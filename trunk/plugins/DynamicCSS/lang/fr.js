@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "fr", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "fr", ENCODING: UTF-8
 // Sponsored by http://www.ebdata.com
 // Author: Cédric Guillemette, <cguillemette@ebdata.com>
 //
