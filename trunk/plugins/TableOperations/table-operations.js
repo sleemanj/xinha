@@ -86,6 +86,7 @@ TableOperations.prototype.dialogTableProperties = function() {
 	var dialog = new PopupWin(this.editor, i18n["Table Properties"], function(dialog, params) {
 		TableOperations.processStyle(params, table);
 		for (var i in params) {
+      if(typeof params[i] == 'function') continue;
 			var val = params[i];
 			switch (i) {
 			    case "f_caption":
@@ -283,6 +284,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 	var dialog = new PopupWin(this.editor, i18n[cell ? "Cell Properties" : "Row Properties"], function(dialog, params) {
 		TableOperations.processStyle(params, element);
 		for (var i in params) {
+      if(typeof params[i] == 'function') continue;
 			var val = params[i];
 			switch (i) {
 			    case "f_align":
@@ -503,16 +505,16 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		var index = td.cellIndex;
 		for (var i = rows.length; --i >= 0;) {
       /*
-      var tr = rows;   
-      var otd = tr.insertCell(index + (/after/.test(button_id) ? 1 : 0));   
-      otd.innerHTML = mozbr;   
+      var tr = rows;
+      var otd = tr.insertCell(index + (/after/.test(button_id) ? 1 : 0));
+      otd.innerHTML = mozbr;
       */
 			var tr = rows[i];
 			var ref = tr.cells[index + (/after/.test(button_id) ? 1 : 0)];
 			var otd = editor._doc.createElement("td");
 			otd.innerHTML = mozbr;
 			tr.insertBefore(otd, ref);
-      
+
 		}
 		editor.focusEditor();
 		break;
@@ -725,6 +727,7 @@ TableOperations.getLength = function(value) {
 TableOperations.processStyle = function(params, element) {
 	var style = element.style;
 	for (var i in params) {
+    if(typeof params[i] == 'function') continue;
 		var val = params[i];
 		switch (i) {
 		    case "f_st_backgroundColor":
@@ -1077,6 +1080,7 @@ TableOperations.createStyleFieldset = function(doc, editor, el) {
 	// value.
 	(currentBorderStyle.match(/([^\s]*)\s/)) && (currentBorderStyle = RegExp.$1);
 	for (var i in options) {
+    if(typeof options[i] == 'function') continue;
 		var val = options[i];
 		option = doc.createElement("option");
 		option.value = val;
