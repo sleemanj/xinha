@@ -222,6 +222,7 @@ HTMLArea.Config = function () {
   // URL-s
   this.imgURL = "images/";
   this.popupURL = "popups/";
+  this.helpURL  = _editor_url + "reference.html";
 
   // remove tags (these have to be a regexp, or null if this functionality is not desired)
   this.htmlRemoveTags = null;
@@ -2931,7 +2932,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
       case "inserttable": this._insertTable(); break;
       case "insertimage": this._insertImage(); break;
       case "about"    : this._popupDialog("about.html", null, this); break;
-      case "showhelp" : window.open(_editor_url + "reference.html", "ha_help"); break;
+      case "showhelp" : window.open(this.config.helpURL, "ha_help"); break;
 
       case "killword": this._wordClean(); break;
 
