@@ -1,0 +1,413 @@
+/** htmlArea - James' Fork - Linker Plugin **/
+Linker._pluginInfo =
+{
+  name     : "Linker",
+  version  : "1.0",
+  developer: "James Sleeman",
+  developer_url: "http://www.gogo.co.nz/",
+  c_owner      : "Gogo Internet Services",
+  license      : "htmlArea",
+  sponsor      : "Gogo Internet Services",
+  sponsor_url  : "http://www.gogo.co.nz/"
+};
+
+HTMLArea.loadStyle('dTree/dtree.css', 'Linker');
+
+HTMLArea.Config.prototype.Linker =
+{
+  'backend' : _editor_url + 'plugins/Linker/scan.php'
+}
+
+function Linker(editor, args)
+{
+  this.editor  = editor;
+  this.lConfig = editor.config.Linker;
+
+  var linker = this;
+  editor.config.registerButton(
+                               'linker', 'Insert/Modify Hyperlink', [_editor_url + "images/ed_buttons_main.gif",6,1], false,
+                                function(e, objname, obj) { linker._createLink(linker._getSelectedAnchor()); }
+                               );
+
+  // See if we can find 'insertlink' and replace it with superclean
+  var t = editor.config.toolbar;
+  var done = false;
+  for(var i = 0; i < t.length && !done; i++)
+  {
+    for(var x = 0; x < t[i].length && !done; x++)
+    {
+      if(t[i][x] == 'createlink')
+      {
+        t[i][x] = 'linker';
+        done = true;
+      }
+    }
+  }
+
+  if(!done)
+  {
+    t[t.length-1].push('linker');
+  }
+}
+
+Linker.prototype._createLink = function(a)
+{
+
+  if(!this._dialog)
+  {
+    this._dialog = new Linker.Dialog(this);
+  }
+
+  var inputs =
+  {
+    type:     'url',
+    href:     'http://www.example.com/',
+    target:   '',
+    p_width:  '',
+    p_height: '',
+    p_options: ['menubar=no','toolbar=yes','location=no','status=no','scrollbars=yes','resizeable=yes'],
+    to:       'alice@example.com',
+    subject:  '',
+    body:     ''
+  }
+
+  if(a && a.tagName.toLowerCase() == 'a')
+  {
+    var m = a.href.match(/^mailto:(.*@[^?&]*)(\?(.*))?$/);
+    if(m)
+    {
+      // Mailto
+      inputs.type = 'mailto';
+      inputs.to = m[1];
+      if(m[3])
+      {
+        var args  = m[3].split('&');
+        for(var x = 0; x<args.length; x++)
+        {
+          var j = args[x].match(/(subject|body)=(.*)/);
+          if(j)
+          {
+            inputs[j[1]] = unescape(j[2]);
+          }
+        }
+      }
+    }
+    else
+    {
+
+
+      if(a.getAttribute('onclick'))
+      {
+        var m = a.getAttribute('onclick').match(/window\.open\(\s*this\.href\s*,\s*'([a-z0-9_]*)'\s*,\s*'([a-z0-9_=,]*)'\s*\)/i);
+
+        // Popup Window
+        inputs.href   = a.href ? a.href : '';
+        inputs.target = 'popup';
+        inputs.p_name = m[1];
+        inputs.p_options = [ ];
+
+
+        var args = m[2].split(',');
+        for(var x = 0; x < args.length; x++)
+        {
+          var i = args[x].match(/(width|height)=([0-9]+)/);
+          if(i)
+          {
+            inputs['p_' + i[1]] = parseInt(i[2]);
+          }
+          else
+          {
+            inputs.p_options.push(args[x]);
+          }
+        }
+      }
+      else
+      {
+        // Normal
+        inputs.href   = a.href;
+        inputs.target = a.target;
+      }
+    }
+  }
+
+  var linker = this;
+
+  // If we are not editing a link, then we need to insert links now using execCommand
+  // because for some reason IE is losing the selection between now and when doOK is
+  // complete.  I guess because we are defocusing the iframe when we click stuff in the
+  // linker dialog.
+
+  this.a = a; // Why doesn't a get into the closure below, but if I set it as a property then it's fine?
+
+  var doOK = function()
+  {
+    //if(linker.a) alert(linker.a.tagName);
+    var a = linker.a;
+
+    var values = linker._dialog.hide();
+    var atr =
+    {
+      href: '',
+      target:'',
+      title:'',
+      onclick:''
+    }
+
+    if(values.type == 'url')
+    {
+     atr.href = values.href;
+     atr.target = values.target;
+     if(values.target == 'popup')
+     {
+
+       if(values.p_width)
+       {
+         values.p_options.push('width=' + values.p_width);
+       }
+       if(values.p_height)
+       {
+         values.p_options.push('height=' + values.p_height);
+       }
+       atr.onclick = 'try{if(document.designMode && document.designMode == \'on\') return false;}catch(e){} window.open(this.href, \'' + (values.p_name.replace(/[^a-z0-9_]/i, '_')) + '\', \'' + values.p_options.join(',') + '\');return false;';
+     }
+    }
+    else
+    {
+      atr.href = 'mailto:' + values.to + '?';
+      if(values.subject) atr.href += 'subject=' + escape(values.subject);
+      if(values.body)    atr.href += (values.subject ? '&' : '') + 'body=' + escape(values.body);
+    }
+
+    if(a && a.tagName.toLowerCase() == 'a')
+    {
+      if(!atr.href)
+      {
+        if(confirm(linker._dialog._lc('Are you sure you wish to remove this link?')))
+        {
+          var p = a.parentNode;
+          while(a.hasChildNodes())
+          {
+            p.insertBefore(a.removeChild(a.childNodes[0]), a);
+          }
+          p.removeChild(a);
+        }
+      }
+      // Update the link
+      for(var i in atr)
+      {
+        a.setAttribute(i, atr[i]);
+      }
+    }
+    else
+    {
+      // Insert a link, we let the browser do this, we figure it knows best
+      var tmp = HTMLArea.uniq('http://www.example.com/Link');
+      linker.editor._doc.execCommand('createlink', false, tmp);
+
+      // Fix them up
+      var anchors = linker.editor._doc.getElementsByTagName('a');
+      for(var i = 0; i < anchors.length; i++)
+      {
+        var a = anchors[i];
+        if(a.href == tmp)
+        {
+          // Found one.
+          for(var i in atr)
+          {
+            a.setAttribute(i, atr[i]);
+          }
+        }
+      }
+    }
+  }
+
+  this._dialog.show(inputs, doOK);
+
+}
+
+Linker.prototype._getSelectedAnchor = function()
+{
+  var sel  = this.editor._getSelection();
+  var rng  = this.editor._createRange(sel);
+  var a    = this.editor._activeElement(sel);
+  if(a != null && a.tagName.toLowerCase() == 'a')
+  {
+    return a;
+  }
+  else
+  {
+    a = this.editor._getFirstAncestor(sel, 'a');
+    if(a != null)
+    {
+      return a;
+    }
+  }
+  return null;
+}
+
+
+// Inline Dialog for Linker
+
+Linker.Dialog_dTrees = [ ];
+
+
+Linker.Dialog = function (linker)
+{
+  var  lDialog = this;
+  this.Dialog_nxtid = 0;
+  this.linker = linker;
+  this.id = { }; // This will be filled below with a replace, nifty
+
+  this.ready = false;
+
+  // load the dTree script
+  if(typeof dTree == 'undefined')
+  {
+    HTMLArea._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
+                       function() {lDialog._prepareDialog(); lDialog.ready = true; }
+                      );
+  }
+  else
+  {
+    lDialog._prepareDialog();
+    lDialog.ready = true;
+  }
+}
+
+Linker.Dialog.prototype._prepareDialog = function()
+{
+
+  var lDialog = this;
+  var linker = this.linker;
+  var html = HTMLArea._geturlcontent(_editor_url + 'plugins/Linker/dialog.html');
+  var dialog = this.dialog = new HTMLArea.Dialog(linker.editor, html, 'Linker');
+
+  // Make a dtree
+  var files = HTMLArea._geturlcontent(linker.lConfig.backend);
+
+  files = eval(files);
+
+  var dTreeName = HTMLArea.uniq('dTree_');
+
+  this.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
+  eval(dTreeName + ' = this.dTree');
+
+  this.dTree.add(this.Dialog_nxtid++, -1, document.location.host, null, document.location.host);
+  this.makeNodes(files, 0);
+
+  // Put it in
+  var ddTree = this.dialog.getElementById('dTree');
+  ddTree.innerHTML = this.dTree.toString();
+  ddTree.style.position = 'absolute';
+  ddTree.style.left = 1 + 'px';
+  ddTree.style.top =  0 + 'px';
+  ddTree.style.overflow = 'auto';
+
+  var options = this.dialog.getElementById('options');
+  options.style.position = 'absolute';
+  options.style.top      = 0   + 'px';
+  options.style.right    = 0   + 'px';
+  options.style.width    = 320 + 'px';
+  options.style.overflow = 'auto';
+
+  // Hookup the resizer
+  this.dialog.onresize = function()
+    {
+      options.style.height = ddTree.style.height = (dialog.height - dialog.getElementById('h1').offsetHeight) + 'px';
+      ddTree.style.width  = (dialog.width  - 322 ) + 'px';
+    }
+
+
+}
+
+Linker.Dialog.prototype.makeNodes = function(files, parent)
+{
+  for(var i = 0; i < files.length; i++)
+  {
+    if(typeof files[i] == 'string')
+    {
+      this.dTree.add(Linker.nxtid++, parent,
+                     files[i].replace(/^.*\//, ''),
+                     'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=unescape(\'' + escape(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
+                     files[i]);
+    }
+    else
+    {
+      var id = this.Dialog_nxtid++;
+      this.dTree.add(id, parent, files[i][0].replace(/^.*\//, ''), null, files[i][0]);
+      this.makeNodes(files[i][1], id);
+    }
+  }
+}
+
+Linker.Dialog.prototype._lc = function(string)
+{
+  return HTMLArea._lc(string, 'Linker');
+}
+
+Linker.Dialog.prototype.show = function(inputs, ok, cancel)
+{
+
+  if(!this.ready)
+  {
+    var lDialog = this;
+    window.setTimeout(function() {lDialog.show(inputs,ok,cancel);},100);
+    return;
+  }
+
+  if(inputs.type=='url')
+  {
+    this.dialog.getElementById('urltable').style.display = '';
+    this.dialog.getElementById('mailtable').style.display = 'none';
+  }
+  else
+  {
+    this.dialog.getElementById('urltable').style.display = 'none';
+    this.dialog.getElementById('mailtable').style.display = '';
+  }
+
+  if(inputs.target=='popup')
+  {
+    this.dialog.getElementById('popuptable').style.display = '';
+  }
+  else
+  {
+    this.dialog.getElementById('popuptable').style.display = 'none';
+  }
+
+  // Connect the OK and Cancel buttons
+  var dialog = this.dialog;
+  var lDialog = this;
+  if(ok)
+  {
+    this.dialog.getElementById('ok').onclick = ok;
+  }
+  else
+  {
+    this.dialog.getElementById('ok').onclick = function() {lDialog.hide();};
+  }
+
+  if(cancel)
+  {
+    this.dialog.getElementById('cancel').onclick = cancel;
+  }
+  else
+  {
+    this.dialog.getElementById('cancel').onclick = function() { lDialog.hide()};
+  }
+
+  // Show the dialog
+  this.linker.editor.disableToolbar(['fullscreen','linker']);
+
+  this.dialog.show(inputs);
+
+  // Init the sizes
+  this.dialog.onresize();
+}
+
+Linker.Dialog.prototype.hide = function()
+{
+  this.linker.editor.enableToolbar();
+  return this.dialog.hide();
+}
+
