@@ -481,7 +481,7 @@ function Stylist(editor, args)
 {
   this.editor = editor;
   editor._stylist = null; // This needs to be changes to be Stylist::_stylist sometime
-  editor._stylist = editor.addPanel('bottom');
+  editor._stylist = editor.addPanel('right');
   HTMLArea.addClass(editor._stylist, 'stylist');
 
   var stylist = this;
