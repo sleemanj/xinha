@@ -76,48 +76,18 @@ HtmlTidy.btnList = [
 		    ["html-auto-tidy"]
 ];
 
-HtmlTidy.prototype.onGenerateOnce = function() {
-	var editor = this.editor;
-
-	var ifr = document.createElement("iframe");
-	ifr.name = "htiframe_name";
-	var s = ifr.style;
-	s.position = "absolute";
-	s.width = s.height = s.border = s.left = s.top = s.padding = s.margin = "0px";
-	document.body.appendChild(ifr);
-
-	var frm = '<form id="htiform_id" name="htiform_name" method="post" target="htiframe_name" action="';
-	frm += _editor_url + 'plugins/HtmlTidy/html-tidy-logic.php';
-	frm += '"><textarea name="htisource_name" id="htisource_id">';
-	frm += '</textarea></form>';
-
-	var newdiv = document.createElement('div');
-	newdiv.style.display = "none";
-	newdiv.innerHTML = frm;
-	document.body.appendChild(newdiv);
-};
-
 HtmlTidy.prototype.buttonPress = function(editor, id) {
 	var i18n = HtmlTidy.I18N;
 
-	switch (id) {
-	    case "HT-html-tidy":
-
-		var oldhtml = editor.getHTML();
-
-		// Ask the server for some nice new html, based on the old...
-		var myform = document.getElementById('htiform_id');
-		var txtarea = document.getElementById('htisource_id');
-		txtarea.value = editor.getHTML();
-
-		// Apply the 'meanwhile' text, e.g. "Tidying HTML, please wait..."
-		editor.setHTML(i18n['tidying']);
-
-		// The returning tidying processing script needs to find the editor
-		window._editorRef = editor;
-
-		// ...And send our old source off for processing!
-		myform.submit();
+	switch (id)
+  {
+    case "HT-html-tidy":
+    {
+      var oldhtml = editor.getHTML();
+      // Ask the server for some nice new html, based on the old...
+      HTMLArea._postback(_editor_url + 'plugins/HtmlTidy/html-tidy-logic.php', {'htisource_name' : oldhtml},
+                            function(javascriptResponse) { eval(javascriptResponse) });
+    }
 		break;
 	}
 };
