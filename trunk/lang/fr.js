@@ -41,7 +41,7 @@ HTMLArea.I18N = {
 		indent:         "Augmenter le retrait",
 		forecolor:      "Couleur de police",
 		hilitecolor:    "Surlignage",
-		horizontalrule: "Ligne horizontale",
+		inserthorizontalrule: "Ligne horizontale",
 		createlink:     "Insérer un hyperlien",
 		insertimage:    "Insérer/Modifier une image",
 		inserttable:    "Insérer un tableau",
@@ -66,8 +66,9 @@ HTMLArea.I18N = {
 
 	msg: {
 		"Path":         "Chemin",
-		"TEXT_MODE":    "Vous êtes en MODE TEXTE.  Appuyez sur le bouton [<>] pour retourner au mode tel-tel.",
+		"TEXT_MODE":    "Vous êtes en MODE TEXTE.  Appuyez sur le bouton [<>] pour retourner au mode normal.",
 
+		"empty-link" :	"Pour créer le lien, vous devez d'abord sélectionner le texte qui servira de lien",
 		"IE-sucks-full-screen" :
 		// translate here
 		"Le mode plein écran peut causer des problèmes sous Internet Explorer, " +
