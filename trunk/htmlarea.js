@@ -2146,27 +2146,32 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
 
   // Insert a space in certain locations, this is just to make editing a little
   // easier (to "get out of" tags), it's not essential.
+  // TODO: Make this work for IE?
+  // TODO: Perhaps should use a plain space character, I'm not sure.
   if(HTMLArea.is_gecko)
   {
     var s = this._getSelection();
-    if(s && s.isCollapsed && s.anchorNode && s.anchorNode.nodeType == 3)
+    // If the last character in the last text node of the parent tag
+    if(s && s.isCollapsed && s.anchorNode
+         && s.anchorNode.parentNode.tagName.toLowerCase() != 'body'
+         && s.anchorNode.nodeType == 3 && s.anchorOffset == s.anchorNode.length
+         && !
+          (   s.anchorNode.parentNode.nextSibling
+           && s.anchorNode.parentNode.nextSibling.nodeType == 3
+          )
+      )
     {
-      if(s.anchorOffset == s.anchorNode.length)
+      // Insert hair-width-space after the close tag if there isn't another text node on the other side
+      // It could also work with zero-width-space (\u200B) but I don't like it so much.
+      // Perhaps this won't work well in various character sets and we should use plain space (20)?
+      try
       {
-        if(HTMLArea.isBlockElement(s.anchorNode.parentNode))
-        {
-          if(s.anchorNode.data != '\xA0' && !s.anchorNode.nextSibling)
-          {
-            s.anchorNode.parentNode.insertBefore(this._doc.createTextNode('\xA0'), s.anchorNode.nextSibling);
-          }
-        }
-        else
-        {
-          if(!s.anchorNode.parentNode.nextSibling)
-          {
-            s.anchorNode.parentNode.parentNode.insertBefore(this._doc.createTextNode('\xA0'), s.anchorNode.parentNode.nextSibling);
-          }
-        }
+        s.anchorNode.parentNode.parentNode.insertBefore
+          (this._doc.createTextNode('\u200A'), s.anchorNode.parentNode.nextSibling);
+      }
+      catch(e)
+      {
+        // Disregard
       }
     }
   }
@@ -2178,7 +2183,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
       plugin.onUpdateToolbar();
   }
 
-};
+}
 
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
@@ -2967,6 +2972,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
       default: try { this._doc.execCommand(cmdID, UI, param); }
     catch(e) { if (this.config.debug) { alert(e + "\n\nby execCommand(" + cmdID + ");"); } }
   }
+
   this.updateToolbar();
   return false;
 };
