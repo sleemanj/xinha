@@ -48,8 +48,8 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 
 <? // we have to propagate our values through forms ?>
 
-<input type="hidden" name="plugin" value="ImageManager">
-<input type="hidden" name="f" value="images">
+<input type="hidden" name="__plugin" value="ImageManager">
+<input type="hidden" name="__function" value="images">
 
 <fieldset><legend>Image Manager</legend>
 <div class="dirs">
@@ -65,7 +65,7 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 	<a href="#" onclick="newFolder();" title="New Folder"><img src="<? print $IMConfig['base_url']; ?>img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
 <? } ?>
 	<div id="messages" style="display: none;"><span id="message"></span><img SRC="<? print $IMConfig['base_url']; ?>img/dots.gif" width="22" height="12" alt="..." /></div>
-	<iframe src="<? print $IMConfig['backend_url']; ?>f=images" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
+	<iframe src="<? print $IMConfig['backend_url']; ?>__function=images" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </div>
 </fieldset>
 <!-- image properties -->
