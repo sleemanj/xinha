@@ -15,8 +15,7 @@
 	// Open a tidy process - I hope it's installed!
 	$descriptorspec = array(
 		0 => array("pipe", "r"),
-		1 => array("pipe", "w"),
-		2 => array("file", "/dev/null", "a")
+		1 => array("pipe", "w")
 	);
 	$process = proc_open("tidy -config html-tidy-config.cfg", $descriptorspec, $pipes);
 
