@@ -5,7 +5,6 @@
 
 function EnterParagraphs(editor) {
   this.editor = editor;
-
   // Activate only if we're talking to Gecko
   if (HTMLArea.is_gecko)
     this.onKeyPress = this.__onKeyPress;
@@ -255,8 +254,8 @@ EnterParagraphs.prototype.handleEnter = function(ev) {
     sel.collapse( holdEnd.parentNode, prodigal);
   }
   else sel.collapse(holdEnd, 0);
-  editor.scrollToElement(holdEnd);
-  editor.updateToolbar();
+  this.editor.scrollToElement(holdEnd);
+  this.editor.updateToolbar();
 
   //======================
     HTMLArea._stopEvent(ev);
