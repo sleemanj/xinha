@@ -38,7 +38,7 @@ function ListType(editor) {
 	for (i = 0; !found && i < toolbar.length; ++i) {
 		a = toolbar[i];
 		for (j = 0; j < a.length; ++j) {
-			if (a[j] == "unorderedlist") {
+			if (a[j] == "insertunorderedlist") {
 				found = true;
 				break;
 			}
