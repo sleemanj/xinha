@@ -35,7 +35,7 @@ HTMLArea.I18N = {
 		indent:         "Poveèaj zamik",
 		forecolor:      "Barva pisave",
 		hilitecolor:    "Barva ozadja",
-		horizontalrule: "Vodoravna èrta",
+		inserthorizontalrule: "Vodoravna èrta",
 		createlink:     "Vstavi hiperpovezavo",
 		insertimage:    "Vstavi sliko",
 		inserttable:    "Vstavi tabelo",

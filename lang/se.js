@@ -25,7 +25,7 @@ HTMLArea.I18N = {
 		indent:         "Öka indrag",
 		forecolor:      "Textfärg",
 		backcolor:      "Bakgrundsfärg",
-		horizontalrule: "Vågrät linje",
+		inserthorizontalrule: "Vågrät linje",
 		createlink:     "Infoga länk",
 		insertimage:    "Infoga bild",
 		inserttable:    "Infoga tabell",

@@ -26,7 +26,7 @@ HTMLArea.I18N = {
 		indent:         "Αύξηση Εσοχής",
 		forecolor:      "Χρώμα Γραμματοσειράς",
 		hilitecolor:    "Χρώμα Φόντου",
-		horizontalrule: "Οριζόντια Γραμμή",
+		inserthorizontalrule: "Οριζόντια Γραμμή",
 		createlink:     "Εισαγωγή Συνδέσμου",
 		insertimage:    "Εισαγωγή/Τροποποίηση Εικόνας",
 		inserttable:    "Εισαγωγή Πίνακα",

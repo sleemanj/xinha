@@ -35,7 +35,7 @@ HTMLArea.I18N = {
 		indent:         "Odsadit",
 		forecolor:      "Barva písma",
 		hilitecolor:    "Barva pozadí",
-		horizontalrule: "Vodorovná čára",
+		inserthorizontalrule: "Vodorovná čára",
 		createlink:     "Vložit odkaz",
 		insertimage:    "Vložit obrázek",
 		inserttable:    "Vložit tabulku",

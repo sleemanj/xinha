@@ -35,7 +35,7 @@ HTMLArea.I18N = {
 		indent:         "הגדל כניסה",
 		forecolor:      "צבע גופן",
 		hilitecolor:    "צבע רקע",
-		horizontalrule: "קו אנכי",
+		inserthorizontalrule: "קו אנכי",
 		createlink:     "הכנס היפר-קישור",
 		insertimage:    "הכנס/שנה תמונה",
 		inserttable:    "הכנס טבלה",
