@@ -173,7 +173,7 @@ HTMLArea.Config = function () {
   var cfg = this;
   this.version = "3.0";
 
-  this.width = "auto";
+  this.width = "toolbar";
   this.height = "auto";
 
   // enable creation of a status bar?
