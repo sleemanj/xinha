@@ -1483,12 +1483,7 @@ HTMLArea.prototype.generate = function ()
     // check if any plugins have registered refresh handlers
     for (var i in editor.plugins) {
       var plugin = editor.plugins[i].instance;
-      if (typeof plugin.onGenerate == "function")
-        plugin.onGenerate();
-      if (typeof plugin.onGenerateOnce == "function") {
-        plugin.onGenerateOnce();
-        plugin.onGenerateOnce = null;
-      }
+      HTMLArea.refreshPlugin(plugin);
     }
 
     if(typeof editor._onGenerate == "function") { editor._onGenerate();}
@@ -1596,12 +1591,13 @@ HTMLArea.prototype.setFullHTML = function(html) {
  ***************************************************/
 
 // Create the specified plugin and register it with this HTMLArea
+// return the plugin created to allow refresh when necessary
 HTMLArea.prototype.registerPlugin = function() {
   var plugin = arguments[0];
   var args = [];
   for (var i = 1; i < arguments.length; ++i)
     args.push(arguments[i]);
-  this.registerPlugin2(plugin, args);
+  return this.registerPlugin2(plugin, args);
 };
 
 // this is the variant of the function above where the plugin arguments are
@@ -1624,6 +1620,7 @@ HTMLArea.prototype.registerPlugin2 = function(plugin, args) {
     clone.instance = obj;
     clone.args = args;
     this.plugins[plugin._pluginInfo.name] = clone;
+    return obj;
   } else
     alert("Can't register plugin " + plugin.toString() + ".");
 };
@@ -1703,6 +1700,15 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
   return false;
 }
 
+// refresh plugin by calling onGenerate or onGenerateOnce method.
+HTMLArea.refreshPlugin = function(plugin) {
+  if (typeof plugin.onGenerate == "function")
+    plugin.onGenerate();
+  if (typeof plugin.onGenerateOnce == "function") {
+    plugin.onGenerateOnce();
+    plugin.onGenerateOnce = null;
+  }
+};
 
 HTMLArea.loadStyle = function(style, plugin) {
   var url = _editor_url || '';
