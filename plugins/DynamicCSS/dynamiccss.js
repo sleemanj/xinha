@@ -8,38 +8,38 @@
 
 function DynamicCSS(editor, args) {
         this.editor = editor;
-	        
+
         var cfg = editor.config;
-	var toolbar = cfg.toolbar;
-	var self = this;
-	var i18n = DynamicCSS.I18N;
+  var toolbar = cfg.toolbar;
+  var self = this;
+  var i18n = DynamicCSS.I18N;
 
         /*var cssArray=null;
         var cssLength=0;
         var lastTag=null;
         var lastClass=null;*/
-        
-	var css_class = {
-		id         : "DynamicCSS-class",
-		tooltip       : i18n["DynamicCSSStyleTooltip"],
-		options    : {"":""},
-		action     : function(editor) { self.onSelect(editor, this); },
-		refresh    : function(editor) { self.updateValue(editor, this); }
-	};
-	cfg.registerDropdown(css_class);
 
-	toolbar[0].splice(0, 0, "separator");
-	toolbar[0].splice(0, 0, "DynamicCSS-class");
-	toolbar[0].splice(0, 0, "T[CSS]");
+  var css_class = {
+    id         : "DynamicCSS-class",
+    tooltip       : i18n["DynamicCSSStyleTooltip"],
+    options    : {"":""},
+    action     : function(editor) { self.onSelect(editor, this); },
+    refresh    : function(editor) { self.updateValue(editor, this); }
+  };
+  cfg.registerDropdown(css_class);
+
+  toolbar[0].splice(0, 0, "separator");
+  toolbar[0].splice(0, 0, "DynamicCSS-class");
+  toolbar[0].splice(0, 0, "T[CSS]");
 };
 
 DynamicCSS.parseStyleSheet=function(editor){
         var i18n = DynamicCSS.I18N;
         iframe = editor._iframe.contentWindow.document;
-        
+
         cssArray=DynamicCSS.cssArray;
         if(!cssArray) cssArray=new Array();
-        
+
         for(i=0;i<iframe.styleSheets.length;i++){
             // Mozilla
             if(HTMLArea.is_gecko){
@@ -76,19 +76,19 @@ DynamicCSS.applyCSSRule=function(i18n,cssRules,cssArray){
         // StyleRule
         if(cssRules[rule].selectorText){
             if(cssRules[rule].selectorText.search(/:+/)==-1){
-                
+
                 // split equal Styles (Mozilla-specific) e.q. head, body {border:0px}
                 // for ie not relevant. returns allways one element
                 cssElements = cssRules[rule].selectorText.split(",");
                 for(k=0;k<cssElements.length;k++){
                     cssElement = cssElements[k].split(".");
-                    
+
                     tagName=cssElement[0].toLowerCase().trim();
                     className=cssElement[1];
-                                        
+
                     if(!tagName) tagName='all';
                     if(!cssArray[tagName]) cssArray[tagName]=new Array();
-                    
+
                     if(className){
                         if(tagName=='all') cssName=className;
                         else cssName='<'+className+'>';
@@ -112,23 +112,23 @@ DynamicCSS.applyCSSRule=function(i18n,cssRules,cssArray){
 }
 
 DynamicCSS._pluginInfo = {
-	name          : "DynamicCSS",
-	version       : "1.5.2",
-	developer     : "Holger Hees",
-	developer_url : "http://www.systemconcept.de/",
-	c_owner       : "Holger Hees",
-	sponsor       : "System Concept GmbH",
-	sponsor_url   : "http://www.systemconcept.de/",
-	license       : "htmlArea"
+  name          : "DynamicCSS",
+  version       : "1.5.2",
+  developer     : "Holger Hees",
+  developer_url : "http://www.systemconcept.de/",
+  c_owner       : "Holger Hees",
+  sponsor       : "System Concept GmbH",
+  sponsor_url   : "http://www.systemconcept.de/",
+  license       : "htmlArea"
 };
 
 DynamicCSS.prototype.onSelect = function(editor, obj) {
     var tbobj = editor._toolbarObjects[obj.id];
     var index = tbobj.element.selectedIndex;
     var className = tbobj.element.value;
-        
+
     var parent = editor.getParentElement();
-    
+
     if(className!='none'){
         parent.className=className;
         DynamicCSS.lastClass=className;
@@ -176,44 +176,46 @@ DynamicCSS.prototype.updateValue = function(editor, obj) {
             DynamicCSS.parseCount=1;
             this.reparseTimer(editor,obj,this);
         }
-        
+
         var parent = editor.getParentElement();
         var tagName = parent.tagName.toLowerCase();
         var className = parent.className;
-        
-        if(DynamicCSS.lastTag!=tagName || DynamicCSS.lastClass!=className){        
+
+        if(DynamicCSS.lastTag!=tagName || DynamicCSS.lastClass!=className){
             DynamicCSS.lastTag=tagName;
             DynamicCSS.lastClass=className;
-        
+
             var i18n = DynamicCSS.I18N;
             var select = editor._toolbarObjects[obj.id].element;
-            
+
             while(select.length>0){
                 select.options[select.length-1] = null;
             }
-            
+
             select.options[0]=new Option(i18n["Default"],'none');
             if(cssArray){
                 // style class only allowed if parent tag is not body or editor is in fullpage mode
                 if(tagName!='body' || editor.config.fullPage){
                     if(cssArray[tagName]){
                         for(cssClass in cssArray[tagName]){
+                            if(typeof cssArray[tagName][cssClass] != 'string') continue;
                             if(cssClass=='none') select.options[0]=new Option(cssArray[tagName][cssClass],cssClass);
                             else select.options[select.length]=new Option(cssArray[tagName][cssClass],cssClass);
                         }
                     }
-                    
+
                     if(cssArray['all']){
                         for(cssClass in cssArray['all']){
+                            if(typeof cssArray['all'][cssClass] != 'string') continue;
                             select.options[select.length]=new Option(cssArray['all'][cssClass],cssClass);
                         }
                     }
                 }
                 else if(cssArray[tagName] && cssArray[tagName]['none']) select.options[0]=new Option(cssArray[tagName]['none'],'none');
             }
-                                
+
             select.selectedIndex = 0;
-            
+
             if (typeof className != "undefined" && /\S/.test(className)) {
                 var options = select.options;
                 for (var i = options.length; --i >= 0;) {
@@ -228,7 +230,7 @@ DynamicCSS.prototype.updateValue = function(editor, obj) {
                     select.selectedIndex=select.length-1;
                 }
             }
-                        
+
             if(select.length>1) select.disabled=false;
             else select.disabled=true;
         }
