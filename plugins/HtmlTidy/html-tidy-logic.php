@@ -17,7 +17,8 @@
 		0 => array("pipe", "r"),
 		1 => array("pipe", "w")
 	);
-	$process = proc_open("tidy -config html-tidy-config.cfg", $descriptorspec, $pipes);
+	$process = proc_open("tidy -utf8 -config html-tidy-config.cfg", $descriptorspec, $pipes);
+
 
 	// Make sure the program started and we got the hooks...
 	// Either way, get some source code into $source
@@ -58,25 +59,6 @@
 		$jsMakeSrc .= "\tns += '" . str_replace("'","\'",$line) . "\\n';\n";
 	}
 ?>
-
-
-<html>
-  <head>
-    <script type="text/javascript">
-
-function setNewHtml() {
-	var htRef = window.parent._editorRef.plugins['HtmlTidy'];
-	htRef.instance.processTidied(tidyString());
-}
-function tidyString() {
-	var ns = '\n';
-	<?=$jsMakeSrc;?>
-	return ns;
-}
-
-    </script>
-  </head>
-
-  <body id="htiNewBody" onload="setNewHtml()">
-  </body>
-</html>
+var ns="";
+<?=$jsMakeSrc?>
+editor.setHTML(ns);
