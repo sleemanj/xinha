@@ -44,7 +44,7 @@ ImageManager._pluginInfo = {
 HTMLArea.Config.prototype.ImageManager =
 {
   'backend' : _editor_url + 'plugins/ImageManager/backend.php?plugin=ImageManager&',
-  'images_url' : '/xinha/plugins/ImageManager/demo_images'
+  'images_url' : _editor_url + 'plugins/ImageManager/demo_images'
 }
 
 // Over ride the _insertImage function in htmlarea.js.
