@@ -1012,22 +1012,27 @@ HTMLArea.prototype.generate = function ()
     // we have a form, on submit get the HTMLArea content and
     // update original textarea.
     var f = textarea.form;
-    if (typeof f.onsubmit == "function") {
+    if (typeof f.__msh_prevOnSubmit == "undefined") f.__msh_prevOnSubmit = [];
+    if (typeof f.onsubmit == "function")
+    {
       var funcref = f.onsubmit;
-      if (typeof f.__msh_prevOnSubmit == "undefined") {
-        f.__msh_prevOnSubmit = [];
-      }
       f.__msh_prevOnSubmit.push(funcref);
     }
-    f.onsubmit = function() {
+    f.onsubmit = function()
+    {
       editor._textArea.value = editor.outwardHtml(editor.getHTML());
       var a = this.__msh_prevOnSubmit;
       // call previous submit methods if they were there.
-      if (typeof a != "undefined") {
-        for (var i = a.length; --i >= 0;) {
-          a[i]();
+      var allOK = true;
+      for (var i = a.length; --i >= 0;)
+      {
+        if(a[i]() == false)
+        {
+          allOK = false;
+          break;
         }
       }
+      return allOK;
     };
     if (typeof f.onreset == "function") {
       var funcref = f.onreset;
@@ -1041,10 +1046,18 @@ HTMLArea.prototype.generate = function ()
       editor.updateToolbar();
       var a = this.__msh_prevOnReset;
       // call previous reset methods if they were there.
-      if (typeof a != "undefined") {
-        for (var i = a.length; --i >= 0;) {
-          a[i]();
+      if (typeof a != "undefined")
+      {
+        var allOK = true;
+        for (var i = a.length; --i >= 0;)
+        {
+          if(a[i]() == false)
+          {
+            allOK = false;
+            break;
+          }
         }
+        return allOK;
       }
     };
   }
