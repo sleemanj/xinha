@@ -1,7 +1,7 @@
 // I18N constants
 
-// LANG: "fr", ENCODING: UTF-8 | ISO-8859-1
-// Author: Simon Richard, s.rich@sympatico.ca
+// LANG: "fr", ENCODING: UTF-8
+// Author: Laurent Vilday, mokhet@mokhet.com
 
 // FOR TRANSLATORS:
 //
@@ -12,87 +12,138 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-// All technical terms used in this document are the ones approved
-// by the Office québécois de la langue française.
-// Tous les termes techniques utilisés dans ce document sont ceux
-// approuvés par l'Office québécois de la langue française.
-// http://www.oqlf.gouv.qc.ca/
-
 HTMLArea.I18N = {
 
-	// the following should be the filename without .js extension
-	// it will be used for automatically load plugin language.
-	lang: "fr",
+        // the following should be the filename without .js extension
+        // it will be used for automatically load plugin language.
+        lang: "fr",
 
-	tooltips: {
-		bold:           "Gras",
-		italic:         "Italique",
-		underline:      "Souligné",
-		strikethrough:  "Barré",
-		subscript:      "Indice",
-		superscript:    "Exposant",
-		justifyleft:    "Aligné à gauche",
-		justifycenter:  "Centré",
-		justifyright:   "Aligné à droite",
-		justifyfull:    "Justifier",
-		orderedlist:    "Numérotation",
-		unorderedlist:  "Puces",
-		outdent:        "Diminuer le retrait",
-		indent:         "Augmenter le retrait",
-		forecolor:      "Couleur de police",
-		hilitecolor:    "Surlignage",
-		inserthorizontalrule: "Ligne horizontale",
-		createlink:     "Insérer un hyperlien",
-		insertimage:    "Insérer/Modifier une image",
-		inserttable:    "Insérer un tableau",
-		htmlmode:       "Passer au code source",
-		popupeditor:    "Agrandir l'éditeur",
-		about:          "À propos de cet éditeur",
-		showhelp:       "Aide sur l'éditeur",
-		textindicator:  "Style courant",
-		undo:           "Annuler la dernière action",
-		redo:           "Répéter la dernière action",
-		cut:            "Couper la sélection",
-		copy:           "Copier la sélection",
-		paste:          "Coller depuis le presse-papier",
-		lefttoright:    "Direction de gauche à droite",
-		righttoleft:    "Direction de droite à gauche"
-	},
+        tooltips: {
+                bold:           "Gras",
+                italic:         "Italique",
+                underline:      "SoulignÃ©",
+                strikethrough:  "BarrÃ©",
+                subscript:      "Indice",
+                superscript:    "Exposant",
+                justifyleft:    "Aligner Ã  gauche",
+                justifycenter:  "Centrer",
+                justifyright:   "Aligner Ã  droite",
+                justifyfull:    "Justifier",
+                orderedlist:    "NumÃ©rotation",
+                unorderedlist:  "Puces",
+                outdent:        "Diminuer le retrait",
+                indent:         "Augmenter le retrait",
+                forecolor:      "Couleur de police",
+                hilitecolor:    "Surlignage",
+                inserthorizontalrule: "Ligne horizontale",
+                createlink:     "InsÃ©rer un hyperlien",
+                insertimage:    "InsÃ©rer/Modifier une image",
+                inserttable:    "InsÃ©rer un tableau",
+                htmlmode:       "Passer au code source",
+                popupeditor:    "Agrandir l'Ã©diteur",
+                about:          "A propos",
+                showhelp:       "Aide",
+                textindicator:  "Style courant",
+                undo:           "Annuler la derniÃ¨re action",
+                redo:           "RÃ©pÃ©ter la derniÃ¨re action",
+                cut:            "Couper la sÃ©lection",
+                copy:           "Copier la sÃ©lection",
+                paste:          "Coller depuis le presse-papier",
+                lefttoright:    "Direction de gauche Ã  droite",
+                righttoleft:    "Direction de droite Ã  gauche",
+                removeformat:   "Supprimer mise en forme",
+                print:          "Imprimer document",
+                killword:       "Effacer tags MSOffice"
+        },
 
-	buttons: {
-		"ok":           "OK",
-		"cancel":       "Annuler"
-	},
+        buttons: {
+                "ok":           "OK",
+                "cancel":       "Annuler"
+        },
 
-	msg: {
-		"Path":         "Chemin",
-		"TEXT_MODE":    "Vous êtes en MODE TEXTE.  Appuyez sur le bouton [<>] pour retourner au mode normal.",
+        msg: {
+                "Path":         "Chemin",
+                "TEXT_MODE":    "Vous Ãªtes en MODE TEXTE.  Appuyez sur le bouton [<>] pour retourner au mode WYSIWYG.",
 
-		"empty-link" :	"Pour créer le lien, vous devez d'abord sélectionner le texte qui servira de lien",
-		"IE-sucks-full-screen" :
-		// translate here
-		"Le mode plein écran peut causer des problèmes sous Internet Explorer, " +
-		"ceci dû à des bogues du navigateur qui ont été impossible à contourner.  " +
-		"Les différents symptômes peuvent être un affichage déficient, le manque de " +
-		"fonctions dans l'éditeur et/ou pannes aléatoires du navigateur.  Si votre " +
-		"système est Windows 9x, il est possible que vous subissiez une erreur de type " +
-		"«General Protection Fault» et que vous ayez à redémarrer votre ordinateur." +
-		"\n\nConsidérez-vous comme ayant été avisé.  Appuyez sur OK si vous désirez tout " +
-		"de même essayer le mode plein écran de l'éditeur."
-	},
+                "empty-link" :  "Pour crÃ©er le lien, vous devez d'abord sÃ©lectionner le texte qui servira de lien",
+                "IE-sucks-full-screen" :
+                // translate here
+                "Le mode plein Ã©cran peut causer des problÃ¨mes sous Internet Explorer, " +
+                "dÃ» Ã  des bugs du navigateur que nous n'avons pu contourner pour le moment.  " +
+                "Les diffÃ©rents symptÃ´mes peuvent Ãªtre un affichage dÃ©ficient, le manque de " +
+                "fonctions dans l'Ã©diteur et/ou des pannes alÃ©aoires du navigateur.  Si votre " +
+                "systÃ¨me est Windows 9x, il est possible que vous subissiez une erreur de type " +
+                "General Protection Fault et que vous ayez redÃ©marrer votre ordinateur." +
+                "\n\nAppuyez sur OK si vous dÃ©sirez tout de mÃªme passer en plein Ã©cran.",
 
-	dialogs: {
-		"Cancel"                                            : "Annuler",
-		"Insert/Modify Link"                                : "Insérer/Modifier Lien",
-		"New window (_blank)"                               : "Nouvelle fenêtre (_blank)",
-		"None (use implicit)"                               : "Aucun (par défaut)",
-		"OK"                                                : "OK",
-		"Other"                                             : "Autre",
-		"Same frame (_self)"                                : "Même cadre (_self)",
-		"Target:"                                           : "Cible:",
-		"Title (tooltip):"                                  : "Titre (infobulle):",
-		"Top frame (_top)"                                  : "Cadre du haut (_top)",
-		"URL:"                                              : "Adresse Web:",
-		"You must enter the URL where this link points to"  : "Vous devez entrer l'adresse Web du lien"
-	}
+    "MOZ-security-clipboard" :
+    // Translate Here
+    "Le bouton Coller ne fonctionne pas sur les navigateurs basÃ©s sur Mozilla (pour des raisons de sÃ©curitÃ©). Pressez simplement CTRL-V au clavier pour coller directement."
+        },
+
+        dialogs: {
+                // Common
+                "OK"                                                : "OK",
+                "Cancel"                                            : "Annuler",
+
+                "Alignment:"                                        : "Alignement:",
+                "Not set"                                           : "IndÃ©fini",
+                "Left"                                              : "Left",
+                "Right"                                             : "Right",
+                "Texttop"                                           : "Texttop",
+                "Absmiddle"                                         : "Absmiddle",
+                "Baseline"                                          : "Baseline",
+                "Absbottom"                                         : "Absbottom",
+                "Bottom"                                            : "Bottom",
+                "Middle"                                            : "Middle",
+                "Top"                                               : "Top",
+
+                "Layout"                                            : "Mise en page",
+                "Spacing"                                           : "Espacement",
+                "Horizontal:"                                       : "Horizontal:",
+                "Horizontal padding"                                : "Marge horizontale interne",
+                "Vertical:"                                         : "Vertical:",
+                "Vertical padding"                                  : "Marge verticale interne",
+                "Border thickness:"                                 : "Epaisseur de bordure:",
+                "Leave empty for no border"                         : "Laisser vide pour pas de bordure",
+
+                // Insert Link
+                "Insert/Modify Link"                                : "InsÃ©rer/Modifier un lien",
+                "None (use implicit)"                               : "Aucun (implicite)",
+                "New window (_blank)"                               : "Nouvelle fenÃªtre (_blank)",
+                "Same frame (_self)"                                : "MÃªme frame (_self)",
+                "Top frame (_top)"                                  : "Frame principale (_top)",
+                "Other"                                             : "Autre",
+                "Target:"                                           : "Cible:",
+                "Title (tooltip):"                                  : "Titre (tooltip):",
+                "URL:"                                              : "URL:",
+                "You must enter the URL where this link points to"  : "Vous devez entrer l'URL de ce lien",
+                // Insert Table
+                "Insert Table"                                      : "InsÃ©rer tableau",
+                "Rows:"                                             : "Lignes:",
+                "Number of rows"                                    : "Nombre de lignes",
+                "Cols:"                                             : "Colonnes:",
+                "Number of columns"                                 : "Nombre de colonnes",
+                "Width:"                                            : "Largeur:",
+                "Width of the table"                                : "Largeur du tableau",
+                "Percent"                                           : "Pourcent",
+                "Pixels"                                            : "Pixels",
+                "Em"                                                : "Em",
+                "Width unit"                                        : "unitÃ©",
+                "Positioning of this table"                         : "Position du tableau",
+                "Cell spacing:"                                     : "Cellule spacing:",
+                "Space between adjacent cells"                      : "Espace entre les cellules adjacentes",
+                "Cell padding:"                                     : "Cellules padding:",
+                "Space between content and border in cell"          : "Espace entre le contenu et la bordue d'une cellule",
+                // Insert Image
+                "Insert Image"                                      : "InsÃ©rer image",
+                "Image URL:"                                        : "Image URL:",
+                "Enter the image URL here"                          : "Entrer l'URL de l'image ici",
+                "Preview"                                           : "PrÃ©visualiser",
+                "Preview the image in a new window"                 : "PrÃ©visualiser l'image dans une nouvelle fenÃªtre",
+                "Alternate text:"                                   : "Text alternatif:",
+                "For browsers that don't support images"            : "Pour les navigateurs qui ne supportent pas les images",
+                "Positioning of this image"                         : "Position de l'image",
+                "Image Preview:"                                    : "PrÃ©visualisation:"
+        }
 };
