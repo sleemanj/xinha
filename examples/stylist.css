@@ -1,0 +1,20 @@
+.bluetext
+{
+  color:blue;
+}
+
+p.blue_paragraph
+{
+  color:darkblue;
+}
+
+li.green_list_item
+{
+  color:green;
+}
+
+h1.webdings_lvl_1
+{
+  font-family:webdings;
+}
+
