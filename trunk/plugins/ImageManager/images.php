@@ -12,7 +12,7 @@ require_once('Classes/ImageManager.php');
 
 // uncomment for debugging
 
-_ddtOn();
+// _ddtOn();
 
 //default path is /
 $relative = '/';
