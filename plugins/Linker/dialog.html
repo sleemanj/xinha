@@ -80,6 +80,7 @@
   </fieldset>
   <div style="text-align:right">
     <input type="button" id="[ok]"     value="_(OK)"     />
+    <input type="button" id="[clear]"  value="_(REMOVE LINK)" onclick="this.form['[href]'].value='';this.form['[to]'].value='';document.getElementById('[ok]').click();" />
     <input type="button" id="[cancel]" value="_(CANCEL)" />
   </div>
 </div>
