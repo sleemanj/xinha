@@ -73,6 +73,7 @@ DynamicCSS.parseStyleSheet=function(editor){
 
 DynamicCSS.applyCSSRule=function(i18n,cssRules,cssArray){
     for(rule in cssRules){
+        if(typeof cssRules[rule] == 'function') continue;
         // StyleRule
         if(cssRules[rule].selectorText){
             if(cssRules[rule].selectorText.search(/:+/)==-1){
