@@ -1,14 +1,36 @@
-// htmlArea v3.0 - Copyright (c) 2003-2004 dynarch.com
-//                               2002-2003 interactivetools.com, inc.
-// This copyright notice MUST stay intact for use (see license.txt).
-//
-// A free WYSIWYG editor replacement for <textarea> fields.
-// For full source code and docs, visit http://www.interactivetools.com/
-//
-// Version 3.0 developed by Mihai Bazon.
-//   http://dynarch.com/mishoo/
-//
-// $Id: htmlarea.js,v 1.95 2004/09/17 11:54:24 mishoo Exp $
+
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    --  Developers - Coding Style:
+    --   For the sake of not committing needlessly conflicting changes,
+    --
+    --   * New code to be indented with 2 spaces ("soft tab").
+    --   * New code preferably uses BSD-Style Bracing
+    --      if(foo)
+    --      {
+    --        bar();
+    --      }
+    --   * Don't change brace styles unless you're working on the non BSD-Style
+    --     area (so we don't get spurious changes in line numbering).
+    --   * Don't change indentation unless you're working on the badly indented
+    --     area (so we don't get spurious changes of large blocks of code).
+    --   * Jedit is the recommended editor, a comment of this format should be
+    --     included in the top 10 lines of the file (see the embedded edit mode)
+    --
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
+    --------------------------------------------------------------------------*/
 
 if (typeof _editor_url == "string") {
   // Leave exactly one backslash at the end of _editor_url
@@ -257,24 +279,6 @@ HTMLArea.Config = function () {
     bottom: '100px'
   }
 
-  /*
-  this.toolbar = [
-    [ "fontname", "space",
-      "fontsize", "space",
-      "formatblock", "space",
-      "bold", "italic", "underline", "strikethrough", "separator",
-      "subscript", "superscript", "separator",
-      "copy", "cut", "paste", "space", "undo", "redo", "space", "removeformat", "killword" ],
-
-    [ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator",
-      "lefttoright", "righttoleft", "separator",
-      "orderedlist", "unorderedlist", "outdent", "indent", "separator",
-      "forecolor", "hilitecolor", "separator",
-      "inserthorizontalrule", "createlink", "insertimage", "inserttable", "toggleborders", "htmlmode", "separator",
-      "popupeditor", "separator", "showhelp", "about" ]
-  ];
-  */
-
   this.fontname = {
     "&mdash; font &mdash;":         '',
     "Arial":	   'arial,helvetica,sans-serif',
@@ -339,35 +343,6 @@ HTMLArea.Config = function () {
   //            See images/buttons_main.gif to see how it's done.
   //    - Enabled in text mode: if false the button gets disabled for text-only mode; otherwise enabled all the time.
   this.btnList = {
-    /*
-    bold:          [ "Bold", "ed_format_bold.gif", false, function(e) {e.execCommand("bold");} ],
-    italic:        [ "Italic", "ed_format_italic.gif", false, function(e) {e.execCommand("italic");} ],
-    underline:     [ "Underline", "ed_format_underline.gif", false, function(e) {e.execCommand("underline");} ],
-    strikethrough: [ "Strikethrough", "ed_format_strike.gif", false, function(e) {e.execCommand("strikethrough");} ],
-    subscript:     [ "Subscript", "ed_format_sub.gif", false, function(e) {e.execCommand("subscript");} ],
-    superscript:   [ "Superscript", "ed_format_sup.gif", false, function(e) {e.execCommand("superscript");} ],
-    justifyleft: [ "Justify Left", "ed_align_left.gif", false, function(e) {e.execCommand("justifyleft");} ],
-    justifycenter: [ "Justify Center", "ed_align_center.gif", false, function(e){e.execCommand("justifycenter");}],
-    justifyright: [ "Justify Right", "ed_align_right.gif", false, function(e) {e.execCommand("justifyright");} ],
-    justifyfull: [ "Justify Full", "ed_align_justify.gif", false, function(e) {e.execCommand("justifyfull");} ],
-
-    orderedlist: [ "Ordered List", "ed_list_num.gif", false, function(e) {e.execCommand("insertorderedlist");} ],
-    unorderedlist: [ "Bulleted List", "ed_list_bullet.gif", false, function(e) {e.execCommand("insertunorderedlist");} ],
-    insertorderedlist: [ "Ordered List", "ed_list_num.gif", false, function(e) {e.execCommand("insertorderedlist");} ],
-    insertunorderedlist: [ "Bulleted List", "ed_list_bullet.gif", false, function(e) {e.execCommand("insertunorderedlist");} ],
-
-    outdent: [ "Decrease Indent", "ed_indent_less.gif", false, function(e) {e.execCommand("outdent");} ],
-    indent: [ "Increase Indent", "ed_indent_more.gif", false, function(e) {e.execCommand("indent");} ],
-    forecolor: [ "Font Color", "ed_color_fg.gif", false, function(e) {e.execCommand("forecolor");} ],
-    hilitecolor: [ "Background Color", "ed_color_bg.gif", false, function(e) {e.execCommand("hilitecolor");} ],
-
-    undo: [ "Undoes your last action", "ed_undo.gif", false, function(e) {e.execCommand("undo");} ],
-    redo: [ "Redoes your last action", "ed_redo.gif", false, function(e) {e.execCommand("redo");} ],
-    cut: [ "Cut selection", "ed_cut.gif", false, cut_copy_paste ],
-    copy: [ "Copy selection", "ed_copy.gif", false, cut_copy_paste ],
-    paste: [ "Paste from clipboard", "ed_paste.gif", false, cut_copy_paste ],
-
-    */
     bold:          [ "Bold",   ["ed_buttons_main.gif",3,2], false, function(e) {e.execCommand("bold");} ],
     italic:        [ "Italic", ["ed_buttons_main.gif",2,2], false, function(e) {e.execCommand("italic");} ],
     underline:     [ "Underline", ["ed_buttons_main.gif",2,0], false, function(e) {e.execCommand("underline");} ],
@@ -758,13 +733,6 @@ HTMLArea.prototype._createToolbar = function () {
       };
       tb_objects[txt] = obj;
       // handlers to emulate nice flat toolbar buttons
-      /* -- This is now handled by a :hover pseudo class in htmlarea.css
-      HTMLArea._addEvent(el, "mouseover", function () {
-        if (obj.enabled) {
-          HTMLArea._addClass(el, "buttonHover");
-        }
-      });
-      */
       HTMLArea._addEvent(el, "mouseout", function () {
         if (obj.enabled) with (HTMLArea) {
           //_removeClass(el, "buttonHover");
@@ -837,9 +805,11 @@ HTMLArea.prototype._createToolbar = function () {
       first = false;
     }
     var group = this.config.toolbar[i];
-    for (var j = 0; j < group.length; ++j) {
+    for (var j = 0; j < group.length; ++j)
+    {
       var code = group[j];
-      if (/^([IT])\[(.*?)\]/.test(code)) {
+      if (/^([IT])\[(.*?)\]/.test(code))
+      {
         // special case, create text label
         var l7ed = RegExp.$1 == "I"; // localized?
         var label = RegExp.$2;
@@ -850,7 +820,9 @@ HTMLArea.prototype._createToolbar = function () {
         tb_row.appendChild(tb_cell);
         tb_cell.className = "label";
         tb_cell.innerHTML = label;
-      } else {
+      }
+      else if(typeof code != 'function')
+      {
         createButton(code);
       }
     }
@@ -1633,7 +1605,17 @@ HTMLArea.getPluginDir = function(pluginName) {
   return _editor_url + "plugins/" + pluginName;
 };
 
-HTMLArea.loadPlugin = function(pluginName) {
+HTMLArea.loadPlugin = function(pluginName, callback) {
+  // Might already be loaded
+  if(eval('typeof ' + pluginName) != 'undefined')
+  {
+    if(callback)
+    {
+      callback();
+    }
+    return;
+  }
+
   var dir = this.getPluginDir(pluginName);
   var plugin = pluginName.replace(/([a-z])([A-Z])([a-z])/g,
           function (str, l1, l2, l3) {
@@ -1641,11 +1623,56 @@ HTMLArea.loadPlugin = function(pluginName) {
           }).toLowerCase() + ".js";
   var plugin_file = dir + "/" + plugin;
   var plugin_lang = dir + "/lang/" + _editor_lang + ".js";
-  document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
-  document.write("<script type='text/javascript' src='" + plugin_lang + "'></script>");
-  //this.loadScript(plugin_file);
-  //this.loadScript(plugin_lang);
+
+  if(callback)
+  {
+    HTMLArea._loadback(plugin_file, function() { HTMLArea._loadback(plugin_lang, callback); });
+  }
+  else
+  {
+    document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
+    document.write("<script type='text/javascript' src='" + plugin_lang + "'></script>");
+  }
 };
+
+HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
+{
+  var nuPlugins = HTMLArea.cloneObject(plugins);
+
+  while(nuPlugins.length)
+  {
+    // Might already be loaded
+    if(eval('typeof ' + nuPlugins[nuPlugins.length-1]) != 'undefined')
+    {
+      nuPlugins.pop();
+    }
+    else
+    {
+      break;
+    }
+  }
+
+  if(!nuPlugins.length)
+  {
+    return true;
+  }
+
+  HTMLArea.loadPlugin
+  (nuPlugins.pop(),
+      function()
+      {
+        if(HTMLArea.loadPlugins(nuPlugins, callbackIfNotReady))
+        {
+          if(typeof callbackIfNotReady == 'function')
+          {
+            callbackIfNotReady();
+          }
+        }
+      }
+  );
+  return false;
+}
+
 
 HTMLArea.loadStyle = function(style, plugin) {
   var url = _editor_url || '';
@@ -2149,10 +2176,14 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
   // easier (to "get out of" tags), it's not essential.
   // TODO: Make this work for IE?
   // TODO: Perhaps should use a plain space character, I'm not sure.
-  if(HTMLArea.is_gecko)
+  //  OK, I've disabled this temporarily, to be honest, I can't rightly remember what the
+  //  original problem was I was trying to solve with it.  I think perhaps that EnterParagraphs
+  //  might solve the problem, whatever the hell it was.  I'm going senile, I'm sure.
+  if(0 && HTMLArea.is_gecko)
   {
     var s = this._getSelection();
     // If the last character in the last text node of the parent tag
+    // and the parent tag is not a block tag
     if(s && s.isCollapsed && s.anchorNode
          && s.anchorNode.parentNode.tagName.toLowerCase() != 'body'
          && s.anchorNode.nodeType == 3 && s.anchorOffset == s.anchorNode.length
@@ -2160,6 +2191,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
           (   s.anchorNode.parentNode.nextSibling
            && s.anchorNode.parentNode.nextSibling.nodeType == 3
           )
+         && !HTMLArea.isBlockElement(s.anchorNode.parentNode)
       )
     {
       // Insert hair-width-space after the close tag if there isn't another text node on the other side
@@ -2168,7 +2200,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
       try
       {
         s.anchorNode.parentNode.parentNode.insertBefore
-          (this._doc.createTextNode('\u200A'), s.anchorNode.parentNode.nextSibling);
+          (this._doc.createTextNode('\t'), s.anchorNode.parentNode.nextSibling);
       }
       catch(e)
       {
@@ -3474,17 +3506,6 @@ HTMLArea.prototype.dom_checkInsertP = function() {
 
   var newblock = block.parentNode.insertBefore(df.firstChild, block.nextSibling);
 
-  /*
-  if(block.nextSibling)
-  {
-    block.parentNode.insertBefore(df, block.nextSibling);
-  }
-  else
-  {
-    block.parentNode.appendChild(df);
-  }
-  */
-
   // Select the range (to set the insertion)
   // collapse to the start of the new block
   //  (remember the block might be <p><br/></p>, so if we collapsed to the end the <br/> would be noticable)
@@ -4536,11 +4557,35 @@ if(!Array.prototype.append)
   }
 }
 
+HTMLArea.makeEditors = function(editor_names, default_config, plugin_names)
+{
+  if(typeof default_config == 'function')
+  {
+    default_config = default_config();
+  }
+
+  var editors = { };
+  for(var x = 0; x < editor_names.length; x++)
+  {
+    editors[editor_names[x]] = new HTMLArea(editor_names[x], HTMLArea.cloneObject(default_config));
+    if(plugin_names)
+    {
+      for(var i = 0; i < plugin_names.length; i++)
+      {
+        editors[editor_names[x]].registerPlugin(eval(plugin_names[i]));
+      }
+    }
+  }
+  return editors;
+}
+
+HTMLArea.startEditors = function(editors)
+{
+  for(var i in editors)
+  {
+    if(editors[i].generate) editors[i].generate();
+  }
+}
 
 
 HTMLArea.init();
-// EOF
-// Local variables: //
-// c-basic-offset:8 //
-// indent-tabs-mode:t //
-// End: //
