@@ -1,8 +1,7 @@
 // I18N constants
 
 // LANG: "it", ENCODING: UTF-8 | ISO-8859-1
-// Author: Fabio Rotondo <fabio@rotondo.it>
-// Update for 3.0 rc1: Giovanni Premuda <gpremuda@softwerk.it>
+// Author: Mattia Landoni, http://www.webpresident.org/
 
 HTMLArea.I18N = {
 
@@ -17,32 +16,32 @@ HTMLArea.I18N = {
                 strikethrough:  "Barrato",
                 subscript:      "Pedice",
                 superscript:    "Apice",
-                justifyleft:    "Allinea a sinistra",
-                justifycenter:  "Allinea in centro",
-                justifyright:   "Allinea a destra",
-                justifyfull:    "Giustifica",
-                insertorderedlist:    "Lista ordinata",
-                insertunorderedlist:  "Lista puntata",
-                outdent:        "Decrementa indentazione",
-                indent:         "Incrementa indentazione",
-                forecolor:      "Colore del carattere",
-                hilitecolor:    "Colore di sfondo",
-                inserthorizontalrule: "Linea orizzontale",
-                createlink:     "Inserisci un link",
-                insertimage:    "Inserisci un'immagine",
-                inserttable:    "Inserisci una tabella",
-                htmlmode:       "Visualizzazione HTML",
-                popupeditor:    "Editor a pieno schermo",
-                about:          "Info sull'editor",
-                showhelp:       "Aiuto sull'editor",
+                justifyleft:    "Sinistra",
+                justifycenter:  "Centrato",
+                justifyright:   "Destra",
+                justifyfull:    "Giustificato",
+                orderedlist:    "Lista numerata",
+                unorderedlist:  "Lista non numerata",
+                outdent:        "Diminuisci indentazione",
+                indent:         "Aumenta indentazione",
+                forecolor:      "Colore font",
+                hilitecolor:    "Colore sfondo",
+                horizontalrule: "Righello orizzontale",
+                createlink:     "Inserisci link",
+                insertimage:    "Inserisci/modifica Immagine",
+                inserttable:    "Inserisci tabella",
+                htmlmode:       "Visualizza/nascondi sorgente HTML",
+                popupeditor:    "Allarga editor",
+                about:          "Informazioni su HTMLArea",
+                showhelp:       "Aiuto",
                 textindicator:  "Stile corrente",
-                undo:           "Annulla",
-                redo:           "Ripristina",
+                undo:           "Annulla ultima azione",
+                redo:           "Ripeti ultima azione",
                 cut:            "Taglia",
                 copy:           "Copia",
                 paste:          "Incolla",
-                lefttoright:    "Scrivi da sinistra a destra",
-                righttoleft:    "Scrivi da destra a sinistra"
+                lefttoright:    "Testo da sx a dx",
+                righttoleft:    "Testo da dx a sx"
         },
 
         buttons: {
@@ -52,28 +51,29 @@ HTMLArea.I18N = {
 
         msg: {
                 "Path":         "Percorso",
-                "TEXT_MODE":    "Sei in MODALITA' TESTO. Usa il bottone [<>] per tornare alla modalità WYSIWYG.",
+                "TEXT_MODE":    "Sei in MODALITA' TESTO.  Usa il bottone [<>] per tornare alla modalita' grafica.",
+
                 "IE-sucks-full-screen" :
                 // translate here
-                "The full screen mode is known to cause problems with Internet Explorer, " +
-                "due to browser bugs that we weren't able to workaround.  You might experience garbage " +
-                "display, lack of editor functions and/or random browser crashes.  If your system is Windows 9x " +
-                "it's very likely that you'll get a 'General Protection Fault' and need to reboot.\n\n" +
-                "You have been warned.  Please press OK if you still want to try the full screen editor."
+                "E' risaputo che la modalita' a schermo intero causi problemi con Internet Explorer, a causa di " +
+                "bachi nel browser che non siamo riusciti ad aggirare.  Potresti sperimentare visualizzazione " +
+                "malata, disfunzioni dell'editor e/o collasso totale del browser.  Se il tuo sistema e' Windows 9x " +
+                "molto probabilmente accadra' un 'Errore di Protezione Generale' e dovrai riavviare.\n\n" +
+                "Sei stato avvisato.  Premi OK per vedere l'editor a tutto schermo a tuo rischio e pericolo."
         },
 
         dialogs: {
-                "Annulla"                                            : "Cancel",
-                "Inserisci/modifica Link"                                : "Insert/Modify Link",
-                "Nuova finestra (_blank)"                               : "New window (_blank)",
-                "Nessuno (usa predefinito)"                               : "None (use implicit)",
+                "Cancel"                                            : "Annulla",
+                "Insert/Modify Link"                                : "Inserisci/modifica link",
+                "New window (_blank)"                               : "Nuova finestra (_blank)",
+                "None (use implicit)"                               : "Niente (usa implicito)",
                 "OK"                                                : "OK",
-                "Altro"                                             : "Other",
-                "Stessa finestra (_self)"                                : "Same frame (_self)",
+                "Other"                                             : "Altro",
+                "Same frame (_self)"                                : "Stessa frame (_self)",
                 "Target:"                                           : "Target:",
-                "Title (suggerimento):"                                  : "Title (tooltip):",
-                "Frame principale (_top)"                                  : "Top frame (_top)",
+                "Title (tooltip):"                                  : "Title (suggerimento):",
+                "Top frame (_top)"                                  : "Pagina intera (_top)",
                 "URL:"                                              : "URL:",
-                "You must enter the URL where this link points to"  : "Devi inserire un indirizzo per questo link"
+                "You must enter the URL where this link points to"  : "Devi inserire l'indirizzo a cui punta il link"
         }
 };

@@ -1,8 +1,8 @@
-ï»¿// I18N constants
+// I18N constants
 
-// LANG: "de", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "de", ENCODING: ISO-8859-1
 
-// translated: <]{MJ}[>  i@student.ethz.ch
+// translated: Raimund Meyer xinha@ray-of-light.org
 
 
 ContextMenu.I18N = {
@@ -12,48 +12,48 @@ ContextMenu.I18N = {
 
 	"Cut"                                                   : "Ausschneiden",
 	"Copy"                                                  : "Kopieren",
-	"Paste"                                                 : "EinfÃ¼gen",
-	"Image Properties"                                      : "_Bild Einstellungen...",
-	"Modify Link"                                           : "_Link Ã¤ndern...",
-	"Check Link"                                            : "Link testen...",
-	"Remove Link"                                           : "Link entfernen...",
-	"Cell Properties"                                       : "Z_ellen Einstellungen...",
-	"Row Properties"                                        : "Ze_ilen Einstellungen...",
-	"Insert Row Before"                                     : "Zeile einfÃ¼gen v_or Position",
-	"Insert Row After"                                      : "Zeile einfÃ¼gen n_ach Position",
-	"Delete Row"                                            : "Zeile lÃ¶schen",
-	"Table Properties"                                      : "_Tabellen Einstellungen...",
-	"Insert Column Before"                                  : "Spalte einfÃ¼gen vo_r Position",
-	"Insert Column After"                                   : "Spalte einfÃ¼gen na_ch Position",
-	"Delete Column"                                         : "Spalte lÃ¶schen",
-	"Justify Left"                                          : "Links ausrichten",
+	"Paste"                                                 : "Einfügen",
+	"Image Properties"                                      : "Eigenschaften",
+	"Modify Link"                                           : "Link ändern",
+	"Check Link"                                            : "Link testen",
+	"Remove Link"                                           : "Link entfernen",
+	"Cell Properties"                                       : "Zellenoptionen",
+	"Row Properties"                                        : "Zeilenoptionen",
+	"Insert Row Before"                                     : "Zeile einfügen vor Position",
+	"Insert Row After"                                      : "Zeile einügen nach Position",
+	"Delete Row"                                            : "Zeile löschen",
+	"Table Properties"                                      : "Tabellenoptionen",
+	"Insert Column Before"                                  : "Spalte einfügen vor Position",
+	"Insert Column After"                                   : "Spalte einfügen nach Position",
+	"Delete Column"                                         : "Spalte löschen",
+	"Justify Left"                                          : "Linksbündig",
 	"Justify Center"                                        : "Zentriert",
-	"Justify Right"                                         : "Rechts ausrichten",
+	"Justify Right"                                         : "Rechtsbündig",
 	"Justify Full"                                          : "Blocksatz",
-	"Make link"                                             : "Lin_k erstellen...",
-	"Remove the"                                            : "",
-	"Element"                                               : "Element entfernen...",
+	"Make link"                                             : "Link erstellen",
+	"Remove the"                                            : "Element",
+	"Element"                                               : "entfernen",
 
 	// Other labels (tooltips and alert/confirm box messages)
 
-	"Please confirm that you want to remove this element:"  : "Wollen sie dieses Element wirklich entfernen ?",
+	"Please confirm that you want to remove this element:"  : "Wollen sie dieses Element wirklich entfernen?",
 	"Remove this node from the document"                    : "Dieses Element aus dem Dokument entfernen",
-	"How did you get here? (Please report!)"                : "How did you get here? (Please report!)",
-	"Show the image properties dialog"                      : "Fenster fÃ¼r die Bild-Einstellungen anzeigen",
-	"Modify URL"                                            : "URL Ã¤ndern",
+	"How did you get here? (Please report!)"                : "Wie sind Sie denn hier hin gekommen? (Please report!)",
+	"Show the image properties dialog"                      : "Fenster für die Bildoptionen anzeigen",
+	"Modify URL"                                            : "URL ändern",
 	"Current URL is"                                        : "Aktuelle URL ist",
-	"Opens this link in a new window"                       : "Diesen Link in neuem Fenster Ã¶ffnen",
-	"Please confirm that you want to unlink this element."  : "Wollen sie diesen Link wirklich entfernen ?",
+	"Opens this link in a new window"                       : "Diesen Link in neuem Fenster öffnen",
+	"Please confirm that you want to unlink this element."  : "Wollen sie diesen Link wirklich entfernen?",
 	"Link points to:"                                       : "Link zeigt auf:",
 	"Unlink the current element"                            : "Link auf Element entfernen",
-	"Show the Table Cell Properties dialog"                 : "Zellen-Einstellungen anzeigen",
-	"Show the Table Row Properties dialog"                  : "Zeilen-Einstellungen anzeigen",
-	"Insert a new row before the current one"               : "Zeile einfÃ¼gen vor der aktuellen Position",
-	"Insert a new row after the current one"                : "Zeile einfÃ¼gen nach der aktuellen Position",
-	"Delete the current row"                                : "Zeile lÃ¶schen",
-	"Show the Table Properties dialog"                      : "Show the Table Properties dialog",
-	"Insert a new column before the current one"            : "Spalte einfÃ¼gen vor der aktuellen Position",
-	"Insert a new column after the current one"             : "Spalte einfÃ¼gen nach der aktuellen Position",
-	"Delete the current column"                             : "Spalte lÃ¶schen",
+	"Show the Table Cell Properties dialog"                 : "Zellenoptionen anzeigen",
+	"Show the Table Row Properties dialog"                  : "Zeilenoptionen anzeigen",
+	"Insert a new row before the current one"               : "Zeile einfügen vor der aktuellen Position",
+	"Insert a new row after the current one"                : "Zeile einfügen nach der aktuellen Position",
+	"Delete the current row"                                : "Zeile löschen",
+	"Show the Table Properties dialog"                      : "Tabellenoptionen anzeigen",
+	"Insert a new column before the current one"            : "Spalte einfügen vor der aktuellen Position",
+	"Insert a new column after the current one"             : "Spalte einfügen nach der aktuellen Position",
+	"Delete the current column"                             : "Spalte löschen",
 	"Create a link"                                         : "Link erstellen"
 };
