@@ -1,80 +1,59 @@
 // I18N constants
 
-// LANG: "de", ENCODING: ISO-8859-1 for the german umlaut!
+// LANG: "de", ENCODING: UTF-8
 
-HTMLArea.I18N = {
-
-	// the following should be the filename without .js extension
-	// it will be used for automatically load plugin language.
-	lang: "de",
-
-	tooltips: {
-		bold:           "Fett",
-		italic:         "Kursiv",
-		underline:      "Unterstrichen",
-		strikethrough:  "Durchgestrichen",
-		subscript:      "Hochgestellt",
-		superscript:    "Tiefgestellt",
-        justifyleft:            "Linksbündig",
-        justifycenter:          "Zentriert",
-        justifyright:           "Rechtsbündig",
-		justifyfull:    "Blocksatz",
-        orderedlist:      "Nummerierung",
-        unorderedlist:    "Aufzählungszeichen",
-		outdent:        "Einzug verkleinern",
-        indent:                 "Einzug vergrößern",
-        forecolor:              "Schriftfarbe",
-        backcolor:              "Hindergrundfarbe",
-        hilitecolor:            "Hintergrundfarbe",
-		horizontalrule: "Horizontale Linie",
-        inserthorizontalrule:   "Horizontale Linie",
-        createlink:             "Hyperlink einfügen",
-        insertimage:            "Bild einfügen",
-        inserttable:            "Tabelle einfügen",
-		htmlmode:       "HTML Modus",
-		popupeditor:    "Editor im Popup öffnen",
-        about:                  "Über htmlarea",
-        help:                   "Hilfe",
-		showhelp:       "Hilfe",
-        textindicator:          "Derzeitiger Stil",
-        undo:                   "Rückgängig",
-		redo:           "Wiederholen",
-		cut:            "Ausschneiden",
-		copy:           "Kopieren",
-        paste:                  "Einfügen aus der Zwischenablage",
-        lefttoright:            "Textrichtung von Links nach Rechts",
-        righttoleft:            "Textrichtung von Rechts nach Links",
-        removeformat:            "Formatierung entfernen"
-	},
-  
- buttons: {
-		"ok":           "OK",
-		"cancel":       "Abbrechen"
-	},
-
-	msg: {
-		"Path":         "Pfad",
-        "TEXT_MODE":            "Sie sind im Text-Modus. Benutzen Sie den [<>] Knopf um in den visuellen Modus (WYSIWIG) zu gelangen.",
-
-        "Moz-Clipboard" :
-        "Aus Sicherheitsgründen dürfen Skripte normalerweise nicht programmtechnisch auf " +
-        "Ausschneiden/Kopieren/Einfügen zugreifen. Bitte klicken Sie OK um die technische " +
-        "Erläuterung auf mozilla.org zu öffnen, in der erklärt wird, wie einem Skript Zugriff " +
-        "gewährt werden kann."
-    },
-    
-    dialogs: {
-        "OK":                   "OK",
-        "Cancel":               "Abbrechen",
-        "Insert/Modify Link":   "Verknüpfung hinzufügen/ändern",
-        "None (use implicit)":  "k.A. (implizit)",
-        "New window (_blank)":  "Neues Fenster (_blank)",
-        "Same frame (_self)":   "Selber Rahmen (_self)",
-        "Top frame (_top)":     "Oberster Rahmen (_top)",
-        "Other":                "Anderes",
-        "Target:":              "Ziel:",
-        "Title (tooltip):":     "Titel (Tooltip):",
-        "URL:":                 "URL:",
-        "You must enter the URL where this link points to": "Sie müssen eine Ziel-URL angeben für die Verknüpfung angeben"
-	}
-};
+{
+  "Bold": "Fett",
+  "Italic": "Kursiv",
+  "Underline": "Unterstrichen",
+  "Strikethrough": "Durchgestrichen",
+  "Subscript": "Hochgestellt",
+  "Superscript": "Tiefgestellt",
+  "Justify Left": "LinksbÃ¼ndig",
+  "Justify Center": "Zentriert",
+  "Justify Right": "RechtsbÃ¼ndig",
+  "Justify Full": "Blocksatz",
+  "Ordered List": "Nummerierung",
+  "Bulleted List": "AufzÃ¤hlungszeichen",
+  "Decrease Indent": "Einzug verkleinern",
+  "Increase Indent": "Einzug vergrÃ¶ÃŸern",
+  "Font Color": "Schriftfarbe",
+  "Background Color": "Hindergrundfarbe",
+  "Background Color": "Hintergrundfarbe",
+  "Horizontal Rule": "Horizontale Linie",
+  "Horizontal Rule": "Horizontale Linie",
+  "Insert Web Link": "Hyperlink einfÃ¼gen",
+  "Insert/Modify Image": "Bild einfÃ¼gen",
+  "Insert Table": "Tabelle einfÃ¼gen",
+  "Toggle HTML Source": "HTML Modus",
+  "Enlarge Editor": "Editor im Popup Ã¶ffnen",
+  "About this editor": "Ãœber htmlarea",
+  "Help using editor": "Hilfe",
+  "Help using editor": "Hilfe",
+  "Current style": "Derzeitiger Stil",
+  "Undoes your last action": "RÃ¼ckgÃ¤ngig",
+  "Redoes your last action": "Wiederholen",
+  "Cut selection": "Ausschneiden",
+  "Copy selection": "Kopieren",
+  "Paste from clipboard": "EinfÃ¼gen aus der Zwischenablage",
+  "Direction left to right": "Textrichtung von Links nach Rechts",
+  "Direction right to left": "Textrichtung von Rechts nach Links",
+  "Remove formatting": "Formatierung entfernen",
+  "OK": "OK",
+  "Cancel": "Abbrechen",
+  "Path": "Pfad",
+  "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Sie sind im Text-Modus. Benutzen Sie den [<>] Knopf um in den visuellen Modus (WYSIWIG) zu gelangen.",
+  "The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly.": "Aus SicherheitsgrÃ¼nden dÃ¼rfen Skripte normalerweise nicht programmtechnisch auf Ausschneiden/Kopieren/EinfÃ¼gen zugreifen. Bitte klicken Sie OK um die technische ErlÃ¤uterung auf mozilla.org zu Ã¶ffnen, in der erklÃ¤rt wird, wie einem Skript Zugriff gewÃ¤hrt werden kann.",
+  "OK": "OK",
+  "Cancel": "Abbrechen",
+  "Insert/Modify Link": "VerknÃ¼pfung hinzufÃ¼gen/Ã¤ndern",
+  "None (use implicit)": "k.A. (implizit)",
+  "New window (_blank)": "Neues Fenster (_blank)",
+  "Same frame (_self)": "Selber Rahmen (_self)",
+  "Top frame (_top)": "Oberster Rahmen (_top)",
+  "Other": "Anderes",
+  "Target:": "Ziel:",
+  "Title (tooltip):": "Titel (Tooltip):",
+  "URL:": "URL:",
+  "You must enter the URL where this link points to": "Sie mÃ¼ssen eine Ziel-URL angeben fÃ¼r die VerknÃ¼pfung angeben"
+}

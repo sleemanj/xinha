@@ -1,51 +1,40 @@
 // I18N constants
 
-HTMLArea.I18N = {
+// LANG: "es", ENCODING: UTF-8
 
-  // the following should be the filename without .js extension
-  // it will be used for automatically load plugin language.
-  lang: "es",
-
-  tooltips: {
-    bold:           "Negrita",
-    italic:         "Cursiva",
-    underline:      "Subrayado",
-    strikethrough:  "Tachado",
-    subscript:      "Sub?ndice",
-    superscript:    "Super?ndice",
-    justifyleft:    "Alinear a la Izquierda",
-    justifycenter:  "Centrar",
-    justifyright:   "Alinear a la Derecha",
-    justifyfull:    "Justificar",
-    orderedlist:    "Lista Ordenada",
-    unorderedlist:  "Lista No Ordenada",
-    outdent:        "Aumentar Sangr?a",
-    indent:         "Disminuir Sangr?a",
-    forecolor:      "Color del Texto",
-    hilitecolor:    "Color del Fondo",
-    inserthorizontalrule: "L?nea Horizontal",
-    createlink:     "Insertar Enlace",
-    insertimage:    "Insertar Imagen",
-    inserttable:    "Insertar Tabla",
-    htmlmode:       "Ver Documento en HTML",
-    popupeditor:    "Ampliar Editor",
-    about:          "Acerca del Editor",
-    showhelp:       "Ayuda",
-    textindicator:  "Estilo Actual",
-    undo:           "Deshacer",
-    redo:           "Rehacer",
-    cut:            "Cortar selecci?n",
-    copy:           "Copiar selecci?n",
-    paste:          "Pegar desde el portapapeles"
-  },
-
-  buttons: {
-    "ok":           "Aceptar",
-    "cancel":       "Cancelar"
-  },
-
-  msg: {
-    "Path":         "Ruta",
-    "TEXT_MODE":    "Esta en modo TEXTO. Use el boton [<>] para cambiar a WYSIWIG"
-  }
-};
+{
+  "Bold": "Negrita",
+  "Italic": "Cursiva",
+  "Underline": "Subrayado",
+  "Strikethrough": "Tachado",
+  "Subscript": "Sub?ndice",
+  "Superscript": "Super?ndice",
+  "Justify Left": "Alinear a la Izquierda",
+  "Justify Center": "Centrar",
+  "Justify Right": "Alinear a la Derecha",
+  "Justify Full": "Justificar",
+  "Ordered List": "Lista Ordenada",
+  "Bulleted List": "Lista No Ordenada",
+  "Decrease Indent": "Aumentar Sangr?a",
+  "Increase Indent": "Disminuir Sangr?a",
+  "Font Color": "Color del Texto",
+  "Background Color": "Color del Fondo",
+  "Horizontal Rule": "L?nea Horizontal",
+  "Insert Web Link": "Insertar Enlace",
+  "Insert/Modify Image": "Insertar Imagen",
+  "Insert Table": "Insertar Tabla",
+  "Toggle HTML Source": "Ver Documento en HTML",
+  "Enlarge Editor": "Ampliar Editor",
+  "About this editor": "Acerca del Editor",
+  "Help using editor": "Ayuda",
+  "Current style": "Estilo Actual",
+  "Undoes your last action": "Deshacer",
+  "Redoes your last action": "Rehacer",
+  "Cut selection": "Cortar selecci?n",
+  "Copy selection": "Copiar selecci?n",
+  "Paste from clipboard": "Pegar desde el portapapeles",
+  "OK": "Aceptar",
+  "Cancel": "Cancelar",
+  "Path": "Ruta",
+  "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Esta en modo TEXTO. Use el boton [<>] para cambiar a WYSIWIG"
+}

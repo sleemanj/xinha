@@ -22,7 +22,6 @@
 
 function ImageManager(editor)
 {
-	var tt = ImageManager.I18N;	
 
 };
 

@@ -12,7 +12,6 @@ function DynamicCSS(editor, args) {
         var cfg = editor.config;
   var toolbar = cfg.toolbar;
   var self = this;
-  var i18n = DynamicCSS.I18N;
 
         /*var cssArray=null;
         var cssLength=0;
@@ -21,7 +20,7 @@ function DynamicCSS(editor, args) {
 
   var css_class = {
     id         : "DynamicCSS-class",
-    tooltip       : i18n["DynamicCSSStyleTooltip"],
+    tooltip       : this._lc("Choose stylesheet", "DynamicCSS"),
     options    : {"":""},
     action     : function(editor) { self.onSelect(editor, this); },
     refresh    : function(editor) { self.updateValue(editor, this); }
@@ -34,17 +33,16 @@ function DynamicCSS(editor, args) {
 };
 
 DynamicCSS.parseStyleSheet=function(editor){
-        var i18n = DynamicCSS.I18N;
         iframe = editor._iframe.contentWindow.document;
 
         cssArray=DynamicCSS.cssArray;
         if(!cssArray) cssArray=new Array();
-
+        
         for(i=0;i<iframe.styleSheets.length;i++){
             // Mozilla
             if(HTMLArea.is_gecko){
                 try{
-                    cssArray=DynamicCSS.applyCSSRule(i18n,iframe.styleSheets[i].cssRules,cssArray);
+                    cssArray=DynamicCSS.applyCSSRule(iframe.styleSheets[i].cssRules,cssArray);
                 }
                 catch(e){
                     //alert(e);
@@ -54,12 +52,12 @@ DynamicCSS.parseStyleSheet=function(editor){
             else {
                 try{
                     if(iframe.styleSheets[i].rules){
-                        cssArray=DynamicCSS.applyCSSRule(i18n,iframe.styleSheets[i].rules,cssArray);
+                        cssArray=DynamicCSS.applyCSSRule(iframe.styleSheets[i].rules,cssArray);
                     }
                     // @import StyleSheets (IE)
                     if(iframe.styleSheets[i].imports){
                         for(j=0;j<iframe.styleSheets[i].imports.length;j++){
-                            cssArray=DynamicCSS.applyCSSRule(i18n,iframe.styleSheets[i].imports[j].rules,cssArray);
+                            cssArray=DynamicCSS.applyCSSRule(iframe.styleSheets[i].imports[j].rules,cssArray);
                         }
                     }
                 }
@@ -71,7 +69,7 @@ DynamicCSS.parseStyleSheet=function(editor){
         DynamicCSS.cssArray=cssArray;
 }
 
-DynamicCSS.applyCSSRule=function(i18n,cssRules,cssArray){
+DynamicCSS.applyCSSRule=function(cssRules,cssArray){
     for(rule in cssRules){
         if(typeof cssRules[rule] == 'function') continue;
         // StyleRule
@@ -96,8 +94,8 @@ DynamicCSS.applyCSSRule=function(i18n,cssRules,cssArray){
                     }
                     else{
                         className='none';
-                        if(tagName=='all') cssName=i18n["Default"];
-                        else cssName='<'+i18n["Default"]+'>';
+                        if(tagName=='all') cssName=this._lc("Default", "DynamicCSS");
+                        else cssName='<'+this._lc("Default", "DynamicCSS")+'>';
                     }
                     cssArray[tagName][className]=cssName;
                     DynamicCSS.cssLength++;
@@ -106,7 +104,7 @@ DynamicCSS.applyCSSRule=function(i18n,cssRules,cssArray){
         }
         // ImportRule (Mozilla)
         else if(cssRules[rule].styleSheet){
-            cssArray=DynamicCSS.applyCSSRule(i18n,cssRules[rule].styleSheet.cssRules,cssArray);
+            cssArray=DynamicCSS.applyCSSRule(cssRules[rule].styleSheet.cssRules,cssArray);
         }
     }
     return cssArray;
@@ -122,6 +120,10 @@ DynamicCSS._pluginInfo = {
   sponsor_url   : "http://www.systemconcept.de/",
   license       : "htmlArea"
 };
+
+DynamicCSS.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'DynamicCSS');
+}
 
 DynamicCSS.prototype.onSelect = function(editor, obj) {
     var tbobj = editor._toolbarObjects[obj.id];
@@ -186,14 +188,13 @@ DynamicCSS.prototype.updateValue = function(editor, obj) {
             DynamicCSS.lastTag=tagName;
             DynamicCSS.lastClass=className;
 
-            var i18n = DynamicCSS.I18N;
             var select = editor._toolbarObjects[obj.id].element;
 
             while(select.length>0){
                 select.options[select.length-1] = null;
             }
 
-            select.options[0]=new Option(i18n["Default"],'none');
+            select.options[0]=new Option(this._lc("Default", "DynamicCSS"),'none');
             if(cssArray){
                 // style class only allowed if parent tag is not body or editor is in fullpage mode
                 if(tagName!='body' || editor.config.fullPage){
@@ -227,7 +228,7 @@ DynamicCSS.prototype.updateValue = function(editor, obj) {
                     }
                 }
                 if(select.selectedIndex == 0){
-                    select.options[select.length]=new Option(i18n["Undefined"],className);
+                    select.options[select.length]=new Option(this._lc("Undefined", "DynamicCSS"),className);
                     select.selectedIndex=select.length-1;
                 }
             }

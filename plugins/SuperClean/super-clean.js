@@ -3,7 +3,7 @@ function SuperClean(editor, args)
 {
   this.editor = editor;
   editor._superclean_on = false;
-  editor.config.registerButton('superclean', SuperClean.I18N.tooltip, editor.imgURL('ed_superclean.gif', 'SuperClean'), true, function(e, objname, obj) { e._superClean(null, obj); });
+  editor.config.registerButton('superclean', this._lc("Clean Up HTML"), editor.imgURL('ed_superclean.gif', 'SuperClean'), true, function(e, objname, obj) { e._superClean(null, obj); });
 
   // See if we can find 'killword' and replace it with superclean
   var t = editor.config.toolbar;
@@ -37,6 +37,10 @@ SuperClean._pluginInfo =
   sponsor      : "Gogo Internet Services",
   sponsor_url  : "http://www.gogo.co.nz/"
 };
+
+SuperClean.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'SuperClean');
+}
 
 /** superClean combines HTMLTidy, Word Cleaning and font stripping into a single function
  *  it works a bit differently in how it asks for parameters */
@@ -100,7 +104,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
   win.style.padding = '5px';
   frm.appendChild(win);
 
-  win.appendChild(document.createTextNode(SuperClean.I18N.select_from));
+  win.appendChild(document.createTextNode(HTMLArea._lc("Please select from the following cleaning options...", "SuperClean")));
 
   if(this.config.tidy_handler)
   {
@@ -110,7 +114,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
     cb.setAttribute('type', 'checkbox');
     cb.setAttribute('name', 'tidy');
     lab.appendChild(cb);
-    lab.appendChild(document.createTextNode(SuperClean.I18N.general_tidy));
+    lab.appendChild(document.createTextNode(HTMLArea._lc("General tidy up and correction of some problems.", "SuperClean")));
     div.appendChild(lab);
     win.appendChild(div);
   }
@@ -121,7 +125,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
   cb.setAttribute('type', 'checkbox');
   cb.setAttribute('name', 'word_clean');
   lab.appendChild(cb);
-  lab.appendChild(document.createTextNode(SuperClean.I18N.word_clean));
+  lab.appendChild(document.createTextNode(HTMLArea._lc("Clean bad HTML from Microsoft Word", "SuperClean")));
   div.appendChild(lab);
   win.appendChild(div);
 
@@ -131,7 +135,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
   cb.setAttribute('type', 'checkbox');
   cb.setAttribute('name', 'faces');
   lab.appendChild(cb);
-  lab.appendChild(document.createTextNode(SuperClean.I18N.faces));
+  lab.appendChild(document.createTextNode(HTMLArea._lc('Remove custom typefaces (font "styles").', "SuperClean")));
   div.appendChild(lab);
   win.appendChild(div);
 
@@ -141,7 +145,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
   cb.setAttribute('type', 'checkbox');
   cb.setAttribute('name', 'sizes');
   lab.appendChild(cb);
-  lab.appendChild(document.createTextNode(SuperClean.I18N.sizes));
+  lab.appendChild(document.createTextNode(HTMLArea._lc('Remove custom font sizes.', "SuperClean")));
   div.appendChild(lab);
   win.appendChild(div);
 
@@ -151,7 +155,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
   cb.setAttribute('type', 'checkbox');
   cb.setAttribute('name', 'colors');
   lab.appendChild(cb);
-  lab.appendChild(document.createTextNode(SuperClean.I18N.colors));
+  lab.appendChild(document.createTextNode(HTMLArea._lc('Remove custom text colors.', "SuperClean")));
   div.appendChild(lab);
   win.appendChild(div);
 
@@ -159,7 +163,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
   div.style.textAlign  = 'center';
   var but = document.createElement('input');
   but.setAttribute('type',  'button');
-  but.setAttribute('value', SuperClean.I18N.go);
+  but.setAttribute('value', HTMLArea._lc('Go', "SuperClean"));
 
 
   // We want it in text mode when we do the clean.
@@ -198,7 +202,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
 
   var but = document.createElement('input');
   but.setAttribute('type',  'button');
-  but.setAttribute('value', SuperClean.I18N.cancel);
+  but.setAttribute('value', HTMLArea._lc('Cancel', "SuperClean"));
   but.onclick = function()
   {
     editor._textArea.style.display = '';

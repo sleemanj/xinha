@@ -10,8 +10,8 @@
 window.resizeTo(400, 100);
 
 function Init() {
-  i18n = window.opener.HTMLArea.I18N.dialogs; // load the HTMLArea plugin and lang file
-  __dlg_translate(i18n);
+  HTMLArea = window.opener.HTMLArea; // load the HTMLArea plugin and lang file
+  __dlg_translate('HTMLArea');
   __dlg_init();
   document.getElementById("f_rows").focus();
 };

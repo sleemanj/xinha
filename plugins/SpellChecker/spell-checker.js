@@ -14,13 +14,12 @@ function SpellChecker(editor) {
   this.editor = editor;
 
   var cfg = editor.config;
-  var tt = SpellChecker.I18N;
   var bl = SpellChecker.btnList;
   var self = this;
 
   // see if we can find the mode switch button, insert this before that
   var id = "SC-spell-check";
-  cfg.registerButton(id, tt[id], editor.imgURL("spell-check.gif", "SpellChecker"), false,
+  cfg.registerButton(id, this._lc("Spell-check"), editor.imgURL("spell-check.gif", "SpellChecker"), false,
              function(editor, id) {
                // dispatch button press event
                self.buttonPress(editor, id);
@@ -78,6 +77,10 @@ SpellChecker._pluginInfo = {
   sponsor_url   : "http://www.americanbible.org",
   license       : "htmlArea"
 };
+
+SpellChecker.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'SpellChecker');
+}
 
 SpellChecker.btnList = [
   null, // separator

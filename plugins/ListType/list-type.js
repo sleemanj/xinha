@@ -13,21 +13,20 @@ function ListType(editor) {
 	var cfg = editor.config;
 	var toolbar = cfg.toolbar;
 	var self = this;
-	var i18n = ListType.I18N;
 	var options = {};
-	options[i18n["Decimal"]] = "decimal";
-	options[i18n["Lower roman"]] = "lower-roman";
-	options[i18n["Upper roman"]] = "upper-roman";
-	options[i18n["Lower latin"]] = "lower-alpha";
-	options[i18n["Upper latin"]] = "upper-alpha";
+	options[this._lc("Decimal numbers")] = "decimal";
+	options[this._lc("Lower roman numbers")] = "lower-roman";
+	options[this._lc("Upper roman numbers")] = "upper-roman";
+	options[this._lc("Lower latin letters")] = "lower-alpha";
+	options[this._lc("Upper latin letters")] = "upper-alpha";
 	if (!HTMLArea.is_ie)
 		// IE doesn't support this property; even worse, it complains
 		// with a gross error message when we tried to select it,
 		// therefore let's hide it from the damn "browser".
-		options[i18n["Lower greek"]] = "lower-greek";
+		options[this._lc("Lower greek letters")] = "lower-greek";
 	var obj = {
 		id            : "ListType",
-		tooltip       : i18n["ListStyleTooltip"],
+		tooltip       : this._lc("Choose list style type (for ordered lists)"),
 		options       : options,
 		action        : function(editor) { self.onSelect(editor, this); },
 		refresh       : function(editor) { self.updateValue(editor, this); },
@@ -58,6 +57,10 @@ ListType._pluginInfo = {
 	sponsor_url   : "http://www.queensu.ca/",
 	license       : "htmlArea"
 };
+
+ListType.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'ListType');
+}
 
 ListType.prototype.onSelect = function(editor, combo) {
 	var tbobj = editor._toolbarObjects[combo.id].element;

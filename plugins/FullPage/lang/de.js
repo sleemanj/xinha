@@ -1,6 +1,6 @@
 // I18N for the FullPage plugin
 
-// LANG: "en", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "de", ENCODING: UTF-8
 // Author: Holger Hees, http://www.systemconcept.de
 
 // FOR TRANSLATORS:
@@ -12,14 +12,14 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-FullPage.I18N = {
-	"Alternate style-sheet:":		"Alternativer Stylesheet:",
-	"Background color:":			"Hintergrundfarbe:",
-	"Cancel":				"Abbrechen",
-	"DOCTYPE:":				"DOCTYPE:",
-	"Document properties":			"Dokumenteigenschaften",
-	"Document title:":			"Dokumenttitel:",
-	"OK":					"OK",
-	"Primary style-sheet:":			"Stylesheet:",
-	"Text color:":				"Textfarbe:"
-};
+{
+  "Alternate style-sheet:": "Alternativer Stylesheet:",
+  "Background color:": "Hintergrundfarbe:",
+  "Cancel": "Abbrechen",
+  "DOCTYPE:": "DOCTYPE:",
+  "Document properties": "Dokumenteigenschaften",
+  "Document title:": "Dokumenttitel:",
+  "OK": "OK",
+  "Primary style-sheet:": "Stylesheet:",
+  "Text color:": "Textfarbe:"
+}

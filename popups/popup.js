@@ -75,27 +75,26 @@ function __dlg_init(bottom) {
 	document.body.onkeypress = __dlg_close_on_esc;
 };
 
-function __dlg_translate(i18n) {
+function __dlg_translate(context) {
+    HTMLArea = window.opener.HTMLArea;
 	var types = ["input", "select", "legend", "span", "option", "td", "button", "div"];
 	for (var type = 0; type < types.length; ++type) {
 		var spans = document.getElementsByTagName(types[type]);
 		for (var i = spans.length; --i >= 0;) {
 			var span = spans[i];
 			if (span.firstChild && span.firstChild.data) {
-				var txt = i18n[span.firstChild.data];
+				var txt = HTMLArea._lc(span.firstChild.data, context);
 				if (txt)
 					span.firstChild.data = txt;
 			}
                         if (span.title) {
-				var txt = i18n[span.title];
+				var txt = HTMLArea._lc(span.title, context);
 				if (txt)
 					span.title = txt;
                         }
 		}
 	}
-	var txt = i18n[document.title];
-	if (txt)
-		document.title = txt;
+    document.title = HTMLArea._lc(document.title, context);
 };
 
 // closes the dialog and passes the return info upper.

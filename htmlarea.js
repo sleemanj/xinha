@@ -158,7 +158,6 @@ HTMLArea.init = function() {
 HTMLArea.loadScript(_editor_url + "dialog.js");
 HTMLArea.loadScript(_editor_url + "inline-dialog.js");
 HTMLArea.loadScript(_editor_url + "popupwin.js");
-HTMLArea.loadScript(_editor_url + "lang/" + _editor_lang + ".js");
 
 // cache some regexps
 HTMLArea.RE_tagName = /(<\/|<)\s*([^ \t\n>]+)/ig;
@@ -175,7 +174,13 @@ HTMLArea.Config = function () {
 
   this.width = "toolbar";
   this.height = "auto";
-
+  
+  //language of the editor
+  this.lang = "en";
+  
+  //
+  this.lcBackend = "lcbackend.php?lang=$lang&context=$context";
+  
   // enable creation of a status bar?
   this.statusBar = true;
 
@@ -338,7 +343,7 @@ HTMLArea.Config = function () {
   //              - buttonName is the ID of the clicked button
   //              These 2 parameters makes it possible for you to use the same
   //              handler for more HTMLArea objects or for more different buttons.
-  //    - ToolTip: default tooltip, for cases when it is not defined in the -lang- file (HTMLArea.I18N)
+  //    - ToolTip: tooltip, will be translated below
   //    - Icon: path to an icon image file for the button
   //            OR; you can use an 18x18 block of a larger image by supllying an array
   //            that has three elemtents, the first is the larger image, the second is the column
@@ -439,14 +444,7 @@ HTMLArea.Config = function () {
     {
       btn[1] = _editor_url + this.imgURL + btn[1];
     }
-    try
-    {
-      if (typeof HTMLArea.I18N.tooltips[i] != "undefined")
-      {
-        btn[0] = HTMLArea.I18N.tooltips[i];
-      }
-    }
-    catch(e) { }
+    btn[0] = HTMLArea._lc(btn[0]); //initialize tooltip
   }
 };
 
@@ -727,7 +725,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       el = document.createElement("div");
       el.appendChild(document.createTextNode("A"));
       el.className = "indicator";
-      el.title = HTMLArea.I18N.tooltips.textindicator;
+      el.title = HTMLArea._lc("Current style");
       var obj = {
         name	: txt, // the button name (i.e. 'bold')
         element : el, // the UI element (DIV)
@@ -846,7 +844,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         var l7ed = RegExp.$1 == "I"; // localized?
         var label = RegExp.$2;
         if (l7ed) {
-          label = HTMLArea.I18N.custom[label];
+	  label = HTMLArea._lc(label);
         }
         var tb_cell = document.createElement("td");
         tb_row.appendChild(tb_cell);
@@ -930,11 +928,11 @@ HTMLArea.prototype._createStatusBar = function() {
   statusbar.className = "statusBar";
   this._htmlArea.appendChild(statusbar);
   this._statusBar = statusbar;
-  // statusbar.appendChild(document.createTextNode(HTMLArea.I18N.msg["Path"] + ": "));
+  // statusbar.appendChild(document.createTextNode(HTMLArea._lc("Path") + ": "));
   // creates a holder for the path view
   div = document.createElement("span");
   div.className = "statusBarTree";
-  div.innerHTML = HTMLArea.I18N.msg["Path"] + ": ";
+  div.innerHTML = HTMLArea._lc("Path") + ": ";
   this._statusBarTree = div;
   this._statusBar.appendChild(div);
   if (!this.config.statusBar) {
@@ -1536,7 +1534,7 @@ HTMLArea.prototype.setMode = function(mode) {
       this._textArea.style.display = "block";
       if (this.config.statusBar)
       {
-        this._statusBar.innerHTML = HTMLArea.I18N.msg["TEXT_MODE"];
+        this._statusBar.innerHTML = HTMLArea._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
       }
 
       this.notifyOf('modechange', {'mode':'text'});
@@ -1671,16 +1669,14 @@ HTMLArea.loadPlugin = function(pluginName, callback) {
             return l1 + "-" + l2.toLowerCase() + l3;
           }).toLowerCase() + ".js";
   var plugin_file = dir + "/" + plugin;
-  var plugin_lang = dir + "/lang/" + _editor_lang + ".js";
 
   if(callback)
   {
-    HTMLArea._loadback(plugin_file, function() { HTMLArea._loadback(plugin_lang, callback); });
+    HTMLArea._loadback(plugin_file, callback);
   }
   else
   {
     document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
-    document.write("<script type='text/javascript' src='" + plugin_lang + "'></script>");
   }
 };
 
@@ -2036,7 +2032,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
   if (!text) {
     ancestors = this.getAllAncestors();
     if (this.config.statusBar && !noStatus) {
-      this._statusBarTree.innerHTML = HTMLArea.I18N.msg["Path"] + ": "; // clear
+      this._statusBarTree.innerHTML = HTMLArea._lc("Path") + ": "; // clear
       for (var i = ancestors.length; --i >= 0;) {
         var el = ancestors[i];
         if (!el) {
@@ -2999,7 +2995,6 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
     HTMLArea._object = this;
     var win;
     if (HTMLArea.is_ie) {
-      //if (confirm(HTMLArea.I18N.msg["IE-sucks-full-screen"]))
       {
                                 win = window.open(this.popupURL("fullscreen.html"), "ha_fullscreen",
               "toolbar=no,location=no,directories=no,status=no,menubar=no," +
@@ -3035,15 +3030,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
         this._wordClean();
     } catch (e) {
       if (HTMLArea.is_gecko) {
-        if (typeof HTMLArea.I18N.msg["Moz-Clipboard"] == "undefined") {
-          HTMLArea.I18N.msg["Moz-Clipboard"] =
-            "Unprivileged scripts cannot access Cut/Copy/Paste programatically " +
-            "for security reasons.  Click OK to see a technical note at mozilla.org " +
-            "which shows you how to allow a script to access the clipboard.\n\n" +
-            "[FIXME: please translate this message in your language definition file.]";
-        }
-        if (confirm(HTMLArea.I18N.msg["Moz-Clipboard"]))
-          window.open("http://mozilla.org/editor/midasdemo/securityprefs.html");
+        alert(HTMLArea._lc("The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly."));
       }
     }
     break;
@@ -3074,6 +3061,11 @@ HTMLArea.prototype._editorEvent = function(ev) {
   var editor = this;
   var keyEvent = (HTMLArea.is_ie && ev.type == "keydown") || (!HTMLArea.is_ie && ev.type == "keypress");
 
+  //call events of textarea
+  if(typeof editor._textArea['on'+ev.type] == "function") {
+    editor._textArea['on'+ev.type]();
+  }
+  
   if(HTMLArea.is_gecko && keyEvent && ev.ctrlKey &&  this._unLink && this._unlinkOnUndo)
   {
     if(String.fromCharCode(ev.charCode).toLowerCase() == 'z')
@@ -4374,9 +4366,6 @@ HTMLArea._postback = function(url, data, handler)
   var content = '';
   for(var i in data)
   {
-    if(typeof data[i] == 'function') continue;
-    // http://worldtimzone.com/blog/date/2002/09/24
-
     content += (content.length ? '&' : '') + i + '=' + encodeURIComponent(data[i]);
   }
 
@@ -4530,11 +4519,40 @@ HTMLArea.uniq = function(prefix)
 /** Load a language file.
  *  This function should not be used directly, HTMLArea._lc will use it when necessary.
  * @param context Case sensitive context name, eg 'HTMLArea', 'TableOperations', ...
- * @TODO  Make this useful.
  */
 HTMLArea._loadlang = function(context)
-{
-  return { };
+{ 
+  if(typeof _editor_lcbackend == "string")
+  {
+    //use backend
+    var url = _editor_lcbackend;
+    url = url.replace(/%lang%/, _editor_lang);
+    url = url.replace(/%context%/, context);
+  }
+  else
+  {
+    //use internal files
+    if(context != 'HTMLArea') {
+      var url = _editor_url+"/plugins/"+context+"/lang/"+_editor_lang+".js";
+    } else {
+      var url = _editor_url+"/lang/"+_editor_lang+".js";
+    }
+  }
+  
+  var lang;
+  var langData = HTMLArea._geturlcontent(url);
+  if(langData != "") {
+    try {
+        eval('lang = ' + langData);
+    } catch(Error) {
+        alert('Error reading Language-File ('+url+'):\n'+Error.toString());
+        lang = { }
+    }
+  } else {
+    lang = { };
+  }
+
+  return lang;
 }
 
 /** Return a localised string.
@@ -4543,6 +4561,11 @@ HTMLArea._loadlang = function(context)
  */
 HTMLArea._lc = function(string, context)
 {
+  if(_editor_lang == "en")
+  {
+    return string;
+  }
+  
   if(typeof HTMLArea._lc_catalog == 'undefined')
   {
     HTMLArea._lc_catalog = [ ];

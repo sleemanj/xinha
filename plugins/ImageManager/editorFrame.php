@@ -30,13 +30,10 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 <script type="text/javascript">
 
 if(window.top)
-	I18N = window.top.I18N;
+	HTMLArea = window.top.HTMLArea;
 
 function i18n(str) {
-	if(I18N)
-		return (I18N[str] || str);
-	else
-		return str;
+    return HTMLArea._lc(str, 'ImageManager');
 };
 	
 	var mode = "<? echo $editor->getAction(); ?>" //crop, scale, measure

@@ -17,10 +17,9 @@ function FullPage(editor) {
 
 	var cfg = editor.config;
 	cfg.fullPage = true;
-	var tt = FullPage.I18N;
 	var self = this;
 
-	cfg.registerButton("FP-docprop", tt["Document properties"], editor.imgURL("docprop.gif", "FullPage"), false,
+	cfg.registerButton("FP-docprop", this._lc("Document properties"), editor.imgURL("docprop.gif", "FullPage"), false,
 			   function(editor, id) {
 				   self.buttonPress(editor, id);
 			   });
@@ -40,6 +39,10 @@ FullPage._pluginInfo = {
 	sponsor_url   : "http://thycotic.com",
 	license       : "htmlArea"
 };
+
+FullPage.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'FullPage');
+}
 
 FullPage.prototype.buttonPress = function(editor, id) {
 	var self = this;

@@ -13,11 +13,10 @@ function CharacterMap(editor) {
         var cfg = editor.config;
 	var toolbar = cfg.toolbar;
 	var self = this;
-	var i18n = CharacterMap.I18N;
         
 	cfg.registerButton({
                 id       : "insertcharacter",
-                tooltip  : i18n["CharacterMapTooltip"],
+                tooltip  : this._lc("Insert special character"),
                 image    : editor.imgURL("ed_charmap.gif", "CharacterMap"),
                 textMode : false,
                 action   : function(editor) {
@@ -37,9 +36,10 @@ function CharacterMap(editor) {
 	}
 	if (found)
 	    a.splice(j, 0, "insertcharacter");
-        else{                
-            toolbar[1].splice(0, 0, "separator");
-	    toolbar[1].splice(0, 0, "insertcharacter");
+        else {
+            if(toolbar[1]) i = 1; else i = 0;
+            toolbar[i].splice(0, 0, "separator");
+	        toolbar[i].splice(0, 0, "insertcharacter");
         }
 };
 
@@ -53,6 +53,10 @@ CharacterMap._pluginInfo = {
 	sponsor_url   : "http://www.systemconcept.de/",
 	license       : "htmlArea"
 };
+
+CharacterMap.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'CharacterMap');
+}
 
 CharacterMap.prototype.buttonPress = function(editor) {
     editor._popupDialog( "plugin://CharacterMap/select_character", function( entity ) 

@@ -1,6 +1,6 @@
-﻿// I18N constants
+// I18N constants
 
-// LANG: "cz", ENCODING: UTF-8 | ISO-8859-2
+// LANG: "cz", ENCODING: UTF-8
 // Author: Jiri Löw, <jirilow@jirilow.com>
 
 // FOR TRANSLATORS:
@@ -12,26 +12,26 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-SpellChecker.I18N = {
-	"CONFIRM_LINK_CLICK"                    : "Prosím potvrďte otevření tohoto odkazu",
-	"Cancel"                                : "Zrušit",
-	"Dictionary"                            : "Slovník",
-	"Finished list of mispelled words"      : "Dokončen seznam chybných slov",
-	"I will open it in a new page."         : "Bude otevřen jej v nové stránce.",
-	"Ignore all"                            : "Ignorovat vše",
-	"Ignore"                                : "Ignorovat",
-	"NO_ERRORS"                             : "Podle zvoleného slovníku nebyla nalezena žádná chybná slova.",
-	"NO_ERRORS_CLOSING"                     : "Kontrola správnosti slov dokončena, nebyla nalezena žádná chybná slova. Ukončování ...",
-	"OK"                                    : "OK",
-	"Original word"                         : "Původní slovo",
-	"Please wait.  Calling spell checker."  : "Prosím čekejte. Komunikuace s kontrolou správnosti slov.",
-	"Please wait: changing dictionary to"   : "Prosím čekejte: změna adresáře na",
-	"QUIT_CONFIRMATION"                     : "Změny budou zrušeny a kontrola správnosti slov ukončena. Prosím potvrďte.",
-	"Re-check"                              : "Překontrolovat",
-	"Replace all"                           : "Zaměnit všechno",
-	"Replace with"                          : "Zaměnit za",
-	"Replace"                               : "Zaměnit",
-	"SC-spell-check"                        : "Kontrola správnosti slov",
-	"Suggestions"                           : "Doporučení",
-	"pliz weit ;-)"                         : "strpení prosím ;-)"
-};
+{
+  "Please confirm that you want to open this link": "Prosím potvrďte otevření tohoto odkazu",
+  "Cancel": "Zrušit",
+  "Dictionary": "Slovník",
+  "Finished list of mispelled words": "Dokončen seznam chybných slov",
+  "I will open it in a new page.": "Bude otevřen jej v nové stránce.",
+  "Ignore all": "Ignorovat vše",
+  "Ignore": "Ignorovat",
+  "No mispelled words found with the selected dictionary.": "Podle zvoleného slovníku nebyla nalezena žádná chybná slova.",
+  "Spell check complete, didn't find any mispelled words.  Closing now...": "Kontrola správnosti slov dokončena, nebyla nalezena žádná chybná slova. Ukončování ...",
+  "OK": "OK",
+  "Original word": "Původní slovo",
+  "Please wait.  Calling spell checker.": "Prosím čekejte. Komunikuace s kontrolou správnosti slov.",
+  "Please wait: changing dictionary to": "Prosím čekejte: změna adresáře na",
+  "This will drop changes and quit spell checker.  Please confirm.": "Změny budou zrušeny a kontrola správnosti slov ukončena. Prosím potvrďte.",
+  "Re-check": "Překontrolovat",
+  "Replace all": "Zaměnit všechno",
+  "Replace with": "Zaměnit za",
+  "Replace": "Zaměnit",
+  "Spell-check": "Kontrola správnosti slov",
+  "Suggestions": "Doporučení",
+  "One moment...": "strpení prosím ;-)"
+}

@@ -12,7 +12,6 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-Linker.I18N = {
-  "Styles"                :    "Styles"
-
-};
+{
+  "Styles": "Styles"
+}

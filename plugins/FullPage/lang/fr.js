@@ -1,6 +1,6 @@
 // I18N for the FullPage plugin
 
-// LANG: "fr", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "fr", ENCODING: UTF-8
 // Author: Cédric Guillemette, http://www.ebdata.com
 
 // FOR TRANSLATORS:
@@ -12,14 +12,14 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-FullPage.I18N = {
-	"Alternate style-sheet:":		"Feuille de style alternative:",
-	"Background color:":			"Couleur d'arrière plan:",
-	"Cancel":				"Annuler",
-	"DOCTYPE:":				"DOCTYPE:",
-	"Document properties":			"Propriétés de document",
-	"Document title:":			"Titre du document:",
-	"OK":					"OK",
-	"Primary style-sheet:":			"Feuille de style primaire:",
-	"Text color:":				"Couleur de texte:"
-};
+{
+  "Alternate style-sheet:": "Feuille de style alternative:",
+  "Background color:": "Couleur d'arrière plan:",
+  "Cancel": "Annuler",
+  "DOCTYPE:": "DOCTYPE:",
+  "Document properties": "Propriétés de document",
+  "Document title:": "Titre du document:",
+  "OK": "OK",
+  "Primary style-sheet:": "Feuille de style primaire:",
+  "Text color:": "Couleur de texte:"
+}

@@ -66,7 +66,7 @@ HTMLArea.Config.prototype.stylistLoadStyles = function(styles, altnames)
 HTMLArea.prototype._fillStylist = function()
 {
   if(!this._stylist) return false;
-  this._stylist.innerHTML = '<h1>'+Stylist.I18N.Styles+'</h1>'; // FIXME : l18n
+  this._stylist.innerHTML = '<h1>'+HTMLArea._lc('Styles', 'Stylist')+'</h1>';
 
   var may_apply = true;
   var sel       = this._getSelection();

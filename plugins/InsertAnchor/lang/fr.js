@@ -12,7 +12,7 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-InsertAnchor.I18N = {
-  "IA-insert-anchor" : "Insérer ancre",
-  "IA-anchorname" : "Nom de l'ancre"
-};
+{
+  "Insert Anchor": "Insérer ancre",
+  "Anchor name": "Nom de l'ancre"
+}

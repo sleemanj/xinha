@@ -6,10 +6,10 @@
   <script type="text/javascript">
     window.resizeTo(400, 200);
 
-I18N = window.opener.HTMLArea.I18N.dialogs;
+HTMLArea = window.opener.HTMLArea;
 
 function i18n(str) {
-  return (I18N[str] || str);
+  return (HTMLArea._lc(str, 'HTMLArea'));
 };
 
 function onTargetChanged() {
@@ -22,7 +22,7 @@ function onTargetChanged() {
 };
 
 function Init() {
-  __dlg_translate(I18N);
+  __dlg_translate('HTMLArea');
   __dlg_init();
   var param = window.dialogArguments;
   var target_select = document.getElementById("f_target");

@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "de", ENCODING: ISO-8859-1
+// LANG: "de", ENCODING: UTF-8
 // translated: Raimund Meyer xinha@ray-of-light.org
 
 // FOR TRANSLATORS:
@@ -12,7 +12,6 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-FullScreen.I18N = {
-  "tooltip"                :    "Editor maximieren/verkleinern"
-
-};
+{
+  "Maximize/Minimize Editor": "Editor maximieren/verkleinern"
+}

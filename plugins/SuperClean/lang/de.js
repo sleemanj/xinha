@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "de", ENCODING: SO-8859-1
+// LANG: "de", ENCODING: UTF-8
 // translated: Raimund Meyer xinha@ray-of-light.org
 
 // FOR TRANSLATORS:
@@ -12,16 +12,16 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-SuperClean.I18N = {
-  "tooltip"                :    "HTML s‰ubern",
-  "select_from"            :    "Bitte Optionen ausw‰hlen...",
-  "general_tidy"           :    "Allgemeines aufr‰umen und Korrektur einiger Probleme.",
-  "word_clean"             :    "Schlechtes HTML aus Microsoft Word aufr‰umen",
-  "faces"                  :    '"Fonts" entfernen (font face).',
-  "sizes"                  :    'Schriftgrˆﬂen entfernen (font size).',
-  "colors"                 :    'Schriftfarben entfernen (font color).',
-  "go"                     :    'Go',
-  'cancel'                 :    'Abbruch',
-  'failed'                 :    'S‰ubern fehlgeschlagen. ‹berpr¸fen Sie Ihren Code auf Fehler.',
-  'nothingtodo'             :   'Es gibt nichts zu s‰ubern...!'
-};
+{
+  "Clean Up HTML": "HTML s√§ubern",
+  "Please select from the following cleaning options...": "Bitte Optionen ausw√§hlen...",
+  "General tidy up and correction of some problems.": "Allgemeines aufr√§umen und Korrektur einiger Probleme.",
+  "Clean bad HTML from Microsoft Word": "Schlechtes HTML aus Microsoft Word aufr√§umen",
+  "Remove custom typefaces (font \"styles\").": "\"Fonts\" entfernen (font face).",
+  "Remove custom font sizes.": "Schriftgr√∂√üen entfernen (font size).",
+  "Remove custom text colors.": "Schriftfarben entfernen (font color).",
+  "Go": "Go",
+  "Cancel": "Abbruch",
+  "Tidy failed.  Check your HTML for syntax errors.": "S√§ubern fehlgeschlagen. √úberpr√ºfen Sie Ihren Code auf Fehler.",
+  "You don't have anything to tidy!": "Es gibt nichts zu s√§ubern...!"
+}

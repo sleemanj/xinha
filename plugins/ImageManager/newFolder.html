@@ -20,13 +20,13 @@ form .elements{
 /*<![CDATA[*/
 	window.resizeTo(300, 160);
 
-	if(window.opener)
-		I18N = window.opener.I18N;
-
-	init = function () 
+    if(window.opener)
+        HTMLArea = window.opener.HTMLArea;
+    
+	init = function ()
 	{
 		__dlg_init();
-		__dlg_translate(I18N);
+		__dlg_translate('ImageManager');
 		document.getElementById("f_foldername").focus();
 	}
 

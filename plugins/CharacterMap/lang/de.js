@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "de", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "de", ENCODING: UTF-8
 // Sponsored by http://www.systemconcept.de
 // Author: Holger Hees, <hhees@systemconcept.de>
 //
@@ -8,9 +8,9 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 
-CharacterMap.I18N = {
-	"CharacterMapTooltip"       : "Sonderzeichen einfügen",
-	"Insert special character"  : "Sonderzeichen einfügen",
-	"HTML value:"               : "HTML Wert:",
-	"Cancel"                    : "Abbrechen"
-};
+{
+  "Insert special character": "Sonderzeichen einfÃ¼gen",
+  "Insert special character": "Sonderzeichen einfÃ¼gen",
+  "HTML value:": "HTML Wert:",
+  "Cancel": "Abbrechen"
+}

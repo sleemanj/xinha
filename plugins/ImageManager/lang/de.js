@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "en", ENCODING: iso-8856-1
+// LANG: "en", ENCODING: UTF-8
 // Author: Raimund Meyer, xinha@ray-of-light.org
 
 // FOR TRANSLATORS:
@@ -12,11 +12,7 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-ImageManager.I18N = {
-	"Image Manager"									: "Bildmanager",
-	"Crop"											: "Beschneiden"
-};
-/*
-
-
-*/
+{
+  "Image Manager": "Bildmanager",
+  "Crop": "Beschneiden"
+}

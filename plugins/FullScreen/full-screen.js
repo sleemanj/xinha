@@ -6,7 +6,7 @@ function FullScreen(editor, args)
 
   editor.config.registerButton
   ( 'fullscreen',
-    FullScreen.I18N.tooltip,
+    this._lc("Maximize/Minimize Editor"),
     [_editor_url + cfg.imgURL + 'ed_buttons_main.gif',8,0], true,
       function(e, objname, obj)
       {
@@ -54,6 +54,10 @@ FullScreen._pluginInfo =
   sponsor      : "Gogo Internet Services",
   sponsor_url  : "http://www.gogo.co.nz/"
 };
+
+FullScreen.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'FullScreen');
+}
 
 /** fullScreen makes an editor take up the full window space (and resizes when the browser is resized)
  *  the principle is the same as the "popupwindow" functionality in the original htmlArea, except

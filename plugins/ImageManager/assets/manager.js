@@ -7,10 +7,7 @@
 	
 	//Translation
 	function i18n(str) {
-		if(I18N)
-		  return (I18N[str] || str);
-		else
-			return str;
+        return HTMLArea._lc(str, 'ImageManager');
 	};
 
 
@@ -33,8 +30,7 @@
 	{
 		__dlg_init();
 
-		if(I18N)
-			__dlg_translate(I18N);
+		__dlg_translate('ImageManager');
 
 		var uploadForm = document.getElementById('uploadForm');
 		if(uploadForm) uploadForm.target = 'imgManager';

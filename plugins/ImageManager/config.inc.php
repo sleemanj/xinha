@@ -175,7 +175,7 @@ $IMConfig['thumbnail_dir'] = '.thumbs';
 * DEFAULT: for demo purposes we turn this off.
 */
 
-$IMConfig['allow_new_dir'] = false;
+$IMConfig['allow_new_dir'] = true;
 
 // -------------------------------------------------------------------------
 
@@ -191,7 +191,7 @@ $IMConfig['allow_new_dir'] = false;
 * DEFAULT: for demo purposes we turn this off.
 */
 
-$IMConfig['allow_upload'] = false;
+$IMConfig['allow_upload'] = true;
 
 // -------------------------------------------------------------------------
 

@@ -28,8 +28,9 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 <script type="text/javascript">
 /*<![CDATA[*/
 	window.resizeTo(673, 531);
+
 	if(window.opener)
-		I18N = window.opener.I18N;
+		HTMLArea = window.opener.HTMLArea;
 /*]]>*/
 </script>
 <script type="text/javascript" src="<? print $IMConfig['base_url'];?>assets/editor.js"></script>

@@ -10,7 +10,6 @@
 
 // internationalization file was already loaded in parent ;-)
 var SpellChecker = window.opener.SpellChecker;
-var i18n = SpellChecker.I18N;
 
 var HTMLArea = window.opener.HTMLArea;
 var _editor_url = window.opener._editor_url;
@@ -27,6 +26,10 @@ var suggested_words = {};
 
 var to_p_dict = []; // List of words to add to personal dictionary.
 var to_r_list = []; // List of words to add to replacement list.
+
+function _lc(string) {
+  return HTMLArea._lc(string, 'SpellChecker');
+}
 
 function makeCleanDoc(leaveFixed) {
   // document.getElementById("status").innerHTML = 'Please wait: rendering valid HTML';
@@ -46,7 +49,7 @@ function makeCleanDoc(leaveFixed) {
 };
 
 function recheckClicked() {
-  document.getElementById("status").innerHTML = i18n["Please wait: changing dictionary to"] + ': "' + document.getElementById("f_dictionary").value + '".';
+  document.getElementById("status").innerHTML = _lc("Please wait: changing dictionary to") + ': "' + document.getElementById("f_dictionary").value + '".';
   var field = document.getElementById("f_content");
   field.value = makeCleanDoc(true);
   field.form.submit();
@@ -83,7 +86,7 @@ function saveClicked() {
 function cancelClicked() {
   var ok = true;
   if (modified) {
-    ok = confirm(i18n["QUIT_CONFIRMATION"]);
+    ok = confirm(_lc("This will drop changes and quit spell checker.  Please confirm."));
   }
   if (ok) {
     window.close();
@@ -120,7 +123,7 @@ function replaceClicked() {
   } while ((index != start) && wrongWords[index].__msh_fixed);
   if (index == start) {
     index = 0;
-    alert(i18n["Finished list of mispelled words"]);
+    alert(_lc("Finished list of mispelled words"));
   }
   wrongWords[index].__msh_wordClicked(true);
   return false;
@@ -189,9 +192,7 @@ function internationalizeWindow() {
       var el = els[j];
       if (el.childNodes.length == 1 && /\S/.test(el.innerHTML)) {
         var txt = el.innerHTML;
-        if (typeof i18n[txt] != "undefined") {
-          el.innerHTML = i18n[txt];
-        }
+        el.innerHTML = _lc(txt);
       }
     }
   }
@@ -400,10 +401,10 @@ function finishedSpellChecking() {
   wrongWords = sps;
   if (sps.length == 0) {
     if (!modified) {
-      alert(i18n["NO_ERRORS"]);
+      alert(_lc("No mispelled words found with the selected dictionary."));
       // window.close();
     } else {
-      alert(i18n["NO_ERRORS"]);
+      alert(_lc("No mispelled words found with the selected dictionary."));
     }
     return false;
   }
@@ -412,8 +413,8 @@ function finishedSpellChecking() {
   for (var i = as.length; --i >= 0;) {
     var a = as[i];
     a.onclick = function() {
-      if (confirm(i18n["CONFIRM_LINK_CLICK"] + ":\n" +
-            this.href + "\n" + i18n["I will open it in a new page."])) {
+      if (confirm(_lc("Please confirm that you want to open this link") + ":\n" +
+            this.href + "\n" + _lc("I will open it in a new page."))) {
         window.open(this.href);
       }
       return false;

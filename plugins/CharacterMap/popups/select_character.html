@@ -45,7 +45,7 @@ border-bottom: 1px solid black; letter-spacing: 2px;
 // HTMLSource based on HTMLArea XTD 1.5 (http://mosforge.net/projects/htmlarea3xtd/) modified by Holger Hees
 // Original Author - Bernhard Pfeifer novocaine@gmx.net
 
-CharacterMap = window.opener.CharacterMap; // load the CharacterMap plugin and lang file ;-)
+HTMLArea = window.opener.HTMLArea;
 window.resizeTo(480, 300);
 // center on parent
 var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
@@ -63,7 +63,7 @@ function _CloseOnEsc()
 
 function Init()                                                         // run on page load
 {
-   __dlg_translate(CharacterMap.I18N);
+   __dlg_translate('CharacterMap');
    __dlg_init();
     document.body.onkeypress = _CloseOnEsc;
 

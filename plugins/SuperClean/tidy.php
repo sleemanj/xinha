@@ -165,14 +165,14 @@
     else
     {
       ?>
-      alert(SuperClean.I18N.failed);
+      alert(this._lc('Tidy failed.  Check your HTML for syntax errors.'));
       <?php
     }
   }
   else
   {
     ?>
-    alert(SuperClean.I18N.nothingtodo);
+    alert(this._lc('You don\'t have anything to tidy!'));
     <?php
   }
 
