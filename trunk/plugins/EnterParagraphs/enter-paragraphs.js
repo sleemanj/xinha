@@ -1,13 +1,12 @@
-// Modification to htmlArea to insert Paragraphs instead of
-// linebreaks, under Gecko engines, circa January 2004
 // By Adam Wright, for The University of Western Australia
 //
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 
-function EnterParagraphs(editor, params) {
+function EnterParagraphs(editor) {
   this.editor = editor;
-  // activate only if we're talking to Gecko
+
+  // Activate only if we're talking to Gecko
   if (HTMLArea.is_gecko)
     this.onKeyPress = this.__onKeyPress;
 };
@@ -16,189 +15,250 @@ EnterParagraphs._pluginInfo = {
   name          : "EnterParagraphs",
   version       : "1.0",
   developer     : "Adam Wright",
-  developer_url : "http://blog.hipikat.org/",
+  developer_url : "http://www.hipikat.org/",
   sponsor       : "The University of Western Australia",
   sponsor_url   : "http://www.uwa.edu.au/",
   license       : "htmlArea"
 };
 
-// An array of elements who, in html4, by default, have an inline display and can have children
-// we use RegExp here since it should be a bit faster, also cleaner to check
-EnterParagraphs.prototype._html4_inlines_re = /^(a|abbr|acronym|b|bdo|big|cite|code|dfn|em|font|i|kbd|label|q|s|samp|select|small|span|strike|strong|sub|sup|textarea|tt|u|var)$/i;
+// Whitespace Regex
+EnterParagraphs.prototype._whiteSpace = /^\s*$/;
+// The pragmatic list of which elements a paragraph may not contain, and which may contain a paragraph
+EnterParagraphs.prototype._pExclusions = /^(address|blockquote|body|dd|div|dl|dt|fieldset|form|h1|h2|h3|h4|h5|h6|hr|li|noscript|ol|p|pre|table|ul)$/i;
+EnterParagraphs.prototype._pContainers = /^(body|del|div|fieldset|form|ins|map|noscript|object|td|th)$/i;
+// Elements which may not contain paragraphs, and would prefer a break to being split
+EnterParagraphs.prototype._pBreak = /^(address|pre|blockquote)$/i;
+// Elements which may not contain children
+EnterParagraphs.prototype._permEmpty = /^(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)$/i;
+// Elements which count as content, as distinct from whitespace or containers
+EnterParagraphs.prototype._elemSolid = /^(applet|br|button|hr|img|input|table)$/i;
+// Elements which should get a new P, before or after, when enter is pressed at either end
+EnterParagraphs.prototype._pifySibling = /^(address|blockquote|del|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|map|noscript|object|ol|p|pre|table|ul|)$/i;
+EnterParagraphs.prototype._pifyForced = /^(ul|ol|dl|table)$/i;
+// Elements which should get a new P, before or after a close parent, when enter is pressed at either end
+EnterParagraphs.prototype._pifyParent = /^(dd|dt|li|td|th|tr)$/i;
 
-// Finds the first parent element of a given node whose display is probably not inline
-EnterParagraphs.prototype.parentBlock = function(node) {
-  while (node.parentNode && (node.nodeType != 1 || this._html4_inlines_re.test(node.tagName)))
-    node = node.parentNode;
-  return node;
+// Gecko's a bit lacking in some odd ways...
+EnterParagraphs.prototype.insertAdjacentElement = function(ref,pos,el) {
+
+  if ( pos == 'BeforeBegin' ) ref.parentNode.insertBefore(el,ref);
+  else if ( pos == 'AfterEnd' ) ref.nextSibling ? ref.parentNode.insertBefore(el,ref.nextSibling) : ref.parentNode.appendChild(el);
+  else if ( pos == 'AfterBegin' && ref.firstChild ) ref.insertBefore(el,ref.firstChild);
+  else if ( pos == 'BeforeEnd' || pos == 'AfterBegin' ) ref.appendChild(el);
 };
 
-// Internal function for recursively itterating over a all nodes in a fragment
-// If a callback function returns a non-null value, that is returned and the crawl is therefore broken
-EnterParagraphs.prototype.walkNodeChildren = function(me, callback) {
-  if (me.firstChild) {
-    var myChild = me.firstChild;
-    var retVal;
-    while (myChild) {
-      if ((retVal = callback(this, myChild)) != null)
-        return retVal;
-      if ((retVal = this.walkNodeChildren(myChild, callback)) != null)
-        return retVal;
-      myChild = myChild.nextSibling;
-    }
+// Passes a global parent node or document fragment to forEachNode
+EnterParagraphs.prototype.forEachNodeUnder = function (top, fn, ltr, init, parm) {
+
+  // Identify the first and last nodes to deal with
+  var start, end;
+  if ( top.nodeType == 11 && top.firstChild ) {
+    start = top.firstChild;
+    end = top.lastChild;
+  } else start = end = top;
+  while ( end.lastChild ) end = end.lastChild;
+
+  // Pass onto forEachNode
+  return this.forEachNode(start, end, fn, ltr, init, parm);
+};
+
+// Throws each node into a function
+EnterParagraphs.prototype.forEachNode = function (left, right, fn, ltr, init, parm) {
+
+  var xBro = function(elem, ltr) { return ( ltr ? elem.nextSibling : elem.previousSibling ); };
+  var xSon = function(elem, ltr) { return ( ltr ? elem.firstChild : elem.lastChild ); };
+  var walk, lookup, fnVal, ping = init;
+
+  // Until we've hit the last node
+  while ( walk != ltr ? right : left ) {
+
+    // Progress to the next node
+    if ( !walk ) walk = ltr ? left : right;
+    else {
+      if ( xSon(walk,ltr) ) walk = xSon(walk,ltr);
+      else {
+        if ( xBro(walk,ltr) ) walk = xBro(walk,ltr);
+        else {
+          lookup = walk;
+          while ( !xBro(lookup,ltr) && lookup != (ltr ? right : left) ) lookup = lookup.parentNode;
+          walk = ( lookup.nextSibling ? lookup.nextSibling : lookup ) ;
+          if ( walk == right ) break;
+    }	}	}
+
+    fnVal = fn(this, walk, ping, parm, (walk==(ltr?right:left)));	// Throw this node at the wanted function
+    if ( fnVal[0] ) return fnVal[1];								// If this node wants us to return, return pong
+    if ( fnVal[1] ) ping = fnVal[1];								// Otherwise, set pong to ping, to pass to the next node
   }
+  return false;
 };
 
-// Callback function to be performed on each node in the hierarchy
-// Sets flag to true if we find actual text or an element that's not usually displayed inline
-EnterParagraphs.prototype._isFilling = function(self, node) {
-  if (node.nodeType == 1 && !self._html4_inlines_re.test(node.nodeName))
-    return true;
-  else if (node.nodeType == 3 && node.nodeValue != '')
-    return true;
-  return null;
-  //alert(node.nodeName);
+// forEachNode fn: Find a post-insertion node, only if all nodes are empty, or the first content
+EnterParagraphs.prototype._fenEmptySet = function (parent, node, pong, getCont, last) {
+
+  // Mark this if it's the first base
+  if ( !pong && !node.firstChild ) pong = node;
+
+  // Check for content
+  if ( (node.nodeType == 1 && parent._elemSolid.test(node.nodeName)) ||
+    (node.nodeType == 3 && !parent._whiteSpace.test(node.nodeValue)) ||
+    (node.nodeType != 1 && node.nodeType != 3) ) {
+
+    return new Array(true, (getCont?node:false));
+  }
+
+  // Only return the 'base' node if we didn't want content
+  if ( last && !getCont ) return new Array(true, pong);
+  return new Array(false, pong);
 };
 
-// Inserts a node deeply on the left of a hierarchy of nodes
-EnterParagraphs.prototype.insertDeepLeftText = function(target, toInsert) {
-  var falling = target;
-  while (falling.firstChild && falling.firstChild.nodeType == 1)
-    falling = falling.firstChild;
-  //var refNode = falling.firstChild ? falling.firstChild : null;
-  //falling.insertBefore(toInsert, refNode);
-  falling.innerHTML = toInsert;
+// forEachNode fn:
+EnterParagraphs.prototype._fenCullIds = function (parent, node, pong, parm, last) {
+
+  // Check for an id, blast it if it's in the store, otherwise add it
+  if ( node.id ) pong[node.id] ? node.id = '' : pong[node.id] = true;
+  return new Array(false,pong);
 };
 
-// Kind of like a macros, for a frequent query...
-EnterParagraphs.prototype.isElem = function(node, type) {
-  return node.nodeName.toLowerCase() == type.toLowerCase();
+// Grabs a range suitable for paragraph stuffing
+EnterParagraphs.prototype.processSide = function(rng, left) {
+
+  var next = function(element, left) { return ( left ? element.previousSibling : element.nextSibling ); };
+  var node = left ? rng.startContainer : rng.endContainer;
+  var offset = left ? rng.startOffset : rng.endOffset;
+  var roam, start = node;
+
+  // Never start with an element, because then the first roaming node might
+  // be on the exclusion list and we wouldn't know until it was too late
+  while ( start.nodeType == 1 && !this._permEmpty.test(start.nodeName) ) start = ( offset ? start.lastChild : start.firstChild );
+
+  // Climb the tree, left or right, until our course of action presents itself
+  while ( roam = roam ? ( next(roam,left) ? next(roam,left) : roam.parentNode ) : start ) {
+
+    if ( next(roam,left) ) {
+      // If the next sibling's on the exclusion list, stop before it
+      if ( this._pExclusions.test(next(roam,left).nodeName) ) {
+        return this.processRng(rng, left, roam, next(roam,left), (left?'AfterEnd':'BeforeBegin'), true, false);
+    } } else {
+      // If our parent's on the container list, stop inside it
+      if (this._pContainers.test(roam.parentNode.nodeName)) {
+        return this.processRng(rng, left, roam, roam.parentNode, (left?'AfterBegin':'BeforeEnd'), true, false);
+      }
+      // If our parent's on the exclusion list, chop without wrapping
+      else if (this._pExclusions.test(roam.parentNode.nodeName)) {
+        if (this._pBreak.test(roam.parentNode.nodeName)) {
+          return this.processRng(rng, left, roam, roam.parentNode,
+                            (left?'AfterBegin':'BeforeEnd'), false, (left?true:false));
+        } else {
+          return this.processRng(rng, left, (roam = roam.parentNode),
+                            (next(roam,left) ? next(roam,left) : roam.parentNode),
+              (next(roam,left) ? (left?'AfterEnd':'BeforeBegin') : (left?'AfterBegin':'BeforeEnd')), false, false);
+}	}	}	}	};
+
+// Neighbour and insertion identify where the new node, roam, needs to enter
+// the document; landmarks in our selection will be deleted before insertion
+EnterParagraphs.prototype.processRng = function(rng, left, roam, neighbour, insertion, pWrap, preBr) {
+
+  var node = left ? rng.startContainer : rng.endContainer;
+  var offset = left ? rng.startOffset : rng.endOffset;
+
+  // Define the range to cut, and extend the selection range to the same boundary
+  var editor = this.editor;
+  var newRng = editor._doc.createRange();
+  newRng.selectNode(roam);
+  if (left) {
+    newRng.setEnd(node, offset);
+    rng.setStart(newRng.startContainer, newRng.startOffset);
+  } else {
+    newRng.setStart(node, offset);
+    rng.setEnd(newRng.endContainer, newRng.endOffset);
+  }
+
+  // Clone the range and remove duplicate ids it would otherwise produce
+  var cnt = newRng.cloneContents();
+  this.forEachNodeUnder(cnt, this._fenCullIds, true, this.takenIds, false);
+
+  // Special case, for inserting paragraphs before some blocks when caret is at their zero offset
+  var pify, pifyOffset, fill;
+  pify = left ? (newRng.endContainer.nodeType == 3 ? true:false) : (newRng.startContainer.nodeType == 3 ? false:true);
+  pifyOffset = pify ? newRng.startOffset : newRng.endOffset;
+  pify = pify ? newRng.startContainer : newRng.endContainer;
+
+  if ( this._pifyParent.test(pify.nodeName) && pify.parentNode.childNodes.item(0) == pify ) {
+    while ( !this._pifySibling.test(pify.nodeName) ) pify = pify.parentNode;
+  }
+
+  if ( cnt.nodeType == 11 && !cnt.firstChild ) cnt.appendChild(editor._doc.createElement(pify.nodeName));
+  fill = this.forEachNodeUnder(cnt,this._fenEmptySet,true,false,false);
+
+  if ( fill && this._pifySibling.test(pify.nodeName) &&
+    ( (pifyOffset == 0) || ( pifyOffset == 1 && this._pifyForced.test(pify.nodeName) ) ) ) {
+
+    roam = editor._doc.createElement('p');
+    roam.appendChild(editor._doc.createElement('br'));
+
+    if (left && pify.previousSibling) return new Array(pify.previousSibling, 'AfterEnd', roam);
+    else if (!left && pify.nextSibling) return new Array(pify.nextSibling, 'BeforeBegin', roam);
+    else return new Array(pify.parentNode, (left?'AfterBegin':'BeforeEnd'), roam);
+  }
+
+  // If our cloned contents are 'content'-less, shove a break in them
+  if ( fill ) {
+    if ( fill.nodeType == 3 ) fill = fill.parentNode;		// Ill-concieved?
+    if ( (fill.nodeType == 1 && !this._elemSolid.test()) || fill.nodeType == 11 ) fill.appendChild(editor._doc.createElement('br'));
+    else fill.parentNode.insertBefore(editor._doc.createElement('br'),fill);
+  }
+
+  // And stuff a shiny new object with whatever contents we have
+  roam = (pWrap || (cnt.nodeType == 11 && !cnt.firstChild)) ? editor._doc.createElement('p') : editor._doc.createDocumentFragment();
+  roam.appendChild(cnt);
+  if (preBr) roam.appendChild(editor._doc.createElement('br'));
+
+  // Return the nearest relative, relative insertion point and fragment to insert
+  return new Array(neighbour, insertion, roam);
 };
 
-// The onKeyPress even that does all the work - nicely breaks the line into paragraphs
+// Called when a key is pressed in the editor
 EnterParagraphs.prototype.__onKeyPress = function(ev) {
 
-  if (ev.keyCode == 13 && !ev.shiftKey && this.editor._iframe.contentWindow.getSelection) {
+  // If they've hit enter and shift is up, take it
+  if (ev.keyCode == 13 && !ev.shiftKey && this.editor._iframe.contentWindow.getSelection)
+    return this.handleEnter(ev);
+};
 
-    var editor = this.editor;
+// Handles the pressing of an unshifted enter for Gecko
+EnterParagraphs.prototype.handleEnter = function(ev) {
 
-    // Get the selection and solid references to what we're dealing with chopping
-    var sel = editor._iframe.contentWindow.getSelection();
+  // Grab the selection and associated range
+  var sel = this.editor._getSelection();
+  var rng = this.editor._createRange(sel);
+  this.takenIds = new Object();
 
-    // Set the start and end points such that they're going /forward/ through the document
-    var rngLeft = editor._doc.createRange();		var rngRight = editor._doc.createRange();
-    rngLeft.setStart(sel.anchorNode, sel.anchorOffset);	rngRight.setStart(sel.focusNode, sel.focusOffset);
-    rngLeft.collapse(true);					rngRight.collapse(true);
+  // Grab ranges for document re-stuffing, if appropriate
+  var pStart = this.processSide(rng, true);
+  var pEnd = this.processSide(rng, false);
 
-    var direct = rngLeft.compareBoundaryPoints(rngLeft.START_TO_END, rngRight) < 0;
+  // Get rid of everything local to the selection
+  sel.removeAllRanges();
+  rng.deleteContents();
 
-    var startNode = direct ? sel.anchorNode : sel.focusNode;
-    var startOffset = direct ? sel.anchorOffset : sel.focusOffset;
-    var endNode = direct ? sel.focusNode : sel.anchorNode;
-    var endOffset = direct ? sel.focusOffset : sel.anchorOffset;
+  // Grab a node we'll have after insertion, since fragments will be lost
+  var holdEnd = this.forEachNodeUnder(pEnd[2], this._fenEmptySet, true, false, true);
 
-    // Find the parent blocks of nodes at either end, and their attributes if they're paragraphs
-    var startBlock = this.parentBlock(startNode);		var endBlock = this.parentBlock(endNode);
-    var attrsLeft = new Array();				var attrsRight = new Array();
+  // Reinsert our carefully chosen document fragments
+  if ( pStart ) this.insertAdjacentElement(pStart[0], pStart[1], pStart[2]);
+  if ( pEnd.nodeType != 1 ) this.insertAdjacentElement(pEnd[0], pEnd[1], pEnd[2]);
 
-    // If a list, let the browser take over, if we're in a paragraph, gather it's attributes
-    if (this.isElem(startBlock, 'li') || this.isElem(endBlock, 'li'))
-      return;
-
-    if (this.isElem(startBlock, 'p')) {
-      for (var i = 0; i < startBlock.attributes.length; i++) {
-        attrsLeft[startBlock.attributes[i].nodeName] = startBlock.attributes[i].nodeValue;
-      }
-    }
-    if (this.isElem(endBlock, 'p')) {
-      for (var i = 0; i < endBlock.attributes.length; i++) {
-        // If we start and end within one paragraph, don't duplicate the 'id'
-        if (endBlock != startBlock || endBlock.attributes[i].nodeName.toLowerCase() != 'id')
-          attrsRight[endBlock.attributes[i].nodeName] = endBlock.attributes[i].nodeValue;
-      }
-    }
-
-    // Look for where to start and end our chopping - within surrounding paragraphs
-    // if they exist, or at the edges of the containing block, otherwise
-    var startChop = startNode;				var endChop = endNode;
-
-    while ((startChop.previousSibling && !this.isElem(startChop.previousSibling, 'p'))
-           || (startChop.parentNode && startChop.parentNode != startBlock && startChop.parentNode.nodeType != 9))
-      startChop = startChop.previousSibling ? startChop.previousSibling : startChop.parentNode;
-
-    while ((endChop.nextSibling && !this.isElem(endChop.nextSibling, 'p'))
-           || (endChop.parentNode && endChop.parentNode != endBlock && endChop.parentNode.nodeType != 9))
-      endChop = endChop.nextSibling ? endChop.nextSibling : endChop.parentNode;
-
-    // Set up new paragraphs
-    var pLeft = editor._doc.createElement('p');		var pRight = editor._doc.createElement('p');
-
-    for (var attrName in attrsLeft) {
-      var thisAttr = editor._doc.createAttribute(attrName);
-      thisAttr.value = attrsLeft[attrName];
-      pLeft.setAttributeNode(thisAttr);
-    }
-    for (var attrName in attrsRight) {
-      var thisAttr = editor._doc.createAttribute(attrName);
-      thisAttr.value = attrsRight[attrName];
-      pRight.setAttributeNode(thisAttr);
-    }
-
-    // Get the ranges destined to be stuffed into new paragraphs
-    rngLeft.setStartBefore(startChop);
-    rngLeft.setEnd(startNode,startOffset);
-    pLeft.appendChild(rngLeft.cloneContents());		// Copy into pLeft
-
-    rngRight.setEndAfter(endChop);
-    rngRight.setStart(endNode,endOffset);
-    pRight.appendChild(rngRight.cloneContents());		// Copy into pRight
-
-    // If either paragraph is empty, fill it with a nonbreakable space
-    var foundBlock = false;
-    foundBlock = this.walkNodeChildren(pLeft, this._isFilling);
-    if (foundBlock != true)
-      this.insertDeepLeftText(pLeft, '&nbsp;');
-
-    foundBlock = false;
-    foundBlock = this.walkNodeChildren(pRight, this._isFilling);
-    if (foundBlock != true)
-      this.insertDeepLeftText(pRight, '&nbsp;');
-
-    // Get a range for everything to be replaced and replace it
-    var rngAround = editor._doc.createRange();
-
-    if (!startChop.previousSibling && this.isElem(startChop.parentNode, 'p'))
-      rngAround.setStartBefore(startChop.parentNode);
-    else
-      rngAround.setStart(rngLeft.startContainer, rngLeft.startOffset);
-
-    if (!endChop.nextSibling && this.isElem(endChop.parentNode, 'p'))
-      rngAround.setEndAfter(endChop.parentNode);
-    else
-      rngAround.setEnd(rngRight.endContainer, rngRight.endOffset);
-
-    rngAround.deleteContents();
-    rngAround.insertNode(pRight);
-    rngAround.insertNode(pLeft);
-
-    // Set the selection to the start of the (second) new paragraph
-    if (pRight.firstChild) {
-      while (pRight.firstChild && this._html4_inlines_re.test(pRight.firstChild.nodeName))
-        pRight = pRight.firstChild;
-      // Slip into any inline tags
-      if (pRight.firstChild && pRight.firstChild.nodeType == 3)
-        pRight = pRight.firstChild;	// and text, if they've got it
-
-      var rngCaret = editor._doc.createRange();
-      rngCaret.setStart(pRight, 0);
-      rngCaret.collapse(true);
-
-      sel = editor._iframe.contentWindow.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(rngCaret);
-    }
-
-    // Stop the bubbling
-    HTMLArea._stopEvent(ev);
+  // Move the caret in front of the first good text element
+  if ( this._permEmpty.test(holdEnd.nodeName) ) {
+    var prodigal = 0;
+    while ( holdEnd.parentNode.childNodes.item(prodigal) != holdEnd ) prodigal++;
+    sel.collapse( holdEnd.parentNode, prodigal);
   }
+  else sel.collapse(holdEnd, 0);
+  editor.scrollToElement(holdEnd);
+  editor.updateToolbar();
+
+  //======================
+    HTMLArea._stopEvent(ev);
+    return true;
 };
