@@ -12,12 +12,12 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-ListType.I18N = {
-  "Decimal"                :    "Nombres décimaux",
-  "Lower roman"            :    "Nombres romains minuscule",
-  "Upper roman"            :    "Nombres romains majuscule",
-  "Lower latin"            :    "Lettres latines minuscule",
-  "Upper latin"            :    "Lettres latines majuscule",
-  "Lower greek"            :    "Lettres grecques minuscule",
-  "ListStyleTooltip"       :    "Choisissez le style de liste (pour les listes ordonnées)"
-};
+{
+  "Decimal numbers": "Nombres décimaux",
+  "Lower roman numbers": "Nombres romains minuscule",
+  "Upper roman numbers": "Nombres romains majuscule",
+  "Lower latin letters": "Lettres latines minuscule",
+  "Upper latin letters": "Lettres latines majuscule",
+  "Lower greek letters": "Lettres grecques minuscule",
+  "Choose list style type (for ordered lists)": "Choisissez le style de liste (pour les listes ordonnées)"
+}

@@ -34,7 +34,7 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 	window.resizeTo(600, 460);
 
 	if(window.opener)
-		I18N = window.opener.ImageManager.I18N;
+		HTMLArea = window.opener.HTMLArea;
 
 	var thumbdir = "<? echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<? echo $manager->getImagesURL(); ?>";

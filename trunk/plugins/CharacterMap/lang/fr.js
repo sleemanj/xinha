@@ -12,9 +12,9 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-CharacterMap.I18N = {
-  "CharacterMapTooltip"       : "Insérer caractère spécial",
-  "Insert special character"  : "Insérer caractère spécial",
-  "HTML value:"               : "entité HTML:",
-  "Cancel"                    : "Annuler"
-};
+{
+  "Insert special character": "Insérer caractère spécial",
+  "Insert special character": "Insérer caractère spécial",
+  "HTML value:": "entité HTML:",
+  "Cancel": "Annuler"
+}

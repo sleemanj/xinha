@@ -1,36 +1,31 @@
 // I18N constants
 
-HTMLArea.I18N = {
+// LANG: "en", ENCODING: UTF-8
 
-	// the following should be the filename without .js extension
-	// it will be used for automatically load plugin language.
-	lang: "nb",
-
-	tooltips: {
-		bold:           "Fet",
-		italic:         "Kursiv",
-		underline:      "Understreket",
-		strikethrough:  "Gjennomstreket",
-		subscript:      "Senket",
-		superscript:    "Hevet",
-		justifyleft:    "Venstrejuster",
-		justifycenter:  "Midtjuster",
-		justifyright:   "Høyrejuster",
-		justifyfull:    "Blokkjuster",
-		orderedlist:    "Nummerert liste",
-		unorderedlist:  "Punktmerket liste",
-		outdent:        "Øke innrykk",
-		indent:         "Reduser innrykk",
-		forecolor:      "Skriftfarge",
-		backcolor:      "Bakgrunnsfarge",
-		inserthorizontalrule: "Horisontal linje",
-		createlink:     "Sett inn lenke",
-		insertimage:    "Sett inn bilde",
-		inserttable:    "Sett inn tabell",
-		htmlmode:       "Vis HTML kode",
-		popupeditor:    "Forstørr redigeringsvindu",
-		about:          "Om..",
-		help:           "Hjelp",
-		textindicator:  "Gjeldende stil"
-	}
-};
+{
+  "Bold": "Fet",
+  "Italic": "Kursiv",
+  "Underline": "Understreket",
+  "Strikethrough": "Gjennomstreket",
+  "Subscript": "Senket",
+  "Superscript": "Hevet",
+  "Justify Left": "Venstrejuster",
+  "Justify Center": "Midtjuster",
+  "Justify Right": "HÃ¸yrejuster",
+  "Justify Full": "Blokkjuster",
+  "Ordered List": "Nummerert liste",
+  "Bulleted List": "Punktmerket liste",
+  "Decrease Indent": "Ã˜ke innrykk",
+  "Increase Indent": "Reduser innrykk",
+  "Font Color": "Skriftfarge",
+  "Background Color": "Bakgrunnsfarge",
+  "Horizontal Rule": "Horisontal linje",
+  "Insert Web Link": "Sett inn lenke",
+  "Insert/Modify Image": "Sett inn bilde",
+  "Insert Table": "Sett inn tabell",
+  "Toggle HTML Source": "Vis HTML kode",
+  "Enlarge Editor": "ForstÃ¸rr redigeringsvindu",
+  "About this editor": "Om..",
+  "Help using editor": "Hjelp",
+  "Current style": "Gjeldende stil"
+}

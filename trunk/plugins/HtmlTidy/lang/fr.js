@@ -1,4 +1,4 @@
-                      // I18N constants
+// I18N constants
 
 // LANG: "fr", ENCODING: UTF-8
 // Author: Laurent Vilday, mokhet@mokhet.com
@@ -12,7 +12,7 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-HtmlTidy.I18N = {
-  "tidying"                               : "\n Nettoyage de la source HTML, veuillez patientier.",
-  "HT-html-tidy"                          : "HTML Tidy"
-};
+{
+  "\n Tidying up the HTML source, please wait...": "\n Nettoyage de la source HTML, veuillez patientier.",
+  "HTML Tidy": "HTML Tidy"
+}

@@ -46,7 +46,6 @@ function CSS(editor, params) {
 	var cfg = editor.config;
 	var toolbar = cfg.toolbar;
 	var self = this;
-	var i18n = CSS.I18N;
 	var plugin_config;
   if(params && params.length)
   {

@@ -6,10 +6,7 @@
  */
 
 	function i18n(str) {
-		if(I18N)
-		  return (I18N[str] || str);
-		else
-			return str;
+        return HTMLArea._lc(str, 'ImageManager');
 	};
 
 	function changeDir(newDir) 

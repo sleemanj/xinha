@@ -42,13 +42,12 @@ ContextMenu.prototype.getContextMenu = function(target) {
 	var menu = [];
 	var tbo = this.editor.plugins.TableOperations;
 	if (tbo) tbo = tbo.instance;
-	var i18n = ContextMenu.I18N;
 
 	var selection = editor.hasSelectedText();
 	if (selection)
-		menu.push([ i18n["Cut"], function() { editor.execCommand("cut"); }, null, config.btnList["cut"][1] ],
-			  [ i18n["Copy"], function() { editor.execCommand("copy"); }, null, config.btnList["copy"][1] ]);
-	menu.push([ i18n["Paste"], function() { editor.execCommand("paste"); }, null, config.btnList["paste"][1] ]);
+		menu.push([ HTMLArea._lc("Cut", "ContextMenu"), function() { editor.execCommand("cut"); }, null, config.btnList["cut"][1] ],
+			  [ HTMLArea._lc("Copy", "ContextMenu"), function() { editor.execCommand("copy"); }, null, config.btnList["copy"][1] ]);
+	menu.push([ HTMLArea._lc("Paste", "ContextMenu"), function() { editor.execCommand("paste"); }, null, config.btnList["paste"][1] ]);
 
 	var currentTarget = target;
 	var elmenus = [];
@@ -92,45 +91,45 @@ ContextMenu.prototype.getContextMenu = function(target) {
 		    case "img":
 			img = target;
 			elmenus.push(null,
-				     [ i18n["Image Properties"],
+				     [ HTMLArea._lc("Image Properties", "ContextMenu"),
 				       function() {
 					       editor._insertImage(img);
 				       },
-				       i18n["Show the image properties dialog"],
+				       HTMLArea._lc("Show the image properties dialog", "ContextMenu"),
 				       config.btnList["insertimage"][1] ]
 				);
 			break;
 		    case "a":
 			link = target;
 			elmenus.push(null,
-				     [ i18n["Modify Link"],
+				     [ HTMLArea._lc("Modify Link", "ContextMenu"),
                function() { editor.config.btnList['createlink'][3](editor); },
-				       i18n["Current URL is"] + ': ' + link.href,
+				       HTMLArea._lc("Current URL is", "ContextMenu") + ': ' + link.href,
 				       config.btnList["createlink"][1] ],
 
-				     [ i18n["Check Link"],
+				     [ HTMLArea._lc("Check Link", "ContextMenu"),
 				       function() { window.open(link.href); },
-				       i18n["Opens this link in a new window"] ],
+				       HTMLArea._lc("Opens this link in a new window", "ContextMenu") ],
 
-				     [ i18n["Remove Link"],
+				     [ HTMLArea._lc("Remove Link", "ContextMenu"),
 				       function() {
-					       if (confirm(i18n["Please confirm that you want to unlink this element."] + "\n" +
-							   i18n["Link points to:"] + " " + link.href)) {
+					       if (confirm(HTMLArea._lc("Please confirm that you want to unlink this element.", "ContextMenu") + "\n" +
+							   HTMLArea._lc("Link points to:", "ContextMenu") + " " + link.href)) {
 						       while (link.firstChild)
 							       link.parentNode.insertBefore(link.firstChild, link);
 						       link.parentNode.removeChild(link);
 					       }
 				       },
-				       i18n["Unlink the current element"] ]
+				       HTMLArea._lc("Unlink the current element", "ContextMenu") ]
 				);
 			break;
 		    case "td":
 			td = target;
 			if (!tbo) break;
 			elmenus.push(null,
-				     [ i18n["Cell Properties"],
+				     [ HTMLArea._lc("Cell Properties", "ContextMenu"),
 				       function() { tableOperation("TO-cell-prop"); },
-				       i18n["Show the Table Cell Properties dialog"],
+				       HTMLArea._lc("Show the Table Cell Properties dialog", "ContextMenu"),
 				       config.btnList["TO-cell-prop"][1] ]
 				);
 			break;
@@ -138,24 +137,24 @@ ContextMenu.prototype.getContextMenu = function(target) {
 			tr = target;
 			if (!tbo) break;
 			elmenus.push(null,
-				     [ i18n["Row Properties"],
+				     [ HTMLArea._lc("Row Properties", "ContextMenu"),
 				       function() { tableOperation("TO-row-prop"); },
-				       i18n["Show the Table Row Properties dialog"],
+				       HTMLArea._lc("Show the Table Row Properties dialog", "ContextMenu"),
 				       config.btnList["TO-row-prop"][1] ],
 
-				     [ i18n["Insert Row Before"],
+				     [ HTMLArea._lc("Insert Row Before", "ContextMenu"),
 				       function() { tableOperation("TO-row-insert-above"); },
-				       i18n["Insert a new row before the current one"],
+				       HTMLArea._lc("Insert a new row before the current one", "ContextMenu"),
 				       config.btnList["TO-row-insert-above"][1] ],
 
-				     [ i18n["Insert Row After"],
+				     [ HTMLArea._lc("Insert Row After", "ContextMenu"),
 				       function() { tableOperation("TO-row-insert-under"); },
-				       i18n["Insert a new row after the current one"],
+				       HTMLArea._lc("Insert a new row after the current one", "ContextMenu"),
 				       config.btnList["TO-row-insert-under"][1] ],
 
-				     [ i18n["Delete Row"],
+				     [ HTMLArea._lc("Delete Row", "ContextMenu"),
 				       function() { tableOperation("TO-row-delete"); },
-				       i18n["Delete the current row"],
+				       HTMLArea._lc("Delete the current row", "ContextMenu"),
 				       config.btnList["TO-row-delete"][1] ]
 				);
 			break;
@@ -163,39 +162,39 @@ ContextMenu.prototype.getContextMenu = function(target) {
 			table = target;
 			if (!tbo) break;
 			elmenus.push(null,
-				     [ i18n["Table Properties"],
+				     [ HTMLArea._lc("Table Properties", "ContextMenu"),
 				       function() { tableOperation("TO-table-prop"); },
-				       i18n["Show the Table Properties dialog"],
+				       HTMLArea._lc("Show the Table Properties dialog", "ContextMenu"),
 				       config.btnList["TO-table-prop"][1] ],
 
-				     [ i18n["Insert Column Before"],
+				     [ HTMLArea._lc("Insert Column Before", "ContextMenu"),
 				       function() { tableOperation("TO-col-insert-before"); },
-				       i18n["Insert a new column before the current one"],
+				       HTMLArea._lc("Insert a new column before the current one", "ContextMenu"),
 				       config.btnList["TO-col-insert-before"][1] ],
 
-				     [ i18n["Insert Column After"],
+				     [ HTMLArea._lc("Insert Column After", "ContextMenu"),
 				       function() { tableOperation("TO-col-insert-after"); },
-				       i18n["Insert a new column after the current one"],
+				       HTMLArea._lc("Insert a new column after the current one", "ContextMenu"),
 				       config.btnList["TO-col-insert-after"][1] ],
 
-				     [ i18n["Delete Column"],
+				     [ HTMLArea._lc("Delete Column", "ContextMenu"),
 				       function() { tableOperation("TO-col-delete"); },
-				       i18n["Delete the current column"],
+				       HTMLArea._lc("Delete the current column", "ContextMenu"),
 				       config.btnList["TO-col-delete"][1] ]
 				);
 			break;
 		    case "body":
 			elmenus.push(null,
-				     [ i18n["Justify Left"],
+				     [ HTMLArea._lc("Justify Left", "ContextMenu"),
 				       function() { editor.execCommand("justifyleft"); }, null,
 				       config.btnList["justifyleft"][1] ],
-				     [ i18n["Justify Center"],
+				     [ HTMLArea._lc("Justify Center", "ContextMenu"),
 				       function() { editor.execCommand("justifycenter"); }, null,
 				       config.btnList["justifycenter"][1] ],
-				     [ i18n["Justify Right"],
+				     [ HTMLArea._lc("Justify Right", "ContextMenu"),
 				       function() { editor.execCommand("justifyright"); }, null,
 				       config.btnList["justifyright"][1] ],
-				     [ i18n["Justify Full"],
+				     [ HTMLArea._lc("Justify Full", "ContextMenu"),
 				       function() { editor.execCommand("justifyfull"); }, null,
 				       config.btnList["justifyfull"][1] ]
 				);
@@ -204,9 +203,9 @@ ContextMenu.prototype.getContextMenu = function(target) {
 	}
 
 	if (selection && !link)
-		menu.push(null, [ i18n["Make link"],
+		menu.push(null, [ HTMLArea._lc("Make link", "ContextMenu"),
            function() { editor.config.btnList['createlink'][3](editor); },
-				  i18n["Create a link"],
+				  HTMLArea._lc("Create a link", "ContextMenu"),
 				  config.btnList["createlink"][1] ]);
 
 	for (var i = 0; i < elmenus.length; ++i)
@@ -214,9 +213,9 @@ ContextMenu.prototype.getContextMenu = function(target) {
 
 	if (!/html|body/i.test(currentTarget.tagName))
 		menu.push(null,
-			  [ i18n["Remove the"] + " &lt;" + currentTarget.tagName + "&gt; " + i18n["Element"],
+			  [ HTMLArea._lc("Remove the", "ContextMenu") + " &lt;" + currentTarget.tagName + "&gt; " + HTMLArea._lc("Element", "ContextMenu"),
 			    function() {
-				    if (confirm(i18n["Please confirm that you want to remove this element:"] + " " +
+				    if (confirm(HTMLArea._lc("Please confirm that you want to remove this element:", "ContextMenu") + " " +
 						currentTarget.tagName)) {
 					    var el = currentTarget;
 					    var p = el.parentNode;
@@ -236,20 +235,19 @@ ContextMenu.prototype.getContextMenu = function(target) {
 					    }
 				    }
 			    },
-			    i18n["Remove this node from the document"] ],
-			  [ i18n["Insert paragraph before"],
+			    HTMLArea._lc("Remove this node from the document", "ContextMenu") ],
+			  [ HTMLArea._lc("Insert paragraph before", "ContextMenu"),
 			    function() { insertPara(false); },
-			    i18n["Insert a paragraph before the current node"] ],
-			  [ i18n["Insert paragraph after"],
+			    HTMLArea._lc("Insert a paragraph before the current node", "ContextMenu") ],
+			  [ HTMLArea._lc("Insert paragraph after", "ContextMenu"),
 			    function() { insertPara(true); },
-			    i18n["Insert a paragraph after the current node"] ]
+			    HTMLArea._lc("Insert a paragraph after the current node", "ContextMenu") ]
 			  );
 	return menu;
 };
 
 ContextMenu.prototype.popupMenu = function(ev) {
 	var self = this;
-	var i18n = ContextMenu.I18N;
 	if (this.currentMenu)
 		this.currentMenu.parentNode.removeChild(this.currentMenu);
 	function getPos(el) {
@@ -264,7 +262,7 @@ ContextMenu.prototype.popupMenu = function(ev) {
 	function documentClick(ev) {
 		ev || (ev = window.event);
 		if (!self.currentMenu) {
-			alert(i18n["How did you get here? (Please report!)"]);
+			alert(HTMLArea._lc("How did you get here? (Please report!)", "ContextMenu"));
 			return false;
 		}
 		var el = HTMLArea.is_ie ? ev.srcElement : ev.target;

@@ -1,7 +1,6 @@
 function InsertAnchor(editor) {
   this.editor = editor;
   var cfg = editor.config;
-  var tt = InsertAnchor.I18N;
   var bl = InsertAnchor.btnList;
   var self = this;
 
@@ -15,7 +14,7 @@ function InsertAnchor(editor) {
     }
     else {
       var id = "IA-" + btn[0];
-      cfg.registerButton(id, tt[id], editor.imgURL(btn[0] + ".gif", "InsertAnchor"), false,
+      cfg.registerButton(id, this._lc("Insert Anchor"), editor.imgURL(btn[0] + ".gif", "InsertAnchor"), false,
              function(editor, id) {
                // dispatch button press event
                self.buttonPress(editor, id);
@@ -40,6 +39,10 @@ InsertAnchor._pluginInfo = {
   license       : "htmlArea"
 };
 
+InsertAnchor.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'InsertAnchor');
+}
+
 InsertAnchor.btnList = [
   null, // separator
   ["insert-anchor"]
@@ -59,7 +62,7 @@ InsertAnchor.prototype.onGenerate = function() {
 
 InsertAnchor.prototype.buttonPress = function(editor, id) {
   var anchor;
-  anchor = prompt(InsertAnchor.I18N["IA-anchorname"], "");
+  anchor = prompt(this._lc("Anchor name"), "");
   if (anchor == "" || anchor == null) {
     return;
   }

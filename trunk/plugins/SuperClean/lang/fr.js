@@ -12,16 +12,16 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-SuperClean.I18N = {
-  "tooltip"                :    "Nettoyer le code HTML",
-  "select_from"            :    "Veuillez sélectionner une options de nettoyage.",
-  "general_tidy"           :    "Nettoyage générique et correction des problèmes mineurs.",
-  "word_clean"             :    "Nettoyer les balises HTML de Microsoft Word",
-  "faces"                  :    'Supprimer les polices personalisées (font "styles").',
-  "sizes"                  :    'Supprimer les tailles de polices personnalisées.',
-  "colors"                 :    'Supprimer les couleurs de texte personalisées.',
-  "go"                     :    'Commencer',
-  'cancel'                 :    'Annuler',
-  'failed'                 :    'Tidy a échoué. Vérifier la syntaxe HTML.',
-  'nothingtodo'             :    "Rien à transmettre à tidy !"
-};
+{
+  "Clean Up HTML": "Nettoyer le code HTML",
+  "Please select from the following cleaning options...": "Veuillez sélectionner une options de nettoyage.",
+  "General tidy up and correction of some problems.": "Nettoyage générique et correction des problèmes mineurs.",
+  "Clean bad HTML from Microsoft Word": "Nettoyer les balises HTML de Microsoft Word",
+  "Remove custom typefaces (font \"styles\").": "Supprimer les polices personalisées (font \"styles\").",
+  "Remove custom font sizes.": "Supprimer les tailles de polices personnalisées.",
+  "Remove custom text colors.": "Supprimer les couleurs de texte personalisées.",
+  "Go": "Commencer",
+  "Cancel": "Annuler",
+  "Tidy failed.  Check your HTML for syntax errors.": "Tidy a échoué. Vérifier la syntaxe HTML.",
+  "You don't have anything to tidy!": "Rien à transmettre à tidy !"
+}

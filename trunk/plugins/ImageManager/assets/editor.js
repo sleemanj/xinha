@@ -165,7 +165,7 @@
 		if(window.opener)
 		{
 			__dlg_init(bottom);
-			__dlg_translate(I18N);
+			__dlg_translate('ImageManager');
 		}
 	}
 

@@ -12,14 +12,14 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-FullPage.I18N = {
-	"Alternate style-sheet:":		"גיליון סגנון אחר:",
-	"Background color:":			"צבע רקע:",
-	"Cancel":				"ביטול",
-	"DOCTYPE:":				"DOCTYPE:",
-	"Document properties":			"מאפייני מסמך",
-	"Document title:":			"כותרת מסמך:",
-	"OK":					"אישור",
-	"Primary style-sheet:":			"גיליון סגנון ראשי:",
-	"Text color:":				"צבע טקסט:"
-};
+{
+  "Alternate style-sheet:": "גיליון סגנון אחר:",
+  "Background color:": "צבע רקע:",
+  "Cancel": "ביטול",
+  "DOCTYPE:": "DOCTYPE:",
+  "Document properties": "מאפייני מסמך",
+  "Document title:": "כותרת מסמך:",
+  "OK": "אישור",
+  "Primary style-sheet:": "גיליון סגנון ראשי:",
+  "Text color:": "צבע טקסט:"
+}

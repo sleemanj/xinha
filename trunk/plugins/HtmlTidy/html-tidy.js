@@ -8,7 +8,6 @@ function HtmlTidy(editor) {
 	this.editor = editor;
 
 	var cfg = editor.config;
-	var tt = HtmlTidy.I18N;
 	var bl = HtmlTidy.btnList;
 	var self = this;
 
@@ -20,16 +19,20 @@ function HtmlTidy(editor) {
 		var btn = bl[i];
 		if (btn == "html-tidy") {
 			var id = "HT-html-tidy";
-			cfg.registerButton(id, tt[id], editor.imgURL(btn[0] + ".gif", "HtmlTidy"), true,
+			cfg.registerButton(id, this._lc("HTML Tidy"), editor.imgURL(btn[0] + ".gif", "HtmlTidy"), true,
 					   function(editor, id) {
 						   // dispatch button press event
 						   self.buttonPress(editor, id);
 					   }, btn[1]);
 			toolbar.push(id);
 		} else if (btn == "html-auto-tidy") {
+            var btnTxt = [this._lc("Auto-Tidy"), this._lc("Don't Tidy")];
+            var optionItems = new Object();
+            optionItems[btnTxt[0]] = "auto";
+            optionItems[btnTxt[1]] = "noauto";
 			var ht_class = {
 				id	: "HT-auto-tidy",
-				options	: { "Auto-Tidy" : "auto", "Don't Tidy" : "noauto" },
+				options	: optionItems,
 				action	: function (editor) { self.__onSelect(editor, this); },
 				refresh	: function (editor) { },
 				context	: "body"
@@ -52,6 +55,10 @@ HtmlTidy._pluginInfo = {
 	sponsor_url   : "http://www.uwa.edu.au/",
 	license       : "htmlArea"
 };
+
+HtmlTidy.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'HtmlTidy');
+}
 
 HtmlTidy.prototype.__onSelect = function(editor, obj) {
 	// Get the toolbar element object
@@ -77,7 +84,6 @@ HtmlTidy.btnList = [
 ];
 
 HtmlTidy.prototype.buttonPress = function(editor, id) {
-	var i18n = HtmlTidy.I18N;
 
 	switch (id)
   {

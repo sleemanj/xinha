@@ -1,46 +1,38 @@
 // I18N constants
 
-HTMLArea.I18N = {
+// LANG: "en", ENCODING: UTF-8
 
-	// the following should be the filename without .js extension
-	// it will be used for automatically load plugin language.
-	lang: "en",
-
-	tooltips: {
-		bold:           	"Lihavoitu",
-		italic:         	"Kursivoitu",
-		underline:      	"Alleviivattu",
-		strikethrough:  	"Yliviivattu",
-		subscript:      	"Alaindeksi",
-		superscript:    	"Yl‰indeksi",
-		justifyleft:    	"Tasaa vasemmat reunat",
-		justifycenter:  	"Keskit‰",
-		justifyright:   	"Tasaa oikeat reunat",
-		justifyfull:    	"Tasaa molemmat reunat",
-		orderedlist: 	"Numerointi",
-		unorderedlist: 	"Luettelomerkit",
-		outdent:        	"Lis‰‰ sisennyst‰",
-		indent:         	"Pienenn‰ sisennyst‰",
-		forecolor:      	"Fontin v‰ri",
-		hilitecolor:    	"Taustav‰ri",
-		inserthorizontalrule: 	"Vaakaviiva",
-		createlink:     	"Lis‰‰ Linkki",
-		insertimage:    	"Lis‰‰ Kuva",
-		inserttable:    	"Lis‰‰ Taulu",
-		htmlmode:       	"HTML L‰hdekoodi vs WYSIWYG",
-		popupeditor:    	"Suurenna Editori",
-		about:          	"Tietoja Editorista",
-		showhelp:           	"N‰yt‰ Ohje",
-		textindicator:  	"Nykyinen tyyli",
-		undo:           	"Peruuta viimeinen toiminto",
-		redo:           	"Palauta viimeinen toiminto",
-		cut:            	"Leikkaa maalattu",
-		copy:           	"Kopioi maalattu",
-		paste:          	"Liit‰ leikepyˆd‰lt‰"
-	},
-
-	buttons: {
-		"ok":           	"Hyv‰ksy",
-		"cancel":       	"Peruuta"
-	}
-};
+{
+  "Bold": "Lihavoitu",
+  "Italic": "Kursivoitu",
+  "Underline": "Alleviivattu",
+  "Strikethrough": "Yliviivattu",
+  "Subscript": "Alaindeksi",
+  "Superscript": "Yl√§indeksi",
+  "Justify Left": "Tasaa vasemmat reunat",
+  "Justify Center": "Keskit√§",
+  "Justify Right": "Tasaa oikeat reunat",
+  "Justify Full": "Tasaa molemmat reunat",
+  "Ordered List": "Numerointi",
+  "Bulleted List": "Luettelomerkit",
+  "Decrease Indent": "Lis√§√§ sisennyst√§",
+  "Increase Indent": "Pienenn√§ sisennyst√§",
+  "Font Color": "Fontin v√§ri",
+  "Background Color": "Taustav√§ri",
+  "Horizontal Rule": "Vaakaviiva",
+  "Insert Web Link": "Lis√§√§ Linkki",
+  "Insert/Modify Image": "Lis√§√§ Kuva",
+  "Insert Table": "Lis√§√§ Taulu",
+  "Toggle HTML Source": "HTML L√§hdekoodi vs WYSIWYG",
+  "Enlarge Editor": "Suurenna Editori",
+  "About this editor": "Tietoja Editorista",
+  "Help using editor": "N√§yt√§ Ohje",
+  "Current style": "Nykyinen tyyli",
+  "Undoes your last action": "Peruuta viimeinen toiminto",
+  "Redoes your last action": "Palauta viimeinen toiminto",
+  "Cut selection": "Leikkaa maalattu",
+  "Copy selection": "Kopioi maalattu",
+  "Paste from clipboard": "Liit√§ leikepy√∂d√§lt√§",
+  "OK": "Hyv√§ksy",
+  "Cancel": "Peruuta"
+}

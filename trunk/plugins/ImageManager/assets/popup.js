@@ -82,30 +82,32 @@ function __dlg_init(bottom) {
 	document.body.onkeypress = __dlg_close_on_esc;
 };
 
-function __dlg_translate(i18n) {
-	var types = ["span", "option", "td", "button", "div", "label", "a","img", "legend"];
-	for (var type in types) {
-		var spans = document.getElementsByTagName(types[type]);
-		for (var i = spans.length; --i >= 0;) {
-			var span = spans[i];
-			if (span.firstChild && span.firstChild.data) {				
-				var txt = i18n[span.firstChild.data];
-				if (txt) span.firstChild.data = txt;
-			}
-			if(span.title){
-				var txt = i18n[span.title];
-				if(txt) span.title = txt;
-			}
-			if(span.alt){
-				var txt = i18n[span.alt];
-				if(txt) span.alt = txt;
-			}
-		}
-	}
-	var txt = i18n[document.title];
-	if (txt)
-		document.title = txt;
+function __dlg_translate(context) {
+    var types = ["span", "option", "td", "button", "div", "label", "a","img", "legend"];
+    for (var type = 0; type < types.length; ++type) {
+        var spans = document.getElementsByTagName(types[type]);
+        for (var i = spans.length; --i >= 0;) {
+            var span = spans[i];
+            if (span.firstChild && span.firstChild.data) {
+                var txt = HTMLArea._lc(span.firstChild.data, context);
+                if (txt)
+                    span.firstChild.data = txt;
+            }
+            if (span.title) {
+                var txt = HTMLArea._lc(span.title, context);
+                if (txt)
+                    span.title = txt;
+            }
+            if (span.alt) {
+                var txt = HTMLArea._lc(span.alt, context);
+                if (txt)
+                    span.alt = txt;
+            }
+        }
+    }
+    document.title = HTMLArea._lc(document.title, context);
 };
+
 
 // closes the dialog and passes the return info upper.
 function __dlg_close(val) {

@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "de", ENCODING: ISO-8859-1
+// LANG: "de", ENCODING: UTF-8
 // Author: Raimund Meyer ray@ray-of-light.org
 
 // FOR TRANSLATORS:
@@ -12,7 +12,7 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-HtmlTidy.I18N = {
-	"tidying"                               : "\n Code wird ges‰ubert, bitte warten...",
-	"HT-html-tidy"                          : "HTML Tidy"
-};
+{
+  "\n Tidying up the HTML source, please wait...": "\n Code wird ges√§ubert, bitte warten...",
+  "HTML Tidy": "HTML Tidy"
+}

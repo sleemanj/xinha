@@ -143,7 +143,7 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 /*<![CDATA[*/
 
 	if(window.top)
-		I18N = window.top.I18N;
+		HTMLArea = window.top.HTMLArea;
 
 	function hideMessage()
 	{

@@ -1,28 +1,39 @@
 // I18N constants
 
-// LANG: "it", ENCODING: UTF-8 | ISO-8859-1
-// Author: Fabio Rotondo, <fabio@rotondo.it>
+// LANG: "nl", ENCODING: UTF-8
+// Author: A.H van den Broek  http://www.kontaktfm.nl
+// Email : tonbroek@kontaktfm.nl
 
-SpellChecker.I18N = {
-	"CONFIRM_LINK_CLICK"                    : "Devi confermare l'apertura di questo link",
-	"Cancel"                                : "Annulla",
-	"Dictionary"                            : "Dizionario",
-	"Finished list of mispelled words"      : "La lista delle parole scritte male è terminata",
-	"I will open it in a new page."         : "Lo aprirò in una nuova pagina.",
-	"Ignore all"                            : "Ignora sempre",
-	"Ignore"                                : "Ignora",
-	"NO_ERRORS"                             : "Non sono state trovate parole scritte male con il dizionario selezionato.",
-	"NO_ERRORS_CLOSING"                     : "Controllo completato, non sono state trovate parole scritte male. Sto chiudendo...",
-	"OK"                                    : "OK",
-	"Original word"                         : "Parola originale",
-	"Please wait.  Calling spell checker."  : "Attendere.  Sto invocando lo Spell Checker.",
-	"Please wait: changing dictionary to"   : "Attendere. Cambio il dizionario in",
-	"QUIT_CONFIRMATION"                     : "Questo annullerà le modifiche e chiuderà lo Spell Checker. Conferma.",
-	"Re-check"                              : "Ricontrolla",
-	"Replace all"                           : "Sostituisci sempre",
-	"Replace with"                          : "Stostituisci con",
-	"Replace"                               : "Sostituisci",
-	"SC-spell-check"                        : "Spell-check",
-	"Suggestions"                           : "Suggerimenti",
-	"pliz weit ;-)"                         : "Attendere Prego ;-)"
-};
+// FOR TRANSLATORS:
+//
+//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
+//      (at least a valid email address)
+//
+//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
+//      (if this is not possible, please include a comment
+//       that states what encoding is necessary.)
+
+{
+  "Please confirm that you want to open this link": "Weet u zeker dat u deze link wilt openen?",
+  "Cancel": "Annuleer",
+  "Dictionary": "Woordenboek",
+  "Finished list of mispelled words": "klaar met de lijst van fouten woorden",
+  "I will open it in a new page.": "Ik zal het in een nieuwe pagina openen.",
+  "Ignore all": "alles overslaan",
+  "Ignore": "Overslaan",
+  "No mispelled words found with the selected dictionary.": "Geen fouten gevonden met dit woordenboek.",
+  "Spell check complete, didn't find any mispelled words.  Closing now...": "Spell checking is klaar, geen fouten gevonden.  spell checking word gesloten...",
+  "OK": "OK",
+  "Original word": "Originele woord",
+  "Please wait.  Calling spell checker.": "Even wachten. spell checker wordt geladen.",
+  "Please wait: changing dictionary to": "even wachten: woordenboek wordt veranderd naar",
+  "This will drop changes and quit spell checker.  Please confirm.": "Dit zal alle veranderingen annuleren en de spell checker sluiten.  Weet u het zeker?",
+  "Re-check": "Opnieuw",
+  "Replace all": "Alles vervangen",
+  "Replace with": "Vervangen met",
+  "Replace": "Vervangen",
+  "Revert": "Omkeren",
+  "Spell-check": "Spell-check",
+  "Suggestions": "Suggestie",
+  "One moment...": "Even wachten ;-)"
+}

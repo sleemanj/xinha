@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "nl", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "nl", ENCODING: UTF-8
 // Author: Mihai Bazon, http://dynarch.com/mishoo
 
 // FOR TRANSLATORS:
@@ -12,12 +12,12 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-ListType.I18N = {
-	"Decimal"                :    "Decimale nummers",
-	"Lower roman"            :    "Romeinse nummers klein",
-	"Upper roman"            :    "Romeinse nummers groot",
-	"Lower latin"            :    "Latijnse letters klein",
-	"Upper latin"            :    "Latijnse letters groot",
-	"Lower greek"            :    "Griekse letters",
-	"ListStyleTooltip"       :    "Kies stijl type (voor ordered lists)"
-};
+{
+  "Decimal numbers": "Decimale nummers",
+  "Lower roman numbers": "Romeinse nummers klein",
+  "Upper roman numbers": "Romeinse nummers groot",
+  "Lower latin letters": "Latijnse letters klein",
+  "Upper latin letters": "Latijnse letters groot",
+  "Lower greek letters": "Griekse letters",
+  "Choose list style type (for ordered lists)": "Kies stijl type (voor ordered lists)"
+}
