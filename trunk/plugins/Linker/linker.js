@@ -168,27 +168,33 @@ Linker.prototype._createLink = function(a)
 
     if(values.type == 'url')
     {
-     atr.href = values.href;
-     atr.target = values.target;
-     if(values.target == 'popup')
+     if(values.href)
      {
+       atr.href = values.href;
+       atr.target = values.target;
+       if(values.target == 'popup')
+       {
 
-       if(values.p_width)
-       {
-         values.p_options.push('width=' + values.p_width);
+         if(values.p_width)
+         {
+           values.p_options.push('width=' + values.p_width);
+         }
+         if(values.p_height)
+         {
+           values.p_options.push('height=' + values.p_height);
+         }
+         atr.onclick = 'try{if(document.designMode && document.designMode == \'on\') return false;}catch(e){} window.open(this.href, \'' + (values.p_name.replace(/[^a-z0-9_]/i, '_')) + '\', \'' + values.p_options.join(',') + '\');return false;';
        }
-       if(values.p_height)
-       {
-         values.p_options.push('height=' + values.p_height);
-       }
-       atr.onclick = 'try{if(document.designMode && document.designMode == \'on\') return false;}catch(e){} window.open(this.href, \'' + (values.p_name.replace(/[^a-z0-9_]/i, '_')) + '\', \'' + values.p_options.join(',') + '\');return false;';
      }
     }
     else
     {
-      atr.href = 'mailto:' + values.to + '?';
-      if(values.subject) atr.href += 'subject=' + escape(values.subject);
-      if(values.body)    atr.href += (values.subject ? '&' : '') + 'body=' + escape(values.body);
+      if(values.to)
+      {
+        atr.href = 'mailto:' + values.to + '?';
+        if(values.subject) atr.href += 'subject=' + escape(values.subject);
+        if(values.body)    atr.href += (values.subject ? '&' : '') + 'body=' + escape(values.body);
+      }
     }
 
     if(a && a.tagName.toLowerCase() == 'a')
@@ -213,6 +219,8 @@ Linker.prototype._createLink = function(a)
     }
     else
     {
+      if(!atr.href) return true;
+
       // Insert a link, we let the browser do this, we figure it knows best
       var tmp = HTMLArea.uniq('http://www.example.com/Link');
       linker.editor._doc.execCommand('createlink', false, tmp);
