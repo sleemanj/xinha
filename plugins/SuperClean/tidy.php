@@ -26,6 +26,8 @@
     }
   }
 
+  header('Content-Type: text/javascript; charset=utf-8');
+
   /** Function to POST some data to a URL */
   function PostIt($DataStream, $URL)
   {
@@ -98,8 +100,18 @@
 
   if(trim(@$_REQUEST['content']))
   {
+    // PHP's urldecode doesn't understand %uHHHH for unicode
+    $_REQUEST['content'] = preg_replace('/%u([a-f0-9]{4,4})/ei', 'utf8_chr(0x$1)', $_REQUEST['content']);
+    function utf8_chr($num)
+    {
+      if($num<128)return chr($num);
+      if($num<1024)return chr(($num>>6)+192).chr(($num&63)+128);
+      if($num<32768)return chr(($num>>12)+224).chr((($num>>6)&63)+128).chr(($num&63)+128);
+      if($num<2097152)return chr(($num>>18)+240).chr((($num>>12)&63)+128).chr((($num>>6)&63)+128) .chr(($num&63)+128);
+      return '';
+    }
     ob_start();
-      passthru("echo " .  escapeshellarg($_REQUEST['content']) . " | tidy -q -i -wrap 9999 2>/dev/null", $result);
+      passthru("echo " .  escapeshellarg($_REQUEST['content']) . " | tidy -q -i -u -wrap 9999 -utf8 -bare -asxhtml 2>/dev/null", $result);
       $content = ob_get_contents();
     ob_end_clean();
 

@@ -77,7 +77,7 @@ HTMLArea.prototype._superClean = function(opts, obj)
 
     if(this.config.tidy_handler && opts.tidy)
     {
-      HTMLArea._postback(this.config.tidy_handler, {'content' : this.getHTML()},
+      HTMLArea._postback(this.config.tidy_handler, {'content' : this.getInnerHTML()},
                          function(javascriptResponse) { eval(javascriptResponse) });
     }
     return true;
