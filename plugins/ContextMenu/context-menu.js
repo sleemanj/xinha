@@ -104,7 +104,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 			link = target;
 			elmenus.push(null,
 				     [ i18n["Modify Link"],
-				       function() { editor.execCommand("createlink", true); },
+               function() { editor.config.btnList['createlink'][3](editor); },
 				       i18n["Current URL is"] + ': ' + link.href,
 				       config.btnList["createlink"][1] ],
 
@@ -205,7 +205,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 
 	if (selection && !link)
 		menu.push(null, [ i18n["Make link"],
-				  function() { editor.execCommand("createlink", true); },
+           function() { editor.config.btnList['createlink'][3](editor); },
 				  i18n["Create a link"],
 				  config.btnList["createlink"][1] ]);
 
@@ -300,7 +300,7 @@ ContextMenu.prototype.popupMenu = function(ev) {
 			self.iePopup.hide();
 	};
 	var target = HTMLArea.is_ie ? ev.srcElement : ev.target;
-	var ifpos = getPos(self.editor._iframe);
+     var ifpos = getPos(self.editor._htmlArea);//_iframe);
 	var x = ev.clientX + ifpos.x;
 	var y = ev.clientY + ifpos.y;
 
@@ -382,8 +382,12 @@ ContextMenu.prototype.popupMenu = function(ev) {
 			item.appendChild(td1);
 			td1.className = "icon";
 			if (item.__msh.icon)
-				td1.innerHTML = "<img align='middle' src='" + item.__msh.icon + "' />";
-			var td2 = doc.createElement("td");
+      {
+        var t = HTMLArea.makeBtnImg(item.__msh.icon, doc);
+        td1.appendChild(t);
+        // td1.innerHTML = "<img align='middle' src='" + item.__msh.icon + "' />";
+      }
+      var td2 = doc.createElement("td");
 			if (HTMLArea.is_ie)
 				td2.unselectable = "on";
 			item.appendChild(td2);
@@ -414,10 +418,13 @@ ContextMenu.prototype.popupMenu = function(ev) {
 	}
 
 	if (!HTMLArea.is_ie) {
+    /* FIXME: I think this is to stop the popup from running off the bottom of the screen?
 		var dx = x + div.offsetWidth - window.innerWidth + 4;
 		var dy = y + div.offsetHeight - window.innerHeight + 4;
+    // alert('dy= (' + y + '+' + div.offsetHeight + '-' + window.innerHeight + ' + 4 ) = ' + dy);
 		if (dx > 0) x -= dx;
 		if (dy > 0) y -= dy;
+    */
 		div.style.left = x + "px";
 		div.style.top = y + "px";
 	} else {
