@@ -581,8 +581,8 @@ HTMLArea.prototype._createToolbar = function () {
 	this._createToolbar1(editor, toolbar, tb_objects);
 	this._htmlArea.appendChild(toolbar);
 }
-	
-	
+
+
 HTMLArea.prototype._setConfig = function(config) {
 	this.config = config;
 }
@@ -1042,42 +1042,50 @@ HTMLArea.prototype.generate = function ()
     // we have a form, on submit get the HTMLArea content and
     // update original textarea.
     var f = textarea.form;
-    if (typeof f.__msh_prevOnSubmit == "undefined") f.__msh_prevOnSubmit = [];
-    if (typeof f.onsubmit == "function")
+    if (typeof f.__msh_prevOnSubmit == "undefined")
     {
-      var funcref = f.onsubmit;
-      f.__msh_prevOnSubmit.push(funcref);
-    }
-    f.onsubmit = function()
-    {
-      editor._textArea.value = editor.outwardHtml(editor.getHTML());
-      var a = this.__msh_prevOnSubmit;
-      // call previous submit methods if they were there.
-      var allOK = true;
-      for (var i = a.length; --i >= 0;)
+      f.__msh_prevOnSubmit = [];
+      if (typeof f.onsubmit == "function")
       {
-        if(a[i]() == false)
+        var funcref = f.onsubmit;
+        f.__msh_prevOnSubmit.push(funcref);
+        f.onsubmit = null;
+      }
+
+      f.onsubmit = function()
+      {
+        var a = this.__msh_prevOnSubmit;
+        // call previous submit methods if they were there.
+        var allOK = true;
+        for (var i = a.length; --i >= 0;)
         {
-          allOK = false;
-          break;
+          // We want the handler to be a member of the form, not the array, so that "this" will work correctly
+          this.__msh_tempEventHandler = a[i];
+          if(this.__msh_tempEventHandler() == false)
+          {
+            allOK = false;
+            break;
+          }
         }
+        return allOK;
       }
-      return allOK;
-    };
-    if (typeof f.onreset == "function") {
-      var funcref = f.onreset;
-      if (typeof f.__msh_prevOnReset == "undefined") {
-        f.__msh_prevOnReset = [];
-      }
-      f.__msh_prevOnReset.push(funcref);
     }
-    f.onreset = function() {
-      editor.setHTML(editor._textArea.value);
-      editor.updateToolbar();
-      var a = this.__msh_prevOnReset;
-      // call previous reset methods if they were there.
-      if (typeof a != "undefined")
+    f.__msh_prevOnSubmit.push(function() {editor._textArea.value = editor.outwardHtml(editor.getHTML());});
+
+    if (typeof f.__msh_prevOnReset == "undefined")
+    {
+      f.__msh_prevOnReset = [];
+      if (typeof f.onreset == "function")
       {
+        var funcref = f.onreset;
+        f.__msh_prevOnReset.push(funcref);
+        f.onreset = null;
+      }
+
+      f.onreset = function()
+      {
+        var a = this.__msh_prevOnReset;
+        // call previous submit methods if they were there.
         var allOK = true;
         for (var i = a.length; --i >= 0;)
         {
@@ -1089,7 +1097,8 @@ HTMLArea.prototype.generate = function ()
         }
         return allOK;
       }
-    };
+    }
+    f.__msh_prevOnReset.push(function() {editor.setHTML(editor._textArea.value); editor.updateToolbar();});
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
@@ -1378,7 +1387,6 @@ HTMLArea.prototype.generate = function ()
       }
       else
       {
-
         this._doc.designMode = 'on';
       }
     }
