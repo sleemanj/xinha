@@ -578,6 +578,22 @@ HTMLArea.prototype._createToolbar = function () {
   var tb_objects = new Object();
   this._toolbarObjects = tb_objects;
 
+	this._createToolbar1(editor, toolbar, tb_objects);
+	this._htmlArea.appendChild(toolbar);
+}
+	
+	
+HTMLArea.prototype._setConfig = function(config) {
+	this.config = config;
+}
+
+HTMLArea.prototype._addToolbar = function() {
+	this._createToolbar1(this, this._toolbar, this._toolbarObjects);
+}
+
+// separate from previous createToolBar to allow dynamic change of toolbar
+HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
+
   // creates a new line in the toolbar
   function newLine() {
     var table = document.createElement("table");
@@ -843,8 +859,6 @@ HTMLArea.prototype._createToolbar = function () {
       }
     }
   }
-
-  this._htmlArea.appendChild(toolbar);
 };
 
 use_clone_img = false;
