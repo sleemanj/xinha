@@ -203,7 +203,13 @@ function initDocument() {
   frame = document.getElementById("i_framecontent");
   var field = document.getElementById("f_content");
   field.value = HTMLArea.getHTML(editor._doc.body, false, editor);
-
+  var dict = document.getElementById("f_dictionary");
+  if(typeof editor.config.SpellChecker.defaultDictionary != "undefined"
+     && editor.config.SpellChecker.defaultDictionary != "") {
+    dict.value = editor.config.SpellChecker.defaultDictionary;
+  } else {
+    dict.value = "en_GB";
+  }
   if(editor.config.SpellChecker.backend == 'php')
   {
     field.form.action = _editor_url + '/plugins/SpellChecker/spell-check-logic.php';
@@ -421,10 +427,11 @@ function finishedSpellChecking() {
     for (var i = select.length; --i >= 0;) {
       select.remove(i);
     }
+    var activeDictionary = document.getElementById("f_dictionary").value;
     for (var i = 0; i < dicts.length; ++i) {
       var txt = dicts[i];
       var option = document.createElement("option");
-      if (/^@(.*)$/.test(txt)) {
+      if(txt == activeDictionary) {
         txt = RegExp.$1;
         option.selected = true;
       }

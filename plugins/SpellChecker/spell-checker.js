@@ -8,7 +8,7 @@
 //
 // $Id$
 
-HTMLArea.Config.prototype.SpellChecker = { 'backend': 'php', 'personalFilesDir' : '' };
+HTMLArea.Config.prototype.SpellChecker = { 'backend': 'php', 'personalFilesDir' : '', 'defaultDictionary' : 'en_GB' };
 
 function SpellChecker(editor) {
   this.editor = editor;
