@@ -267,6 +267,7 @@ HTMLArea.Config = function () {
     ["linebreak","justifyleft","justifycenter","justifyright","justifyfull","separator"],
     ["insertorderedlist","insertunorderedlist","outdent","indent","separator"],
     ["inserthorizontalrule","createlink","insertimage","inserttable","separator"],
+    ["undo","redo"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste"]),["separator"],
     ["killword","removeformat","toggleborders","lefttoright", "righttoleft", "separator","htmlmode","about"]
   ];
 
