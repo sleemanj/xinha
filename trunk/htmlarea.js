@@ -546,9 +546,19 @@ HTMLArea.replaceAll = function(config) {
 };
 
 /** Helper function: replaces the TEXTAREA with the given ID with HTMLArea. */
-HTMLArea.replace = function(id, config) {
+HTMLArea.replace = function(id, config)
+{
   var ta = HTMLArea.getElementById("textarea", id);
-  return ta ? (new HTMLArea(ta, config)).generate() : null;
+  if (ta)
+  {
+    var taobj = new HTMLArea(ta, config);
+    taobj.generate();
+    return taobj;
+  }
+  else
+  {
+    return null;
+  };
 };
 
 // Creates the toolbar and appends it to the _htmlarea
