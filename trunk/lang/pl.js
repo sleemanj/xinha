@@ -23,7 +23,7 @@ HTMLArea.I18N = {
 		indent:         "Zwiêksz wciêcie",
 		forecolor:      "Kolor czcionki",
 		backcolor:      "Kolor t³a",
-		horizontalrule: "Linia pozioma",
+		inserthorizontalrule: "Linia pozioma",
 		createlink:     "Wstaw adres sieci Web",
 		insertimage:    "Wstaw obraz",
 		inserttable:    "Wstaw tabelê",

@@ -35,7 +35,7 @@ HTMLArea.I18N = {
 		indent:         "Increase Indent",
 		forecolor:      "Font Color",
 		hilitecolor:    "Background Color",
-		horizontalrule: "Horizontal Rule",
+		inserthorizontalrule: "Horizontal Rule",
 		createlink:     "Insert Web Link",
 		insertimage:    "Insert/Modify Image",
 		inserttable:    "Insert Table",

@@ -35,7 +35,7 @@ HTMLArea.I18N = {
 		indent:         "Увеличить отступ",
 		forecolor:      "Цвет шрифта",
 		hilitecolor:    "Цвет фона",
-		horizontalrule: "Горизонтальный разделитель",
+		inserthorizontalrule: "Горизонтальный разделитель",
 		createlink:     "Вставить гиперссылку",
 		insertimage:    "Вставить изображение",
 		inserttable:    "Вставить таблицу",

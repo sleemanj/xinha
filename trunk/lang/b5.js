@@ -23,7 +23,7 @@ HTMLArea.I18N = {
 		indent:         "加寬行前空白",
 		forecolor:      "文字顏色",
 		backcolor:      "背景顏色",
-		horizontalrule: "水平線",
+		inserthorizontalrule: "水平線",
 		createlink:     "插入連結",
 		insertimage:    "插入圖形",
 		inserttable:    "插入表格",
