@@ -815,7 +815,9 @@ HTMLArea.prototype._createToolbar = function () {
     } else {
       first = false;
     }
+    if(this.config.toolbar[i] == null) this.config.toolbar[i] = ['separator'];
     var group = this.config.toolbar[i];
+
     for (var j = 0; j < group.length; ++j)
     {
       var code = group[j];

@@ -4,10 +4,11 @@ function InsertAnchor(editor) {
   var tt = InsertAnchor.I18N;
   var bl = InsertAnchor.btnList;
   var self = this;
-  
+
   // register the toolbar buttons provided by this plugin
   var toolbar = [];
   for (var i in bl) {
+    if(typeof bl[i] == 'function') continue;
     var btn = bl[i];
     if (!btn) {
       toolbar.push("separator");
@@ -22,7 +23,7 @@ function InsertAnchor(editor) {
       toolbar.push(id);
     }
   }
-  
+
   for (var i in toolbar) {
     cfg.toolbar[0].push(toolbar[i]);
   }
@@ -76,6 +77,6 @@ InsertAnchor.prototype.buttonPress = function(editor, id) {
     } else {
       editor.insertNodeAtSelection(alink);
     }
-  } 
+  }
   catch (e) { }
 }
