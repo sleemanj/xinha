@@ -100,7 +100,7 @@ Linker.prototype._createLink = function(a)
           var j = args[x].match(/(subject|body)=(.*)/);
           if(j)
           {
-            inputs[j[1]] = unescape(j[2]);
+            inputs[j[1]] = decodeURIComponent(j[2]);
           }
         }
       }
@@ -192,8 +192,8 @@ Linker.prototype._createLink = function(a)
       if(values.to)
       {
         atr.href = 'mailto:' + values.to + '?';
-        if(values.subject) atr.href += 'subject=' + escape(values.subject);
-        if(values.body)    atr.href += (values.subject ? '&' : '') + 'body=' + escape(values.body);
+        if(values.subject) atr.href += 'subject=' + encodeURIComponent(values.subject);
+        if(values.body)    atr.href += (values.subject ? '&' : '') + 'body=' + encodeURIComponent(values.body);
       }
     }
 
@@ -368,7 +368,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
     {
       this.dTree.add(Linker.nxtid++, parent,
                      files[i].replace(/^.*\//, ''),
-                     'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=unescape(\'' + escape(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
+                     'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
                      files[i]);
     }
     else

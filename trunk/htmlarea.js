@@ -241,6 +241,9 @@ HTMLArea.Config = function () {
   if (this.baseURL && this.baseURL.match(/(.*)\/([^\/]+)/))
     this.baseURL = RegExp.$1 + "/";
 
+  // CharSet of the iframe, default is the charset of the document
+  this.charSet = HTMLArea.is_gecko ? document.characterSet : document.charset;
+
   // URL-s
   this.imgURL = "images/";
   this.popupURL = "popups/";
@@ -1413,9 +1416,10 @@ HTMLArea.prototype.generate = function ()
       doc.open();
       var html = "<html>\n";
       html += "<head>\n";
-      if(typeof editor.config.baseHref != 'undefined')
+      html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
+      if(typeof editor.config.baseHref != 'undefined' && editor.config.baseHref != null)
       {
-        html += "<base href=\"" + editor.config.baseHref + "\"/>";
+        html += "<base href=\"" + editor.config.baseHref + "\"/>\n";
       }
       html += "<style title=\"table borders\">"
            + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;} \n"
@@ -4337,7 +4341,10 @@ HTMLArea._postback = function(url, data, handler)
   var content = '';
   for(var i in data)
   {
-    content += (content.length ? '&' : '') + i + '=' + escape(data[i]);
+    if(typeof data[i] == 'function') continue;
+    // http://worldtimzone.com/blog/date/2002/09/24
+
+    content += (content.length ? '&' : '') + i + '=' + encodeURIComponent(data[i]);
   }
 
   function callBack()
