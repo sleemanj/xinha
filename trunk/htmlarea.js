@@ -3762,7 +3762,7 @@ HTMLArea.prototype._createRange = function(sel) {
   if (HTMLArea.is_ie) {
     return sel.createRange();
   } else {
-    this.focusEditor();
+    this.activateEditor();
     if (typeof sel != "undefined") {
       try {
         return sel.getRangeAt(0);
