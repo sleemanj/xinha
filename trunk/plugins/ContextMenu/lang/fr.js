@@ -31,7 +31,7 @@ ContextMenu.I18N = {
 	"Delete Row"                                            : "Suppr_imer une rangée",
 	"Table Properties"                                      : "Proprié_tés de la table...",
 	"Insert Column Before"                                  : "I_nsérer une colonne avant",
-	"Insert Column After"                                   : "Insérer une colonne _après",
+	"Insert Column After"                                   : "Insérer une colonne après",
 	"Delete Column"                                         : "_Supprimer la colonne",
 	"Justify Left"                                          : "Justifier _gauche",
 	"Justify Center"                                        : "Justifier _centre",
@@ -40,6 +40,8 @@ ContextMenu.I18N = {
 	"Make link"                                             : "Convertir en lien...",
 	"Remove the"                                            : "Supprimer",
 	"Element"                                               : "Élément...",
+	"Insert paragraph before"																: "InsÉl�rer un paragraphe avant",
+	"Insert paragraph after"																: "InsÉl�rer un paragraphe après",
 
 	// Other labels (tooltips and alert/confirm box messages)
 
