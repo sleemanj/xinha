@@ -20,7 +20,13 @@
   <link rel="stylesheet" href="full_example.css" />
 
   <script type="text/javascript">
-    _editor_url = "../";      // This is a path to the base xinha directory.
+    // You must set _editor_url to the URL (including trailing slash) where
+    // where xinha is installed, it's highly recommended to use an absolute URL
+    //  eg: _editor_url = "/path/to/xinha/";
+    // You may try a relative URL if you wish]
+    //  eg: _editor_url = "../";
+    // in this example we do a little regular expression to find the absolute path.
+    _editor_url  = document.location.href.replace(/examples\/full_example-body\.html.*/, '')
     _editor_lang = "en";      // And the language we need to use in the editor.
   </script>
 
