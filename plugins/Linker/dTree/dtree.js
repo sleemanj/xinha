@@ -161,7 +161,7 @@ dTree.prototype.closeAll = function() {
 // Outputs the tree to the page
 
 dTree.prototype.toString = function() {
-
+  this.setCS_All();
   var str = '<div class="dtree">\n';
 
   if (document.getElementById) {
@@ -204,7 +204,7 @@ dTree.prototype.addNode = function(pNode) {
 
       cn._ai = n;
 
-      this.setCS(cn);
+      // this.setCS(cn);
 
       if (!cn.target && this.config.target) cn.target = this.config.target;
 
@@ -358,7 +358,36 @@ dTree.prototype.setCS = function(node) {
 
 };
 
+dTree.prototype.setCS_All = function()
+{
+  var ids = { }; // ID => { _hc: haschildren, _ls_is: lastsibling}
 
+  for(var n = 0; n < this.aNodes.length; n++)
+  {
+    var node = this.aNodes[n];
+    if(!ids[node.pid])
+    {
+      ids[node.pid] = { _hc: true, _ls_is: node.id };
+    }
+    else
+    {
+      ids[node.pid]._hc    = true;
+      ids[node.pid]._ls_is = node.id;
+    }
+
+    if(!ids[node.id])
+    {
+      ids[node.id] = { _hc: false, _ls_is: null }
+    }
+  }
+
+  for(var n = 0; n < this.aNodes.length; n++)
+  {
+    var node = this.aNodes[n];
+    node._ls = ids[node.pid]._ls_is == node.id ? true : false;
+    node._hc = ids[node.id]._hc;
+  }
+}
 
 // Returns the selected node
 

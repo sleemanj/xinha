@@ -18,18 +18,27 @@ HTMLArea.Config.prototype.Linker =
   'backend' : _editor_url + 'plugins/Linker/scan.php'
 }
 
+
 function Linker(editor, args)
 {
   this.editor  = editor;
   this.lConfig = editor.config.Linker;
 
   var linker = this;
-  editor.config.registerButton(
-                               'linker', 'Insert/Modify Hyperlink', [_editor_url + "images/ed_buttons_main.gif",6,1], false,
-                                function(e, objname, obj) { linker._createLink(linker._getSelectedAnchor()); }
-                               );
+  if(editor.config.btnList.createlink)
+  {
+    editor.config.btnList.createlink[3]
+      =  function(e, objname, obj) { linker._createLink(linker._getSelectedAnchor()); };
+  }
+  else
+  {
+    editor.config.registerButton(
+                                 'createlink', 'Insert/Modify Hyperlink', [_editor_url + "images/ed_buttons_main.gif",6,1], false,
+                                 function(e, objname, obj) { linker._createLink(linker._getSelectedAnchor()); }
+                                 );
+  }
 
-  // See if we can find 'insertlink' and replace it with superclean
+  // See if we can find 'createlink'
   var t = editor.config.toolbar;
   var done = false;
   for(var i = 0; i < t.length && !done; i++)
@@ -38,7 +47,6 @@ function Linker(editor, args)
     {
       if(t[i][x] == 'createlink')
       {
-        t[i][x] = 'linker';
         done = true;
       }
     }
@@ -46,17 +54,12 @@ function Linker(editor, args)
 
   if(!done)
   {
-    t[t.length-1].push('linker');
+    t[t.length-1].push('createlink');
   }
 }
 
 Linker.prototype._createLink = function(a)
 {
-
-  if(!this._dialog)
-  {
-    this._dialog = new Linker.Dialog(this);
-  }
 
   var inputs =
   {
@@ -245,7 +248,10 @@ Linker.prototype._getSelectedAnchor = function()
   return null;
 }
 
-
+Linker.prototype.onGenerate = function()
+{
+  this._dialog = new Linker.Dialog(this);
+}
 // Inline Dialog for Linker
 
 Linker.Dialog_dTrees = [ ];
@@ -259,34 +265,47 @@ Linker.Dialog = function (linker)
   this.id = { }; // This will be filled below with a replace, nifty
 
   this.ready = false;
+  this.files  = false;
+  this.html   = false;
+  this.dialog = false;
 
   // load the dTree script
-  if(typeof dTree == 'undefined')
-  {
-    HTMLArea._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
-                       function() {lDialog._prepareDialog(); lDialog.ready = true; }
-                      );
-  }
-  else
-  {
-    lDialog._prepareDialog();
-    lDialog.ready = true;
-  }
+  this._prepareDialog();
+
 }
 
 Linker.Dialog.prototype._prepareDialog = function()
 {
-
   var lDialog = this;
   var linker = this.linker;
-  var html = HTMLArea._geturlcontent(_editor_url + 'plugins/Linker/dialog.html');
-  var dialog = this.dialog = new HTMLArea.Dialog(linker.editor, html, 'Linker');
 
-  // Make a dtree
-  var files = HTMLArea._geturlcontent(linker.lConfig.backend);
+  // We load some stuff up int he background, recalling this function
+  // when they have loaded.  This is to keep the editor responsive while
+  // we prepare the dialog.
+  if(typeof dTree == 'undefined')
+  {
+    HTMLArea._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
+                       function() {lDialog._prepareDialog(); }
+                      );
+    return;
+  }
 
-  files = eval(files);
+  if(this.files == false)
+  {
+    HTMLArea._getback(linker.lConfig.backend, function(txt) { lDialog.files = eval(txt); lDialog._prepareDialog(); });
+    return;
+  }
+  var files = this.files;
 
+  if(this.html == false)
+  {
+    HTMLArea._getback(_editor_url + 'plugins/Linker/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
+    return;
+  }
+  var html = this.html;
+
+  // Now we have everything we need, so we can build the dialog.
+  var dialog = this.dialog = new HTMLArea.Dialog(linker.editor, this.html, 'Linker');
   var dTreeName = HTMLArea.uniq('dTree_');
 
   this.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
@@ -297,11 +316,14 @@ Linker.Dialog.prototype._prepareDialog = function()
 
   // Put it in
   var ddTree = this.dialog.getElementById('dTree');
-  ddTree.innerHTML = this.dTree.toString();
+  //ddTree.innerHTML = this.dTree.toString();
+  ddTree.innerHTML = '';
   ddTree.style.position = 'absolute';
   ddTree.style.left = 1 + 'px';
   ddTree.style.top =  0 + 'px';
   ddTree.style.overflow = 'auto';
+  this.ddTree = ddTree;
+  this.dTree._linker_premade = this.dTree.toString();
 
   var options = this.dialog.getElementById('options');
   options.style.position = 'absolute';
@@ -317,7 +339,7 @@ Linker.Dialog.prototype._prepareDialog = function()
       ddTree.style.width  = (dialog.width  - 322 ) + 'px';
     }
 
-
+  this.ready = true;
 }
 
 Linker.Dialog.prototype.makeNodes = function(files, parent)
@@ -347,12 +369,16 @@ Linker.Dialog.prototype._lc = function(string)
 
 Linker.Dialog.prototype.show = function(inputs, ok, cancel)
 {
-
   if(!this.ready)
   {
     var lDialog = this;
     window.setTimeout(function() {lDialog.show(inputs,ok,cancel);},100);
     return;
+  }
+
+  if(this.ddTree.innerHTML == '')
+  {
+    this.ddTree.innerHTML = this.dTree._linker_premade;
   }
 
   if(inputs.type=='url')
