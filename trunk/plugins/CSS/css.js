@@ -7,6 +7,39 @@
 // This notice MUST stay intact for use (see license.txt).
 //
 // $Id: css.js,v 1.4 2003/11/24 01:34:33 mishoo Exp $
+// @TODO This is the default and won't be very useful to others.
+// We should make this better.
+HTMLArea.Config.prototype.cssPluginConfig =
+  {
+    combos : [
+      { label: "Syntax",
+                   // menu text       // CSS class
+        options: { "None"           : "",
+                   "Code" : "code",
+                   "String" : "string",
+                   "Comment" : "comment",
+                   "Variable name" : "variable-name",
+                   "Type" : "type",
+                   "Reference" : "reference",
+                   "Preprocessor" : "preprocessor",
+                   "Keyword" : "keyword",
+                   "Function name" : "function-name",
+                   "Html tag" : "html-tag",
+                   "Html italic" : "html-helper-italic",
+                   "Warning" : "warning",
+                   "Html bold" : "html-helper-bold"
+                 },
+        context: "pre"
+      },
+      { label: "Info",
+        options: { "None"           : "",
+                   "Quote"          : "quote",
+                   "Highlight"      : "highlight",
+                   "Deprecated"     : "deprecated"
+                 }
+      }
+    ]
+  };
 
 function CSS(editor, params) {
 	this.editor = editor;
@@ -14,8 +47,17 @@ function CSS(editor, params) {
 	var toolbar = cfg.toolbar;
 	var self = this;
 	var i18n = CSS.I18N;
-	var plugin_config = params[0];
-	var combos = plugin_config.combos;
+	var plugin_config;
+  if(params && params.length)
+  {
+    plugin_config = params[0];
+  }
+  else
+  {
+    plugin_config = editor.config.cssPluginConfig;
+  }
+
+  var combos = plugin_config.combos;
 
 	var first = true;
 	for (var i = combos.length; --i >= 0;) {
