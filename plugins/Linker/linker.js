@@ -15,7 +15,8 @@ HTMLArea.loadStyle('dTree/dtree.css', 'Linker');
 
 HTMLArea.Config.prototype.Linker =
 {
-  'backend' : _editor_url + 'plugins/Linker/scan.php'
+  'backend' : _editor_url + 'plugins/Linker/scan.php',
+  'files' : null
 }
 
 
@@ -310,7 +311,18 @@ Linker.Dialog.prototype._prepareDialog = function()
 
   if(this.files == false)
   {
-    HTMLArea._getback(linker.lConfig.backend, function(txt) { lDialog.files = eval(txt); lDialog._prepareDialog(); });
+    if(linker.lConfig.backend)
+    {
+        //get files from backend
+        HTMLArea._getback(linker.lConfig.backend,
+                          function(txt) { lDialog.files = eval(txt); lDialog._prepareDialog(); });
+    }
+    else if(linker.lConfig.files != null)
+    {
+        //get files from plugin-config
+        lDialog.files = linker.lConfig.files;
+        lDialog._prepareDialog();
+    }
     return;
   }
   var files = this.files;
