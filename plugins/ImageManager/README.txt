@@ -22,6 +22,23 @@ at
    http://xinha.gogo.co.nz/punbb/viewforum.php?id=1
 
 ------------------------------------------------------------------------------
+To get this working check see config.inc.php for configuration values.
+
+Most likely you will need to adjust images_dir and images_url if you have
+not unpacked Xinha in your DOCUMENT_ROOT.
+
+You may also need to modify image-manager.js line 47 (or override from the calling
+page) to have the same value as $IMConfig['images_url'] from config.inc.php.
+
+For demo purposes ImageManager is set up to view images in the
+
+   /xinha/plugins/ImageManager/demo_images
+
+directory. This is governed by the images_dir and images_url config options.
+
+--------------------------------------------------------------------------------
+
+
 
 I've  packaged  this  up to be distributed with Xinha. In order
 for  this  to  work  as  is, you either have to unpack Xinha in

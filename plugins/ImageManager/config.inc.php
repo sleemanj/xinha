@@ -79,7 +79,7 @@ $IMConfig['images_dir'] = "demo_images";
 // try to figure out the URL of the images directory. We're assuming it's not
 // symlinked.
 
-$IMConfig['images_url'] = "/TESTS/xinha/plugins/ImageManager/demo_images";
+$IMConfig['images_url'] = "/xinha/plugins/ImageManager/demo_images";
 
 // -------------------------------------------------------------------------
 
