@@ -58,8 +58,18 @@ function Linker(editor, args)
   }
 }
 
+Linker.prototype._lc = function(string)
+{
+  return HTMLArea._lc(string, 'Linker');
+}
+
 Linker.prototype._createLink = function(a)
 {
+  if(!a && this.editor._selectionEmpty(this.editor._getSelection()))
+  {
+    alert(this._lc("You must select some text before making a new link."));
+    return false;
+  }
 
   var inputs =
   {
@@ -362,10 +372,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
   }
 }
 
-Linker.Dialog.prototype._lc = function(string)
-{
-  return HTMLArea._lc(string, 'Linker');
-}
+Linker.Dialog.prototype._lc = Linker.prototype._lc;
 
 Linker.Dialog.prototype.show = function(inputs, ok, cancel)
 {
