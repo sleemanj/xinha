@@ -27,14 +27,15 @@ To get this working check see config.inc.php for configuration values.
 Most likely you will need to adjust images_dir and images_url if you have
 not unpacked Xinha in your DOCUMENT_ROOT.
 
-You may also need to modify image-manager.js line 47 (or override from the calling
-page) to have the same value as $IMConfig['images_url'] from config.inc.php.
-
 For demo purposes ImageManager is set up to view images in the
 
    /xinha/plugins/ImageManager/demo_images
 
 directory. This is governed by the images_dir and images_url config options.
+
+The permissions on the demo_images directory may not be correct. The directory
+should be owned by the user your webserver runs as and should have 755 
+permissions.
 
 --------------------------------------------------------------------------------
 

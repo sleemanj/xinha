@@ -249,11 +249,9 @@ define( "IM_CONFIG_LOADED", "yes" );
 include_once( "ddt.php" );
 
 // uncomment to send debug messages to a local file
-
 // _setDebugLog( "/tmp/debug_log.txt" );
 
 // turn debugging on everywhere.
-
 // _ddtOn();
 
 // END
