@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id: css.js,v 1.4 2003/11/24 01:34:33 mishoo Exp $
+// $Id$
 // @TODO This is the default and won't be very useful to others.
 // We should make this better.
 HTMLArea.Config.prototype.cssPluginConfig =

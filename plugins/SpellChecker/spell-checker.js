@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id: spell-checker.js,v 1.8 2004/07/13 15:19:51 mishoo Exp $
+// $Id$
 
 HTMLArea.Config.prototype.SpellChecker = { 'backend': 'php', 'personalFilesDir' : '' };
 
