@@ -553,7 +553,7 @@ class ImageManager
 
 		//well, no thumbnail was found, so ask the thumbs.php
 		//to generate the thumbnail on the fly.
-		Return $IMConfig['backend_url'] . 'f=thumbs&img='.rawurlencode($relative);
+		Return $IMConfig['backend_url'] . '__function=thumbs&img='.rawurlencode($relative);
 	}
 
 	/**

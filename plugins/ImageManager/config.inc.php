@@ -21,10 +21,10 @@
 *
 * URL to use for unified backend.
 *
-* The ?plugin=ImageManager& is required. 
+* The ?__plugin=ImageManager& is required. 
 */
 
-$IMConfig['backend_url'] = "backend.php?plugin=ImageManager&";
+$IMConfig['backend_url'] = "backend.php?__plugin=ImageManager&";
 
 /**
 * Backend Installation Directory
@@ -76,10 +76,10 @@ $IMConfig['images_dir'] = "demo_images";
 
 // $IMConfig['images_url'] = "/url/to/above";
 
-// try to figure out the URL of the images directory. We're assuming it's not
-// symlinked.
+// try to figure out the URL of the sample images directory. For your installation
+// you will probably want to keep images in another directory.
 
-$IMConfig['images_url'] = "/xinha/plugins/ImageManager/demo_images";
+$IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
 
 // -------------------------------------------------------------------------
 
@@ -249,10 +249,10 @@ define( "IM_CONFIG_LOADED", "yes" );
 include_once( "ddt.php" );
 
 // uncomment to send debug messages to a local file
-// _setDebugLog( "/tmp/debug_log.txt" );
+_setDebugLog( "/tmp/debug_log.txt" );
 
 // turn debugging on everywhere.
-// _ddtOn();
+_ddtOn();
 
 // END
 

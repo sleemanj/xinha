@@ -19,8 +19,8 @@
 * routes all requests to the server through this single, replaceable,
 * entry point. backend.php expects at least two URL variable parameters: 
 *
-* plugin=ImageManager   for future expansion; identify the plugin being requested.
-* f=thumbs|images|editorFrame|editor|manager  function being called.
+* __plugin=ImageManager   for future expansion; identify the plugin being requested.
+* __function=thumbs|images|editorFrame|editor|manager  function being called.
 *
 * Having a single entry point that strictly adheres to a defined interface will 
 * make the backend code much easier to maintain and expand. It will make it easier
@@ -55,7 +55,7 @@ $formVars = empty($_POST) ? $_GET : $_POST;
 // separating out all the presentation HTML from the logic. (Right now all the HTML
 // used by ImageManager is in the same files as the PHP code ...)
 
-if ( @$formVars[ "plugin" ] != "ImageManager" )
+if ( @$formVars[ "__plugin" ] != "ImageManager" )
 	{
 	// not for us.
 
@@ -68,9 +68,9 @@ if ( @$formVars[ "plugin" ] != "ImageManager" )
 // going to get rewritten anyway, we just include the correct file based on the 
 // function request.
 
-_ddt( __FILE__, __LINE__, "backend.php(): handling function '" . $formVars[ "f" ] . "' base_dir is '" . $IMConfig["base_dir"] . "'" );
+_ddt( __FILE__, __LINE__, "backend.php(): handling function '" . $formVars[ "__function" ] . "' base_dir is '" . $IMConfig["base_dir"] . "'" );
 
-switch ( @$formVars[ "f" ] )
+switch ( @$formVars[ "__function" ] )
 	{
 
 	case "editor": 

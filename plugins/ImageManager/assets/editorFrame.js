@@ -33,7 +33,7 @@ function doSubmit(action)
         // backend_url is set by the calling page. For now we assume it contains
 		  // a trailing &
 
-        var url = _backend_url + "f=editorFrame&img="+currentImageFile+"&action=crop&params="+parseInt(t_cx.value)+','+parseInt(t_cy.value)+','+ parseInt(t_cw.value)+','+parseInt(t_ch.value);
+        var url = _backend_url + "__function=editorFrame&img="+currentImageFile+"&action=crop&params="+parseInt(t_cx.value)+','+parseInt(t_cy.value)+','+ parseInt(t_cw.value)+','+parseInt(t_ch.value);
 
         //alert(url);
         location.href = url;
@@ -42,7 +42,7 @@ function doSubmit(action)
     }   
     else if (action == 'scale')
     {
-        var url = _backend_url + "f=editorFrame&img="+currentImageFile+"&action=scale&params="+parseInt(s_sw.value)+','+parseInt(s_sh.value);
+        var url = _backend_url + "__function=editorFrame&img="+currentImageFile+"&action=scale&params="+parseInt(s_sw.value)+','+parseInt(s_sh.value);
         //alert(url);
         location.href = url;
         
@@ -52,9 +52,9 @@ function doSubmit(action)
         var flip = topDoc.getElementById('flip');
 
         if(flip.value == 'hoz' || flip.value == 'ver') 
-            location.href = _backend_url + "f=editorFrame&img="+currentImageFile+"&action=flip&params="+flip.value;
+            location.href = _backend_url + "__function=editorFrame&img="+currentImageFile+"&action=flip&params="+flip.value;
         else if (isNaN(parseFloat(r_ra.value))==false)
-            location.href = _backend_url + "f=editorFrame&img="+currentImageFile+"&action=rotate&params="+parseFloat(r_ra.value);
+            location.href = _backend_url + "__function=editorFrame&img="+currentImageFile+"&action=rotate&params="+parseFloat(r_ra.value);
     }
     else if(action == 'save') {
         var s_file = topDoc.getElementById('save_filename');
@@ -70,7 +70,7 @@ function doSubmit(action)
         {
             var filename = encodeURI(s_file.value);
             var quality = parseInt(s_quality.value);
-            var url = _backend_url + "f=editorFrame&img="+currentImageFile+"&action=save&params="+format[0]+","+quality+"&file="+filename;
+            var url = _backend_url + "__function=editorFrame&img="+currentImageFile+"&action=save&params="+format[0]+","+quality+"&file="+filename;
             //alert(url);
             location.href = url;
         }

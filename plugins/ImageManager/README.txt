@@ -22,10 +22,11 @@ at
    http://xinha.gogo.co.nz/punbb/viewforum.php?id=1
 
 ------------------------------------------------------------------------------
-To get this working check see config.inc.php for configuration values.
+If you have GD installed and configured in PHP this should work out of the 
+box. 
 
-Most likely you will need to adjust images_dir and images_url if you have
-not unpacked Xinha in your DOCUMENT_ROOT.
+For production use see config.inc.php for configuration values. You will 
+want to adjust images_dir and images_url for your application.
 
 For demo purposes ImageManager is set up to view images in the
 
@@ -38,13 +39,6 @@ should be owned by the user your webserver runs as and should have 755
 permissions.
 
 --------------------------------------------------------------------------------
-
-
-
-I've  packaged  this  up to be distributed with Xinha. In order
-for  this  to  work  as  is, you either have to unpack Xinha in
-DOCUMENT_ROOT  or you will need to edit config.inc.php to match
-your install.
 
 By  default this ImageManager is set up to browse some graphics
 in plugins/ImageManager/demo_images.
@@ -67,7 +61,7 @@ backend.php.
 
 Request URLs are of the form:
 
- <config backend URL>(?|&)plugin=ImageManager&f=<function>&arg=value&arg=value
+ <config backend URL>(?|&)__plugin=ImageManager&__function=<function>&arg=value&arg=value
 
 The default URL is plugins/xinha/backend.php.
 

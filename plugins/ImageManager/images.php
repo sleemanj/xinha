@@ -67,7 +67,7 @@ function drawFiles($list, &$manager)
 
 		<a href="javascript:;" onclick="selectImage('<? echo $file['relative'];?>', '<? echo $entry; ?>', <? echo $file['image'][0];?>, <? echo $file['image'][1]; ?>);"title="<? echo $entry; ?> - <? echo Files::formatSize($file['stat']['size']); ?>"><img src="<? print $manager->getThumbnail($file['relative']); ?>" alt="<? echo $entry; ?> - <? echo Files::formatSize($file['stat']['size']); ?>"/></a>
 		</td></tr><tr><td class="edit">
-			<a href="<? print $IMConfig['backend_url']; ?>f=images&dir=<? echo $relative; ?>&amp;delf=<? echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<? echo $entry; ?>');"><img src="<? print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<? echo rawurlencode($file['relative']);?>');"><img src="<? print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
+			<a href="<? print $IMConfig['backend_url']; ?>__function=images&dir=<? echo $relative; ?>&amp;delf=<? echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<? echo $entry; ?>');"><img src="<? print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<? echo rawurlencode($file['relative']);?>');"><img src="<? print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
 		<? if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
 		</td></tr></table></td> 
 	  <? 
@@ -191,7 +191,7 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 
 	function editImage(image) 
 	{
-		var url = "<? print $IMConfig['backend_url']; ?>f=editor&img="+image;
+		var url = "<? print $IMConfig['backend_url']; ?>__function=editor&img="+image;
 		Dialog(url, function(param) 
 		{
 			if (!param) // user must have pressed Cancel

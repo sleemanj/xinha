@@ -19,13 +19,13 @@
 		// backend_url is defined in the calling page. For now we 
 		// assume it has a trailing &
 
-		location.href = _backend_url + "f=images&dir="+newDir;
+		location.href = _backend_url + "__function=images&dir="+newDir;
 	}
 
 
 	function newFolder(dir, newDir) 
 	{
-		location.href = _backend_url + "f=images&dir="+dir+"&newDir="+newDir;
+		location.href = _backend_url + "__function=images&dir="+dir+"&newDir="+newDir;
 	}
 
 	//update the dir list in the parent window.

@@ -43,7 +43,7 @@ ImageManager._pluginInfo = {
 
 HTMLArea.Config.prototype.ImageManager =
 {
-  'backend' : _editor_url + 'plugins/ImageManager/backend.php?plugin=ImageManager&',
+  'backend' : _editor_url + 'plugins/ImageManager/backend.php?__plugin=ImageManager&',
   'images_url' : _editor_url + 'plugins/ImageManager/demo_images'
 }
 
@@ -61,9 +61,10 @@ HTMLArea.prototype._insertImage = function(image) {
 	}
 
 	// the selection will have the absolute url to the image. 
-	// We need to coerce it to be relative to the images directory.
+	// coerce it to be relative to the images directory.
 	//
 	// FIXME: we have the correct URL, but how to get it to select?
+	// FIXME: need to do the same for MSIE.
 
 	if ( image )
 		{
@@ -77,9 +78,13 @@ HTMLArea.prototype._insertImage = function(image) {
 
 			var image_src = image.getAttribute("src");
 
-			// alert( "images_url is '" + editor.config.ImageManager.images_url + "'" );
+			// strip off any http://blah prefix
 
-			var image_regex = new RegExp( editor.config.ImageManager.images_url );
+			var images_url = editor.config.ImageManager.images_url.replace( /https?:\/\/[^\/]*/, "" );
+
+			// alert( "images_url is '" + images_url + "'" );
+
+			var image_regex = new RegExp( images_url );
 
 			// alert(" regex is '" + image_regex.source + "'" );
 
@@ -109,7 +114,7 @@ HTMLArea.prototype._insertImage = function(image) {
 
 	// alert( "backend is '" + editor.config.ImageManager.backend + "'" );
 
-	var manager = editor.config.ImageManager.backend + 'f=manager';
+	var manager = editor.config.ImageManager.backend + '__function=manager';
 
 	Dialog(manager, function(param) {
 		if (!param) {	// user must have pressed Cancel

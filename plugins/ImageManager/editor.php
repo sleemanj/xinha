@@ -140,7 +140,7 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 <a href="javascript:toggle('save')" id="icon_save" title="Save"><img src="<? print $IMConfig['base_url'];?>img/save.gif" height="20" width="20" alt="Save" /><span>Save</span></a>
 </div>
 <div id="contents">
-<iframe src="<? print $IMConfig['backend_url']; ?>f=editorFrame&img=<? if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor"  scrolling="auto" title="Image Editor" frameborder="0"></iframe>
+<iframe src="<? print $IMConfig['backend_url']; ?>__function=editorFrame&img=<? if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor"  scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>
 </body>
