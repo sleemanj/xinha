@@ -61,13 +61,13 @@
           {
             if($subdir = scan($path, $url))
             {
-              $files[] = array($url, $subdir);
+              $files[] = array('url'=>$url, 'children'=>$subdir);
             }
           }
           elseif(is_file($path))
           {
             if(($include && !preg_match($include, $url)) || ($exclude && preg_match($exclude, $url))) continue;
-            $files[] = $url;
+            $files[] = array('url'=>$url);
           }
 
         }
@@ -103,12 +103,30 @@
 
       if(is_array($var))
       {
+        $useObject = false;
+        foreach(array_keys($var) as $k) {
+            if(!is_numeric($k)) $useObject = true;
+        }
         $js = array();
         foreach($var as $k => $v)
         {
-          $js[] = to_js($v, $tabs + 1);
+          $i = "";
+          if($useObject) {
+            if(preg_match('#[a-zA-Z]+[a-zA-Z0-9]*#', $k)) {
+              $i .= "$k: ";
+            } else {
+              $i .= "'$k': ";
+            }
+          }
+          $i .= to_js($v, $tabs + 1);
+          $js[] = $i;
         }
-        return "[\n" . tabify(implode(",\n", $js), $tabs) . "\n]";
+        if($useObject) {
+            $ret = "{\n" . tabify(implode(",\n", $js), $tabs) . "\n}";
+        } else {
+            $ret = "[\n" . tabify(implode(",\n", $js), $tabs) . "\n]";
+        }
+        return $ret;
       }
 
       return 'null';

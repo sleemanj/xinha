@@ -67,7 +67,7 @@ Linker.prototype._lc = function(string)
 Linker.prototype._createLink = function(a)
 {
   if(!a && this.editor._selectionEmpty(this.editor._getSelection()))
-  {
+  {       
     alert(this._lc("You must select some text before making a new link."));
     return false;
   }
@@ -315,7 +315,13 @@ Linker.Dialog.prototype._prepareDialog = function()
     {
         //get files from backend
         HTMLArea._getback(linker.lConfig.backend,
-                          function(txt) { lDialog.files = eval(txt); lDialog._prepareDialog(); });
+                          function(txt) {
+                            try {
+                                eval('lDialog.files = '+txt);
+                            } catch(Error) {
+                                lDialog.files = [ {url:'',title:Error.toString()} ];
+                            }
+                            lDialog._prepareDialog(); });
     }
     else if(linker.lConfig.files != null)
     {
@@ -383,11 +389,30 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
                      'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
                      files[i]);
     }
-    else
+    else if(files[i].length)
     {
       var id = this.Dialog_nxtid++;
       this.dTree.add(id, parent, files[i][0].replace(/^.*\//, ''), null, files[i][0]);
       this.makeNodes(files[i][1], id);
+    }
+    else if(typeof files[i] == 'object')
+    {
+      if(files[i].children) {
+        var id = this.Dialog_nxtid++;
+      } else {
+        var id = Linker.nxtid++;
+      }
+
+      if(files[i].title) var title = files[i].title;
+      else if(files[i].url) var title = files[i].url.replace(/^.*\//, '');
+      else var title = "no title defined";
+      if(files[i].url) var link = 'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i].url) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);';
+      else var link = '';
+      
+      this.dTree.add(id, parent, title, link, title);
+      if(files[i].children) {
+        this.makeNodes(files[i].children, id);
+      }
     }
   }
 }
