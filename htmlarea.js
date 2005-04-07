@@ -174,13 +174,13 @@ HTMLArea.Config = function () {
 
   this.width = "toolbar";
   this.height = "auto";
-  
+
   //language of the editor
   this.lang = "en";
-  
+
   //
   this.lcBackend = "lcbackend.php?lang=$lang&context=$context";
-  
+
   // enable creation of a status bar?
   this.statusBar = true;
 
@@ -331,6 +331,18 @@ HTMLArea.Config = function () {
   };
 
   this.debug = true;
+
+  this.URIs = {
+   "blank": "popups/blank.html",
+   "link": "link.html",
+   "insert_image": "insert_image.html",
+   "insert_table": "insert_table.html",
+   "select_color": "select_color.html",
+   "fullscreen": "fullscreen.html",
+   "about": "about.html",
+   "mozilla_security": "http://mozilla.org/editor/midasdemo/securityprefs.html"
+  };
+
 
   // ADDING CUSTOM BUTTONS: please read below!
   // format of the btnList elements is "ID: [ ToolTip, Icon, Enabled in text mode?, ACTION ]"
@@ -1013,7 +1025,7 @@ HTMLArea.prototype.generate = function ()
   // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
   innerEditor.appendChild(iframe);
-  iframe.src = _editor_url + "popups/blank.html";
+  iframe.src = _editor_url + editor.config.URIs["blank"];
   this._iframe = iframe;
 
 
@@ -2794,7 +2806,7 @@ HTMLArea.prototype._createLink = function(link) {
       f_target : link.target,
       f_usetarget : editor.config.makeLinkShowsTarget
     };
-  this._popupDialog("link.html", function(param) {
+  this._popupDialog(editor.config.URIs["link"], function(param) {
     if (!param)
       return false;
     var a = link;
@@ -2852,7 +2864,7 @@ HTMLArea.prototype._insertImage = function(image) {
     f_vert   : image.vspace,
     f_horiz  : image.hspace
   };
-  this._popupDialog("insert_image.html", function(param) {
+  this._popupDialog(editor.config.URIs["insert_image"], function(param) {
     if (!param) {	// user must have pressed Cancel
       return false;
     }
@@ -2892,7 +2904,7 @@ HTMLArea.prototype._insertTable = function() {
   var sel = this._getSelection();
   var range = this._createRange(sel);
   var editor = this;	// for nested functions
-  this._popupDialog("insert_table.html", function(param) {
+  this._popupDialog(editor.config.URIs["insert_table"], function(param) {
     if (!param) {	// user must have pressed Cancel
       return false;
     }
@@ -2981,7 +2993,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
       case "hilitecolor":
     (HTMLArea.is_ie) && (cmdID = "backcolor");
       case "forecolor":
-    this._popupDialog("select_color.html", function(color) {
+    this._popupDialog(editor.config.URIs["select_color"], function(color) {
       if (color) { // selection not canceled
         editor._doc.execCommand(cmdID, false, "#" + color);
       }
@@ -2996,12 +3008,12 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
     var win;
     if (HTMLArea.is_ie) {
       {
-                                win = window.open(this.popupURL("fullscreen.html"), "ha_fullscreen",
+                                win = window.open(this.popupURL(editor.config.URIs["fullscreen"]), "ha_fullscreen",
               "toolbar=no,location=no,directories=no,status=no,menubar=no," +
               "scrollbars=no,resizable=yes,width=640,height=480");
       }
     } else {
-                            win = window.open(this.popupURL("fullscreen.html"), "ha_fullscreen",
+                            win = window.open(this.popupURL(editor.config.URIs["fullscreen"]), "ha_fullscreen",
             "toolbar=no,menubar=no,personalbar=no,width=640,height=480," +
             "scrollbars=no,resizable=yes");
     }
@@ -3016,7 +3028,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
     break;
       case "inserttable": this._insertTable(); break;
       case "insertimage": this._insertImage(); break;
-      case "about"    : this._popupDialog("about.html", null, this); break;
+      case "about"    : this._popupDialog(editor.config.URIs["about"], null, this); break;
       case "showhelp" : window.open(this.config.helpURL, "ha_help"); break;
 
       case "killword": this._wordClean(); break;
@@ -3065,7 +3077,7 @@ HTMLArea.prototype._editorEvent = function(ev) {
   if(typeof editor._textArea['on'+ev.type] == "function") {
     editor._textArea['on'+ev.type]();
   }
-  
+
   if(HTMLArea.is_gecko && keyEvent && ev.ctrlKey &&  this._unLink && this._unlinkOnUndo)
   {
     if(String.fromCharCode(ev.charCode).toLowerCase() == 'z')
@@ -3331,10 +3343,10 @@ HTMLArea.prototype.convertNode = function(el, newTagName) {
 HTMLArea.prototype.ie_checkBackspace = function() {
   var sel = this._getSelection();
   var range = this._createRange(sel);
-  
+
   // the selection must contain at least some text
   if (range.text == "undefined") return true;
-  
+
   // to remove a link (should be done like this?)
   var r2 = range.duplicate();
   r2.moveStart("character", -1);
@@ -4521,7 +4533,7 @@ HTMLArea.uniq = function(prefix)
  * @param context Case sensitive context name, eg 'HTMLArea', 'TableOperations', ...
  */
 HTMLArea._loadlang = function(context)
-{ 
+{
   if(typeof _editor_lcbackend == "string")
   {
     //use backend
@@ -4538,7 +4550,7 @@ HTMLArea._loadlang = function(context)
       var url = _editor_url+"/lang/"+_editor_lang+".js";
     }
   }
-  
+
   var lang;
   var langData = HTMLArea._geturlcontent(url);
   if(langData != "") {
@@ -4565,7 +4577,7 @@ HTMLArea._lc = function(string, context)
   {
     return string;
   }
-  
+
   if(typeof HTMLArea._lc_catalog == 'undefined')
   {
     HTMLArea._lc_catalog = [ ];
