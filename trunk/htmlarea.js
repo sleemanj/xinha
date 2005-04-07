@@ -1521,7 +1521,7 @@ HTMLArea.prototype.generate = function ()
     if(typeof editor._onGenerate == "function") { editor._onGenerate();}
 
     setTimeout(function() {
-      editor.updateToolbar();
+//      editor.updateToolbar();
     }, 250);
 
     if (typeof editor.onGenerate == "function")
@@ -4688,5 +4688,14 @@ HTMLArea.startEditors = function(editors)
   }
 }
 
+HTMLArea.prototype.registerPlugins = function(plugin_names) {
+  if(plugin_names)
+  {
+    for(var i = 0; i < plugin_names.length; i++)
+    {
+      this.registerPlugin(eval(plugin_names[i]));
+    }
+  }
+}
 
 HTMLArea.init();
