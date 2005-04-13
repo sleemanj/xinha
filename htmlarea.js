@@ -1396,21 +1396,22 @@ HTMLArea.prototype.generate = function ()
 
   HTMLArea.prototype.activateEditor = function()
   {
-    if (HTMLArea.is_gecko && this._doc.designMode != 'on')
-    try {
+    if (HTMLArea.is_gecko && this._doc.designMode != 'on') {
+      try {
     
-      // cannot set design mode if no display
-      if (this._iframe.style.display == 'none')
-      {
-        this._iframe.style.display = '';
-        this._doc.designMode = 'on';
-        this._iframe.style.display = 'none';
-      }
-      else
-      {
-        this._doc.designMode = 'on';
-      }
-    } catch (e) {}
+        // cannot set design mode if no display
+        if (this._iframe.style.display == 'none')
+        {
+          this._iframe.style.display = '';
+          this._doc.designMode = 'on';
+          this._iframe.style.display = 'none';
+        }
+        else
+        {
+          this._doc.designMode = 'on';
+        }
+      } catch (e) {}
+    }
     else
     {
       this._doc.body.contentEditable = true;
