@@ -15,13 +15,17 @@
 # OR NON-INFRINGEMENT. 
 # ------------------------------------------------------------------
 #
+# Preprocess popups/about.html so that it is out of date by incrementing
+# a commit index in the file. This will force the SVN revision history
+# variables to be updated on commit making those values reflect the actual 
+# version of the repository we're dealing with.
+#
 # This script requires both a bourne compatible shell and a command
 # line PHP processor. see ./lib/svn_commit_preproc.php. You may need
 # to update the path in that script to point to your command line php
 # parser.
 #
-# Preprocess popups/about.html so that it reflects the actual version
-# we're dealing with intead of just the version of the about.html file.
+# Currently this only runs under Unix/Linux.
 
 # make sure we're not running from a webserver.
 # FIXME: We need to verify that supported webservers call use the HTTP_HOST
@@ -37,6 +41,7 @@ fi
 if test ! -f .xinha_root;
    then
    echo svn_commit must be run from the Xinha root directory.
+   echo Usage: ./utils/svn_commit.sh
    exit -1
    fi
 
@@ -51,6 +56,10 @@ if test -z "`svn status`";
    exit
    fi
 
+# update the popups/about.html file.
+
 ./utils/lib/svn_commit_preproc.php
+
+# run the commit.
 
 svn commit 
