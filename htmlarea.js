@@ -1384,12 +1384,23 @@ HTMLArea.prototype.generate = function ()
     return props;
   }
 
+  HTMLArea.prototype.editorIsActivated = function() {
+    try {
+      if (HTMLArea.is_gecko) return (this._doc.designMode == 'on');
+      else return (this._doc.body.contentEditable);
+    } catch (e)
+    {
+      return false;
+    }
+  }
+
   HTMLArea.prototype.activateEditor = function()
   {
     if (HTMLArea.is_gecko && this._doc.designMode != 'on')
-    {
-      try{HTMLArea.last_on.designMode = 'off';} catch(e) { }
-      if(this._iframe.style.display == 'none')
+    try {
+    
+      // cannot set design mode if no display
+      if (this._iframe.style.display == 'none')
       {
         this._iframe.style.display = '';
         this._doc.designMode = 'on';
@@ -1399,20 +1410,18 @@ HTMLArea.prototype.generate = function ()
       {
         this._doc.designMode = 'on';
       }
-    }
+    } catch (e) {}
     else
     {
       this._doc.body.contentEditable = true;
     }
-    HTMLArea.last_on = this._doc;
   }
 
   HTMLArea.prototype.deactivateEditor = function()
   {
-    if(HTMLArea.is_gecko && this._doc.designMode == 'on')
+    if (HTMLArea.is_gecko && this._doc.designMode != 'off')
     {
-      this._doc.designMode = 'off';
-      HTMLArea.last_on = null;
+      try {this._doc.designMode = 'off';} catch (e) {}
     }
     else
     {
@@ -1426,11 +1435,16 @@ HTMLArea.prototype.generate = function ()
     var editor = this;
     try
     {
-      doc = editor._iframe.contentWindow.document;
-      if (!doc) {
-        // Try again..
-        // FIXME: don't know what else to do here.  Normally
-        // we'll never reach this point.
+      if (editor._iframe.contentDocument)
+      {
+        this._doc = editor._iframe.contentDocument;
+      }
+      else
+      {
+        this._doc = editor._iframe.contentWindow.document;
+      }
+      doc = this._doc;
+      if (!doc) { // try later
         if (HTMLArea.is_gecko) {
           setTimeout(function() { editor.initIframe()}, 50);
           return false;
@@ -1438,14 +1452,15 @@ HTMLArea.prototype.generate = function ()
           alert("ERROR: IFRAME can't be initialized.");
         }
       }
+      editor.activateEditor();
     }
     catch(e)
-    {
+    { // try later
       setTimeout(function() { editor.initIframe()}, 50);
     }
 
+    doc.open();
     if (!editor.config.fullPage) {
-      doc.open();
       var html = "<html>\n";
       html += "<head>\n";
       html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
@@ -1475,22 +1490,20 @@ HTMLArea.prototype.generate = function ()
       html +=   editor.inwardHtml(editor._textArea.value);
       html += "</body>\n";
       html += "</html>";
-      doc.write(html);
-      doc.close();
     } else {
       var html = editor.inwardHtml(editor._textArea.value);
       if (html.match(HTMLArea.RE_doctype)) {
         editor.setDoctype(RegExp.$1);
         html = html.replace(HTMLArea.RE_doctype, "");
       }
-      doc.open();
-      doc.write(html);
-      doc.close();
     }
-
-    this._doc = doc;
-
-    // If we have multiple editors some bug in Mozilla makes some lose editing ability
+    doc.write(html);
+    doc.close();
+    
+    // redo it for some obscure reason that IE need it..
+    editor.activateEditor();
+    
+    // if we have multiple editors some bug in Mozilla makes some lose editing ability
     if(HTMLArea.is_gecko)
     {
       HTMLArea._addEvents(
@@ -1498,10 +1511,6 @@ HTMLArea.prototype.generate = function ()
         ["mousedown"],
         function() { editor.activateEditor();  }
       );
-    }
-    else
-    {
-      editor.activateEditor();
     }
 
     // editor.focusEditor();
@@ -1518,14 +1527,16 @@ HTMLArea.prototype.generate = function ()
       HTMLArea.refreshPlugin(plugin);
     }
 
-    if(typeof editor._onGenerate == "function") { editor._onGenerate();}
+    // specific editor initialization
+    if(typeof editor._onGenerate == "function") {
+      editor._onGenerate();
+    }
 
-    setTimeout(function() {
-//      editor.updateToolbar();
+    // update toolbar (hope this will arrive enough late...)
+    editor._timerToolbar = setTimeout(function() {
+      editor.updateToolbar();
+      editor._timerToolbar = null;
     }, 250);
-
-    if (typeof editor.onGenerate == "function")
-      editor.onGenerate();
   }
 
 // Switches editor mode; parameter can be "textmode" or "wysiwyg".  If no
@@ -1931,7 +1942,7 @@ HTMLArea.prototype.focusEditor = function() {
       try
       {
         // We don't want to focus the field unless at least one field has been activated.
-        if(HTMLArea.last_on)
+        if(!this.editorIsActivated())
         {
           this.activateEditor();
           this._iframe.contentWindow.focus();
@@ -4668,14 +4679,9 @@ HTMLArea.makeEditors = function(editor_names, default_config, plugin_names)
   var editors = { };
   for(var x = 0; x < editor_names.length; x++)
   {
-    editors[editor_names[x]] = new HTMLArea(editor_names[x], HTMLArea.cloneObject(default_config));
-    if(plugin_names)
-    {
-      for(var i = 0; i < plugin_names.length; i++)
-      {
-        editors[editor_names[x]].registerPlugin(eval(plugin_names[i]));
-      }
-    }
+    var editor = new HTMLArea(editor_names[x], HTMLArea.cloneObject(default_config));
+    editor.registerPlugins(plugin_names);
+    editors[editor_names[x]] = editor;
   }
   return editors;
 }
