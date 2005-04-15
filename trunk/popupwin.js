@@ -92,7 +92,7 @@ PopupWin.prototype.addButtons = function() {
 		var btn = arguments[i];
 		var button = this.doc.createElement("button");
 		div.appendChild(button);
-		button.innerHTML = HTMLArea._lc(buttons[btn], 'HTMLArea');
+		button.innerHTML = HTMLArea._lc(btn, 'HTMLArea');
 		switch (btn) {
 		    case "ok":
 			button.onclick = function() {
