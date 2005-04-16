@@ -1,0 +1,14 @@
+
+Work-in-progress:
+
+To set up the software to run please run Configure.php with the full path 
+to your command line PHP intepreter as in:
+
+/usr/local/bin/php Configure.php
+
+Configure.php will ask for the completely path to PHP and Perl. 
+
+Configure will do some variable expansion in devutils/* and set permissions on
+the plugins/ImageManager/demo_images directory.
+
+For more information please see the README.txt and README_DEVELOPERS.txt files.
