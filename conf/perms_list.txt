@@ -1,0 +1,11 @@
+<?
+/**
+* Optionally lists out permissions.
+*
+* format is:
+*
+* file octal_perms owner
+*/
+?>
+
+./plugins/ImageManager/demo_images 644 nobody

@@ -1,0 +1,4 @@
+./devutils/makedocs.pl.in 0755
+./devutils/svn_commit.pl.in 0755
+./devutils/buildruntime.php.in 0755
+./devutils/ddtpreproc.php.in 0755

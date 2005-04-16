@@ -1,0 +1,12 @@
+
+Xinha Unified Backend Branch Configure Script.
+
+This Configure.php script is used to patch paths to the PHP and Perl 
+command line interpreters into the devutils/* scripts. 
+
+It also sets permissions and ownership on key directories (notably 
+plugins/ImageManager/demo_images). 
+
+See README.txt, README_DEVELOPERS.txt and index.html for more 
+information.
+

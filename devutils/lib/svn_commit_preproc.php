@@ -1,22 +1,23 @@
-#!/usr/local/bin/php
 <?php
 
-/*
-# -----------------------------------------------------------------
-# Copyright (C) DTLink, LLC. 
-# http://www.dtlink.com and http://www.formvista.com
-#
-# Use of this code is granted by the terms of the htmlArea License (based on
-# BSD license) please read license.txt in this package for details.
-# 
-# All software distributed under the Licenses is provided strictly on
-# an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR
-# IMPLIED, AND DTLINK LLC HEREBY DISCLAIMS ALL SUCH
-# WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT,
-# OR NON-INFRINGEMENT. 
-# ------------------------------------------------------------------
-*/
+// [NOSTRIP
+// -----------------------------------------------------------------
+// Copyright (C) DTLink, LLC. 
+// http://www.dtlink.com and http://www.formvista.com
+// -----------------------------------------------------------------
+// This code is distributed under the the sames terms as Xinha
+// itself. (HTMLArea license based on the BSD license) 
+// 
+// Please read license.txt in this package for details.
+//
+// All software distributed under the Licenses is provided strictly on
+// an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR
+// IMPLIED, AND DTLINK LLC HEREBY DISCLAIMS ALL SUCH
+// WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT,
+// OR NON-INFRINGEMENT. 
+// ------------------------------------------------------------------
+// NOSTRIP]
 
 /**
 * 
@@ -103,22 +104,6 @@ fclose( $outfile );
 return( true );
 
 }	// end of increment_commit_count()
-
-// ---------------------------------------------------------------
-//			TEMPLATE EXPANSION
-// ---------------------------------------------------------------
-
-// VERSION.php
-
-if ( increment_commit_count( realpath( "./popups/about.html" ), 
-realpath( "./" ) . "/popups/about.html" ))
-   {
-   print( "popups/about.html updated.\n" );
-   }
-else
-   {
-   print( "popups/about.html NOT updated due to error\n" );
-   }
 
 // END
 
