@@ -702,7 +702,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       tb_objects[txt] = obj;
       for (var i in options) {
         var op = document.createElement("option");
-        op.innerHTML = i;
+        op.innerHTML = HTMLArea._lc(i);
         op.value = options[i];
         el.appendChild(op);
       }
