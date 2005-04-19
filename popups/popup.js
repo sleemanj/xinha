@@ -77,7 +77,7 @@ function __dlg_init(bottom) {
 
 function __dlg_translate(context) {
     HTMLArea = window.opener.HTMLArea;
-	var types = ["input", "select", "legend", "span", "option", "td", "button", "div"];
+	var types = ["input", "select", "legend", "span", "option", "td", "button", "div", "label"];
 	for (var type = 0; type < types.length; ++type) {
 		var spans = document.getElementsByTagName(types[type]);
 		for (var i = spans.length; --i >= 0;) {
