@@ -178,9 +178,6 @@ HTMLArea.Config = function () {
   //language of the editor
   this.lang = "en";
 
-  //
-  this.lcBackend = "lcbackend.php?lang=$lang&context=$context";
-
   // enable creation of a status bar?
   this.statusBar = true;
 
