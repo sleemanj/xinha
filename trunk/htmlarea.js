@@ -4557,9 +4557,9 @@ HTMLArea._loadlang = function(context)
   {
     //use internal files
     if(context != 'HTMLArea') {
-      var url = _editor_url+"/plugins/"+context+"/lang/"+_editor_lang+".js";
+      var url = _editor_url+"plugins/"+context+"/lang/"+_editor_lang+".js";
     } else {
-      var url = _editor_url+"/lang/"+_editor_lang+".js";
+      var url = _editor_url+"lang/"+_editor_lang+".js";
     }
   }
 
