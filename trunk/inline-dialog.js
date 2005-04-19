@@ -93,6 +93,10 @@ HTMLArea.Dialog.prototype.show = function(values)
 
   this.editor._textArea.style.display = 'none';
   this.editor._iframe.style.visibility   = 'hidden';
+  if (this.editor.config.statusBar)
+  {
+    this.editor._statusBar.innerHTML = '&nbsp;';
+  }
   this.rootElem.style.display   = '';
 }
 
@@ -102,6 +106,11 @@ HTMLArea.Dialog.prototype.hide = function()
   this.editor._textArea.style.display = this._restoreTo[0];
   this.editor._iframe.style.visibility   = this._restoreTo[1];
   this.editor.showPanels(this._restoreTo[2]);
+  if (this.editor.config.statusBar)
+  {
+    this.editor._statusBar.innerHTML = '';
+    this.editor._statusBar.appendChild(this.editor._statusBarTree);
+  }
   // Restore the selection
   if(HTMLArea.is_ie)
   {
