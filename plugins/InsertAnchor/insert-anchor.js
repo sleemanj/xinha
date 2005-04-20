@@ -72,6 +72,7 @@ InsertAnchor.prototype.buttonPress = function(editor, id) {
     var alink = doc.createElement("a");
     alink.id = anchor;
     alink.name = anchor;
+    alink.title = anchor;
     alink.className = "anchor";
     if (HTMLArea.is_ie) {
       var sel = editor._getSelection();
