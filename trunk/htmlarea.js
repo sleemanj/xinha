@@ -336,8 +336,7 @@ HTMLArea.Config = function () {
    "insert_table": "insert_table.html",
    "select_color": "select_color.html",
    "fullscreen": "fullscreen.html",
-   "about": "about.html",
-   "mozilla_security": "http://mozilla.org/editor/midasdemo/securityprefs.html"
+   "about": "about.html"
   };
 
 
