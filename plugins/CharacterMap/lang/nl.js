@@ -10,7 +10,6 @@
 
 {
   "Insert special character": "Speciaal character invoegen",
-  "Insert special character": "Speciaal character invoegen",
   "HTML value:": "HTML waarde:",
   "Cancel": "Annuleer"
 }
