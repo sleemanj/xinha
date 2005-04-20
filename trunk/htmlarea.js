@@ -1409,7 +1409,7 @@ HTMLArea.prototype.generate = function ()
         }
       } catch (e) {}
     }
-    else
+    else if(!HTMLArea.is_gecko)
     {
       this._doc.body.contentEditable = true;
     }
