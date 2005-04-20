@@ -271,7 +271,7 @@ TableOperations.prototype.dialogTableProperties = function() {
 		p = dialog.doc.getElementById("--HA-layout");
 		p.appendChild(st_layout);
 		dialog.modal = true;
-		dialog.addButtons("ok", "cancel");
+		dialog.addButtons("OK", "Cancel");
 		dialog.showAtElement(dialog.editor._iframe, "c");
 	});
 };
@@ -372,7 +372,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 		p = dialog.doc.getElementById("--HA-layout");
 		p.appendChild(st_layout);
 		dialog.modal = true;
-		dialog.addButtons("ok", "cancel");
+		dialog.addButtons("OK", "Cancel");
 		dialog.showAtElement(dialog.editor._iframe, "c");
 	});
 };

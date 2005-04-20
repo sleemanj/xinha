@@ -77,5 +77,7 @@
   "HTMLArea cowardly refuses to delete the last column in table.": "Letzte Spalte in dieser Tabelle kann nicht gelöscht werden",
   "HTMLArea cowardly refuses to delete the last row in table.": "Letzte Reihe in dieser Tabelle kann nicht gelöscht werden",
   "percent": "%",
-  "pixels": "Pixel"
+  "pixels": "Pixel",
+  "OK": "OK",
+  "Cancel": "Abbrechen"
 }
