@@ -1,0 +1,29 @@
+Release Notes - Xinha Unified Backend Branch
+
+by: Yermo Lamers of DTLink, LLC
+http://www.formvista.com/contact.html
+
+---------------------------------------------------------------------
+2005-04-23: dev snapshot
+
+CHANGES:
+
+. The _ddt() trace system has been changed to write all trace messages
+  into a single popup window. This has produced a radical performance
+  improvement which makes Xinha with all debugging messages enabled
+  useable. 
+
+. the debug buttons have been removed.
+
+. the ddtpreproc.php script has been completed which recurses through
+  the directory structure and patches file and line numbers into all
+  javascript files.
+
+BUGS/ISSUES
+
+. under FireFox the popup debugging window is not well formed and produces
+  an error.
+
+. there is a javascript exception in the popup trace window support.
+
+. this code has not been tested using MSIE.

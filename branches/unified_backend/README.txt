@@ -1,7 +1,8 @@
 
 Xinha Unified Backend Branch.
 
-by: Yermo Lamers http://www.formvista.com/contact.html
+by: Yermo Lamers of DTLink,LLC
+http://www.formvista.com/contact.html
 
 The Unified Backend Branch code has been released under the same terms
 as HTMLAREA itself. For license information please see license.txt.

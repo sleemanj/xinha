@@ -148,13 +148,20 @@ HTMLArea._scripts = [];
 * A number of functions are called prior to HTMLArea object
 * construction. This is a shorthand to clean up the calls in
 * all these methods. 
+*
+* @see ddtpreproc.php
 */
 
-HTMLArea._ddt = function( msg )
+HTMLArea._ddt = function( file, line, msg )
   {
 
+  // FIXME: separated onto multiple lines to avoid being
+  // picked up by ddtpreproc.php.
+
   if ( typeof startupDDT != 'undefined' )
-     startupDDT._ddt( msg );
+    startupDDT._ddt( 
+      file,line, msg 
+      );
 
   }
 // STRIP]
@@ -428,11 +435,6 @@ HTMLArea.Config = function ()
       ["undo","redo"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste"]),["separator"],
       ["killword","removeformat","toggleborders","lefttoright", "righttoleft", "separator","htmlmode","about"]
 
-		// [STRIP
-		,["object_debug_toggle"]
-		,["static_debug_toggle"]
-		// STRIP]
-
     ];
 
   /**
@@ -651,11 +653,6 @@ HTMLArea.Config = function ()
     removeformat:  [ "Remove formatting", ["ed_buttons_main.gif",4,4], false, function(e) {e.execCommand("removeformat");} ],
     killword:      [ "Clear MSOffice tags", ["ed_buttons_main.gif",4,3], false, function(e) {e.execCommand("killword");} ]
 
-    // [STRIP
-    ,object_debug_toggle: [ "Toggle Debug of HTMLArea object", ["ed_buttons_main.gif",7,0], true, function(e) {e.ddt._ddtToggle();} ]
-    ,static_debug_toggle: [ "Toggle Debug of HTMLArea static methods (popup)", ["ed_buttons_main.gif",7,0], true, function(e) {e.ddt._ddtTogglePopup();} ]
-	 // STRIP]
-
     };  // end of btnList definition
 
   // initialize tooltips from the I18N module and generate correct image path
@@ -726,13 +723,13 @@ HTMLArea.Config.prototype.registerButton = function(id, tooltip, image, textMode
     {
     // alert("WARNING [HTMLArea.Config::registerDropdown]:\nA dropdown with the same ID already exists.");
   
-    HTMLArea._ddt("registerButton(): WARNING [HTMLArea.Config::registerDropdown]: A dropdown with the same ID already exists.");
+    HTMLArea._ddt( "htmlarea.js","726", "registerButton(): WARNING [HTMLArea.Config::registerDropdown]: A dropdown with the same ID already exists." );
     }
 
   if (typeof this.btnList[the_id] != "undefined") 
     {
     // alert("WARNING [HTMLArea.Config::registerDropdown]:\nA button with the same ID already exists.");
-    HTMLArea._ddt( "registerbutton(): WARNING [HTMLArea.Config::registerDropdown]:A button with the same ID already exists.");
+    HTMLArea._ddt( "htmlarea.js","732", "registerbutton(): WARNING [HTMLArea.Config::registerDropdown]:A button with the same ID already exists." );
     }
 
   switch (typeof id) 
@@ -762,13 +759,13 @@ HTMLArea.Config.prototype.registerDropdown = function(object)
   if (typeof this.customSelects[object.id] != "undefined") 
     {
 	 // alert("WARNING [HTMLArea.Config::registerDropdown]:\nA dropdown with the same ID already exists.");
-    HTMLArea._ddt("registerDropdown(): WARNING [HTMLArea.Config::registerDropdown]:\nA dropdown with the same ID already exists.");
+    HTMLArea._ddt( "htmlarea.js","762", "registerDropdown(): WARNING [HTMLArea.Config::registerDropdown]:\nA dropdown with the same ID already exists." );
     }
 
   if (typeof this.btnList[object.id] != "undefined") 
     {
 	 // alert("WARNING [HTMLArea.Config::registerDropdown]:\nA button with the same ID already exists.");
-    HTMLArea._ddt("registerDropdown(): WARNING [HTMLArea.Config::registerDropdown]:\nA button with the same ID already exists.");
+    HTMLArea._ddt( "htmlarea.js","768", "registerDropdown(): WARNING [HTMLArea.Config::registerDropdown]:\nA button with the same ID already exists." );
     }
 
   this.customSelects[object.id] = object;
@@ -828,7 +825,7 @@ HTMLArea.Config.prototype.hideSomeButtons = function(remove)
 HTMLArea.loadScript = function(url, plugin) 
   {
 
-  HTMLArea._ddt( "loadScript(): Top with url '" + url + "' and plugin '" + plugin + "'" );
+  HTMLArea._ddt( "htmlarea.js","828", "loadScript(): Top with url '" + url + "' and plugin '" + plugin + "'" );
 
   if (plugin)
     {
@@ -872,7 +869,7 @@ HTMLArea.loadScript(_editor_url + "popupwin.js");
 HTMLArea.init = function() 
   {
 
-  HTMLArea._ddt( "init(): top" );
+  HTMLArea._ddt( "htmlarea.js","872", "init(): top" );
 
   var head = document.getElementsByTagName("head")[0];
   var current = 0;
@@ -898,7 +895,7 @@ HTMLArea.init = function()
 
       // MSIE is not ready.
 
-      HTMLArea._ddt( "init(): MSIE ready state not ready '" + window.event.srcElement.readyState + "'" );
+      HTMLArea._ddt( "htmlarea.js","898", "init(): MSIE ready state not ready '" + window.event.srcElement.readyState + "'" );
 
       return;
       }
@@ -908,12 +905,15 @@ HTMLArea.init = function()
     if (current < HTMLArea._scripts.length) 
       {
       var url = HTMLArea._scripts[current++];
+
+		// as we load scripts update the window title bar.
+
       document.title = "[HTMLArea: loading script " + current + "/" + HTMLArea._scripts.length + "]";
       var script = document.createElement("script");
       script.type = "text/javascript";
       script.src = url;
 
-      HTMLArea._ddt( "loadNextScript(): loading '" + url + "'" );
+      HTMLArea._ddt( "htmlarea.js","916", "loadNextScript(): loading '" + url + "'" );
 
       // the magic step. evt depends on the browser (See above)
 
@@ -924,16 +924,17 @@ HTMLArea.init = function()
       {
       document.title = savetitle;
 
-      HTMLArea._ddt( "loadNextScript(): end of list reached. Firing HTMLAreaonLoad handler which is '" + HTMLArea.onLoad + "'" );
+      HTMLArea._ddt( "htmlarea.js","927", "loadNextScript(): end of list reached. Firing HTMLAreaonLoad handler which is '" + HTMLArea.onLoad + "'" );
 
 	   // fire the onLoad handler. See HTMLArea.onload() up top. 
 	   // By default this is a null function.
 	 
       HTMLArea.onload();
       }
-    };
 
-  HTMLArea._ddt( "init(): calling first loadNextScript()" );
+    };  // end of in-line loadNextScript() function.
+
+  HTMLArea._ddt( "htmlarea.js","937", "init(): calling first loadNextScript()" );
 
   // start the chain of script loading.
 
@@ -950,7 +951,7 @@ HTMLArea.init = function()
 HTMLArea.replaceAll = function(config) 
   {
 
-  HTMLArea._ddt( "replaceAll(): top" );
+  HTMLArea._ddt( "htmlarea.js","954", "replaceAll(): top" );
 
   var tas = document.getElementsByTagName("textarea");
   for (var i = tas.length; i > 0; (new HTMLArea(tas[--i], config)).generate());
@@ -965,7 +966,7 @@ HTMLArea.replaceAll = function(config)
 HTMLArea.replace = function(id, config)
   {
 
-  HTMLArea._ddt( "replace(): top with id '" + id + "'" );
+  HTMLArea._ddt( "htmlarea.js","969", "replace(): top with id '" + id + "'" );
 
   var ta = HTMLArea.getElementById("textarea", id);
   if (ta)
@@ -995,7 +996,7 @@ use_clone_img = false;
 HTMLArea.makeBtnImg = function(imgDef, doc)
   {
 
-  HTMLArea._ddt( "== makeBtnImg(): top" );
+  HTMLArea._ddt( "htmlarea.js","999", "makeBtnImg(): top" );
 
   if(!doc) doc = document;
 
@@ -1063,7 +1064,7 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
 
   i_contain.appendChild(img);
 
-  HTMLArea._ddt( "== makeBtnImg(): bottom" );
+  HTMLArea._ddt( "htmlarea.js","1067", "makeBtnImg(): bottom" );
 
   return i_contain;
 
@@ -1097,19 +1098,19 @@ HTMLArea.getPluginDir = function(pluginName)
 HTMLArea.loadPlugin = function(pluginName, callback) 
 {
 
-  HTMLArea._ddt( "loadPlugin(): loading plugin '" + pluginName + "'" );
+  HTMLArea._ddt( "htmlarea.js","1101", "loadPlugin(): loading plugin '" + pluginName + "'" );
 
   // Might already be loaded
 
   if ( eval('typeof ' + pluginName) != 'undefined' )
     {
 
-    HTMLArea._ddt( "loadPlugins(): plugin '" + pluginName + "' already loaded" );
+    HTMLArea._ddt( "htmlarea.js","1108", "loadPlugin(): plugin '" + pluginName + "' already loaded" );
 
     if (callback)
       {
 
-      HTMLArea._ddt( "loadPlugins(): calling plugin '" + pluginName + "' callback" );
+      HTMLArea._ddt( "htmlarea.js","1113", "loadPlugin(): calling plugin '" + pluginName + "' callback" );
 
       callback();
       }
@@ -1119,21 +1120,22 @@ HTMLArea.loadPlugin = function(pluginName, callback)
 
   var dir = this.getPluginDir(pluginName);
   var plugin = pluginName.replace(/([a-z])([A-Z])([a-z])/g,
-          function (str, l1, l2, l3) {
+          function (str, l1, l2, l3) 
+			   {
             return l1 + "-" + l2.toLowerCase() + l3;
-          }).toLowerCase() + ".js";
+            }).toLowerCase() + ".js";
 
   var plugin_file = dir + "/" + plugin;
 
   if ( callback )
     {
-    HTMLArea._ddt( "loadPlugin(): callback defined. Using _loadback() to load plugin" );
+    HTMLArea._ddt( "htmlarea.js","1132", "loadPlugin(): callback defined. Using _loadback() to load plugin" );
 
     HTMLArea._loadback(plugin_file, callback);
     }
   else
     {
-    HTMLArea._ddt( "loadPlugin(): callback not defined. writing javascript include line to document." );
+    HTMLArea._ddt( "htmlarea.js","1138", "loadPlugin(): callback not defined. writing javascript include line to document." );
 
     document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
     }
@@ -1148,12 +1150,14 @@ HTMLArea.loadPlugin = function(pluginName, callback)
 * This is called from the page to load in the plugin javascript
 * files. This method is called before the HTMLArea object is
 * constructed.
+*
+* @todo stop needlessly cloning the plugins array on each recursion.
 */
 
 HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
   {
 
-  HTMLArea._ddt( "loadPlugins(): top" );
+  HTMLArea._ddt( "htmlarea.js","1160", "loadPlugins(): top - cloning plugins array." );
 
   // make a copy of the plugins array that we'll chip away at.
 
@@ -1170,7 +1174,7 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
       {
       var poppedPlugin = nuPlugins.pop();
 
-      HTMLArea._ddt( "loadPlugins(): plugin '" + poppedPlugin + "' was already loaded" );
+      HTMLArea._ddt( "htmlarea.js","1177", "loadPlugins(): plugin '" + poppedPlugin + "' was already loaded" );
 
       }
     else
@@ -1185,16 +1189,21 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
   if( !nuPlugins.length )
     {
 
-    HTMLArea._ddt( "loadPlugins(): no plugins left to load" );
+    HTMLArea._ddt( "htmlarea.js","1192", "loadPlugins(): no plugins left to load" );
 
     return true;
     }
 
   // personally, I find this using a function definition as an argument to a method
-  // really ugly. Here's we're pulling off the current plugin to load (argument 1), 
+  // really ugly (not that there's much of an alternative in Javascript). 
+  //
+  // Here's we're pulling off the current plugin to load (argument 1), 
   // and setting the "callback function" (the function that's called after the plugin
   // javascript file is successfully loaded) to run loadPlugins .. essentially 
   // an indirect recursive algorithm.
+  //
+  // FIXME: Because of this little algorithm the nuPlugins array gets
+  // cloned on each recursion. 
 
   HTMLArea.loadPlugin( nuPlugins.pop(),
       function()
@@ -1209,7 +1218,7 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
       }
     );  // this is the end of the HTMLArea.loadPlugin() recursive call.
 
-  HTMLArea._ddt( "loadPlugins(): end" );
+  HTMLArea._ddt( "htmlarea.js","1221", "loadPlugins(): end" );
 
   return false;
 
@@ -1224,17 +1233,17 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
 HTMLArea.refreshPlugin = function(plugin) 
   {
 
-  HTMLArea._ddt( "refreshPlugin(): top" );
+  HTMLArea._ddt( "htmlarea.js","1236", "refreshPlugin(): top" );
 
   if (typeof plugin.onGenerate == "function")
     {
-    HTMLArea._ddt( "refreshPlugin(): onGenerate is a function. calling onGenerate for '" + plugin + "'" );
+    HTMLArea._ddt( "htmlarea.js","1240", "refreshPlugin(): onGenerate is a function. calling onGenerate for '" + plugin + "'" );
     plugin.onGenerate();
     }
 
   if (typeof plugin.onGenerateOnce == "function") 
     {
-    HTMLArea._ddt( "refreshPlugin(): onGenerateOnce is a function. calling onGenerateOnce for '" + plugin + "'" );
+    HTMLArea._ddt( "htmlarea.js","1246", "refreshPlugin(): onGenerateOnce is a function. calling onGenerateOnce for '" + plugin + "'" );
     plugin.onGenerateOnce();
     plugin.onGenerateOnce = null;
     }
@@ -1251,7 +1260,7 @@ HTMLArea.loadStyle = function(style, plugin)
   {
   var url = _editor_url || '';
 
-  HTMLArea._ddt( "loadStyle(): top with style '" + style + "' and plugin '" + plugin + "'" );
+  HTMLArea._ddt( "htmlarea.js","1263", "loadStyle(): top with style '" + style + "' and plugin '" + plugin + "'" );
   
   if (typeof plugin != "undefined") 
     {
@@ -1269,7 +1278,7 @@ HTMLArea.loadStyle = function(style, plugin)
   link.href = url;
   head.appendChild(link);
 
-  HTMLArea._ddt( "loadStyle(): appending '" + link + "' to document" );
+  HTMLArea._ddt( "htmlarea.js","1281", "loadStyle(): appending '" + link.href + "' to document" );
 
   //document.write("<style type='text/css'>@import url(" + url + ");</style>");
 
@@ -1302,7 +1311,7 @@ HTMLArea.objectProperties = function(obj)
 HTMLArea.getInnerText = function(el) 
   {
 
-  HTMLArea._ddt( "getInnerText(): top" );
+  HTMLArea._ddt( "htmlarea.js","1314", "getInnerText(): top" );
 
   var txt = '', i;
 
@@ -1323,12 +1332,14 @@ HTMLArea.getInnerText = function(el)
 /**
 * returns a clone of the given object
 *
+* recurses through all the members of an object, which may contain nested
+* objects and/or arrays, and constructs a complete copy.
 */
 
 HTMLArea.cloneObject = function(obj) 
   {
 
-  HTMLArea._ddt( "cloneObject(): top" );
+  HTMLArea._ddt( "htmlarea.js","1342", "cloneObject(): top" );
 
   if (!obj) return null;
 
@@ -1338,24 +1349,44 @@ HTMLArea.cloneObject = function(obj)
   
   if (obj.constructor.toString().indexOf("function Array(") == 1) 
     {
+
+    HTMLArea._ddt( "htmlarea.js","1353", "cloneObject(): contructing an array object." );
+
     newObj = obj.constructor();
     }
 
   // check for function objects (as usual, IE is fucked up)
   if (obj.constructor.toString().indexOf("function Function(") == 1) 
     {
+
+    HTMLArea._ddt( "htmlarea.js","1362", "cloneObject(): cloning an function object." );
+
     newObj = obj; // just copy reference to it
     } 
-  else for (var n in obj) 
+  else 
     {
-    var node = obj[n];
-    if (typeof node == 'object') { newObj[n] = HTMLArea.cloneObject(node); }
-    else                         { newObj[n] = node; }
-    }
+
+    HTMLArea._ddt( "htmlarea.js","1369", "cloneObject(): copying object members." );
+
+	 for (var n in obj) 
+      {
+      var node = obj[n];
+
+      if (typeof node == 'object') 
+		  { 
+		  newObj[n] = HTMLArea.cloneObject(node); 
+		  }
+      else                         
+		  { 
+		  newObj[n] = node; 
+		  }
+      }
+
+    } // end of else we weren't passed an array or function object.
 
   return newObj;
 
-  };
+  };  // end of HTMLArea.cloneObject()  
 
 // ----------------------------------------------------------
 
@@ -1368,7 +1399,7 @@ HTMLArea.cloneObject = function(obj)
 HTMLArea.checkSupportedBrowser = function() 
   {
 
-  HTMLArea._ddt( "checkSupportedBrowser(): top" );
+  HTMLArea._ddt( "htmlarea.js","1402", "checkSupportedBrowser(): top" );
 
   if (HTMLArea.is_gecko) 
     {
@@ -1404,7 +1435,7 @@ HTMLArea.checkSupportedBrowser = function()
 HTMLArea.getElementById = function(tag, id) 
   {
 
-  HTMLArea._ddt( "getElementById(): top with tag '" + tag + "' id '" + id + "'" );
+  HTMLArea._ddt( "htmlarea.js","1438", "getElementById(): top with tag '" + tag + "' id '" + id + "'" );
 
   var el, i, objs = document.getElementsByTagName(tag);
   for (i = objs.length; --i >= 0 && (el = objs[i]);)
@@ -1426,7 +1457,7 @@ HTMLArea.getElementById = function(tag, id)
 HTMLArea._postback = function(url, data, handler)
   {
 
-  HTMLArea._ddt( "_postback() : top with url '" + url + "'" );
+  HTMLArea._ddt( "htmlarea.js","1460", "_postback() : top with url '" + url + "'" );
 
   var req = null;
   if(HTMLArea.is_ie)
@@ -1478,7 +1509,7 @@ HTMLArea._postback = function(url, data, handler)
 HTMLArea._getback = function(url, handler)
   {
 
-  HTMLArea._ddt( "_getback(): top" );
+  HTMLArea._ddt( "htmlarea.js","1512", "_getback(): top" );
 
   var req = null;
   if(HTMLArea.is_ie)
@@ -1520,7 +1551,7 @@ HTMLArea._getback = function(url, handler)
 HTMLArea._geturlcontent = function(url)
   {
 
-  HTMLArea._ddt( "_geturlcontent(): top with url '" + url + "'" );
+  HTMLArea._ddt( "htmlarea.js","1554", "_geturlcontent(): top with url '" + url + "'" );
 
   var req = null;
   if(HTMLArea.is_ie)
@@ -1555,7 +1586,7 @@ HTMLArea._geturlcontent = function(url)
 HTMLArea.arrayContainsArray = function(a1, a2)
   {
 
-  HTMLArea._ddt( "arrayContainsArray(): top" );
+  HTMLArea._ddt( "htmlarea.js","1589", "arrayContainsArray(): top" );
 
   var all_found = true;
   for(var x = 0; x < a2.length; x++)
@@ -1590,7 +1621,7 @@ HTMLArea.arrayContainsArray = function(a1, a2)
 HTMLArea.arrayFilter = function(a1, filterfn)
   {
 
-  HTMLArea._ddt( "arrayFilter(): top" );
+  HTMLArea._ddt( "htmlarea.js","1624", "arrayFilter(): top" );
 
   var new_a = [ ];
   for(var x = 0; x < a1.length; x++)
@@ -1627,7 +1658,7 @@ HTMLArea.uniq = function(prefix)
 HTMLArea._loadlang = function(context)
   {
 
-  HTMLArea._ddt( "_loadlang(): top" );
+  HTMLArea._ddt( "htmlarea.js","1661", "_loadlang(): top" );
 
   if(typeof _editor_lcbackend == "string")
     {
@@ -1684,7 +1715,7 @@ HTMLArea._loadlang = function(context)
 HTMLArea._lc = function(string, context)
   {
 
-  HTMLArea._ddt( "_lc: top with string '" + string + "'" );
+  HTMLArea._ddt( "htmlarea.js","1718", "_lc: top with string '" + string + "'" );
 
   if(_editor_lang == "en")
     {
@@ -1726,7 +1757,7 @@ HTMLArea._lc = function(string, context)
 HTMLArea.hasDisplayedChildren = function(el)
   {
 
-  HTMLArea._ddt( "hasDisplayedChildren(): top" );
+  HTMLArea._ddt( "htmlarea.js","1760", "hasDisplayedChildren(): top" );
 
   var children = el.childNodes;
   for(var i =0; i < children.length;i++)
@@ -1748,14 +1779,23 @@ HTMLArea.hasDisplayedChildren = function(el)
 
 /**
 * _loadback()
+*
+* load a script file in the "background" and when finished invoked a provided
+* callback.
 */
 
 HTMLArea._loadback = function(src, callback)
   {
 
-  HTMLArea._ddt( "_loadback(): top with src '" + src + "'" );
+  HTMLArea._ddt( "htmlarea.js","1790", "_loadback(): top with src '" + src + "'" );
 
   var head = document.getElementsByTagName("head")[0];
+
+  // cross browser support. Basically this event gets fired when the 
+  // script has been completely loaded. We hook the callback into the
+  // event. This gives us a way to be notified when the script has finished
+  // loading. MSIE and Gecko use different events for this purpose.
+
   var evt = HTMLArea.is_ie ? "onreadystatechange" : "onload";
 
   var script = document.createElement("script");
@@ -1769,7 +1809,9 @@ HTMLArea._loadback = function(src, callback)
 
   head.appendChild(script);
 
-  };
+  HTMLArea._ddt( "htmlarea.js","1812", "_loadback(): script tag to load javascript file appended to head section." );
+
+  };  // end of _loadback()
 
 // -----------------------------------------------------
 
@@ -1780,7 +1822,7 @@ HTMLArea._loadback = function(src, callback)
 HTMLArea.collectionToArray = function(collection)
   {
 
-  HTMLArea._ddt( "collectionToArray(): top" );
+  HTMLArea._ddt( "htmlarea.js","1825", "collectionToArray(): top" );
 
   var array = [ ];
   for(var i = 0; i < collection.length; i++)
@@ -1800,21 +1842,30 @@ HTMLArea.collectionToArray = function(collection)
 HTMLArea.makeEditors = function(editor_names, default_config, plugin_names)
   {
 
-  HTMLArea._ddt( "makeEditors(): top" );
+  HTMLArea._ddt( "htmlarea.js","1845", "makeEditors(): top" );
 
-  if(typeof default_config == 'function')
+  if ( typeof default_config == 'function')
     {
+
+	 HTMLArea._ddt( "htmlarea.js","1850", "makeEditors(): default config is a function" );
     default_config = default_config();
     }
 
   var editors = { };
   for(var x = 0; x < editor_names.length; x++)
     {
+
+	 HTMLArea._ddt( "htmlarea.js","1858", "makeEditors(): making editor '" + editor_names[x] + "' and copying in cloned default_config" );
+
     editors[editor_names[x]] = new HTMLArea(editor_names[x], HTMLArea.cloneObject(default_config));
-    if(plugin_names)
+
+    if ( plugin_names )
       {
       for(var i = 0; i < plugin_names.length; i++)
         {
+
+		  HTMLArea._ddt( "htmlarea.js","1867", "makeEditors(): registering plugin '" + plugin_names[i] + "' for editor '" + editor_names[x] + "'" );
+		  
         editors[editor_names[x]].registerPlugin(eval(plugin_names[i]));
         }
       }
@@ -1826,13 +1877,15 @@ HTMLArea.makeEditors = function(editor_names, default_config, plugin_names)
 // ----------------------------------------------------------------------
 
 /**
-* startEditors()
+* startEditors() - front end to generate()
+*
+* loops through all editors on the page and generates each.
 */
 
 HTMLArea.startEditors = function(editors)
   {
 
-  HTMLArea._ddt( "startEditors(): top" );
+  HTMLArea._ddt( "htmlarea.js","1888", "startEditors(): top" );
 
   for(var i in editors)
     {
@@ -1851,7 +1904,7 @@ HTMLArea.startEditors = function(editors)
 HTMLArea._makeColor = function(v) 
   {
 
-  HTMLArea._ddt( "_makeColor(): top" );
+  HTMLArea._ddt( "htmlarea.js","1907", "_makeColor(): top" );
 
   if (typeof v != "number") 
     {
@@ -2017,7 +2070,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor)
 HTMLArea.getHTMLWrapper = function(root, outputRoot, editor) 
   {
 
-  HTMLArea._ddt( "getHTMLWrapper(): top" );
+  HTMLArea._ddt( "htmlarea.js","2073", "getHTMLWrapper(): top" );
 
   var html = "";
 
@@ -2215,7 +2268,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor)
 HTMLArea.addClasses = function(el, classes)
   {
 
-  HTMLArea._ddt( "addClasses(): top" );
+  HTMLArea._ddt( "htmlarea.js","2271", "addClasses(): top" );
 
   if(el != null)
     {
@@ -2249,7 +2302,7 @@ HTMLArea.addClasses = function(el, classes)
 HTMLArea.removeClasses = function(el, classes)
   {
 
-  HTMLArea._ddt( "removeClasses(): top" );
+  HTMLArea._ddt( "htmlarea.js","2305", "removeClasses(): top" );
 
   var existing    = el.className.trim().split();
   var new_classes = [ ];
@@ -2361,6 +2414,9 @@ HTMLArea._removeClasses = HTMLArea.removeClasses;
 
 HTMLArea._addEvent = function(el, evname, func) 
   {
+
+  HTMLArea._ddt( "htmlarea.js","2418", "_addEvent(): adding event for '" + evname + "' func '" + func.toString().substring(0,100) + "'" );
+
   if (HTMLArea.is_ie) 
     {
     el.attachEvent("on" + evname, func);
@@ -2477,14 +2533,14 @@ function HTMLArea(textarea, config)
     // [STRIP
     // create a ddt debug trace object. textarea is a string here.
 
-    this.ddt = new DDT( textarea );
+	 this.ddt = new DDT( textarea );
 
     // uncomment to turn on debugging messages.
 
-    // this.ddt._ddtOn();
+    this.ddt._ddtOn();
     // STRIP]
 
-    this.ddt._ddt("HTMLArea(): DDT Trace System Initialized.");
+    this.ddt._ddt( "htmlarea.js","2543", "HTMLArea(): DDT Trace System Initialized." );
 
     this._htmlArea = null;
     this._textArea = textarea;
@@ -2538,7 +2594,7 @@ function HTMLArea(textarea, config)
 
     }  // end of if we are a supported browser.
 
-  this.ddt._ddt( "HTMLArea(): end" );
+  this.ddt._ddt( "htmlarea.js","2597", "HTMLArea(): end" );
 
   };  // end of HTMLArea() constructor
 
@@ -2551,7 +2607,7 @@ function HTMLArea(textarea, config)
 HTMLArea.prototype._createToolbar = function () 
   {
 
-  this.ddt._ddt( "_createToolbar(): top" );
+  this.ddt._ddt( "htmlarea.js","2610", "_createToolbar(): top" );
 
   var editor = this;	// to access this in nested functions
 
@@ -2578,7 +2634,7 @@ HTMLArea.prototype._createToolbar = function ()
 HTMLArea.prototype.registerPanel = function(side, object)
   {
 
-  this.ddt._ddt( "registerPanel(): top with side '" + side + "'" );
+  this.ddt._ddt( "htmlarea.js","2637", "registerPanel(): top with side '" + side + "'" );
 
   if(!side) side = 'right';
 
@@ -2621,14 +2677,14 @@ HTMLArea.prototype._addToolbar = function()
 HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) 
   {
 
-  this.ddt._ddt( "_createToolbar1(): top" );
+  this.ddt._ddt( "htmlarea.js","2680", "_createToolbar1(): top" );
 
   // creates a new line in the toolbar
 
   function newLine( editor ) 
     {
 
-	 editor.ddt._ddt( "newLine(): top" );
+	 editor.ddt._ddt( "htmlarea.js","2687", "newLine(): top" );
 
     var table = document.createElement("table");
     table.border = "0px";
@@ -2664,7 +2720,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
   function setButtonStatus(id, newval ) 
     {
 
-	 HTMLArea._ddt( "== setButtonStatus() : top with id '" + id + "' value '" + newval + '"' );
+	 HTMLArea._ddt( "htmlarea.js","2723", "setButtonStatus() : top with id '" + id + "' value '" + newval + '"' );
 
     var oldval = this[id];
     var el = this.element;
@@ -2720,7 +2776,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
   function createSelect(txt) 
     {
 
-	 HTMLArea._ddt( "== createSelect(): top with text '" + txt + "'" );
+	 HTMLArea._ddt( "htmlarea.js","2779", "createSelect(): top with text '" + txt + "'" );
 
     var options = null;
     var el = null;
@@ -2804,7 +2860,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
           });
       }
 
-	 HTMLArea._ddt( "createSelect(): end" );
+	 HTMLArea._ddt( "htmlarea.js","2863", "createSelect(): end" );
 
     return el;
 
@@ -2819,7 +2875,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
   function createButton(txt, editor ) 
     {
 
-	 editor.ddt._ddt( "createButton(): top with text '" + txt + "'" );
+	 editor.ddt._ddt( "htmlarea.js","2878", "createButton(): top with text '" + txt + "'" );
 
     // the element that will be created
 
@@ -3039,7 +3095,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
 HTMLArea.prototype._createStatusBar = function() 
   {
 
-  this.ddt._ddt( "_createStatusBar(): top" );
+  this.ddt._ddt( "htmlarea.js","3098", "_createStatusBar(): top" );
 
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
@@ -3073,7 +3129,7 @@ HTMLArea.prototype._createStatusBar = function()
 HTMLArea.prototype.generate = function ()
   {
 
-  this.ddt._ddt( "generate(): top" );
+  this.ddt._ddt( "htmlarea.js","3132", "generate(): top" );
 
   var editor = this;	// we'll need "this" in some nested functions
 
@@ -3087,6 +3143,9 @@ HTMLArea.prototype.generate = function ()
         {
         if (typeof EnterParagraphs == 'undefined')
           {
+
+			 this.ddt._ddt( "htmlarea.js","3147", "generate(): mozParaHandler config set to 'best'. Loading EnterParagraphs" );
+
           EnterParagraphs = 'null';
           HTMLArea._loadback
             (_editor_url + 'plugins/EnterParagraphs/enter-paragraphs.js', function() { editor.registerPlugin('EnterParagraphs'); editor.generate(); } );
@@ -3137,6 +3196,8 @@ HTMLArea.prototype.generate = function ()
   // insert the editor before the textarea.
   textarea.parentNode.insertBefore(htmlarea, textarea);
 
+  this.ddt._ddt( "htmlarea.js","3199", "generate(): creating toolbar" );
+
   // creates & appends the toolbar
   this._createToolbar();
 
@@ -3163,11 +3224,15 @@ HTMLArea.prototype.generate = function ()
   //   iframe.style.borderWidth = "0px";
   // }
 
+  this.ddt._ddt( "htmlarea.js","3227", "generate(): adding panels" );
+
   // Add the panels
   for(var i in this._panels)
     {
     innerEditor.appendChild(this._panels[i].div);
     }
+
+  this.ddt._ddt( "htmlarea.js","3235", "generate(): creating Status Bar" );
 
   // creates & appends the status bar
   this._createStatusBar();
@@ -3194,7 +3259,7 @@ HTMLArea.prototype.generate = function ()
       f.onsubmit = function()
         {
 
-		  this.ddt._ddt( "generate(): f.onsubmit(): top" );
+		  this.ddt._ddt( "htmlarea.js","3262", "generate(): f.onsubmit(): top" );
 
         var a = this.__msh_prevOnSubmit;
 
@@ -3233,7 +3298,7 @@ HTMLArea.prototype.generate = function ()
       f.onreset = function()
         {
 
-        this.ddt._ddt( "generate(): f.onreset(): top" );
+        this.ddt._ddt( "htmlarea.js","3301", "generate(): f.onreset(): top" );
 
         var a = this.__msh_prevOnReset;
         // call previous submit methods if they were there.
@@ -3267,6 +3332,8 @@ HTMLArea.prototype.generate = function ()
   // Hide textarea
 
   textarea.style.display = "none";
+
+  this.ddt._ddt( "htmlarea.js","3336", "generate(): calculating starting size" );
 
   // Calculate the starting size, EXCLUDING THE TOOLBAR & STATUS BAR (always)
   var height = null;
@@ -3304,7 +3371,7 @@ HTMLArea.prototype.generate = function ()
   this.setInnerSize(width,height);
   this.notifyOn('panel_change',function(){editor.setInnerSize();});
 
-  this.ddt._ddt( "generate(): bottom before timeout call to initIframe()" );
+  this.ddt._ddt( "htmlarea.js","3374", "generate(): bottom before timeout call to initIframe()" );
 
   // IMPORTANT: we have to allow Mozilla a short time to recognize the
   // new frame.  Otherwise we get a stupid exception.
@@ -3326,7 +3393,7 @@ HTMLArea.prototype.initIframe = function()
   var doc = null;
   var editor = this;
 
-  this.ddt._ddt( "initFrame(): top" );
+  this.ddt._ddt( "htmlarea.js","3396", "initFrame(): top" );
 
   try
     {
@@ -3416,8 +3483,13 @@ HTMLArea.prototype.initIframe = function()
     HTMLArea._addEvents(
         editor._iframe.contentWindow,
         ["mousedown"],
-        function() { editor.activateEditor();  }
-      );
+        function() 
+		    { 
+
+			 editor.ddt._ddt( "htmlarea.js","3489", "_iframe.contentWindow mouse down event. activating editor" );
+			 editor.activateEditor();  
+			 }
+        );
     }
   else
     {
@@ -3427,11 +3499,12 @@ HTMLArea.prototype.initIframe = function()
   // editor.focusEditor();
   // intercept some events; for updating the toolbar & keyboard handlers
 
-  HTMLArea._addEvents
-      (doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"],
-       function (event) {
+  HTMLArea._addEvents( doc, 
+    ["keydown", "keypress", "mousedown", "mouseup", "drag"],
+       function (event) 
+		   {
          return editor._editorEvent(HTMLArea.is_ie ? editor._iframe.contentWindow.event : event);
-       });
+         });
 
   // check if any plugins have registered refresh handlers
 
@@ -3441,7 +3514,13 @@ HTMLArea.prototype.initIframe = function()
     HTMLArea.refreshPlugin(plugin);
     }
 
-  if (typeof editor._onGenerate == "function") { editor._onGenerate();}
+  // do not become cross-eyed and think this is the same as the 
+  // statement that follows it. note the "_"
+
+  if (typeof editor._onGenerate == "function") 
+    { 
+    editor._onGenerate();
+	 }
 
   setTimeout(function() {
   //      editor.updateToolbar();
@@ -3474,7 +3553,7 @@ HTMLArea.prototype.getInnerSize = function()
 HTMLArea.prototype.setInnerSize = function(width, height)
   {
 
-  this.ddt._ddt( "setInnerSize(): top with width '" + width + "' height '" + height + "'" );
+  this.ddt._ddt( "htmlarea.js","3556", "setInnerSize(): top with width '" + width + "' height '" + height + "'" );
 
   if (typeof width == 'undefined' || width == null)
     {
@@ -3602,6 +3681,9 @@ HTMLArea.prototype.setInnerSize = function(width, height)
 
 HTMLArea.prototype.addPanel = function(side)
   {
+
+  this.ddt._ddt( "htmlarea.js","3685", "addPanel() : top with side '" + side + "'" );
+
   var div = document.createElement('div');
   div.side = side;
   HTMLArea.addClasses(div, 'panel');
@@ -3619,6 +3701,9 @@ HTMLArea.prototype.addPanel = function(side)
 
 HTMLArea.prototype.removePanel = function(panel)
   {
+
+  this.ddt._ddt( "htmlarea.js","3705", "removePanel() : top" );
+
   this._panels[panel.side].div.removeChild(panel);
   var clean = [ ];
 
@@ -3632,7 +3717,7 @@ HTMLArea.prototype.removePanel = function(panel)
   this._panels[panel.side].panels = clean;
   this.notifyOf('panel_change', {'action':'remove','panel':panel});
 
-  }
+  }  // end of removePanel()
 
 /**
 * hidePanel
@@ -3640,6 +3725,9 @@ HTMLArea.prototype.removePanel = function(panel)
 
 HTMLArea.prototype.hidePanel = function(panel)
   {
+
+  this.ddt._ddt( "htmlarea.js","3729", "hidePanel() : top" );
+
   if (panel)
     {
     panel.style.display = 'none';
@@ -3653,6 +3741,9 @@ HTMLArea.prototype.hidePanel = function(panel)
 
 HTMLArea.prototype.showPanel = function(panel)
   {
+
+  this.ddt._ddt( "htmlarea.js","3745", "showPanel() : top" );
+
   if ( panel )
     {
     panel.style.display = '';
@@ -3666,6 +3757,9 @@ HTMLArea.prototype.showPanel = function(panel)
 
 HTMLArea.prototype.hidePanels = function(sides)
   {
+
+  this.ddt._ddt( "htmlarea.js","3761", "hidePanels() : top" );
+
   if(typeof sides == 'undefined')
     {
     sides = ['left','right','top','bottom'];
@@ -3690,6 +3784,9 @@ HTMLArea.prototype.hidePanels = function(sides)
 
 HTMLArea.prototype.showPanels = function(sides)
   {
+
+  this.ddt._ddt( "htmlarea.js","3788", "showPanels() : top" );
+
   if(typeof sides == 'undefined')
     {
     sides = ['left','right','top','bottom'];
@@ -3707,6 +3804,8 @@ HTMLArea.prototype.showPanels = function(sides)
   this.notifyOf('panel_change', {'action':'multi_show','sides':sides});
   }
 
+// -------------------------------------------------------------------
+
 /**
 * activateEditor
 */
@@ -3714,12 +3813,14 @@ HTMLArea.prototype.showPanels = function(sides)
 HTMLArea.prototype.activateEditor = function()
   {
 
-  this.ddt._ddt( "activateEditor(): top" );
+  this.ddt._ddt( "htmlarea.js","3816", "activateEditor(): top - called by '" + HTMLArea.prototype.activateEditor.caller.toString().substring(0,100) + "'" );
 
   if (HTMLArea.is_gecko && this._doc.designMode != 'on')
     {
 
     try{HTMLArea.last_on.designMode = 'off';} catch(e) { }
+
+    this.ddt._ddt( "htmlarea.js","3823", "activateEditor(): _iframe.style.display is '" + this._iframe.style.display + "'" );
 
     if(this._iframe.style.display == 'none')
       {
@@ -3729,17 +3830,27 @@ HTMLArea.prototype.activateEditor = function()
       }
     else
       {
+
+		this.ddt._ddt( "htmlarea.js","3834", "activateEditor(): setting designMode to on" );
+
       this._doc.designMode = 'on';
       }
     }
   else
     {
+
+	 this.ddt._ddt( "htmlarea.js","3842", "activateEditor(): Setting contentEditable to true" );
+
     this._doc.body.contentEditable = true;
     }
 
   HTMLArea.last_on = this._doc;
 
+  this.ddt._ddt( "htmlarea.js","3849", "activateEditor(): end" );
+
   }  // end of activateEditor()
+
+// --------------------------------------------------------------
 
 /**
 * deactivateEditor()
@@ -3748,7 +3859,7 @@ HTMLArea.prototype.activateEditor = function()
 HTMLArea.prototype.deactivateEditor = function()
   {
 
-  this.ddt._ddt( "deactivateEditor(): top" );
+  this.ddt._ddt( "htmlarea.js","3862", "deactivateEditor(): top" );
 
   if (HTMLArea.is_gecko && this._doc.designMode == 'on')
     {
@@ -3761,6 +3872,7 @@ HTMLArea.prototype.deactivateEditor = function()
     }
   }
 
+// --------------------------------------------------------------
 
 /**
 * Switches editor mode; 
@@ -3848,7 +3960,7 @@ HTMLArea.prototype.setMode = function(mode)
 HTMLArea.prototype.setFullHTML = function(html) 
   {
 
-  this.ddt._ddt( "setFullHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","3963", "setFullHTML(): top" );
 
   var save_multiline = RegExp.multiline;
   RegExp.multiline = true;
@@ -3888,14 +4000,14 @@ HTMLArea.prototype.setFullHTML = function(html)
 /**
 * registerPlugin()
 *
-* Create the specified plugin and register it with this HTMLArea
+* Create the specified plugin and register it with this HTMLArea instance.
 * return the plugin created to allow refresh when necessary
 */
 
 HTMLArea.prototype.registerPlugin = function() 
   {
 
-  this.ddt._ddt( "registerPlugin(): top" );
+  this.ddt._ddt( "htmlarea.js","4010", "registerPlugin(): top" );
 
   var plugin = arguments[0];
   var args = [];
@@ -3917,7 +4029,7 @@ HTMLArea.prototype.registerPlugin = function()
 HTMLArea.prototype.registerPlugin2 = function(plugin, args) 
   {
 
-  this.ddt._ddt( "registerPlugin2(): top" );
+  this.ddt._ddt( "htmlarea.js","4032", "registerPlugin2(): top" );
 
   if (typeof plugin == "string")
     plugin = eval(plugin);
@@ -3925,7 +4037,7 @@ HTMLArea.prototype.registerPlugin2 = function(plugin, args)
   if (typeof plugin == "undefined") 
     {
 
-	 this.ddt._ddt( "registerPlugin2(): INTERNAL ERROR: plugin is undefined. " );
+	 this.ddt._ddt( "htmlarea.js","4040", "registerPlugin2(): INTERNAL ERROR: plugin is undefined. " );
 
     /* FIXME: This should never happen. But why does it do? */
     return false;
@@ -3999,7 +4111,7 @@ HTMLArea.prototype._wordClean = function()
   {
   var editor = this;
 
-  this.ddt._ddt( "_wordClean(): top" );
+  this.ddt._ddt( "htmlarea.js","4114", "_wordClean(): top" );
 
   var stats = 
     {
@@ -4116,7 +4228,7 @@ HTMLArea.prototype._wordClean = function()
   // this.setHTML(this.getInnerHTML());
   // this.forceRedraw();
 
-  this.ddt._ddt( "_wordClean(): bottom" );
+  this.ddt._ddt( "htmlarea.js","4231", "_wordClean(): bottom" );
 
   this.updateToolbar();
 
@@ -4131,7 +4243,7 @@ HTMLArea.prototype._wordClean = function()
 HTMLArea.prototype._clearFonts = function() 
   {
 
-  this.ddt._ddt( "_clearFonts(): top" );
+  this.ddt._ddt( "htmlarea.js","4246", "_clearFonts(): top" );
   
   var D = this.getInnerHTML();
 
@@ -4169,7 +4281,7 @@ HTMLArea.prototype._clearFonts = function()
 HTMLArea.prototype._splitBlock = function()
   {
 
-  this.ddt._ddt( "_splitBlock(): top" );
+  this.ddt._ddt( "htmlarea.js","4284", "_splitBlock(): top" );
 
   this._doc.execCommand('formatblock', false, '<div>');
   }
@@ -4183,7 +4295,7 @@ HTMLArea.prototype._splitBlock = function()
 HTMLArea.prototype.forceRedraw = function() 
   {
 
-  this.ddt._ddt( "forceRedraw(): top" );
+  this.ddt._ddt( "htmlarea.js","4298", "forceRedraw(): top" );
 
   this._doc.body.style.visibility = "hidden";
   this._doc.body.style.visibility = "visible";
@@ -4201,7 +4313,7 @@ HTMLArea.prototype.forceRedraw = function()
 HTMLArea.prototype.focusEditor = function() 
   {
 
-  this.ddt._ddt( "forceRedraw(): top _editMode is '" + this._editMode + "'" );
+  this.ddt._ddt( "htmlarea.js","4316", "focusEditor(): top _editMode is '" + this._editMode + "'" );
 
   switch (this._editMode) 
     {
@@ -4249,7 +4361,7 @@ HTMLArea.prototype.focusEditor = function()
 HTMLArea.prototype._undoTakeSnapshot = function() 
   {
 
-  this.ddt._ddt( "_undoTakeSnapshot(): top" );
+  this.ddt._ddt( "htmlarea.js","4364", "_undoTakeSnapshot(): top" );
 
   ++this._undoPos;
 
@@ -4286,7 +4398,7 @@ HTMLArea.prototype._undoTakeSnapshot = function()
 HTMLArea.prototype.undo = function() 
   {
 
-  this.ddt._ddt( "undo(): top" );
+  this.ddt._ddt( "htmlarea.js","4401", "undo(): top" );
 
   if (this._undoPos > 0) 
     {
@@ -4305,7 +4417,7 @@ HTMLArea.prototype.undo = function()
 HTMLArea.prototype.redo = function() 
   {
 
-  this.ddt._ddt( "redo(): top" );
+  this.ddt._ddt( "htmlarea.js","4420", "redo(): top" );
 
   if (this._undoPos < this._undoQueue.length - 1) 
     {
@@ -4324,7 +4436,7 @@ HTMLArea.prototype.redo = function()
 HTMLArea.prototype.disableToolbar = function(except)
   {
 
-  this.ddt._ddt( "disableToolbar(): top" );
+  this.ddt._ddt( "htmlarea.js","4439", "disableToolbar(): top" );
 
   if(typeof except == 'undefined')
     {
@@ -4356,7 +4468,7 @@ HTMLArea.prototype.disableToolbar = function(except)
 HTMLArea.prototype.enableToolbar = function()
   {
 
-  this.ddt._ddt( "enableToolbar(): top" );
+  this.ddt._ddt( "htmlarea.js","4471", "enableToolbar(): top" );
 
   this.updateToolbar();
   }
@@ -4373,7 +4485,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
   var text = (this._editMode == "textmode");
   var ancestors = null;
 
-  this.ddt._ddt( "updateToolbar(): top" );
+  this.ddt._ddt( "htmlarea.js","4488", "updateToolbar(): top" );
 
   if (!text) 
     {
@@ -4387,7 +4499,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
         if (!el) 
 		    {
 
-			 this.ddt._ddt( "updateToolbar(): INTERNAL ERROR" );
+			 this.ddt._ddt( "htmlarea.js","4502", "updateToolbar(): INTERNAL ERROR" );
 
           // hell knows why we get here; this
           // could be a classic example of why
@@ -4469,7 +4581,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
         if (!ancestors[k]) 
 		    {
 
-			 this.ddt._ddt( "updateToolbar(): INTERNAL ERROR" );
+			 this.ddt._ddt( "htmlarea.js","4584", "updateToolbar(): INTERNAL ERROR" );
 
           // the impossible really happens.
           continue;
@@ -4688,6 +4800,8 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
       plugin.onUpdateToolbar();
     }
 
+  this.ddt._ddt( "htmlarea.js","4803", "updateToolbar(): end" );
+
   }  // end of updateToolbar()
 
 // ------------------------------------------------------------
@@ -4702,7 +4816,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
 HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted) 
   {
 
-  this.ddt._ddt( "insertNodeAtSelection(): top" );
+  this.ddt._ddt( "htmlarea.js","4819", "insertNodeAtSelection(): top" );
 
   if (!HTMLArea.is_ie) 
     {
@@ -4775,7 +4889,7 @@ HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
 HTMLArea.prototype.getParentElement = function(sel) 
   {
 
-  this.ddt._ddt( "getParentElement(): top" );
+  this.ddt._ddt( "htmlarea.js","4892", "getParentElement(): top" );
 
   if (typeof sel == 'undefined')
     {
@@ -4842,7 +4956,7 @@ HTMLArea.prototype.getParentElement = function(sel)
 HTMLArea.prototype.getAllAncestors = function() 
   {
 
-  this.ddt._ddt( "getAllAncestors(): top" );
+  this.ddt._ddt( "htmlarea.js","4959", "getAllAncestors(): top" );
 
   var p = this.getParentElement();
   var a = [];
@@ -4867,6 +4981,9 @@ HTMLArea.prototype.getAllAncestors = function()
 
 HTMLArea.prototype._getFirstAncestor = function(sel, types)
   {
+
+  this.ddt._ddt( "htmlarea.js","4985", "_getFirstAncestor(): top" );
+
   var prnt = this._activeElement(sel);
   if(prnt == null)
     {
@@ -4920,10 +5037,14 @@ HTMLArea.prototype._getFirstAncestor = function(sel, types)
 HTMLArea.prototype._activeElement = function(sel)
   {
 
-  this.ddt._ddt( "_activeElement(): top" );
+  this.ddt._ddt( "htmlarea.js","5040", "_activeElement(): top" );
 
   if(sel == null) return null;
-  if(this._selectionEmpty(sel)) return null;
+  if ( this._selectionEmpty(sel) ) 
+    {
+	 this.ddt._ddt( "htmlarea.js", "5046", "_activeElement(): _selectionEmpty returned true. Returning null" );
+    return null;
+	 }
 
   if(HTMLArea.is_ie)
     {
@@ -4978,11 +5099,19 @@ HTMLArea.prototype._activeElement = function(sel)
 
     if(! sel.isCollapsed)
       {
+
+		this.ddt._ddt( "htmlarea.js","5099", "_activeElement(): selection is not collapsed" );
+
       if(sel.anchorNode.nodeType == 1)
         {
+		  this.ddt._ddt( "htmlarea.js","5099", "_activeElement(): nodeType is 1. Returning sel.anchorNode" );
+
         return sel.anchorNode;
         }
       }
+
+    this.ddt._ddt( "htmlarea.js","5099", "_activeElement(): bottom" );
+
     return null;
     }
 
@@ -4997,9 +5126,13 @@ HTMLArea.prototype._activeElement = function(sel)
 HTMLArea.prototype._selectionEmpty = function(sel)
   {
 
-  this.ddt._ddt( "_selectionEmpty(): top" );
+  this.ddt._ddt( "htmlarea.js","5117", "_selectionEmpty(): top" );
 
-  if(!sel) return true;
+  if (!sel) 
+    {
+	 this.ddt._ddt( "htmlarea.js","5131", "_selectionEmpty(): no selection" );
+    return true;
+	 }
 
   if(HTMLArea.is_ie)
     {
@@ -5007,8 +5140,11 @@ HTMLArea.prototype._selectionEmpty = function(sel)
     }
   else if(typeof sel.isCollapsed != 'undefined')
     {
+	 this.ddt._ddt( "htmlarea.js", "5141", "_selectionEmpty(): isCollapsed" );
     return sel.isCollapsed;
     }
+
+  this.ddt._ddt( "htmlarea.js", "5141", "_selectionEmpty(): bottom. returning true." );
 
   return true;
 
@@ -5023,7 +5159,7 @@ HTMLArea.prototype._selectionEmpty = function(sel)
 HTMLArea.prototype._getAncestorBlock = function(sel)
   {
 
-  this.ddt._ddt( "_getAncestorBlock(): top" );
+  this.ddt._ddt( "htmlarea.js","5143", "_getAncestorBlock(): top" );
 
   // Scan upwards to find a block level element that we can change or apply to
   var prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement : this._createRange(sel).commonAncestorContainer);
@@ -5080,7 +5216,7 @@ HTMLArea.prototype._getAncestorBlock = function(sel)
 HTMLArea.prototype._createImplicitBlock = function(type)
   {
 
-  this.ddt._ddt( "_createImplicitBlock(): top" );
+  this.ddt._ddt( "htmlarea.js","5200", "_createImplicitBlock(): top" );
 
   // expand it until we reach a block element in either direction
   // then wrap the selection in a block and return
@@ -5226,7 +5362,7 @@ HTMLArea.prototype._formatBlock = function(block_format)
 HTMLArea.prototype.selectNodeContents = function(node, pos) 
   {
 
-  this.ddt._ddt( "selectNodeContents(): top" );
+  this.ddt._ddt( "htmlarea.js","5346", "selectNodeContents(): top" );
 
   this.focusEditor();
   this.forceRedraw();
@@ -5287,7 +5423,7 @@ HTMLArea.prototype.selectNodeContents = function(node, pos)
 HTMLArea.prototype.insertHTML = function(html) 
   {
 
-  this.ddt._ddt( "insertHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","5407", "insertHTML(): top" );
 
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -5324,7 +5460,7 @@ HTMLArea.prototype.insertHTML = function(html)
 HTMLArea.prototype.surroundHTML = function(startTag, endTag) 
   {
 
-  this.ddt._ddt( "surroundHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","5444", "surroundHTML(): top" );
 
   var html = this.getSelectedHTML();
 
@@ -5341,7 +5477,7 @@ HTMLArea.prototype.surroundHTML = function(startTag, endTag)
 HTMLArea.prototype.getSelectedHTML = function() 
   {
 
-  this.ddt._ddt( "getSelectedHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","5461", "getSelectedHTML(): top" );
 
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -5501,7 +5637,7 @@ HTMLArea.prototype._createLink = function(link)
 HTMLArea.prototype._insertImage = function(image) 
   {
 
-  this.ddt._ddt( "_insertImage(): top" );
+  this.ddt._ddt( "htmlarea.js","5621", "_insertImage(): top" );
 
   var editor = this;	// for nested functions
   var outparam = null;
@@ -5584,7 +5720,7 @@ HTMLArea.prototype._insertImage = function(image)
 HTMLArea.prototype._insertTable = function() 
   {
 
-  this.ddt._ddt( "_insertTable(): top" );
+  this.ddt._ddt( "htmlarea.js","5704", "_insertTable(): top" );
 
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -5676,7 +5812,7 @@ HTMLArea.prototype._insertTable = function()
 HTMLArea.prototype._comboSelected = function(el, txt) 
   {
 
-  this.ddt._ddt( "_comboSelected(): top" );
+  this.ddt._ddt( "htmlarea.js","5796", "_comboSelected(): top" );
 
   this.focusEditor();
   var value = el.options[el.selectedIndex].value;
@@ -5716,7 +5852,7 @@ HTMLArea.prototype._comboSelected = function(el, txt)
 HTMLArea.prototype.execCommand = function(cmdID, UI, param) 
   {
 
-  this.ddt._ddt( "execCommand(): top with cmdId '" + cmdID + "'" );
+  this.ddt._ddt( "htmlarea.js","5836", "execCommand(): top with cmdId '" + cmdID + "'" );
 
   var editor = this;	// for nested functions
   this.focusEditor();
@@ -5847,7 +5983,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param)
 HTMLArea.prototype._editorEvent = function(ev) 
   {
 
-  this.ddt._ddt( "_editorEvent(): top" );
+  this.ddt._ddt( "htmlarea.js","5967", "_editorEvent(): top with event type '" + ev.type + "'" );
 
   var editor = this;
   var keyEvent = (HTMLArea.is_ie && ev.type == "keydown") || (!HTMLArea.is_ie && ev.type == "keypress");
@@ -5871,17 +6007,44 @@ HTMLArea.prototype._editorEvent = function(ev)
 
   if (keyEvent)
     {
+
+    this.ddt._ddt( "htmlarea.js","5992", "_editorEvent(): keyEvent" );
+
+	 // loop over all the plugins and pass this event to any that have 
+	 // an onKeyPress() method.
+
     for (var i in editor.plugins)
       {
       var plugin = editor.plugins[i].instance;
+
+      // to make it easier to figure out what kind of object we're talking to
+		// I've added a name member. This change has not yet been applied to 
+		// all plugins.
+
+	   this.ddt._ddtDumpObject( "htmlarea.js","5994", "_editorEvent(): plugin '" + ( plugin.name ? plugin.name : "unknown" ) + "' has members:", plugin );
+
       if (typeof plugin.onKeyPress == "function")
+		  {
+
+		  this.ddt._ddt( "htmlarea.js","6010", "_editorEvent(): keyEvent - invoking onKeyPress method in plugin '" + ( plugin.name ? plugin.name : "unknown" ) + "'" );
+																																								 
         if (plugin.onKeyPress(ev))
+          {
+
+			 this.ddt._ddt( "htmlarea.js","6015", "_editorEvent(): keyEvent - onKeyPress() returned false. Returning false" );
           return false;
+			 }
+
+		  } // end of if this plugin had a KeyPress handler.
+
       }
     }
 
   if (keyEvent && ev.ctrlKey && !ev.altKey)
     {
+
+	 this.ddt._ddt( "htmlarea.js","6027", "_editorEvent(): control key key event" );
+
     var sel = null;
     var range = null;
     var key = String.fromCharCode(HTMLArea.is_ie ? ev.keyCode : ev.charCode).toLowerCase();
@@ -5890,6 +6053,9 @@ HTMLArea.prototype._editorEvent = function(ev)
     switch (key) 
 	   {
       case 'a':
+
+		  this.ddt._ddt( "htmlarea.js","6038", "_editorEvent(): cntrl-a select all" );
+
         if (!HTMLArea.is_ie) 
 		    {
           // KEY select all
@@ -5905,20 +6071,88 @@ HTMLArea.prototype._editorEvent = function(ev)
 
       // simple key commands follow
 
-      case 'b': cmd = "bold"; break;
-      case 'i': cmd = "italic"; break;
-      case 'u': cmd = "underline"; break;
-      case 's': cmd = "strikethrough"; break;
-      case 'l': cmd = "justifyleft"; break;
-      case 'e': cmd = "justifycenter"; break;
-      case 'r': cmd = "justifyright"; break;
-      case 'j': cmd = "justifyfull"; break;
-      case 'z': cmd = "undo"; break;
-      case 'y': cmd = "redo"; break;
-      case 'v': if (HTMLArea.is_ie || editor.config.htmlareaPaste) { cmd = "paste"; } break;
-      case 'n': cmd = "formatblock"; value = HTMLArea.is_ie ? "<p>" : "p"; break;
+      case 'b': 
+		  
+		  this.ddt._ddt( "htmlarea.js","6057", "_editorEvent(): cntrl-b bold" );
+		  cmd = "bold"; 
+		  break;
 
-      case '0': cmd = "killword"; break;
+      case 'i': 
+		  
+		  this.ddt._ddt( "htmlarea.js","6063", "_editorEvent(): cntrl-i italics" );
+		  cmd = "italic"; 
+		  break;
+
+      case 'u': 
+		
+		  this.ddt._ddt( "htmlarea.js","6069", "_editorEvent(): cntrl-u underline" );
+		  cmd = "underline"; 
+		  break;
+
+      case 's': 
+		
+		  this.ddt._ddt( "htmlarea.js","6075", "_editorEvent(): cntrl-s strikethrough" );
+		  cmd = "strikethrough"; 
+		  break;
+
+      case 'l': 
+		
+		  this.ddt._ddt( "htmlarea.js","6081", "_editorEvent(): cntrl-l justify left" );
+		  cmd = "justifyleft"; 
+		  break;
+
+      case 'e': 
+		  
+		  this.ddt._ddt( "htmlarea.js","6087", "_editorEvent(): cntrl-e justify center" );
+		  cmd = "justifycenter"; 
+		  break;
+
+      case 'r': 
+		
+		  this.ddt._ddt( "htmlarea.js","6093", "_editorEvent(): cntrl-r justify right" );
+		  cmd = "justifyright"; 
+		  break;
+
+      case 'j': 
+		
+		  this.ddt._ddt( "htmlarea.js","6099", "_editorEvent(): cntrl-j justify full" );
+		  cmd = "justifyfull"; 
+		  break;
+
+      case 'z': 
+		
+		  this.ddt._ddt( "htmlarea.js","6105", "_editorEvent(): cntrl-z undo" );
+		  cmd = "undo"; 
+		  break;
+
+      case 'y': 
+		
+		  this.ddt._ddt( "htmlarea.js","6111", "_editorEvent(): cntrl-y redo" );
+		  cmd = "redo"; 
+		  break;
+
+      case 'v': 
+		
+		  this.ddt._ddt( "htmlarea.js","6117", "_editorEvent(): cntrl-v paste" );
+		  if (HTMLArea.is_ie || editor.config.htmlareaPaste) 
+		    { 
+			 cmd = "paste"; 
+			 } 
+			break;
+
+      case 'n': 
+		
+		  
+		  this.ddt._ddt( "htmlarea.js","6127", "_editorEvent(): cntrl-n format block" );
+		  cmd = "formatblock"; 
+		  value = HTMLArea.is_ie ? "<p>" : "p"; 
+		  break;
+
+      case '0': 
+		
+		  this.ddt._ddt( "htmlarea.js","6134", "_editorEvent(): cntrl-O kill word" );
+		  cmd = "killword"; 
+		  break;
 
       // headings
       case '1':
@@ -5928,6 +6162,7 @@ HTMLArea.prototype._editorEvent = function(ev)
       case '5':
       case '6':
 
+		  this.ddt._ddt( "htmlarea.js","6146", "_editorEvent(): cntrl-[1-6] heading" );
         cmd = "formatblock";
         value = "h" + key;
         if (HTMLArea.is_ie)
@@ -5938,6 +6173,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 
     if (cmd) 
 	   {
+      this.ddt._ddt( "htmlarea.js","6157", "_editorEvent(): executing simple command '" + cmd + "'" );
       // execute simple command
       this.execCommand(cmd, false, value);
       HTMLArea._stopEvent(ev);
@@ -5989,7 +6225,7 @@ HTMLArea.prototype._editorEvent = function(ev)
         editor._unlinkOnUndo = true;
 
         return a;
-        }
+        }  // end of in-line function definition.
 
       switch(ev.which)
         {
@@ -5999,6 +6235,9 @@ HTMLArea.prototype._editorEvent = function(ev)
 
         case 32:
           {
+
+			 this.ddt._ddt( "htmlarea.js","6220", "_editorEvent(): entered a space" );
+
           if(s && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0)
             {
             var midStart = s.anchorNode.data.substring(0,s.anchorOffset).search(/\S{4,}$/);
@@ -6039,6 +6278,11 @@ HTMLArea.prototype._editorEvent = function(ev)
 
         default :
           {
+
+			 this.ddt._ddt( "htmlarea.js","6263", "_editorEvent(): keycode is '" + ev.keyCode + "' which (normal key) is '" + ev.which + "'" );
+
+			 // is it an escape character or ...
+
           if(ev.keyCode == 27 || (this._unlinkOnUndo && ev.ctrlKey && ev.which == 122) )
             {
             if(this._unLink)
@@ -6050,13 +6294,24 @@ HTMLArea.prototype._editorEvent = function(ev)
             }
           else if(ev.which || ev.keyCode == 8 || ev.keyCode == 46)
             {
+
+				// backspace or period? 
+
+            this.ddt._ddt( "htmlarea.js","6281", "_editorEvent(): normal key or backspace or period" );
+
             this._unlinkOnUndo = false;
 
             if(s.anchorNode && s.anchorNode.nodeType == 3)
               {
               // See if we might be changing a link
               var a = this._getFirstAncestor(s, 'a');
-              if(!a) break; // not an anchor
+
+              if (!a) 
+				    {
+					 this.ddt._ddt( "htmlarea.js","6292", "_editorEvent(): not an anchor" );
+					 break; // not an anchor
+					 }
+
               if(!a._updateAnchTimeout)
                 {
                 if(   s.anchorNode.data.match(HTMLArea.RE_email)
@@ -6102,6 +6357,9 @@ HTMLArea.prototype._editorEvent = function(ev)
     switch (ev.keyCode)
       {
       case 13: // KEY enter
+
+		 this.ddt._ddt( "htmlarea.js","6342", "_editorEvent(): enter key handling" );
+
         if (HTMLArea.is_gecko && !ev.shiftKey && this.config.mozParaHandler == 'dirty' )
           {
           this.dom_checkInsertP();
@@ -6111,6 +6369,9 @@ HTMLArea.prototype._editorEvent = function(ev)
 
       case 8: // KEY backspace
       case 46: // KEY delete
+
+		 this.ddt._ddt( "htmlarea.js","6354", "_editorEvent(): delete or backspace handling" );
+
         if (HTMLArea.is_gecko && !ev.shiftKey) 
 		    {
           if (this.dom_checkBackspace())
@@ -6137,6 +6398,8 @@ HTMLArea.prototype._editorEvent = function(ev)
     editor._timerToolbar = null;
     }, 100);
 
+  this.ddt._ddt( "htmlarea.js","6382", "_editorEvent(): bottom" );
+
   };  // end of _editorEvent()
 
 // ---------------------------------------
@@ -6147,7 +6410,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 
 HTMLArea.prototype.convertNode = function(el, newTagName) 
   {
-  this.ddt._ddt( "convertNode(): top" );
+  this.ddt._ddt( "htmlarea.js","6394", "convertNode(): top" );
 
   var newel = this._doc.createElement(newTagName);
   while (el.firstChild)
@@ -6193,7 +6456,7 @@ HTMLArea.prototype.ie_checkBackspace = function()
 HTMLArea.prototype.dom_checkBackspace = function() 
   {
 
-  this.ddt._ddt( "dom_checkBackspace(): top" );
+  this.ddt._ddt( "htmlarea.js","6440", "dom_checkBackspace(): top" );
 
   var self = this;
 
@@ -6460,7 +6723,7 @@ HTMLArea.prototype.dom_checkInsertP = function()
 HTMLArea.prototype.scrollToElement = function(e)
   {
 
-  this.ddt._ddt( "scrollToElement(): top" );
+  this.ddt._ddt( "htmlarea.js","6707", "scrollToElement(): top" );
 
   if(HTMLArea.is_gecko)
     {
@@ -6533,7 +6796,7 @@ HTMLArea.prototype.getHTML = function()
 HTMLArea.prototype.outwardHtml = function(html)
   {
 
-  this.ddt._ddt( "outwardHtml(): top" );
+  this.ddt._ddt( "htmlarea.js","6780", "outwardHtml(): top" );
 
   html = html.replace(/<(\/?)b(\s|>|\/)/ig, "<$1strong$2");
   html = html.replace(/<(\/?)i(\s|>|\/)/ig, "<$1em$2");
@@ -6566,7 +6829,7 @@ HTMLArea.prototype.outwardHtml = function(html)
 HTMLArea.prototype.inwardHtml = function(html)
   {
 
-  this.ddt._ddt( "inwardHtml(): top" );
+  this.ddt._ddt( "htmlarea.js","6813", "inwardHtml(): top" );
 
   // Midas uses b and i instead of strong and em, um, hello,
   // mozilla, this is the 21st century calling!
@@ -6600,7 +6863,7 @@ HTMLArea.prototype.inwardHtml = function(html)
 HTMLArea.prototype.outwardSpecialReplacements = function(html)
   {
 
-  this.ddt._ddt( "outwardSpecialReplacements(): top" );
+  this.ddt._ddt( "htmlarea.js","6847", "outwardSpecialReplacements(): top" );
 
   for(var i in this.config.specialReplacements)
     {
@@ -6624,7 +6887,7 @@ HTMLArea.prototype.outwardSpecialReplacements = function(html)
 
 HTMLArea.prototype.inwardSpecialReplacements = function(html)
   {
-  this.ddt._ddt( "inwardSpecialReplacements(): top" );
+  this.ddt._ddt( "htmlarea.js","6871", "inwardSpecialReplacements(): top" );
 
   // alert("inward");
   for(var i in this.config.specialReplacements)
@@ -6652,7 +6915,7 @@ HTMLArea.prototype.inwardSpecialReplacements = function(html)
 HTMLArea.prototype.fixRelativeLinks = function(html)
   {
 
-  this.ddt._ddt( "fixRelativeLinks(): top" );
+  this.ddt._ddt( "htmlarea.js","6899", "fixRelativeLinks(): top" );
 
   if (typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors)
     {
@@ -6698,7 +6961,7 @@ HTMLArea.prototype.fixRelativeLinks = function(html)
 HTMLArea.prototype.stripBaseURL = function(string)  
   {
 
-  this.ddt._ddt( "stripBaseURL(): top" );
+  this.ddt._ddt( "htmlarea.js","6945", "stripBaseURL(): top" );
 
   var baseurl = this.config.baseURL;
 
@@ -6726,7 +6989,7 @@ HTMLArea.prototype.stripBaseURL = function(string)
 HTMLArea.prototype.getInnerHTML = function() 
   {
 
-  this.ddt._ddt( "getInnerHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","6973", "getInnerHTML(): top" );
 
   if(!this._doc.body) return '';
   switch (this._editMode) 
@@ -6763,7 +7026,7 @@ HTMLArea.prototype.getInnerHTML = function()
 HTMLArea.prototype.setHTML = function(html) 
   {
   
-  this.ddt._ddt( "setHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","7010", "setHTML(): top" );
 
   switch (this._editMode) 
     {
@@ -6835,7 +7098,7 @@ HTMLArea.prototype._getSelection = function()
 HTMLArea.prototype._createRange = function(sel) 
   {
 
-  this.ddt._ddt( "_createRange(): top" );
+  this.ddt._ddt( "htmlarea.js","7082", "_createRange(): top" );
 
   if (HTMLArea.is_ie) 
     {
@@ -6871,7 +7134,7 @@ HTMLArea.prototype._createRange = function(sel)
 HTMLArea.prototype.notifyOn = function(ev, fn)
   {
 
-  this.ddt._ddt( "notifyOn(): top" );
+  this.ddt._ddt( "htmlarea.js","7118", "notifyOn(): top" );
 
   if(typeof this._notifyListeners[ev] == 'undefined')
     {
@@ -6891,7 +7154,7 @@ HTMLArea.prototype.notifyOn = function(ev, fn)
 HTMLArea.prototype.notifyOf = function(ev, args)
   {
 
-  this.ddt._ddt( "notifyOf(): top" );
+  this.ddt._ddt( "htmlarea.js","7138", "notifyOf(): top" );
 
   if(this._notifyListeners[ev])
     {
@@ -6918,7 +7181,7 @@ HTMLArea.prototype.notifyOf = function(ev, args)
 HTMLArea.prototype._popupDialog = function(url, action, init) 
   {
 
-  this.ddt._ddt( "_popupDialog(): top with url '" + url + "' action '" + action + "'" );
+  this.ddt._ddt( "htmlarea.js","7165", "_popupDialog(): top with url '" + url + "' action '" + action + "'" );
 
   Dialog(this.popupURL(url), action, init);
   };
@@ -7011,7 +7274,7 @@ HTMLArea.prototype._toggleBorders = function()
 HTMLArea.prototype.registerPlugins = function(plugin_names) 
   {
 
-  this.ddt._ddt( "registerPlugins(): top" );
+  this.ddt._ddt( "htmlarea.js","7258", "registerPlugins(): top" );
 
   if(plugin_names)
     {
