@@ -1,0 +1,21 @@
+Xinha Unified Backend branch - TODO List
+
+by: Yermo Lamers of DTLink, LLC
+http://www.formvista.com/contact.html
+
+---------------------------------------------
+
+2005-04-23 - in the order things will be done:
+
+. route all client/server communications through a single backend script.
+  (ImageManager is done. Linker and SpellCheckers are next).
+
+. make_runtime.php script needs to be written to generate a debug message and
+  comment free "runtime" version. 
+
+. add a central URL rewriter for use in the Linker plugin to handle 
+  http://null/ bug in MSIE and to normalize all links as optionally
+  fully qualified to absolute to the current site.
+
+. fix EnterParagraphs.
+

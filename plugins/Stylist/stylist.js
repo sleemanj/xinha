@@ -5,6 +5,7 @@
 
 HTMLArea.Config.prototype.css_style = { };
 
+
 /**
  * This method loads an external stylesheet and uses it in the stylist
  */
@@ -516,6 +517,15 @@ Stylist._pluginInfo =
   sponsor      : "Gogo Internet Services",
   sponsor_url  : "http://www.gogo.co.nz/"
 };
+
+/**
+* name member for debugging
+*
+* This member is used to identify objects of this class in debugging
+* messages.
+*/
+
+Stylist.prototype.name = "Stylist";
 
 Stylist.prototype.onGenerate = function()
 {

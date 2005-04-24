@@ -39,13 +39,13 @@
 
   <script type="text/javascript">
 
+  var startupDDT = new DDT( "startup" );
+
   // uncomment the following if you would like to trace out the 
   // startup functions. This only works in the debugging version
   // of Xinha_ub, not the runtime.
-  //
 
-  // var startupDDT = new DDT( "startup_trace" );
-  // startupDDT._ddtOnPopup();
+  startupDDT._ddtOn();
 
   </script>
   
@@ -68,8 +68,13 @@
 	 // another xinha_init defined in a full_example.js file that gets included
 	 // at the end.)
 
+   startupDDT._ddt( "simple_example.html", "71", "Setting up xinha_init()" );
+
     xinha_init = xinha_init ? xinha_init : function()
     {
+
+ 	   startupDDT._ddt( "simple_example.html", "76", "xinha_init called from window.onload handler for simple_example.html" );
+
       /** STEP 1 ***************************************************************
        * First, what are the plugins you will be using in the editors on this
        * page.  List all the plugins you will need, even if not all the editors
@@ -87,17 +92,18 @@
       // This loads the plugins. Note that we're using the minimal list
 		// by default.
 
+	   startupDDT._ddt( "simple_example.html", "92", "calling HTMLArea.loadplugins()" );
+
       if ( !HTMLArea.loadPlugins( xinha_plugins_minimal, xinha_init)) return;
 
       /** STEP 2 ***************************************************************
        * Now, what are the names of the textareas you will be turning into
-       * editors?
+       * editors? For this example we're only loading 1 editor.
        ************************************************************************/
 
       xinha_editors = xinha_editors ? xinha_editors :
       [
-        'TextArea1',
-        'TextArea2'
+        'TextArea1'
       ];
 
       /** STEP 3 ***************************************************************
@@ -112,6 +118,8 @@
        *   xinha_config.height = 420;
        *
        *************************************************************************/
+
+  	    startupDDT._ddt( "simple_example.html", "119", "calling HTMLArea.Config()" );
 
        xinha_config = xinha_config ? xinha_config : new HTMLArea.Config();
 
@@ -132,6 +140,8 @@
        * editors.
        ************************************************************************/
 
+      startupDDT._ddt( "simple_example.html", "140", "calling HTMLArea.makeEditors()" );
+
       xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins_minimal);
 
       /** STEP 4 ***************************************************************
@@ -144,17 +154,22 @@
        *
        ************************************************************************/
 
+       xinha_editors.TextArea1.config.width  = 700;
+       xinha_editors.TextArea1.config.height = 350;
 
       /** STEP 5 ***************************************************************
        * Finally we "start" the editors, this turns the textareas into
        * Xinha editors.
        ************************************************************************/
 
+      startupDDT._ddt( "simple_example.html", "160", "calling HTMLArea.startEditors()" );
+
       HTMLArea.startEditors(xinha_editors);
 
     }  // end of xinha_init()
 
-    window.onload = xinha_init;
+    // window.onload = xinha_init;
+
   </script>
 </head>
 
@@ -176,17 +191,11 @@
 
     <textarea id="TextArea1" name="TextArea1" rows="10" cols="80" style="width:100%">
 	 This is the content of TextArea1 from xinha_ub/examples/simple_example.html.<br>
-	 The two extra <b>&lt;&gt;</b> buttons on the toolbars are to turn on two sections of 
-	 debugging trace messages. The first turns on trace messages in the HTMLArea
-	 object which appear in a text area below. The second turns on trace messages in the
-	 HTMLArea static methods which appear in a popup box. <br><br>
-	 These trace messages can also be turned on from the simple_example.html file or
-	 from within htmlarea.js
-	 </textarea>
-	 <br>
-	 <br>
-    <textarea id="TextArea2" name="TextArea2" rows="10" cols="80" style="width:100%">
-	 This is the content of TextArea2 from xinha_ub/examples/simple_example.html.
+	 In order to see the new debugging trace messages you will need to turn off
+	 popup blockers for this site.<br>
+	 These trace messages can also be turned on/off from within simple_example.html by
+	 commenting out or uncomments the _ddtOn() line. The same applies to the trace
+	 messages inside the HTMLArea object in htmlarea.js.
 	 </textarea>
 
   </form>

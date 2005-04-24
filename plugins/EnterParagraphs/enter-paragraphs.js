@@ -20,6 +20,15 @@ EnterParagraphs._pluginInfo = {
   license       : "htmlArea"
 };
 
+/**
+* name member for debugging
+*
+* This member is used to identify objects of this class in debugging
+* messages.
+*/
+
+EnterParagraphs.prototype.name = "EnterParagraphs";
+
 // Whitespace Regex
 EnterParagraphs.prototype._whiteSpace = /^\s*$/;
 // The pragmatic list of which elements a paragraph may not contain, and which may contain a paragraph

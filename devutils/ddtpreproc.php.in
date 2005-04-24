@@ -1,4 +1,5 @@
 #![@@PHP@@]
+<?php
 
 // [NOSTRIP
 // -----------------------------------------------------------------
@@ -19,5 +20,229 @@
 // ------------------------------------------------------------------
 // NOSTRIP]
 
+// attempt to prevent this script from being run through the webserver.
 
-// TO BE DEVELOPED
+if ( @$_SERVER["HTTP_HOST"] != NULL )
+	die( "No" );
+
+/**
+* ddtpreproc
+*
+* Since Javascript does not seem to have variables similar to __FILE__ and
+* __LINE__ from php, this script pre-processes .js files to patch in file and
+* line numbers into all _ddt() calls. 
+*
+* After making an editing pass through the .js files, this script should be
+* called to update the line numbers.
+*
+* @package xinha
+* @subpackage devutils
+* @author Yermo Lamers
+* @copyright DTLink, LLC 2005
+*
+* @todo handle multi-line comments.
+* @todo handle nested ");" 
+* @todo distinguish between _ddt( $file, $line, $msg ) and _ddt( "file", "100", "message" );
+*/
+
+// --------------------------------------------------
+
+/**
+* primitive ddt() placeholder.
+*
+* edit this function to turn on debugging messages.
+*/
+
+function _ddt( $file, $line, $msg )
+{
+
+// uncomment this line to turn on debugging messages.
+
+print( basename( $file ) . ":$line - $msg\n" );
+
+}
+
+/* ----------------------------------------------------- */
+
+/**
+* recursive apply
+*
+* recurse through a directory looking for files that match the given expression
+* and apply the given function.
+*/
+
+function rapply( $path, $regex, $function )
+{
+
+_ddt( __FILE__, __LINE__, "rapply(): top with path '$path', regex '$regex', function '$function'" );
+
+// does the directory or file exist?
+
+if ( !file_exists( $path ))
+	return  false ;
+
+// if path is not a directory, and it matches the regex, apply the function.
+
+if ( !is_dir( $path ) )
+	{
+
+	if ( preg_match( $regex, $path ) )
+		{
+
+		if ( ! $function( $path ) )
+			{
+
+			_ddt( __FILE__, __LINE__, "rapply(): function '$function' returned false" );
+
+			return  false ;
+			}
+		}
+
+	return  true ;
+	}
+else
+	{
+
+	// process the entries in the directory
+
+	if (( $dh = opendir($path)) === false )
+		{
+		_ddt( __FILE__, __LINE__, "rapply(): unable to open directory '$path'" );
+
+		return  false ;
+		}
+
+	while (false !== ($filename = readdir( $dh )))
+		{
+		if (( $filename != ".") && ( $filename != ".." ))
+			{
+			if ( ! rapply( "$path/$filename", $regex, $function ))
+				{
+				return  false ;
+				}
+			}
+		}
+
+	closedir($dh);
+
+	return true ;
+
+	}	// end of if it's a directory
+
+}	// end of rapply()
+
+// --------------------------------------------------------------
+
+/**
+* process _ddt() calls in a javascript file.
+*
+* Adds in file and linenumber arguments to all _ddt() calls 
+* in a javascript file. Handles the case where no file and line
+* info has been added (a fresh debug statement) and where ones 
+* are already present.
+*
+* @todo handle rare case of multiple ddt() calls on a single line.
+* @todo improve ddt identification regex so that it handles embedded );
+*/
+
+function procDDT( $path )
+{
+
+_ddt( __FILE__, __LINE__, "procDDT(): top with path '$path'" );
+
+if ( !file_exists( $path ) )
+	{
+	_ddt( __FILE__, __LINE__, "procDDT(): file '$path' does not exist" );
+	return false;
+	}
+
+// load into an array. loop over each line in the array doing the replace. 
+// then write the whole thing out.
+
+if (( $content_array = file( $path )) === false )
+	{
+
+	_ddt( __FILE__, __LINE__, "procDDT(): file() returned false on '$path'" );
+	return false;
+	}
+
+_ddt( __FILE__, __LINE__, "procDDT(): read in file with '" . count( $content_array ) . "' lines" );
+
+// now loop over the array doing a search and replace 
+
+foreach ( $content_array as $index => $line )
+	{
+
+	// do we have a _ddt() call with existing file and line numbers?
+	//
+	// we make a nasty assmption here that ); will not be present inside the debug message.
+	// Doing the double regex here is wasteful ...
+
+	$line_number = $index + 1;
+
+	if ( preg_match( "/_ddt\([\s]*\"[^,]+\"[\s]*,[\s]*\"[0-9]+\"[\s]*,.*?\);/", $line ) )
+		{
+
+		_ddt( __FILE__, __LINE__, "procDDT(): found an existing file/line ddt on line $index" );
+
+		$content_array[ $index ] = preg_replace( "/_ddt\([\s]*\"[^,]+\"[\s]*,[\s]*\"[0-9]+\"[\s]*,[\s]*(.*?)[\s]*\);/", "_ddt( \"" . basename( $path ) . "\",\"$line_number\", $1 );", $line );
+
+		}
+	else if ( preg_match( "/_ddt\((.*?)\);/", $line ) )
+		{
+
+		_ddt( __FILE__, __LINE__, "procDDT(): found a new ddt on line $index" );
+
+		$content_array[ $index ] = preg_replace( "/_ddt\((.*?)\);/", "_ddt( \"" . basename( $path ) . "\",\"$line_number\", $1 );", $line );
+
+		_ddt( __FILE__, __LINE__, "procDDT(): existing line changed to '" . $content_array[$index] . "'" );
+		}
+
+	}	// end of foreach.
+
+// write the thing out.
+
+if (( $fh = fopen( $path, "w" )) == NULL )
+	{
+
+	_ddt( __FILE__, __LINE__, "procDDT(): unable to open '$path' for writing" );
+
+	return false;
+
+	}
+
+foreach ( $content_array as $index => $line )
+	fputs( $fh, $line );
+
+fclose( $fh );
+
+_ddt( __FILE__, __LINE__, "procDDT(): bottom" );
+
+return true;
+
+}	// end of procDDT()
+
+// ------------------------------------------------------------------
+
+// check usage. 
+
+if ( $argc != 2 )
+	{
+	die( "Usage: ddtpreproc.php path_to_xinha_root\n" );
+	}
+
+$dir_path = $argv[1];
+
+if ( ! file_exists( $dir_path ) )
+	{
+	die( "Path '$dir_path' does not exist\n" );
+	}
+
+// recurse through the directory applying the procDDT function on all
+// files ending in ".js".
+
+rapply( $dir_path, "/.*js$/", "procDDT" );
+
+// END
+
+?>

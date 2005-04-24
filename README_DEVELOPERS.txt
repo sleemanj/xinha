@@ -3,7 +3,7 @@
               Xinha Unified Backend Branch 
                     Development Info
 
-by: Yermo Lamers
+by: Yermo Lamers of DTLink Software
 http://www.formvista.com
 
 ----------------------------------------------------------
@@ -43,7 +43,7 @@ buildruntime.php: - not done
   and debug trace messages stripped out. It also does
   in-line text replacement for some specific tags.
 
-ddtpreproc.php - not done
+ddtpreproc.php
 
   Javascript does not seem to have a version of PHP's 
   __LINE__ and __FILE__ constants so there is no clean way of
@@ -51,6 +51,10 @@ ddtpreproc.php - not done
   none that I've been able to find. This script preprocesses the
   javascript source files to patch in file and line numbers to
   every _ddt() call.
+
+  If you are working on the source files and add or delete lines just
+  rerun the ddtpreproc.php script from the xinha_ub root directory. It
+  will recurse through all the .js files in the directory tree.
 
 makedocs.pl
 
@@ -115,19 +119,16 @@ There is a ./utils/makedocs.pl shell script.
 
 To further make my life easier and come up to speed, I've added 
 trace messages to virtually every method using a contributed version 
-of my DDT debug-trace-message-to-textarea class. These messages can 
-be turned on and off on a per-class basis using the ddtOn() method. 
+of my DDT debug-trace-message-to-popup window class. 
 
-There is also a global trace message object included in the full_example-body.html 
-file to trace out the editor startup. At that point the page is not completely
-constructed so a popup window is used to house these trace messages.
+You will need to turn off any popup blockers in order to see the debugging
+trace messages. 
+
+These messages can be turned on and off on a per-class basis using the ddtOn() method. 
+(See examples/simple_example.html)
 
 What's nice is you can quickly get a feel for the order in which things happen
 and which methods are invoked for what events.
-
-Unfortunately, the trace message infrastructure adds a tremendous amount of processing 
-and size to the distribution. With all debug messages turned on, this branch of
-Xinha is pretty much unuseable as an editor.
 
 The concept is to do development on the trace enabled version of the code and then
 generate a stripped "runtime" version using the provided ./utils/make_runtime.sh
@@ -135,11 +136,6 @@ script. make_runtime strips all debugging code out of the .js files. It also rem
 almost all comments to reduce file size. I am envisioning having two distributions
 of Xinha .. a development version with all debugging intact and a runtime version
 that has been stripped. (this has served me extremely well in formVista development)
-
-Debug trace messages can be enabled in one of two ways:
-
-1. uncommenting the _ddtOn() calls in the example HTML page and in htmlarea.js
-2. clicking the new '<>' icons which turn on trace messages 
 
 ----------------------------------------------------------
                       Coding Style

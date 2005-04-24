@@ -28,6 +28,8 @@
 * @copyright DTLink, LLC
 * @author Yermo Lamers
 * @package ddt
+* 
+* @todo find source of spurious document not well formed error on reload.
 */
 
 // -----------------------------
@@ -38,10 +40,16 @@
 //
 // 2005-04-12 YmL:
 //	.	expanded for use in Xinha.
+//
+// 2005-04-22 YmL:
+//	.	now uses a popup window for all messages.
+//		writing to a textarea was simply too slow.
 // -----------------------------
 
 /**
 * DDT constructor.
+*
+* @param name name identifying the object sending the debug messages.
 *
 * @class Debugging Trace Message class. 
 *
@@ -58,74 +66,81 @@ if (name != undefined )
 
 	// descriptive named used as a title for the trace box.
 
-	this.textarea_name = name;
+	this.name = name;
 
-	// hopefully unique name to avoid conflicts with existing elements.
-
-	this.textarea_id = "DDT_" + name;
 	}
 else
 	{
-	this.textarea_name = "DDT";
+	this.name = "DDT";
 	}
 
 // by default messages are off.
 
-this.textarea = null;
-
 this.state = "off";
+this.popup = null;
 
 }
 
-// --------------------------------
+// -------------------------------------------
 
 /**
-* turn on debugging messages and optionally create the text area.
+* turn on debugging messages optionally opening the debug window.
+*
+* the original design used a textarea on the page but this made debugging
+* startup code difficult. The design has been changed to send debug messages
+* to a popup window. Instead of appending to a textarea messages are now
+* written to the window, which is much faster.
+*
+* Instead of using separate areas for each object that might send a message
+* debug messages are tagged with the name of the object sending the message.
+*
+* You will need to turn off popup blockers in order for this to work.
 */
 
 DDT.prototype._ddtOn = function()
 {
 
-// if the text area hasn't been created yet, create it.
+// if the popup hasn't been opened yet, open it.
 
-if (( this.textarea = document.getElementById( this.textarea_id )) == null )
+if ( this.popup == null )
 	{
 
-	var header = document.createElement( "h3" );
-	var message = document.createTextNode( "Trace messages for " + this.textarea_name );
-	header.appendChild( message );
+	// open the popup window
 
-	this.textarea = document.createElement("textarea");
+	this.popup = window.open( "", "ddt_popup",
+			      "toolbar=no,menubar=no,personalbar=no,width=800,height=450," +
+			      "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
 
-	// name it so we can reuse it; avoid naming conflicts with existing textareas.
+	// it's possible that the window was left open or we are another object
+	// sharing the same window.
 
-	this.textarea.id = this.textarea_id;
+	if ( typeof this.popup.document.getElementsByTagName("p")[0] == 'undefined' )
+		{
 
-	this.textarea.style.width = "85%";
-	this.textarea.style.height = "15em";
+		var content = "<html><body><p>DDT</p><p><a href=\"javascript:document.write( '<hr>');\">ADD SEPARATOR</a></p></body></html>";
+		this.popup.document.write( content );
 
-	document.body.appendChild( header );
-	document.body.appendChild(this.textarea);
-	}
+		var header = this.popup.document.createElement( "h3" );
+		var message = this.popup.document.createTextNode( "_ddt Trace Messages" );
+		header.appendChild( message );
+		this.popup.document.body.appendChild( header );
 
-// clear the text area.
+		}	// end of if the popup document hadn't been created.
 
-this.textarea.value = "";
+	}	// end of if the popup had not been opened.
 
 this.state = "on";
 
-}; // end of ddtOn
+}; // end of _ddtOn()
 
 // --------------------------------
 
 /**
-* turn off debugging messages
+* turn off debugging messages.
 */
 
 DDT.prototype._ddtOff = function()
 {
-this.textarea.value = "";
-this.textarea = null;
 this.state = "off";
 }
 
@@ -145,110 +160,21 @@ else
 
 }
 
-// -------------------------------------------
-
-/**
-* use a popup textarea for debugging
-*
-* there are cases where one would like to debug javascript code while a page
-* is being constructed. This function raises a popup window, puts a textarea in it.
-* subsequent debug trace messages are sent to the window.
-*
-* You will need to turn off popup blockers in order for this to work.
-*/
-
-DDT.prototype._ddtOnPopup = function()
-{
-
-// if the text area hasn't been created yet, create it.
-
-if ( this.textarea == null )
-	{
-
-	// open the popup window
-
-	var popup = window.open( "", "ddt_popup",
-			      "toolbar=no,menubar=no,personalbar=no,width=800,height=250," +
-			      "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
-
-	// it's possible that the window was left open between loads so check to see
-	// if the text area already exists
-
-	if (( this.textarea = popup.document.getElementById( this.textarea_id )) == null )
-		{
-
-		var content = "<html><body><p>ddt</p></body></html";
-		popup.document.write( content );
-
-		var header = popup.document.createElement( "h3" );
-		var message = popup.document.createTextNode( "Trace messages for " + this.textarea_name );
-		header.appendChild( message );
-
-		this.textarea = popup.document.createElement("textarea");
-
-		// name it so we can reuse it; avoid naming conflicts with existing textareas.
-
-		this.textarea.id = this.textarea_id;
-
-		this.textarea.style.width = "95%";
-		this.textarea.style.height = "15em";
-
-		popup.document.body.appendChild( header );
-		popup.document.body.appendChild(this.textarea);
-
-		}	// end of if textarea did not already exist.
-
-	}	// end of if this object did not have a textarea set.
-
-this.textarea.value = "";
-this.state = "on";
-
-}; // end of ddtOnPopup()
-
-// --------------------------------
-
-/**
-* turn off debugging messages in popup.
-*/
-
-DDT.prototype._ddtOffPopup = function()
-{
-this.textarea.value = "";
-this.textarea = null;
-this.state = "off";
-}
-
-// ----------------------------------
-
-/**
-* toggle debug message on/off state in popup.
-*/
-
-DDT.prototype._ddtTogglePopup = function()
-{
-
-if ( this.state == "on" )
-	this._ddtOff();
-else
-	this._ddtOnPopup();
-
-}
-
 // --------------------------------
 
 /**
 * log a message
 *
-* dumps a debugging message to debug textarea if trace messages for this 
+* writes a debugging trace message to debug popup if trace messages for this 
 * object have been turned on.
 */
 
-DDT.prototype._ddt = function( msg ) 
+DDT.prototype._ddt = function( file, line, msg ) 
 {
 
 if ( this.state == "on" )
 	{
-	this.textarea.value += msg + "\n";
+	this.popup.document.write( "(" + this.name + ") " + file + ":" + line + " - " + msg + "<br>\n" );
 	}
 
 }
@@ -262,20 +188,29 @@ if ( this.state == "on" )
 * useful at the moment.
 */
 
-DDT.prototype._ddtDumpObject = function( msg, obj )
+DDT.prototype._ddtDumpObject = function( file, line, msg, obj )
 {
 
-if ( this.textarea != null )
+this._ddt( "ddt.js","194", file, line, msg );
+
+for (var x in obj)
    {
 
-   this.textarea.value += msg + "\n";
+	if ( typeof obj[x] == 'string' )
+		{
 
-   for (var x in obj)
-     {
+		// avoid getting caught by ddtpreproc.php script.
 
-     this.textarea.value += "   " + x  + "\n";
-     }
-
+		this._ddt( 
+			file, line, "member - '" + x + "' = '" + obj[x].substr(0,40) + "'"  
+			);
+		}
+	else
+		{
+		this._ddt( 
+			file, line, "member - '" + x + "'"  
+			);
+		}
    }
 
 } // end of _ddtDumpObject()
@@ -287,6 +222,7 @@ if ( this.textarea != null )
 *
 * displays a tree of html elements. Design based on method from htmlarea.js
 *
+* @see ddtpreproc.php
 * @param root top of tree to display
 * @param level depth level.
 */
@@ -296,7 +232,12 @@ DDT.prototype._ddtDumpTree = function(root, level)
 var tag = root.tagName.toLowerCase(), i;
 var ns = HTMLArea.is_ie ? root.scopeName : root.prefix;
 
-this._ddt(level + "- " + tag + " [" + ns + "]");
+// FIXME: separated on multiple lines to avoid being picked
+// up by ddtpreproc.php
+
+this._ddt( 
+	":","0", level + "- " + tag + " [" + ns + "]" 
+	);
 
 for (i = root.firstChild; i; i = i.nextSibling)
 	if (i.nodeType == 1)

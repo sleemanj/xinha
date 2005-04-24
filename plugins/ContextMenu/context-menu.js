@@ -25,6 +25,15 @@ ContextMenu._pluginInfo = {
 	license       : "htmlArea"
 };
 
+/**
+* name member for debugging
+*
+* This member is used to identify objects of this class in debugging
+* messages.
+*/
+
+ContextMenu.prototype.name = "ContextMenu";
+
 ContextMenu.prototype.onGenerate = function() {
 	var self = this;
 	var doc = this.editordoc = this.editor._iframe.contentWindow.document;
