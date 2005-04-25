@@ -30,7 +30,7 @@
 */
 
 // sections marked with DDT open and close brackets are stripped out by 
-// the make_runtime.sh utility. Individual _ddt() calls are also automatically
+// the make_runtime.php utility. Individual _ddt() calls are also automatically
 // stripped out.
 
 // --------------------------------------------------------------------------
@@ -2049,6 +2049,9 @@ HTMLArea.htmlEncode = function(str)
 
 HTMLArea.getHTML = function(root, outputRoot, editor)
   {
+
+  HTMLArea._ddt( "htmlarea.js","2073", "getHTML(): top" );
+
   try
     {
     return HTMLArea.getHTMLWrapper(root,outputRoot,editor);
@@ -3883,6 +3886,9 @@ HTMLArea.prototype.deactivateEditor = function()
 
 HTMLArea.prototype.setMode = function(mode) 
   {
+
+  this.ddt._ddt( "htmlarea.js","3887", "setMode(): setting mode to '" + mode + "'" );
+
   if (typeof mode == "undefined") 
     {
     mode = ((this._editMode == "textmode") ? "wysiwyg" : "textmode");
@@ -3960,7 +3966,7 @@ HTMLArea.prototype.setMode = function(mode)
 HTMLArea.prototype.setFullHTML = function(html) 
   {
 
-  this.ddt._ddt( "htmlarea.js","3963", "setFullHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","3966", "setFullHTML(): top" );
 
   var save_multiline = RegExp.multiline;
   RegExp.multiline = true;
@@ -4007,7 +4013,7 @@ HTMLArea.prototype.setFullHTML = function(html)
 HTMLArea.prototype.registerPlugin = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4010", "registerPlugin(): top" );
+  this.ddt._ddt( "htmlarea.js","4013", "registerPlugin(): top" );
 
   var plugin = arguments[0];
   var args = [];
@@ -4029,7 +4035,7 @@ HTMLArea.prototype.registerPlugin = function()
 HTMLArea.prototype.registerPlugin2 = function(plugin, args) 
   {
 
-  this.ddt._ddt( "htmlarea.js","4032", "registerPlugin2(): top" );
+  this.ddt._ddt( "htmlarea.js","4035", "registerPlugin2(): top" );
 
   if (typeof plugin == "string")
     plugin = eval(plugin);
@@ -4037,7 +4043,7 @@ HTMLArea.prototype.registerPlugin2 = function(plugin, args)
   if (typeof plugin == "undefined") 
     {
 
-	 this.ddt._ddt( "htmlarea.js","4040", "registerPlugin2(): INTERNAL ERROR: plugin is undefined. " );
+	 this.ddt._ddt( "htmlarea.js","4043", "registerPlugin2(): INTERNAL ERROR: plugin is undefined. " );
 
     /* FIXME: This should never happen. But why does it do? */
     return false;
@@ -4111,7 +4117,7 @@ HTMLArea.prototype._wordClean = function()
   {
   var editor = this;
 
-  this.ddt._ddt( "htmlarea.js","4114", "_wordClean(): top" );
+  this.ddt._ddt( "htmlarea.js","4117", "_wordClean(): top" );
 
   var stats = 
     {
@@ -4228,7 +4234,7 @@ HTMLArea.prototype._wordClean = function()
   // this.setHTML(this.getInnerHTML());
   // this.forceRedraw();
 
-  this.ddt._ddt( "htmlarea.js","4231", "_wordClean(): bottom" );
+  this.ddt._ddt( "htmlarea.js","4234", "_wordClean(): bottom" );
 
   this.updateToolbar();
 
@@ -4243,7 +4249,7 @@ HTMLArea.prototype._wordClean = function()
 HTMLArea.prototype._clearFonts = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4246", "_clearFonts(): top" );
+  this.ddt._ddt( "htmlarea.js","4249", "_clearFonts(): top" );
   
   var D = this.getInnerHTML();
 
@@ -4281,7 +4287,7 @@ HTMLArea.prototype._clearFonts = function()
 HTMLArea.prototype._splitBlock = function()
   {
 
-  this.ddt._ddt( "htmlarea.js","4284", "_splitBlock(): top" );
+  this.ddt._ddt( "htmlarea.js","4287", "_splitBlock(): top" );
 
   this._doc.execCommand('formatblock', false, '<div>');
   }
@@ -4295,7 +4301,7 @@ HTMLArea.prototype._splitBlock = function()
 HTMLArea.prototype.forceRedraw = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4298", "forceRedraw(): top" );
+  this.ddt._ddt( "htmlarea.js","4301", "forceRedraw(): top" );
 
   this._doc.body.style.visibility = "hidden";
   this._doc.body.style.visibility = "visible";
@@ -4313,7 +4319,7 @@ HTMLArea.prototype.forceRedraw = function()
 HTMLArea.prototype.focusEditor = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4316", "focusEditor(): top _editMode is '" + this._editMode + "'" );
+  this.ddt._ddt( "htmlarea.js","4319", "focusEditor(): top _editMode is '" + this._editMode + "'" );
 
   switch (this._editMode) 
     {
@@ -4361,7 +4367,7 @@ HTMLArea.prototype.focusEditor = function()
 HTMLArea.prototype._undoTakeSnapshot = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4364", "_undoTakeSnapshot(): top" );
+  this.ddt._ddt( "htmlarea.js","4367", "_undoTakeSnapshot(): top" );
 
   ++this._undoPos;
 
@@ -4398,7 +4404,7 @@ HTMLArea.prototype._undoTakeSnapshot = function()
 HTMLArea.prototype.undo = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4401", "undo(): top" );
+  this.ddt._ddt( "htmlarea.js","4404", "undo(): top" );
 
   if (this._undoPos > 0) 
     {
@@ -4417,7 +4423,7 @@ HTMLArea.prototype.undo = function()
 HTMLArea.prototype.redo = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4420", "redo(): top" );
+  this.ddt._ddt( "htmlarea.js","4423", "redo(): top" );
 
   if (this._undoPos < this._undoQueue.length - 1) 
     {
@@ -4436,7 +4442,7 @@ HTMLArea.prototype.redo = function()
 HTMLArea.prototype.disableToolbar = function(except)
   {
 
-  this.ddt._ddt( "htmlarea.js","4439", "disableToolbar(): top" );
+  this.ddt._ddt( "htmlarea.js","4442", "disableToolbar(): top" );
 
   if(typeof except == 'undefined')
     {
@@ -4468,7 +4474,7 @@ HTMLArea.prototype.disableToolbar = function(except)
 HTMLArea.prototype.enableToolbar = function()
   {
 
-  this.ddt._ddt( "htmlarea.js","4471", "enableToolbar(): top" );
+  this.ddt._ddt( "htmlarea.js","4474", "enableToolbar(): top" );
 
   this.updateToolbar();
   }
@@ -4485,7 +4491,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
   var text = (this._editMode == "textmode");
   var ancestors = null;
 
-  this.ddt._ddt( "htmlarea.js","4488", "updateToolbar(): top" );
+  this.ddt._ddt( "htmlarea.js","4491", "updateToolbar(): top" );
 
   if (!text) 
     {
@@ -4499,7 +4505,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
         if (!el) 
 		    {
 
-			 this.ddt._ddt( "htmlarea.js","4502", "updateToolbar(): INTERNAL ERROR" );
+			 this.ddt._ddt( "htmlarea.js","4505", "updateToolbar(): INTERNAL ERROR" );
 
           // hell knows why we get here; this
           // could be a classic example of why
@@ -4581,7 +4587,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
         if (!ancestors[k]) 
 		    {
 
-			 this.ddt._ddt( "htmlarea.js","4584", "updateToolbar(): INTERNAL ERROR" );
+			 this.ddt._ddt( "htmlarea.js","4587", "updateToolbar(): INTERNAL ERROR" );
 
           // the impossible really happens.
           continue;
@@ -4800,7 +4806,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
       plugin.onUpdateToolbar();
     }
 
-  this.ddt._ddt( "htmlarea.js","4803", "updateToolbar(): end" );
+  this.ddt._ddt( "htmlarea.js","4806", "updateToolbar(): end" );
 
   }  // end of updateToolbar()
 
@@ -4816,7 +4822,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
 HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted) 
   {
 
-  this.ddt._ddt( "htmlarea.js","4819", "insertNodeAtSelection(): top" );
+  this.ddt._ddt( "htmlarea.js","4822", "insertNodeAtSelection(): top" );
 
   if (!HTMLArea.is_ie) 
     {
@@ -4889,7 +4895,7 @@ HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
 HTMLArea.prototype.getParentElement = function(sel) 
   {
 
-  this.ddt._ddt( "htmlarea.js","4892", "getParentElement(): top" );
+  this.ddt._ddt( "htmlarea.js","4895", "getParentElement(): top" );
 
   if (typeof sel == 'undefined')
     {
@@ -4956,7 +4962,7 @@ HTMLArea.prototype.getParentElement = function(sel)
 HTMLArea.prototype.getAllAncestors = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","4959", "getAllAncestors(): top" );
+  this.ddt._ddt( "htmlarea.js","4962", "getAllAncestors(): top" );
 
   var p = this.getParentElement();
   var a = [];
@@ -4982,7 +4988,7 @@ HTMLArea.prototype.getAllAncestors = function()
 HTMLArea.prototype._getFirstAncestor = function(sel, types)
   {
 
-  this.ddt._ddt( "htmlarea.js","4985", "_getFirstAncestor(): top" );
+  this.ddt._ddt( "htmlarea.js","4988", "_getFirstAncestor(): top" );
 
   var prnt = this._activeElement(sel);
   if(prnt == null)
@@ -5037,12 +5043,12 @@ HTMLArea.prototype._getFirstAncestor = function(sel, types)
 HTMLArea.prototype._activeElement = function(sel)
   {
 
-  this.ddt._ddt( "htmlarea.js","5040", "_activeElement(): top" );
+  this.ddt._ddt( "htmlarea.js","5043", "_activeElement(): top" );
 
   if(sel == null) return null;
   if ( this._selectionEmpty(sel) ) 
     {
-	 this.ddt._ddt( "htmlarea.js", "5046", "_activeElement(): _selectionEmpty returned true. Returning null" );
+	 this.ddt._ddt( "htmlarea.js","5048", "_activeElement(): _selectionEmpty returned true. Returning null" );
     return null;
 	 }
 
@@ -5100,17 +5106,17 @@ HTMLArea.prototype._activeElement = function(sel)
     if(! sel.isCollapsed)
       {
 
-		this.ddt._ddt( "htmlarea.js","5099", "_activeElement(): selection is not collapsed" );
+		this.ddt._ddt( "htmlarea.js","5106", "_activeElement(): selection is not collapsed" );
 
       if(sel.anchorNode.nodeType == 1)
         {
-		  this.ddt._ddt( "htmlarea.js","5099", "_activeElement(): nodeType is 1. Returning sel.anchorNode" );
+		  this.ddt._ddt( "htmlarea.js","5110", "_activeElement(): nodeType is 1. Returning sel.anchorNode" );
 
         return sel.anchorNode;
         }
       }
 
-    this.ddt._ddt( "htmlarea.js","5099", "_activeElement(): bottom" );
+    this.ddt._ddt( "htmlarea.js","5116", "_activeElement(): bottom" );
 
     return null;
     }
@@ -5126,11 +5132,11 @@ HTMLArea.prototype._activeElement = function(sel)
 HTMLArea.prototype._selectionEmpty = function(sel)
   {
 
-  this.ddt._ddt( "htmlarea.js","5117", "_selectionEmpty(): top" );
+  this.ddt._ddt( "htmlarea.js","5132", "_selectionEmpty(): top" );
 
   if (!sel) 
     {
-	 this.ddt._ddt( "htmlarea.js","5131", "_selectionEmpty(): no selection" );
+	 this.ddt._ddt( "htmlarea.js","5136", "_selectionEmpty(): no selection" );
     return true;
 	 }
 
@@ -5140,11 +5146,11 @@ HTMLArea.prototype._selectionEmpty = function(sel)
     }
   else if(typeof sel.isCollapsed != 'undefined')
     {
-	 this.ddt._ddt( "htmlarea.js", "5141", "_selectionEmpty(): isCollapsed" );
+	 this.ddt._ddt( "htmlarea.js","5146", "_selectionEmpty(): isCollapsed" );
     return sel.isCollapsed;
     }
 
-  this.ddt._ddt( "htmlarea.js", "5141", "_selectionEmpty(): bottom. returning true." );
+  this.ddt._ddt( "htmlarea.js","5150", "_selectionEmpty(): bottom. returning true." );
 
   return true;
 
@@ -5159,7 +5165,7 @@ HTMLArea.prototype._selectionEmpty = function(sel)
 HTMLArea.prototype._getAncestorBlock = function(sel)
   {
 
-  this.ddt._ddt( "htmlarea.js","5143", "_getAncestorBlock(): top" );
+  this.ddt._ddt( "htmlarea.js","5165", "_getAncestorBlock(): top" );
 
   // Scan upwards to find a block level element that we can change or apply to
   var prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement : this._createRange(sel).commonAncestorContainer);
@@ -5216,7 +5222,7 @@ HTMLArea.prototype._getAncestorBlock = function(sel)
 HTMLArea.prototype._createImplicitBlock = function(type)
   {
 
-  this.ddt._ddt( "htmlarea.js","5200", "_createImplicitBlock(): top" );
+  this.ddt._ddt( "htmlarea.js","5222", "_createImplicitBlock(): top" );
 
   // expand it until we reach a block element in either direction
   // then wrap the selection in a block and return
@@ -5362,7 +5368,7 @@ HTMLArea.prototype._formatBlock = function(block_format)
 HTMLArea.prototype.selectNodeContents = function(node, pos) 
   {
 
-  this.ddt._ddt( "htmlarea.js","5346", "selectNodeContents(): top" );
+  this.ddt._ddt( "htmlarea.js","5368", "selectNodeContents(): top" );
 
   this.focusEditor();
   this.forceRedraw();
@@ -5423,7 +5429,7 @@ HTMLArea.prototype.selectNodeContents = function(node, pos)
 HTMLArea.prototype.insertHTML = function(html) 
   {
 
-  this.ddt._ddt( "htmlarea.js","5407", "insertHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","5429", "insertHTML(): top" );
 
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -5460,7 +5466,7 @@ HTMLArea.prototype.insertHTML = function(html)
 HTMLArea.prototype.surroundHTML = function(startTag, endTag) 
   {
 
-  this.ddt._ddt( "htmlarea.js","5444", "surroundHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","5466", "surroundHTML(): top" );
 
   var html = this.getSelectedHTML();
 
@@ -5477,7 +5483,7 @@ HTMLArea.prototype.surroundHTML = function(startTag, endTag)
 HTMLArea.prototype.getSelectedHTML = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","5461", "getSelectedHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","5483", "getSelectedHTML(): top" );
 
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -5637,7 +5643,7 @@ HTMLArea.prototype._createLink = function(link)
 HTMLArea.prototype._insertImage = function(image) 
   {
 
-  this.ddt._ddt( "htmlarea.js","5621", "_insertImage(): top" );
+  this.ddt._ddt( "htmlarea.js","5643", "_insertImage(): top" );
 
   var editor = this;	// for nested functions
   var outparam = null;
@@ -5720,7 +5726,7 @@ HTMLArea.prototype._insertImage = function(image)
 HTMLArea.prototype._insertTable = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","5704", "_insertTable(): top" );
+  this.ddt._ddt( "htmlarea.js","5726", "_insertTable(): top" );
 
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -5812,7 +5818,7 @@ HTMLArea.prototype._insertTable = function()
 HTMLArea.prototype._comboSelected = function(el, txt) 
   {
 
-  this.ddt._ddt( "htmlarea.js","5796", "_comboSelected(): top" );
+  this.ddt._ddt( "htmlarea.js","5818", "_comboSelected(): top" );
 
   this.focusEditor();
   var value = el.options[el.selectedIndex].value;
@@ -5852,7 +5858,7 @@ HTMLArea.prototype._comboSelected = function(el, txt)
 HTMLArea.prototype.execCommand = function(cmdID, UI, param) 
   {
 
-  this.ddt._ddt( "htmlarea.js","5836", "execCommand(): top with cmdId '" + cmdID + "'" );
+  this.ddt._ddt( "htmlarea.js","5858", "execCommand(): top with cmdId '" + cmdID + "'" );
 
   var editor = this;	// for nested functions
   this.focusEditor();
@@ -5983,7 +5989,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param)
 HTMLArea.prototype._editorEvent = function(ev) 
   {
 
-  this.ddt._ddt( "htmlarea.js","5967", "_editorEvent(): top with event type '" + ev.type + "'" );
+  this.ddt._ddt( "htmlarea.js","5989", "_editorEvent(): top with event type '" + ev.type + "'" );
 
   var editor = this;
   var keyEvent = (HTMLArea.is_ie && ev.type == "keydown") || (!HTMLArea.is_ie && ev.type == "keypress");
@@ -6008,7 +6014,7 @@ HTMLArea.prototype._editorEvent = function(ev)
   if (keyEvent)
     {
 
-    this.ddt._ddt( "htmlarea.js","5992", "_editorEvent(): keyEvent" );
+    this.ddt._ddt( "htmlarea.js","6014", "_editorEvent(): keyEvent" );
 
 	 // loop over all the plugins and pass this event to any that have 
 	 // an onKeyPress() method.
@@ -6026,12 +6032,12 @@ HTMLArea.prototype._editorEvent = function(ev)
       if (typeof plugin.onKeyPress == "function")
 		  {
 
-		  this.ddt._ddt( "htmlarea.js","6010", "_editorEvent(): keyEvent - invoking onKeyPress method in plugin '" + ( plugin.name ? plugin.name : "unknown" ) + "'" );
+		  this.ddt._ddt( "htmlarea.js","6032", "_editorEvent(): keyEvent - invoking onKeyPress method in plugin '" + ( plugin.name ? plugin.name : "unknown" ) + "'" );
 																																								 
         if (plugin.onKeyPress(ev))
           {
 
-			 this.ddt._ddt( "htmlarea.js","6015", "_editorEvent(): keyEvent - onKeyPress() returned false. Returning false" );
+			 this.ddt._ddt( "htmlarea.js","6037", "_editorEvent(): keyEvent - onKeyPress() returned false. Returning false" );
           return false;
 			 }
 
@@ -6043,7 +6049,7 @@ HTMLArea.prototype._editorEvent = function(ev)
   if (keyEvent && ev.ctrlKey && !ev.altKey)
     {
 
-	 this.ddt._ddt( "htmlarea.js","6027", "_editorEvent(): control key key event" );
+	 this.ddt._ddt( "htmlarea.js","6049", "_editorEvent(): control key key event" );
 
     var sel = null;
     var range = null;
@@ -6054,7 +6060,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 	   {
       case 'a':
 
-		  this.ddt._ddt( "htmlarea.js","6038", "_editorEvent(): cntrl-a select all" );
+		  this.ddt._ddt( "htmlarea.js","6060", "_editorEvent(): cntrl-a select all" );
 
         if (!HTMLArea.is_ie) 
 		    {
@@ -6073,67 +6079,67 @@ HTMLArea.prototype._editorEvent = function(ev)
 
       case 'b': 
 		  
-		  this.ddt._ddt( "htmlarea.js","6057", "_editorEvent(): cntrl-b bold" );
+		  this.ddt._ddt( "htmlarea.js","6079", "_editorEvent(): cntrl-b bold" );
 		  cmd = "bold"; 
 		  break;
 
       case 'i': 
 		  
-		  this.ddt._ddt( "htmlarea.js","6063", "_editorEvent(): cntrl-i italics" );
+		  this.ddt._ddt( "htmlarea.js","6085", "_editorEvent(): cntrl-i italics" );
 		  cmd = "italic"; 
 		  break;
 
       case 'u': 
 		
-		  this.ddt._ddt( "htmlarea.js","6069", "_editorEvent(): cntrl-u underline" );
+		  this.ddt._ddt( "htmlarea.js","6091", "_editorEvent(): cntrl-u underline" );
 		  cmd = "underline"; 
 		  break;
 
       case 's': 
 		
-		  this.ddt._ddt( "htmlarea.js","6075", "_editorEvent(): cntrl-s strikethrough" );
+		  this.ddt._ddt( "htmlarea.js","6097", "_editorEvent(): cntrl-s strikethrough" );
 		  cmd = "strikethrough"; 
 		  break;
 
       case 'l': 
 		
-		  this.ddt._ddt( "htmlarea.js","6081", "_editorEvent(): cntrl-l justify left" );
+		  this.ddt._ddt( "htmlarea.js","6103", "_editorEvent(): cntrl-l justify left" );
 		  cmd = "justifyleft"; 
 		  break;
 
       case 'e': 
 		  
-		  this.ddt._ddt( "htmlarea.js","6087", "_editorEvent(): cntrl-e justify center" );
+		  this.ddt._ddt( "htmlarea.js","6109", "_editorEvent(): cntrl-e justify center" );
 		  cmd = "justifycenter"; 
 		  break;
 
       case 'r': 
 		
-		  this.ddt._ddt( "htmlarea.js","6093", "_editorEvent(): cntrl-r justify right" );
+		  this.ddt._ddt( "htmlarea.js","6115", "_editorEvent(): cntrl-r justify right" );
 		  cmd = "justifyright"; 
 		  break;
 
       case 'j': 
 		
-		  this.ddt._ddt( "htmlarea.js","6099", "_editorEvent(): cntrl-j justify full" );
+		  this.ddt._ddt( "htmlarea.js","6121", "_editorEvent(): cntrl-j justify full" );
 		  cmd = "justifyfull"; 
 		  break;
 
       case 'z': 
 		
-		  this.ddt._ddt( "htmlarea.js","6105", "_editorEvent(): cntrl-z undo" );
+		  this.ddt._ddt( "htmlarea.js","6127", "_editorEvent(): cntrl-z undo" );
 		  cmd = "undo"; 
 		  break;
 
       case 'y': 
 		
-		  this.ddt._ddt( "htmlarea.js","6111", "_editorEvent(): cntrl-y redo" );
+		  this.ddt._ddt( "htmlarea.js","6133", "_editorEvent(): cntrl-y redo" );
 		  cmd = "redo"; 
 		  break;
 
       case 'v': 
 		
-		  this.ddt._ddt( "htmlarea.js","6117", "_editorEvent(): cntrl-v paste" );
+		  this.ddt._ddt( "htmlarea.js","6139", "_editorEvent(): cntrl-v paste" );
 		  if (HTMLArea.is_ie || editor.config.htmlareaPaste) 
 		    { 
 			 cmd = "paste"; 
@@ -6143,14 +6149,14 @@ HTMLArea.prototype._editorEvent = function(ev)
       case 'n': 
 		
 		  
-		  this.ddt._ddt( "htmlarea.js","6127", "_editorEvent(): cntrl-n format block" );
+		  this.ddt._ddt( "htmlarea.js","6149", "_editorEvent(): cntrl-n format block" );
 		  cmd = "formatblock"; 
 		  value = HTMLArea.is_ie ? "<p>" : "p"; 
 		  break;
 
       case '0': 
 		
-		  this.ddt._ddt( "htmlarea.js","6134", "_editorEvent(): cntrl-O kill word" );
+		  this.ddt._ddt( "htmlarea.js","6156", "_editorEvent(): cntrl-O kill word" );
 		  cmd = "killword"; 
 		  break;
 
@@ -6162,7 +6168,7 @@ HTMLArea.prototype._editorEvent = function(ev)
       case '5':
       case '6':
 
-		  this.ddt._ddt( "htmlarea.js","6146", "_editorEvent(): cntrl-[1-6] heading" );
+		  this.ddt._ddt( "htmlarea.js","6168", "_editorEvent(): cntrl-[1-6] heading" );
         cmd = "formatblock";
         value = "h" + key;
         if (HTMLArea.is_ie)
@@ -6173,7 +6179,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 
     if (cmd) 
 	   {
-      this.ddt._ddt( "htmlarea.js","6157", "_editorEvent(): executing simple command '" + cmd + "'" );
+      this.ddt._ddt( "htmlarea.js","6179", "_editorEvent(): executing simple command '" + cmd + "'" );
       // execute simple command
       this.execCommand(cmd, false, value);
       HTMLArea._stopEvent(ev);
@@ -6236,7 +6242,7 @@ HTMLArea.prototype._editorEvent = function(ev)
         case 32:
           {
 
-			 this.ddt._ddt( "htmlarea.js","6220", "_editorEvent(): entered a space" );
+			 this.ddt._ddt( "htmlarea.js","6242", "_editorEvent(): entered a space" );
 
           if(s && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0)
             {
@@ -6279,7 +6285,7 @@ HTMLArea.prototype._editorEvent = function(ev)
         default :
           {
 
-			 this.ddt._ddt( "htmlarea.js","6263", "_editorEvent(): keycode is '" + ev.keyCode + "' which (normal key) is '" + ev.which + "'" );
+			 this.ddt._ddt( "htmlarea.js","6285", "_editorEvent(): keycode is '" + ev.keyCode + "' which (normal key) is '" + ev.which + "'" );
 
 			 // is it an escape character or ...
 
@@ -6297,7 +6303,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 
 				// backspace or period? 
 
-            this.ddt._ddt( "htmlarea.js","6281", "_editorEvent(): normal key or backspace or period" );
+            this.ddt._ddt( "htmlarea.js","6303", "_editorEvent(): normal key or backspace or period" );
 
             this._unlinkOnUndo = false;
 
@@ -6308,7 +6314,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 
               if (!a) 
 				    {
-					 this.ddt._ddt( "htmlarea.js","6292", "_editorEvent(): not an anchor" );
+					 this.ddt._ddt( "htmlarea.js","6314", "_editorEvent(): not an anchor" );
 					 break; // not an anchor
 					 }
 
@@ -6358,7 +6364,7 @@ HTMLArea.prototype._editorEvent = function(ev)
       {
       case 13: // KEY enter
 
-		 this.ddt._ddt( "htmlarea.js","6342", "_editorEvent(): enter key handling" );
+		 this.ddt._ddt( "htmlarea.js","6364", "_editorEvent(): enter key handling" );
 
         if (HTMLArea.is_gecko && !ev.shiftKey && this.config.mozParaHandler == 'dirty' )
           {
@@ -6370,7 +6376,7 @@ HTMLArea.prototype._editorEvent = function(ev)
       case 8: // KEY backspace
       case 46: // KEY delete
 
-		 this.ddt._ddt( "htmlarea.js","6354", "_editorEvent(): delete or backspace handling" );
+		 this.ddt._ddt( "htmlarea.js","6376", "_editorEvent(): delete or backspace handling" );
 
         if (HTMLArea.is_gecko && !ev.shiftKey) 
 		    {
@@ -6398,7 +6404,7 @@ HTMLArea.prototype._editorEvent = function(ev)
     editor._timerToolbar = null;
     }, 100);
 
-  this.ddt._ddt( "htmlarea.js","6382", "_editorEvent(): bottom" );
+  this.ddt._ddt( "htmlarea.js","6404", "_editorEvent(): bottom" );
 
   };  // end of _editorEvent()
 
@@ -6410,7 +6416,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 
 HTMLArea.prototype.convertNode = function(el, newTagName) 
   {
-  this.ddt._ddt( "htmlarea.js","6394", "convertNode(): top" );
+  this.ddt._ddt( "htmlarea.js","6416", "convertNode(): top" );
 
   var newel = this._doc.createElement(newTagName);
   while (el.firstChild)
@@ -6456,7 +6462,7 @@ HTMLArea.prototype.ie_checkBackspace = function()
 HTMLArea.prototype.dom_checkBackspace = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","6440", "dom_checkBackspace(): top" );
+  this.ddt._ddt( "htmlarea.js","6462", "dom_checkBackspace(): top" );
 
   var self = this;
 
@@ -6723,7 +6729,7 @@ HTMLArea.prototype.dom_checkInsertP = function()
 HTMLArea.prototype.scrollToElement = function(e)
   {
 
-  this.ddt._ddt( "htmlarea.js","6707", "scrollToElement(): top" );
+  this.ddt._ddt( "htmlarea.js","6729", "scrollToElement(): top" );
 
   if(HTMLArea.is_gecko)
     {
@@ -6758,6 +6764,9 @@ HTMLArea.prototype.scrollToElement = function(e)
 
 HTMLArea.prototype.getHTML = function() 
   {
+
+  this.ddt._ddt( "htmlarea.js", "6768", "getHTML() - prototype version - top" );
+
   var html = '';
   switch (this._editMode) 
     {
@@ -6796,7 +6805,7 @@ HTMLArea.prototype.getHTML = function()
 HTMLArea.prototype.outwardHtml = function(html)
   {
 
-  this.ddt._ddt( "htmlarea.js","6780", "outwardHtml(): top" );
+  this.ddt._ddt( "htmlarea.js","6802", "outwardHtml(): top" );
 
   html = html.replace(/<(\/?)b(\s|>|\/)/ig, "<$1strong$2");
   html = html.replace(/<(\/?)i(\s|>|\/)/ig, "<$1em$2");
@@ -6829,7 +6838,7 @@ HTMLArea.prototype.outwardHtml = function(html)
 HTMLArea.prototype.inwardHtml = function(html)
   {
 
-  this.ddt._ddt( "htmlarea.js","6813", "inwardHtml(): top" );
+  this.ddt._ddt( "htmlarea.js","6835", "inwardHtml(): top" );
 
   // Midas uses b and i instead of strong and em, um, hello,
   // mozilla, this is the 21st century calling!
@@ -6863,7 +6872,7 @@ HTMLArea.prototype.inwardHtml = function(html)
 HTMLArea.prototype.outwardSpecialReplacements = function(html)
   {
 
-  this.ddt._ddt( "htmlarea.js","6847", "outwardSpecialReplacements(): top" );
+  this.ddt._ddt( "htmlarea.js","6869", "outwardSpecialReplacements(): top" );
 
   for(var i in this.config.specialReplacements)
     {
@@ -6887,7 +6896,7 @@ HTMLArea.prototype.outwardSpecialReplacements = function(html)
 
 HTMLArea.prototype.inwardSpecialReplacements = function(html)
   {
-  this.ddt._ddt( "htmlarea.js","6871", "inwardSpecialReplacements(): top" );
+  this.ddt._ddt( "htmlarea.js","6893", "inwardSpecialReplacements(): top" );
 
   // alert("inward");
   for(var i in this.config.specialReplacements)
@@ -6915,7 +6924,7 @@ HTMLArea.prototype.inwardSpecialReplacements = function(html)
 HTMLArea.prototype.fixRelativeLinks = function(html)
   {
 
-  this.ddt._ddt( "htmlarea.js","6899", "fixRelativeLinks(): top" );
+  this.ddt._ddt( "htmlarea.js","6921", "fixRelativeLinks(): top" );
 
   if (typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors)
     {
@@ -6961,7 +6970,7 @@ HTMLArea.prototype.fixRelativeLinks = function(html)
 HTMLArea.prototype.stripBaseURL = function(string)  
   {
 
-  this.ddt._ddt( "htmlarea.js","6945", "stripBaseURL(): top" );
+  this.ddt._ddt( "htmlarea.js","6967", "stripBaseURL(): top" );
 
   var baseurl = this.config.baseURL;
 
@@ -6989,7 +6998,7 @@ HTMLArea.prototype.stripBaseURL = function(string)
 HTMLArea.prototype.getInnerHTML = function() 
   {
 
-  this.ddt._ddt( "htmlarea.js","6973", "getInnerHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","6995", "getInnerHTML(): top" );
 
   if(!this._doc.body) return '';
   switch (this._editMode) 
@@ -7026,7 +7035,7 @@ HTMLArea.prototype.getInnerHTML = function()
 HTMLArea.prototype.setHTML = function(html) 
   {
   
-  this.ddt._ddt( "htmlarea.js","7010", "setHTML(): top" );
+  this.ddt._ddt( "htmlarea.js","7032", "setHTML(): top" );
 
   switch (this._editMode) 
     {
@@ -7098,7 +7107,7 @@ HTMLArea.prototype._getSelection = function()
 HTMLArea.prototype._createRange = function(sel) 
   {
 
-  this.ddt._ddt( "htmlarea.js","7082", "_createRange(): top" );
+  this.ddt._ddt( "htmlarea.js","7104", "_createRange(): top" );
 
   if (HTMLArea.is_ie) 
     {
@@ -7134,7 +7143,7 @@ HTMLArea.prototype._createRange = function(sel)
 HTMLArea.prototype.notifyOn = function(ev, fn)
   {
 
-  this.ddt._ddt( "htmlarea.js","7118", "notifyOn(): top" );
+  this.ddt._ddt( "htmlarea.js","7140", "notifyOn(): top" );
 
   if(typeof this._notifyListeners[ev] == 'undefined')
     {
@@ -7154,7 +7163,7 @@ HTMLArea.prototype.notifyOn = function(ev, fn)
 HTMLArea.prototype.notifyOf = function(ev, args)
   {
 
-  this.ddt._ddt( "htmlarea.js","7138", "notifyOf(): top" );
+  this.ddt._ddt( "htmlarea.js","7160", "notifyOf(): top" );
 
   if(this._notifyListeners[ev])
     {
@@ -7181,7 +7190,7 @@ HTMLArea.prototype.notifyOf = function(ev, args)
 HTMLArea.prototype._popupDialog = function(url, action, init) 
   {
 
-  this.ddt._ddt( "htmlarea.js","7165", "_popupDialog(): top with url '" + url + "' action '" + action + "'" );
+  this.ddt._ddt( "htmlarea.js","7187", "_popupDialog(): top with url '" + url + "' action '" + action + "'" );
 
   Dialog(this.popupURL(url), action, init);
   };
@@ -7274,7 +7283,7 @@ HTMLArea.prototype._toggleBorders = function()
 HTMLArea.prototype.registerPlugins = function(plugin_names) 
   {
 
-  this.ddt._ddt( "htmlarea.js","7258", "registerPlugins(): top" );
+  this.ddt._ddt( "htmlarea.js","7280", "registerPlugins(): top" );
 
   if(plugin_names)
     {

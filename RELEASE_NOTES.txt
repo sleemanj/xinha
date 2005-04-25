@@ -13,6 +13,10 @@ CHANGES:
   improvement which makes Xinha with all debugging messages enabled
   useable. 
 
+. a separate popup trace window is opened for each domain to avoid:
+
+  Error: uncaught exception: Permission denied to get property Window.DDT_STATUS
+
 . the debug buttons have been removed.
 
 . the ddtpreproc.php script has been completed which recurses through
@@ -21,9 +25,5 @@ CHANGES:
 
 BUGS/ISSUES
 
-. under FireFox the popup debugging window is not well formed and produces
-  an error.
-
-. there is a javascript exception in the popup trace window support.
-
 . this code has not been tested using MSIE.
+
