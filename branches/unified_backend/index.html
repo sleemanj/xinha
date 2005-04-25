@@ -61,22 +61,44 @@ h2
 <h1>Xinha</h1>
 <p>
 Xinha (pronounced like the <a class="ext-link" title="http://images.google.co.nz/images?q=xena&amp;hl=en&amp;btnG=Google+Search" href="http://images.google.co.nz/images?q=xena&amp;hl=en&amp;btnG=Google+Search">Warrior Princess</a>) stands for &#34;Xinha is not htmlarea&#34;.  It began as a stop-gap fork of the <a class="ext-link" title="http://InteractiveTools.com/" href="http://InteractiveTools.com/">InteractiveTools.Com</a> <a class="ext-link" title="http://www.htmlarea.com/" href="http://www.htmlarea.com/">htmlArea</a> WYSIWYG editor, but due to popular demand it has spawned into Xinha, a generally better version of htmlArea version 3, with a much cooler name.  See the <a href="http://xinha.python-hosting.com/wiki/Examples">Examples</a> to have a play with the latest release of Xinha.
+<br><br>
+The main branch of Xinha is maintained by James Sleeman of <a href="http://code.gogo.co.nz">Gogo Code</a>. 
 
 </p>
-<h2>Unified Backend Branch - snapshot of 2005-04-15</h2>
+<h2>Unified Backend Branch - snapshot of 2005-04-24</h2>
 
 <p>
-This version of Xinha is known as the unified backend branch. The purpose of this 
-branch is modify the standard Xinha distribution such that all client to server requests
-are routed through a single unified backend script. This should lead to a more 
-maintainable codebase. 
+This version of Xinha is known as the unified backend branch. This work is
+sponsored by <a href="http://www.dtlink.com">DTLink, LLC</a> of College Park, Maryland, 
+USA and is maintained by Yermo Lamers. These changes are, of course, released under the 
+same terms as Xinha itself.<br><br>
+
+The original purpose of this branch was to modify the standard Xinha distribution such 
+that all client to server requests are routed through a single unified backend script. 
+As part of that effort alot of cleanup work has been done. Changes include reorganizing 
+the codebase, adding JSDoc headers, adding an extensive debugging trace system, 
+fixing various bugs and adding a number of management scripts.
+<br>
+<br>
+If you have questions or need help please post in the Xinha discussion 
+forum. Or you can contact me directly via:<br><br>
+
+<a href="http://www.formvista.com/contact.html">http://www.formvista.com/contact.html</a>
+
 </p>
 
 <p>
 For more information see the README.txt file.
 </p>
 
-<ul><li><a href="./docs/index.html">Programmers Documenation</a></li></ul>
+<h2>Examples in the local examples directory</h2>
+<b>(Turn off Popup Blockers to see the debugging trace window.)</b>
+<ul><li><a href="./examples/full_example.html">Full Featured Demo with menu to choose plugins</a></li>
+<li><a href="./examples/simple_example.html">Minimal Simple Demo</a></li>
+</ul>
+
+<h2>Programmers Documentation</h2>
+<ul><li><a href="./docs/index.html">Programmers Documentation</a></li></ul>
 
 <h2>Status - only partially functional.</h2>
 <ul>
@@ -93,14 +115,7 @@ For more information see the README.txt file.
 <li>trace messages in plugins</li>
 <li>debug trace message panel - to turn trace messages on/off on a plugin by plugin basis</li>
 <li>buildruntime.php script to strip out comments and trace messages</li>
-<li>ddtpreproc.php to process js files to include line numbers and filenames</li>
 <li>fix enterparagraph</li>
-</ul>
-
-
-<h2>Examples in the local examples directory</h2>
-<ul><li><a href="./examples/full_example.html">Full Featured Demo with menu to choose plugins</a></li>
-<li><a href="./examples/simple_example.html">Simple Demo with just 2 plugins.</a></li>
 </ul>
 
 <h2>On the Xinha.org Website:</h2>
