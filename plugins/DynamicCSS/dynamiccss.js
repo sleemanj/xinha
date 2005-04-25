@@ -20,7 +20,7 @@ function DynamicCSS(editor, args) {
 
   var css_class = {
     id         : "DynamicCSS-class",
-    tooltip       : this._lc("Choose stylesheet", "DynamicCSS"),
+    tooltip       : this._lc("Choose stylesheet"),
     options    : {"":""},
     action     : function(editor) { self.onSelect(editor, this); },
     refresh    : function(editor) { self.updateValue(editor, this); }
@@ -94,8 +94,8 @@ DynamicCSS.applyCSSRule=function(cssRules,cssArray){
                     }
                     else{
                         className='none';
-                        if(tagName=='all') cssName=this._lc("Default", "DynamicCSS");
-                        else cssName='<'+this._lc("Default", "DynamicCSS")+'>';
+                        if(tagName=='all') cssName=this._lc("Default");
+                        else cssName='<'+this._lc("Default")+'>';
                     }
                     cssArray[tagName][className]=cssName;
                     DynamicCSS.cssLength++;
@@ -194,7 +194,7 @@ DynamicCSS.prototype.updateValue = function(editor, obj) {
                 select.options[select.length-1] = null;
             }
 
-            select.options[0]=new Option(this._lc("Default", "DynamicCSS"),'none');
+            select.options[0]=new Option(this._lc("Default"),'none');
             if(cssArray){
                 // style class only allowed if parent tag is not body or editor is in fullpage mode
                 if(tagName!='body' || editor.config.fullPage){
@@ -228,7 +228,7 @@ DynamicCSS.prototype.updateValue = function(editor, obj) {
                     }
                 }
                 if(select.selectedIndex == 0){
-                    select.options[select.length]=new Option(this._lc("Undefined", "DynamicCSS"),className);
+                    select.options[select.length]=new Option(this._lc("Undefined"),className);
                     select.selectedIndex=select.length-1;
                 }
             }
