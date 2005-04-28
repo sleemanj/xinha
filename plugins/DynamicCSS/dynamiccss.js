@@ -94,8 +94,8 @@ DynamicCSS.applyCSSRule=function(cssRules,cssArray){
                     }
                     else{
                         className='none';
-                        if(tagName=='all') cssName=this._lc("Default");
-                        else cssName='<'+this._lc("Default")+'>';
+                        if(tagName=='all') cssName=HTMLArea._lc("Default", 'DynamicCSS');
+                        else cssName='<'+HTMLArea._lc("Default", 'DynamicCSS')+'>';
                     }
                     cssArray[tagName][className]=cssName;
                     DynamicCSS.cssLength++;
