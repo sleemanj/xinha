@@ -2798,7 +2798,7 @@ HTMLArea.prototype._createLink = function(link) {
       compare = range.compareBoundaryPoints(range.START_TO_END, range);
     }
     if (compare == 0) {
-      alert("You need to select some text before creating a link");
+      alert(HTMLArea._lc("You need to select some text before creating a link"));
       return;
     }
     outparam = {
@@ -4016,7 +4016,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor){
         return HTMLArea.getHTMLWrapper(root,outputRoot,editor);
     }
     catch(e){
-        alert('Your Document is not well formed. Check JavaScript console for details.');
+        alert(HTMLArea._lc('Your Document is not well formed. Check JavaScript console for details.'));
         return editor._iframe.contentWindow.document.body.innerHTML;
     }
 }
