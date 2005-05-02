@@ -12,6 +12,7 @@ function _CloseOnEsc() {
 }
 
 function Init() {                                                       // run on page load
+  __dlg_translate('HTMLArea'); // Translate the text in this dialog.
   __dlg_init();    // <!-- this can be found in popup.js -->
   document.body.onkeypress = _CloseOnEsc;
 
