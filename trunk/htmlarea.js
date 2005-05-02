@@ -175,8 +175,6 @@ HTMLArea.Config = function () {
   this.width = "toolbar";
   this.height = "auto";
 
-  //language of the editor
-  this.lang = "en";
 
   // enable creation of a status bar?
   this.statusBar = true;
