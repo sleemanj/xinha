@@ -37,14 +37,14 @@ function ListType(editor) {
 	for (i = 0; !found && i < toolbar.length; ++i) {
 		a = toolbar[i];
 		for (j = 0; j < a.length; ++j) {
-			if (a[j] == "insertunorderedlist") {
+			if (a[j] == "insertorderedlist") {
 				found = true;
 				break;
 			}
 		}
 	}
 	if (found)
-		a.splice(j, 0, "space", "ListType", "space");
+		a.splice(j+1, 0, "space", "ListType", "space");
 };
 
 ListType._pluginInfo = {
