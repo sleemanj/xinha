@@ -13,5 +13,4 @@
 //       that states what encoding is necessary.)
 
 {
-  "Styles": "Styles"
 }
