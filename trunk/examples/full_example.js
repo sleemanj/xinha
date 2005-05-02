@@ -14,6 +14,7 @@
   if(window.parent && window.parent != window)
   {
     var f = window.parent.menu.document.forms[0];
+    _editor_lang = f.lang.value;
     num = parseInt(f.num.value);
     if(isNaN(num))
     {
