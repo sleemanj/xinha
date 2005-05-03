@@ -2887,6 +2887,10 @@ HTMLArea.prototype._insertImage = function(image) {
         }
       } else {
         img = range.startContainer.previousSibling;
+        if (!img.tagName) {
+          // if the cursor is at the beginning of the document
+          img = range.startContainer.firstChild;
+        }
       }
     } else {
       img.src = param.f_url;
