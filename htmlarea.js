@@ -4606,7 +4606,15 @@ HTMLArea._lc = function(string, context)
 
   if(typeof HTMLArea._lc_catalog[context][string] == 'undefined')
   {
-    return string; // Indicate it's untranslated
+    if(context=='HTMLArea')
+    {
+      return string; // Indicate it's untranslated
+    }
+    else
+    {
+      //if string is not found and context is not HTMLArea try if it is in HTMLArea
+      return HTMLArea._lc(string, 'HTMLArea');
+    }
   }
   else
   {
