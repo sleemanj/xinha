@@ -2997,22 +2997,23 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
   var editor = this;	// for nested functions
   this.focusEditor();
   cmdID = cmdID.toLowerCase();
-  if (HTMLArea.is_gecko) try { this._doc.execCommand('useCSS', false, true); } catch (e) {};
+  if (HTMLArea.is_gecko) try { this._doc.execCommand('useCSS', false, true); } catch (e) {}; //switch useCSS off (true=off)
   switch (cmdID) {
-      case "htmlmode" : this.setMode(); break;
-      case "hilitecolor":
-    (HTMLArea.is_ie) && (cmdID = "backcolor");
-      case "forecolor":
-    this._popupDialog(editor.config.URIs["select_color"], function(color) {
-      if (color) { // selection not canceled
-        editor._doc.execCommand(cmdID, false, "#" + color);
-      }
-    }, HTMLArea._colorToRgb(this._doc.queryCommandValue(cmdID)));
-    break;
-      case "createlink":
-    this._createLink();
-    break;
-      case "popupeditor":
+    case "htmlmode" : this.setMode(); break;
+    case "hilitecolor":
+      (HTMLArea.is_ie) && (cmdID = "backcolor");          
+      if (HTMLArea.is_gecko) try { editor._doc.execCommand('useCSS', false, false); } catch (e) {};//switch on useCSS (mozilla bug #279330)
+    case "forecolor":
+      this._popupDialog(editor.config.URIs["select_color"], function(color) {
+        if (color) { // selection not canceled
+          editor._doc.execCommand(cmdID, false, "#" + color);
+        }
+      }, HTMLArea._colorToRgb(this._doc.queryCommandValue(cmdID)));
+      break;
+    case "createlink":
+      this._createLink();
+      break;
+    case "popupeditor":
     // this object will be passed to the newly opened window
     HTMLArea._object = this;
     var win;
