@@ -60,27 +60,30 @@ InsertAnchor.prototype.onGenerate = function() {
   }
 }
 
-InsertAnchor.prototype.buttonPress = function(editor, id) {
-  var anchor;
-  anchor = prompt(this._lc("Anchor name"), "");
-  if (anchor == "" || anchor == null) {
-    return;
-  }
-
-  try {
-    var doc = editor._doc;
-    var alink = doc.createElement("a");
-    alink.id = anchor;
-    alink.name = anchor;
-    alink.title = anchor;
-    alink.className = "anchor";
-    if (HTMLArea.is_ie) {
-      var sel = editor._getSelection();
-      var range = editor._createRange(sel);
-      range.pasteHTML(alink.outerHTML);
-    } else {
-      editor.insertNodeAtSelection(alink);
-    }
-  }
-  catch (e) { }
+InsertAnchor.prototype.buttonPress = function(editor) {
+  var outparam = null;
+  editor._popupDialog( "plugin://InsertAnchor/insert_anchor", function( param ) {
+                if ( param ) {
+            var anchor = param["name"];  
+      if (anchor == "" || anchor == null) {
+        return;
+      }
+      try {
+        var doc = editor._doc;
+        var alink = doc.createElement("a");
+        alink.id = anchor;
+        alink.name = anchor;
+        alink.title = anchor;
+        alink.className = "anchor";
+        if (HTMLArea.is_ie) {
+          var sel = editor._getSelection();
+          var range = editor._createRange(sel);
+          range.pasteHTML(alink.outerHTML);
+        } else {
+          editor.insertNodeAtSelection(alink);
+        }
+      }
+      catch (e) { }
+    }  
+  }, outparam);
 }
