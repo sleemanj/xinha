@@ -31,7 +31,11 @@
 		__dlg_init();
 
 		__dlg_translate('ImageManager');
-
+        
+        // This is so the translated string shows up in the drop down.
+        document.getElementById("f_align").selectedIndex = 1;
+        document.getElementById("f_align").selectedIndex = 0;
+        
 		var uploadForm = document.getElementById('uploadForm');
 		if(uploadForm) uploadForm.target = 'imgManager';
 

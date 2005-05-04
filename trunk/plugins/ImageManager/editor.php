@@ -20,11 +20,11 @@ $editor = new ImageEditor($manager);
 <head>
 	<title></title>
 <script type="text/javascript">
-_backend_url = "<? print $IMConfig['backend_url']; ?>";
+_backend_url = "<?php print $IMConfig['backend_url']; ?>";
 </script>
-	<link href="<? print $IMConfig['base_url'];?>assets/editor.css" rel="stylesheet" type="text/css" />	
-<script type="text/javascript" src="<? print $IMConfig['base_url'];?>assets/slider.js"></script>
-<script type="text/javascript" src="<? print $IMConfig['base_url'];?>assets/popup.js"></script>
+	<link href="<?php print $IMConfig['base_url'];?>assets/editor.css" rel="stylesheet" type="text/css" />	
+<script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/slider.js"></script>
+<script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/popup.js"></script>
 <script type="text/javascript">
 /*<![CDATA[*/
 	window.resizeTo(673, 531);
@@ -33,12 +33,12 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 		HTMLArea = window.opener.HTMLArea;
 /*]]>*/
 </script>
-<script type="text/javascript" src="<? print $IMConfig['base_url'];?>assets/editor.js"></script>
+<script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/editor.js"></script>
 </head>
 
 <body>
 <div id="indicator">
-<img src="<? print $IMConfig['base_url'];?>img/spacer.gif" id="indicator_image" height="20" width="20" alt="" />
+<img src="<?php print $IMConfig['base_url'];?>img/spacer.gif" id="indicator_image" height="20" width="20" alt="" />
 </div>
 <div id="tools">
 	<div id="tools_crop" style="display:none;">
@@ -47,22 +47,22 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 			<label for="cy">Start Y:</label><input type="text" id="cy" class="textInput" onchange="updateMarker('crop')"/>
 			<label for="cw">Width:</label><input type="text" id="cw" class="textInput" onchange="updateMarker('crop')"/>
 			<label for="ch">Height:</label><input type="text" id="ch" class="textInput" onchange="updateMarker('crop')"/>
-			<img src="<? print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
+			<img src="<?php print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
 		</div>	
-		<a href="javascript: editor.doSubmit('crop');" class="buttons" title="OK"><img src="<? print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<? print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
+		<a href="javascript: editor.doSubmit('crop');" class="buttons" title="OK"><img src="<?php print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<?php print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
 	</div>	
 	<div id="tools_scale" style="display:none;">
 		<div id="tool_inputs">
 			<label for="sw">Width:</label><input type="text" id="sw" class="textInput" onchange="checkConstrains('width')"/>
-			<a href="javascript:toggleConstraints();" title="Lock"><img src="<? print $IMConfig['base_url'];?>img/islocked2.gif" id="scaleConstImg" height="14" width="8" alt="Lock" class="div" /></a><label for="sh">Height:</label>
+			<a href="javascript:toggleConstraints();" title="Lock"><img src="<?php print $IMConfig['base_url'];?>img/islocked2.gif" id="scaleConstImg" height="14" width="8" alt="Lock" class="div" /></a><label for="sh">Height:</label>
 			<input type="text" id="sh" class="textInput" onchange="checkConstrains('height')"/>
 			<input type="checkbox" id="constProp" value="1" checked="checked" onclick="toggleConstraints()"/>
 			<label for="constProp">Constrain Proportions</label>
-			<img src="<? print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
+			<img src="<?php print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
 		</div>	
-		<a href="javascript: editor.doSubmit('scale');" class="buttons" title="OK"><img src="<? print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<? print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
+		<a href="javascript: editor.doSubmit('scale');" class="buttons" title="OK"><img src="<?php print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<?php print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
 	</div>	
 	<div id="tools_rotate" style="display:none;">
 		<div id="tool_inputs">
@@ -81,28 +81,28 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
               <option value="-90">Rotate 90 &deg; CCW</option>
          </select>
 			<label for="ra">Angle:</label><input type="text" id="ra" class="textInput" />
-			<img src="<? print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
+			<img src="<?php print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
 		</div>	
-		<a href="javascript: editor.doSubmit('rotate');" class="buttons" title="OK"><img src="<? print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<? print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
+		<a href="javascript: editor.doSubmit('rotate');" class="buttons" title="OK"><img src="<?php print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<?php print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
 	</div>		
 	<div id="tools_measure" style="display:none;">
 		<div id="tool_inputs">
 			<label>X:</label><input type="text" class="measureStats" id="sx" />
 			<label>Y:</label><input type="text" class="measureStats" id="sy" />
-			<img src="<? print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
+			<img src="<?php print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
 			<label>W:</label><input type="text" class="measureStats" id="mw" />
 			<label>H:</label><input type="text" class="measureStats" id="mh" />
-			<img src="<? print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
+			<img src="<?php print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
 			<label>A:</label><input type="text" class="measureStats" id="ma" />		
 			<label>D:</label><input type="text" class="measureStats" id="md" />		
-			<img src="<? print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
+			<img src="<?php print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
 			<button type="button" onclick="editor.reset();" >Clear</button>
 		</div>	
 	</div>
 	<div id="tools_save" style="display:none;">
 		<div id="tool_inputs">
-			<label for="save_filename">Filename:</label><input type="text" id="save_filename" value="<? echo $editor->getDefaultSaveFile();?>"/>
+			<label for="save_filename">Filename:</label><input type="text" id="save_filename" value="<?php echo $editor->getDefaultSaveFile();?>"/>
 			<select name="format" id="save_format" style="margin-left: 10px; vertical-align: middle;" onchange="updateFormat(this)">
             <option value="" selected>Image Format</option>
             <option value="">---------------------</option>
@@ -110,38 +110,38 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
             <option value="jpeg,60">JPEG Medium</option>
             <option value="jpeg,35">JPEG Low</option>
             <option value="png">PNG</option>
-			<? if($editor->isGDGIFAble() != -1) { ?>
+			<?php if($editor->isGDGIFAble() != -1) { ?>
             <option value="gif">GIF</option>
-			<? } ?>
+			<?php } ?>
          </select>
 			<label>Quality:</label>
 			<table style="display: inline; vertical-align: middle;" cellpadding="0" cellspacing="0">
 				<tr>
 				<td>
 					<div id="slidercasing"> 
-				<div id="slidertrack" style="width:100px"><img src="<? print $IMConfig['base_url'];?>img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
-            <div id="sliderbar" style="left:85px" onmousedown="captureStart();"><img src="<? print $IMConfig['base_url'];?>img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
+				<div id="slidertrack" style="width:100px"><img src="<?php print $IMConfig['base_url'];?>img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
+            <div id="sliderbar" style="left:85px" onmousedown="captureStart();"><img src="<?php print $IMConfig['base_url'];?>img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
 			</div>	
 				</td>
 				</tr>
 			</table>				
 			<input type="text" id="quality" onchange="updateSlider(this.value)" style="width: 2em;" value="85"/>
-			<img src="<? print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
+			<img src="<?php print $IMConfig['base_url'];?>img/div.gif" height="30" width="2" class="div" alt="|" />
 		</div>	
-		<a href="javascript: editor.doSubmit('save');" class="buttons" title="OK"><img src="<? print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<? print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
+		<a href="javascript: editor.doSubmit('save');" class="buttons" title="OK"><img src="<?php print $IMConfig['base_url'];?>img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="<?php print $IMConfig['base_url'];?>img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
 	</div>	
 </div>
 <div id="toolbar">
-<a href="javascript:toggle('crop')" id="icon_crop" title="Crop"><img src="<? print $IMConfig['base_url'];?>img/crop.gif" height="20" width="20" alt="Crop" /><span>Crop</span></a>
-<a href="javascript:toggle('scale')" id="icon_scale" title="Resize"><img src="<? print $IMConfig['base_url'];?>img/scale.gif" height="20" width="20" alt="Resize" /><span>Resize</span></a>
-<a href="javascript:toggle('rotate')" id="icon_rotate" title="Rotate"><img src="<? print $IMConfig['base_url'];?>img/rotate.gif" height="20" width="20" alt="Rotate" /><span>Rotate</span></a>
-<a href="javascript:toggle('measure')" id="icon_measure" title="Measure"><img src="<? print $IMConfig['base_url'];?>img/measure.gif" height="20" width="20" alt="Measure" /><span>Measure</span></a>
-<a href="javascript: toggleMarker();" title="Marker"><img id="markerImg" src="<? print $IMConfig['base_url'];?>img/t_black.gif" height="20" width="20" alt="Marker" /><span>Marker</span></a>
-<a href="javascript:toggle('save')" id="icon_save" title="Save"><img src="<? print $IMConfig['base_url'];?>img/save.gif" height="20" width="20" alt="Save" /><span>Save</span></a>
+<a href="javascript:toggle('crop')" id="icon_crop" title="Crop"><img src="<?php print $IMConfig['base_url'];?>img/crop.gif" height="20" width="20" alt="Crop" /><span>Crop</span></a>
+<a href="javascript:toggle('scale')" id="icon_scale" title="Resize"><img src="<?php print $IMConfig['base_url'];?>img/scale.gif" height="20" width="20" alt="Resize" /><span>Resize</span></a>
+<a href="javascript:toggle('rotate')" id="icon_rotate" title="Rotate"><img src="<?php print $IMConfig['base_url'];?>img/rotate.gif" height="20" width="20" alt="Rotate" /><span>Rotate</span></a>
+<a href="javascript:toggle('measure')" id="icon_measure" title="Measure"><img src="<?php print $IMConfig['base_url'];?>img/measure.gif" height="20" width="20" alt="Measure" /><span>Measure</span></a>
+<a href="javascript: toggleMarker();" title="Marker"><img id="markerImg" src="<?php print $IMConfig['base_url'];?>img/t_black.gif" height="20" width="20" alt="Marker" /><span>Marker</span></a>
+<a href="javascript:toggle('save')" id="icon_save" title="Save"><img src="<?php print $IMConfig['base_url'];?>img/save.gif" height="20" width="20" alt="Save" /><span>Save</span></a>
 </div>
 <div id="contents">
-<iframe src="<? print $IMConfig['backend_url']; ?>__function=editorFrame&img=<? if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor"  scrolling="auto" title="Image Editor" frameborder="0"></iframe>
+<iframe src="<?php print $IMConfig['backend_url']; ?>__function=editorFrame&img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor"  scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>
 </body>
