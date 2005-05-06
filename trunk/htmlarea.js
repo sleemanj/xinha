@@ -4302,7 +4302,13 @@ HTMLArea.prototype._toggleBorders = function()
    {
      if(this.borders)
      {
-       HTMLArea._addClass(tables[ix], 'htmtableborders');
+        // flashing the display forces moz to listen (JB:18-04-2005) - #102
+        if(HTMLArea.is_gecko)
+        {
+            tables[ix].style.display="none";
+            tables[ix].style.display="table";
+        }
+        HTMLArea._addClass(tables[ix], 'htmtableborders');
      }
      else
      {
