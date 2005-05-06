@@ -62,25 +62,44 @@ InsertAnchor.prototype.onGenerate = function() {
 
 InsertAnchor.prototype.buttonPress = function(editor) {
   var outparam = null;
+  var sel  = editor._getSelection();
+  var range  = editor._createRange(sel);
+  var  a = editor._activeElement(sel);
+  if(!(a != null && a.tagName.toLowerCase() == 'a')) {
+    a = editor._getFirstAncestor(sel, 'a'); 
+  }     
+  if (a != null && a.tagName.toLowerCase() == 'a') {
+    outparam = { name : a.id };
+  } else
+    outparam = { name : '' };
+
   editor._popupDialog( "plugin://InsertAnchor/insert_anchor", function( param ) {
-                if ( param ) {
+    if ( param ) {
             var anchor = param["name"];  
       if (anchor == "" || anchor == null) {
+        if (!a)
+          document.getElementById(a);
+          a.parentNode.removeChild(a);
         return;
-      }
+      } 
       try {
         var doc = editor._doc;
-        var alink = doc.createElement("a");
-        alink.id = anchor;
-        alink.name = anchor;
-        alink.title = anchor;
-        alink.className = "anchor";
-        if (HTMLArea.is_ie) {
-          var sel = editor._getSelection();
-          var range = editor._createRange(sel);
-          range.pasteHTML(alink.outerHTML);
+        if (!a) {
+          a = doc.createElement("a");
+          a.id = anchor;
+          a.name = anchor;
+          a.title = anchor;
+          a.className = "anchor";
+          if (HTMLArea.is_ie) {
+            range.pasteHTML(a.outerHTML);
+          } else {
+            editor.insertNodeAtSelection(a);
+          }
         } else {
-          editor.insertNodeAtSelection(alink);
+          a.id = anchor;
+				  a.name = anchor;
+				  a.title = anchor;
+				  a.className = "anchor";
         }
       }
       catch (e) { }
