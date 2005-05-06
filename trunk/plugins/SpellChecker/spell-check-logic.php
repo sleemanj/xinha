@@ -127,19 +127,21 @@ if (trim($text) != "")
                 $lineindex = $lineindex + 1;
             }
          }
+        $infolines .= '"Language Used":"'.$lang.'",';
+        $infolines .= '"Mispelled words":"'.$counter.'",';
+        $infolines .= '"Total words suggested":"'.$suggest_count.'",';
+        $infolines .= '"Total Lines Checked":"'.$returnlines.'"';
+        $infolines .= '};';
+        $varlines = substr($varlines, 0, strlen($varlines) - 1);
+        echo $varlines.'};'.$infolines.'</script>';
      }
      else
      {
        $return = 'failed to open!';
      }
+
 }
-$infolines .= '"Language Used":"'.$lang.'",';
-$infolines .= '"Mispelled words":"'.$counter.'",';
-$infolines .= '"Total words suggested":"'.$suggest_count.'",';
-$infolines .= '"Total Lines Checked":"'.$returnlines.'"';
-$infolines .= '};';
-$varlines = substr($varlines, 0, strlen($varlines) - 1);
-echo $varlines.'};'.$infolines.'</script>';
+
 
 echo '</head>
 <body onload="window.parent.finishedSpellChecking();">';
