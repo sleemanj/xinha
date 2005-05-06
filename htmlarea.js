@@ -1392,7 +1392,7 @@ HTMLArea.prototype.generate = function ()
   {
     if (HTMLArea.is_gecko && this._doc.designMode != 'on') {
       try {
-    
+
         // cannot set design mode if no display
         if (this._iframe.style.display == 'none')
         {
@@ -1494,10 +1494,10 @@ HTMLArea.prototype.generate = function ()
     }
     doc.write(html);
     doc.close();
-    
+
     // redo it for some obscure reason that IE need it..
     editor.activateEditor();
-    
+
     // if we have multiple editors some bug in Mozilla makes some lose editing ability
     if(HTMLArea.is_gecko)
     {
@@ -2791,7 +2791,14 @@ HTMLArea.prototype._createLink = function(link) {
     var range = editor._createRange(sel);
     var compare = 0;
     if (HTMLArea.is_ie) {
-      compare = range.compareEndPoints("StartToEnd", range);
+      if(sel.type == "Control")
+      {
+        compare = range.length;
+      }
+      else
+      {
+        compare = range.compareEndPoints("StartToEnd", range);
+      }
     } else {
       compare = range.compareBoundaryPoints(range.START_TO_END, range);
     }
@@ -3001,7 +3008,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
   switch (cmdID) {
     case "htmlmode" : this.setMode(); break;
     case "hilitecolor":
-      (HTMLArea.is_ie) && (cmdID = "backcolor");          
+      (HTMLArea.is_ie) && (cmdID = "backcolor");
       if (HTMLArea.is_gecko) try { editor._doc.execCommand('useCSS', false, false); } catch (e) {};//switch on useCSS (mozilla bug #279330)
     case "forecolor":
       this._popupDialog(editor.config.URIs["select_color"], function(color) {
