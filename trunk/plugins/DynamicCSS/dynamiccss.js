@@ -14,9 +14,9 @@ function DynamicCSS(editor, args) {
   var self = this;
 
         /*var cssArray=null;
-        var cssLength=0;
+        var cssLength=0;*/
         var lastTag=null;
-        var lastClass=null;*/
+        var lastClass=null;
 
   var css_class = {
     id         : "DynamicCSS-class",
@@ -37,7 +37,7 @@ DynamicCSS.parseStyleSheet=function(editor){
 
         cssArray=DynamicCSS.cssArray;
         if(!cssArray) cssArray=new Array();
-        
+
         for(i=0;i<iframe.styleSheets.length;i++){
             // Mozilla
             if(HTMLArea.is_gecko){
@@ -184,9 +184,9 @@ DynamicCSS.prototype.updateValue = function(editor, obj) {
         var tagName = parent.tagName.toLowerCase();
         var className = parent.className;
 
-        if(DynamicCSS.lastTag!=tagName || DynamicCSS.lastClass!=className){
-            DynamicCSS.lastTag=tagName;
-            DynamicCSS.lastClass=className;
+        if(this.lastTag!=tagName || this.lastClass!=className){
+            this.lastTag=tagName;
+            this.lastClass=className;
 
             var select = editor._toolbarObjects[obj.id].element;
 
