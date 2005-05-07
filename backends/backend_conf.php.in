@@ -1,0 +1,59 @@
+<?php
+
+// [NOSTRIP
+// -----------------------------------------------------------------
+// Copyright (C) DTLink, LLC. 
+// http://www.dtlink.com and http://www.formvista.com
+// -----------------------------------------------------------------
+// This code is distributed under the the sames terms as Xinha
+// itself. (HTMLArea license based on the BSD license) 
+// 
+// Please read license.txt in this package for details.
+//
+// All software distributed under the Licenses is provided strictly on
+// an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR
+// IMPLIED, AND DTLINK LLC HEREBY DISCLAIMS ALL SUCH
+// WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT,
+// OR NON-INFRINGEMENT. 
+// ------------------------------------------------------------------
+// NOSTRIP]
+
+/**
+* Configure.php generated backend configuration file for php backend.
+*
+* This file must be included on each page where the PHP backend is used.
+*
+* @package xinha
+* @subpackage backend
+* @author Yermo Lamers http://www.formvista.com/contact.html
+* @copyright DTLink, LLC 2005
+*/
+
+/**
+* install path.
+*
+* XINHA_INSTALL_ROOT contains the path to the installed Xinha.
+*/
+
+define( "XINHA_INSTALL_ROOT", "[@@XINHA_INSTALL_ROOT@@]" );
+
+/**
+* install URL
+*
+* The URL to the root directory of the Xinha install
+* (e.g. /xinha)
+*/
+
+define( "XINHA_INSTALL_URL", "[@@XINHA_INSTALL_URL@@]" );
+
+/**
+* Backend URL to use.
+*/
+
+define( "XINHA_BACKEND_URL", "backends/backend.php" );
+
+// --------------------------------------------
+// END
+
+?>
