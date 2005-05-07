@@ -8,4 +8,5 @@
 */
 ?>
 
-./plugins/ImageManager/demo_images 644 nobody
+./examples/images 755 nobody
+./examples/images/linux 755 nobody

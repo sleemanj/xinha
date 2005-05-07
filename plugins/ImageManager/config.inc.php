@@ -13,8 +13,24 @@
 // 2005-03-20 Yermo Lamers (www.formvista.com):
 //	. unified backend.
 // . created a set of defaults that make sense for bundling with Xinha.
-
+//
+// 2005-05-01 YmL:
+//	. modified for master unified backend. 
+// . config values can be overridden by the calling page (makes integration
+//	  easier.
 // -------------------------------------------------------------------------
+
+/**
+* Xinha PHP backend config file.
+*
+* probably already included. We assume we are in the xinha/plugins/ImageManager
+* directory
+*/
+
+if ( ! defined( "XINHA_INSTALL_ROOT" ) )
+	{
+	include_once( "../../backends/backend_conf.php" );
+	}
 
 /**
 * Default backend URL
@@ -24,7 +40,10 @@
 * The ?__plugin=ImageManager& is required. 
 */
 
-$IMConfig['backend_url'] = "backend.php?__plugin=ImageManager&";
+if ( @$IMConfig['backend_url' ] == NULL )
+	{
+	$IMConfig['backend_url'] = XINHA_INSTALL_URL . "/backends/backend.php?__plugin=ImageManager&";
+	}
 
 /**
 * Backend Installation Directory
@@ -35,8 +54,11 @@ $IMConfig['backend_url'] = "backend.php?__plugin=ImageManager&";
 * and the backend are in the same directory)
 */
 
-$IMConfig['base_dir'] = getcwd();
-$IMConfig['base_url'] = '';
+if ( @$IMConfig[ 'base_dir' ] == NULL )
+	{
+	$IMConfig['base_dir'] = XINHA_INSTALL_ROOT . "/plugins/ImageManager/";
+	$IMConfig['base_url'] = XINHA_INSTALL_URL . "/plugins/ImageManager/";
+	}
 
 // ------------------------------------------------------------
 
@@ -50,13 +72,16 @@ $IMConfig['base_url'] = '';
 * PHP must be able to create files in this directory.
 * Able to create directories is nice, but not necessary.
 *
-* CHANGE THIS: for out-of-the-box demo purposes we're setting this to ./demo_images
-* which has some graphics in it.
+* For out-of-the-box demo purposes we're setting this to 
+* xinha/examples/images which has some graphics in it.
 */
 
 // $IMConfig['images_dir'] = "/some/path/to/images/directory;
 
-$IMConfig['images_dir'] = "demo_images";
+if ( @$IMConfig['images_dir'] == NULL )
+	{
+	$IMConfig['images_dir'] = XINHA_INSTALL_ROOT . "/examples/images";
+	}
 
 // -------------------------------------------------------------------------
 
@@ -69,17 +94,12 @@ $IMConfig['images_dir'] = "demo_images";
 * If this directory needs to be publicly accessiable, remove scripting capabilities
 * for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
 * in this directory and its subdirectories.
-*
-* CHANGE THIS: You need to change this to match the url where you have Xinha
-* installed. If the images show up blank chances are this is not set correctly.
 */
 
-// $IMConfig['images_url'] = "/url/to/above";
-
-// try to figure out the URL of the sample images directory. For your installation
-// you will probably want to keep images in another directory.
-
-$IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
+if ( @$IMConfig['images_url'] == NULL )
+	{
+	$IMConfig['images_url'] = XINHA_INSTALL_URL . "/examples/images";
+	}
 
 // -------------------------------------------------------------------------
 
@@ -96,7 +116,10 @@ $IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] )
 * FALSE - Set to false if PHP on the web server is not in safe mode.
 */
 
-$IMConfig['safe_mode'] = false;
+if ( @$IMConfig['safe_mode'] == NULL )
+	{
+	$IMConfig['safe_mode'] = false;
+	}
 
 // -------------------------------------------------------------------------
 
@@ -154,7 +177,10 @@ $IMConfig['thumbnail_prefix'] = '.';
 *  to false or empty string '';
 */
 
-$IMConfig['thumbnail_dir'] = '.thumbs';
+if ( @$IMConfig[ 'thumbnail_dir' ] == NULL )
+	{
+	$IMConfig['thumbnail_dir'] = '.thumbs';
+	}
 
 // -------------------------------------------------------------------------
 
@@ -175,7 +201,10 @@ $IMConfig['thumbnail_dir'] = '.thumbs';
 * DEFAULT: for demo purposes we turn this off.
 */
 
-$IMConfig['allow_new_dir'] = true;
+if ( @$IMConfig[ 'allow_new_dir' ] === NULL )
+	{
+	$IMConfig['allow_new_dir'] = false;
+	}
 
 // -------------------------------------------------------------------------
 
@@ -191,7 +220,10 @@ $IMConfig['allow_new_dir'] = true;
 * DEFAULT: for demo purposes we turn this off.
 */
 
-$IMConfig['allow_upload'] = true;
+if ( @$IMConfig['allow_upload'] === NULL )
+	{
+	$IMConfig['allow_upload'] = false;
+	}
 
 // -------------------------------------------------------------------------
 
@@ -209,7 +241,10 @@ $IMConfig['allow_upload'] = true;
 * NOTE: If uploading is not allowed, this parameter is ignored.
 */
 
-$IMConfig['validate_images'] = true;
+if ( @$IMConfig[ 'validate_images' ] === NULL )
+	{
+	$IMConfig['validate_images'] = true;
+	}
 
 // -------------------------------------------------------------------------
 
@@ -220,7 +255,10 @@ $IMConfig['validate_images'] = true;
 * due to error or bad image file.
 */
 
-$IMConfig['default_thumbnail'] = 'img/default.gif';
+if ( @$IMConfig['default_thumbnail'] == NULL )
+	{
+	$IMConfig['default_thumbnail'] = 'img/default.gif';
+	}
 
 // -------------------------------------------------------------------------
 
@@ -228,8 +266,11 @@ $IMConfig['default_thumbnail'] = 'img/default.gif';
 *  Thumbnail dimensions.
 */
 
-$IMConfig['thumbnail_width'] = 96;
-$IMConfig['thumbnail_height'] = 96;
+if ( @$IMConfig['thumbnail_width'] == NULL )
+	{
+	$IMConfig['thumbnail_width'] = 96;
+	$IMConfig['thumbnail_height'] = 96;
+	}
 
 // -------------------------------------------------------------------------
 
@@ -239,20 +280,24 @@ $IMConfig['thumbnail_height'] = 96;
 * Image Editor temporary filename prefix.
 */
 
-$IMConfig['tmp_prefix'] = '.editor_';
+if ( @$IMConfig['tmp_prefix'] == NULL )
+	{
+	$IMConfig['tmp_prefix'] = '.editor_';
+	}
 
+// used to verify that the config has been loaded.
 
 define( "IM_CONFIG_LOADED", "yes" );
 
-// bring in the debugging library
+// bring in the debugging library.
 
-include_once( "ddt.php" );
+include_once( XINHA_INSTALL_ROOT . "/ddt/ddt.php" );
 
 // uncomment to send debug messages to a local file
-_setDebugLog( "/tmp/debug_log.txt" );
+// _setDebugLog( "/tmp/debug_log.txt" );
 
-// turn debugging on everywhere.
-_ddtOn();
+// uncomment to turn on debugging messages.
+//_ddtOn();
 
 // END
 

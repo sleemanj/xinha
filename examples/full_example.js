@@ -47,7 +47,7 @@
     {
       // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
       //  otherwise it won't work!
-      config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
+      config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.php/, 'stylist.css'));
 
       // Or we can load styles directly
       config.stylistLoadStyles('p.red_text { color:red }');

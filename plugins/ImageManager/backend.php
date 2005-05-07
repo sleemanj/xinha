@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
 * Unified backend for ImageManager 
@@ -7,7 +7,7 @@
 *   Xiang Wei Zhuo, email: xiangweizhuo(at)hotmail.com Wei Shou.
 *
 * Unified backend sponsored by DTLink Software, http://www.dtlink.com
-* Implementation by Yermo Lamers, http://www.formvista.com
+* Implementation by Yermo Lamers, http://www.formvista.com/contact.html
 *
 * (c) DTLink, LLC 2005.
 * Distributed under the same terms as HTMLArea itself.
@@ -40,14 +40,26 @@ require_once('config.inc.php');
 * debug message library
 */
 
-include_once( "ddt.php" );
+include_once( "../ddt/ddt.php" );
 
 // uncomment to turn on debugging
 // _ddtOn();
 
-_ddt( __FILE__, __LINE__, "backend.php: top with query '" . $_SERVER["PHP_SELF"] . "' string '" . $_SERVER["QUERY_STRING"] . "'" );
+// ---------------------------------------------------------------
 
-$formVars = empty($_POST) ? $_GET : $_POST;
+/**
+* ImageManager backend callback
+*
+* After including this file, the unified backend.php script
+* will call this function
+*/
+
+function imagemanager_callback( $formVars )
+{
+
+global $IMConfig;
+
+_ddt( __FILE__, __LINE__, "backend.php: top with query '" . $_SERVER["PHP_SELF"] . "' string '" . $_SERVER["QUERY_STRING"] . "'" );
 
 // make sure the request is for us (this gives us the ability to eventually organize
 // a backend event handler system) For an include file the return doesn't make alot of
@@ -120,6 +132,8 @@ switch ( @$formVars[ "__function" ] )
 	}	// end of switch.
 
 return false ;
+
+}	// end of ImageManager_plugin
 
 // END
 

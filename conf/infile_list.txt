@@ -2,3 +2,4 @@
 ./devutils/svn_commit.pl.in 0755
 ./devutils/buildruntime.php.in 0755
 ./devutils/ddtpreproc.php.in 0755
+./backends/backend_conf.php.in 0644

@@ -220,7 +220,14 @@ if ( this.state == "on" )
 DDT.prototype._ddtDumpObject = function( file, line, msg, obj )
 {
 
-this._ddt( "ddt.js","208", file, line, msg );
+this._ddt( 
+file, line, msg );
+
+if ( typeof obj == 'undefined' )
+	{
+	this._ddt(
+		file, line, "Object is undefined!" );
+	}
 
 for (var x in obj)
    {
