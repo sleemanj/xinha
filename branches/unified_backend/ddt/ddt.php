@@ -1,15 +1,23 @@
-<?
+<?php
 
-
-/*
-This ddt library is released under the terms of the HTMLArea license. 
-See license.txt that is shipped with Xinha.
-*/
-
-// must be included after the configuration has been loaded.
-
-if ( ! defined( "IM_CONFIG_LOADED" ) )
-	die( "sorry" );
+// [NOSTRIP
+// -----------------------------------------------------------------
+// Copyright (C) DTLink, LLC. 
+// http://www.dtlink.com and http://www.formvista.com
+// -----------------------------------------------------------------
+// This code is distributed under the the sames terms as Xinha
+// itself. (HTMLArea license based on the BSD license) 
+// 
+// Please read license.txt in this package for details.
+//
+// All software distributed under the Licenses is provided strictly on
+// an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR
+// IMPLIED, AND DTLINK LLC HEREBY DISCLAIMS ALL SUCH
+// WARRANTIES, INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT,
+// OR NON-INFRINGEMENT. 
+// ------------------------------------------------------------------
+// NOSTRIP]
 
 /**
 * Debug and Error Message functions.

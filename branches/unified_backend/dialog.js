@@ -11,63 +11,140 @@
 //
 // $Id$
 
+// --------------------------------------------------------------------------
 // Though "Dialog" looks like an object, it isn't really an object.  Instead
 // it's just namespace for protecting global symbols.
+//
+// Something to note, the ImageManager plugin (and possibly others) has it's
+// own version of this file
+// --------------------------------------------------------------------------
 
-function Dialog(url, action, init) {
-	if (typeof init == "undefined") {
-		init = window;	// pass this window object by default
-	}
-	Dialog._geckoOpenModal(url, action, init);
-};
+/**
+* should be a function, the return handler of the currently opened dialog.
+*/
 
-Dialog._parentEvent = function(ev) {
-	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
-	if (Dialog._modal && !Dialog._modal.closed) {
-		HTMLArea._stopEvent(ev);
-	}
-};
-
-
-// should be a function, the return handler of the currently opened dialog.
 Dialog._return = null;
 
-// constant, the currently opened dialog
+/**
+* constant, the currently opened dialog
+*/
+
 Dialog._modal = null;
 
-// the dialog will read it's args from this variable
+/**
+* the dialog will read it's args from this variable
+*/
+
 Dialog._arguments = null;
 
-Dialog._geckoOpenModal = function(url, action, init) {
+/**
+* Dialog()
+*
+* Added an option "editor" parameter to pass-through the editor object
+* to the dialog.
+*/
+
+function Dialog(url, action, init) 
+  {
+
+	if (typeof init == "undefined") 
+	  {
+		init = window;	// pass this window object by default
+	  }
+
+	// optional editor instance parameter that can be propagated through to 
+	// dialogs.
+
+	if (typeof Dialog.arguments[3] != "undefined") 
+	  {
+		Dialog._editor = Dialog.arguments[3];
+	  }
+
+	Dialog._geckoOpenModal(url, action, init);
+
+  };
+
+// -----------------------------------------
+
+/**
+* Dialog._parentEvent()
+*/
+
+Dialog._parentEvent = function(ev) 
+  {
+
+	setTimeout( function() 
+	    { 
+			if (Dialog._modal && !Dialog._modal.closed) 
+			  { 
+				Dialog._modal.focus() 
+				} 
+			}, 50);
+
+	if (Dialog._modal && !Dialog._modal.closed) 
+	  {
+		HTMLArea._stopEvent(ev);
+	  }
+  };  // end of Dialog._parentEvent()
+
+// -------------------------------------------
+
+/**
+* Dialog._geckoOpenModal()
+*/
+
+Dialog._geckoOpenModal = function(url, action, init) 
+  {
+
 	var dlg = window.open(url, "hadialog",
 			      "toolbar=no,menubar=no,personalbar=no,width=10,height=10," +
 			      "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
+
 	Dialog._modal = dlg;
 	Dialog._arguments = init;
 
 	// capture some window's events
-	function capwin(w) {
+	function capwin(w) 
+	  {
 		HTMLArea._addEvent(w, "click", Dialog._parentEvent);
 		HTMLArea._addEvent(w, "mousedown", Dialog._parentEvent);
 		HTMLArea._addEvent(w, "focus", Dialog._parentEvent);
-	};
+	  };
+
 	// release the captured events
-	function relwin(w) {
+
+	function relwin(w) 
+	  {
 		HTMLArea._removeEvent(w, "click", Dialog._parentEvent);
 		HTMLArea._removeEvent(w, "mousedown", Dialog._parentEvent);
 		HTMLArea._removeEvent(w, "focus", Dialog._parentEvent);
-	};
+	  };
+
 	capwin(window);
+
 	// capture other frames
+
 	for (var i = 0; i < window.frames.length; capwin(window.frames[i++]));
-	// make up a function to be called when the Dialog ends.
-	Dialog._return = function (val) {
-		if (val && action) {
+	
+	// make up a function to be called when the Dialog ends. This will call
+	// the function passed to us above. (i.e. action)
+
+	Dialog._return = function (val) 
+	  {
+		if (val && action) 
+		  {
 			action(val);
-		}
+		  }
+
 		relwin(window);
+
 		// capture other frames
+
 		for (var i = 0; i < window.frames.length; relwin(window.frames[i++]));
+
 		Dialog._modal = null;
-	};
-};
+    };
+
+  }; // end of Dialog._geckoOpenModal()
+
+// END

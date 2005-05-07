@@ -11,24 +11,18 @@
 //
 // $Id: dialog.js 26 2004-03-31 02:35:21Z Wei Zhuo $
 
-// Though "Dialog" looks like an object, it isn't really an object.  Instead
-// it's just namespace for protecting global symbols.
-
-function Dialog(url, action, init) {
-	if (typeof init == "undefined") {
-		init = window;	// pass this window object by default
-	}
-	Dialog._geckoOpenModal(url, action, init);
-};
-
-Dialog._parentEvent = function(ev) {
-	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
-	if (Dialog._modal && !Dialog._modal.closed) {
-		Dialog._stopEvent(ev);
-	}
-};
-
-
+// ------------------------------------------------------------------
+//
+// this is a modified duplicate of the /dialog.js in the Xinha root.
+// the code seems to make the assumption that only one of these dialogs
+// can be open at once (modal).
+//
+// REVISION HISTORY:
+//
+// 2005-05-01 YmL:
+//	.	added optional editor parameter to Dialog() "constructor".
+//
+// ------------------------------------------------------------------
 // should be a function, the return handler of the currently opened dialog.
 Dialog._return = null;
 
@@ -38,74 +32,174 @@ Dialog._modal = null;
 // the dialog will read it's args from this variable
 Dialog._arguments = null;
 
-Dialog._geckoOpenModal = function(url, action, init) {
+Dialog.agt = navigator.userAgent.toLowerCase();
+
+Dialog.is_ie	   = ((Dialog.agt.indexOf("msie") != -1) && (Dialog.agt.indexOf("opera") == -1));
+
+// ------------------------------------------------------------------
+
+// Though "Dialog" looks like an object, it isn't really an object.  Instead
+// it's just namespace for protecting global symbols.
+
+function Dialog(url, action, init) 
+  {
+	if (typeof init == "undefined") 
+	  {
+		init = window;	// pass this window object by default
+	  }
+
+	// optional editor instance parameter that can be propagated through to 
+	// dialogs.
+
+	if (typeof Dialog.arguments[3] != "undefined") 
+	  {
+		Dialog._editor = Dialog.arguments[3];
+	  }
+
+	Dialog._geckoOpenModal(url, action, init);
+
+  }; // end of Dialog()
+
+// ----------------------------------------------------------
+
+/**
+* Dialog._parentEvent()
+*/
+
+Dialog._parentEvent = function(ev) 
+  {
+	setTimeout( 
+	  function() 
+	    { 
+			if (Dialog._modal && !Dialog._modal.closed) 
+			  { 
+				Dialog._modal.focus() 
+				} 
+			}, 50); // end of setTimeout() call.
+		
+	if (Dialog._modal && !Dialog._modal.closed) 
+	  {
+		Dialog._stopEvent(ev);
+	  }
+
+  }; // end of _parentEvent();
+
+// ----------------------------------------------------------
+
+/**
+* Dialog._geckoOpenModal()
+*/
+
+Dialog._geckoOpenModal = function(url, action, init) 
+  {
 	//var urlLink = "hadialog"+url.toString();
+
 	var myURL = "hadialog"+url;
 	var regObj = /\W/g;
+
 	myURL = myURL.replace(regObj,'_');
+
 	var dlg = window.open(url, myURL,
 			      "toolbar=no,menubar=no,personalbar=no,width=10,height=10," +
 			      "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
+
 	Dialog._modal = dlg;
 	Dialog._arguments = init;
 
 	// capture some window's events
-	function capwin(w) {
+	function capwin(w) 
+	  {
 		Dialog._addEvent(w, "click", Dialog._parentEvent);
 		Dialog._addEvent(w, "mousedown", Dialog._parentEvent);
 		Dialog._addEvent(w, "focus", Dialog._parentEvent);
-	};
+	  };
+
 	// release the captured events
-	function relwin(w) {
+	function relwin(w) 
+	  {
 		Dialog._removeEvent(w, "click", Dialog._parentEvent);
 		Dialog._removeEvent(w, "mousedown", Dialog._parentEvent);
 		Dialog._removeEvent(w, "focus", Dialog._parentEvent);
-	};
+	  };
+
 	capwin(window);
+
 	// capture other frames
 	for (var i = 0; i < window.frames.length; capwin(window.frames[i++]));
-	// make up a function to be called when the Dialog ends.
-	Dialog._return = function (val) {
-		if (val && action) {
+
+	// make up a function to be called when the Dialog ends, using the function
+	// passed to us.
+
+	Dialog._return = function (val) 
+	  {
+		if (val && action) 
+		  {
 			action(val);
-		}
+		  }
+
 		relwin(window);
 		// capture other frames
+
 		for (var i = 0; i < window.frames.length; relwin(window.frames[i++]));
+
 		Dialog._modal = null;
-	};
-};
 
+    };
+  }; // end of Dialog._geckoOpenModal
 
-// event handling
+/**
+* event handling
+*/
 
-Dialog._addEvent = function(el, evname, func) {
-	if (Dialog.is_ie) {
+Dialog._addEvent = function(el, evname, func) 
+  {
+	if (Dialog.is_ie) 
+	  {
 		el.attachEvent("on" + evname, func);
-	} else {
+	  } 
+	else 
+	  {
 		el.addEventListener(evname, func, true);
-	}
-};
+    }
+  };
 
+/**
+* _removeEvent()
+*/
 
-Dialog._removeEvent = function(el, evname, func) {
-	if (Dialog.is_ie) {
+Dialog._removeEvent = function(el, evname, func) 
+  {
+	if (Dialog.is_ie) 
+	  {
 		el.detachEvent("on" + evname, func);
-	} else {
+	  } 
+	else 
+	  {
 		el.removeEventListener(evname, func, true);
-	}
-};
+   	}
+  };
 
+/**
+* _stopEvent()
+*/
 
-Dialog._stopEvent = function(ev) {
-	if (Dialog.is_ie) {
+Dialog._stopEvent = function(ev) 
+  {
+	if (Dialog.is_ie) 
+	  {
 		ev.cancelBubble = true;
 		ev.returnValue = false;
-	} else {
+	  } 
+	else 
+	  {
 		ev.preventDefault();
 		ev.stopPropagation();
-	}
-};
+	  }
+  };
 
-Dialog.agt = navigator.userAgent.toLowerCase();
-Dialog.is_ie	   = ((Dialog.agt.indexOf("msie") != -1) && (Dialog.agt.indexOf("opera") == -1));
+Dialog.hello = function()
+{
+alert( "HELLO" );
+}
+
+// END

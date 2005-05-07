@@ -1,6 +1,6 @@
 <?php
 
-// [COPY
+// [NOSTRIP
 // -----------------------------------------------------------------
 // Copyright (C) DTLink, LLC. 
 // http://www.dtlink.com and http://www.formvista.com
@@ -16,7 +16,7 @@
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT,
 // OR NON-INFRINGEMENT. 
 // ------------------------------------------------------------------
-// COPY]
+// NOSTRIP]
 
 /**
 * Simple Configure system ported from formVista
@@ -34,6 +34,9 @@
 // 2005-04-15 YmL:
 // . ported from formVista.
 // . this version relicensed under HTMLArea license.
+//
+// 2005-05-01 YmL:
+//	.	now generates a backend config file containing install root.
 // ---------------------------------------------------------------
 
 // make sure we're not running in a webserver
@@ -99,6 +102,8 @@ while ( true )
 		}
 	}
 
+// path to perl (used by makedocs.pl script)
+
 while ( true )
 	{
 
@@ -128,6 +133,44 @@ while ( true )
 		print( "\nPlease enter the path to Perl\n" );
 		}
 	}
+
+// URL to Xinha install
+
+while ( true )
+	{
+
+	print "\n";
+	print "---------------------------------------------------------\n";
+	print "Xinha needs to know what URL it's installed under.\n";
+	print "(e.g. /xinha or maybe http://some_site.com/somedir/xinha)\n";
+	print "\nURL of Xinha install:\n";
+	print "[" . @$dataExport["XINHA_INSTALL_URL"] . "]:";
+
+	$response = fgets( $stdin, 256 );
+										  
+   if ( preg_match( "/\S/", $response ) )
+		{
+		$response = trim($response);
+
+    	$dataExport[ "XINHA_INSTALL_URL" ] = $response;
+
+		break;
+		}
+	else
+		{
+
+		// it's possible we've already looped through this 
+
+		if ( preg_match( "/\S/", @$dataExport[ "XINHA_INSTALL_URL" ] ))
+			break;
+
+		print( "\nPlease enter the url of your Xinha install.\n" );
+		}
+	}
+
+// We assume the current directory is the root of the Xinha install.
+
+$dataExport[ "XINHA_INSTALL_ROOT"] = getcwd();
 
 // ---------------------------------------------------------------
 //			TEMPLATE EXPANSION

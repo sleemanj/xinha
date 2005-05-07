@@ -1,17 +1,17 @@
 <?
 /**
- * The main GUI for the ImageManager.
- * @author $Author: Wei Zhuo $
- * @version $Id: manager.php 26 2004-03-31 02:35:21Z Wei Zhuo $
- * @package ImageManager
- */
+* The main GUI for the ImageManager.
+* @author $Author: Wei Zhuo $
+* @version $Id: manager.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+* @package ImageManager
+*/
 
-	require_once('config.inc.php');
-	require_once('ddt.php');
-	require_once('Classes/ImageManager.php');
+require_once('config.inc.php');
+require_once(XINHA_INSTALL_ROOT . '/ddt/ddt.php');
+require_once('Classes/ImageManager.php');
 	
-	$manager = new ImageManager($IMConfig);
-	$dirs = $manager->getDirs();
+$manager = new ImageManager($IMConfig);
+$dirs = $manager->getDirs();
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -21,32 +21,51 @@
 	<title>Insert Image</title>
 <script type="text/javascript">
 
-<? // temporary. An ImageManager rewrite will take care of this kludge. ?>
+<?php // temporary. An ImageManager rewrite will take care of this kludge. ?>
 
-_backend_url = "<? print $IMConfig['backend_url']; ?>";
+_backend_url = "<?php print $IMConfig['backend_url']; ?>";
+
+// This page is opened by a call to Dialog() in xinha/dialog.js. Subsequent
+// dialogs are opened using the version in ImageManager/assets/dialog.js.
+//
+// The Dialog() call accepts an optional fourth parameter, the editor instance
+// that is raising this dialog. From there we can pull out the ImageManager instance and
+// get access to the ddt instance. This has an added benefit allowing us to
+// put all the previously free standing manager functions into the image manager class.
+
+_imgManager = window.opener.Dialog._editor.plugins[ "ImageManager" ].instance;
+
+_imgManager.ddt._ddt( "manager.php", "38", "top of file after getting imgManager reference." );
+
 </script>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <link href="<? print $IMConfig['base_url'];?>assets/manager.css" rel="stylesheet" type="text/css" />	
-<script type="text/javascript" src="<? print $IMConfig['base_url'];?>assets/popup.js"></script>
-<script type="text/javascript" src="<? print $IMConfig['base_url'];?>assets/dialog.js"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="<?php print $IMConfig['base_url'];?>assets/manager.css" rel="stylesheet" type="text/css" />	
+<script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/popup.js"></script>
+<script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/dialog.js"></script>
 <script type="text/javascript">
 /*<![CDATA[*/
 	window.resizeTo(600, 460);
 
-	if(window.opener)
+	if (window.opener)
 		HTMLArea = window.opener.HTMLArea;
 
-	var thumbdir = "<? echo $IMConfig['thumbnail_dir']; ?>";
-	var base_url = "<? echo $manager->getImagesURL(); ?>";
+	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
+	var base_url = "<?php echo $manager->getImagesURL(); ?>";
+
+	_imgManager.ddt._ddt( "manager.php", "38", "thumbdir is '" + thumbdir + "' base_url is '" + base_url + "'" );
+
+	// manager.js relies on the existence of _imgManager in this scope.
 /*]]>*/
 </script>
-<script type="text/javascript" src="<? print $IMConfig['base_url'];?>assets/manager.js"></script>
+
+<script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/manager.js"></script>
 </head>
 <body>
 <div class="title">Insert Image</div>
-<form action="<? print $IMConfig['backend_url'] ?>" id="uploadForm" method="post" enctype="multipart/form-data">
+<form action="<?php print $IMConfig['backend_url'] ?>" id="uploadForm" method="post" enctype="multipart/form-data">
 
-<? // we have to propagate our values through forms ?>
+<?php // we have to propagate our values through forms ?>
 
 <input type="hidden" name="__plugin" value="ImageManager">
 <input type="hidden" name="__function" value="images">
@@ -56,16 +75,16 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 	<label for="dirPath">Directory</label>
 	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)">
 	<option value="/">/</option>
-<? foreach($dirs as $relative=>$fullpath) { ?>
-		<option value="<? echo rawurlencode($relative); ?>"><? echo $relative; ?></option>
-<? } ?>
+<?php foreach($dirs as $relative=>$fullpath) { ?>
+		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
+<?php } ?>
 	</select>
-	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="<? print $IMConfig['base_url']; ?>img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" /></a>
-<? if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
-	<a href="#" onclick="newFolder();" title="New Folder"><img src="<? print $IMConfig['base_url']; ?>img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
-<? } ?>
-	<div id="messages" style="display: none;"><span id="message"></span><img SRC="<? print $IMConfig['base_url']; ?>img/dots.gif" width="22" height="12" alt="..." /></div>
-	<iframe src="<? print $IMConfig['backend_url']; ?>__function=images" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
+	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="<?php print $IMConfig['base_url']; ?>img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" /></a>
+<?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
+	<a href="#" onclick="newFolder();" title="New Folder"><img src="<?php print $IMConfig['base_url']; ?>img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
+<?php } ?>
+	<div id="messages" style="display: none;"><span id="message"></span><img SRC="<?php print $IMConfig['base_url']; ?>img/dots.gif" width="22" height="12" alt="..." /></div>
+	<iframe src="<?php print $IMConfig['backend_url']; ?>__function=images" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </div>
 </fieldset>
 <!-- image properties -->
@@ -76,7 +95,7 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 			<td rowspan="3" align="right">&nbsp;</td>
 			<td align="right"><label for="f_width">Width</label></td>
 			<td><input type="text" id="f_width" class="smallWidth" value="" onchange="javascript:checkConstrains('width');"/></td>
-			<td rowspan="2" align="right"><img src="<? print $IMConfig['base_url']; ?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" /></td>
+			<td rowspan="2" align="right"><img src="<?php print $IMConfig['base_url']; ?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" /></td>
 			<td rowspan="3" align="right">&nbsp;</td>
 			<td align="right"><label for="f_vert">V Space</label></td>
 			<td><input type="text" id="f_vert" class="smallWidth" value="" /></td>
@@ -90,7 +109,7 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
 			<td><input type="text" id="f_horiz" class="smallWidth" value="" /></td>
 		</tr>
 		<tr>
-<? if($IMConfig['allow_upload'] == true) { ?>
+<?php if($IMConfig['allow_upload'] == true) { ?>
 			<td align="right"><label for="upload">Upload</label></td>
 			<td>
 				<table cellpadding="0" cellspacing="0" border="0">
@@ -100,9 +119,9 @@ _backend_url = "<? print $IMConfig['backend_url']; ?>";
                   </tr>
                 </table>
 			</td>
-<? } else { ?>
+<?php } else { ?>
 			<td colspan="2"></td>
-<? } ?>
+<?php } ?>
 			<td align="right"><label for="f_align">Align</label></td>
 			<td colspan="2">
 				<select size="1" id="f_align"  title="Positioning of this image">

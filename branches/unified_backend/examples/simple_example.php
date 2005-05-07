@@ -9,14 +9,17 @@
     --  of the file to remove the auto-example-generating code and allow for the
     --  use of the file as a boilerplate.
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+	 --  This is a simplified, minimal, example without the fancy on-demand
+	 --  plugin loadeer from the full_example.html example.
+	 -- 
+    --  $HeadURL: http://svn.xinha.python-hosting.com/branches/unified_backend/examples/full_example-body.html $
+    --  $LastChangedDate: 2005-03-05 03:42:32 -0500 (Sat, 05 Mar 2005) $
+    --  $LastChangedRevision: 35 $
+    --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Example of Xinha</title>
+  <title>Simple Example of Xinha</title>
   <link rel="stylesheet" href="full_example.css" />
 
   <script type="text/javascript">
@@ -26,62 +29,80 @@
     // You may try a relative URL if you wish]
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
-    _editor_url  = document.location.href.replace(/examples\/full_example-body\.html.*/, '')
+    _editor_url  = document.location.href.replace(/examples\/simple_example\.html.*/, '')
     _editor_lang = "en";      // And the language we need to use in the editor.
   </script>
 
   <!--  load in debug trace message class -->
 
-  <script type="text/javascript" src="../ddt.js"></script>
-
-  <!-- create a global trace message object -->
+  <script type="text/javascript" src="../ddt/ddt.js"></script>
 
   <script type="text/javascript">
-   var startupDDT = new DDT( "startup" );
-   startupDDT._ddtOn();
+
+  var startupDDT = new DDT( "startup" );
+
+  // uncomment the following if you would like to trace out the 
+  // startup functions. This only works in the debugging version
+  // of Xinha_ub, not the runtime.
+
+  startupDDT._ddtOn();
   </script>
   
   <!-- Load up the actual editor core -->
   <script type="text/javascript" src="../htmlarea.js"></script>
 
   <script type="text/javascript">
+
     xinha_editors = null;
     xinha_init    = null;
     xinha_config  = null;
     xinha_plugins = null;
 
     // This contains the names of textareas we will make into Xinha editors
+	 //
+	 // If xinha_init() is already defined then we copy it onto itself; this
+	 // might occur if you define another xinha_init() in some other file.
+	 //
+	 // (see the full_example.html where this is done. In that example, there's
+	 // another xinha_init defined in a full_example.js file that gets included
+	 // at the end.)
+
+   startupDDT._ddt( "simple_example.html", "71", "Setting up xinha_init()" );
+
     xinha_init = xinha_init ? xinha_init : function()
     {
+
+ 	   startupDDT._ddt( "simple_example.html", "76", "xinha_init called from window.onload handler for simple_example.html" );
+
       /** STEP 1 ***************************************************************
        * First, what are the plugins you will be using in the editors on this
        * page.  List all the plugins you will need, even if not all the editors
        * will use all the plugins.
        ************************************************************************/
 
-      xinha_plugins = xinha_plugins ? xinha_plugins :
+		// a minmal list of plugins.
+
+      xinha_plugins_minimal = 
       [
-       'CharacterMap',
        'ContextMenu',
-       'FullScreen',
-       'ListType',
-       'SpellChecker',
-       'Stylist',
-       'SuperClean',
-       'TableOperations'
+       'Stylist'
       ];
-             // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-             if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+
+      // This loads the plugins. Note that we're using the minimal list
+		// by default.
+
+	   startupDDT._ddt( "simple_example.html", "92", "calling HTMLArea.loadplugins()" );
+
+      if ( !HTMLArea.loadPlugins( xinha_plugins_minimal, xinha_init)) return;
 
       /** STEP 2 ***************************************************************
        * Now, what are the names of the textareas you will be turning into
-       * editors?
+       * editors? For this example we're only loading 1 editor.
        ************************************************************************/
 
       xinha_editors = xinha_editors ? xinha_editors :
       [
-        'myTextArea',
-        'anotherOne'
+        'TextArea1'
       ];
 
       /** STEP 3 ***************************************************************
@@ -96,6 +117,8 @@
        *   xinha_config.height = 420;
        *
        *************************************************************************/
+
+  	    startupDDT._ddt( "simple_example.html", "119", "calling HTMLArea.Config()" );
 
        xinha_config = xinha_config ? xinha_config : new HTMLArea.Config();
 
@@ -116,7 +139,9 @@
        * editors.
        ************************************************************************/
 
-      xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+      startupDDT._ddt( "simple_example.html", "140", "calling HTMLArea.makeEditors()" );
+
+      xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins_minimal);
 
       /** STEP 4 ***************************************************************
        * If you want to change the configuration variables of any of the
@@ -128,63 +153,51 @@
        *
        ************************************************************************/
 
+       xinha_editors.TextArea1.config.width  = 700;
+       xinha_editors.TextArea1.config.height = 350;
 
       /** STEP 5 ***************************************************************
        * Finally we "start" the editors, this turns the textareas into
        * Xinha editors.
        ************************************************************************/
 
-      HTMLArea.startEditors(xinha_editors);
-    }
+      startupDDT._ddt( "simple_example.html", "160", "calling HTMLArea.startEditors()" );
 
-    window.onload = xinha_init;
+      HTMLArea.startEditors(xinha_editors);
+
+    }  // end of xinha_init()
+
+    // window.onload = xinha_init;
+
   </script>
 </head>
 
 <body onload="xinha_init()">
 
+  <h1>Xinha Simple Example</h1>
+
+  <p>This file demonstrates a simple integration of the Xinha editor with a minimal
+  set of plugins.</p>
+  <br>
+
+  <a href="../index.html">Back to Index</a>
+
+  <br>
+  <hr>
+  <br>
+
   <form id="editors_here">
-    <textarea id="myTextArea" name="myTextArea" rows="10" cols="80" style="width:100%"></textarea>
-    <textarea id="anotherOne" name="anotherOne" rows="10" cols="80" style="width:100%"></textarea>
+
+    <textarea id="TextArea1" name="TextArea1" rows="10" cols="80" style="width:100%">
+	 This is the content of TextArea1 from xinha_ub/examples/simple_example.html.<br>
+	 In order to see the new debugging trace messages you will need to turn off
+	 popup blockers for this site.<br>
+	 These trace messages can also be turned on/off from within simple_example.html by
+	 commenting out or uncomments the _ddtOn() line. The same applies to the trace
+	 messages inside the HTMLArea object in htmlarea.js.
+	 </textarea>
+
   </form>
-
-
-  <!----------------------------------------------------------------------------
-    -                            !! IMPORTANT !!
-    -  The html and javascript below is the code used to create the example page.
-    -  It renders a lot of the above unused because it pre-fills xinha_editors,
-    -  xinha_config and xinha_plugins for you, and creates new textareas in place
-    -  of the ones above. The items above are not used while the example is being
-    -  used!
-    -
-    -  If you are going to take the code in this file to form the basis of your
-    -  own, then leave out this marked area.
-    --------------------------------------------------------------------------->
-
-        <div id="lipsum" style="display:none">
-          <p>This is an example of a Xinha editor. The two extra
-			 <b>&lt;&gt;</b> buttons on the right of the toolbar 
-			 turn on debugging trace messages.</p>
-
-          <p>This branch of Xinha development is called the Unified
-			 Backend branch. It includes a number of changes over the
-			 trunk<p>
-
-          <ul>
-            <li> JSDoc documentation headers on all functions (partially complete)  </li>
-            <li> _ddt() debugging trace messages added to most methods. </li>
-            <li> svn_commit.php front end to svn commit. </li>
-            <li> Configure.php script to generate server side scripts and permissions. </li>
-            <li> makedocs.pl script to generate documentation.</li>
-          </ul>
-
-			 <p>For more information see the README.txt and README_DEVELOPERS.txt
-			 file from the Xinha_ub branch.</p>
-        </div>
-        <script src="full_example.js"></script>
-
-  <!--------------------------------------------------------------------------->
-
 
 </body>
 </html>

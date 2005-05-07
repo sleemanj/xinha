@@ -4,6 +4,67 @@ by: Yermo Lamers of DTLink, LLC
 http://www.formvista.com/contact.html
 
 ---------------------------------------------------------------------
+2005-05-06: dev snapshot change summary
+
+htmlarea.js
+
+. more debugging messages added.
+. added HTMLArea.Config.linkReplacementMode which can be either 
+  fullyqualified (the old default behavior) or absolute. 
+  
+  When set to fullyqualified all absolute links (e.g. /somepath) will be changed
+  to fullyqualified URLS (e.g. http://yoursite/somepth).
+
+  When set to absolute, all fullyqualified urls back to the current site
+  will be changed to absolute (e.g. http//yoursite/somepath to /somepath)
+  making the Xinha generated content portable between sites. 
+
+  ( see HTMLArea.prototype.outwardHtml() )
+
+. bugfix - if plugin .js file has a parse error htmlarea will only try to load
+  it a configurable number of times before popping up an error message.
+
+backends/backend.php
+
+. initial unified backend created. Requests to this backend are routed
+  to the corresponding plugin specific backend.php file. 
+
+backends/backend_conf.php
+
+. a central server side configuration file has been created for the use
+  of plugin serverside code. 
+. all backends hooked into this scheme must include the central config file.
+
+ImageManager
+
+. modified the config to allow overriding default values.
+. default image directory is now xinha/examples/images
+. added debugging trace messages which are tagged with the ImageManager name.
+. now uses unified backend. 
+
+Linker
+
+. includes central config. 
+. default directory is now the xinha/examples directory (to avoid scan.php security
+  problem)
+. added debugging trace messages which are tagged with the Linker name.
+. links selected from the tree are now displayed in absolute instead of fully qualified
+  fashion.
+. on edit the link that was previously selected is highlighted.
+. on edit the selected link is scrolled to if it's outside the viewable area.
+. if scan.php returns some kind of error or invalid javascript Linker now pops up
+  a nice descriptive error message.
+
+. bugfix - same pattern as in loading plugins. If there is some error in loading
+  the directory listing Linker will only attempt it a few times before giving up and
+  displaying a nice error.
+
+dTree.js
+
+. added clear_s() method to clear the selection
+. added getNodeElement() method to return the <a ..> element for a given node.
+
+---------------------------------------------------------------------
 2005-04-23: dev snapshot
 
 CHANGES:
