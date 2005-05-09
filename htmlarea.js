@@ -547,6 +547,122 @@ HTMLArea.Config.prototype.hideSomeButtons = function(remove) {
   }
 };
 
+/** Helper Function: add buttons/drop-downs boxes with title or separator to the toolbar
+ * if the buttons/drop-downs boxes doesn't allready exists.
+ * id: button or selectbox (as array with separator or title)
+ * where: button or selectbox (as array if the first is not found take the second and so on)
+ * position:
+ * -1 = insert button (id) one position before the button (where)
+ * 0 = replace button (where) by button (id)
+ * +1 = insert button (id) one position after button (where) 
+ *
+ * cfg.addToolbarElement(["T[title]", "button_id", "separator"] , ["first_id","second_id"], -1);
+*/
+
+HTMLArea.Config.prototype.addToolbarElement = function(id, where, position) {
+  var toolbar = this.toolbar;
+  var a, i, j, o, sid;
+  var idIsArray = false;
+  var whereIsArray = false;
+  var whereLength = 0;
+  var whereJ = 0;
+  var whereI = 0;
+  var exists = false;
+  var found = false;
+  // check if id and where are arrys
+  if ((id && typeof id == "object") && (id.constructor == Array)) {
+    idIsArray = true;
+  }
+  if ((where && typeof where == "object") && (where.constructor == Array)) {
+    whereIsArray = true;
+    whereLength = where.length;
+	}
+
+  if (idIsArray) { //find the button/select box in input array
+    for (i = 0; i < id.length; ++i) {
+      if ((id[i] != "separator") && (id[i].indexOf("T[") != 0)) {
+        sid = id[i];
+      }
+    }
+  } else {
+    sid = id;
+  }
+
+  for (var i = 0; !exists && !found && i < toolbar.length; ++i) {
+    a = toolbar[i]
+    for (j = 0; !found && j < a.length; ++j) {
+      if (a[i] == sid) { // check if button/select box exists
+        exists = true;
+        break;
+      }
+      if (whereIsArray) {
+        for (o = 0; o < whereLength; ++o) {
+          if(a[j] == where[o]) {
+            if (o == 0) {
+              found = true;
+              j--;
+              break;
+            } else {
+              whereI = i; 
+              whereJ = j;
+              whereLength = o;
+            }
+          }
+        }
+      } else {
+        if (a[j] == where) { // find the position to insert
+          found = true;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!exists) {
+    if (!found && whereIsArray) { //if check found any other as the first button
+      if (where.length != whereLength) {
+        j = whereJ;
+        a = toolbar[whereI];
+        found = true;
+      }
+    }
+    if (found) {
+      if (position == 0) { // replace the found button
+        if (idIsArray) {
+          a[j] = id[id.length-1];
+          for (i = id.length-1; --i >= 0;) {
+            a.splice(j, 0, id[i]);
+          }
+        } else {
+          a[j] = id;
+        }
+      } else { // insert before/after the found button
+        if (position < 0) {
+          j = j + position + 1; //correct position before
+        } else if (position > 0) {
+          j = j + position; //correct posion after
+        }
+        if (idIsArray) { 
+          for (i = id.length; --i >= 0;) {
+            a.splice(j, 0, id[i]);
+          }
+        } else {
+           a.splice(j, 0, id);
+        }
+      }
+    }	else { // no button found
+      toolbar[0].splice(0, 0, "separator");
+      if (idIsArray) {
+        for (i = id.length; --i >= 0;) {
+          toolbar[0].splice(0, 0, id[i]);
+        }
+      } else {
+        toolbar[0].splice(0, 0, id);
+      }
+    }
+  }
+}
+
 /** Helper function: replace all TEXTAREA-s in the document with HTMLArea-s. */
 HTMLArea.replaceAll = function(config) {
   var tas = document.getElementsByTagName("textarea");
