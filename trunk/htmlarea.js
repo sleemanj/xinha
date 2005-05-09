@@ -1602,10 +1602,8 @@ HTMLArea.prototype.generate = function ()
     doc.write(html);
     doc.close();
 
-    // redo it for some obscure reason that IE need it..
-    editor.activateEditor();
-
     // if we have multiple editors some bug in Mozilla makes some lose editing ability
+    // so activation is done only when mouse down
     if(HTMLArea.is_gecko)
     {
       HTMLArea._addEvents(
@@ -1614,7 +1612,14 @@ HTMLArea.prototype.generate = function ()
         function() { editor.activateEditor();  }
       );
     }
+    else
+    {
+    	// redo it for some obscure reason that IE need it..
+    	editor.activateEditor();
+    }
 
+    // seems that focusEditor is redondant with the mouse down event handler
+    // and should be better used
     // editor.focusEditor();
     // intercept some events; for updating the toolbar & keyboard handlers
     HTMLArea._addEvents
