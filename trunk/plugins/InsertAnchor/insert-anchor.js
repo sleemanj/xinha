@@ -67,7 +67,7 @@ InsertAnchor.prototype.buttonPress = function(editor) {
   var  a = editor._activeElement(sel);
   if(!(a != null && a.tagName.toLowerCase() == 'a')) {
     a = editor._getFirstAncestor(sel, 'a'); 
-  }     
+  }
   if (a != null && a.tagName.toLowerCase() == 'a') {
     outparam = { name : a.id };
   } else
@@ -75,21 +75,25 @@ InsertAnchor.prototype.buttonPress = function(editor) {
 
   editor._popupDialog( "plugin://InsertAnchor/insert_anchor", function( param ) {
     if ( param ) {
-            var anchor = param["name"];  
+      var anchor = param["name"];
       if (anchor == "" || anchor == null) {
-        if (!a)
-          document.getElementById(a);
+        if (a) {
+          var child = a.innerHTML;
           a.parentNode.removeChild(a);
+          editor.insertHTML(child);
+        }
         return;
       } 
       try {
         var doc = editor._doc;
         if (!a) {
+//          editor.surroundHTML('<a id="' + anchor + '" name="' + anchor + '" title="' + anchor + '" class="anchor">', '</a>');
           a = doc.createElement("a");
           a.id = anchor;
           a.name = anchor;
           a.title = anchor;
           a.className = "anchor";
+          a.innerHTML = sel; 
           if (HTMLArea.is_ie) {
             range.pasteHTML(a.outerHTML);
           } else {
@@ -97,12 +101,12 @@ InsertAnchor.prototype.buttonPress = function(editor) {
           }
         } else {
           a.id = anchor;
-				  a.name = anchor;
-				  a.title = anchor;
-				  a.className = "anchor";
+          a.name = anchor;
+          a.title = anchor;
+          a.className = "anchor";
         }
       }
       catch (e) { }
-    }  
+    }
   }, outparam);
 }
