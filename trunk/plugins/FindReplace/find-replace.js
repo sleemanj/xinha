@@ -9,23 +9,10 @@ function FindReplace(editor) {
 this.editor = editor;
 var cfg = editor.config;
 var self = this;
-
 cfg.registerButton("FR-findreplace", this._lc("Find and Replace"),
                    editor.imgURL("ed_find.gif", "FindReplace"), false,
                    function(editor) { self.buttonPress(editor); });
-
-var joincfg = cfg.toolbar[0].join("|"); 
-  if(/formatblock\|/.test(joincfg))
-    cfg.toolbar[0] = joincfg.replace(/formatblock\|(space\|)?/,
-                     "formatblock|space|FR-findreplace|separator|").split("|");
-  else if(/fontsize\|/.test(joincfg))
-    cfg.toolbar[0] = joincfg.replace(/fontsize\|(space\|)?/,
-                     "fontsize|space|FR-findreplace|separator|").split("|");
-  else if(/fontname\|/.test(joincfg))
-    cfg.toolbar[0] = joincfg.replace(/fontname\|(space\|)?/,
-                     "fontname|space|FR-findreplace|separator|").split("|");
-  else 
-    cfg.toolbar[0].splice(0, 0, "FR-findreplace", "separator");
+cfg.addToolbarElement(["FR-findreplace","separator"], ["formatblock","fontsize","fontname"], -1);
 };
 
 FindReplace.prototype.buttonPress = function(editor) { 

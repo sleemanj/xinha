@@ -7,16 +7,14 @@
 // This notice MUST stay intact for use (see license.txt).
 
 function DynamicCSS(editor, args) {
-        this.editor = editor;
-
-        var cfg = editor.config;
-  var toolbar = cfg.toolbar;
+  this.editor = editor;
+  var cfg = editor.config;
   var self = this;
 
-        /*var cssArray=null;
-        var cssLength=0;*/
-        var lastTag=null;
-        var lastClass=null;
+/*var cssArray=null;
+  var cssLength=0;*/
+  var lastTag=null;
+  var lastClass=null;
 
   var css_class = {
     id         : "DynamicCSS-class",
@@ -26,10 +24,7 @@ function DynamicCSS(editor, args) {
     refresh    : function(editor) { self.updateValue(editor, this); }
   };
   cfg.registerDropdown(css_class);
-
-  toolbar[0].splice(0, 0, "separator");
-  toolbar[0].splice(0, 0, "DynamicCSS-class");
-  toolbar[0].splice(0, 0, "T[CSS]");
+  cfg.addToolbarElement(["T[CSS]", "DynamicCSS-class", "separator"] , "formatblock", -1);
 };
 
 DynamicCSS.parseStyleSheet=function(editor){

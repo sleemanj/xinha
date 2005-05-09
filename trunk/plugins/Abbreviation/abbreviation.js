@@ -21,7 +21,7 @@ function Abbreviation(editor) {
 			self.buttonPress(editor);
 		}
 	})
-	cfg.addToolbarElement("abbreviation", "inserthorizontalrule", 1)
+	cfg.addToolbarElement("abbreviation", "inserthorizontalrule", 1);
 }
 
 Abbreviation._pluginInfo = {

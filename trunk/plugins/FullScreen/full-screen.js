@@ -23,24 +23,7 @@ function FullScreen(editor, args)
   );
 
   // See if we can find 'popupeditor' and replace it with fullscreen
-  var t = editor.config.toolbar;
-  var done = false;
-  for(var i = 0; i < t.length && !done; i++)
-  {
-    for(var x = 0; x < t[i].length && !done; x++)
-    {
-      if(t[i][x] == 'popupeditor')
-      {
-        t[i][x] = 'fullscreen';
-        done = true;
-      }
-    }
-  }
-
-  if(!done)
-  {
-    t[0].push('fullscreen');
-  }
+  editor.config.addToolbarElement("fullscreen", "popupeditor", 0);
 }
 
 FullScreen._pluginInfo =
