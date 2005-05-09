@@ -62,15 +62,16 @@ InsertAnchor.prototype.onGenerate = function() {
 
 InsertAnchor.prototype.buttonPress = function(editor) {
   var outparam = null;
+  var html = editor.getSelectedHTML();
   var sel  = editor._getSelection();
   var range  = editor._createRange(sel);
   var  a = editor._activeElement(sel);
   if(!(a != null && a.tagName.toLowerCase() == 'a')) {
     a = editor._getFirstAncestor(sel, 'a'); 
   }
-  if (a != null && a.tagName.toLowerCase() == 'a') {
+  if (a != null && a.tagName.toLowerCase() == 'a')
     outparam = { name : a.id };
-  } else
+  else
     outparam = { name : '' };
 
   editor._popupDialog( "plugin://InsertAnchor/insert_anchor", function( param ) {
@@ -93,7 +94,7 @@ InsertAnchor.prototype.buttonPress = function(editor) {
           a.name = anchor;
           a.title = anchor;
           a.className = "anchor";
-          a.innerHTML = sel; 
+          a.innerHTML = html;
           if (HTMLArea.is_ie) {
             range.pasteHTML(a.outerHTML);
           } else {
