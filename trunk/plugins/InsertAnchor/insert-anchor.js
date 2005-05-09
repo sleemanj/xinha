@@ -1,52 +1,36 @@
 function InsertAnchor(editor) {
   this.editor = editor;
   var cfg = editor.config;
-  var bl = InsertAnchor.btnList;
   var self = this;
 
   // register the toolbar buttons provided by this plugin
-  var toolbar = [];
-  for (var i in bl) {
-    if(typeof bl[i] == 'function') continue;
-    var btn = bl[i];
-    if (!btn) {
-      toolbar.push("separator");
-    }
-    else {
-      var id = "IA-" + btn[0];
-      cfg.registerButton(id, this._lc("Insert Anchor"), editor.imgURL(btn[0] + ".gif", "InsertAnchor"), false,
-             function(editor, id) {
-               // dispatch button press event
-               self.buttonPress(editor, id);
-             }, btn[1]);
-      toolbar.push(id);
-    }
-  }
-
-  for (var i in toolbar) {
-    cfg.toolbar[0].push(toolbar[i]);
-  }
+  cfg.registerButton({
+  id       : "insert-anchor", 
+  tooltip  : this._lc("Insert Anchor"), 
+  image    : editor.imgURL("insert-anchor.gif", "InsertAnchor"),
+  textMode : false,
+  action   : function(editor) {
+               self.buttonPress(editor);
+             }
+  });
+  cfg.addToolbarElement("insert-anchor", "createlink", 1);
 }
 
 InsertAnchor._pluginInfo = {
   name          : "InsertAnchor",
-  version       : "1.0",
-  developer     : "Andre Rabold",
-  developer_url : "http://www.mr-printware.de",
-  c_owner       : "Andre Rabold",
-  sponsor       : "MR Printware GmbH",
-  sponsor_url   : "http://www.mr-printware.de",
+  origin        : "version: 1.0, by Andre Rabold, MR Printware GmbH, http://www.mr-printware.de",
+  version       : "2.0",
+  developer     : "Udo Schmal",
+  developer_url : "http://www.schaffrath-neuemedien.de",
+  c_owner       : "Udo Schmal",
+  sponsor       : "L.N.Schaffrath NeueMedien",
+  sponsor_url   : "http://www.schaffrath-neuemedien.de",
   license       : "htmlArea"
 };
 
 InsertAnchor.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'InsertAnchor');
 }
-
-InsertAnchor.btnList = [
-  null, // separator
-  ["insert-anchor"]
-];
 
 InsertAnchor.prototype.onGenerate = function() {
   var style_id = "IA-style"
