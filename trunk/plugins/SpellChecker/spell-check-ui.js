@@ -433,7 +433,6 @@ function finishedSpellChecking() {
       var txt = dicts[i];
       var option = document.createElement("option");
       if(txt == activeDictionary) {
-        txt = RegExp.$1;
         option.selected = true;
       }
       option.value = txt;
