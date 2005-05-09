@@ -270,7 +270,7 @@ HTMLArea.Config = function () {
     ["linebreak","justifyleft","justifycenter","justifyright","justifyfull","separator"],
     ["insertorderedlist","insertunorderedlist","outdent","indent","separator"],
     ["inserthorizontalrule","createlink","insertimage","inserttable","separator"],
-    ["undo","redo"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste"]),["separator"],
+    ["undo","redo"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste"]),["selectall"],["separator"],
     ["killword","removeformat","toggleborders","lefttoright", "righttoleft", "separator","htmlmode","about"]
   ];
 
@@ -386,7 +386,7 @@ HTMLArea.Config = function () {
     cut: [ "Cut selection", ["ed_buttons_main.gif",5,0], false, cut_copy_paste ],
     copy: [ "Copy selection", ["ed_buttons_main.gif",4,0], false, cut_copy_paste ],
     paste: [ "Paste from clipboard", ["ed_buttons_main.gif",4,1], false, cut_copy_paste ],
-
+    selectall: [ "Select all", "ed_selectall.gif", false, function(e) {e.execCommand("selectall");} ],
 
 
     inserthorizontalrule: [ "Horizontal Rule", ["ed_buttons_main.gif",6,0], false, function(e) {e.execCommand("inserthorizontalrule");} ],
