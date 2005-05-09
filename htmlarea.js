@@ -3855,7 +3855,7 @@ HTMLArea.prototype.fixRelativeLinks = function(html)
   }
 
 
-  if(typeof this.config.stripBaseHref != 'undefined' && this.config.stipBaseHref)
+  if(typeof this.config.stripBaseHref != 'undefined' && this.config.stripBaseHref)
   {
     var baseRe = null
     if(typeof this.config.baseHref != 'undefined' && this.config.baseHref != null)
