@@ -40,23 +40,7 @@ function Linker(editor, args)
   }
 
   // See if we can find 'createlink'
-  var t = editor.config.toolbar;
-  var done = false;
-  for(var i = 0; i < t.length && !done; i++)
-  {
-    for(var x = 0; x < t[i].length && !done; x++)
-    {
-      if(t[i][x] == 'createlink')
-      {
-        done = true;
-      }
-    }
-  }
-
-  if(!done)
-  {
-    t[t.length-1].push('createlink');
-  }
+ editor.config.addToolbarElement("createlink", "createlink", 0);
 }
 
 Linker.prototype._lc = function(string)

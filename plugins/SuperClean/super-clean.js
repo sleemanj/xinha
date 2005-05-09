@@ -6,24 +6,7 @@ function SuperClean(editor, args)
   editor.config.registerButton('superclean', this._lc("Clean Up HTML"), editor.imgURL('ed_superclean.gif', 'SuperClean'), true, function(e, objname, obj) { e._superClean(null, obj); });
 
   // See if we can find 'killword' and replace it with superclean
-  var t = editor.config.toolbar;
-  var done = false;
-  for(var i = 0; i < t.length && !done; i++)
-  {
-    for(var x = 0; x < t[i].length && !done; x++)
-    {
-      if(t[i][x] == 'killword')
-      {
-        t[i][x] = 'superclean';
-        done = true;
-      }
-    }
-  }
-
-  if(!done)
-  {
-    t[t.length-1].push('superclean');
-  }
+  editor.config.addToolbarElement("superclean", "killword", 0);
 }
 
 SuperClean._pluginInfo =
