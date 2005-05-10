@@ -236,7 +236,7 @@ HTMLArea.Config = function () {
     ["linebreak","justifyleft","justifycenter","justifyright","justifyfull","separator"],
     ["insertorderedlist","insertunorderedlist","outdent","indent","separator"],
     ["inserthorizontalrule","createlink","insertimage","inserttable","separator"],
-    ["undo","redo"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste"]),["selectall"],["separator"],
+    ["undo","redo"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),["selectall"],["separator"],
     ["killword","removeformat","toggleborders","lefttoright", "righttoleft", "separator","htmlmode","about"]
   ];
 
@@ -363,6 +363,7 @@ HTMLArea.Config = function () {
     htmlmode: [ "Toggle HTML Source", ["ed_buttons_main.gif",7,0], true, function(e) {e.execCommand("htmlmode");} ],
     toggleborders: [ "Toggle Borders", ["ed_buttons_main.gif",7,2], false, function(e) { e._toggleBorders() } ],
     print:         [ "Print document", ["ed_buttons_main.gif",8,1], false, function(e) {e._iframe.contentWindow.print();} ],
+    saveas: [ "Save as", "ed_saveas.gif", false, function(e) {e.execCommand("saveas",false,"noname.htm");} ],
     popupeditor: [ "Enlarge Editor", ["ed_buttons_main.gif",8,0], true,
       function(e, objname, obj)
       {
@@ -383,6 +384,7 @@ HTMLArea.Config = function () {
     splitblock:    [ "Split Block", "ed_splitblock.gif", false, function(e) {e._splitBlock();} ],
     lefttoright: [ "Direction left to right", ["ed_buttons_main.gif",0,4], false, function(e) {e.execCommand("lefttoright");} ],
     righttoleft: [ "Direction right to left", ["ed_buttons_main.gif",1,4], false, function(e) {e.execCommand("righttoleft");} ],
+    overwrite: [ "Insert/Overwrite", "ed_overwrite.gif", false, function(e) {e.execCommand("overwrite");} ],
 
     wordclean:     [ "MS Word Cleaner", ["ed_buttons_main.gif",5,3], false, function(e) {e._wordClean();} ],
     clearfonts:    [ "Clear Inline Font Specifications", ["ed_buttons_main.gif",5,4], false, function(e) {e._clearFonts();} ],
