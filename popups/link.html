@@ -26,6 +26,11 @@ function onTargetChanged() {
 function Init() {
   __dlg_translate('HTMLArea');
   __dlg_init();
+
+  // Make sure the translated string appears in the drop down. (for gecko)
+  document.getElementById("f_target").selectedIndex = 1;
+  document.getElementById("f_target").selectedIndex = 0;
+
   var param = window.dialogArguments;
   var target_select = document.getElementById("f_target");
   var use_target = true;
