@@ -149,7 +149,7 @@ HTMLArea.init = function() {
       head.appendChild(script);
     } else {
       document.title = savetitle;
-      HTMLArea.onload();
+    HTMLArea.onload();
     }
   };
   loadNextScript();
@@ -1068,11 +1068,10 @@ HTMLArea.prototype.generate = function ()
       {
         if(typeof EnterParagraphs == 'undefined')
         {
-          EnterParagraphs = 'null';
-          HTMLArea._loadback
-            (_editor_url + 'plugins/EnterParagraphs/enter-paragraphs.js', function() { editor.registerPlugin('EnterParagraphs'); editor.generate(); } );
+          HTMLArea.loadPlugin("EnterParagraphs", function() { editor.generate(); } );
           return false;
         }
+        editor.registerPlugin('EnterParagraphs');
       }
       break;
 
