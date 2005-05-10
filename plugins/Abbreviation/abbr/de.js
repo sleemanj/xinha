@@ -1,5 +1,5 @@
 // I18N constants
-// LANG: "de", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "de", ENCODING: UTF-8
 // Author: Udo Schmal, <schmal@schaffrath-neuemedien.de>
 //
 // (c) Udo Schmal & Schaffrath NeueMedien 2004

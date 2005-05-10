@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "en", ENCODING: UTF-8
+// LANG: "no", ENCODING: UTF-8
 // Author: Mihai Bazon, <mihai_bazon@yahoo.com>
 // translated into Norwegia: ses@online.no  11.11.03
 
