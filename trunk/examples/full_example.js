@@ -63,6 +63,27 @@
       config.pageStyle = "@import url(dynamic.css);";
     }
 
+    if(typeof InsertWords != 'undefined')
+    {
+      // Register the keyword/replacement list
+      var keywrds1 = new Object();
+      var keywrds2 = new Object();
+
+      keywrds1['-- Dropdown Label --'] = '';
+      keywrds1['onekey'] = 'onevalue';
+      keywrds1['twokey'] = 'twovalue';
+      keywrds1['threekey'] = 'threevalue';
+
+      keywrds2['-- Insert Keyword --'] = '';
+      keywrds2['Username'] = '%user%';
+      keywrds2['Last login date'] = '%last_login%';
+      config.InsertWords = {
+        combos : [ { options: keywrds1, context: "body" },
+               { options: keywrds2, context: "li" } ]
+      }
+
+    }
+
     return config;
   }
 
