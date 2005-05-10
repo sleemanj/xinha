@@ -42,7 +42,8 @@
         "Clear Inline Font Specifications": "Zeichensatz Formatierungen entfernen",
         "Split Block": "Block teilen",
         "Toggle Borders": "Tabellenränder ein/ausblenden",
-
+        "Save as": "speichern unter",
+        "Insert/Overwrite": "Einfügen/Überschreiben",
         "&mdash; format &mdash;": "&mdash; Format &mdash;",
         "Heading 1": "Überschrift 1",
         "Heading 2": "Überschrift 2",
