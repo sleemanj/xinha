@@ -120,44 +120,10 @@ function HTMLArea(textarea, config) {
 };
 
 HTMLArea.onload = function(){};
-HTMLArea._scripts = [];
-
-HTMLArea.loadScript = function(url, plugin) {
-  if (plugin)
-    url = HTMLArea.getPluginDir(plugin) + '/' + url;
-  this._scripts.push(url);
-};
-
-
 HTMLArea.init = function() {
-
-  var head = document.getElementsByTagName("head")[0];
-  var current = 0;
-  var savetitle = document.title;
-  var evt = HTMLArea.is_ie ? "onreadystatechange" : "onload";
-  function loadNextScript() {
-    if (current > 0 && HTMLArea.is_ie &&
-        !/loaded|complete/.test(window.event.srcElement.readyState))
-      return;
-    if (current < HTMLArea._scripts.length) {
-      var url = HTMLArea._scripts[current++];
-      document.title = "[HTMLArea: loading script " + current + "/" + HTMLArea._scripts.length + "]";
-      var script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = url;
-      script[evt] = loadNextScript;
-      head.appendChild(script);
-    } else {
-      document.title = savetitle;
     HTMLArea.onload();
-    }
-  };
-  loadNextScript();
 };
 
-HTMLArea.loadScript(_editor_url + "dialog.js");
-HTMLArea.loadScript(_editor_url + "inline-dialog.js");
-HTMLArea.loadScript(_editor_url + "popupwin.js");
 
 // cache some regexps
 HTMLArea.RE_tagName = /(<\/|<)\s*([^ \t\n>]+)/ig;
@@ -333,7 +299,6 @@ HTMLArea.Config = function () {
    "insert_image": "insert_image.html",
    "insert_table": "insert_table.html",
    "select_color": "select_color.html",
-   "fullscreen": "fullscreen.html",
    "about": "about.html"
   };
 
@@ -398,10 +363,19 @@ HTMLArea.Config = function () {
     htmlmode: [ "Toggle HTML Source", ["ed_buttons_main.gif",7,0], true, function(e) {e.execCommand("htmlmode");} ],
     toggleborders: [ "Toggle Borders", ["ed_buttons_main.gif",7,2], false, function(e) { e._toggleBorders() } ],
     print:         [ "Print document", ["ed_buttons_main.gif",8,1], false, function(e) {e._iframe.contentWindow.print();} ],
-    popupeditor: [ "Enlarge Editor", "fullscreen_maximize.gif", true,
+    popupeditor: [ "Enlarge Editor", ["ed_buttons_main.gif",8,0], true,
       function(e, objname, obj)
       {
-        e.execCommand("popupeditor");
+        //call FullScreen-plugin (backwards-compatibility)
+        e._fullScreen();
+        if(e._isFullScreen)
+        {
+          obj.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.gif',9,0]);
+        }
+        else
+        {
+          obj.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.gif',8,0]);
+        }
       } ],
     about: [ "About this editor", ["ed_buttons_main.gif",8,2], true, function(e) {e.execCommand("about");} ],
     showhelp: [ "Help using editor", ["ed_buttons_main.gif",9,2], true, function(e) {e.execCommand("showhelp");} ],
@@ -1058,6 +1032,41 @@ HTMLArea.prototype._createStatusBar = function() {
 HTMLArea.prototype.generate = function ()
 {
   var editor = this;	// we'll need "this" in some nested functions
+
+  if(typeof Dialog == 'undefined')
+  {
+    HTMLArea._loadback
+      (_editor_url + 'dialog.js', function() { editor.generate(); } );
+      return false;
+  }
+
+  if(typeof HTMLArea.Dialog == 'undefined')
+  {
+    HTMLArea._loadback
+      (_editor_url + 'inline-dialog.js', function() { editor.generate(); } );
+      return false;
+  }
+
+  if(typeof PopupWin == 'undefined')
+  {
+    HTMLArea._loadback
+      (_editor_url + 'popupwin.js', function() { editor.generate(); } );
+      return false;
+  }
+
+  //backwards-compatibility: load FullScreen-Plugin if we find a "popupeditor"-button in the toolbar
+  var toolbar = editor.config.toolbar;
+  for (var i = toolbar.length; --i >= 0;) {
+    for (var j = toolbar[i].length; --j >= 0; ) {
+      if (toolbar[i][j]=="popupeditor") {
+        if(typeof FullScreen == "undefined") {
+          HTMLArea.loadPlugin("FullScreen", function() { editor.generate(); } );
+          return false;
+        }
+        editor.registerPlugin('FullScreen');
+      }
+    }
+  }
 
   // If this is gecko, set up the paragraph handling now
   if(HTMLArea.is_gecko)
@@ -3131,23 +3140,6 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
     case "createlink":
       this._createLink();
       break;
-    case "popupeditor":
-    // this object will be passed to the newly opened window
-    HTMLArea._object = this;
-    var win;
-    if (HTMLArea.is_ie) {
-      {
-                                win = window.open(this.popupURL(editor.config.URIs["fullscreen"]), "ha_fullscreen",
-              "toolbar=no,location=no,directories=no,status=no,menubar=no," +
-              "scrollbars=no,resizable=yes,width=640,height=480");
-      }
-    } else {
-                            win = window.open(this.popupURL(editor.config.URIs["fullscreen"]), "ha_fullscreen",
-            "toolbar=no,menubar=no,personalbar=no,width=640,height=480," +
-            "scrollbars=no,resizable=yes");
-    }
-    win.focus()
-    break;
       case "undo":
       case "redo":
     if (this._customUndo)
