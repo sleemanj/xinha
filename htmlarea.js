@@ -1535,7 +1535,7 @@ HTMLArea.prototype.generate = function ()
     {
       try {this._doc.designMode = 'off';} catch (e) {}
     }
-    else
+    else if(!HTMLArea.is_gecko)
     {
       this._doc.body.contentEditable = false;
     }
