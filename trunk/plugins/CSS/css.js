@@ -44,7 +44,6 @@ HTMLArea.Config.prototype.cssPluginConfig =
 function CSS(editor, params) {
 	this.editor = editor;
 	var cfg = editor.config;
-	var toolbar = cfg.toolbar;
 	var self = this;
 	var plugin_config;
   if(params && params.length)
@@ -58,7 +57,6 @@ function CSS(editor, params) {
 
   var combos = plugin_config.combos;
 
-	var first = true;
 	for (var i = 0; i < combos.length; i++) {
 		var combo = combos[i];
 		var id = "CSS-class" + i;
@@ -71,8 +69,7 @@ function CSS(editor, params) {
 		};
 		cfg.registerDropdown(css_class);
     cfg.addToolbarElement(["T[" + combo.label + "]", id, "separator"] , "formatblock", -1);
-		first = false;
-	}
+ 	}
 };
 
 CSS._pluginInfo = {

@@ -25,8 +25,7 @@ function FullPage(editor) {
 			   });
 
 	// add a new line in the toolbar
-	cfg.toolbar[0].splice(0, 0, "separator");
-	cfg.toolbar[0].splice(0, 0, "FP-docprop");
+	cfg.addToolbarElement(["separator","FP-docprop"],"separator",-1);
 };
 
 FullPage._pluginInfo = {
