@@ -530,7 +530,7 @@ HTMLArea.Config.prototype.hideSomeButtons = function(remove) {
  * position:
  * -1 = insert button (id) one position before the button (where)
  * 0 = replace button (where) by button (id)
- * +1 = insert button (id) one position after button (where) 
+ * +1 = insert button (id) one position after button (where)
  *
  * cfg.addToolbarElement(["T[title]", "button_id", "separator"] , ["first_id","second_id"], -1);
 */
@@ -579,7 +579,7 @@ HTMLArea.Config.prototype.addToolbarElement = function(id, where, position) {
               j--;
               break;
             } else {
-              whereI = i; 
+              whereI = i;
               whereJ = j;
               whereLength = o;
             }
@@ -618,7 +618,7 @@ HTMLArea.Config.prototype.addToolbarElement = function(id, where, position) {
         } else if (position > 0) {
           j = j + position; //correct posion after
         }
-        if (idIsArray) { 
+        if (idIsArray) {
           for (i = id.length; --i >= 0;) {
             a.splice(j, 0, id[i]);
           }
@@ -1135,8 +1135,8 @@ HTMLArea.prototype.generate = function ()
 
   // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
-  innerEditor.appendChild(iframe);
   iframe.src = _editor_url + editor.config.URIs["blank"];
+  innerEditor.appendChild(iframe);
   this._iframe = iframe;
 
 
