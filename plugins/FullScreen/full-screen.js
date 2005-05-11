@@ -4,7 +4,7 @@ function FullScreen(editor, args)
   editor._superclean_on = false;
   cfg = editor.config;
 
-  editor.config.registerButton
+  cfg.registerButton
   ( 'fullscreen',
     this._lc("Maximize/Minimize Editor"),
     [_editor_url + cfg.imgURL + 'ed_buttons_main.gif',8,0], true,
@@ -23,7 +23,7 @@ function FullScreen(editor, args)
   );
 
   // See if we can find 'popupeditor' and replace it with fullscreen
-  editor.config.addToolbarElement("fullscreen", "popupeditor", 0);
+  cfg.addToolbarElement("fullscreen", "popupeditor", 0);
 }
 
 FullScreen._pluginInfo =
