@@ -8,12 +8,12 @@ HTMLArea.Dialog = function(editor, html, localizer)
 
   this.rootElem = document.createElement('div');
   this.rootElem.className = 'dialog';
-  this.rootElem.style.position = 'relative';
+  this.rootElem.style.position = 'absolute';
   this.rootElem.style.display  = 'none';
 
   this.width  = parseInt(this.rootElem.style.width  = this.editor._iframe.style.width);
-  this.height = parseInt(this.rootElem.style.height = this.editor._iframe.style.height);
-
+  this.height = this.rootElem.style.height = (parseInt(this.editor._iframe.style.height)+this.editor._statusBar.offsetHeight-2)+'px';
+  
   var dialog = this;
   if(typeof localizer == 'function')
   {
@@ -66,7 +66,7 @@ HTMLArea.Dialog = function(editor, html, localizer)
       function(e, args)
       {
         dialog.width  = parseInt(dialog.rootElem.style.width  = args.editorWidth  + 'px');
-        dialog.height = parseInt(dialog.rootElem.style.height = args.editorHeight + 'px');
+        dialog.height = dialog.rootElem.style.height = (args.editorHeight+dialog.editor._statusBar.offsetHeight-2)+'px';
         dialog.onresize();
       }
     );
@@ -93,10 +93,6 @@ HTMLArea.Dialog.prototype.show = function(values)
 
   this.editor._textArea.style.display = 'none';
   this.editor._iframe.style.visibility   = 'hidden';
-  if (this.editor.config.statusBar)
-  {
-    this.editor._statusBar.innerHTML = '&nbsp;';
-  }
   this.rootElem.style.display   = '';
 }
 
@@ -106,16 +102,13 @@ HTMLArea.Dialog.prototype.hide = function()
   this.editor._textArea.style.display = this._restoreTo[0];
   this.editor._iframe.style.visibility   = this._restoreTo[1];
   this.editor.showPanels(this._restoreTo[2]);
-  if (this.editor.config.statusBar)
-  {
-    this.editor._statusBar.innerHTML = '';
-    this.editor._statusBar.appendChild(this.editor._statusBarTree);
-  }
+  
   // Restore the selection
   if(HTMLArea.is_ie)
   {
     this._lastRange.select();
   }
+  this.editor.updateToolbar();
   return this.getValues();
 }
 
@@ -295,7 +288,7 @@ HTMLArea.Dialog.prototype.getValues = function()
 
             if(i.checked)
             {
-              if(v.push)
+              if(v && v.push)
               {
                 v.push(i.value);
               }

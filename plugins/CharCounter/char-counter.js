@@ -34,6 +34,23 @@ CharCounter.prototype.onUpdateToolbar = function() {
     this.updateCharCount();
 }
 
+CharCounter.prototype.onMode = function (mode)
+{
+  //Hide Chars in statusbar when switching into textmode
+  switch (mode)
+  {
+    case "textmode":
+      this.charCount.style.display = "none";
+      break;
+    case "wysiwyg":
+      this.charCount.style.display = "";
+      break;
+    default:
+      alert("Mode <" + mode + "> not defined!");
+      return false;
+  }
+}
+
 CharCounter.prototype.onKeyPress = function(ev) {
     var cnt = this.updateCharCount();
 

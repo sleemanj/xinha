@@ -1024,6 +1024,13 @@ HTMLArea.prototype._createStatusBar = function() {
   div.innerHTML = HTMLArea._lc("Path") + ": ";
   this._statusBarTree = div;
   this._statusBar.appendChild(div);
+
+  div = document.createElement("span");
+  div.innerHTML = HTMLArea._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
+  div.style.display = "none";
+  this._statusBarTextMode = div;
+  this._statusBar.appendChild(div);
+
   if (!this.config.statusBar) {
     // disable it...
     statusbar.style.display = "none";
@@ -1674,7 +1681,8 @@ HTMLArea.prototype.setMode = function(mode) {
       this._textArea.style.display = "block";
       if (this.config.statusBar)
       {
-        this._statusBar.innerHTML = HTMLArea._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
+        this._statusBarTree.style.display = "none";
+        this._statusBarTextMode.style.display = "";
       }
 
       this.notifyOf('modechange', {'mode':'text'});
@@ -1698,8 +1706,8 @@ HTMLArea.prototype.setMode = function(mode) {
       this.activateEditor();
       if (this.config.statusBar)
       {
-        this._statusBar.innerHTML = '';
-        this._statusBar.appendChild(this._statusBarTree);
+        this._statusBarTree.style.display = "";
+        this._statusBarTextMode.style.display = "none";
       }
 
       this.notifyOf('modechange', {'mode':'wysiwyg'});
