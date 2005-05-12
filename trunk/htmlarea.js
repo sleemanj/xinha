@@ -1502,6 +1502,14 @@ HTMLArea.prototype.generate = function ()
     return props;
   }
 
+  /*
+   * EDITOR ACTIVATION NOTES:
+   *  when a page has multiple Xinha editors, ONLY ONE should be activated at any time (this is mostly to
+   *  work around a bug in Mozilla, but also makes some sense).  No editor should be activated or focused
+   *  automatically until at least one editor has been activated through user action (by mouse-clicking in
+   *  the editor).
+   */
+
   HTMLArea.prototype.editorIsActivated = function() {
     try {
       if (HTMLArea.is_gecko) return (this._doc.designMode == 'on');
@@ -1512,11 +1520,21 @@ HTMLArea.prototype.generate = function ()
     }
   }
 
+  HTMLArea._someEditorHasBeenActivated = false;
+  HTMLArea._currentlyActiveEditor      = false;
   HTMLArea.prototype.activateEditor = function()
   {
-    if (HTMLArea.is_gecko && this._doc.designMode != 'on') {
-      try {
+    // We only want ONE editor at a time to be active
+    if(HTMLArea._currentlyActiveEditor)
+    {
+      if(HTMLArea._currentlyActiveEditor == this) return true;
+      HTMLArea._currentlyActiveEditor.deactivateEditor();
+    }
 
+    if (HTMLArea.is_gecko && this._doc.designMode != 'on')
+    {
+      try
+      {
         // cannot set design mode if no display
         if (this._iframe.style.display == 'none')
         {
@@ -1534,6 +1552,17 @@ HTMLArea.prototype.generate = function ()
     {
       this._doc.body.contentEditable = true;
     }
+
+    // We need to know that at least one editor on the page has been activated
+    // this is because we will not focus any editor until an editor has been activated
+    HTMLArea._someEditorHasBeenActivated = true;
+    HTMLArea._currentlyActiveEditor      = this;
+
+    var editor = this;
+    this._timerToolbar = setTimeout(function() {
+      editor.updateToolbar();
+      editor._timerToolbar = null;
+    }, 250);
   }
 
   HTMLArea.prototype.deactivateEditor = function()
@@ -1546,6 +1575,16 @@ HTMLArea.prototype.generate = function ()
     {
       this._doc.body.contentEditable = false;
     }
+
+    if(HTMLArea._currentlyActiveEditor != this)
+    {
+      // We just deactivated an editor that wasn't marked as the currentlyActiveEditor
+
+      return; // I think this should really be an error, there shouldn't be a situation where
+              // an editor is deactivated without first being activated.  but it probably won't
+              // hurt anything.
+    }
+    HTMLArea._currentlyActiveEditor = false;
   }
 
   HTMLArea.prototype.initIframe = function()
@@ -1571,7 +1610,6 @@ HTMLArea.prototype.generate = function ()
           alert("ERROR: IFRAME can't be initialized.");
         }
       }
-      editor.activateEditor();
     }
     catch(e)
     { // try later
@@ -1620,24 +1658,14 @@ HTMLArea.prototype.generate = function ()
     doc.close();
 
     // if we have multiple editors some bug in Mozilla makes some lose editing ability
-    // so activation is done only when mouse down
-    if(HTMLArea.is_gecko)
-    {
-      HTMLArea._addEvents(
-        editor._iframe.contentWindow,
-        ["mousedown"],
-        function() { editor.activateEditor();  }
-      );
-    }
-    else
-    {
-    	// redo it for some obscure reason that IE need it..
-    	editor.activateEditor();
-    }
+    HTMLArea._addEvents
+    (
+      doc,
+      ["mousedown"],
+      function() { editor.activateEditor(); return true; }
+    );
 
-    // seems that focusEditor is redondant with the mouse down event handler
-    // and should be better used
-    // editor.focusEditor();
+
     // intercept some events; for updating the toolbar & keyboard handlers
     HTMLArea._addEvents
       (doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"],
@@ -1655,12 +1683,6 @@ HTMLArea.prototype.generate = function ()
     if(typeof editor._onGenerate == "function") {
       editor._onGenerate();
     }
-
-    // update toolbar (hope this will arrive enough late...)
-    editor._timerToolbar = setTimeout(function() {
-      editor.updateToolbar();
-      editor._timerToolbar = null;
-    }, 250);
   }
 
 // Switches editor mode; parameter can be "textmode" or "wysiwyg".  If no
@@ -1721,7 +1743,6 @@ HTMLArea.prototype.setMode = function(mode) {
     }
   }
   this._editMode = mode;
-  // this.focusEditor();
 
   for (var i in this.plugins) {
     var plugin = this.plugins[i].instance;
@@ -1749,7 +1770,6 @@ HTMLArea.prototype.setFullHTML = function(html) {
     this._doc.write(html);
     this._doc.close();
     this.activateEditor();
-    // this._doc.body.contentEditable = true;
     return true;
   }
 };
@@ -2067,12 +2087,11 @@ HTMLArea.prototype.focusEditor = function() {
       try
       {
         // We don't want to focus the field unless at least one field has been activated.
-        if(!this.editorIsActivated())
+        if(HTMLArea._someEditorHasBeenActivated)
         {
-          this.activateEditor();
-          this._iframe.contentWindow.focus();
+          this.activateEditor(); // Ensure *this* editor is activated
+          this._iframe.contentWindow.focus(); // and focus it
         }
-
       } catch (e) {} break;
       case "textmode": try { this._textArea.focus() } catch (e) {} break;
       default	   : alert("ERROR: mode " + this._editMode + " is not defined");
