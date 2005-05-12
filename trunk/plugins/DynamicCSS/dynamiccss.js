@@ -33,7 +33,10 @@ DynamicCSS.parseStyleSheet=function(editor){
         cssArray=DynamicCSS.cssArray;
         if(!cssArray) cssArray=new Array();
 
-        for(i=0;i<iframe.styleSheets.length;i++){
+        for(i=0;i<iframe.styleSheets.length;i++)
+        {
+            if(iframe.styleSheets[i].title == "table borders") continue;
+            
             // Mozilla
             if(HTMLArea.is_gecko){
                 try{
