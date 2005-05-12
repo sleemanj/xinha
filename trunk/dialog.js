@@ -19,7 +19,6 @@ function Dialog(url, action, init) {
 		init = window;	// pass this window object by default
 	}
 	Dialog._geckoOpenModal(url, action, init);
-  window.focus();
 };
 
 Dialog._parentEvent = function(ev) {
