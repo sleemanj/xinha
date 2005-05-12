@@ -1559,14 +1559,14 @@ HTMLArea.prototype.generate = function ()
     HTMLArea._currentlyActiveEditor      = this;
 
     var editor = this;
-    this._timerToolbar = setTimeout(function() {
-      editor.updateToolbar();
-      editor._timerToolbar = null;
-    }, 250);
+    this.enableToolbar();
   }
 
   HTMLArea.prototype.deactivateEditor = function()
   {
+    // If the editor isn't active then the user shouldn't use the toolbar
+    this.disableToolbar();
+
     if (HTMLArea.is_gecko && this._doc.designMode != 'off')
     {
       try {this._doc.designMode = 'off';} catch (e) {}
@@ -1584,11 +1584,13 @@ HTMLArea.prototype.generate = function ()
               // an editor is deactivated without first being activated.  but it probably won't
               // hurt anything.
     }
+
     HTMLArea._currentlyActiveEditor = false;
   }
 
   HTMLArea.prototype.initIframe = function()
   {
+    this.disableToolbar();
     var doc = null;
     var editor = this;
     try
@@ -2137,6 +2139,7 @@ HTMLArea.prototype.redo = function() {
 
 HTMLArea.prototype.disableToolbar = function(except)
 {
+  if(this._timerToolbar) clearTimeout(this._timerToolbar);
   if(typeof except == 'undefined')
   {
     except = [ ];
