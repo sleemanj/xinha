@@ -32,7 +32,7 @@ function ListType(editor) {
 		context       : "ol"
 	};
 	cfg.registerDropdown(obj);
-	cfg.addToolbarElement("listtype", "orderedlist", 1);
+	cfg.addToolbarElement("listtype", ["insertorderedlist","orderedlist"], 1);
 }	
 
 ListType._pluginInfo = {
