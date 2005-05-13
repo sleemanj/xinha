@@ -1,6 +1,6 @@
 // I18N for the Equation plugin
 
-// LANG: "de", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "de", ENCODING: UTF-8
 // Author: Joe Hobson, jhobson@bcoe.org
 
 // FOR TRANSLATORS:
