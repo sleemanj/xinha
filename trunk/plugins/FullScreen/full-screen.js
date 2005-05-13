@@ -74,8 +74,9 @@ HTMLArea.prototype._fullScreen = function()
       y = document.body.clientHeight;
     }
 
+    e.sizeEditor(x,y,true,true);
+    /*
     if(!e._revertFullScreen) e._revertFullScreen = e.getInnerSize();
-
     width = x;
     height = y - e._toolbar.offsetHeight - (e._statusBar ? e._statusBar.offsetHeight : 0);
     e.setInnerSize(width,height);
@@ -90,7 +91,7 @@ HTMLArea.prototype._fullScreen = function()
         e._statusBar.style.width = (width - 12) + 'px';
       }
     }
-
+    */
     e._sizing = false;
   }
 
@@ -98,6 +99,8 @@ HTMLArea.prototype._fullScreen = function()
   {
     if(e._isFullScreen || e._sizing) return false;
     e._sizing = true;
+    e.initSize();
+    /*
     e.setInnerSize(e._revertFullScreen.width, e._revertFullScreen.height);
     if(HTMLArea.is_ie && document.documentElement && document.documentElement.clientHeight)
     {
@@ -108,6 +111,7 @@ HTMLArea.prototype._fullScreen = function()
       }
     }
     e._revertFullScreen = null;
+    */
     e._sizing = false;
   }
 
