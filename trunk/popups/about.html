@@ -253,10 +253,23 @@ POSSIBILITY OF SUCH DAMAGE.</pre>
 
 
 <div id="tab-area-4">
-<pre>$HeadURL$
-$LastChangedDate$
-$LastChangedRevision$
-$LastChangedBy$</pre>
+  <script type="text/javascript">
+    if(window.opener && window.opener.HTMLArea)
+    {
+      var ver = window.opener.HTMLArea.version;
+      document.write('<pre>'
+                      + '\nRelease: ' + ver.Release + ' (' + ver.Date + ')'
+                      + '\nHead: ' + ver.Head
+                      + '\nRevision: ' + ver.Revision
+                      + '\nLast Changed By: ' + ver.RevisionBy
+                      + '\n' +
+                      '</pre>');
+    }
+    else
+    {
+      document.write('<pre>Version information unavailable.</pre>');
+    }
+  </script>
 </div>
 
 </div></div>

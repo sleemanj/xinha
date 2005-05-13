@@ -32,6 +32,15 @@
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
+HTMLArea.version =
+{
+  'Release'   : 'Trunk',
+  'Head'      : '$HeadURL$'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'Date'      : '$LastChangedDate$'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
+  'Revision'  : '$LastChangedRevision$'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'RevisionBy': '$LastChangedBy$'.replace(/^[^:]*: (.*) \$$/, '$1')
+}
+
 if (typeof _editor_url == "string") {
   // Leave exactly one backslash at the end of _editor_url
   _editor_url = _editor_url.replace(/\x2f*$/, '/');
