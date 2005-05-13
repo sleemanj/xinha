@@ -9,10 +9,10 @@
     --  of the file to remove the auto-example-generating code and allow for the
     --  use of the file as a boilerplate.
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL: svn://gogo@xinha.gogo.co.nz/repository/trunk/examples/full_example-body.html $
+    --  $LastChangedDate: 2005-03-05 21:42:32 +1300 (Sat, 05 Mar 2005) $
+    --  $LastChangedRevision: 35 $
+    --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,7 +26,7 @@
     // You may try a relative URL if you wish]
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
-    _editor_url  = document.location.href.replace(/examples\/full_example-body\.html.*/, '')
+    _editor_url  = document.location.href.replace(/examples\/.*/, '')
     _editor_lang = "en";      // And the language we need to use in the editor.
   </script>
 
@@ -50,14 +50,8 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-       'CharacterMap',
-       'ContextMenu',
-       'FullScreen',
-       'ListType',
-       'SpellChecker',
-       'Stylist',
-       'SuperClean',
-       'TableOperations'
+      'FullScreen',
+      'TableOperations'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -69,8 +63,7 @@
 
       xinha_editors = xinha_editors ? xinha_editors :
       [
-        'myTextArea',
-        'anotherOne'
+        'myTextArea'
       ];
 
       /** STEP 3 ***************************************************************
@@ -128,51 +121,34 @@
 
     window.onload = xinha_init;
   </script>
-  <link href="../skins/blue-look/skin.css" rel="Stylesheet" />
 </head>
 
-<body onload="xinha_init()">
+<body>
 
-  <form id="editors_here">
-    <textarea id="myTextArea" name="myTextArea" rows="10" cols="80" style="width:100%"></textarea>
-    <textarea id="anotherOne" name="anotherOne" rows="10" cols="80" style="width:100%"></textarea>
+  <form action="javascript:var x = document.getElementById('editors_here');alert(x.myTextArea.value);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
+    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320">
+      &lt;p&gt;
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
+        velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
+        ante elementum turpis. Aliquam nisl. Nulla posuere neque non
+        tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
+        parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
+        Curabitur pharetra bibendum lectus.
+      &lt;/p&gt;
+
+      &lt;ul&gt;
+        &lt;li&gt; Phasellus et massa sed diam viverra semper.  &lt;/li&gt;
+        &lt;li&gt; Mauris tincidunt felis in odio.              &lt;/li&gt;
+        &lt;li&gt; Nulla placerat nunc ut pede.                 &lt;/li&gt;
+        &lt;li&gt; Vivamus ultrices mi sit amet urna.           &lt;/li&gt;
+        &lt;li&gt; Quisque sed augue quis nunc laoreet volutpat.&lt;/li&gt;
+        &lt;li&gt; Nunc sit amet metus in tortor semper mattis. &lt;/li&gt;
+      &lt;/ul&gt;
+    </textarea>
+
+    <input type="submit" />
   </form>
-
-
-  <!----------------------------------------------------------------------------
-    -                            !! IMPORTANT !!
-    -  The html and javascript below is the code used to create the example page.
-    -  It renders a lot of the above unused because it pre-fills xinha_editors,
-    -  xinha_config and xinha_plugins for you, and creates new textareas in place
-    -  of the ones above. The items above are not used while the example is being
-    -  used!
-    -
-    -  If you are going to take the code in this file to form the basis of your
-    -  own, then leave out this marked area.
-    --------------------------------------------------------------------------->
-
-        <div id="lipsum" style="display:none">
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-          Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
-          velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
-          ante elementum turpis. Aliquam nisl. Nulla posuere neque non
-          tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
-          parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
-          Curabitur pharetra bibendum lectus.</p>
-
-          <ul>
-            <li> Phasellus et massa sed diam viverra semper.  </li>
-            <li> Mauris tincidunt felis in odio.              </li>
-            <li> Nulla placerat nunc ut pede.                 </li>
-            <li> Vivamus ultrices mi sit amet urna.           </li>
-            <li> Quisque sed augue quis nunc laoreet volutpat.</li>
-            <li> Nunc sit amet metus in tortor semper mattis. </li>
-          </ul>
-        </div>
-        <script src="full_example.js"></script>
-
-  <!--------------------------------------------------------------------------->
-
 
 </body>
 </html>

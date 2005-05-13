@@ -71,7 +71,7 @@
 
 .htmlarea iframe
 {
-  border: none;
+  border: 1px solid;
 }
 
 .htmlarea .statusBar {
@@ -231,4 +231,4 @@ form { margin: 0px; border: none; }
 .htmlarea .panels.left  h1     { border-right:none;  }
 .htmlarea .panels.right .panel { border-right:none; border-left:none; }
 .htmlarea .panels.left  h1     { border-left:none;  }
-div.htmlarea { border: 1px solid black; }
+.htmlarea { border: 1px solid black; }

@@ -69,7 +69,10 @@ HTMLArea.is_gecko  = (navigator.product == "Gecko");
 
 // Creates a new HTMLArea object.  Tries to replace the textarea with the given
 // ID with it.
-function HTMLArea(textarea, config) {
+function HTMLArea(textarea, config)
+{
+  if(!textarea) throw("Tried to create HTMLArea without textarea specified.");
+
   if (HTMLArea.checkSupportedBrowser()) {
     if (typeof config == "undefined") {
       this.config = new HTMLArea.Config();
@@ -77,7 +80,20 @@ function HTMLArea(textarea, config) {
       this.config = config;
     }
     this._htmlArea = null;
+
+    if(typeof textarea != 'object')
+    {
+      textarea = HTMLArea.getElementById('textarea', textarea);
+    }
     this._textArea = textarea;
+
+    // Before we modify anything, get the initial textarea size
+    this._initial_ta_size =
+    {
+      w: textarea.style.width ? textarea.style.width : textarea.offsetWidth,
+      h: textarea.style.height ? textarea.style.height : textarea.offsetHeight
+    }
+
     this._editMode = "wysiwyg";
     this.plugins = {};
     this._timerToolbar = null;
@@ -98,32 +114,33 @@ function HTMLArea(textarea, config) {
       right:
       {
         on: true,
-        div:    document.createElement('div'),
+        container:    document.createElement('td'),
         panels: [ ]
       },
       left:
       {
         on: true,
-        div:    document.createElement('div'),
+        container:    document.createElement('td'),
         panels: [ ]
       },
       top:
       {
         on: true,
-        div:    document.createElement('div'),
+        container:    document.createElement('td'),
         panels: [ ]
       },
       bottom:
       {
         on: true,
-        div:    document.createElement('div'),
+        container:    document.createElement('td'),
         panels: [ ]
       }
     };
 
     for(var i in panels)
     {
-      panels[i].div.className = 'panels ' + i;
+      panels[i].div = panels[i].container; // legacy
+      panels[i].container.className = 'panels ' + i;
     }
   }
 };
@@ -145,11 +162,40 @@ HTMLArea.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\
 
 HTMLArea.Config = function () {
   var cfg = this;
-  this.version = "3.0";
+  this.version = HTMLArea.version.Revision;
 
-  this.width = "toolbar";
+  // Width and Height
+  //  you may set these as follows
+  //  width = 'auto'      -- the width of the original textarea will be used
+  //  width = 'toolbar'   -- the width of the toolbar will be used
+  //  width = '<css measure>' -- use any css measurement, eg width = '75%'
+  //
+  //  height = 'auto'     -- the height of the original textarea
+  //  height = '<css measure>' -- any css measurement, eg height = '480px'
+  this.width  = "auto";
   this.height = "auto";
 
+  // the next parameter specifies whether the toolbar should be included
+  // in the size above, or are extra to it.  If false then it's recommended
+  // to have explicit pixel sizes above (or on your textarea and have auto above)
+  this.sizeIncludesBars = true;
+
+  // the next parameter specifies whether the panels should be included
+  // in the size above, or are extra to it.  If false then it's recommended
+  // to have explicit pixel sizes above (or on your textarea and have auto above)
+  this.sizeIncludesPanels = true;
+
+  // Width of the "Right Side" panel, when present
+  // these, and the width and height of the editor
+  // _must_ be pixel widths if you wish to have config.sizeIncludesPanels = false
+  // if you have sizeIncludesPanels true, they can be any valid CSS measurement.
+  this.panel_dimensions =
+  {
+    left:   '200px', // Width
+    right:  '200px',
+    top:    '100px', // Height
+    bottom: '100px'
+  }
 
   // enable creation of a status bar?
   this.statusBar = true;
@@ -170,10 +216,6 @@ HTMLArea.Config = function () {
 
   // the time interval at which undo samples are taken
   this.undoTimeout = 500;	// 1/2 sec.
-
-  // the next parameter specifies whether the toolbar should be included
-  // in the size or not.
-  this.sizeIncludesToolbar = true;
 
   // if true then HTMLArea will retrieve the full HTML, starting with the
   // <HTML> tag.
@@ -227,6 +269,20 @@ HTMLArea.Config = function () {
   // remove tags (these have to be a regexp, or null if this functionality is not desired)
   this.htmlRemoveTags = null;
 
+  // Turning this on will turn all "linebreak" and "separator" items in your toolbar into soft-breaks,
+  // this means that if the items between that item and the next linebreak/separator can
+  // fit on the same line as that which came before then they will, otherwise they will
+  // float down to the next line.
+
+  // If you put a linebreak and separator next to each other, only the separator will
+  // take effect, this allows you to have one toolbar that works for both flowToolbars = true and false
+  // infact the toolbar below has been designed in this way, if flowToolbars is false then it will
+  // create explictly two lines (plus any others made by plugins) breaking at justifyleft, however if
+  // flowToolbars is false and your window is narrow enough then it will create more than one line
+  // even neater, if you resize the window the toolbars will reflow.  Niiiice.
+
+  this.flowToolbars = true;
+
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
    *
@@ -238,25 +294,17 @@ HTMLArea.Config = function () {
    */
   this.toolbar =
   [
-    ["popupeditor","separator"],
-    ["formatblock","fontname","fontsize","bold","italic","underline","strikethrough","separator"],
-    ["forecolor","hilitecolor","textindicator","separator"],
-    ["subscript","superscript"],
-    ["linebreak","justifyleft","justifycenter","justifyright","justifyfull","separator"],
-    ["insertorderedlist","insertunorderedlist","outdent","indent","separator"],
-    ["inserthorizontalrule","createlink","insertimage","inserttable","separator"],
-    ["undo","redo"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),["selectall"],["separator"],
-    ["killword","removeformat","toggleborders","lefttoright", "righttoleft", "separator","htmlmode","about"]
+    ["popupeditor"],
+    ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
+    ["separator","forecolor","hilitecolor","textindicator"],
+    ["separator","subscript","superscript"],
+    ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
+    ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
+    ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
+    ["separator","undo","redo","selectall"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
+    ["separator","killword","removeformat","toggleborders","lefttoright", "righttoleft","separator","htmlmode","about"]
   ];
 
-  // Width of the "Right Side" panel, when present
-  this.panel_dimensions =
-  {
-    left:   '200px', // Width
-    right:  '200px',
-    top:    '100px', // Height
-    bottom: '100px'
-  }
 
   this.fontname = {
     "&mdash; font &mdash;":         '',
@@ -666,7 +714,8 @@ HTMLArea.prototype._createToolbar = function () {
   var editor = this;	// to access this in nested functions
 
   var toolbar = document.createElement("div");
-  this._toolbar = toolbar;
+  // ._toolbar is for legacy, ._toolBar is better thanks.
+  this._toolBar = this._toolbar = toolbar;
   toolbar.className = "toolbar";
   toolbar.unselectable = "1";
 
@@ -676,6 +725,7 @@ HTMLArea.prototype._createToolbar = function () {
 
 	this._createToolbar1(editor, toolbar, tb_objects);
 	this._htmlArea.appendChild(toolbar);
+  return toolbar;
 }
 
 
@@ -690,12 +740,40 @@ HTMLArea.prototype._addToolbar = function() {
 // separate from previous createToolBar to allow dynamic change of toolbar
 HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
 
+  // This shouldn't be necessary, but IE seems to float outside of the container
+  // when we float toolbar sections, so we have to clear:both here as well
+  // as at the end (which we do have to do).
+  if(editor.config.flowToolbars)
+  {
+    var brk = document.createElement('div');
+    brk.style.height =
+      brk.style.width =
+      brk.style.lineHeight =
+      brk.style.fontSize = '1px';
+    brk.style.clear = 'both';
+    toolbar.appendChild(brk);
+  }
+
   // creates a new line in the toolbar
   function newLine() {
+    if(typeof tb_row != 'undefined' && tb_row.childNodes.length == 0) return;
+
     var table = document.createElement("table");
     table.border = "0px";
     table.cellSpacing = "0px";
     table.cellPadding = "0px";
+    if(editor.config.flowToolbars)
+    {
+      if(HTMLArea.is_ie)
+      {
+        table.style.styleFloat = "left";
+      }
+      else
+      {
+        table.style.cssFloat = "left";
+      }
+    }
+
     toolbar.appendChild(table);
     // TBODY is required for IE, otherwise you don't see anything
     // in the TABLE.
@@ -703,7 +781,10 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
     table.appendChild(tb_body);
     tb_row = document.createElement("tr");
     tb_body.appendChild(tb_row);
+
+    table.className = 'toolbarRow'; // meh, kinda.
   }; // END of function: newLine
+
   // init first line
   newLine();
 
@@ -809,6 +890,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
     var btn = null;
     switch (txt) {
         case "separator":
+          if(editor.config.flowToolbars) newLine();
       el = document.createElement("div");
       el.className = "separator";
       break;
@@ -816,9 +898,9 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       el = document.createElement("div");
       el.className = "space";
       break;
-        case "linebreak":
-      newLine();
-      return false;
+      case "linebreak":
+          newLine();
+          return false;
         case "textindicator":
       el = document.createElement("div");
       el.appendChild(document.createTextNode("A"));
@@ -913,13 +995,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
     } else if (!el) {
       el = createSelect(txt);
     }
-    if (el) {
-      var tb_cell = document.createElement("td");
-      tb_row.appendChild(tb_cell);
-      tb_cell.appendChild(el);
-    } else {
-      alert("FIXME: Unknown toolbar item: " + txt);
-    }
+
     return el;
   };
 
@@ -951,10 +1027,35 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       }
       else if(typeof code != 'function')
       {
-        createButton(code);
+        var tb_element = createButton(code);
+
+        if (tb_element)
+        {
+          var tb_cell = document.createElement("td");
+          tb_cell.className = 'toolbarElement';
+          tb_row.appendChild(tb_cell);
+          tb_cell.appendChild(tb_element);
+        }
+        else if (tb_element == null)
+        {
+          alert("FIXME: Unknown toolbar item: " + code);
+        }
       }
     }
   }
+
+  if(editor.config.flowToolbars)
+  {
+    var brk = document.createElement('div');
+    brk.style.height =
+      brk.style.width =
+      brk.style.lineHeight =
+      brk.style.fontSize = '1px';
+    brk.style.clear = 'both';
+    toolbar.appendChild(brk);
+  }
+
+  return toolbar;
 };
 
 use_clone_img = false;
@@ -981,7 +1082,7 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
   i_contain.style.overflow = 'hidden';
   i_contain.style.width = "18px";
   i_contain.style.height = "18px";
-
+  i_contain.className    = 'buttonImageContainer';
 
   var img = null;
   if(typeof imgDef == 'string')
@@ -1024,8 +1125,8 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
 HTMLArea.prototype._createStatusBar = function() {
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
-  this._htmlArea.appendChild(statusbar);
   this._statusBar = statusbar;
+
   // statusbar.appendChild(document.createTextNode(HTMLArea._lc("Path") + ": "));
   // creates a holder for the path view
   div = document.createElement("span");
@@ -1040,10 +1141,13 @@ HTMLArea.prototype._createStatusBar = function() {
   this._statusBarTextMode = div;
   this._statusBar.appendChild(div);
 
-  if (!this.config.statusBar) {
+  if (!this.config.statusBar)
+  {
     // disable it...
     statusbar.style.display = "none";
   }
+
+  return statusbar;
 };
 
 // Creates the HTMLArea object and replaces the textarea with it.
@@ -1112,67 +1216,94 @@ HTMLArea.prototype.generate = function ()
     }
   }
 
-  // get the textarea
-  var textarea = this._textArea;
-  if (typeof textarea == "string")
-  {
-    this._textArea = textarea = HTMLArea.getElementById("textarea", textarea);
-  }
-  this._ta_size =
-  {
-    w: textarea.offsetWidth,
-    h: textarea.offsetHeight
-  };
+  // create the editor framework, yah, table layout I know, but much easier
+  // to get it working correctly this way, sorry about that, patches welcome.
 
-  // create the editor framework
-  var htmlarea = document.createElement("div");
-  htmlarea.className = "htmlarea";
+  this._framework =
+  {
+    'table'     :document.createElement('table'),
+    'tbody'     :document.createElement('tbody'), // IE will not show the table if it doesn't have a tbody!
+    'tb_row'    :document.createElement('tr'),
+    'tb_cell'   :document.createElement('td'), // Toolbar
+
+    'tp_row'   :document.createElement('tr'),
+    'tp_cell'   :this._panels.top.container,   // top panel
+
+    'ler_row'   :document.createElement('tr'),
+    'lp_cell'   :this._panels.left.container,  // left panel
+    'ed_cell'   :document.createElement('td'), // editor
+    'rp_cell'   :this._panels.right.container, // right panel
+
+    'bp_row'    :document.createElement('tr'),
+    'bp_cell'   :this._panels.bottom.container,// bottom panel
+
+    'sb_row'    :document.createElement('tr'),
+    'sb_cell'   :document.createElement('td')  // status bar
+  }
+
+  var fw = this._framework;
+  fw.table.border="0";
+  fw.table.cellPadding="0";
+  fw.table.cellSpacing="0";
+  fw.tb_row.style.verticalAlign = 'top';
+  fw.tp_row.style.verticalAlign = 'top';
+  fw.ler_row.style.verticalAlign= 'top';
+  fw.bp_row.style.verticalAlign = 'top';
+  fw.sb_row.style.verticalAlign = 'top';
+
+  // Put the cells in the rows        set col & rowspans
+  // note that I've set all these so that all panels are showing
+  // but they will be redone in sizeEditor() depending on which
+  // panels are shown.  It's just here to clarify how the thing
+  // is put togethor.
+  fw.tb_row.appendChild(fw.tb_cell);  fw.tb_cell.colSpan = 3;
+
+  fw.tp_row.appendChild(fw.tp_cell);  fw.tp_cell.colSpan = 3;
+
+  fw.ler_row.appendChild(fw.lp_cell);
+  fw.ler_row.appendChild(fw.ed_cell);
+  fw.ler_row.appendChild(fw.rp_cell);
+
+  fw.bp_row.appendChild(fw.bp_cell);  fw.bp_cell.colSpan = 3;
+
+  fw.sb_row.appendChild(fw.sb_cell);  fw.sb_cell.colSpan = 3;
+
+  // Put the rows in the table body
+  fw.tbody.appendChild(fw.tb_row);  // Toolbar
+  fw.tbody.appendChild(fw.tp_row); // Left, Top, Right panels
+  fw.tbody.appendChild(fw.ler_row);  // Editor/Textarea
+  fw.tbody.appendChild(fw.bp_row);  // Bottom panel
+  fw.tbody.appendChild(fw.sb_row);  // Statusbar
+
+  // and body in the table
+  fw.table.appendChild(fw.tbody);
+
+
+  var htmlarea = this._framework.table;
   this._htmlArea = htmlarea;
-  if(this.config.width != 'auto' && this.config.width != 'toolbar')
-  {
-    htmlarea.style.width = this.config.width;
-  }
+  htmlarea.className = "htmlarea";
 
-  // insert the editor before the textarea.
+    // create the toolbar and put in the area
+  var toolbar = this._createToolbar();
+  this._framework.tb_cell.appendChild(toolbar);
+
+    // create the IFRAME & add to container
+  var iframe = document.createElement("iframe");
+  iframe.src = _editor_url + editor.config.URIs["blank"];
+  this._framework.ed_cell.appendChild(iframe);
+  this._iframe = iframe;
+
+    // creates & appends the status bar
+  var statusbar = this._createStatusBar();
+  this._framework.sb_cell.appendChild(statusbar);
+
+  // insert Xinha before the textarea.
+  var textarea = this._textArea;
   textarea.parentNode.insertBefore(htmlarea, textarea);
-
-  // creates & appends the toolbar
-  this._createToolbar();
-
-  // Create containing div (to hold editor and stylist)
-  var innerEditor = document.createElement('div');
-  htmlarea.appendChild(innerEditor);
-  innerEditor.style.position = 'relative';
-  this.innerEditor = innerEditor;
 
   // extract the textarea and insert it into the htmlarea
   textarea.parentNode.removeChild(textarea);
-  innerEditor.appendChild(textarea);
-
-  // create the IFRAME & add to container
-  var iframe = document.createElement("iframe");
-  iframe.src = _editor_url + editor.config.URIs["blank"];
-  innerEditor.appendChild(iframe);
-  this._iframe = iframe;
-
-
-  // - I don't think this is required, see the .htmlarea iframe in htmlarea.css
-  // remove the default border as it keeps us from computing correctly
-  // the sizes.  (somebody tell me why doesn't this work in IE)
-  // if (!HTMLArea.is_ie) {
-  //   iframe.style.borderWidth = "0px";
-  // }
-
-
-  // Add the panels
-  for(var i in this._panels)
-  {
-    innerEditor.appendChild(this._panels[i].div);
-  }
-
-  // creates & appends the status bar
-  this._createStatusBar();
-
+  this._framework.ed_cell.appendChild(textarea);
 
   // Set up event listeners for saving the iframe content to the textarea
   if (textarea.form) {
@@ -1247,42 +1378,8 @@ HTMLArea.prototype.generate = function ()
   // Hide textarea
   textarea.style.display = "none";
 
-  // Calculate the starting size, EXCLUDING THE TOOLBAR & STATUS BAR (always)
-  var height = null;
-  var width  = null;
-
-  switch(this.config.height)
-  {
-    // "auto" means the same height as the original textarea
-    case 'auto' : { height = parseInt(this._ta_size.h);    break; }
-    // otherwise we expect it to be a PIXEL height
-    default     : { height = parseInt(this.config.height); break; }
-  }
-
-  switch(this.config.width)
-  {
-    // toolbar means the width is the same as the toolbar
-    case 'toolbar': {width = parseInt(this._toolbar.offsetWidth); break; }
-    // auto means the same as the textarea
-    case 'auto'   : {width = parseInt(this._ta_size.w);          break; }
-    // otherwise it is expected to be a PIXEL width
-    default       : {width = parseInt(this.config.width);        break; }
-  }
-
-  if (this.config.sizeIncludesToolbar)
-  {
-    // substract toolbar height
-    height -= this._toolbar.offsetHeight;
-    height -= this._statusBar.offsetHeight;
-  }
-
-  // Minimal size = 100x100
-  width  = Math.max(width, 100);
-  height = Math.max(height,100);
-
-  this.setInnerSize(width,height);
-  this.notifyOn('panel_change',function(){editor.setInnerSize();});
-
+  // Initalize size
+  editor.initSize();
 
   // IMPORTANT: we have to allow Mozilla a short time to recognize the
   // new frame.  Otherwise we get a stupid exception.
@@ -1290,131 +1387,269 @@ HTMLArea.prototype.generate = function ()
   setTimeout(function() { editor.initIframe()}, 50);
 };
 
-  /** Size the htmlArea according to the available space
-   *   Width and Height include toolbar!
-   **/
 
-  HTMLArea.prototype.getInnerSize = function()
+  /**
+   * Size the editor according to the INITIAL sizing information.
+   * config.width
+   *    The width may be set via three ways
+   *    auto    = the width is inherited from the original textarea
+   *    toolbar = the width is set to be the same size as the toolbar
+   *    <set size> = the width is an explicit size (any CSS measurement, eg 100em should be fine)
+   *
+   * config.height
+   *    auto    = the height is inherited from the original textarea
+   *    <set size> = an explicit size measurement (again, CSS measurements)
+   *
+   * config.sizeIncludesBars
+   *    true    = the tool & status bars will appear inside the width & height confines
+   *    false   = the tool & status bars will appear outside the width & height confines
+   *
+   */
+
+  HTMLArea.prototype.initSize = function()
   {
-    return this._innerSize;
+    var editor = this;
+
+    var width  = null;
+    var height = null;
+    switch(this.config.width)
+    {
+      case 'auto':
+      {
+        width = this._initial_ta_size.w;
+      }
+      break;
+
+      case 'toolbar':
+      {
+        width = this._toolBar.offsetWidth;
+      }
+      break;
+
+      default :
+      {
+        width = this.config.width;
+      }
+      break;
+    }
+
+    switch(this.config.height)
+    {
+      case 'auto':
+      {
+        height = this._initial_ta_size.h;
+      }
+      break;
+
+      default :
+      {
+        height = this.config.height;
+      }
+      break;
+    }
+
+    this.sizeEditor(width, height, this.config.sizeIncludesBars, this.config.sizeIncludesPanels);
+    HTMLArea._addEvent(window, 'resize', function() { editor.sizeEditor() });
+    this.notifyOn('panel_change',function(){editor.sizeEditor();});
   }
 
-  HTMLArea.prototype.setInnerSize = function(width, height)
+  /**
+   *  Size the editor to a specific size, or just refresh the size (when window resizes for example)
+   *  @param width optional width (CSS specification)
+   *  @param height optional height (CSS specification)
+   *  @param includingBars optional boolean to indicate if the size should include or exclude tool & status bars
+   */
+
+  HTMLArea.prototype.sizeEditor = function(width, height, includingBars, includingPanels)
   {
-    if(typeof width == 'undefined' || width == null)
+    if(includingBars != null)     this._htmlArea.sizeIncludesToolbars = includingBars;
+    if(includingPanels != null)   this._htmlArea.sizeIncludesPanels   = includingPanels;
+
+    if(width != null)
     {
-      width  = this._innerSize.width;
+      this._htmlArea.style.width          = width;
+      if(!this._htmlArea.sizeIncludesPanels)
+      {
+        // Need to add some for l & r panels
+        var panel = this._panels.right;
+        if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+        {
+          this._htmlArea.style.width = this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.right);
+        }
+
+        var panel = this._panels.left;
+        if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+        {
+          this._htmlArea.style.width = this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.left);
+        }
+      }
     }
 
-    if(typeof height == 'undefined' || height == null)
+    if(height != null)
     {
-      height  = this._innerSize.height;
+      this._htmlArea.style.height         = height;
+      if(!this._htmlArea.sizeIncludesToolbars)
+      {
+        // Need to add some for toolbars
+        this._htmlArea.style.height         = this._htmlArea.offsetHeight + this._toolbar.offsetHeight + this._statusBar.offsetHeight;
+      }
+
+      if(!this._htmlArea.sizeIncludesPanels)
+      {
+        // Need to add some for l & r panels
+        var panel = this._panels.top;
+        if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+        {
+          this._htmlArea.style.height = this._htmlArea.offsetHeight + parseInt(this.config.panel_dimensions.top);
+        }
+
+        var panel = this._panels.bottom;
+        if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+        {
+          this._htmlArea.style.height = this._htmlArea.offsetHeight + parseInt(this.config.panel_dimensions.bottom);
+        }
+      }
     }
 
-    this._innerSize = {'width':width,'height':height};
+    // At this point we have this._htmlArea.style.width & this._htmlArea.style.height
+    // which are the size for the OUTER editor area, including toolbars and panels
+    // now we size the INNER area and position stuff in the right places.
 
-    var editorWidth  = width;
-    var editorHeight = height;
-    var editorLeft   = 0;
-    var editorTop    = 0;
+    width  = this._htmlArea.offsetWidth;
+    height = this._htmlArea.offsetHeight;
+
+    // Set colspan for toolbar, and statusbar, rowspan for left & right panels, and insert panels to be displayed
+    // into thier rows
     var panels = this._panels;
+    var col_span = 1;
 
-    var panel = panels.right;
-    if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+    if(panels.left.on && panels.left.panels.length && HTMLArea.hasDisplayedChildren(panels.left.container))
     {
-      panel.div.style.position = 'absolute';
-      panel.div.style.width    = parseInt(this.config.panel_dimensions.right) + (HTMLArea.ie_ie ? -1 : -2) + 'px';
-      panel.div.style.height   = height + (HTMLArea.is_ie ? -1 : -1) + 'px';
-      panel.div.style.top      = '0px';
-      panel.div.style.right    = (HTMLArea.is_ie ? 1 : 2) + 'px';
-      panel.div.style.padding  = "0px";
-      panel.div.style.overflow = "auto";
-      panel.div.style.display  = 'block';
-      editorWidth -= parseInt(this.config.panel_dimensions.right) + (HTMLArea.is_ie ? 2 : 0);
+      col_span += 1;
+      if(!panels.left.container.parentNode)
+      {
+        this._framework.ler_row.insertBefore(panels.left.container,this._framework.ed_cell);
+      }
     }
     else
     {
-      panel.div.style.display  = 'none';
+      if(panels.left.container.parentNode)
+      {
+        panels.left.container.parentNode.removeChild(panels.left.container);
+      }
     }
 
-    var panel = panels.left;
-    if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+    if(panels.top.on && panels.top.panels.length && HTMLArea.hasDisplayedChildren(panels.top.container))
     {
-      panel.div.style.position = 'absolute';
-      panel.div.style.width    = parseInt(this.config.panel_dimensions.left) + (HTMLArea.ie_ie ? -1 : -1) + 'px';
-      panel.div.style.height   = height + (HTMLArea.is_ie ? -1 : -1) + 'px';
-      panel.div.style.top      = '0px';
-      panel.div.style.left     = (HTMLArea.is_ie ? 0 : 0) + 'px';
-      panel.div.style.padding  = "0px";
-      panel.div.style.overflow = "auto";
-      panel.div.style.display  = "block";
-      editorWidth -= parseInt(this.config.panel_dimensions.left) + (HTMLArea.is_ie ? 2 : 0);
-      editorLeft   = parseInt(this.config.panel_dimensions.left) + (HTMLArea.is_ie ? 2 : 0) + 'px';
+      if(!panels.top.container.parentNode)
+      {
+        this._framework.tp_row.appendChild(panels.top.container);
+      }
     }
     else
     {
-      panel.div.style.display  = 'none';
+      if(panels.top.container.parentNode)
+      {
+        panels.top.container.parentNode.removeChild(panels.top.container);
+      }
     }
 
-    var panel = panels.top;
-    if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+    if(panels.right.on && panels.right.panels.length && HTMLArea.hasDisplayedChildren(panels.right.container))
     {
-      panel.div.style.position = 'absolute';
-      panel.div.style.top      = '0px';
-      panel.div.style.left     = '0px';
-      panel.div.style.width    = width  + 'px';
-      panel.div.style.height   = parseInt(this.config.panel_dimensions.top) + 'px';
-      panel.div.style.padding  = "0px";
-      panel.div.style.overflow = "auto";
-      panel.div.style.display  = "block";
-      editorHeight -= parseInt(this.config.panel_dimensions.top);
-      editorTop     = parseInt(this.config.panel_dimensions.top) + 'px';
+      col_span += 1;
+      if(!panels.right.container.parentNode)
+      {
+        this._framework.ler_row.insertBefore(panels.right.container, this._framework.ed_cell.nextSibling);
+      }
     }
     else
     {
-      panel.div.style.display  = 'none';
+      if(panels.right.container.parentNode)
+      {
+        panels.right.container.parentNode.removeChild(panels.right.container);
+      }
     }
 
-    var panel = panels.bottom;
-    if(panel.on && panel.panels.length && HTMLArea.hasDisplayedChildren(panel.div))
+    if(panels.bottom.on && panels.bottom.panels.length && HTMLArea.hasDisplayedChildren(panels.bottom.container))
     {
-      panel.div.style.position = 'absolute';
-      panel.div.style.bottom   = '0px';
-      panel.div.style.left     = '0px';
-      panel.div.style.width    = width  + 'px';
-      panel.div.style.height   = parseInt(this.config.panel_dimensions.bottom) + 'px';
-      panel.div.style.padding  = "0px";
-      panel.div.style.overflow = "auto";
-      panel.div.style.display  = "block";
-      editorHeight -= parseInt(this.config.panel_dimensions.bottom);
+      if(!panels.bottom.container.parentNode)
+      {
+        this._framework.bp_row.appendChild(panels.right.container);
+      }
     }
     else
     {
-      panel.div.style.display  = 'none';
+      if(panels.bottom.container.parentNode)
+      {
+        panels.bottom.container.parentNode.removeChild(panels.bottom.container);
+      }
     }
 
-    // Set the dimensions of the container
-    this.innerEditor.style.width  = width  + 'px';
-    this.innerEditor.style.height = height + 'px';
-    this.innerEditor.style.position = 'relative';
+    this._framework.tb_cell.colSpan = col_span;
+    this._framework.tp_cell.colSpan = col_span;
+    this._framework.bp_cell.colSpan = col_span;
+    this._framework.sb_cell.colSpan = col_span;
 
-    // and the iframe
-    this._iframe.style.width  = editorWidth  + 'px';
-    this._iframe.style.height = editorHeight + 'px';
-    this._iframe.style.position = 'absolute';
-    this._iframe.style.left = editorLeft;
-    this._iframe.style.top  = editorTop;
+    // Put in the panel rows, top panel goes above editor row
+    if(!this._framework.tp_row.childNodes.length)
+    {
+      if(this._framework.tp_row.parentNode)
+      {
+        this._framework.tp_row.parentNode.removeChild(this._framework.tp_row);
+      }
+    }
+    else
+    {
+      if(!this._framework.tp_row.parentNode)
+      {
+        this._framework.tbody.insertBefore(this._framework.tp_row, this._framework.ler_row);
+      }
+    }
 
+    // bp goes after the editor
+    if(!this._framework.bp_row.childNodes.length)
+    {
+      if(this._framework.bp_row.parentNode)
+      {
+        this._framework.bp_row.parentNode.removeChild(this._framework.bp_row);
+      }
+    }
+    else
+    {
+      if(!this._framework.bp_row.parentNode)
+      {
+        this._framework.tbody.insertBefore(this._framework.bp_row, this._framework.ler_row.nextSibling);
+      }
+    }
 
-    // the editor including the toolbar now have the same size as the
-    // original textarea.. which means that we need to reduce that a bit.
-    this._textArea.style.width  = editorWidth  + 'px';
-    this._textArea.style.height = editorHeight + 'px';
-    this._textArea.style.position = 'absolute';
-    this._textArea.style.left = editorLeft;
-    this._textArea.style.top  = editorTop;
+    // finally if the statusbar is on, insert it
+    if(this.config.statusBar)
+    {
+      if(!this._framework.sb_row.parentNode)
+      {
+        this._framework.table.appendChild(this._framework.sb_row);
+      }
+    }
+    else
+    {
+      if(this._framework.sb_row.parentNode)
+      {
+        this._framework.sb_row.parentNode.removeChild(this._framework.sb_row);
+      }
+    }
 
-    this.notifyOf('resize', {'width':width,'height':height,'editorWidth':editorWidth,'editorHeight':editorHeight,'editorTop':editorTop,'editorLeft':editorLeft});
+    // Size and set colspans, link up the framework
+    this._framework.lp_cell.style.width  = this.config.panel_dimensions.left;
+    this._framework.rp_cell.style.width  = this.config.panel_dimensions.right;
+    this._framework.tp_cell.style.height = this.config.panel_dimensions.top;
+    this._framework.bp_cell.style.height = this.config.panel_dimensions.bottom;
+    this._framework.tb_cell.style.height = this._toolBar.offsetHeight   + 'px';
+    this._framework.sb_cell.style.height = this._statusBar.offsetHeight + 'px';
+    this._iframe.style.height   = '100%';
+    this._iframe.style.width    = '100%';
+
+    this._textArea.style.height = '100%';
+    this._textArea.style.width  = '100%';
   }
 
   HTMLArea.prototype.addPanel = function(side)
@@ -1448,18 +1683,18 @@ HTMLArea.prototype.generate = function ()
   HTMLArea.prototype.hidePanel = function(panel)
   {
     if(panel)
-  {
-    panel.style.display = 'none';
-    this.notifyOf('panel_change', {'action':'hide','panel':panel});
-  }
+    {
+      panel.style.display = 'none';
+      this.notifyOf('panel_change', {'action':'hide','panel':panel});
+    }
   }
 
   HTMLArea.prototype.showPanel = function(panel)
   {
     if(panel)
-  {
-    panel.style.display = '';
-    this.notifyOf('panel_change', {'action':'show','panel':panel});
+    {
+      panel.style.display = '';
+      this.notifyOf('panel_change', {'action':'show','panel':panel});
     }
   }
 
@@ -1711,7 +1946,8 @@ HTMLArea.prototype.setMode = function(mode) {
       // Hide the iframe
       this.deactivateEditor();
       this._iframe.style.display   = 'none';
-      this._textArea.style.display = "block";
+      this._textArea.style.display = '';
+
       if (this.config.statusBar)
       {
         this._statusBarTree.style.display = "none";
