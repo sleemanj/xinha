@@ -10,10 +10,10 @@ HTMLArea.Dialog = function(editor, html, localizer)
   this.rootElem.className = 'dialog';
   this.rootElem.style.position = 'absolute';
   this.rootElem.style.display  = 'none';
+  this.editor._framework.ed_cell.insertBefore(this.rootElem, this.editor._framework.ed_cell.firstChild);
+  this.rootElem.style.width  = this.width  =  this.editor._framework.ed_cell.offsetWidth;
+  this.rootElem.style.height = this.height =  this.editor._framework.ed_cell.offsetHeight;
 
-  this.width  = parseInt(this.rootElem.style.width  = this.editor._iframe.style.width);
-  this.height = this.rootElem.style.height = (parseInt(this.editor._iframe.style.height)+this.editor._statusBar.offsetHeight-2)+'px';
-  
   var dialog = this;
   if(typeof localizer == 'function')
   {
@@ -58,15 +58,15 @@ HTMLArea.Dialog = function(editor, html, localizer)
 
   this.rootElem.innerHTML = html;
 
-  this.editor.innerEditor.appendChild(this.rootElem);
+
 
 
   this.editor.notifyOn
    ('resize',
       function(e, args)
       {
-        dialog.width  = parseInt(dialog.rootElem.style.width  = args.editorWidth  + 'px');
-        dialog.height = dialog.rootElem.style.height = (args.editorHeight+dialog.editor._statusBar.offsetHeight-2)+'px';
+        dialog.rootElem.style.width  = dialog.width  =  dialog.editor._framework.ed_cell.offsetWidth;
+        dialog.rootElem.style.height = dialog.height =  dialog.editor._framework.ed_cell.offsetHeight;
         dialog.onresize();
       }
     );
@@ -102,7 +102,7 @@ HTMLArea.Dialog.prototype.hide = function()
   this.editor._textArea.style.display = this._restoreTo[0];
   this.editor._iframe.style.visibility   = this._restoreTo[1];
   this.editor.showPanels(this._restoreTo[2]);
-  
+
   // Restore the selection
   if(HTMLArea.is_ie)
   {

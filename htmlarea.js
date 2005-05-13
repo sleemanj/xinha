@@ -1250,7 +1250,7 @@ HTMLArea.prototype.generate = function ()
   fw.ler_row.style.verticalAlign= 'top';
   fw.bp_row.style.verticalAlign = 'top';
   fw.sb_row.style.verticalAlign = 'top';
-
+  fw.ed_cell.style.position     = 'relative';
   // Put the cells in the rows        set col & rowspans
   // note that I've set all these so that all panels are showing
   // but they will be redone in sizeEditor() depending on which
@@ -1650,6 +1650,8 @@ HTMLArea.prototype.generate = function ()
 
     this._textArea.style.height = '100%';
     this._textArea.style.width  = '100%';
+
+    this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
   }
 
   HTMLArea.prototype.addPanel = function(side)
