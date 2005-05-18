@@ -4503,8 +4503,10 @@ HTMLArea.getHTML = function(root, outputRoot, editor){
     }
 }
 
-HTMLArea.getHTMLWrapper = function(root, outputRoot, editor) {
+HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
   var html = "";
+  if(!indent) indent = '';
+
   switch (root.nodeType) {
     case 10:// Node.DOCUMENT_TYPE_NODE
     case 6: // Node.ENTITY_NODE
@@ -4523,7 +4525,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor) {
     case 4: // Node.CDATA_SECTION_NODE
       // Mozilla seems to convert CDATA into a comment when going into wysiwyg mode,
       //  don't know about IE
-      html += '<![CDATA[' + root.data + ']]>';
+      html += (HTMLArea.is_ie ? ('\n' + indent) : '') + '<![CDATA[' + root.data + ']]>' ;
       break;
 
     case 5: // Node.ENTITY_REFERENCE_NODE
@@ -4533,7 +4535,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor) {
     case 7: // Node.PROCESSING_INSTRUCTION_NODE
       // PI's don't seem to survive going into the wysiwyg mode, (at least in moz)
       // so this is purely academic
-      html += '<?' + root.target + ' ' + root.data + ' ?>';
+      html += (HTMLArea.is_ie ? ('\n' + indent) : '') + '<?' + root.target + ' ' + root.data + ' ?>';
       break;
 
 
@@ -4550,7 +4552,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor) {
       outputRoot = !(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(root_tag));
     if (HTMLArea.is_ie && root_tag == "head") {
       if (outputRoot)
-        html += "<head>";
+        html += (HTMLArea.is_ie ? ('\n' + indent) : '') + "<head>";
       // lowercasize
       var save_multiline = RegExp.multiline;
       RegExp.multiline = true;
@@ -4558,13 +4560,13 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor) {
         return p1 + p2.toLowerCase();
       });
       RegExp.multiline = save_multiline;
-      html += txt;
+      html += txt + '\n';
       if (outputRoot)
-        html += "</head>";
+        html += (HTMLArea.is_ie ? ('\n' + indent) : '') + "</head>";
       break;
     } else if (outputRoot) {
       closed = (!(root.hasChildNodes() || HTMLArea.needsClosingTag(root)));
-      html = "<" + root.tagName.toLowerCase();
+      html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
       var attrs = root.attributes;
       for (i = 0; i < attrs.length; ++i) {
         var a = attrs.item(i);
@@ -4618,25 +4620,23 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor) {
         html += closed ? " />" : ">";
       }
     }
+    var containsBlock = false;
     for (i = root.firstChild; i; i = i.nextSibling) {
-      html += HTMLArea.getHTMLWrapper(i, true, editor);
+      if(!containsBlock && i.nodeType == 1 && HTMLArea.isBlockElement(i)) containsBlock = true;
+      html += HTMLArea.getHTMLWrapper(i, true, editor, indent + '  ');
     }
     if (outputRoot && !closed) {
-      html += "</" + root.tagName.toLowerCase() + ">";
+      html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
     }
     break;
       }
       case 3: // Node.TEXT_NODE
-
-    // If a text node is alone in an element and all spaces, replace it with an non breaking one
-    // This partially undoes the damage done by moz, which translates '&nbsp;'s into spaces in the data element
-
     html = /^script|style$/i.test(root.parentNode.tagName) ? root.data : HTMLArea.htmlEncode(root.data);
     break;
 
       case 8: // Node.COMMENT_NODE
     html = "<!--" + root.data + "-->";
-    break;		// skip comments, for now.
+    break;
   }
   return html;
 };
