@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * The main GUI for the ImageManager.
 * @author $Author: Wei Zhuo $
@@ -7,7 +7,12 @@
 */
 
 require_once('config.inc.php');
-require_once(XINHA_INSTALL_ROOT . '/ddt/ddt.php');
+
+if ( ! function_exists( "_ddt" ) )
+	{
+	require_once( XINHA_INSTALL_ROOT . '/ddt/ddt.php');
+	}
+
 require_once('Classes/ImageManager.php');
 	
 $manager = new ImageManager($IMConfig);

@@ -40,7 +40,7 @@ require_once('config.inc.php');
 * debug message library
 */
 
-include_once( "../ddt/ddt.php" );
+include_once( XINHA_INSTALL_ROOT . "/ddt/ddt.php" );
 
 // uncomment to turn on debugging
 // _ddtOn();

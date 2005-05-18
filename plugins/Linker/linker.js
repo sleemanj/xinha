@@ -571,14 +571,17 @@ Linker.Dialog.prototype._prepareDialog = function()
     if(linker.lConfig.backend)
 	    {
 
-			linker.ddt._ddt( "linker.js","574", "_prepareDialog(): backend defined. loading files using _getback()" );
+			linker.ddt._ddt( "linker.js","574", "_prepareDialog(): backend defined. loading files using _getback() from '" + linker.lConfig.backend + "__function=scan'" );
 
 			//get files from backend
 			HTMLArea._getback( linker.lConfig.backend + "__function=scan",
 						function(txt) 
 							{
 
-							linker.ddt._ddt( "linker.js","581",  "linker.js", "_getback(): got back txt '" + txt + "'"  );
+							// for some reason this linker reference is not working in this closure
+							// under firefox 1.0.3.
+
+							linker.ddt._ddt( "linker.js","581", "_getback(): got back txt '" + txt + "'"  );
 
 							try 
 								{
@@ -628,6 +631,8 @@ Linker.Dialog.prototype._prepareDialog = function()
 	  }
 
   var html = this.html;
+
+	linker.ddt._ddt( "linker.js","634", "_prepareDialog(): to dialog html '" + html + "'" );
 
   // Now we have everything we need, so we can build the dialog.
 
