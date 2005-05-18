@@ -98,7 +98,7 @@ function ImageManager(editor)
 * an image is selected (right click->image properties for instance)
 * then image will contain the selected image.
 *
-* @todo figure out how to get to editor object from Dialog function.
+* @todo check previousSibling issue. The fix here is probably covering up some other problem.
 */
 
 HTMLArea.prototype._insertImage = function(image) 
@@ -115,7 +115,10 @@ HTMLArea.prototype._insertImage = function(image)
 		image = this.getParentElement();
 
 		if (image && !/^img$/i.test(image.tagName))
+			{
+			this.ddt._ddt( "image-manager.js","114", "_insertImage(): setting image to null" );
 			image = null;
+			}
 		}
 
 	// the selection will have the absolute url to the image. 
@@ -196,6 +199,8 @@ HTMLArea.prototype._insertImage = function(image)
 				return false;
 				}
 
+			// pulled in as a result of the closure above.
+
 			var img = image;
 
 			if (!img) 
@@ -203,7 +208,11 @@ HTMLArea.prototype._insertImage = function(image)
 				var sel = editor._getSelection();
 				var range = editor._createRange(sel);			
 
-				ddt._ddt( "image-manager.js","206", "_insertImage(): execing insertImage" );
+				// this is the browser built-in execCommand, not the HTMLArea execCommand
+				// method. The assumption here is that it will interact with the range
+				// created above so we can pull out the just inserted image from it.
+
+				ddt._ddt( "image-manager.js","206", "_insertImage(): no image. invoking browser insertImage execCommand" );
 
 				editor._doc.execCommand("insertimage", false, param.f_url);
 
@@ -220,25 +229,64 @@ HTMLArea.prototype._insertImage = function(image)
 					} 
 				else 
 					{
+
+					// If the editor window does not have focus or we are positioned immediately 
+					// adjacent to another image and do not have a selection this returns a null 
+					// object, not an img object. 
+					// 
+					// FIXME: The current Xinha commit, #156, does not exibit this behavior and it does
+					// not have the logic below. This implies there is some other problem elsewhere. 
+					// Why does it return null here under the same circumstances?
+
 					img = range.startContainer.previousSibling;
+
+					if ( img == null ) 
+						{
+
+						// we are probably at the beginning or end of the document. By trial and 
+						// error it looks like the IMG tag is most likely our first child in the
+						// beginning of document case and under nextSibling in the end of document
+						// case. We'll need to verify this for future releases of Gecko.
+
+						ddt._ddt( "image-manager.js", "242", "_insertImage(): previousSibling is NULL. Checking firstChild" );
+
+						if (( range.startContainer.firstChild != null ) && ( range.startContainer.firstChild.nodeName == "IMG" ))
+							{
+							ddt._ddt( "image-manager.js", "251", "_insertImage(): Found image under firstChild. Beginning of document?" );
+
+							img = range.startContainer.firstChild;
+							}
+						else if (( range.startContainer.nextSibling != null ) && ( range.startContainer.nextSibling.nodeName == "IMG" ))
+							{
+							ddt._ddt( "image-manager.js", "242", "_insertImage(): Found image under nextSibling. end of document?" );
+							img = range.startContainer.nextSibling;
+							}
+						else
+							{
+							alert( "INTERNAL ERROR - was unable to locate the newly inserted image object. The HTML in the document may be out of whack." );
+							return false
+							}
+						}
 					}
 				} 
 			else 
 				{			
 				img.src = param.f_url;
 				}
-		
+
+			ddt._ddt( "image-manager.js","234", "_insertImage(): before switch type of img is '" + typeof img + "'" );
+					
 			for (field in param) 
 				{
 				var value = param[field];
 
 				switch (field) 
 					{
-				   case "f_alt"    : img.alt	 = value; break;
-				   case "f_border" : img.border = parseInt(value || "0"); break;
-				   case "f_align"  : img.align	 = value; break;
-				   case "f_vert"   : img.vspace = parseInt(value || "0"); break;
-				   case "f_horiz"  : img.hspace = parseInt(value || "0"); break;
+					case "f_alt"    : img.alt	 = value; break;
+					case "f_border" : img.border = parseInt(value || "0"); break;
+					case "f_align"  : img.align	 = value; break;
+					case "f_vert"   : img.vspace = parseInt(value || "0"); break;
+					case "f_horiz"  : img.hspace = parseInt(value || "0"); break;
 					case "f_width"  : img.width = parseInt(value || "0"); break;
 					case "f_height"  : img.height = parseInt(value || "0"); break;
 					}

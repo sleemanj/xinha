@@ -179,7 +179,9 @@ include_once( "../backends/backend_conf.php" );
       HTMLArea.startEditors(xinha_editors);
     }
 
-    window.onload = xinha_init;
+    // calling xinha_init twice can cause a nasty little exception.
+    // window.onload = xinha_init;
+
   </script>
 </head>
 
@@ -203,7 +205,9 @@ include_once( "../backends/backend_conf.php" );
     -  own, then leave out this marked area.
     --------------------------------------------------------------------------->
 
-        <div id="lipsum" style="display:none">
+    <div id="lipsum" style="display:none"><h1>TEST</h1></div>
+
+        <div id="lipsumx" style="display:none">
           <p>This is an example of a Xinha editor with extensive trace messages
 			 turned on. To turn off trace messages, assuming you have the source, just
 			 comment out the _ddtOn() calls. Eventually we'll have a script that 
@@ -227,6 +231,7 @@ include_once( "../backends/backend_conf.php" );
 			 <p>For more information see the README.txt and README_DEVELOPERS.txt
 			 file from the Xinha_ub branch.</p>
         </div>
+
         <script src="full_example.js"></script>
 
   <!--------------------------------------------------------------------------->

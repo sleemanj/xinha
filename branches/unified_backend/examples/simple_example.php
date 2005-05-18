@@ -29,7 +29,7 @@
     // You may try a relative URL if you wish]
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
-    _editor_url  = document.location.href.replace(/examples\/simple_example\.html.*/, '')
+    _editor_url  = document.location.href.replace(/examples\/simple_example\.php.*/, '')
     _editor_lang = "en";      // And the language we need to use in the editor.
   </script>
 
@@ -189,12 +189,14 @@
   <form id="editors_here">
 
     <textarea id="TextArea1" name="TextArea1" rows="10" cols="80" style="width:100%">
-	 This is the content of TextArea1 from xinha_ub/examples/simple_example.html.<br>
+	 This is the content of TextArea1 from xinha_ub/examples/simple_example.php.<br>
 	 In order to see the new debugging trace messages you will need to turn off
 	 popup blockers for this site.<br>
 	 These trace messages can also be turned on/off from within simple_example.html by
 	 commenting out or uncomments the _ddtOn() line. The same applies to the trace
 	 messages inside the HTMLArea object in htmlarea.js.
+	 The version of EnterParagraphs in this editor should be largely fixed. If you notice
+	 any problems please report them in the forums.
 	 </textarea>
 
   </form>

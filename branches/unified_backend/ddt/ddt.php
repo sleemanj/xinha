@@ -88,7 +88,7 @@ if ( @$fvDEBUG[ "logfile" ] != NULL )
 			}
 		}
 
-	fputs( $fvDEBUG[ "logfile_fp" ], "$msgline" );
+	fwrite( $fvDEBUG[ "logfile_fp" ], $msgline );
 	fflush( $fvDEBUG[ "logfile_fp" ] );
 
 	}

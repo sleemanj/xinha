@@ -1,4 +1,5 @@
-<?
+<?php
+
 /**
  * Show a list of images in a long horizontal table.
  * @author $Author: Wei Zhuo $
@@ -7,41 +8,56 @@
  */
 
 require_once('config.inc.php');
-require_once(XINHA_INSTALL_ROOT . '/ddt/ddt.php');
+
+// we may already have a definition of _ddt(). 
+
+if ( ! function_exists( "_ddt" ) )
+	{
+	require_once(XINHA_INSTALL_ROOT . '/ddt/ddt.php');
+	}
+
 require_once('Classes/ImageManager.php');
 
 // uncomment for debugging
 
 // _ddtOn();
 
-//default path is /
+_ddt( __FILE__, __LINE__, "images.php - base_url is '" . $IMConfig['base_url'] . "'" );
+
+// default path is /
+
 $relative = '/';
 $manager = new ImageManager($IMConfig);
 
-//process any file uploads
+// process any file uploads
+
 $manager->processUploads();
 
 $manager->deleteFiles();
 
 $refreshDir = false;
-//process any directory functions
+
+// process any directory functions
+
 if($manager->deleteDirs() || $manager->processNewDir())
 	$refreshDir = true;
 
-//check for any sub-directory request
-//check that the requested sub-directory exists
-//and valid
-if(isset($_REQUEST['dir']))
-{
+// check for any sub-directory request
+// check that the requested sub-directory exists
+// and valid
+
+if (isset($_REQUEST['dir']))
+	{
 	$path = rawurldecode($_REQUEST['dir']);
 	if($manager->validRelativePath($path))
 		$relative = $path;
-}
+	}
 
 
 $manager = new ImageManager($IMConfig);
 
-//get the list of files and directories
+// get the list of files and directories
+
 $list = $manager->getFiles($relative);
 
 /* ================= OUTPUT/DRAW FUNCTIONS ======================= */
@@ -49,10 +65,16 @@ $list = $manager->getFiles($relative);
 /**
  * Draw the files in an table.
  */
+
 function drawFiles($list, &$manager)
 {
 	global $relative;
-	global $IMConfig;
+
+	// we used to have the global $IMConfig here but for some reason the global
+	// reference was getting dropped. Pulling it from inside manager is probably
+	// cleaner.
+
+	_ddt( __FILE__, __LINE__, "drawFiles(): config['base_url'] is '" . $manager->config['base_url'] . "'" );
 
 	foreach($list as $entry => $file) 
 	{ 
@@ -65,7 +87,11 @@ function drawFiles($list, &$manager)
 
 		<a href="javascript:;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php print $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
 		</td></tr><tr><td class="edit">
-			<a href="<?php echo $IMConfig['backend_url']; ?>__function=images&dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
+			<a href="<?php print $IMConfig['backend_url']; ?>__function=images&dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php 
+			
+			_ddt( __FILE__, __LINE__, "images.php - base_url is '" . $manager->config['base_url'] . "'" );
+			
+			echo $manager->config['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="<?php print $manager->config['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
 		<?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
 		</td></tr></table></td> 
 	  <?php 
@@ -80,15 +106,18 @@ function drawFiles($list, &$manager)
 function drawDirs($list, &$manager) 
 {
 	global $relative;
-   global $IMConfig;
 
 	foreach($list as $path => $dir) 
 	{ ?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-		<a href="<?php print $IMConfig['backend_url']; ?>__function=images&dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="<?php print $IMConfig['base_url'];?>img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
+		<a href="<?php print $manager->config['backend_url']; ?>__function=images&dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="<?php print $manager->config['base_url'];?>img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
 		</td></tr><tr>
 		<td class="edit">
-			<a href="<?php print $IMConfig['backend_url']; ?>__function=editor&dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
+			<a href="<?php print $$manager->config['backend_url']; ?>__function=editor&dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="<?php 
+
+			_ddt( __FILE__, __LINE__, "images.php - base_url is '" . $manager->config['base_url'] . "'" );
+			
+			print $manager->config['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
 			<?php echo $dir['entry']; ?>
 		</td>
 		</tr></table></td>

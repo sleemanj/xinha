@@ -4,6 +4,61 @@ by: Yermo Lamers of DTLink, LLC
 http://www.formvista.com/contact.html
 
 ---------------------------------------------------------------------
+2005-05-17: dev snapshot change summary
+
+examples/simple_sample.php
+
+. removed styllist. There is some exception problem I haven't tracked
+  down yet.
+
+ddt/ddt.js
+
+. Should now work under MSIE.
+
+htmlarea.js
+
+. added workaround fix for NASTY FIREFOX BUG resulting in the infamous
+  uneditable area problem (exception on designMode="on" issue - 
+  refer to bug: 
+
+  https://bugzilla.mozilla.org/show_bug.cgi?id=207842
+
+  and this thread:
+
+  http://xinha.gogo.co.nz/punbb/viewtopic.php?id=229
+
+. trailing <BR>'s are no longer stripped out of the document. This
+  was wreaking havoc on EnterParagraphs. It's not clear whether or not
+  this is going to have unanticipated side-effects.
+
+plugins/EnterParagraphs/enter-paragraphs.js
+
+  NOT FULLY FUNCTIONAL YET - DOESN'T HANDLE ALL CASES CORRECTLY,
+  but it's much better than it was I think.
+
+. largely reworked.
+. changed obfuscated variables names to make it more readable.
+. expanded out nested (x ? y : z) constructs to make it more readable.
+. added alot of comments.
+. fixed a serious bug in findEachNodeUnder() that was not correctly
+  handling beginning and end node conditions.
+. fixed design flaw that selected a non-existent insertion point for 
+  placing the cursor.
+. fixed several exceptions.
+. now correctly handles lists by passing the back back to the Gecko
+  engine if we are in a list with the exception of being at the
+  first position in the first element in which case we insert
+  a paragraph before the list and move the cursor back to the first
+  item on the list.
+
+---------------------------------------------------------------------
+2005-05-09: dev snapshot change summary
+
+plugins/linker/scan.php
+
+. fixed misformed debug message.
+
+---------------------------------------------------------------------
 2005-05-06: dev snapshot change summary
 
 htmlarea.js

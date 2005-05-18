@@ -51,7 +51,25 @@
 //
 // 	Error: uncaught exception: Permission denied to get property Window.DDT_STATUS
 // .	setting the title of the debug window so you can tell which domain it refers to.
+//
+// 2005-05-12 YmL:
+//	.	added _ddtDumpNode() to dump node details along with message.
+//
 // -----------------------------
+
+
+
+/**
+* browser identification
+*/
+
+DDT.agt = navigator.userAgent.toLowerCase();
+DDT.is_ie	   = ((DDT.agt.indexOf("msie") != -1) && (DDT.agt.indexOf("opera") == -1));
+DDT.is_opera  = (DDT.agt.indexOf("opera") != -1);
+DDT.is_mac	   = (DDT.agt.indexOf("mac") != -1);
+DDT.is_mac_ie = (DDT.is_ie && DDT.is_mac);
+DDT.is_win_ie = (DDT.is_ie && !DDT.is_mac);
+DDT.is_gecko  = (navigator.product == "Gecko");
 
 /**
 * DDT constructor.
@@ -120,15 +138,40 @@ if ( this.popup == null )
 	// domain cannot write to a window opened by another domain. 
 	//
 	// We'll just use the hostname here to make the window name unique.
+	//
+	// Something to note, MSIE 6 (at least under win98) throws an exception
+	// if there are any "."'s in the window name, so we replace them with underscores here.
 
-	this.popup = window.open( "", "ddt_popup_" + location.host,
+	var window_name = "ddt_popup_" + location.hostname.replace( /[.]/g, "_" );
+
+	if (DDT.is_gecko) 
+		{
+		this.popup = window.open( "", "ddt_popup_" + location.host,
 			      "toolbar=no,menubar=no,personalbar=no,width=800,height=450," +
 			      "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
+		}
+	else
+		{
+
+		this.popup = window.open("", window_name,
+              "toolbar=no,location=no,directories=no,status=no,menubar=no," +
+              "scrollbars=no,resizable=yes,width=800,height=450");
+
+		}
+
+	// did we manage to open a window?
+
+	if (( typeof this.popup == 'undefined' ) || ( this.popup == null ))
+		{
+		alert( "FAILED TO OPEN DEBUGGING TRACE WINDOW" );
+
+		return false;
+		}
 
 	// it's possible that the window was left open or we are another object
 	// sharing the same window.
 
-	if ( typeof this.popup.DDT_STATUS == 'undefined' )
+	if (( this.popup != null ) && ( typeof this.popup.DDT_STATUS == 'undefined' ))
 		{
 
 		var content = "<html><head><title>Trace Messages for '" + location.host + "'</title></head><body><p>DDT</p><p><a href=\"javascript:document.write( '<hr>');\">ADD SEPARATOR</a></p></body></html>";
@@ -206,7 +249,35 @@ if ( this.state == "on" )
 		}
 	}
 
-}
+}	// end of _ddt()
+
+// --------------------------------
+
+/**
+* dumps key properties from a node.
+*/
+
+DDT.prototype._ddtDumpNode = function( file, line, msg, node )
+{
+
+if ( typeof node == 'undefined' )
+	{
+	this._ddt(
+		file, line, msg + " -- Node is undefined!" );
+
+	return;
+	}
+
+if ( node == null )
+	{
+	this._ddt(
+		file, line, msg + " -- Node is null!" );
+	}
+
+this._ddt( 
+	file, line, msg + "<br>" + this.FragmentToString( node, 0 ) );
+
+} // end of _ddtDumpNode()
 
 // --------------------------------
 
@@ -254,31 +325,188 @@ for (var x in obj)
 // ---------------------------------
 
 /**
-* dumps an object tree
+* generates a string description of a document fragment.
 *
-* displays a tree of html elements. Design based on method from htmlarea.js
+* returns a tree of html elements. Design based on method from htmlarea.js
 *
 * @see ddtpreproc.php
-* @param root top of tree to display
+* @param root top of tree to generate
 * @param level depth level.
 */
 
-DDT.prototype._ddtDumpTree = function(root, level) 
+DDT.prototype.FragmentToString = function(root, level) 
 {							  
-var tag = root.tagName.toLowerCase(), i;
-var ns = HTMLArea.is_ie ? root.scopeName : root.prefix;
 
-// FIXME: separated on multiple lines to avoid being picked
-// up by ddtpreproc.php
+var retval = "";
 
-this._ddt( 
-	":","0", level + "- " + tag + " [" + ns + "]" 
-	);
+if ( typeof root == 'undefined' )
+	return " root undefined ";
 
-for (i = root.firstChild; i; i = i.nextSibling)
-	if (i.nodeType == 1)
-		this._ddtDumpTree(i, level + 2);
+if ( root == null )
+	return " root is null ";
+
+// it may be a mozilla range object:
+
+if ( typeof root.cloneRange != 'undefined' )
+	{
+	// we have a range object. 
+
+	retval = "RANGE OBJECT - start offset '" + root.startOffset + "' end offset '" + root.endOffset + "'<br>";
+	retval += "RANGE START:<br>" + this.FragmentToString( root.startContainer, level );
+	retval += "RANGE END:<br>" + this.FragmentToString( root.endContainer, level );
+
+	return retval;
+	}
+
+if ( typeof root.childNodes == 'undefined' )
+	return " root is not a node";
+
+var childretval = "";
+
+// interestingly if you do not declare a local var for the iterator
+// it seems to become a static variable which mucks up the recursion
+
+var i = 0;
+
+for (i = 0; i < root.childNodes.length; i++)
+	{
+	childretval += this.FragmentToString( root.childNodes[i], level + 2);
+	}
+
+retval = this.indent( level ) + this._ddtGetNodeType( root ) + " - " + root.childNodes.length + " children <br>" + childretval;
+
+return retval;
+
 };
+
+// -------------------------------------------------
+
+/**
+* indent by level
+*/
+
+DDT.prototype.indent = function( level )
+{
+
+var retval = "";
+
+for (i = 0; i<level; i++ )
+	{
+	retval += "&nbsp;&nbsp;";
+	}
+
+return retval;
+
+}
+// -----------------------------------------
+
+/**
+* displays node type
+*/
+
+DDT.prototype._ddtGetNodeType = function( node )
+{
+
+var retval = "";
+
+if ( typeof node == 'undefined' )
+	{
+	return "TYPE_IS_UNDEFINED";
+	}
+
+if ( node == null )
+	{
+	return "TYPE_IS_NULL!";
+	}
+
+if ( typeof node.nodeType == 'undefined' )
+	{
+	return "NOT_A_NODE_OBJECT - type is '" + typeof node + "'";
+	}
+
+switch ( node.nodeType )
+	{
+
+	case 1:
+		retval = "ELEMENT_NODE - tag '" + node.nodeName + "'";
+		return retval;
+		break;
+
+	case 2:
+		return "ATTRIBUTE_NODE";
+		break;
+
+	case 3:
+		retval = "TEXT_NODE";
+		retval = retval + " contents '" + node.nodeValue + "'";
+		return retval;
+
+		break;
+
+	case 4:
+		return "CDATA_SECTION_NODE";
+		break;
+
+	case 5:
+		return "ENTITY_REFERENCE_NODE";
+		break;
+
+	case 6:
+		return "ENTITY_NODE";
+		break;
+
+	case 7:
+		return "PROCESSING_INSTRUCTION_NODE";
+		break;
+
+	case 8:
+		return "COMMENT_NODE";
+		break;
+
+	case 9:
+		return "DOCUMENT_NODE";
+		break;
+
+	case 10:
+		return "DOCUMENT_TYPE_NODE";
+		break;
+
+	case 11:
+		retval = "DOCUMENT_FRAGMENT_NODE";
+
+		return retval;
+		break;
+
+	case 12:
+		return "NOTATION_NODE";
+		break;
+
+	default:
+		return "UNKNOWN_NODE!";
+		break;
+
+	} // end of switch
+
+};	// end of _ddtDumpNode()
+
+// ----------------------------------------------------------
+
+/**
+* getHTMLSource() - returns HTML source for display in a browser window.
+*/
+
+DDT.prototype.getHTMLSource = function( html )
+{
+
+html = html.replace( /</ig, "&lt;" );
+html = html.replace( />/ig, "&gt;" );
+html = html.replace( /&/ig, "&amp;" );
+html = html.replace(/\xA0/g, "&nbsp;");
+html = html.replace(/\x22/g, "&quot;");
+
+return html;
+
+}	// end of showHTML()
 
 // END
 

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Image Manager configuration file.
  * @author $Author: Wei Zhuo $
@@ -291,7 +291,10 @@ define( "IM_CONFIG_LOADED", "yes" );
 
 // bring in the debugging library.
 
-include_once( XINHA_INSTALL_ROOT . "/ddt/ddt.php" );
+if ( !function_exists( "_ddt" ) )
+	{
+	include_once( XINHA_INSTALL_ROOT . "/ddt/ddt.php" );
+	}
 
 // uncomment to send debug messages to a local file
 // _setDebugLog( "/tmp/debug_log.txt" );

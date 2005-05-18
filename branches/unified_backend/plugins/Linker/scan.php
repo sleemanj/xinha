@@ -277,9 +277,14 @@ $javascript_array = to_js(scan($dir));
 // if you want to see what's communicated back to the browser uncomment this. You will
 // get the output in an error popup.
 //
-// _ddtOn();
 
-_ddt( __FILE__, __LINE__, "scan.php: Resulting array is '" + $javascript_array + "'" );
+_setDebugLog( "/tmp/debug_log.txt" );
+
+_ddtOn();
+
+_ddt( __FILE__, __LINE__, "scan.php: hello\n" );
+
+_ddt( __FILE__, __LINE__, "scan.php: Resulting array is '" . $javascript_array . "'" );
 
 echo $javascript_array;
 
