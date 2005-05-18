@@ -57,10 +57,10 @@ HTMLArea.prototype._fullScreen = function()
     e._sizing = true;
     // Width & Height of window
     var x,y;
-    if (self.innerHeight) // all except Explorer
+    if (window.innerHeight) // all except Explorer
     {
-      x = self.innerWidth;
-      y = self.innerHeight;
+      x = window.innerWidth;
+      y = window.innerHeight;
     }
     else if (document.documentElement && document.documentElement.clientHeight)
       // Explorer 6 Strict Mode
@@ -74,24 +74,7 @@ HTMLArea.prototype._fullScreen = function()
       y = document.body.clientHeight;
     }
 
-    e.sizeEditor(x,y,true,true);
-    /*
-    if(!e._revertFullScreen) e._revertFullScreen = e.getInnerSize();
-    width = x;
-    height = y - e._toolbar.offsetHeight - (e._statusBar ? e._statusBar.offsetHeight : 0);
-    e.setInnerSize(width,height);
-
-    // IE in standards mode needs us to set the width of the tool & status bar,
-    // I have NO idea why
-    if(HTMLArea.is_ie && document.documentElement && document.documentElement.clientHeight)
-    {
-      e._toolbar.style.width = (width - 12) + 'px';
-      if(e._statusBar)
-      {
-        e._statusBar.style.width = (width - 12) + 'px';
-      }
-    }
-    */
+    e.sizeEditor(x + 'px',y + 'px',true,true);
     e._sizing = false;
   }
 
@@ -100,18 +83,6 @@ HTMLArea.prototype._fullScreen = function()
     if(e._isFullScreen || e._sizing) return false;
     e._sizing = true;
     e.initSize();
-    /*
-    e.setInnerSize(e._revertFullScreen.width, e._revertFullScreen.height);
-    if(HTMLArea.is_ie && document.documentElement && document.documentElement.clientHeight)
-    {
-      e._toolbar.style.width = '';
-      if(e._statusBar)
-      {
-        e._statusBar.style.width = '';
-      }
-    }
-    e._revertFullScreen = null;
-    */
     e._sizing = false;
   }
 

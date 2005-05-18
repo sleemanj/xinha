@@ -69,9 +69,9 @@
 .htmlarea .toolbar select:hover,
 .htmlarea .toolbar select:active { background: FieldFace; color: ButtonText; }
 
-.htmlarea iframe
+.htmlarea iframe, .htmlarea textarea
 {
-  border: 1px solid;
+  border: none; /*1px solid;*/
 }
 
 .htmlarea .statusBar {
