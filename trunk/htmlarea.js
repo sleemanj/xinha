@@ -3832,12 +3832,19 @@ HTMLArea.prototype.convertNode = function(el, newTagName) {
 
 HTMLArea.prototype.ie_checkBackspace = function() {
   var sel = this._getSelection();
+  if(HTMLArea.is_ie && sel.type == 'Control')
+  {
+    var elm = this._activeElement(sel);
+    elm.parentNode.removeChild(elm);
+    return true;
+  }
+
+  // This bit of code preseves links when you backspace over the
+  // endpoint of the link in IE.  Without it, if you have something like
+  //    link_here |
+  // where | is the cursor, and backspace over the last e, then the link
+  // will de-link, which is a bit tedious
   var range = this._createRange(sel);
-
-  // the selection must contain at least some text
-  if (range.text == "undefined") return true;
-
-  // to remove a link (should be done like this?)
   var r2 = range.duplicate();
   r2.moveStart("character", -1);
   var a = r2.parentElement();
