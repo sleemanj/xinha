@@ -189,6 +189,11 @@ HTMLArea.Config = function () {
   // these, and the width and height of the editor
   // _must_ be pixel widths if you wish to have config.sizeIncludesPanels = false
   // if you have sizeIncludesPanels true, they can be any valid CSS measurement.
+  //
+  // If you are using Xinha in a "Standards Mode" page (using doctype switching)
+  // then you must use pixel heights for the top and bottom panels, otherwise
+  // it won't work correctly.  Also remember that you MUST have the "px" appended
+  // to pixel lengths or it won't work either!
   this.panel_dimensions =
   {
     left:   '200px', // Width
@@ -1245,6 +1250,7 @@ HTMLArea.prototype.generate = function ()
   fw.table.border="0";
   fw.table.cellPadding="0";
   fw.table.cellSpacing="0";
+
   fw.tb_row.style.verticalAlign = 'top';
   fw.tp_row.style.verticalAlign = 'top';
   fw.ler_row.style.verticalAlign= 'top';
@@ -1449,7 +1455,21 @@ HTMLArea.prototype.generate = function ()
     }
 
     this.sizeEditor(width, height, this.config.sizeIncludesBars, this.config.sizeIncludesPanels);
-    HTMLArea._addEvent(window, 'resize', function() { editor.sizeEditor() });
+
+    // The resize handler is to allow for heights specified as percentages.
+    // This has been disabled in compatmode because IE seems to throw a resize
+    // event up to the window even when you change the dimensions of elements
+    // on the page rather than the window itself.  Which can lead to
+    // huge amounts of resize events, and possibly getting into infinite loops
+    // of resize events.
+    //
+    // % widths are fine without the event because they are passed through to
+    // the browser as percentages so it's up to the browser to resize those.
+    if(!document.compatMode || document.compatMode == 'BackCompat')
+    {
+      HTMLArea._addEvent(window, 'resize', function() { editor.sizeEditor(); });
+    }
+
     this.notifyOn('panel_change',function(){editor.sizeEditor();});
   }
 
@@ -1462,6 +1482,7 @@ HTMLArea.prototype.generate = function ()
 
   HTMLArea.prototype.sizeEditor = function(width, height, includingBars, includingPanels)
   {
+
     if(includingBars != null)     this._htmlArea.sizeIncludesToolbars = includingBars;
     if(includingPanels != null)   this._htmlArea.sizeIncludesPanels   = includingPanels;
 
@@ -1511,10 +1532,14 @@ HTMLArea.prototype.generate = function ()
       }
     }
 
+    // We need to set the iframe & textarea to 100% height so that the htmlarea
+    // isn't "pushed out" when we get it's height, so we can change them later.
+    if(this._iframe.style.height != '100%')   this._iframe.style.height   = '100%';
+    if(this._textArea.style.height != '100%') this._textArea.style.height = '100%';
+
     // At this point we have this._htmlArea.style.width & this._htmlArea.style.height
     // which are the size for the OUTER editor area, including toolbars and panels
     // now we size the INNER area and position stuff in the right places.
-
     width  = this._htmlArea.offsetWidth;
     height = this._htmlArea.offsetHeight;
 
@@ -1645,11 +1670,36 @@ HTMLArea.prototype.generate = function ()
     this._framework.bp_cell.style.height = this.config.panel_dimensions.bottom;
     this._framework.tb_cell.style.height = this._toolBar.offsetHeight   + 'px';
     this._framework.sb_cell.style.height = this._statusBar.offsetHeight + 'px';
-    this._iframe.style.height   = '100%';
+
+    // Compatability Mode (both IE and Moz), because table cell heights are
+    // ignored in compatability mode (at least in IE, moz works, but
+    // I don't think it should so we'll do this for moz too incase it changes)
+    // we have to set an explicit pixel height on the iframe so as the table
+    // cell surrounding it takes the available height.
+    // This means that the panel heights for top & bottom MUST be pixel heights
+    // if you are using Xinha in a standards mode page.
+    if( document.compatMode && document.compatMode != 'BackCompat')
+    {
+      var edcellheight = height - this._toolBar.offsetHeight - this._statusBar.offsetHeight;
+      if(this._framework.tp_row.childNodes.length)
+      {
+        edcellheight  -= parseInt(this.config.panel_dimensions.top);
+      }
+
+      if(this._framework.bp_row.childNodes.length)
+      {
+        edcellheight  -= parseInt(this.config.panel_dimensions.bottom);
+      }
+      this._iframe.style.height   = (edcellheight - this._toolBar.offsetHeight - this._statusBar.offsetHeight) + 'px';
+    }
+    else
+    {
+      this._iframe.style.height   = '100%';
+    }
     this._iframe.style.width    = '100%';
 
-    this._textArea.style.height = '100%';
-    this._textArea.style.width  = '100%';
+    this._textArea.style.height = this._iframe.style.height;
+    this._textArea.style.width  = this._iframe.style.width;
 
     this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
   }
@@ -1794,7 +1844,7 @@ HTMLArea.prototype.generate = function ()
         }
       } catch (e) {}
     }
-    else if(!HTMLArea.is_gecko)
+    else if(!HTMLArea.is_gecko && this._doc.body.contentEditable != true)
     {
       this._doc.body.contentEditable = true;
     }
@@ -1817,7 +1867,7 @@ HTMLArea.prototype.generate = function ()
     {
       try {this._doc.designMode = 'off';} catch (e) {}
     }
-    else if(!HTMLArea.is_gecko)
+    else if(!HTMLArea.is_gecko && this._doc.body.contentEditable != false)
     {
       this._doc.body.contentEditable = false;
     }
@@ -2890,9 +2940,17 @@ HTMLArea.prototype._activeElement = function(sel)
     // correct, we possibly should do a simlar check to IE?
     if(! sel.isCollapsed)
     {
-      if(sel.anchorNode.nodeType == 1)
+      if(sel.anchorNode.childNodes.length > sel.anchorOffset && sel.anchorNode.childNodes[sel.anchorOffset].nodeType == 1)
+      {
+        return sel.anchorNode.childNodes[sel.anchorOffset];
+      }
+      else if(sel.anchorNode.nodeType == 1)
       {
         return sel.anchorNode;
+      }
+      else
+      {
+        return sel.anchorNode.parentNode;
       }
     }
     return null;
@@ -3730,7 +3788,7 @@ HTMLArea.prototype._editorEvent = function(ev) {
   editor._timerToolbar = setTimeout(function() {
     editor.updateToolbar();
     editor._timerToolbar = null;
-  }, 100);
+  }, 250);
 };
 
 HTMLArea.prototype.convertNode = function(el, newTagName) {
