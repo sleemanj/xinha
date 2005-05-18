@@ -1690,7 +1690,7 @@ HTMLArea.prototype.generate = function ()
       {
         edcellheight  -= parseInt(this.config.panel_dimensions.bottom);
       }
-      this._iframe.style.height   = (edcellheight - this._toolBar.offsetHeight - this._statusBar.offsetHeight) + 'px';
+      this._iframe.style.height   = edcellheight + 'px';
     }
     else
     {
@@ -2080,6 +2080,14 @@ HTMLArea.prototype.setFullHTML = function(html) {
 // Create the specified plugin and register it with this HTMLArea
 // return the plugin created to allow refresh when necessary
 HTMLArea.prototype.registerPlugin = function() {
+  // We can only register plugins that have been succesfully loaded
+  if
+  (
+    plugin == null
+    || typeof plugin == 'undefined'
+    || (typeof plugin == 'string' && eval('typeof ' + plugin) == 'undefined')
+  ) return false;
+
   var plugin = arguments[0];
   var args = [];
   for (var i = 1; i < arguments.length; ++i)
@@ -2125,9 +2133,9 @@ HTMLArea.loadPlugin = function(pluginName, callback) {
   {
     if(callback)
     {
-      callback();
+      callback(pluginName);
     }
-    return;
+    return true;
   }
 
   var dir = this.getPluginDir(pluginName);
@@ -2139,50 +2147,74 @@ HTMLArea.loadPlugin = function(pluginName, callback) {
 
   if(callback)
   {
-    HTMLArea._loadback(plugin_file, callback);
+    HTMLArea._loadback(plugin_file, function() { callback(pluginName); });
   }
   else
   {
     document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
   }
+  return false;
 };
 
+HTMLArea._pluginLoadStatus = { };
 HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
 {
+  // Rip the ones that are loaded and look for ones that have failed
+  var retVal = true;
   var nuPlugins = HTMLArea.cloneObject(plugins);
-
   while(nuPlugins.length)
   {
-    // Might already be loaded
-    if(eval('typeof ' + nuPlugins[nuPlugins.length-1]) != 'undefined')
+    var p = nuPlugins.pop();
+    if(typeof HTMLArea._pluginLoadStatus[p] == 'undefined')
     {
-      nuPlugins.pop();
+      // Load it
+      HTMLArea._pluginLoadStatus[p] = 'loading';
+      HTMLArea.loadPlugin(p,
+          function(plugin)
+          {
+            if(eval('typeof ' + plugin) != 'undefined')
+            {
+              HTMLArea._pluginLoadStatus[plugin] = 'ready';
+            }
+            else
+            {
+              // Actually, this won't happen, because if the script fails
+              // it will throw an exception preventing the callback from
+              // running.  This will leave it always in the "loading" state
+              // unfortunatly that means we can't fail plugins gracefully
+              // by just skipping them.
+              HTMLArea._pluginLoadStatus[plugin] = 'failed';
+            }
+          }
+      );
+      retVal = false;
     }
     else
     {
-      break;
+      switch(HTMLArea._pluginLoadStatus[p])
+      {
+        case 'failed':
+        case 'ready' :
+        break;
+
+        case 'loading':
+        default       :
+         document.getElementsByTagName('form').item(0).parentNode.appendChild(document.createTextNode(p));
+         retVal = false;
+         break;
+      }
     }
   }
 
-  if(!nuPlugins.length)
-  {
-    return true;
-  }
+  if(retVal) return true; // All done, just return
 
-  HTMLArea.loadPlugin
-  (nuPlugins.pop(),
-      function()
-      {
-        if(HTMLArea.loadPlugins(nuPlugins, callbackIfNotReady))
-        {
-          if(typeof callbackIfNotReady == 'function')
-          {
-            callbackIfNotReady();
-          }
-        }
-      }
-  );
-  return false;
+  // Waiting on plugins to load, return false now and come back a bit later
+  // if we have to callback
+  if(callbackIfNotReady)
+  {
+    setTimeout(function() { if(HTMLArea.loadPlugins(plugins, callbackIfNotReady)) callbackIfNotReady(); }, 150);
+  }
+  return retVal;
 }
 
 // refresh plugin by calling onGenerate or onGenerateOnce method.
