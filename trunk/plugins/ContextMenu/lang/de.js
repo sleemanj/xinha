@@ -42,7 +42,7 @@
   "Justify Right": "Rechtsbündig",
   "Justify Full": "Blocksatz",
   "Make lin_k...": "Link erstellen",
-  "Create a link": "Link erstellen"
+  "Create a link": "Link erstellen",
   "Remove the": "Element",
   "Element...": "entfernen",
   "Please confirm that you want to remove this element:": "Wollen sie dieses Element wirklich entfernen?",
