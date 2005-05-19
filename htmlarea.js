@@ -2081,14 +2081,14 @@ HTMLArea.prototype.setFullHTML = function(html) {
 // return the plugin created to allow refresh when necessary
 HTMLArea.prototype.registerPlugin = function() {
   // We can only register plugins that have been succesfully loaded
+  var plugin = arguments[0];
   if
   (
     plugin == null
     || typeof plugin == 'undefined'
     || (typeof plugin == 'string' && eval('typeof ' + plugin) == 'undefined')
   ) return false;
-
-  var plugin = arguments[0];
+  
   var args = [];
   for (var i = 1; i < arguments.length; ++i)
     args.push(arguments[i]);
@@ -2199,7 +2199,6 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
 
         case 'loading':
         default       :
-         document.getElementsByTagName('form').item(0).parentNode.appendChild(document.createTextNode(p));
          retVal = false;
          break;
       }
