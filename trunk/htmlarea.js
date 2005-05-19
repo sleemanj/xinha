@@ -185,11 +185,6 @@ HTMLArea.Config = function () {
   // to have explicit pixel sizes above (or on your textarea and have auto above)
   this.sizeIncludesPanels = true;
 
-  // Width of the "Right Side" panel, when present
-  // these, and the width and height of the editor
-  // _must_ be pixel widths if you wish to have config.sizeIncludesPanels = false
-  // if you have sizeIncludesPanels true, they can be any valid CSS measurement.
-  //
   // If you are using Xinha in a "Standards Mode" page (using doctype switching)
   // then you must use pixel heights for the top and bottom panels, otherwise
   // it won't work correctly.  Also remember that you MUST have the "px" appended
@@ -1295,7 +1290,6 @@ HTMLArea.prototype.generate = function ()
 
     // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
-  iframe.src = _editor_url + editor.config.URIs["blank"];
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
 
@@ -1311,75 +1305,32 @@ HTMLArea.prototype.generate = function ()
   textarea.parentNode.removeChild(textarea);
   this._framework.ed_cell.appendChild(textarea);
 
+
   // Set up event listeners for saving the iframe content to the textarea
-  if (textarea.form) {
-    // we have a form, on submit get the HTMLArea content and
-    // update original textarea.
-    var f = textarea.form;
-    if (typeof f.__msh_prevOnSubmit == "undefined")
-    {
-      f.__msh_prevOnSubmit = [];
-      if (typeof f.onsubmit == "function")
-      {
-        var funcref = f.onsubmit;
-        f.__msh_prevOnSubmit.push(funcref);
-        f.onsubmit = null;
-      }
+  if (textarea.form)
+  {
+    // onsubmit get the HTMLArea content and update original textarea.
+    HTMLArea.prependDom0Event
+    (
+      this._textArea.form,
+      'submit',
+      function() {editor._textArea.value = editor.outwardHtml(editor.getHTML()); return true;}
+    );
 
-      f.onsubmit = function()
-      {
-        var a = this.__msh_prevOnSubmit;
-        // call previous submit methods if they were there.
-        var allOK = true;
-        for (var i = a.length; --i >= 0;)
-        {
-          // We want the handler to be a member of the form, not the array, so that "this" will work correctly
-          this.__msh_tempEventHandler = a[i];
-          if(this.__msh_tempEventHandler() == false)
-          {
-            allOK = false;
-            break;
-          }
-        }
-        return allOK;
-      }
-    }
-    f.__msh_prevOnSubmit.push(function() {editor._textArea.value = editor.outwardHtml(editor.getHTML());});
+    var initialTAContent = textarea.value;
 
-    if (typeof f.__msh_prevOnReset == "undefined")
-    {
-      f.__msh_prevOnReset = [];
-      if (typeof f.onreset == "function")
-      {
-        var funcref = f.onreset;
-        f.__msh_prevOnReset.push(funcref);
-        f.onreset = null;
-      }
-
-      f.onreset = function()
-      {
-        var a = this.__msh_prevOnReset;
-        // call previous submit methods if they were there.
-        var allOK = true;
-        for (var i = a.length; --i >= 0;)
-        {
-          if(a[i]() == false)
-          {
-            allOK = false;
-            break;
-          }
-        }
-        return allOK;
-      }
-    }
-    f.__msh_prevOnReset.push(function() {editor.setHTML(editor._textArea.value); editor.updateToolbar();});
+    // onreset revert the HTMLArea content to the textarea content
+    HTMLArea.prependDom0Event
+    (
+      this._textArea.form,
+      'reset',
+      function() { editor.setHTML(editor.inwardHtml(initialTAContent)); editor.updateToolbar(); return true; }
+    );
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
   // the HTML content into the original textarea.
-  try {
-    HTMLArea._addEvent(window, 'unload', function() {textarea.value = editor.outwardHtml(editor.getHTML());} );
-  } catch(e) {};
+  HTMLArea.prependDom0Event(window, 'unload', function() {textarea.value = editor.outwardHtml(editor.getHTML()); return true; });
 
   // Hide textarea
   textarea.style.display = "none";
@@ -1387,10 +1338,25 @@ HTMLArea.prototype.generate = function ()
   // Initalize size
   editor.initSize();
 
-  // IMPORTANT: we have to allow Mozilla a short time to recognize the
-  // new frame.  Otherwise we get a stupid exception.
+  // Add an event to initialize the iframe once loaded.
+  editor._iframeLoadDone = false;
+  HTMLArea._addEvent
+  (
+    this._iframe,
+    'load',
+    function(e)
+    {
+      if(! editor._iframeLoadDone)
+      {
+        editor._iframeLoadDone = true;
+        editor.initIframe();
+      }
+      return true;
+    }
+  );
 
-  setTimeout(function() { editor.initIframe()}, 50);
+  // Set src of iframe
+  this._iframe.src = _editor_url + editor.config.URIs["blank"];
 };
 
 
@@ -2063,12 +2029,14 @@ HTMLArea.prototype.setFullHTML = function(html) {
     if (html.match(HTMLArea.RE_body))
       this._doc.getElementsByTagName("body")[0].innerHTML = RegExp.$1;
   } else {
+    var reac = this.editorIsActivated();
+    if(reac) this.deactivateEditor();
     var html_re = /<html>((.|\n)*?)<\/html>/i;
     html = html.replace(html_re, "$1");
     this._doc.open();
     this._doc.write(html);
     this._doc.close();
-    this.activateEditor();
+    if(reac) this.activateEditor();
     return true;
   }
 };
@@ -2080,15 +2048,16 @@ HTMLArea.prototype.setFullHTML = function(html) {
 // Create the specified plugin and register it with this HTMLArea
 // return the plugin created to allow refresh when necessary
 HTMLArea.prototype.registerPlugin = function() {
-  // We can only register plugins that have been succesfully loaded
   var plugin = arguments[0];
+
+  // We can only register plugins that have been succesfully loaded
   if
   (
     plugin == null
     || typeof plugin == 'undefined'
     || (typeof plugin == 'string' && eval('typeof ' + plugin) == 'undefined')
   ) return false;
-  
+
   var args = [];
   for (var i = 1; i < arguments.length; ++i)
     args.push(arguments[i]);
@@ -2544,20 +2513,20 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
         a.href = "javascript:void(0)";
         a.el = el;
         a.editor = this;
-        a.onclick = function() {
+        HTMLArea.addDom0Event(a, 'click', function() {
           this.blur();
           this.editor.selectNodeContents(this.el);
           this.editor.updateToolbar(true);
           return false;
-        };
-        a.oncontextmenu = function() {
+        });
+        HTMLArea.addDom0Event(a, 'contextmenu',  function() {
           // TODO: add context menu here
           this.blur();
           var info = "Inline style:\n\n";
           info += this.el.style.cssText.split(/;\s*/).join(";\n");
           alert(info);
           return false;
-        };
+        });
         var txt = el.tagName.toLowerCase();
         a.title = el.style.cssText;
         if (el.id) {
@@ -4273,16 +4242,32 @@ HTMLArea.prototype.getInnerHTML = function() {
 
 // completely change the HTML inside
 HTMLArea.prototype.setHTML = function(html) {
-  switch (this._editMode) {
-      case "wysiwyg"  :
-    if (!this.config.fullPage)
-      this._doc.body.innerHTML = html;
-    else
-      // this._doc.documentElement.innerHTML = html;
-      this._doc.body.innerHTML = html;
+  switch (this._editMode)
+  {
+    case "wysiwyg"  :
+    {
+      if (!this.config.fullPage)
+      {
+        this._doc.body.innerHTML = html;
+      }
+      else
+      {
+        this._doc.setFullHTML(html);
+      }
+    }
     break;
-      case "textmode" : this._textArea.value = html; break;
-      default	    : alert("Mode <" + mode + "> not defined!");
+
+    case "textmode" :
+    {
+      this._textArea.value = html;
+    }
+    break;
+
+    default	        :
+    {
+      alert("Mode <" + mode + "> not defined!");
+    }
+    break;
   }
   return false;
 };
@@ -4368,12 +4353,56 @@ HTMLArea.prototype._createRange = function(sel) {
 
 // event handling
 
+/** Event Flushing
+ *  To try and work around memory leaks in the rather broken
+ *  garbage collector in IE, HTMLArea.flushEvents can be called
+ *  onunload, it will remove any event listeners (that were added
+ *  through _addEvent(s)) and clear any DOM-0 events.
+ */
+HTMLArea._eventFlushers = [ ];
+HTMLArea.flushEvents = function()
+{
+  var x = 0;
+  var e = null;
+  while(e = HTMLArea._eventFlushers.pop())
+  {
+    if(e.length == 3)
+    {
+      HTMLArea._removeEvent(e[0], e[1], e[2]);
+      x++;
+    }
+    else if (e.length == 2)
+    {
+      e[0]['on' + e[1]] = null;
+      e[0]._xinha_dom0Events[e[1]] = null;
+      x++;
+    }
+  }
+
+  if(document.all)
+  {
+    for(var i = 0; i < document.all.length; i++)
+    {
+      for(var j in document.all[i])
+      {
+        if(/^on/.test(j) && typeof document.all[i][j] == 'function')
+        {
+          document.all[i][j] = null;
+          x++;
+        }
+      }
+    }
+  }
+  alert('Flushed ' + x + ' events.');
+}
+
 HTMLArea._addEvent = function(el, evname, func) {
   if (HTMLArea.is_ie) {
     el.attachEvent("on" + evname, func);
   } else {
     el.addEventListener(evname, func, true);
   }
+  HTMLArea._eventFlushers.push([el, evname, func]);
 };
 
 HTMLArea._addEvents = function(el, evs, func) {
@@ -4406,6 +4435,85 @@ HTMLArea._stopEvent = function(ev) {
   }
 };
 
+/**
+ * Adds a standard "DOM-0" event listener to an element.
+ * The DOM-0 events are those applied directly as attributes to
+ * an element - eg element.onclick = stuff;
+ *
+ * By using this function instead of simply overwriting any existing
+ * DOM-0 event by the same name on the element it will trigger as well
+ * as the existing ones.  Handlers are triggered one after the other
+ * in the order they are added.
+ *
+ * Remember to return true/false from your handler, this will determine
+ * whether subsequent handlers will be triggered (ie that the event will
+ * continue or be canceled).
+ *
+ */
+
+HTMLArea.addDom0Event = function(el, ev, fn)
+{
+  HTMLArea._prepareForDom0Events(el, ev);
+  el._xinha_dom0Events[ev].unshift(fn);
+}
+
+
+/**
+ * See addDom0Event, the difference is that handlers registered using
+ * prependDom0Event will be triggered before existing DOM-0 events of the
+ * same name on the same element.
+ */
+
+HTMLArea.prependDom0Event = function(el, ev, fn)
+{
+  HTMLArea._prepareForDom0Events(el, ev);
+  el._xinha_dom0Events[ev].push(fn);
+}
+
+/**
+ * Prepares an element to receive more than one DOM-0 event handler
+ * when handlers are added via addDom0Event and prependDom0Event.
+ */
+HTMLArea._prepareForDom0Events = function(el, ev)
+{
+  // Create a structure to hold our lists of event handlers
+  if(typeof el._xinha_dom0Events == 'undefined')     el._xinha_dom0Events = { };
+
+  // Create a list of handlers for this event type
+  if(typeof el._xinha_dom0Events[ev] == 'undefined')
+  {
+    el._xinha_dom0Events[ev] = [ ];
+    if(typeof el['on'+ev] == 'function')
+    {
+      el._xinha_dom0Events[ev].push(el['on'+ev]);
+    }
+
+    // Make the actual event handler, which runs through
+    // each of the handlers in the list and executes them
+    // in the correct context.
+    el['on'+ev] = function(event)
+    {
+      var a = el._xinha_dom0Events[ev];
+      // call previous submit methods if they were there.
+      var allOK = true;
+      for (var i = a.length; --i >= 0;)
+      {
+        // We want the handler to be a member of the form, not the array, so that "this" will work correctly
+        el._xinha_tempEventHandler = a[i];
+        if(el._xinha_tempEventHandler(event) == false)
+        {
+          el._xinha_tempEventHandler = null;
+          allOK = false;
+          break;
+        }
+        el._xinha_tempEventHandler = null;
+      }
+      return allOK;
+    }
+
+    HTMLArea._eventFlushers.push([el, ev]);
+  }
+}
 
 HTMLArea.prototype.notifyOn = function(ev, fn)
 {
@@ -4896,6 +5004,7 @@ HTMLArea._postback = function(url, data, handler)
       {
         alert('An error has occurred: ' + req.statusText);
       }
+      req.onreadystatechange = null;
     }
   }
 
@@ -4935,6 +5044,7 @@ HTMLArea._getback = function(url, handler)
       {
         alert('An error has occurred: ' + req.statusText);
       }
+      req.onreadystatechange = null;
     }
   }
 

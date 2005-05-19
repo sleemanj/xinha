@@ -10,6 +10,7 @@
 //   http://dynarch.com/mishoo
 //
 // $Id$
+HTMLArea = window.opener.HTMLArea;
 
 function getAbsolutePos(el) {
 	var r = { x: el.offsetLeft, y: el.offsetTop };
@@ -72,11 +73,10 @@ function __dlg_init(bottom) {
 		var y = (screen.availHeight - H) / 2;
 		window.moveTo(x, y);
 	}
-	document.body.onkeypress = __dlg_close_on_esc;
+	HTMLArea.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
 };
 
 function __dlg_translate(context) {
-    HTMLArea = window.opener.HTMLArea;
 	var types = ["input", "select", "legend", "span", "option", "td", "button", "div", "label"];
 	for (var type = 0; type < types.length; ++type) {
 		var spans = document.getElementsByTagName(types[type]);

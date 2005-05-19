@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
 
@@ -50,8 +51,7 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-      'FullScreen',
-      'TableOperations'
+        'FullScreen'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -117,16 +117,18 @@
        ************************************************************************/
 
       HTMLArea.startEditors(xinha_editors);
+      window.onload = null;
     }
 
-    window.onload = xinha_init;
+    window.onload   = xinha_init;
+    window.onunload = HTMLArea.flushEvents;
   </script>
 </head>
 
 <body>
 
   <form action="javascript:var x = document.getElementById('editors_here');alert(x.myTextArea.value);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
-    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320">
+    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
       &lt;p&gt;
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
         Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
@@ -147,8 +149,7 @@
       &lt;/ul&gt;
     </textarea>
 
-    <input type="submit" />
+    <input type="submit" /> <input type="reset" />
   </form>
-
 </body>
 </html>

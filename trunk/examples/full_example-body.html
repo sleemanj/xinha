@@ -59,6 +59,7 @@
        'SuperClean',
        'TableOperations'
       ];
+
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
 
@@ -131,9 +132,9 @@
   <link href="../skins/blue-look/skin.css" rel="Stylesheet" />
 </head>
 
-<body onload="xinha_init()">
+<body>
 
-  <form id="editors_here">
+  <form id="editors_here" onsubmit="alert(this.myTextArea0.value);">
     <textarea id="myTextArea" name="myTextArea" rows="10" cols="80" style="width:100%"></textarea>
     <textarea id="anotherOne" name="anotherOne" rows="10" cols="80" style="width:100%"></textarea>
   </form>

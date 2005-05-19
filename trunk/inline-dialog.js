@@ -129,6 +129,7 @@ HTMLArea.Dialog.prototype.setValues = function(values)
   for(var i in values)
   {
     var elems = this.getElementsByName(i);
+    if(!elems) continue;
     for(var x = 0; x < elems.length; x++)
     {
       var e = elems[x];
@@ -253,7 +254,7 @@ HTMLArea.Dialog.prototype.getValues = function()
         }
         else
         {
-          if(i.selectedIndex)
+          if(i.selectedIndex >= 0)
           {
             v = i.options[i.selectedIndex];
           }
@@ -288,7 +289,7 @@ HTMLArea.Dialog.prototype.getValues = function()
 
             if(i.checked)
             {
-              if(v && v.push)
+              if(typeof v == 'object' && v.push)
               {
                 v.push(i.value);
               }
