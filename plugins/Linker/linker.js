@@ -355,7 +355,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   // Hookup the resizer
   this.dialog.onresize = function()
     {
-      options.style.height = ddTree.style.height = (dialog.height - dialog.getElementById('h1').offsetHeight) + 'px';
+      options.style.height = ddTree.style.height = (parseInt(dialog.height) - dialog.getElementById('h1').offsetHeight) + 'px';
       ddTree.style.width  = (dialog.width  - 322 ) + 'px';
     }
 
