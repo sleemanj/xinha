@@ -193,7 +193,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
         $type == '' ? $this->type : $type;
         $cmd = '' . IMAGE_TRANSFORM_LIB_PATH . 'convert ';
 		$cmd .= implode(' ', $this->command) . " -quality $quality ";
-		$cmd .= '"'.($this->image) . '" "' . ($filename) . '" 2>&1';
+		$cmd .= '"'.($this->image) . '" "' . ($filename) . '"';
         
         //$cmd = str_replace('/', '\\', $cmd);
 		//echo($cmd.'<br>');
