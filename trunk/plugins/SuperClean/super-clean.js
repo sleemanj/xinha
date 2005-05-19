@@ -36,7 +36,6 @@ SuperClean.prototype._superClean = function(opts, obj)
   // Do the clean if we got options
   var doOK = function()
   {
-  debugger;
     var opts = superclean._dialog.hide();
     var editor = superclean.editor;
 
