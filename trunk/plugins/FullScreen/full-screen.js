@@ -137,6 +137,14 @@ HTMLArea.prototype._fullScreen = function()
     this._isFullScreen = false;
     sizeItDown();
 
+    // Restore all ancestor positions
+    var ancestor = this._htmlArea;
+    while((ancestor = ancestor.parentNode) && ancestor.style)
+    {
+      ancestor.style.position = ancestor._xinha_fullScreenOldPosition;
+      ancestor._xinha_fullScreenOldPosition = null;
+    }
+
     window.scroll(this._unScroll.x, this._unScroll.y);
   }
   else
@@ -150,8 +158,16 @@ HTMLArea.prototype._fullScreen = function()
     };
 
 
+    // Make all ancestors position = static
+    var ancestor = this._htmlArea;
+    while((ancestor = ancestor.parentNode) && ancestor.style)
+    {
+      ancestor._xinha_fullScreenOldPosition = ancestor.style.position;
+      ancestor.style.position = 'static';
+    }
+
     // Maximize
-    window.scroll
+    window.scroll(0,0);
     this._htmlArea.style.position = 'absolute';
     this._htmlArea.style.zIndex   = 9999;
     this._htmlArea.style.left     = 0;
