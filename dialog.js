@@ -70,4 +70,5 @@ Dialog._geckoOpenModal = function(url, action, init) {
 		for (var i = 0; i < window.frames.length; relwin(window.frames[i++]));
 		Dialog._modal = null;
 	};
+  Dialog._modal.focus();
 };
