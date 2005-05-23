@@ -13,7 +13,7 @@ function LangMarks(editor, args) {
 	options[this._lc("&mdash; language &mdash;")] = "";
 	options[this._lc("Greek")] = "el";
 	options[this._lc("English")] = "en";
-	options[this._lc("Frensh")] = "fr";
+	options[this._lc("French")] = "fr";
 	options[this._lc("Latin")] = "la";
 
 	cfg.registerDropdown({
