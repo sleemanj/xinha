@@ -1292,6 +1292,7 @@ HTMLArea.prototype.generate = function ()
   var iframe = document.createElement("iframe");
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
+  this._iframe.className = 'xinha_iframe';
 
     // creates & appends the status bar
   var statusbar = this._createStatusBar();
@@ -1300,9 +1301,10 @@ HTMLArea.prototype.generate = function ()
   // insert Xinha before the textarea.
   var textarea = this._textArea;
   textarea.parentNode.insertBefore(htmlarea, textarea);
+  textarea.className = 'xinha_textarea';
 
   // extract the textarea and insert it into the htmlarea
-  textarea.parentNode.removeChild(textarea);
+  HTMLArea.removeFromParent(textarea);
   this._framework.ed_cell.appendChild(textarea);
 
 
@@ -1514,65 +1516,52 @@ HTMLArea.prototype.generate = function ()
     var panels = this._panels;
     var col_span = 1;
 
-    if(panels.left.on && panels.left.panels.length && HTMLArea.hasDisplayedChildren(panels.left.container))
+    function panel_is_alive(pan)
+    {
+      if(panels[pan].on && panels[pan].panels.length && HTMLArea.hasDisplayedChildren(panels[pan].container))
+      {
+        return true;
+      }
+
+      // Otherwise make sure it's been removed from the framework
+      else
+      {
+        HTMLArea.removeFromParent(panels[pan].container);
+        return false;
+      }
+    }
+
+    if(panel_is_alive('left'))
     {
       col_span += 1;
-      if(!panels.left.container.parentNode)
+      if(!HTMLArea.hasParentNode(panels.left.container))
       {
         this._framework.ler_row.insertBefore(panels.left.container,this._framework.ed_cell);
       }
     }
-    else
-    {
-      if(panels.left.container.parentNode)
-      {
-        panels.left.container.parentNode.removeChild(panels.left.container);
-      }
-    }
 
-    if(panels.top.on && panels.top.panels.length && HTMLArea.hasDisplayedChildren(panels.top.container))
+    if(panel_is_alive('top'))
     {
-      if(!panels.top.container.parentNode)
+      if(!HTMLArea.hasParentNode(panels.top.container))
       {
         this._framework.tp_row.appendChild(panels.top.container);
       }
     }
-    else
-    {
-      if(panels.top.container.parentNode)
-      {
-        panels.top.container.parentNode.removeChild(panels.top.container);
-      }
-    }
 
-    if(panels.right.on && panels.right.panels.length && HTMLArea.hasDisplayedChildren(panels.right.container))
+    if(panel_is_alive('right'))
     {
       col_span += 1;
-      if(!panels.right.container.parentNode)
+      if(!HTMLArea.hasParentNode(panels.right.container))
       {
         this._framework.ler_row.insertBefore(panels.right.container, this._framework.ed_cell.nextSibling);
       }
     }
-    else
-    {
-      if(panels.right.container.parentNode)
-      {
-        panels.right.container.parentNode.removeChild(panels.right.container);
-      }
-    }
 
-    if(panels.bottom.on && panels.bottom.panels.length && HTMLArea.hasDisplayedChildren(panels.bottom.container))
+    if(panel_is_alive('bottom'))
     {
-      if(!panels.bottom.container.parentNode)
+      if(!HTMLArea.hasParentNode(panels.bottom.container))
       {
-        this._framework.bp_row.appendChild(panels.right.container);
-      }
-    }
-    else
-    {
-      if(panels.bottom.container.parentNode)
-      {
-        panels.bottom.container.parentNode.removeChild(panels.bottom.container);
+        this._framework.bp_row.appendChild(panels.bottom.container);
       }
     }
 
@@ -1584,14 +1573,11 @@ HTMLArea.prototype.generate = function ()
     // Put in the panel rows, top panel goes above editor row
     if(!this._framework.tp_row.childNodes.length)
     {
-      if(this._framework.tp_row.parentNode)
-      {
-        this._framework.tp_row.parentNode.removeChild(this._framework.tp_row);
-      }
+      HTMLArea.removeFromParent(this._framework.tp_row);
     }
     else
     {
-      if(!this._framework.tp_row.parentNode)
+      if(!HTMLArea.hasParentNode(this._framework.tp_row))
       {
         this._framework.tbody.insertBefore(this._framework.tp_row, this._framework.ler_row);
       }
@@ -1600,32 +1586,26 @@ HTMLArea.prototype.generate = function ()
     // bp goes after the editor
     if(!this._framework.bp_row.childNodes.length)
     {
-      if(this._framework.bp_row.parentNode)
-      {
-        this._framework.bp_row.parentNode.removeChild(this._framework.bp_row);
-      }
+      HTMLArea.removeFromParent(this._framework.bp_row);
     }
     else
     {
-      if(!this._framework.bp_row.parentNode)
+      if(!HTMLArea.hasParentNode(this._framework.bp_row))
       {
         this._framework.tbody.insertBefore(this._framework.bp_row, this._framework.ler_row.nextSibling);
       }
     }
 
     // finally if the statusbar is on, insert it
-    if(this.config.statusBar)
+    if(!this.config.statusBar)
     {
-      if(!this._framework.sb_row.parentNode)
-      {
-        this._framework.table.appendChild(this._framework.sb_row);
-      }
+      HTMLArea.removeFromParent(this._framework.sb_row);
     }
     else
     {
-      if(this._framework.sb_row.parentNode)
+      if(!HTMLArea.hasParentNode(this._framework.sb_row))
       {
-        this._framework.sb_row.parentNode.removeChild(this._framework.sb_row);
+        this._framework.table.appendChild(this._framework.sb_row);
       }
     }
 
@@ -1892,11 +1872,16 @@ HTMLArea.prototype.generate = function ()
       html += "<style title=\"table borders\">"
            + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;} \n"
            + "</style>\n";
-      html += "<style>"
-           + editor.config.pageStyle + "\n"
+      html += "<style type=\"text/css\">"
            + "html, body { border: 0px; } \n"
            + "span.macro, span.macro ul, span.macro div, span.macro p {background : #CCCCCC;}\n"
            + "</style>\n";
+
+      if(editor.config.pageStyle)
+      {
+        html += "<style type=\"text/css\">\n" + editor.config.pageStyle + "\n</style>";
+      }
+
       if(typeof editor.config.pageStyleSheets !== 'undefined')
       {
         for(style_i = 0; style_i < editor.config.pageStyleSheets.length; style_i++)
@@ -2302,14 +2287,14 @@ HTMLArea.prototype._wordClean = function() {
     else {
       var txt = document.createTextNode(HTMLArea.getInnerText(el));
       el.parentNode.insertBefore(txt, el);
-      el.parentNode.removeChild(el);
+      HTMLArea.removeFromParent(el);
     }
     ++stats.mso_xmlel;
   };
   function checkEmpty(el) {
     if (/^(a|span|b|strong|i|em|font)$/i.test(el.tagName) &&
         !el.firstChild) {
-      el.parentNode.removeChild(el);
+      HTMLArea.removeFromParent(el);
       ++stats.empty_tags;
     }
   };
@@ -2737,6 +2722,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
       plugin.onUpdateToolbar();
   }
 
+
 }
 
 /** Returns a node after which we can insert other nodes, in the current
@@ -3146,10 +3132,10 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
   this.focusEditor();
   this.forceRedraw();
   var range;
-  var collapsed = (typeof pos != "undefined");
+  var collapsed = typeof pos == "undefined" ? true : false;
   if (HTMLArea.is_ie) {
     // Tables and Images get selected as "objects" rather than the text contents
-    if(!collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img/))
+    if(collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|select|textarea/))
     {
       range = this._doc.body.createControlRange();
       range.add(node);
@@ -3165,10 +3151,9 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
     var sel = this._getSelection();
     range = this._doc.createRange();
     // Tables and Images get selected as "objects" rather than the text contents
-    if(!collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img/))
+    if(collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|textarea|select/))
     {
       range.selectNode(node);
-      (collapsed) && range.collapse(pos);
     }
     else
     {
@@ -3628,7 +3613,7 @@ HTMLArea.prototype._editorEvent = function(ev) {
         var rightText = textNode.nextSibling;
         if(typeof tag == 'string') tag = editor._doc.createElement(tag);
         var a = textNode.parentNode.insertBefore(tag, rightText);
-        textNode.parentNode.removeChild(textNode);
+        HTMLArea.removeFromParent(textNode);
         a.appendChild(textNode);
         rightText.data = ' ' + rightText.data;
 
@@ -3649,7 +3634,7 @@ HTMLArea.prototype._editorEvent = function(ev) {
           var t = a.firstChild;
           a.removeChild(t);
           a.parentNode.insertBefore(t, a);
-          a.parentNode.removeChild(a);
+          HTMLArea.removeFromParent(a);
           editor._unLink = null;
           editor._unlinkOnUndo = false;
         }
@@ -3803,7 +3788,7 @@ HTMLArea.prototype.ie_checkBackspace = function() {
   if(HTMLArea.is_ie && sel.type == 'Control')
   {
     var elm = this._activeElement(sel);
-    elm.parentNode.removeChild(elm);
+    HTMLArea.removeFromParent(elm);
     return true;
   }
 
@@ -3843,7 +3828,7 @@ HTMLArea.prototype.dom_checkBackspace = function() {
       while (SC.firstChild)
         p.appendChild(SC.firstChild);
       SC.parentNode.insertBefore(p, SC);
-      SC.parentNode.removeChild(SC);
+      HTMLArea.removeFromParent(SC);
       var r = range.cloneRange();
       r.setStartBefore(newr);
       r.setEndAfter(newr);
@@ -4684,7 +4669,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
       var attrs = root.attributes;
       for (i = 0; i < attrs.length; ++i) {
         var a = attrs.item(i);
-        if (!a.specified) {
+        if (!a.specified && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value')) {
           continue;
         }
         var name = a.nodeName.toLowerCase();
@@ -5004,7 +4989,6 @@ HTMLArea._postback = function(url, data, handler)
       {
         alert('An error has occurred: ' + req.statusText);
       }
-      req.onreadystatechange = null;
     }
   }
 
@@ -5044,7 +5028,6 @@ HTMLArea._getback = function(url, handler)
       {
         alert('An error has occurred: ' + req.statusText);
       }
-      req.onreadystatechange = null;
     }
   }
 
@@ -5312,5 +5295,111 @@ HTMLArea.prototype.registerPlugins = function(plugin_names) {
     }
   }
 }
+
+/** Utility function to base64_encode some arbitrary data, uses the builtin btoa() if it exists (Moz) */
+
+HTMLArea.base64_encode =  function(input)
+{
+  var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var output = "";
+  var chr1, chr2, chr3;
+  var enc1, enc2, enc3, enc4;
+  var i = 0;
+
+  do {
+    chr1 = input.charCodeAt(i++);
+    chr2 = input.charCodeAt(i++);
+    chr3 = input.charCodeAt(i++);
+
+    enc1 = chr1 >> 2;
+    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+    enc4 = chr3 & 63;
+
+    if (isNaN(chr2)) {
+       enc3 = enc4 = 64;
+    } else if (isNaN(chr3)) {
+       enc4 = 64;
+    }
+
+    output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+       keyStr.charAt(enc3) + keyStr.charAt(enc4);
+  } while (i < input.length);
+
+  return output;
+}
+
+/** Utility function to base64_decode some arbitrary data, uses the builtin atob() if it exists (Moz) */
+
+HTMLArea.base64_decode =function(input)
+{
+  var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var output = "";
+  var chr1, chr2, chr3;
+  var enc1, enc2, enc3, enc4;
+  var i = 0;
+
+  // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
+  input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+  do {
+    enc1 = keyStr.indexOf(input.charAt(i++));
+    enc2 = keyStr.indexOf(input.charAt(i++));
+    enc3 = keyStr.indexOf(input.charAt(i++));
+    enc4 = keyStr.indexOf(input.charAt(i++));
+
+    chr1 = (enc1 << 2) | (enc2 >> 4);
+    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+    chr3 = ((enc3 & 3) << 6) | enc4;
+
+    output = output + String.fromCharCode(chr1);
+
+    if (enc3 != 64) {
+       output = output + String.fromCharCode(chr2);
+    }
+    if (enc4 != 64) {
+       output = output + String.fromCharCode(chr3);
+    }
+  } while (i < input.length);
+
+  return output;
+}
+
+HTMLArea.removeFromParent = function(el)
+{
+  if(!el.parentNode) return;
+  var pN = el.parentNode;
+  pN.removeChild(el);
+  return el;
+}
+
+HTMLArea.hasParentNode = function(el)
+{
+  if(el.parentNode)
+  {
+    // When you remove an element from the parent in IE it makes the parent
+    // of the element a document fragment.  Moz doesn't.
+    if(el.parentNode.nodeType == 11)
+    {
+      return false;
+    }
+    return true;
+  }
+
+  return false;
+}
+
+HTMLArea.getOuterHTML = function(element)
+{
+  if(HTMLArea.is_ie)
+  {
+    return element.outerHTML;
+  }
+  else
+  {
+    return (new XMLSerializer()).serializeToString(element);
+  }
+}
+
 
 HTMLArea.init();
