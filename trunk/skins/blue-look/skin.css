@@ -7,10 +7,10 @@
 {
   margin-top:2px;
   margin-bottom:2px;
-  border:1px solid #CCC;
+  border:1px dotted #DEDEDE;
   padding:2px;
   -moz-border-radius:3px;
-
+  margin:4px;
 }
 
 .htmlarea .toolbar .button
@@ -19,7 +19,7 @@
   width:20px;
   height:20px;
   padding:0px;
-  border:1px #f7f8fd;
+  border:1px solid #f7f8fd;
 }
 
 .buttonImageContainer

@@ -69,7 +69,7 @@
 .htmlarea .toolbar select:hover,
 .htmlarea .toolbar select:active { background: FieldFace; color: ButtonText; }
 
-.htmlarea iframe, .htmlarea textarea
+.htmlarea iframe.xinha_iframe, .htmlarea textarea.xinha_textarea
 {
   border: none; /*1px solid;*/
 }
