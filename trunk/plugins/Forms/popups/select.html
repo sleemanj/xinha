@@ -35,7 +35,10 @@ function onOK() {
   param["f_type"] = type;
   param["f_name"] = d.getElementById("f_name").value;
 	param["f_size"] = d.getElementById("f_size").value;
-	param["f_multiple"] = d.getElementById("f_multiple").checked;
+  if (d.getElementById("f_size").value=="1") 
+    param["f_multiple"]=false;
+  else
+  	param["f_multiple"] = d.getElementById("f_multiple").checked;
 	function optionValues(text,value) {
 		this.text = text;
 		this.value = value;
