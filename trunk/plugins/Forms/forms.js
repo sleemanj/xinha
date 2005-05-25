@@ -81,6 +81,12 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 		this.text = text;
 		this.value = value;
 	}
+  function setAttr(el, attr, value) {
+    if (value != "")
+      el.setAttribute(attr, value);
+    else
+      el.removeAttribute(attr);
+  }
   var outparam = new Object();
   var type = button_id;
   if (button_id=="form") { //Form
@@ -99,23 +105,32 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 	  if (frm) { 
       outparam.f_name = frm.name;
       outparam.f_action = frm.action;
-      outparam.f_method = frm.metho;
+      outparam.f_method = frm.method;
+      outparam.f_enctype = frm.enctype;
+      outparam.f_target = frm.target;
     } else {;
       outparam.f_name = "";
   	  outparam.f_action = "";
-	    outparam.f_method = "";  
+	    outparam.f_method = "";
+      outparam.f_enctype = "";
+      outparam.f_target = "";
     }
   	editor._popupDialog("plugin://Forms/form", function(param) {
   		if (param) {
 	  		if(frm) {
 			    frm.name	 = param["f_name"];
-				  frm.action = param["f_action"];
-				  frm.method = param["f_method"];
+          setAttr(frm, "action", param["f_action"]);
+          setAttr(frm, "method", param["f_method"]);
+          setAttr(frm, "enctype",param["f_enctype"]);
+          setAttr(frm, "target", param["f_target"]);
 		    } else {
-			    editor.surroundHTML('<form name="' + param["f_name"] + '"' +
-                                   ' action="' + param["f_action"] + '"' +
-			                             ' method="' + param["f_method"] + '">',
-                              '&nbsp;</form>');
+          frm = '<form name="' + param["f_name"] + '"';
+          if (param["f_action"] != "") frm += ' action="' + param["f_action"] + '"';
+				  if (param["f_method"] != "") frm += ' method="' + param["f_method"] + '"';
+          if (param["f_enctype"] != "") frm += ' enctype="' + param["f_enctype"] + '"';
+          if (param["f_target"] != "") frm += ' target="' + param["f_target"] + '"';
+          frm += '>';
+			    editor.surroundHTML(frm, '&nbsp;</form>');
         }
       }
 	  }, outparam);

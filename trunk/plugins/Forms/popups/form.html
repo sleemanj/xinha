@@ -14,6 +14,8 @@ function Init() {
   document.getElementById("f_name").value = param.f_name;
   document.getElementById("f_action").value = param.f_action;
   document.getElementById("f_method").value = param.f_method;
+  document.getElementById("f_enctype").value = param.f_enctype;
+  document.getElementById("f_target").value = param.f_target;
  	document.getElementById("f_name").focus();
 };
 
@@ -30,7 +32,7 @@ function onOK() {
 	  }
   }
   // pass data back to the calling window
-  var fields = ["f_name", "f_action", "f_method"];
+  var fields = ["f_name", "f_action", "f_method", "f_enctype", "f_target"];
   var param = new Object();
   for (var i in fields) {
     var id = fields[i];
@@ -58,7 +60,7 @@ function onCancel() {
   <fieldset>
   <legend>Form handler script</legend>
   <div class="space"></div>
-  <div class="fr">Script URL:</div>
+  <div class="fr">Action URL:</div>
   <input name="action" id="f_action" type="text" size="30">
   <p />
   <div class="fr">Method:</div>
@@ -68,6 +70,16 @@ function onCancel() {
     <option value="get">Get</option>
   </select>
   <div class="space"></div>
+  <div class="fr">Encoding:</div>
+  <select name="enctype" id="f_enctype">
+    <option value=""></option>
+    <option value="application/x-www-form-urlencoded">HTML-Form to CGI (default)</option>
+    <option value="multipart/form-data">multipart Form Data (File-Upload)</option>
+  </select>
+  <p />
+  <div class="fr">Target Frame:</div>
+  <input name="target" id="f_target" type="text" size="30">
+  <p />  
   </fieldset>
 
 <div id="buttons">
