@@ -72,6 +72,7 @@ Linker.prototype._createLink = function(a)
   if(a && a.tagName.toLowerCase() == 'a')
   {
     var m = a.href.match(/^mailto:(.*@[^?&]*)(\?(.*))?$/);
+    var anchor = a.href.match(/^#(.*)$/);
     if(m)
     {
       // Mailto
@@ -89,6 +90,12 @@ Linker.prototype._createLink = function(a)
           }
         }
       }
+    }
+    else if (anchor)
+    {
+      //Anchor-Link
+      inputs.type = 'anchor';
+      inputs.anchor = m[1];
     }
     else
     {
@@ -171,6 +178,13 @@ Linker.prototype._createLink = function(a)
          atr.onclick = 'try{if(document.designMode && document.designMode == \'on\') return false;}catch(e){} window.open(this.href, \'' + (values.p_name.replace(/[^a-z0-9_]/i, '_')) + '\', \'' + values.p_options.join(',') + '\');return false;';
        }
      }
+    }
+    else if(values.type == 'anchor')
+    {
+      if(values.anchor)
+      {
+        atr.href = values.anchor.value;
+      }
     }
     else
     {
@@ -421,11 +435,19 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
   {
     this.dialog.getElementById('urltable').style.display = '';
     this.dialog.getElementById('mailtable').style.display = 'none';
+    this.dialog.getElementById('anchortable').style.display = 'none';
+  }
+  else if(inputs.type=='anchor')
+  {
+    this.dialog.getElementById('urltable').style.display = 'none';
+    this.dialog.getElementById('mailtable').style.display = 'none';
+    this.dialog.getElementById('anchortable').style.display = '';
   }
   else
   {
     this.dialog.getElementById('urltable').style.display = 'none';
     this.dialog.getElementById('mailtable').style.display = '';
+    this.dialog.getElementById('anchortable').style.display = 'none';
   }
 
   if(inputs.target=='popup')
@@ -436,6 +458,47 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
   {
     this.dialog.getElementById('popuptable').style.display = 'none';
   }
+
+  var anchor = this.dialog.getElementById('anchor');
+  for(var i=0;i<anchor.childNodes.length;i++) {
+    anchor.removeChild(anchor.childNodes[i]);
+  }
+
+  var html = this.linker.editor.getHTML();  
+  var anchors = new Array();
+
+  var m = html.match(/<a[^>]+name="([^"]+)"/gi);
+  if(m)
+  {
+    for(i=0;i<m.length;i++)
+    {
+        var n = m[i].match(/name="([^"]+)"/i);
+        if(!anchors.contains(n[1])) anchors.push(n[1]);
+    }
+  }
+  m = html.match(/id="([^"]+)"/gi);
+  if(m)
+  {
+    for(i=0;i<m.length;i++)
+    {
+        n = m[i].match(/id="([^"]+)"/i);
+        if(!anchors.contains(n[1])) anchors.push(n[1]);
+    }
+  }
+  
+  for(i=0;i<anchors.length;i++)
+  {
+    var opt = document.createElement('option');
+    opt.value = '#'+anchors[i];
+    opt.innerHTML = anchors[i];
+    anchor.appendChild(opt);
+  }
+
+  //if no anchors found completely hide Anchor-Link
+  if(anchor.childNodes.length==0) {
+    this.dialog.getElementById('anchorfieldset').style.display = "none";
+  }
+  
 
   // Connect the OK and Cancel buttons
   var dialog = this.dialog;
