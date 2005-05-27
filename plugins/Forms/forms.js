@@ -138,7 +138,8 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
   } else { // form element (checkbox, radio, text, password, textarea, select, button, submit, reset, image, hidden)
 	  var sel = editor._getSelection();
 	  var range = editor._createRange(sel);
-	  //see if selection is an form element
+	  var tagName = "";
+	  // see if selection is an form element
 	  if (typeof node == "undefined") {
 		  node = editor.getParentElement();
 		  var tag = node.tagName.toLowerCase()
@@ -149,7 +150,7 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 	  if(node) {
 		  type = node.tagName.toLowerCase();
       outparam.f_name = node.name;
-      outparam.f_tagName = node.tagName;      
+      tagName = node.tagName;
       if (type == "input") {
         outparam.f_type = node.type;
         type = node.type;
@@ -159,6 +160,11 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
     		  outparam.f_cols = node.cols;
 				  outparam.f_rows = node.rows;
 				  outparam.f_value = node.innerHTML;
+          outparam.f_wrap = node.getAttribute("wrap");
+          outparam.f_readonly = node.getAttribute("readonly");
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
 			    break;
         case "select":
 			    outparam.f_size = parseInt(node.size);
@@ -196,14 +202,13 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
       }    
 		} else {
       outparam.f_name = "";
-      outparam.f_tagName = "";
       switch (button_id) {
         case "textarea":
         case "select":
-          outparam.f_tagName = button_id
+          tagName = button_id
           break;
         default:
-          outparam.f_tagName = "input";
+          tagName = "input";
           outparam.f_type = button_id;
           break;
       }
@@ -217,22 +222,30 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 		  outparam.f_checked = "";
 		  outparam.f_src = "";
 		  outparam.f_onclick = "";
+      outparam.f_wrap = "";
+      outparam.f_readonly = "false";
+      outparam.f_disabled = "false";
+      outparam.f_tabindex = "";
+      outparam.f_accesskey = "";
 	  };
-  	editor._popupDialog("plugin://Forms/" + outparam.f_tagName + ".html", function(param) {
+  	editor._popupDialog("plugin://Forms/" + tagName + ".html", function(param) {
 	  	if (param) {
 		  	if(node) {
 			    node.name = param["f_name"];
 			    if (type == "textarea") {
-				    if (isNaN(parseInt(param["f_cols"],10)) || parseInt(param["f_cols"],10) <= 0)
-					    node.removeAttribute("cols");
-					  else 
-              node.setAttribute("cols", param["f_cols"]);
-				    if(isNaN(parseInt(param["f_rows"],10)) || parseInt(param["f_rows"],10) <= 0)
-					    node.removeAttribute("rows");
-				  	else 
-              node.setAttribute("rows", param["f_rows"]);
-				    node.value = param["f_value"]; //for ta in editor
-				    node.innerHTML = param["f_value"]; //for ta on web page
+            if (isNaN(parseInt(param["f_cols"],10)) || parseInt(param["f_cols"],10) <= 0)
+              param["f_cols"] = "";
+            setAttr(node, "cols", param["f_cols"]);
+            if(isNaN(parseInt(param["f_rows"],10)) || parseInt(param["f_rows"],10) <= 0)
+              param["f_rows"] = "";
+					  setAttr(node, "rows", param["f_rows"]);
+				    setAttr(node, "value", param["f_value"]); //for ta in editor
+            setAttr(node, "wrap", param["f_wrap"]);
+            setAttr(node, "tabindex", param["f_tabindex"]);
+            setAttr(node, "accesskey", param["f_accesskey"]);
+				    setAttr(node, "readonly", param["f_readonly"]);
+            setAttr(node, "disabled", param["f_disabled"]);
+            node.innerHTML = param["f_value"]; //for ta on web page
 			    } else if(type == "select") {
 				    node.requiredfield = param["f_requiredfield"];
 				    if(isNaN(parseInt(param["f_size"],10)) || parseInt(param["f_size"],10) <= 0)
@@ -279,11 +292,15 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 			    }
         } else {
 			    if(type == "textarea") {
-				    text = '<textarea name="' + param["f_name"] + '" ' +
+				    text = '<textarea name="' + param["f_name"] + '"' +
 				                    ' cols="' + param["f_cols"] + '"' +
-  				                  ' rows="' + param["f_rows"] +'">' +
-	  			          param["f_value"] +
-		  		          '</textarea>';
+  				                  ' rows="' + param["f_rows"] + '"';
+            if (param["f_wrap"] != "") text += ' wrap="' + param["f_wrap"] + '"';
+            if (param["f_tabindex"] != "") text += ' tabindex="' + param["f_tabindex"] + '"';
+            if (param["f_accesskey"] != "") text += ' accesskey="' + param["f_accesskey"] + '"';
+            if (param["f_readonly"] == true) text += ' readonly';
+            if (param["disabled"] == true) text += ' disabled';
+            text += '>' + param["f_value"] + '</textarea>';
 			    } else if(type == "select") {
 				    text = '<select name="'+param["f_name"]+'"';
 				    if(param["f_size"]) text += ' size="'+parseInt(param["f_size"],10)+'"';

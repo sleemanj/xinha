@@ -7,13 +7,11 @@
 
 <script type="text/javascript">
 var type;
-var tagName;
 function Init() {
   __dlg_translate("Forms");
 	__dlg_init();
 	var param = window.dialogArguments;
   type = param.f_type;
-  tagName = param.f_tagName;
   height = 230;
   var d = document;
   d.getElementById("f_name").value = param.f_name;
@@ -33,7 +31,7 @@ function Init() {
 			break;
 		case "checkbox":
 		case "radio": 
-      d.getElementById("f_checked").checked =param.f_checked;	
+      d.getElementById("f_checked").checked = param.f_checked;
       d.getElementById("chk").style.display = "block";
       break;
 		case "button": 
