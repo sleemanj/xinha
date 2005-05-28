@@ -12,6 +12,6 @@
 	"&mdash; language &mdash;":	"&mdash; Sprache &mdash;",
 	"Greek": "griechisch",
 	"English": "englisch",
-	"Frensh": "französisch",
+	"French": "französisch",
 	"Latin": "lateinisch"
 };
