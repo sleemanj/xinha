@@ -7,6 +7,6 @@
 	"&mdash; language &mdash;":	"&mdash; Språk &mdash;",
 	"Greek": "grekisk",
 	"English": "engelsk",
-	"Frensh": "fransk",
+	"French": "fransk",
 	"Latin": "latin"
 };
