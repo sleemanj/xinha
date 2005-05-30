@@ -421,20 +421,6 @@ HTMLArea.Config = function () {
     toggleborders: [ "Toggle Borders", ["ed_buttons_main.gif",7,2], false, function(e) { e._toggleBorders() } ],
     print:         [ "Print document", ["ed_buttons_main.gif",8,1], false, function(e) {e._iframe.contentWindow.print();} ],
     saveas: [ "Save as", "ed_saveas.gif", false, function(e) {e.execCommand("saveas",false,"noname.htm");} ],
-    popupeditor: [ "Enlarge Editor", ["ed_buttons_main.gif",8,0], true,
-      function(e, objname, obj)
-      {
-        //call FullScreen-plugin (backwards-compatibility)
-        e._fullScreen();
-        if(e._isFullScreen)
-        {
-          obj.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.gif',9,0]);
-        }
-        else
-        {
-          obj.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.gif',8,0]);
-        }
-      } ],
     about: [ "About this editor", ["ed_buttons_main.gif",8,2], true, function(e) {e.execCommand("about");} ],
     showhelp: [ "Help using editor", ["ed_buttons_main.gif",9,2], true, function(e) {e.execCommand("showhelp");} ],
 
