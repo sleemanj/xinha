@@ -5165,45 +5165,59 @@ HTMLArea._loadlang = function(context)
 /** Return a localised string.
  * @param string    English language string
  * @param context   Case sensitive context name, eg 'HTMLArea' (default), 'TableOperations'...
+ * @param replace   Replace $variables in String, eg {foo: 'replaceText'} ($foo in string will be replaced)
  */
-HTMLArea._lc = function(string, context)
+HTMLArea._lc = function(string, context, replace)
 {
+  var ret;
   if(_editor_lang == "en")
   {
-    return string;
-  }
-
-  if(typeof HTMLArea._lc_catalog == 'undefined')
-  {
-    HTMLArea._lc_catalog = [ ];
-  }
-
-  if(typeof context == 'undefined')
-  {
-    context = 'HTMLArea';
-  }
-
-  if(typeof HTMLArea._lc_catalog[context] == 'undefined')
-  {
-    HTMLArea._lc_catalog[context] = HTMLArea._loadlang(context);
-  }
-
-  if(typeof HTMLArea._lc_catalog[context][string] == 'undefined')
-  {
-    if(context=='HTMLArea')
-    {
-      return string; // Indicate it's untranslated
-    }
-    else
-    {
-      //if string is not found and context is not HTMLArea try if it is in HTMLArea
-      return HTMLArea._lc(string, 'HTMLArea');
-    }
+    ret = string;
   }
   else
   {
-    return HTMLArea._lc_catalog[context][string];
+    if(typeof HTMLArea._lc_catalog == 'undefined')
+    {
+      HTMLArea._lc_catalog = [ ];
+    }
+
+    if(typeof context == 'undefined')
+    {
+      context = 'HTMLArea';
+    }
+
+    if(typeof HTMLArea._lc_catalog[context] == 'undefined')
+    {
+      HTMLArea._lc_catalog[context] = HTMLArea._loadlang(context);
+    }
+
+    if(typeof HTMLArea._lc_catalog[context][string] == 'undefined')
+    {
+      if(context=='HTMLArea')
+      {
+        ret = string; // Indicate it's untranslated
+      }
+      else
+      {
+        //if string is not found and context is not HTMLArea try if it is in HTMLArea
+        ret = HTMLArea._lc(string, 'HTMLArea');
+      }
+    }
+    else
+    {
+      ret = HTMLArea._lc_catalog[context][string];
+    }
   }
+
+  if(typeof replace != "undefined")
+  {
+    for(var i in replace)
+    {
+      ret = ret.replace('$'+i, replace[i]);
+    }
+  }
+
+  return ret;
 }
 
 HTMLArea.hasDisplayedChildren = function(el)
