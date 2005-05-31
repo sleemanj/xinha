@@ -1,18 +1,60 @@
 // I18N constants
-
 // LANG: "fr", ENCODING: UTF-8
-// Author: Laurent Vilday, mokhet@mokhet.com
-
-// FOR TRANSLATORS:
-//
-//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
-//      (at least a valid email address)
-//
-//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
-//      (if this is not possible, please include a comment
-//       that states what encoding is necessary.)
-
 {
   "Image Manager": "Bibliothèque d'images",
-  "Crop": "Recadrer"
+  "Insert Image": "Insérer une image",
+  "Directory": "Répertoire",
+  "Directory Up": "Remonter",
+  "New Folder": "Nouveau répertoire",
+  "Trash": "Détruire",
+  "Edit": "Editer",
+  "Image File": "Fichier",
+  //"Upload": "Télécharger",
+  "Width": "Largeur",
+  "Height": "Hauteur",
+  "Width:": "Largeur",
+  "Height:": "Hauteur",
+  "Constrain Proportions": "Conserver les proportions",
+  "Border": "Bordure",
+  "V Space": "Espace V",
+  "H Space": "Espace H",
+  "Refresh": "Rafraîchir",
+  "Uploading...": "Chargement...",
+  "Crop": "Recadrer",
+  "Resize": "Retailler",
+  "Rotate": "Roter",
+  "Measure": "Mesure",
+  "Marker": "Marqueur",
+  "Save": "Sauver",
+  "Filename:": "Nom",
+  "Image Format": "Format d'image",
+  "Quality:": "Qualité",
+  "JPEG High": "JPEG haut",
+  "JPEG Medium": "JPEG moyen",
+  "JPEG Low": "JPEG bas",
+  "File saved.": "Fichier sauvegardé.",
+  "File was not saved.": "Fichier non sauvegardé.",
+  "Start X:": "Début X",
+  "Start Y:": "Début Y",
+  "Lock": "Cadenas",
+  "Flip Image": "Symétrie",
+  "Flip Horizontal": "Symétrie horizontale",
+  "Flip Vertical": "Symétrie verticale",
+  "Rotate Image": "Rotation",
+  "Rotate 180 °": "Rotation 180°",
+  "Rotate 90 ° CW": "Rotation 90° horaire",
+  "Rotate 90 ° CCW": "Rotation 90° antihoraire",
+  "Angle:": "Angle",
+  "W:": "L:",
+  "Clear": "Effacer",
+  "Loading": "Chargement en cours",
+  "Invalid base directory:": "Répertoire de base invalide:",
+  "Delete file?": "Suppression du fichier ?",
+  "Please delete all files/folders inside the folder you wish to delete first.": "Veuillez tout d'abord supprimer tous les fichiers et répertoires contenus",
+  "Delete folder?": "Suppression du répertoire ?",
+  "Folder Name:": "Nom du répertoire",
+  "No Images Found": "Aucune image trouvée",
+  "Invalid folder name, please choose another folder name.": "Nom de répertoire invalide, veuillez choisir un autre nom",
+  "GIF format is not supported, image editing not supported.": "Format GIF non supporté, édition d'image non supportée",
+  "No Image Available": "Aucune image disponible"
 }
