@@ -110,3 +110,22 @@
     div.appendChild(txta);
     f.appendChild(div);
   }
+  
+  //check submitted values
+  var submit = document.createElement('input');
+  submit.type = "submit";
+  submit.id = "submit";
+  submit.value = "submit";
+  f.appendChild(submit);
+  
+  var _oldSubmitHandler = null;
+  if (document.forms[0].onsubmit != null) {
+    _oldSubmitHandler = document.forms[0].onsubmit;
+  }
+  function frame_onSubmit(){
+    alert(document.getElementById("myTextarea0").value);
+    if (_oldSubmitHandler != null) {
+      _oldSubmitHandler();
+    }
+  }
+  document.forms[0].onsubmit = frame_onSubmit;

@@ -101,6 +101,10 @@
       </label>
 
       <label>
+        <input type="checkbox" name="plugins" value="InsertMarquee" /> InsertMarquee
+      </label>
+
+      <label>
         <input type="checkbox" name="plugins" value="EditTag" /> EditTag
       </label>
 
@@ -132,18 +136,21 @@
       </label>
     </fieldset>
 
-    <label>Number of Editors: <input type="text" name="num" value="1" /></label>
-
     <fieldset>
-    <legend>Language</legend>
-        <select name="lang">
-        <option value="en">English</option>
-        <option value="de">German</option>
-        <option value="fr">French</option>
-        <option value="it">Italian</option>
-        </select>
+      <legend>Settings</legend>
+        <label>
+          Number of Editors: <input type="text" name="num" value="1" style="width:25;" maxlength="2"/>
+        </label>
+        <label>
+          Language: 
+          <select name="lang">
+          <option value="en">English</option>
+          <option value="de">German</option>
+          <option value="fr">French</option>
+          <option value="it">Italian</option>
+          </select>
+        </label>
     </fieldset>
-
     <input type="submit" value="Show Example" />
   </form>
 
