@@ -63,7 +63,7 @@
 
 .htmlarea .toolbar .space { width: 5px; }
 
-.htmlarea .toolbar select, .htmlarea .toolbar option { font: 11px Tahoma,Verdana,sans-serif; height: 18px;}
+.htmlarea .toolbar select, .htmlarea .toolbar option { font: 11px Tahoma,Verdana,sans-serif;}
 
 .htmlarea .toolbar select,
 .htmlarea .toolbar select:hover,
