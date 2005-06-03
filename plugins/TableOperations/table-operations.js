@@ -683,6 +683,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 
 // the list of buttons added by this plugin
 TableOperations.btnList = [
+  null,
 	// table properties button
     ["table-prop",       "table", "Table properties"],
 	null,			// separator
