@@ -253,11 +253,6 @@ HTMLArea.Config = function () {
   // enable the 'Target' field in the Make Link dialog
   this.makeLinkShowsTarget = true;
 
-  // BaseURL included in the iframe document
-  this.baseURL = document.baseURI || document.URL;
-  if (this.baseURL && this.baseURL.match(/(.*)\/([^\/]+)/))
-    this.baseURL = RegExp.$1 + "/";
-
   // CharSet of the iframe, default is the charset of the document
   this.charSet = HTMLArea.is_gecko ? document.characterSet : document.charset;
 
@@ -3297,7 +3292,7 @@ HTMLArea.prototype._insertImage = function(image) {
       image = null;
   }
   if (image) outparam = {
-    f_base   : editor.config.baseURL,
+    f_base   : editor.config.baseHref,
     f_url    : HTMLArea.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
     f_alt    : image.alt,
     f_border : image.border,
@@ -4726,13 +4721,13 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
   return html;
 };
 
-HTMLArea.prototype.stripBaseURL = function(string) {
-  var baseurl = this.config.baseURL;
-
-  // strip to last directory in case baseurl points to a file
-  baseurl = baseurl.replace(/[^\/]+$/, '');
-  var basere = new RegExp(baseurl);
-  string = string.replace(basere, "");
+HTMLArea.prototype.stripBaseURL = function(string)
+{
+  if(this.config.baseHref==null || !this.config.stripBaseHref)
+  {
+    return(string);
+  }
+  var baseurl = this.config.baseHref;
 
   // strip host-part of URL which is added by MSIE to links relative to server root
   baseurl = baseurl.replace(/^(https?:\/\/[^\/]+)(.*)$/, '$1');
