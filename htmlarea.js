@@ -4078,6 +4078,9 @@ HTMLArea.prototype.outwardHtml = function(html)
   html = html.replace(/<(\/?)b(\s|>|\/)/ig, "<$1strong$2");
   html = html.replace(/<(\/?)i(\s|>|\/)/ig, "<$1em$2");
 
+  // replace window.open to that any clicks won't open a popup in designMode
+  html = html.replace("onclick=\"try{if(document.designMode &amp;&amp; document.designMode == 'on') return false;}catch(e){} window.open(", "onclick=\"window.open(");
+
   // Figure out what our server name is, and how it's referenced
   var serverBase = location.href.replace(/(https?:\/\/[^\/]*)\/.*/, '$1') + '/';
 
@@ -4103,6 +4106,10 @@ HTMLArea.prototype.inwardHtml = function(html)
     html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
     html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");
   }
+
+  // replace window.open to that any clicks won't open a popup in designMode
+  html = html.replace("onclick=\"window.open(", "onclick=\"try{if(document.designMode &amp;&amp; document.designMode == 'on') return false;}catch(e){} window.open(");
+
   html = this.inwardSpecialReplacements(html);
 
   // For IE's sake, make any URLs that are semi-absolute (="/....") to be
