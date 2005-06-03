@@ -8,6 +8,6 @@
 // This notice MUST stay intact for use (see license.txt).
 
 {
-	"Insert scrolling marquee": "Insérez marquee",
+	"Insert scrolling marquee": "InsÃ©rez marquee",
 	"Cancel": "Annulation"
 };
