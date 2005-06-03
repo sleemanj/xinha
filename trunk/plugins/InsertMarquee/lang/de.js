@@ -7,14 +7,14 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 
-{ "Insert scrolling marquee": "Marquee einfügen",
-	"Insert marquee": "Marquee einfügen",	
+{ "Insert scrolling marquee": "Marquee einfÃ¼gen",
+	"Insert marquee": "Marquee einfÃ¼gen",	
 	"Direction:": "Ausrichtung:",
 	"Behavior:": "Bewegung:",
 	"Text:": "Text:",
 	"Background-Color:": "Hintergrundfarbe:",
 	"Width:": "Breite:",
-	"Height:": "Höhe:",
+	"Height:": "Hï¿½he:",
 	"Speed Control": "Geschwindigkeitseinstellungen",
 	"Cancel": "Abbrechen"
 };
