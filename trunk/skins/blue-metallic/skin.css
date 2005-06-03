@@ -1,62 +1,37 @@
-.htmlarea .toolbar, .htmlarea .toolbar .button
-{
-  background-color:#f7f8fd;
-}
+.htmlarea .toolbar { background-color:#f7f8fd;}
 
-.htmlarea .toolbarRow
+.htmlarea .toolbar .toolbarRow
 {
   background-image: url(button-background.png);
-  margin-top:2px;
-  margin-bottom:2px;
-  border:1px dotted #DEDEDE;
-  padding:2px;
+  border:1px solid #DEDEDE;
   -moz-border-radius:3px;
-  margin:4px;
 }
 
-.htmlarea .toolbar .button {
+.htmlarea .toolbar .toolbarRow .button {
   background-image: url(button-background.png);
-  width:20px;
-  height:20px;
-  padding:0px;
   border:1px solid #f7f8fd;
 }
-
-.buttonImageContainer
-{
-  position:relative;
-  left:1px;
-  top :1px;
-}
-
-.htmlarea .toolbar .separator 
-{
-  margin:0px;
+.htmlarea .toolbar .toolbarRow .separator {
   background-image: url(separator.gif);
   border:1px #f7f8fd;
-  width:   7px;
-  height: 20px;
-  padding: 0px;
+  width:7px;
 }
 
-.htmlarea .toolbar a.button:hover
+.htmlarea .toolbar .toolbarRow .buttonHover
 {
-  border: 1px solid;
   border-color: #316AC5;
   background-image: none !important;
   background-color : #FFE1AC !important;
 }
 
-.htmlarea .toolbar a.buttonDisabled:hover
+.htmlarea .toolbar .toolbarRow .buttonDisabled
 {
-  border-color: #316AC5;
   background-color : #FFE1AC;
 }
 
-.htmlarea .toolbar .button.buttonActive,
-.htmlarea .toolbar .button.buttonPressed
+.htmlarea .toolbar .toolbarRow .button.buttonActive,
+.htmlarea .toolbar .toolbarRow .button.buttonPressed
 {
-  border: 1px solid;
   border-color: #79A4CC #FFFFFF #FFFFFF #79A4CC;
   background-image: none !important;
   background-color : #FFBE6D !important;

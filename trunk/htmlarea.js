@@ -289,7 +289,7 @@ HTMLArea.Config = function () {
    */
   this.toolbar =
   [
-    ["popupeditor"],
+    ["separator","popupeditor"],
     ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
     ["separator","forecolor","hilitecolor","textindicator"],
     ["separator","subscript","superscript"],
@@ -297,7 +297,7 @@ HTMLArea.Config = function () {
     ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
     ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
     ["separator","undo","redo","selectall"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
-    ["separator","killword","removeformat","toggleborders","lefttoright", "righttoleft","separator","htmlmode","about"]
+    ["separator","killword","clearfonts","removeformat","toggleborders","lefttoright", "righttoleft","separator","htmlmode","about"]
   ];
 
 
@@ -700,9 +700,9 @@ HTMLArea.prototype._createToolbar = function () {
   toolbar.className = "toolbar";
   toolbar.unselectable = "1";
 
-  var tb_row = null;
   var tb_objects = new Object();
   this._toolbarObjects = tb_objects;
+  var tb_row = null;
 
 	this._createToolbar1(editor, toolbar, tb_objects);
 	this._htmlArea.appendChild(toolbar);
@@ -720,54 +720,38 @@ HTMLArea.prototype._addToolbar = function() {
 
 // separate from previous createToolBar to allow dynamic change of toolbar
 HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
-
+  function clearBoth() {
   // This shouldn't be necessary, but IE seems to float outside of the container
   // when we float toolbar sections, so we have to clear:both here as well
   // as at the end (which we do have to do).
-  if(editor.config.flowToolbars)
-  {
-    var brk = document.createElement('div');
-    brk.style.height =
+    if(editor.config.flowToolbars)
+    {
+      var brk = document.createElement('div');
+      brk.style.height =
       brk.style.width =
       brk.style.lineHeight =
       brk.style.fontSize = '1px';
-    brk.style.clear = 'both';
-    toolbar.appendChild(brk);
+      brk.style.clear = 'both';
+      toolbar.appendChild(brk);
+    }
   }
 
   // creates a new line in the toolbar
   function newLine() {
     if(typeof tb_row != 'undefined' && tb_row.childNodes.length == 0) return;
 
-    var table = document.createElement("table");
-    table.border = "0px";
-    table.cellSpacing = "0px";
-    table.cellPadding = "0px";
-    if(editor.config.flowToolbars)
-    {
-      if(HTMLArea.is_ie)
-      {
-        table.style.styleFloat = "left";
-      }
-      else
-      {
-        table.style.cssFloat = "left";
+    tb_row = document.createElement("div");
+    if(editor.config.flowToolbars) {
+      if(HTMLArea.is_ie) {
+        tb_row.style.styleFloat = "left";
+      } else {
+        tb_row.style.cssFloat = "left";
       }
     }
-
-    toolbar.appendChild(table);
-    // TBODY is required for IE, otherwise you don't see anything
-    // in the TABLE.
-    var tb_body = document.createElement("tbody");
-    table.appendChild(tb_body);
-    tb_row = document.createElement("tr");
-    tb_body.appendChild(tb_row);
-
-    table.className = 'toolbarRow'; // meh, kinda.
+    tb_row.className = 'toolbarRow'; // meh, kinda.
+    tb_row.style.whiteSpace = "nowrap";
+    toolbar.appendChild(tb_row);
   }; // END of function: newLine
-
-  // init first line
-  newLine();
 
   // updates the state of a toolbar element.  This function is member of
   // a toolbar element object (unnamed objects created by createButton or
@@ -840,6 +824,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
     }
     if (options) {
       el = document.createElement("select");
+      el.className = "select";
       el.title = tooltip;
       var obj = {
         name	: txt, // field name
@@ -866,65 +851,35 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
 
   // appends a new button to toolbar
   function createButton(txt) {
+    var btn = editor.config.btnList[txt];
+    if (btn) {
     // the element that will be created
-    var el = null;
-    var btn = null;
-    switch (txt) {
-        case "separator":
-          if(editor.config.flowToolbars) newLine();
-      el = document.createElement("div");
-      el.className = "separator";
-      break;
-        case "space":
-      el = document.createElement("div");
-      el.className = "space";
-      break;
-      case "linebreak":
-          newLine();
-          return false;
-        case "textindicator":
-      el = document.createElement("div");
-      el.appendChild(document.createTextNode("A"));
-      el.className = "indicator";
-      el.title = HTMLArea._lc("Current style");
-      var obj = {
-        name	: txt, // the button name (i.e. 'bold')
-        element : el, // the UI element (DIV)
-        enabled : true, // is it enabled?
-        active	: false, // is it pressed?
-        text	: false, // enabled in text mode?
-        cmd	: "textindicator", // the command ID
-        state	: setButtonStatus // for changing state
-      };
-      tb_objects[txt] = obj;
-      break;
-        default:
-      btn = editor.config.btnList[txt];
-    }
-    if (!el && btn) {
-      el = document.createElement("a");
-      el.style.display = 'block';
-      el.href = 'javascript:void(0)';
-      el.style.textDecoration = 'none';
-      el.title = btn[0];
+      var el = document.createElement("div");
       el.className = "button";
+      el.title = btn[0];
       // let's just pretend we have a button object, and
       // assign all the needed information to it.
       var obj = {
-        name	: txt, // the button name (i.e. 'bold')
-        element : el, // the UI element (DIV)
-        enabled : true, // is it enabled?
-        active	: false, // is it pressed?
-        text	: btn[2], // enabled in text mode?
-        cmd	: btn[3], // the command ID
-        state	: setButtonStatus, // for changing state
-        context : btn[4] || null // enabled in a certain context?
+        name: txt, // the button name (i.e. 'bold')
+        element: el, // the UI element (DIV)
+        enabled: true, // is it enabled?
+        active: false, // is it pressed?
+        text: btn[2], // enabled in text mode?
+        cmd: btn[3], // the command ID
+        state: setButtonStatus, // for changing state
+        context: btn[4] || null // enabled in a certain context?
       };
       tb_objects[txt] = obj;
       // handlers to emulate nice flat toolbar buttons
+      HTMLArea._addEvent(el, "mouseover", function () {
+        if (obj.enabled) with (HTMLArea) {
+          _addClass(el, "buttonHover");
+        }
+      });
+
       HTMLArea._addEvent(el, "mouseout", function () {
         if (obj.enabled) with (HTMLArea) {
-          //_removeClass(el, "buttonHover");
+          _removeClass(el, "buttonHover");
           _removeClass(el, "buttonActive");
           (obj.active) && _addClass(el, "buttonPressed");
         }
@@ -941,7 +896,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       HTMLArea._addEvent(el, "click", function (ev) {
         if (obj.enabled) with (HTMLArea) {
           _removeClass(el, "buttonActive");
-          //_removeClass(el, "buttonHover");
+          _removeClass(el, "buttonHover");
           if(HTMLArea.is_gecko)
           {
             editor.activateEditor();
@@ -950,11 +905,13 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
           _stopEvent(is_ie ? window.event : ev);
         }
       });
-
-      var i_contain = HTMLArea.makeBtnImg(btn[1]);
-      var img = i_contain.firstChild;
-      el.appendChild(i_contain);
-
+      
+      var img = HTMLArea.makeBtnImg(btn[1]);
+      var imgholder = document.createElement("div");
+      imgholder.className = "buttonImageContainer";
+      imgholder.appendChild(img);
+      el.appendChild(imgholder);
+      
       obj.imgel = img;
       obj.swapImage = function(newimg)
       {
@@ -964,6 +921,8 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
           img.style.position = 'relative';
           img.style.top  = newimg[2] ? ('-' + (18 * (newimg[2] + 1)) + 'px') : '-18px';
           img.style.left = newimg[1] ? ('-' + (18 * (newimg[1] + 1)) + 'px') : '-18px';
+         // img.style.bottom = newimg[2] ? ('-' + (18 * (newimg[2] + 19)) + 'px') : '-36px';          
+         // img.style.right = newimg[1] ? ('-' + (18 * (newimg[1] + 19)) + 'px') : '-36px';
         }
         else
         {
@@ -972,14 +931,12 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
           img.style.left = '0px';
         }
       }
-
-    } else if (!el) {
-      el = createSelect(txt);
-    }
-
+    }  
     return el;
   };
 
+  clearBoth();
+  newLine(); // init first line
   var first = true;
   for (var i = 0; i < this.config.toolbar.length; ++i) {
     if (!first) {
@@ -999,43 +956,66 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         var l7ed = RegExp.$1 == "I"; // localized?
         var label = RegExp.$2;
         if (l7ed) {
-	  label = HTMLArea._lc(label);
+	        label = HTMLArea._lc(label);
         }
-        var tb_cell = document.createElement("td");
-        tb_row.appendChild(tb_cell);
-        tb_cell.className = "label";
-        tb_cell.innerHTML = label;
+        var tb_element = document.createElement("div");
+        tb_element.className = "label";
+        tb_element.innerHTML = label;
       }
       else if(typeof code != 'function')
       {
-        var tb_element = createButton(code);
-
-        if (tb_element)
-        {
-          var tb_cell = document.createElement("td");
-          tb_cell.className = 'toolbarElement';
-          tb_row.appendChild(tb_cell);
-          tb_cell.appendChild(tb_element);
+        var tb_element = null;
+        switch (code) {
+          case "separator":
+            if(editor.config.flowToolbars) newLine();
+            tb_element = document.createElement("div");
+            tb_element.className = "separator";
+            break;
+          case "space":
+            tb_element = document.createElement("div");
+            tb_element.className = "space";
+            break;
+          case "linebreak":
+            newLine();
+            break;
+          case "textindicator":
+            tb_element = document.createElement("div");
+            tb_element.appendChild(document.createTextNode("A"));
+            tb_element.className = "indicator";
+            tb_element.title = HTMLArea._lc("Current style");
+            var obj = {
+              name	: code, // the button name (i.e. 'bold')
+              element : tb_element, // the UI element (DIV)
+              enabled : true, // is it enabled?
+              active	: false, // is it pressed?
+              text	: false, // enabled in text mode?
+              cmd	: "textindicator", // the command ID
+              state	: setButtonStatus // for changing state
+            };
+            tb_objects[code] = obj;
+            break;
+        default:
+          tb_element = createButton(code);
         }
-        else if (tb_element == null)
-        {
+      }  
+      if (code != "linebreak") {
+        if (!tb_element)
+          tb_element = createSelect(code);
+        if (tb_element) {
+          if(HTMLArea.is_ie) {
+            tb_element.style.display = "inline";
+          } else {
+            tb_element.style.cssFloat = "left";
+          }
+          tb_row.appendChild(tb_element);
+        }
+        else if (tb_element == null) {
           alert("FIXME: Unknown toolbar item: " + code);
         }
       }
     }
   }
-
-  if(editor.config.flowToolbars)
-  {
-    var brk = document.createElement('div');
-    brk.style.height =
-      brk.style.width =
-      brk.style.lineHeight =
-      brk.style.fontSize = '1px';
-    brk.style.clear = 'both';
-    toolbar.appendChild(brk);
-  }
-
+  clearBoth();
   return toolbar;
 };
 
@@ -1048,23 +1028,6 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
   {
     doc._htmlareaImgCache = { };
   }
-
-  var i_contain = null;
-  if(HTMLArea.is_ie && ((!doc.compatMode) || (doc.compatMode && doc.compatMode == "BackCompat")))
-  {
-    i_contain = doc.createElement('span');
-  }
-  else
-  {
-    i_contain = doc.createElement('div');
-    i_contain.style.position = 'relative';
-  }
-
-  i_contain.style.overflow = 'hidden';
-  i_contain.style.width = "18px";
-  i_contain.style.height = "18px";
-  i_contain.className    = 'buttonImageContainer';
-
   var img = null;
   if(typeof imgDef == 'string')
   {
@@ -1099,8 +1062,7 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
     img.style.top  = imgDef[2] ? ('-' + (18 * (imgDef[2] + 1)) + 'px') : '-18px';
     img.style.left = imgDef[1] ? ('-' + (18 * (imgDef[1] + 1)) + 'px') : '-18px';
   }
-  i_contain.appendChild(img);
-  return i_contain;
+  return img;
 }
 
 HTMLArea.prototype._createStatusBar = function() {
