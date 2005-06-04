@@ -14,7 +14,7 @@
 	"Text:": "Text:",
 	"Background-Color:": "Hintergrundfarbe:",
 	"Width:": "Breite:",
-	"Height:": "H�he:",
+	"Height:": "Höhe:",
 	"Speed Control": "Geschwindigkeitseinstellungen",
 	"Cancel": "Abbrechen"
 };
