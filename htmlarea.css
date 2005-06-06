@@ -10,7 +10,7 @@
 }
 .htmlarea .toolbar .toolbarRow {
   margin: 0; 
-  padding-left: 0px 0px 0px 2px;
+  padding: 0px 2px 0px 2px;
   font-family: Tahoma,Verdana,sans-serif; 
   font-size: 11px;
 }
@@ -24,7 +24,7 @@
 .htmlarea .toolbar .toolbarRow .select { 
   vertical-align: top;
   position: relative;
-  top: 2px;
+  top: 3px;
 }
 
 .htmlarea .toolbar .toolbarRow .button {

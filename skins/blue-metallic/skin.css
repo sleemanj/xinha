@@ -2,23 +2,31 @@
 
 .htmlarea .toolbar .toolbarRow
 {
-  background-image: url(button-background.png);
+  /*background-image: url(button-background.png);*/
+  background-color: #C5DCEC;
   border:1px solid #DEDEDE;
-  -moz-border-radius:3px;
+  -moz-border-radius:5px;
+  margin: 1px;
 }
 
 .htmlarea .toolbar .toolbarRow .button {
   background-image: url(button-background.png);
-  border:1px solid #f7f8fd;
+  padding: 1px;
+  border: 0px;
 }
+
 .htmlarea .toolbar .toolbarRow .separator {
   background-image: url(separator.gif);
-  border:1px #f7f8fd;
-  width:7px;
+  padding: 1px;
+  border: 0px;
+  margin: 2px;
+  width: 7px;
 }
 
 .htmlarea .toolbar .toolbarRow .buttonHover
 {
+  padding: 0px;
+  border: 1px solid;
   border-color: #316AC5;
   background-image: none !important;
   background-color : #FFE1AC !important;
@@ -26,12 +34,16 @@
 
 .htmlarea .toolbar .toolbarRow .buttonDisabled
 {
-  background-color : #FFE1AC;
+  padding: 1px;
+  border: 0px;
+  border-color: #f7f8fd;
 }
 
 .htmlarea .toolbar .toolbarRow .button.buttonActive,
 .htmlarea .toolbar .toolbarRow .button.buttonPressed
 {
+  padding: 0px;
+  border: 1px solid;
   border-color: #79A4CC #FFFFFF #FFFFFF #79A4CC;
   background-image: none !important;
   background-color : #FFBE6D !important;
