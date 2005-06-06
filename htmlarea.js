@@ -906,12 +906,10 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         }
       });
       
-      var img = HTMLArea.makeBtnImg(btn[1]);
-      var imgholder = document.createElement("div");
-      imgholder.className = "buttonImageContainer";
-      imgholder.appendChild(img);
-      el.appendChild(imgholder);
-      
+      var i_contain = HTMLArea.makeBtnImg(btn[1]);
+      var img = i_contain.firstChild;
+      el.appendChild(i_contain);
+
       obj.imgel = img;
       obj.swapImage = function(newimg)
       {
@@ -1022,6 +1020,14 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
   {
     doc._htmlareaImgCache = { };
   }
+  
+  var i_contain = doc.createElement('div');  
+  i_contain.className    = 'buttonImageContainer';
+  i_contain.style.position = 'relative';  
+  i_contain.style.overflow = 'hidden';  
+  i_contain.style.width = "18px";  
+  i_contain.style.height = "18px";  
+  
   var img = null;
   if(typeof imgDef == 'string')
   {
@@ -1056,7 +1062,8 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
     img.style.top  = imgDef[2] ? ('-' + (18 * (imgDef[2] + 1)) + 'px') : '-18px';
     img.style.left = imgDef[1] ? ('-' + (18 * (imgDef[1] + 1)) + 'px') : '-18px';
   }
-  return img;
+  i_contain.appendChild(img);
+  return i_contain;
 }
 
 HTMLArea.prototype._createStatusBar = function() {
