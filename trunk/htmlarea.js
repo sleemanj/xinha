@@ -937,13 +937,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
 
   clearBoth();
   newLine(); // init first line
-  var first = true;
   for (var i = 0; i < this.config.toolbar.length; ++i) {
-    if (!first) {
-      // createButton("linebreak");
-    } else {
-      first = false;
-    }
     if(this.config.toolbar[i] == null) this.config.toolbar[i] = ['separator'];
     var group = this.config.toolbar[i];
 
