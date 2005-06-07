@@ -4596,8 +4596,6 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
     var closed;
     var i;
     var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : '';
-    if (root_tag == 'br' && !root.nextSibling)
-      break;
     if (outputRoot)
       outputRoot = !(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(root_tag));
     if (HTMLArea.is_ie && root_tag == "head") {
