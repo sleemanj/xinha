@@ -276,7 +276,7 @@ HTMLArea.Config = function () {
   // flowToolbars is false and your window is narrow enough then it will create more than one line
   // even neater, if you resize the window the toolbars will reflow.  Niiiice.
 
-  this.flowToolbars = true;
+  this.flowToolbars = false;
 
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
@@ -724,22 +724,18 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
   // This shouldn't be necessary, but IE seems to float outside of the container
   // when we float toolbar sections, so we have to clear:both here as well
   // as at the end (which we do have to do).
-    if(editor.config.flowToolbars)
-    {
       var brk = document.createElement('div');
       brk.style.height =
       brk.style.width =
       brk.style.lineHeight =
       brk.style.fontSize = '1px';
       brk.style.clear = 'both';
-      toolbar.appendChild(brk);
-    }
+      return brk;
   }
 
   // creates a new line in the toolbar
   function newLine() {
     if(typeof tb_row != 'undefined' && tb_row.childNodes.length == 0) return;
-
     tb_row = document.createElement("div");
     if(editor.config.flowToolbars) {
       if(HTMLArea.is_ie) {
@@ -933,7 +929,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
     return el;
   };
 
-  clearBoth();
+  toolbar.appendChild(clearBoth());
   newLine(); // init first line
   for (var i = 0; i < this.config.toolbar.length; ++i) {
     if(this.config.toolbar[i] == null) this.config.toolbar[i] = ['separator'];
@@ -948,7 +944,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         var l7ed = RegExp.$1 == "I"; // localized?
         var label = RegExp.$2;
         if (l7ed) {
-	        label = HTMLArea._lc(label);
+	  label = HTMLArea._lc(label);
         }
         var tb_element = document.createElement("div");
         tb_element.className = "label";
@@ -968,6 +964,8 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
             tb_element.className = "space";
             break;
           case "linebreak":
+            if(typeof tb_row != 'undefined' && tb_row.childNodes.length >0)
+              tb_row.appendChild(clearBoth());
             newLine();
             break;
           case "textindicator":
@@ -1001,13 +999,15 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
           }
           tb_row.appendChild(tb_element);
         }
-        else if (tb_element == null) {
+          else if (tb_element == null) {
           alert("FIXME: Unknown toolbar item: " + code);
         }
       }
     }
   }
-  clearBoth();
+  if(typeof tb_row != 'undefined' && tb_row.childNodes.length >0)
+    tb_row.appendChild(clearBoth());
+  toolbar.appendChild(clearBoth());
   return toolbar;
 };
 
