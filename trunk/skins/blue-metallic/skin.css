@@ -8,6 +8,10 @@
   -moz-border-radius:5px;
   margin: 1px;
 }
+.htmlarea .toolbar .toolbarRow .container,
+.htmlarea .toolbar .toolbarRow .label {
+  background-image: url(button-background.png);
+}
 
 .htmlarea .toolbar .toolbarRow .button {
   background-image: url(button-background.png);
