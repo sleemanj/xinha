@@ -842,7 +842,10 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         editor._comboSelected(el, txt);
       });
     }
-    return el;
+    var xel = document.createElement("div");
+    xel.className = "container";
+    xel.appendChild(el);
+    return xel;
   }; // END of function: createSelect
 
   // appends a new button to toolbar
@@ -969,13 +972,13 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
             newLine();
             break;
           case "textindicator":
-            tb_element = document.createElement("div");
-            tb_element.appendChild(document.createTextNode("A"));
-            tb_element.className = "indicator";
-            tb_element.title = HTMLArea._lc("Current style");
+            var el = document.createElement("div");
+            el.appendChild(document.createTextNode("A"));
+            el.className = "indicator";
+            el.title = HTMLArea._lc("Current style");
             var obj = {
               name	: code, // the button name (i.e. 'bold')
-              element : tb_element, // the UI element (DIV)
+              element : el, // the UI element (DIV)
               enabled : true, // is it enabled?
               active	: false, // is it pressed?
               text	: false, // enabled in text mode?
@@ -983,6 +986,9 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
               state	: setButtonStatus // for changing state
             };
             tb_objects[code] = obj;
+            var tb_element = document.createElement("div");
+            tb_element.className = "container";
+            tb_element.appendChild(el);
             break;
         default:
           tb_element = createButton(code);
