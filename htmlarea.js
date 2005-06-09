@@ -4671,7 +4671,14 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
         html += " " + name + '="' + HTMLArea.htmlEncode(value) + '"';
       }
       if (html != "") {
-        html += closed ? " />" : ">";
+        if(closed && root_tag=="p") {
+          //never use <p /> as empty paragraphs won't be visible
+          html += ">&nbsp;</p>";
+        } else if(closed) {
+          html += " />";
+        } else {
+          html += ">";
+        }
       }
     }
     var containsBlock = false;
