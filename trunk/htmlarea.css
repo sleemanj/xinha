@@ -10,16 +10,26 @@
 
 .htmlarea .toolbar .toolbarRow {
   margin: 0;
-  padding-left: 0px 0px 0px 2px;
+  padding: 0px 2px 0px 2px;
   font-family: Tahoma,Verdana,sans-serif;
   font-size: 11px;
+  height: 24px !important;
+  overflow: hidden;
 }
+.htmlarea .toolbar .toolbarRow .container {
+  margin: 0px;
+  height: 22px;
+  padding: 1px;
+}
+
 .htmlarea .toolbar .toolbarRow img { margin: 0; border: none;}
 .htmlarea .toolbar .toolbarRow .label {
   vertical-align: top;
   position: relative;
   top: 5px;
   padding-right: 2px;
+  border-bottom: 1px;
+  height: 17px;
 }
 .htmlarea .toolbar .toolbarRow .select {
   vertical-align: top;
@@ -70,7 +80,7 @@
   border: 1px solid ButtonShadow;
   vertical-align: top;
   position: relative;
-  top: 5px;
+  top: 4px;
 }
 
 .htmlarea .toolbar .toolbarRow .buttonDisabled img {
