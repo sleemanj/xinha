@@ -1,4 +1,4 @@
-.htmlarea {margin: 2px; background: #fff; }
+.htmlarea { margin: 2px; background: #fff; }
 
 .htmlarea .toolbar {
   cursor: default;
@@ -6,32 +6,22 @@
   padding: 3px;
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-  
-}
-.htmlarea .toolbar .toolbarRow {
-  margin: 0; 
-  padding: 0px 2px 0px 2px;
-  font-family: Tahoma,Verdana,sans-serif; 
-  font-size: 11px;
-  height: 24px !important;
-  overflow: hidden;
-}
-.htmlarea .toolbar .toolbarRow .container {
-  margin: 0px;
-  height: 22px;
-  padding: 1px;
 }
 
+.htmlarea .toolbar .toolbarRow {
+  margin: 0;
+  padding-left: 0px 0px 0px 2px;
+  font-family: Tahoma,Verdana,sans-serif;
+  font-size: 11px;
+}
 .htmlarea .toolbar .toolbarRow img { margin: 0; border: none;}
 .htmlarea .toolbar .toolbarRow .label {
   vertical-align: top;
   position: relative;
   top: 5px;
   padding-right: 2px;
-  border-bottom: 1px;
-  height: 17px;
 }
-.htmlarea .toolbar .toolbarRow .select { 
+.htmlarea .toolbar .toolbarRow .select {
   vertical-align: top;
   position: relative;
   top: 2px;
@@ -54,9 +44,8 @@
   height: 18px;
   overflow: hidden;
 }
-
 .htmlarea .toolbar .toolbarRow .button.buttonHover {
-  cursor: pointer;  
+  cursor: pointer;
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
@@ -81,7 +70,7 @@
   border: 1px solid ButtonShadow;
   vertical-align: top;
   position: relative;
-  top: 4px;
+  top: 5px;
 }
 
 .htmlarea .toolbar .toolbarRow .buttonDisabled img {
