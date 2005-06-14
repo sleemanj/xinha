@@ -276,7 +276,7 @@ HTMLArea.Config = function () {
   // flowToolbars is false and your window is narrow enough then it will create more than one line
   // even neater, if you resize the window the toolbars will reflow.  Niiiice.
 
-  this.flowToolbars = false;
+  this.flowToolbars = true;
 
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
