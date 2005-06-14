@@ -10,13 +10,15 @@
 
 .htmlarea .toolbar .toolbarRow {
   margin: 0;
-  padding: 0px 2px 0px 2px;
+  padding-left: 0px 2px 0px 2px;
   font-family: Tahoma,Verdana,sans-serif;
   font-size: 11px;
   height: 24px !important;
   overflow: hidden;
 }
-.htmlarea .toolbar .toolbarRow .container {
+
+.htmlarea .toolbar .toolbarRow .container
+{
   margin: 0px;
   height: 22px;
   padding: 1px;
