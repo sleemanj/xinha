@@ -18,7 +18,7 @@ function Init() {
     switch (fields[i]) { 
     case "f_readonly": 
     case "f_disabled":
-      document.getElementById(fields[i]).checked = param[fields[i]]; break;
+      document.getElementById(fields[i]).checked = param[fields[i]]=="true"; break;
     default:
       document.getElementById(fields[i]).value = param[fields[i]]; break;
     }
@@ -27,8 +27,7 @@ function Init() {
 };
 
 function onOK() {
-	var d = document;
-	var el = d.getElementById("f_name");
+	var el = document.getElementById("f_name");
 	if (!el.value) {
   	alert("You must enter a Name");
 		el.focus();
@@ -40,7 +39,7 @@ function onOK() {
     switch (fields[i]) { 
     case "f_readonly": 
     case "f_disabled":
-      param[fields[i]] = document.getElementById(fields[i]).checked; break;
+      param[fields[i]] = (document.getElementById(fields[i]).checked)?"true":""; break;
     default:
       param[fields[i]] = document.getElementById(fields[i]).value; break;
     }
