@@ -277,6 +277,9 @@ HTMLArea.Config = function () {
   // even neater, if you resize the window the toolbars will reflow.  Niiiice.
 
   this.flowToolbars = true;
+  
+  // skin stylesheet to load
+  this.skin = "";
 
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
@@ -1124,6 +1127,23 @@ HTMLArea.prototype.generate = function ()
     HTMLArea._loadback
       (_editor_url + 'popupwin.js', function() { editor.generate(); } );
       return false;
+  }
+  
+  if(editor.config.skin != "") {
+    var found=false;
+    var head = document.getElementsByTagName("head")[0];
+    var links = document.getElementsByTagName("link");
+    for(var i = 0; i<links.length; i++) {
+      if((links[i].rel == "stylesheet")&&(links[i].href == _editor_url + 'skins/' + editor.config.skin + '/skin.css'))
+        found = true;
+    }
+    if(!found) {
+      var link = document.createElement("link");
+      link.type = "text/css";
+      link.href = _editor_url + 'skins/' + editor.config.skin + '/skin.css';
+      link.rel = "stylesheet"
+      head.appendChild(link);
+    }
   }
 
   //backwards-compatibility: load FullScreen-Plugin if we find a "popupeditor"-button in the toolbar

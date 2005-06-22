@@ -11,10 +11,12 @@
     --------------------------------------------------------------------------*/
 
   var num     = 1;
+  var skin    = "";
   if(window.parent && window.parent != window)
   {
     var f = window.parent.menu.document.forms[0];
     _editor_lang = f.lang.value;
+    skin = f.skin.value;
     num = parseInt(f.num.value);
     if(isNaN(num))
     {
@@ -39,6 +41,10 @@
   {
     var    config = new HTMLArea.Config();
 
+    if(skin != "")
+    {
+      config.skin = skin;
+    }  
     if(typeof CSS != 'undefined')
     {
       config.pageStyle = "@import url(custom.css);";
