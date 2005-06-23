@@ -3114,7 +3114,7 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
     {
       range = this._doc.body.createTextRange();
       range.moveToElementText(node);
-      (collapsed) && range.collapse(pos);
+      //(collapsed) && range.collapse(pos);
     }
     range.select();
   } else {
@@ -3128,7 +3128,7 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
     else
     {
       range.selectNodeContents(node);
-      (collapsed) && range.collapse(pos);
+      //(collapsed) && range.collapse(pos);
     }
     sel.removeAllRanges();
     sel.addRange(range);
