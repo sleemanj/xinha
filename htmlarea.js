@@ -56,6 +56,9 @@ if (typeof _editor_lang == "string") {
   _editor_lang = "en";
 }
 
+// skin stylesheet to load
+  _editor_skin = "";
+
 var __htmlareas = [ ];
 
 // browser identification
@@ -278,9 +281,6 @@ HTMLArea.Config = function () {
 
   this.flowToolbars = true;
   
-  // skin stylesheet to load
-  this.skin = "";
-
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
    *
@@ -1129,18 +1129,18 @@ HTMLArea.prototype.generate = function ()
       return false;
   }
   
-  if(editor.config.skin != "") {
+  if(_editor_skin != "") {
     var found=false;
     var head = document.getElementsByTagName("head")[0];
     var links = document.getElementsByTagName("link");
     for(var i = 0; i<links.length; i++) {
-      if((links[i].rel == "stylesheet")&&(links[i].href == _editor_url + 'skins/' + editor.config.skin + '/skin.css'))
+      if((links[i].rel == "stylesheet")&&(links[i].href == _editor_url + 'skins/' + _editor_skin + '/skin.css'))
         found = true;
     }
     if(!found) {
       var link = document.createElement("link");
       link.type = "text/css";
-      link.href = _editor_url + 'skins/' + editor.config.skin + '/skin.css';
+      link.href = _editor_url + 'skins/' + _editor_skin + '/skin.css';
       link.rel = "stylesheet"
       head.appendChild(link);
     }

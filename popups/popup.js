@@ -36,6 +36,14 @@ function __dlg_onclose() {
 };
 
 function __dlg_init(bottom) {
+  if(window.opener._editor_skin != "") {
+    var head = document.getElementsByTagName("head")[0];
+    var link = document.createElement("link");
+    link.type = "text/css";
+    link.href = window.opener._editor_url + 'skins/' + window.opener._editor_skin + '/skin.css';
+    link.rel = "stylesheet";
+    head.appendChild(link);
+  }
 	var body = document.body;
 	var body_height = 0;
 	if (typeof bottom == "undefined") {

@@ -55,3 +55,12 @@
   background-repeat:repeat-x;
   background-color:#f2f0e4;
 }
+.dialog {
+  background-color:#f2f0e4;
+}
+.dialog .title {
+  background-image: url(button-background.png);
+}  
+.dialog button{
+  background-image: url(button-background.png);
+}
