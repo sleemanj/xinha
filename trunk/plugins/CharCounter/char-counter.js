@@ -25,8 +25,26 @@ CharCounter.prototype._lc = function(string) {
 
 CharCounter.prototype.onGenerate = function() {
     var self = this;
-    var charCount = document.createElement("div");
+    var charCount = document.createElement("span");
+    charCount.style.padding = "2px 5px";
+     if(HTMLArea.is_ie) {
+      charCount.style.styleFloat = "right";
+    } else {
+      charCount.style.cssFloat = "right";
+    }
+    var brk = document.createElement('div');
+    brk.style.height =
+    brk.style.width =
+    brk.style.lineHeight =
+    brk.style.fontSize = '1px';
+    brk.style.clear = 'both';
+    if(HTMLArea.is_ie) {
+      this.editor._statusBarTree.style.styleFloat = "left";
+    } else {
+      this.editor._statusBarTree.style.cssFloat = "left";
+    }
     this.editor._statusBar.appendChild(charCount);
+    this.editor._statusBar.appendChild(brk);
     this.charCount = charCount;
 };
 
