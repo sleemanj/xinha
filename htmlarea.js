@@ -57,7 +57,7 @@ if (typeof _editor_lang == "string") {
 }
 
 // skin stylesheet to load
-if (!typeof _editor_skin == "string") {
+if (!(typeof _editor_skin == "string")) {
   _editor_skin = "";
 }  
 
