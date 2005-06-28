@@ -116,6 +116,8 @@
         "Space between adjacent cells": "Raum zwischen angrenzenden Zellen",
         "Cell padding:": "Innenabstand:",
         "Space between content and border in cell": "Raum zwischen Inhalt und Rand der Zelle",
+        "You must enter a number of rows": "Bitte geben Sie die Anzahl der Zeilen an",
+        "You must enter a number of columns": "Bitte geben Sie die Anzahl der Spalten an",
 
         // Insert Image
         "Insert Image": "Bild einfügen",
@@ -126,5 +128,6 @@
         "Alternate text:": "Alternativer Text:",
         "For browsers that don't support images": "für Browser die keine Bilder unterstützen",
         "Positioning of this image": "Positionierung dieses Bildes",
-        "Image Preview:": "Bild Voransicht:"
+        "Image Preview:": "Bild Voransicht:",
+        "You must enter the URL": "Bitte geben Sie die URL ein"
 }
