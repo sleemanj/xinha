@@ -9,7 +9,7 @@
 <script type="text/javascript">
 
 FullPage = window.opener.FullPage; // load the FullPage plugin and lang file ;-)
-window.resizeTo(400, 100);
+window.resizeTo(400, 130);
 
   var accepted = {
       f_doctype       : true,
@@ -18,7 +18,9 @@ window.resizeTo(400, 100);
       f_body_fgcolor  : true,
       f_base_style    : true,
       f_alt_style     : true,
-      f_charset       : true
+      f_charset       : true,
+      f_keywords      : true,
+      f_description   : true
   };
 
 var editor = null;
@@ -64,52 +66,50 @@ function onCancel() {
 };
 
 </script>
-
-
+<style type="text/css">
+.fr { width: 11em; float: left; padding: 2px 5px; text-align: right; }
+</style>
   </head>
 
   <body class="dialog" onload="Init()">
 
-    <div class="title"><span>Document properties</span></div>
-
-    <table style="width: 100%">
-      <tr>
-        <td class="label"><span>Document title:</span></td>
-        <td><input type="text" id="f_title" style="width: 100%" /></td>
-      </tr>
-      <tr>
-        <td class="label"><span>DOCTYPE:</span></td>
-        <td><input type="text" id="f_doctype" style="width: 100%" /></td>
-      </tr>
-      <tr>
-        <td class="label"><span>Primary style-sheet:</span></td>
-        <td><input type="text" id="f_base_style" style="width: 100%" /></td>
-      </tr>
-      <tr>
-        <td class="label"><span>Alternate style-sheet:</span></td>
-        <td><input type="text" id="f_alt_style" style="width: 100%" /></td>
-      </tr>
-      <tr>
-        <td class="label"><span>Background color:</span></td>
-        <td><input type="text" id="f_body_bgcolor" size="7" /></td>
-      </tr>
-      <tr>
-        <td class="label"><span>Text color:</span></td>
-        <td><input type="text" id="f_body_fgcolor" size="7" /></td>
-      </tr>
-      <tr>
-        <td class="label"><span>Character set:</span></td>
-        <td><select id="f_charset">
+    <div class="title">Document properties</div>
+    
+    <div class="fr">Document title:</div>
+    <input type="text" id="f_title" style="width: 200px" />
+    <br />
+    <div class="fr">DOCTYPE:</div>
+    <input type="text" id="f_doctype" style="width: 200px" />
+    <br />
+    <div class="fr">Keywords:</div>
+    <input type="text" id="f_keywords" style="width: 200px" />
+    <br />
+    <div class="fr">Description:</div>
+    <input type="text" id="f_description" style="width: 200px" />
+    <br />
+    <div class="fr">Primary style-sheet:</div>
+    <input type="text" id="f_base_style" style="width: 200px" />
+    <br />
+    <div class="fr">Alternate style-sheet:</div>
+    <input type="text" id="f_alt_style" style="width: 200px" />
+    <br />
+    <div class="fr">Background color:</div>
+    <input type="text" id="f_body_bgcolor" size="7" />
+    <br />
+    <div class="fr">Text color:</div>
+    <input type="text" id="f_body_fgcolor" size="7" />
+    <br />
+    <div class="fr">Character set:</div>
+    <select id="f_charset">
           <option value=""></option>
           <option value="utf-8">UTF-8 (recommended)</option>
           <option value="windows-1251">cyrillic (WINDOWS-1251)</option>
           <option value="koi8-r">cyrillic (KOI8-R)</option>
           <option value="iso-8859-5">cyrillic (ISO-8859-5)</option>
           <option value="iso-8859-1">western (ISO-8859-1)</option>
-        </select></td>
-      </tr>
-    </table>
-
+        </select>
+    <br />
+    
     <div id="buttons">
       <button type="button" name="ok" onclick="return onOK();"><span>OK</span></button>
       <button type="button" name="cancel" onclick="return onCancel();"><span>Cancel</span></button>
