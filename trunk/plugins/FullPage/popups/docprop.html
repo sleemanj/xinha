@@ -68,52 +68,63 @@ function onCancel() {
 </script>
 <style type="text/css">
 .fr { width: 11em; float: left; padding: 2px 5px; text-align: right; }
+.txt { width:200px; }
+div { clear:both; }
 </style>
-  </head>
+</head>
 
-  <body class="dialog" onload="Init()">
+<body class="dialog" onload="Init()">
 
-    <div class="title">Document properties</div>
+<div class="title">Document properties</div>
     
-    <div class="fr">Document title:</div>
-    <input type="text" id="f_title" style="width: 200px" />
-    <br />
-    <div class="fr">DOCTYPE:</div>
-    <input type="text" id="f_doctype" style="width: 200px" />
-    <br />
-    <div class="fr">Keywords:</div>
-    <input type="text" id="f_keywords" style="width: 200px" />
-    <br />
-    <div class="fr">Description:</div>
-    <input type="text" id="f_description" style="width: 200px" />
-    <br />
-    <div class="fr">Primary style-sheet:</div>
-    <input type="text" id="f_base_style" style="width: 200px" />
-    <br />
-    <div class="fr">Alternate style-sheet:</div>
-    <input type="text" id="f_alt_style" style="width: 200px" />
-    <br />
-    <div class="fr">Background color:</div>
-    <input type="text" id="f_body_bgcolor" size="7" />
-    <br />
-    <div class="fr">Text color:</div>
-    <input type="text" id="f_body_fgcolor" size="7" />
-    <br />
-    <div class="fr">Character set:</div>
-    <select id="f_charset">
-          <option value=""></option>
-          <option value="utf-8">UTF-8 (recommended)</option>
-          <option value="windows-1251">cyrillic (WINDOWS-1251)</option>
-          <option value="koi8-r">cyrillic (KOI8-R)</option>
-          <option value="iso-8859-5">cyrillic (ISO-8859-5)</option>
-          <option value="iso-8859-1">western (ISO-8859-1)</option>
-        </select>
-    <br />
-    
-    <div id="buttons">
-      <button type="button" name="ok" onclick="return onOK();"><span>OK</span></button>
-      <button type="button" name="cancel" onclick="return onCancel();"><span>Cancel</span></button>
-    </div>
+<div>
+  <label class="fr" for="f_title">Document title:</label>
+  <input type="text" id="f_title" class="txt" />
+</div>
+<div>
+  <label class="fr" for="f_doctype">DOCTYPE:</label>
+  <input type="text" id="f_doctype" class="txt" />
+</div>
+<div>
+  <label class="fr" for="f_keywords">Keywords:</label>
+  <input type="text" id="f_keywords" class="txt" />
+</div>
+<div>
+  <label class="fr" for="f_description">Description:</label>
+  <input type="text" id="f_description" class="txt" />
+</div>
+<div>
+  <label class="fr" for="f_base_style">Primary style-sheet:</label>
+  <input type="text" id="f_base_style" class="txt" />
+</div>
+<div>
+  <label class="fr" for="f_alt_style">Alternate style-sheet:</label>
+  <input type="text" id="f_alt_style" class="txt" />
+</div>
+<div>
+  <label class="fr" for="f_body_bgcolor">Background color:</label>
+  <input type="text" id="f_body_bgcolor" size="7" />
+</div>
+<div>
+  <label class="fr" for="f_body_fgcolor">Text color:</label>
+  <input type="text" id="f_body_fgcolor" size="7" />
+</div>
+<div>
+  <label class="fr" for="f_charset">Character set:</label>
+  <select id="f_charset" class="txt">
+    <option value=""></option>
+    <option value="utf-8">UTF-8 (recommended)</option>
+    <option value="windows-1251">cyrillic (WINDOWS-1251)</option>
+    <option value="koi8-r">cyrillic (KOI8-R)</option>
+    <option value="iso-8859-5">cyrillic (ISO-8859-5)</option>
+    <option value="iso-8859-1">western (ISO-8859-1)</option>
+  </select>
+</div>
+  
+<div id="buttons">
+  <button type="button" name="ok" onclick="return onOK();"><span>OK</span></button>
+  <button type="button" name="cancel" onclick="return onCancel();"><span>Cancel</span></button>
+</div>
 
-  </body>
+</body>
 </html>
