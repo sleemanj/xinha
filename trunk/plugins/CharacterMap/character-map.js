@@ -46,9 +46,8 @@ CharacterMap.prototype.buttonPress = function(editor) {
             //user must have pressed Cancel
             return false;
         }
-        
+        if (HTMLArea.is_ie) editor.focusEditor();
         editor.insertHTML( entity );
                
     }, null);
 }
-
