@@ -56,5 +56,6 @@
   "No Images Found": "Aucune image trouvée",
   "Invalid folder name, please choose another folder name.": "Nom de répertoire invalide, veuillez choisir un autre nom",
   "GIF format is not supported, image editing not supported.": "Format GIF non supporté, édition d'image non supportée",
-  "No Image Available": "Aucune image disponible"
+  "No Image Available": "Aucune image disponible",
+  "No Image selected.": "Aucune image sélectionnée."
 }

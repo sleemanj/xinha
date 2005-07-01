@@ -76,7 +76,7 @@
 
 				if ( el.value == "" )
 					{
-					alert( "No Image selected." );
+					alert( i18n("No Image selected.") );
 					return( false );
 					}
 
