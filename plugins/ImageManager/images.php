@@ -105,11 +105,7 @@ function drawDirs($list, &$manager)
 function drawNoResults() 
 {
 ?>
-<table width="100%">
-  <tr>
-    <td class="noResult">No Images Found</td>
-  </tr>
-</table>
+<div class="noResult">No Images Found</div>
 <?	
 }
 
@@ -119,11 +115,7 @@ function drawNoResults()
 function drawErrorBase(&$manager) 
 {
 ?>
-<table width="100%">
-  <tr>
-    <td class="error">Invalid base directory: <?php echo $manager->config['images_dir']; ?></td>
-  </tr>
-</table>
+<div class="error"><span>Invalid base directory:</span> <?php echo $manager->config['images_dir']; ?></div>
 <?	
 }
 
@@ -156,6 +148,7 @@ _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 
 	init = function()
 	{
+	  __dlg_translate('ImageManager');
 		hideMessage();
 		var topDoc = window.top.document;
 
@@ -207,6 +200,7 @@ _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 /*]]>*/
 </script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/images.js"></script>
+<script type="text/javascript" src="assets/popup.js"></script>
 </head>
 
 <body>

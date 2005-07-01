@@ -27,7 +27,7 @@ _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 </script>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  <link href="<?php print $IMConfig['base_url'];?>assets/manager.css" rel="stylesheet" type="text/css" />	
-<script type="text/javascript" src="../../popups/popup.js"></script>
+<script type="text/javascript" src="assets/popup.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/dialog.js"></script>
 <script type="text/javascript">
 /*<![CDATA[*/
