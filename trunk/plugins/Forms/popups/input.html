@@ -21,7 +21,7 @@ function Init() {
   switch (type) {
     case "text":
     case "password":
-      fields = ["f_name", "f_value", "f_readonly", "f_disabled", "f_tabindex", "f_accesskey", "f_size"];
+      fields = ["f_name", "f_value", "f_readOnly", "f_disabled", "f_tabindex", "f_accesskey", "f_size", "f_maxLength"];
       height = 350;
       document.getElementById("txt").style.display = "block";
       break;
@@ -62,10 +62,10 @@ function Init() {
   }
   for (var i in fields) {
     switch (fields[i]) { 
-    case "f_readonly": 
+    case "f_readOnly": 
     case "f_disabled":
     case "f_checked":
-      document.getElementById(fields[i]).checked = param[fields[i]]=="true"; break;
+      document.getElementById(fields[i]).checked = (param[fields[i]]==fields[i].substring(2,20)) || (param[fields[i]] == true); break;
     default:
       document.getElementById(fields[i]).value = param[fields[i]]; break;
     }
@@ -83,13 +83,16 @@ function onOK() {
 	}
   // pass data back to the calling window
   var param = new Object();
-  param["f_type"] = type;
   for (var i in fields) {
     switch (fields[i]) {
-    case "f_readonly":
+    case "f_readOnly":
     case "f_disabled":
     case "f_checked":
-      param[fields[i]] = (document.getElementById(fields[i]).checked)?"true":""; break;
+      if(HTMLArea.is_ie)
+        param[fields[i]] = (document.getElementById(fields[i]).checked)?true:"";
+      else
+        param[fields[i]] = (document.getElementById(fields[i]).checked)?fields[i].substring(2,20):"";
+      break;
     default:
       param[fields[i]] = document.getElementById(fields[i]).value; break;
     }
@@ -148,7 +151,7 @@ LABEL.label	{
 
   <div id="txt">
     <div class="fr">Read Only</div>
-    <input type="checkbox" name="readonly" id="f_readonly" value="readonly" />
+    <input type="checkbox" name="readOnly" id="f_readOnly" value="readOnly" />
     <p />
     
 	  <fieldset>
@@ -158,7 +161,7 @@ LABEL.label	{
       <input type="text" name="size" id="f_size" size="5" title="Size of text box in characters" />
       <div class="space"></div>
       <div class="fr">Max length:</div>
-      <input type="text" name="maxlength" id="f_maxlength" size="5"	title="Maximum number of characters accepted" />
+      <input type="text" name="maxLength" id="f_maxLength" size="5"	title="Maximum number of characters accepted" />
       <div class="space"></div>
 	  </fieldset>
   </div>

@@ -17,7 +17,7 @@ function Init() {
     switch (fields[i]) {
     case "f_multiple":
     case "f_disabled":
-      document.getElementById(fields[i]).checked = param[fields[i]] == "true"; break;
+      document.getElementById(fields[i]).checked = (param[fields[i]]==fields[i].substring(2,20)) || (param[fields[i]] == true); break;
     case "f_size":
       document.getElementById(fields[i]).value = (param[fields[i]]<=0)?"":param[fields[i]]; break;
     default:
@@ -45,10 +45,10 @@ function onOK() {
       if (document.getElementById("f_size").value=="1") 
         param["f_multiple"] = "";
       else
-  	    param["f_multiple"] = (document.getElementById(fields[i]).checked)?"true":"";
+  	    param["f_multiple"] = (document.getElementById(fields[i]).checked)?"multiple":"";
 	    break;
     case "f_disabled":
-      param[fields[i]] = (document.getElementById(fields[i]).checked)?"true":""; break;
+      param[fields[i]] = (document.getElementById(fields[i]).checked)?"disabled":""; break;
     default:
       param[fields[i]] = document.getElementById(fields[i]).value; break;
     }
@@ -162,10 +162,10 @@ function swapOptions(obj,i,j) {
     <input type="text" name="name" id="f_name" title="Name of the form select" />
     <p />
     <div class="fr">Size:</div>
-    <input name="size" id="f_size" type="text" value="" size="15">
+    <input name="size" id="f_size" type="text" value="" size="15" />
     <p />
 		<div class="fr"><nobr>Multiple Select</nobr></div>
-    <input name="multiple" id="f_multiple" type="checkbox">
+    <input name="multiple" id="f_multiple" type="checkbox" value="multiple" />
     <p />
     <div class="fr">Disabled</div>
     <input type="checkbox" name="disabled" id="f_disabled" value="disabled" />

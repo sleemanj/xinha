@@ -84,12 +84,6 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 		this.text = text;
 		this.value = value;
 	}
-  function setAttr(el, attr, value) {
-    if (value != "")
-      el.setAttribute(attr, value);
-    else
-      el.removeAttribute(attr);
-  }
   var outparam = new Object();
   var type = button_id;
   var sel = editor._getSelection();
@@ -144,6 +138,10 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 	  if (typeof node == "undefined") {
 		  node = editor.getParentElement();
 		  var tag = node.tagName.toLowerCase()
+      if (node && (tag == "legend")) {
+        node = node.parentElement;
+        tag = node.tagName.toLowerCase();
+      }
 		  if (node && !(tag == "textarea" || tag == "select" || tag == "input" || tag == "label" || tag == "fieldset"))
 			  node = null;
 	  }
@@ -160,9 +158,9 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
         case "textarea":
     		  outparam.f_cols = node.cols;
 				  outparam.f_rows = node.rows;
-				  outparam.f_value = node.innerHTML;
+				  outparam.f_text = node.innerHTML;
           outparam.f_wrap = node.getAttribute("wrap");
-          outparam.f_readonly = node.getAttribute("readonly");
+          outparam.f_readOnly = node.getAttribute("readOnly");
           outparam.f_disabled = node.getAttribute("disabled");
           outparam.f_tabindex = node.getAttribute("tabindex");
           outparam.f_accesskey = node.getAttribute("accesskey");
@@ -182,8 +180,8 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 			  case "password":
 				  outparam.f_value = node.value;
 					outparam.f_size = node.size;
-					outparam.f_maxlength = node.maxLength;
-          outparam.f_readonly = node.getAttribute("readonly");
+					outparam.f_maxLength = node.maxLength;
+          outparam.f_readOnly = node.getAttribute("readOnly");
           outparam.f_disabled = node.getAttribute("disabled");
           outparam.f_tabindex = node.getAttribute("tabindex");
           outparam.f_accesskey = node.getAttribute("accesskey");
@@ -232,9 +230,9 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
           break;
         case "fieldset":
           if(node.firstChild.tagName.toLowerCase()=="legend")
-            outparam.f_legend = node.firstChild.innerHTML;
+            outparam.f_text = node.firstChild.innerHTML;
           else
-            outparam.f_legend = "";
+            outparam.f_text = "";
           break;
       }    
 		} else {
@@ -257,12 +255,12 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 		  outparam.f_multiple = "false";
      	outparam.f_value = "";
 		  outparam.f_size = "";
-		  outparam.f_maxlength = "";
+		  outparam.f_maxLength = "";
 		  outparam.f_checked = "";
 		  outparam.f_src = "";
 		  outparam.f_onclick = "";
       outparam.f_wrap = "";
-      outparam.f_readonly = "false";
+      outparam.f_readOnly = "false";
       outparam.f_disabled = "false";
       outparam.f_tabindex = "";
       outparam.f_accesskey = "";
@@ -272,125 +270,81 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
 	  };
   	editor._popupDialog("plugin://Forms/" + tagName + ".html", function(param) {
 	  	if (param) {
+        if(param["f_cols"])
+          if (isNaN(parseInt(param["f_cols"],10)) || parseInt(param["f_cols"],10) <= 0)
+            param["f_cols"] = "";
+        if(param["f_rows"])
+          if(isNaN(parseInt(param["f_rows"],10)) || parseInt(param["f_rows"],10) <= 0)
+            param["f_rows"] = "";
+        if(param["f_size"])
+          if(isNaN(parseInt(param["f_size"],10)) || parseInt(param["f_size"],10) <= 0)
+            param["f_size"] = "";
+        if(param["f_maxlength"])
+          if(isNaN(parseInt(param["f_maxLength"],10)) || parseInt(param["f_maxLength"],10) <= 0)
+            param["f_maxLength"] = "";
 		  	if(node) {
-			    //node.name = param["f_name"];
-          setAttr(node, "name", param["f_name"]);
+          //prepare existing Element
+          for (field in param) {
+            alert(field.substring(2,20) + '=' + param[field]);
+					  if ((field=="f_text") || (field=="f_options") || (field=="f_onclick") || (field=="f_checked"))continue;
+            if (param[field] != "")
+              node.setAttribute(field.substring(2,20), param[field]);
+            else
+              node.removeAttribute(field.substring(2,20));
+				  }
 			    if (type == "textarea") {
-            if (isNaN(parseInt(param["f_cols"],10)) || parseInt(param["f_cols"],10) <= 0)
-              param["f_cols"] = "";
-            setAttr(node, "cols", param["f_cols"]);
-            if(isNaN(parseInt(param["f_rows"],10)) || parseInt(param["f_rows"],10) <= 0)
-              param["f_rows"] = "";
-					  setAttr(node, "rows", param["f_rows"]);
-				    setAttr(node, "value", param["f_value"]); //for ta in editor
-            setAttr(node, "wrap", param["f_wrap"]);
-            setAttr(node, "tabindex", param["f_tabindex"]);
-            setAttr(node, "accesskey", param["f_accesskey"]);
-            setAttr(node, "readonly", param["f_readonly"]);
-            setAttr(node, "disabled", param["f_disabled"]);
-            node.innerHTML = param["f_value"]; //for ta on web page
+            node.innerHTML = param["f_text"];
 			    } else if(type == "select") {
-				    if(isNaN(parseInt(param["f_size"],10)) || parseInt(param["f_size"],10) <= 0)
-              param["f_size"] = "";
-            setAttr(node, "size", param["f_size"]);
-					  setAttr(node, "multiple" ,param["f_multiple"]);
-            setAttr(node, "disabled", param["f_disabled"]);
-            setAttr(node, "tabindex", param["f_tabindex"]);
-            node.options.length = 0;
+				    node.options.length = 0;
 				    var optionsList =  param["f_options"];
 				    for (i=0; i<= optionsList.length-1; i++) {
 					    node.options[i] = new Option(optionsList[i].text, optionsList[i].value)
 				    }
 			    } else if(type == "label") {
-				    setAttr(node, "for", param["f_for"]);
-					  setAttr(node, "accesskey" ,param["f_accesskey"]);
-            node.innerHTML = param["f_text"];
+				    node.innerHTML = param["f_text"];
           } else if(type == "fieldset") {
-            if(outparam.f_legend != "")
+            if(outparam.f_text != "") {
 				      if(node.firstChild.tagName.toLowerCase()=="legend")
-                node.firstChild.innerHTML = param["f_legend"];
-              else {
-                // not implemented jet
-              }
-          } else {  //type == "input"
-				    for (field in param) {
-					    switch (field) {
-                case "f_tabindex": setAttr(node, "tabindex", param["f_tabindex"]); break;
-                case "f_accesskey": setAttr(node, "accesskey", param["f_accesskey"]); break;
-                case "f_readonly": setAttr(node, "readonly", param["f_readonly"]); break;
-                case "f_disabled": setAttr(node, "disabled", param["f_disabled"]); break;
-						    case "f_type": node.type = param["f_type"]; break;
-						    case "f_value": setAttr(node,"value", param["f_value"]); break;
-						    case "f_size": 
-							    if(isNaN(parseInt(param["f_size"],10)) || parseInt(param["f_size"],10) <= 0)
-                    param["f_size"] = "";
-								  setAttr(node, "size", param["f_size"]); break;
-						    case "f_maxlength":
-							    if(isNaN(parseInt(param["f_maxlength"],10)) || parseInt(param["f_maxlength"],10) <= 0)
-                    param["f_maxlength"] = "";
-								  setAttr(node, "maxLength", param["f_maxlength"]); break;
-						    case "f_checked": setAttr(node, "checked", param["f_checked"]); break;
-						    case "f_src": setAttr(node, "src", param["f_src"]); break;
-						    case "f_onclick": setAttr(node, "onclick", param["f_onclick"]); 
-                     node.onclick = "";
-							       if(param["f_onclick"]!="") {
-								       node.onclick = param["f_onclick"];
-							       } break;
-					    }
-				    }
+                node.firstChild.innerHTML = param["f_text"];
+            } else {}// not implemented jet
+          } else if((type == "checkbox") || (type == "radio")) { //input
+              if(param["f_checked"]!="")
+						    node.checked = true;
+              else
+                node.checked = false;
+          } else {
+            if(param["f_onclick"]){
+				      node.onclick = "";
+					    if(param["f_onclick"]!="") 
+						    node.onclick = param["f_onclick"];
+            }
 			    }
         } else {
+          //create Element
+          var text = "";
+          for (field in param) {
+					  if (!param[field]) continue;
+            if ((param[field]=="") || (field=="f_text")|| (field=="f_options"))continue;
+            text += " " + field.substring(2,20) + '="' + param[field] + '"';
+				  }
+
 			    if(type == "textarea") {
-				    text = '<textarea name="' + param["f_name"] + '"' +
-				                    ' cols="' + param["f_cols"] + '"' +
-  				                  ' rows="' + param["f_rows"] + '"';
-            if (param["f_wrap"] != "") text += ' wrap="' + param["f_wrap"] + '"';
-            if (param["f_tabindex"] != "") text += ' tabindex="' + param["f_tabindex"] + '"';
-            if (param["f_accesskey"] != "") text += ' accesskey="' + param["f_accesskey"] + '"';
-            if (param["f_readonly"] == "true") text += ' readonly="true"'; //don't know why ="true"
-            if (param["f_disabled"] == "true") text += ' disabled="true"'; //don't know why ="true"
-            text += '>' + param["f_value"] + '</textarea>';
+				    text = '<textarea' + text + '>' + param["f_text"] + '</textarea>';
 			    } else if(type == "select") {
-				    text = '<select name="'+param["f_name"]+'"';
-				    if (param["f_size"]) text += ' size="'+parseInt(param["f_size"],10)+'"';
-				    if (param["f_tabindex"] != "") text += ' tabindex="' + param["f_tabindex"] + '"';
-            if (param["f_multiple"] == "true") text += ' multiple="true"'; //don't know why ="true"
-            if (param["f_disabled"] == "true") text += ' disabled="true"'; //don't know why ="true"
-				    text += '>';
+				    text = '<select' + text + '>';
 				    var optionsList =  param["f_options"];
 				    for (i=0; i<= optionsList.length-1; i++) {
 					    text += '<option value="'+optionsList[i].value+'">'+optionsList[i].text+'</option>';
 				    }
 				    text += '</select>';
           } else if(type == "label") {
-            text = '<label';
-            if (param["f_for"] != "") text += ' for="'+param["f_for"]+'"';
-            if (param["f_accesskey"] != "") text += ' accesskey="' + param["f_accesskey"] + '"';					  
-            text += '>' + param["f_text"] + '</label>';
+            text = '<label' + text + '>' + param["f_text"] + '</label>';
           } else if(type == "fieldset") {
-            text = '<fieldset>';
-            if (param["f_legend"] != "") text += '<legend>' + param["f_legend"] + '</legend>';
+            text = '<fieldset' + text + '>';
+            if (param["f_legend"] != "") text += '<legend>' + param["f_text"] + '</legend>';
 				    text += '</fieldset>';
 			    } else {
-				    text = '<input type="'+type+'"' +
-				           ' name="'+param["f_name"]+'"';
-				    for (field in param) {
-					    var value = param[field];
-					    if (!value) continue;
-					    switch (field) {
-						    case "f_value": if (param["f_value"] != "") text += ' value="'+param["f_value"]+'"'; break;
-						    case "f_size": if (param["f_size"] != "") text += ' size="'+parseInt(param["f_size"],10)+'"'; break;
-						    case "f_maxlength": if (param["f_maxlength"] != "") text += ' maxlength="'+parseInt(param["f_maxlength"],10)+'"'; break;
-						    case "f_checked": if (param["f_checked"] == "true") text += ' checked'; break;
-						    case "f_src": if (param["f_src"] != "") text += ' src="'+param["f_src"]+'"'; break;
-						    case "f_onclick": if (param["f_onclick"] != "") text += ' onClick="'+param["f_onclick"]+'"'; break;
-                case "f_tabindex": if (param["f_tabindex"] != "") text += ' tabindex="'+param["f_tabindex"]+'"'; break;
-                case "f_accesskey": if (param["f_accesskey"] != "") text += ' accesskey="'+param["f_accesskey"]+'"';
-                case "f_readonly": if (param["f_readonly"] == "true") text += ' readonly="true"'; //don't know why ="true"
-                case "f_disabled": if (param["f_disabled"] == "true") text += ' disabled="true"'; break;//don't know why ="true"
-					    }
-				    }
-				    text += '>';
+				    text = '<input type="'+type+'"' + text + '>';
 			    }
 	        editor.insertHTML(text);
         }
