@@ -11,14 +11,14 @@ function Init() {
   __dlg_translate("Forms");
 	__dlg_init();
 	var param = window.dialogArguments;
-  document.getElementById("f_legend").value = param["f_legend"];
-  document.getElementById("f_legend").focus();
+  document.getElementById("f_text").value = param["f_text"];
+  document.getElementById("f_text").focus();
 };
 
 function onOK() {
 	// pass data back to the calling window
   var param = new Object();
-  param["f_legend"] = document.getElementById("f_legend").value;
+  param["f_text"] = document.getElementById("f_text").value;
 	__dlg_close(param);
   return false;
 };
@@ -35,7 +35,7 @@ function onCancel() {
   <div id="f_type" class="title">Form Element: FIELDSET</div>
   <form action="" method="get">
     <div class="fr">Legend:</div>
-    <input type="text" name="legend" id="f_legend" />
+    <input type="text" name="text" id="f_text" />
     <p />
     <div id="buttons">
       <button type="button" name="ok" onclick="return onOK();">OK</button>

@@ -7,18 +7,18 @@
 
 <script type="text/javascript">
 
-var fields = ["f_name", "f_value", "f_cols", "f_rows", "f_wrap", "f_tabindex", "f_accesskey", "f_readonly", "f_disabled"];
+var fields = ["f_name", "f_text", "f_cols", "f_rows", "f_wrap", "f_tabindex", "f_accesskey", "f_readOnly", "f_disabled"];
 
 function Init() {
-  window.resizeTo(480,260);
+  window.resizeTo(280,260);
   __dlg_translate("Forms");
 	__dlg_init();
 	var param = window.dialogArguments;
   for (var i in fields) {
     switch (fields[i]) { 
-    case "f_readonly": 
+    case "f_readOnly":
     case "f_disabled":
-      document.getElementById(fields[i]).checked = param[fields[i]]=="true"; break;
+      document.getElementById(fields[i]).checked = (param[fields[i]]==fields[i].substring(2,20)) || (param[fields[i]] == true);  break;
     default:
       document.getElementById(fields[i]).value = param[fields[i]]; break;
     }
@@ -37,9 +37,13 @@ function onOK() {
   var param = new Object();
   for (var i in fields) {
     switch (fields[i]) { 
-    case "f_readonly": 
+    case "f_readOnly":
     case "f_disabled":
-      param[fields[i]] = (document.getElementById(fields[i]).checked)?"true":""; break;
+      if(HTMLArea.is_ie)
+        param[fields[i]] = (document.getElementById(fields[i]).checked)?true:"";
+      else
+        param[fields[i]] = (document.getElementById(fields[i]).checked)?fields[i].substring(2,20):"";
+      break;
     default:
       param[fields[i]] = document.getElementById(fields[i]).value; break;
     }
@@ -85,7 +89,7 @@ function onCancel() {
   </select>
   <p />
   <div class="fr">Read Only</div>
-  <input type="checkbox" name="readonly" id="f_readonly" value="readonly" />
+  <input type="checkbox" name="readOnly" id="f_readOnly" value="readOnly" />
   <p />
   <div class="fr">Disabled</div>
   <input type="checkbox" name="disabled" id="f_disabled" value="disabled" />
@@ -98,7 +102,7 @@ function onCancel() {
   <p />
   
   <div class="fr">Initial Text:</div>
-  <input type="text" name="value" id="f_value" title="Default text (optional)" />
+  <input type="text" name="text" id="f_text" title="Default text (optional)" />
   <div id="buttons">
     <button type="button" name="ok" onclick="return onOK();">OK</button>
     <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
