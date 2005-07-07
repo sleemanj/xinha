@@ -22,7 +22,7 @@
   "Uploading...": "Chargement...",
   "Crop": "Recadrer",
   "Resize": "Retailler",
-  "Rotate": "Roter",
+  "Rotate": "Pivoter",
   "Measure": "Mesure",
   "Marker": "Marqueur",
   "Save": "Sauver",
