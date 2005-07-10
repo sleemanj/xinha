@@ -153,6 +153,7 @@ class ImageEditor
 					//get unique filename just returns the filename, so
 					//we need to make the relative path once more.
 					$newSaveFile = $this->makeRelative($relative, $newSaveFile);
+          $image['saveFile'] = $newSaveFile;
 					$newSaveFullpath = $this->manager->getFullPath($newSaveFile);
 					$img->save($newSaveFullpath, $values[0], $quality);
 					if(is_file($newSaveFullpath))
@@ -177,6 +178,8 @@ class ImageEditor
 		$imgInfo = @getimagesize($newFullpath);
 
 		$image['src'] = $newURL;
+    $image['width'] = $imgInfo[0];
+    $image['height'] = $imgInfo[1];
 		$image['dimensions'] = $imgInfo[3];
 		$image['file'] = $newRelative;
 		$image['fullpath'] = $newFullpath;

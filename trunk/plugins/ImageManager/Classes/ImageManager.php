@@ -281,24 +281,16 @@ class ImageManager
 		
 		$thumbnail = $this->config['thumbnail_prefix'].$path_parts['basename'];
 
-		if($this->config['safe_mode'] == true
-			|| strlen(trim($this->config['thumbnail_dir'])) == 0)
+		if( strlen(trim($this->config['thumbnail_dir'])) == 0 || $this->config['safe_mode'] == true)
 		{
 			Return Files::makeFile($path_parts['dirname'],$thumbnail);
 		}
 		else
 		{
-			if(strlen(trim($this->config['thumbnail_dir'])) > 0)
-			{
 				$path = Files::makePath($path_parts['dirname'],$this->config['thumbnail_dir']);
 				if(!is_dir($path))
 					Files::createFolder($path);
 				Return Files::makeFile($path,$thumbnail);
-			}
-			else //should this ever happen?
-			{
-				//error_log('ImageManager: Error in creating thumbnail name');
-			}
 		}
 	}
 	
@@ -339,6 +331,35 @@ class ImageManager
 				//error_log('ImageManager: Error in creating thumbnail url');
 			}
 
+		}
+	}
+
+
+ 	/**
+	 * For a given image file, get the respective resized filename
+	 * no file existence check is done.
+	 * @param string $fullpathfile the full path to the image file
+   * @param integer $width the intended width
+   * @param integer $height the intended height
+   * @param boolean $mkDir whether to attempt to make the resized_dir if it doesn't exist
+	 * @return string of the resized filename
+	 */
+	function getResizedName($fullpathfile, $width, $height, $mkDir = TRUE)
+	{
+		$path_parts = pathinfo($fullpathfile);
+
+		$thumbnail = $this->config['resized_prefix']."_{$width}x{$height}_{$path_parts['basename']}";
+
+		if( strlen(trim($this->config['resized_dir'])) == 0 || $this->config['safe_mode'] == true )
+		{
+			Return Files::makeFile($path_parts['dirname'],$thumbnail);
+		}
+		else
+		{
+      $path = Files::makePath($path_parts['dirname'],$this->config['resized_dir']);
+      if($mkDir && !is_dir($path))
+        Files::createFolder($path);
+      Return Files::makeFile($path,$thumbnail);
 		}
 	}
 

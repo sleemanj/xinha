@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Image Manager configuration file.
  * @author $Author: Wei Zhuo $
@@ -112,7 +112,8 @@ $IMConfig['safe_mode'] = false;
 * DEFAULT: GD is probably the most likely to be available. 
 */
 
-define('IMAGE_CLASS', 'GD');
+$IMConfig['IMAGE_CLASS'] = 'GD';
+
 
 // -------------------------------------------------------------------------
 
@@ -125,7 +126,10 @@ define('IMAGE_CLASS', 'GD');
 * GD does not require the following definition.
 */
 
-define('IMAGE_TRANSFORM_LIB_PATH', 'C:/"Program Files"/ImageMagick-5.5.7-Q16/');
+$IMConfig['IMAGE_TRANSFORM_LIB_PATH'] ='/usr/bin/';
+
+// For windows, something like
+// C:/"Program Files"/ImageMagick-5.5.7-Q16/
 
 // -------------------------------------------------------------------------
 //                OPTIONAL SETTINGS 
@@ -155,6 +159,30 @@ $IMConfig['thumbnail_prefix'] = '.';
 */
 
 $IMConfig['thumbnail_dir'] = '.thumbs';
+
+// -------------------------------------------------------------------------
+
+/**
+* Resized prefix
+*
+* The prefix for resized files, something like .resized will do.  The
+* resized files will be named <prefix>_<width>x<height>_<original>
+* resized files are created when one changes the dimensions of an image
+* in the image manager selection dialog - the image is scaled when the
+* user clicks the ok button.
+*/
+
+$IMConfig['resized_prefix'] = '.resized';
+
+// -------------------------------------------------------------------------
+
+/**
+* Resized Directory
+*
+* Resized images may also be stored in a directory, except in safe mode.
+*/
+
+$IMConfig['resized_dir'] = '.resized';
 
 // -------------------------------------------------------------------------
 
@@ -242,6 +270,45 @@ $IMConfig['thumbnail_height'] = 96;
 $IMConfig['tmp_prefix'] = '.editor_';
 
 
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//       ================== END OF CONFIGURATION =======================      //
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+// If config specified from front end, merge it
+if(isset($_REQUEST['backend_config']))
+{
+  // Config specified from front end, check that it's valid
+  session_start();
+  $secret = $_SESSION[$_REQUEST['backend_config_secret_key_location']];
+
+  if($_REQUEST['backend_config_hash'] !== sha1($_REQUEST['backend_config'] . $secret))
+  {
+    die("Backend security error.");
+  }
+
+  $to_merge = unserialize($_REQUEST['backend_config']);
+  if(!is_array($to_merge))
+  {
+    die("Backend config syntax error.");
+  }
+
+  $IMConfig = array_merge($IMConfig, $to_merge);
+  $IMConfig['backend_url'] .= "backend_config=" . rawurlencode($_REQUEST['backend_config']) . '&';
+  $IMConfig['backend_url'] .= "backend_config_hash=" . rawurlencode($_REQUEST['backend_config_hash']) . '&';
+  $IMConfig['backend_url'] .= "backend_config_secret_key_location=" . rawurlencode($_REQUEST['backend_config_secret_key_location']) . '&';
+
+}
+
+define('IMAGE_CLASS', $IMConfig['IMAGE_CLASS']);
+define('IMAGE_TRANSFORM_LIB_PATH', $IMConfig['IMAGE_TRANSFORM_LIB_PATH']);
 define( "IM_CONFIG_LOADED", "yes" );
 
 // bring in the debugging library

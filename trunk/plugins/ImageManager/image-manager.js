@@ -42,8 +42,45 @@ ImageManager._pluginInfo = {
 
 HTMLArea.Config.prototype.ImageManager =
 {
-  'backend' : _editor_url + 'plugins/ImageManager/backend.php?__plugin=ImageManager&',
-  'images_url' : _editor_url + 'plugins/ImageManager/demo_images'
+  'backend'    : _editor_url + 'plugins/ImageManager/backend.php?__plugin=ImageManager&',
+
+  //  It's useful to pass the configuration to the backend through javascript
+  //  (this saves editing the backend config itself), but the problem is
+  //  how do you make it so that the enduser can not sneakily send thier own
+  //  config to the server (including directory locations etc!).
+  //
+  //  Well, we specify 3 config variables (if the first is given all 3 are required)
+  //  first in backend_config we provide the backend configuration (in the format
+  //  required by the backend, in the case of PHP this is a serialized structure).  We do not
+  //  need to provide a complete configuration here, it will be merged with defaults.
+  //
+  //  Then in backend_config_secret_key_location we store the name of a key in a
+  //  session structure which stores a secret key (anything random), for example
+  //  when making the Xinha editor in PHP we might do
+  //  <?php $_SESSION['Xinha:ImageManager'] = uniqid('secret_'); ?>
+  //  xinha_config.ImageManager.backend_config_secret_key_location = 'Xinha:ImageManager';
+  //
+  //  Then finally in backend_config_hash we store an SHA1 hash of the config combined
+  //  with the secret.
+  //
+  //  A full example in PHP might look like
+  //
+  //  <?php
+  //   $myConfig = array('base_dir' = '/home/your/directory', 'base_url' => '/directory')
+  //   $myConfig = serialize($myConfig);
+  //   if(!isset($_SESSION['Xinha:ImageManager'])) $_SESSION['Xinha:ImageManager'] = uniqid('secret_');
+  //   $secret = $_SESSION['Xinha:ImageManager'];
+  //  ?>
+  //  xinha_config.ImageManager.backend_config      = '<?php echo jsaddslashes($myConfig)?>';
+  //  xinha_config.ImageManager.backend_config_hash = '<?php echo sha1($myConfig . $secret)?>';
+  //  xinha_config.ImageManager.backend_config_secret_key_location = 'Xinha:ImageManager';
+  //
+  // (for jsspecialchars() see http://nz.php.net/manual/en/function.addcslashes.php)
+  //
+  //
+  'backend_config'     : null,
+  'backend_config_hash': null,
+  'backend_config_secret_key_location': 'Xinha:ImageManager'
 }
 
 // Over ride the _insertImage function in htmlarea.js.
@@ -67,44 +104,42 @@ HTMLArea.prototype._insertImage = function(image) {
 
 	if ( image )
 		{
-		if ( HTMLArea.is_ie )
+
+		outparam =
 			{
-			var image_src = image.src;
-			}
-		else
-			{
-			// gecko
-
-			var image_src = image.getAttribute("src");
-
-			// strip off any http://blah prefix
-
-			var images_url = editor.config.ImageManager.images_url.replace( /https?:\/\/[^\/]*/, "" );
-
-			// alert( "images_url is '" + images_url + "'" );
-
-			var image_regex = new RegExp( images_url );
-
-			// alert(" regex is '" + image_regex.source + "'" );
-
-			image_src = image_src.replace( image_regex, "" );
-
-			// alert( "new source is " + image_src );
-			}
-	
-		outparam = 
-			{
-			f_url    : HTMLArea.is_ie ? image.src : image_src,
+			f_url    : HTMLArea.is_ie ? image.src : image.src,
 			f_alt    : image.alt,
-			f_border : image.border,
+			f_border : image.style.borderWidth ? image.style.borderWidth : image.border,
 			f_align  : image.align,
-			f_vert   : image.vspace,
-			f_horiz  : image.hspace,
+			f_padding: image.style.padding,
+			f_margin : image.style.margin,
 			f_width  : image.width,
-			f_height  : image.height
+			f_height  : image.height,
+      f_backgroundColor: image.style.backgroundColor,
+      f_borderColor: image.style.borderColor
 			};
 
-      // TODO - somehow highlight and focus the currently selected image.
+    function shortSize(cssSize)
+    {
+      if(/ /.test(cssSize))
+      {
+        var sizes = cssSize.split(' ');
+        var useFirstSize = true;
+        for(var i = 1; i < sizes.length; i++)
+        {
+          if(sizes[0] != sizes[i])
+          {
+            useFirstSize = false;
+            break;
+          }
+        }
+        if(useFirstSize) cssSize = sizes[0];
+      }
+      return cssSize;
+    }
+    outparam.f_border = shortSize(outparam.f_border);
+    outparam.f_padding = shortSize(outparam.f_padding);
+    outparam.f_margin = shortSize(outparam.f_margin);
 
 		} // end of if we selected an image before raising the dialog.
 
@@ -114,6 +149,15 @@ HTMLArea.prototype._insertImage = function(image) {
 	// alert( "backend is '" + editor.config.ImageManager.backend + "'" );
 
 	var manager = editor.config.ImageManager.backend + '__function=manager';
+  if(editor.config.ImageManager.backend_config != null)
+  {
+    manager += '&backend_config='
+      + encodeURIComponent(editor.config.ImageManager.backend_config);
+    manager += '&backend_config_hash='
+      + encodeURIComponent(editor.config.ImageManager.backend_config_hash);
+    manager += '&backend_config_secret_key_location='
+      + encodeURIComponent(editor.config.ImageManager.backend_config_secret_key_location);
+  }
 
 	Dialog(manager, function(param) {
 		if (!param) {	// user must have pressed Cancel
@@ -141,13 +185,24 @@ HTMLArea.prototype._insertImage = function(image) {
 			var value = param[field];
 			switch (field) {
 			    case "f_alt"    : img.alt	 = value; break;
-			    case "f_border" : img.border = parseInt(value || "0"); break;
+			    case "f_border" :
+            img.style.borderWidth = /[^0-9]/.test(value) ? value :  (parseInt(value || "0") + 'px');
+            if(img.style.borderWidth && !img.style.borderStyle)
+            {
+              img.style.borderStyle = 'solid';
+            }
+            break;
+          case "f_borderColor": img.style.borderColor = value; break;
+          case "f_backgroundColor": img.style.backgroundColor = value; break;
+          case "f_padding": img.style.padding =
+                              /[^0-9]/.test(value) ? value :  (parseInt(value || "0") + 'px'); break;
+          case "f_margin": img.style.margin =
+                              /[^0-9]/.test(value) ? value :  (parseInt(value || "0") + 'px'); break;
 			    case "f_align"  : img.align	 = value; break;
-			    case "f_vert"   : img.vspace = parseInt(value || "0"); break;
-			    case "f_horiz"  : img.hspace = parseInt(value || "0"); break;
 				case "f_width"  : img.width = parseInt(value || "0"); break;
 				case "f_height"  : img.height = parseInt(value || "0"); break;
 			}
+
 		}
 		
 		

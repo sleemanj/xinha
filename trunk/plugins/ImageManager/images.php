@@ -56,22 +56,22 @@ function drawFiles($list, &$manager)
 	global $relative;
 	global $IMConfig;
 
-	foreach($list as $entry => $file) 
-	{ 
+	foreach($list as $entry => $file)
+	{
 		?>
-		<td>
+    <div class="thumb_holder" id="holder_<?php echo asc2hex($entry) ?>">
+      <a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<? echo $file['relative'];?>', '<? echo $entry; ?>', <? echo $file['image'][0];?>, <? echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
+        <img src="<?php print $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/>
+      </a>
+      <div class="edit">
+        <a href="<?php print $IMConfig['backend_url']; ?>__function=images&dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"  /></a>
 
-		<?php _ddt( __FILE__, __LINE__, "drawFiles(): relative is '" . $file['relative'] . "' thumbnail '" . $manager->getThumbnail($file['relative']) . "'" ); ?>
+        <a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit" /></a>
 
-		<table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-        <table width="100" cellpadding="0" cellspacing="0"><tr><td class="block" style="cursor: pointer;" onclick="selectImage('<? echo $file['relative'];?>', '<? echo $entry; ?>', <? echo $file['image'][0];?>, <? echo $file['image'][1]; ?>);" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
-
-		<img src="<?php print $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/>
-		</td></tr><tr><td class="edit">
-			<a href="<?php print $IMConfig['backend_url']; ?>__function=images&dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
-		<?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
-		</td></tr></table></td> 
-	  <?php 
+        <?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
+      </div>
+    </div>
+	  <?php
 	}//foreach
 }//function drawFiles
 
@@ -86,14 +86,14 @@ function drawDirs($list, &$manager)
 
 	foreach($list as $path => $dir) 
 	{ ?>
-		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-		<a href="images.php?dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="<?php print $IMConfig['base_url'];?>img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
-		</td></tr><tr>
-		<td class="edit">
-			<a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
-			<?php echo $dir['entry']; ?>
-		</td>
-		</tr></table></td>
+    <div class="dir_holder">
+      <a class="dir" href="<?php print $IMConfig['backend_url'];?>__function=images&dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="<?php print $IMConfig['base_url'];?>img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
+
+      <div class="edit">
+        <a href="<?php print $IMConfig['backend_url'];?>__function=images&dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
+        <?php echo $dir['entry']; ?>
+      </div>
+    </div>
 	  <?php 
 	} //foreach
 }//function drawDirs
@@ -117,6 +117,16 @@ function drawErrorBase(&$manager)
 ?>
 <div class="error"><span>Invalid base directory:</span> <?php echo $manager->config['images_dir']; ?></div>
 <?	
+}
+
+/**
+ * Utility to convert ascii string to hex
+ */
+function asc2hex ($temp)
+{
+  $len = strlen($temp);
+  for ($i=0; $i<$len; $i++) $data.=sprintf("%02x",ord(substr($temp,$i,1)));
+  return $data;
 }
 
 ?>
@@ -181,6 +191,7 @@ _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 			}
 		}		
 <?php } ?>
+    update_selected();
 	}	
 
 	function editImage(image) 
@@ -206,12 +217,10 @@ _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 <body>
 <?php if ($manager->isValidBase() == false) { drawErrorBase($manager); } 
 	elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
-<table>
-	<tr>
+
 	<?php drawDirs($list[0], $manager); ?>
 	<?php drawFiles($list[1], $manager); ?>
-	</tr>
-</table>
+
 <?php } else { drawNoResults(); } ?>
 </body>
 </html>

@@ -55,7 +55,45 @@
 		var obj = topDoc.getElementById('f_alt'); obj.value = alt;
 		var obj = topDoc.getElementById('orginal_width'); obj.value = width;
 		var obj = topDoc.getElementById('orginal_height'); obj.value = height;		
+    update_selected();
 	}
+
+  var _current_selected = null;
+  function update_selected()
+  {
+    var topDoc = window.top.document;
+    if(_current_selected)
+    {
+      _current_selected.className = _current_selected.className.replace(/(^| )active( |$)/, '$1$2');
+      _current_selected = null;
+    }
+    // Grab the current file, and highlight it if we have it
+    var c_file = topDoc.getElementById('f_url').value;
+    var selection = topDoc.getElementById('dirPath');
+		var currentDir = selection.options[selection.selectedIndex].text;
+    var dRe = new RegExp('^(' + currentDir.replace(/([\/\^$*+?.()|{}[\]])/g, '\\$1') + ')([^/]*)$');
+    if(dRe.test(c_file))
+    {
+      var holder = document.getElementById('holder_' + asc2hex(RegExp.$2));
+      if(holder)
+      {
+        _current_selected = holder;
+        holder.className += ' active';
+      }
+    }
+  }
+
+  function asc2hex(str)
+  {
+    var hexstr = '';
+    for(var i = 0; i < str.length; i++)
+    {
+      var hex = (str.charCodeAt(i)).toString(16);
+      if(hex.length == 1) hex = '0' + hex;
+      hexstr += hex;
+    }
+    return hexstr;
+  }
 
 	function showMessage(newMessage) 
 	{
