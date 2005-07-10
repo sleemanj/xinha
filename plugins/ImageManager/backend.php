@@ -110,6 +110,13 @@ switch ( @$formVars[ "__function" ] )
 
 		break;
 
+	case "resizer":
+
+		include_once( $IMConfig['base_dir'] . "/resizer.php" );
+		exit();
+
+		break;
+
 	default:
 
 		_ddt( __FILE__, __LINE__, "function request not supported" );

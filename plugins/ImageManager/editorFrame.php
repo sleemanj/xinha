@@ -42,6 +42,15 @@ var currentImageFile = "<?php if(count($imageInfo)>0) echo rawurlencode($imageIn
 
 <?php if ($editor->isFileSaved() == 1) { ?>
 	alert(i18n('File saved.'));
+  window.parent.opener.selectImage
+    (
+      '<?php echo $imageInfo['savedFile'] ?>',
+      '<?php echo $imageInfo['savedFile'] ?>'.replace(/^.*\/?([^\/]*)$/, '$1'),
+      <?php echo $imageInfo['width'] ?>,
+      <?php echo $imageInfo['height'] ?>
+    );
+  window.parent.opener.parent.refresh();
+  window.parent.close();
 <?php } else if ($editor->isFileSaved() == -1) { ?>
 	alert(i18n('File was not saved.'));
 <?php } ?>

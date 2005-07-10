@@ -36,23 +36,68 @@
         document.getElementById("f_align").selectedIndex = 1;
         document.getElementById("f_align").selectedIndex = 0;
         
+    // Hookup color pickers
+    var bgCol_pick = document.getElementById('bgCol_pick');
+    var f_backgroundColor = document.getElementById('f_backgroundColor');
+    var bgColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
+    bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
+
+    var bdCol_pick = document.getElementById('bdCol_pick');
+    var f_borderColor = document.getElementById('f_borderColor');
+    var bdColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
+    bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
+
+
+
 		var uploadForm = document.getElementById('uploadForm');
 		if(uploadForm) uploadForm.target = 'imgManager';
 
 		var param = window.dialogArguments;
 		if (param) 
 		{
-			document.getElementById("f_url").value = param["f_url"];
-			document.getElementById("f_alt").value = param["f_alt"];
-			document.getElementById("f_border").value = param["f_border"];
-			document.getElementById("f_vert").value = param["f_vert"];
-			document.getElementById("f_horiz").value = param["f_horiz"];
-			document.getElementById("f_width").value = param["f_width"];
-			document.getElementById("f_height").value = param["f_height"];
+      var image_src = param.f_url;
+      var image_regex = new RegExp( '(https?://[^/]*)?' + base_url.replace(/\/$/, '') );
+      param.f_url = param.f_url.replace( image_regex, "" );
+
+      for (var id in param)
+      {
+        if(id == 'f_align') continue;
+        if(document.getElementById(id))
+        {
+          document.getElementById(id).value = param[id];
+        }
+      }
+
+
+
+      document.getElementById("orginal_width").value = param["f_width"];
+			document.getElementById("orginal_height").value = param["f_height"];
 			setAlign(param["f_align"]);
+
+      // Locate to the correct directory
+      var rd = _resized_dir.replace(HTMLArea.RE_Specials, '\\$1');
+      var rp = _resized_prefix.replace(HTMLArea.RE_Specials, '\\$1');
+      var dreg = new RegExp('^(.*/)(?:'+rd+')?(?:'+rp+'_[0-9]+x[0-9]+_)?([^/]+)$');
+
+      if(dreg.test(param['f_url']))
+      {
+        changeDir(RegExp.$1);
+        var dirPath = document.getElementById('dirPath');
+        for(var i = 0; i < dirPath.options.length; i++)
+        {
+          if(dirPath.options[i].value == encodeURIComponent(RegExp.$1))
+          {
+            dirPath.options[i].selected = true;
+            break;
+          }
+        }
+      }
 		}
 
-		document.getElementById("f_url").focus();
+		document.getElementById("f_alt").focus();
+
+    // For some reason dialog is not shrinkwrapping correctly in IE so we have to explicitly size it for now.
+    if(HTMLArea.is_ie) window.resizeTo(600, 460);
 	}
 
 
@@ -65,7 +110,7 @@
 	function onOK() 
 	{
 		// pass data back to the calling window
-		var fields = ["f_url", "f_alt", "f_align", "f_border", "f_horiz", "f_vert", "f_height", "f_width"];
+		var fields = ["f_url", "f_alt", "f_align", "f_width", "f_height", "f_padding", "f_margin", "f_border", "f_borderColor", "f_backgroundColor"];
 		var param = new Object();
 		for (var i in fields) 
 		{
@@ -82,9 +127,33 @@
 
 				param[id] = makeURL(base_url,el.value);
 				}
-			else
+			else if (el)
 				param[id] = el.value;
+      else alert("Missing " + fields[i]);
+
 		}
+
+    // See if we need to resize the image
+    var origsize =
+    {
+      w:document.getElementById('orginal_width').value,
+      h:document.getElementById('orginal_height').value
+    }
+
+    if(  (origsize.w != param.f_width)
+      || (origsize.h != param.f_height) )
+    {
+      // Yup, need to resize
+      var resized = HTMLArea._geturlcontent(_backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
+      // alert(resized);
+      resized = eval(resized);
+      if(resized)
+      {
+        param.f_url = makeURL(base_url, resized);
+      }
+    }
+
+
 		__dlg_close(param);
 		return false;
 	};
@@ -198,7 +267,7 @@
 
 		message.appendChild(document.createTextNode(i18n(newMessage)));
 		
-		messages.style.display = "block";
+		messages.style.display = '';
 	}
 
 	function addEvent(obj, evType, fn)
