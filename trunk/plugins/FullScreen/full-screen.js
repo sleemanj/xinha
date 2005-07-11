@@ -169,7 +169,7 @@ HTMLArea.prototype._fullScreen = function()
     // Maximize
     window.scroll(0,0);
     this._htmlArea.style.position = 'absolute';
-    this._htmlArea.style.zIndex   = 9999;
+    this._htmlArea.style.zIndex   = 999;
     this._htmlArea.style.left     = 0;
     this._htmlArea.style.top      = 0;
     this._isFullScreen = true;
