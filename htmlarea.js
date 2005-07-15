@@ -160,7 +160,7 @@ HTMLArea.init = function() {
 HTMLArea.RE_tagName = /(<\/|<)\s*([^ \t\n>]+)/ig;
 HTMLArea.RE_doctype = /(<!doctype((.|\n)*?)>)\n?/i;
 HTMLArea.RE_head    = /<head>((.|\n)*?)<\/head>/i;
-HTMLArea.RE_body    = /<body[^>]*>((.|\n)*?)<\/body>/i;
+HTMLArea.RE_body    = /<body[^>]*>((.|\n|\r|\t)*?)<\/body>/i;
 HTMLArea.RE_Specials = /([\/\^$*+?.()|{}[\]])/g;
 HTMLArea.RE_email    = /[a-z0-9_]{3,}@[a-z0-9_-]{2,}(\.[a-z0-9_-]{2,})+/i;
 HTMLArea.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a-z0-9_-]{2,}){2,}(:[0-9]+)?(\/\S+)*)/i;
@@ -4216,7 +4216,7 @@ HTMLArea.prototype.setHTML = function(html) {
       }
       else
       {
-        this._doc.setFullHTML(html);
+        this.setFullHTML(html);
       }
     }
     break;
