@@ -245,6 +245,11 @@ HTMLArea.Config = function () {
   //  that don't have a url prefixing them
   this.stripSelfNamedAnchors = true;
 
+  // sometimes high-ascii in links can cause problems for servers (basically they don't recognise them)
+  //  so you can use this flag to ensure that all characters other than the normal ascii set (actually
+  //  only ! through ~) are escaped in URLs to % codes
+  this.only7BitPrintablesInURLs = true;
+
   // sometimes we want to be able to replace some string in the html comng in and going out
   //  so that in the editor we use the "internal" string, and outside and in the source view
   //  we use the "external" string  this is useful for say making special codes for
@@ -1947,7 +1952,7 @@ HTMLArea.prototype.setMode = function(mode) {
     case "textmode":
     {
       var html = this.outwardHtml(this.getHTML());
-      this._textArea.value = html;
+      this.setHTML(html);
 
       // Hide the iframe
       this.deactivateEditor();
@@ -1968,14 +1973,7 @@ HTMLArea.prototype.setMode = function(mode) {
     {
       var html = this.inwardHtml(this.getHTML());
       this.deactivateEditor();
-      if (!this.config.fullPage)
-      {
-        this._doc.body.innerHTML = html;
-      }
-      else
-      {
-        this.setFullHTML(html);
-      }
+      this.setHTML(html);
       this._iframe.style.display   = '';
       this._textArea.style.display = "none";
       this.activateEditor();
@@ -4237,34 +4235,15 @@ HTMLArea.prototype.getInnerHTML = function() {
 
 // completely change the HTML inside
 HTMLArea.prototype.setHTML = function(html) {
-  switch (this._editMode)
+  if (!this.config.fullPage)
   {
-    case "wysiwyg"  :
-    {
-      if (!this.config.fullPage)
-      {
-        this._doc.body.innerHTML = html;
-      }
-      else
-      {
-        this.setFullHTML(html);
-      }
-    }
-    break;
-
-    case "textmode" :
-    {
-      this._textArea.value = html;
-    }
-    break;
-
-    default	        :
-    {
-      alert("Mode <" + mode + "> not defined!");
-    }
-    break;
+    this._doc.body.innerHTML = html;
   }
-  return false;
+  else
+  {
+    this.setFullHTML(html);
+  }
+  this._textArea.value = html;
 };
 
 // sets the given doctype (useful when config.fullPage is true)
@@ -4711,6 +4690,25 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
             if (HTMLArea.is_ie && (name == "href" || name == "src")) {
               value = editor.stripBaseURL(value);
             }
+
+            // High-ascii (8bit) characters in links seem to cause problems for some sites,
+            // while this seems to be consistent with RFC 3986 Section 2.4
+            // because these are not "reserved" characters, it does seem to
+            // cause links to international resources not to work.  See ticket:167
+
+            // IE always returns high-ascii characters un-encoded in links even if they
+            // were supplied as % codes (it unescapes them when we pul the value from the link).
+
+            // Hmmm, very strange if we use encodeURI here, or encodeURIComponent in place
+            // of escape below, then the encoding is wrong.  I mean, completely.
+            // Nothing like it should be at all.  Using escape seems to work though.
+            // It's in both browsers too, so either I'm doing something wrong, or
+            // something else is going on?
+
+            if(editor.config.only7BitPrintablesInURLs)
+            {
+              value = value.replace(/([^!-~]+)/g, function(match) { return escape(match); });
+            }
           }
         } else { // IE fails to put style in attributes list
           // FIXME: cssText reported by IE is UPPERCASE
@@ -4754,6 +4752,8 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
   }
   return html;
 };
+
+/** @see getHTMLWrapper (search for "value = a.nodeValue;") */
 
 HTMLArea.prototype.stripBaseURL = function(string)
 {
