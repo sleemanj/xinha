@@ -3,30 +3,39 @@
   background-image:url(back.png);
   background-repeat:repeat-y;
 }
-.htmlarea .toolbar .toolbarRow {
+.htmlarea .toolbarRow {
   margin-top:2px;
   margin-bottom:2px;
   background-image:url(button-background.png);
 }
-.htmlarea .toolbar .toolbarRow .button {
+.htmlarea .toolbar .button {
   width:20px;
   height:20px;
   padding:1px;
   border:none;
   background-image:url(button-background.png);
 }
-.htmlarea .toolbar .toolbarRow .separator {
+.buttonImageContainer {
+  position:relative;
+  left:1px;
+  top:1px;
+}
+.htmlarea .toolbar .separator {
+  margin:0;
   background-image:url(separator.png);
   width:7px;
   height:20px;
   padding:0;
 }
-.htmlarea .toolbar .toolbarRow .buttonHover {
+.separator {
+  border:none;
+}
+.htmlarea .toolbar a.button:hover {
   border:1px solid #335500;
   padding:0;
   background-image:url(hover.png);
 }
-.htmlarea .toolbar .toolbarRow .button.buttonPressed
+.htmlarea .toolbar .button.buttonPressed
 {
   border:1px solid #335500;
   padding:0;

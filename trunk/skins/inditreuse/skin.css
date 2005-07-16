@@ -8,14 +8,19 @@
   margin-bottom:2px;
   background-image:url(button-background.png);
 }
-.htmlarea .toolbar .toolbarRow .button{
+.htmlarea .toolbar .button {
   width:20px;
   height:20px;
   padding:1px;
   border:none;
   background-image:url(button-background.png);
 }
-.htmlarea .toolbar .toolbarRow .separator {
+.buttonImageContainer {
+  position:relative;
+  left:1px;
+  top:1px;
+}
+.htmlarea .toolbar .separator {
   margin:0;
   background-image: url(separator.png);
   width:7px;
@@ -23,12 +28,12 @@
   padding:1px;
   border:none;
 }
-.htmlarea .toolbar .toolbarRow .buttonHover {
+.htmlarea .toolbar a.button:hover {
   border:none !important;
   padding:1px;
   background-image:url(hover.png);
 }
-.htmlarea .toolbar .toolbarRow .button.buttonPressed
+.htmlarea .toolbar .button.buttonPressed
 {
   padding:1px;
   background-image:url(selected.png);
