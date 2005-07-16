@@ -1,4 +1,4 @@
-.htmlarea { margin: 2px; background: #fff; }
+.htmlarea { background: #fff; margin:2px; }
 
 .htmlarea .toolbar {
   cursor: default;
@@ -7,70 +7,34 @@
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
+.htmlarea .toolbar table { margin: 0; font-family: tahoma,verdana,sans-serif; font-size: 11px; }
+.htmlarea .toolbar img { border: none; }
+.htmlarea .toolbar .label { padding: 0px 3px; }
 
-.htmlarea .toolbar .toolbarRow {
-  margin: 0;
-  padding: 0px 2px 0px 2px;
-  font-family: Tahoma,Verdana,sans-serif;
-  font-size: 11px;
-  height: 24px !important;
-  overflow: hidden;
-}
-
-.htmlarea .toolbar .toolbarRow .container
-{
-  margin: 0px;
-  height: 22px;
-  padding: 1px;
-}
-
-.htmlarea .toolbar .toolbarRow img { margin: 0; border: none;}
-.htmlarea .toolbar .toolbarRow .label {
-  vertical-align: top;
-  position: relative;
-  top: 5px;
-  padding-right: 2px;
-  border-bottom: 1px;
-  height: 17px;
-}
-.htmlarea .toolbar .toolbarRow .select {
-  vertical-align: top;
-  position: relative;
-  top: 2px;
-}
-
-.htmlarea .toolbar .toolbarRow .button {
+.htmlarea .toolbar .button {
   background: ButtonFace;
   color: ButtonText;
   border: 1px solid ButtonFace;
+  padding: 1px;
   margin: 0px;
-  width: 22px;
-  height: 22px;
-}
-
-.htmlarea .toolbar .toolbarRow .button .buttonImageContainer {
-  position: relative;
-  top: 2px;
-  left: 2px;
   width: 18px;
   height: 18px;
-  overflow: hidden;
 }
-.htmlarea .toolbar .toolbarRow .button.buttonHover {
-  cursor: pointer;
+.htmlarea .toolbar a.button:hover {
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
-.htmlarea .toolbar .toolbarRow .button.buttonDisabled {
-  border-color: none;
+.htmlarea .toolbar a.buttonDisabled:hover {
+  border-color: ButtonFace;
 }
-.htmlarea .toolbar .toolbarRow .buttonActive,
-.htmlarea .toolbar .toolbarRow .buttonPressed
+.htmlarea .toolbar .buttonActive,
+.htmlarea .toolbar .buttonPressed
 {
+  padding: 2px 0px 0px 2px;
   border: 1px solid;
   border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
-.htmlarea .toolbar .toolbarRow .buttonPressed {
+.htmlarea .toolbar .buttonPressed {
   background: ButtonHighlight;
 }
 .htmlarea .toolbar .indicator {
@@ -80,24 +44,21 @@
   text-align: center;
   cursor: default;
   border: 1px solid ButtonShadow;
-  vertical-align: top;
-  position: relative;
-  top: 4px;
 }
 
-.htmlarea .toolbar .toolbarRow .buttonDisabled img {
+.htmlarea .toolbar .buttonDisabled img {
   filter: gray() alpha(opacity = 25);
   -moz-opacity: 0.25;
 }
 
-.htmlarea .toolbar .toolbarRow .separator {
+.htmlarea .toolbar .separator {
+  /*position: relative;*/
   margin: 3px;
   border-left: 1px solid ButtonShadow;
   border-right: 1px solid ButtonHighlight;
   width: 0px;
   height: 18px;
   padding: 0px;
-  vertical-align: top;
 }
 
 .htmlarea .toolbar .space { width: 5px; }
