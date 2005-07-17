@@ -54,8 +54,7 @@ function View( td, character )               // preview character
 {
     if (oldView)
         oldView.className = oldView.className.replace(/\s+character-hilite/, '');
-    document.getElementById( 'characterPreview' ).value = character;
-    document.getElementById( 'showCharacter' ).value = character;
+
     if (td)
         (oldView = td).className += " character-hilite";
 }
@@ -77,15 +76,6 @@ function onCancel()                   // cancel selection
 </script>
 </head>
 <body class="dialog" onload="Init();self.focus();">
-<form method="get" style="margin:2px; padding:2px" onSubmit="Set(document.getElementById('showCharacter').value); return false;">
-<table border="0" cellspacing="0" cellpadding="4" width="100%">
- <tr>
-  <td style="background: Buttonface" valign="center"><div style="padding: 1px; white-space: nowrap; font-family: tahoma,arial,sans-serif; font-size: 11px; font-weight: normal;">HTML value:<div id="characterPreview"></div></div></td>
-  <td style="background: Buttonface" valign="center"><input type="text" name="showcharacter" id="showCharacter" value="" size="15" style="background: #fff; font-size: 11px;" /></td>
-  <td style="background: Buttonface" width="100%"></td>
- </tr>
-</table>
-</form>
 <table border="0" cellspacing="1" cellpadding="0" width="100%" style="cursor: pointer; background: #ADAD9C; border: 1px inset;">
 <tr>
 <td class="character" onMouseOver="View(this,'&amp;Yuml;')" onClick="Set('&Yuml;')">&Yuml;</td>
