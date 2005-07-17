@@ -190,10 +190,10 @@ HTMLArea.Config = function () {
   // to have explicit pixel sizes above (or on your textarea and have auto above)
   this.sizeIncludesPanels = true;
 
-  // If you are using Xinha in a "Standards Mode" page (using doctype switching)
-  // then you must use pixel heights for the top and bottom panels, otherwise
-  // it won't work correctly.  Also remember that you MUST have the "px" appended
-  // to pixel lengths or it won't work either!
+  // each of the panels has a dimension, for the left/right it's the width
+  // for the top/bottom it's the height.
+  //
+  // WARNING: PANEL DIMENSIONS MUST BE SPECIFIED AS PIXEL WIDTHS
   this.panel_dimensions =
   {
     left:   '200px', // Width
@@ -1252,7 +1252,11 @@ HTMLArea.prototype.generate = function ()
     'bp_cell'   :this._panels.bottom.container,// bottom panel
 
     'sb_row'    :document.createElement('tr'),
-    'sb_cell'   :document.createElement('td')  // status bar
+    'sb_cell'   :document.createElement('td'),  // status bar
+
+    'left'      :document.createElement('col'),
+    'middle'      :document.createElement('col'),
+    'right'      :document.createElement('col')
   }
 
   var fw = this._framework;
@@ -1266,6 +1270,7 @@ HTMLArea.prototype.generate = function ()
   fw.bp_row.style.verticalAlign = 'top';
   fw.sb_row.style.verticalAlign = 'top';
   fw.ed_cell.style.position     = 'relative';
+
   // Put the cells in the rows        set col & rowspans
   // note that I've set all these so that all panels are showing
   // but they will be redone in sizeEditor() depending on which
@@ -1290,9 +1295,13 @@ HTMLArea.prototype.generate = function ()
   fw.tbody.appendChild(fw.bp_row);  // Bottom panel
   fw.tbody.appendChild(fw.sb_row);  // Statusbar
 
+  // cols in the table
+  fw.table.appendChild(fw.left);
+  fw.table.appendChild(fw.middle);
+  fw.table.appendChild(fw.right);
+
   // and body in the table
   fw.table.appendChild(fw.tbody);
-
 
   var htmlarea = this._framework.table;
   this._htmlArea = htmlarea;
@@ -1438,19 +1447,7 @@ HTMLArea.prototype.generate = function ()
 
     this.sizeEditor(width, height, this.config.sizeIncludesBars, this.config.sizeIncludesPanels);
 
-    // The resize handler is to allow for heights specified as percentages.
-    // This has been disabled in compatmode because IE seems to throw a resize
-    // event up to the window even when you change the dimensions of elements
-    // on the page rather than the window itself.  Which can lead to
-    // huge amounts of resize events, and possibly getting into infinite loops
-    // of resize events.
-    //
-    // % widths are fine without the event because they are passed through to
-    // the browser as percentages so it's up to the browser to resize those.
-    if(!document.compatMode || document.compatMode == 'BackCompat')
-    {
-      HTMLArea._addEvent(window, 'resize', function() { editor.sizeEditor(); });
-    }
+    HTMLArea.addDom0Event(window, 'resize', function(e) { editor.sizeEditor(); });
 
     this.notifyOn('panel_change',function(){editor.sizeEditor();});
   }
@@ -1464,6 +1461,14 @@ HTMLArea.prototype.generate = function ()
 
   HTMLArea.prototype.sizeEditor = function(width, height, includingBars, includingPanels)
   {
+
+    // We need to set the iframe & textarea to 100% height so that the htmlarea
+    // isn't "pushed out" when we get it's height, so we can change them later.
+    this._iframe.style.height   = '100%';
+    this._textArea.style.height = '100%';
+    this._iframe.style.width    = '100%';
+    this._textArea.style.width  = '100%';
+    this._framework.ed_cell.style.width = '';
 
     if(includingBars != null)     this._htmlArea.sizeIncludesToolbars = includingBars;
     if(includingPanels != null)   this._htmlArea.sizeIncludesPanels   = includingPanels;
@@ -1514,11 +1519,6 @@ HTMLArea.prototype.generate = function ()
       }
     }
 
-    // We need to set the iframe & textarea to 100% height so that the htmlarea
-    // isn't "pushed out" when we get it's height, so we can change them later.
-    if(this._iframe.style.height != '100%')   this._iframe.style.height   = '100%';
-    if(this._textArea.style.height != '100%') this._textArea.style.height = '100%';
-
     // At this point we have this._htmlArea.style.width & this._htmlArea.style.height
     // which are the size for the OUTER editor area, including toolbars and panels
     // now we size the INNER area and position stuff in the right places.
@@ -1528,6 +1528,7 @@ HTMLArea.prototype.generate = function ()
     // Set colspan for toolbar, and statusbar, rowspan for left & right panels, and insert panels to be displayed
     // into thier rows
     var panels = this._panels;
+    var editor = this;
     var col_span = 1;
 
     function panel_is_alive(pan)
@@ -1541,6 +1542,10 @@ HTMLArea.prototype.generate = function ()
       else
       {
         HTMLArea.removeFromParent(panels[pan].container);
+        if(typeof editor._framework[pan] != 'undefined')
+        {
+          HTMLArea.removeFromParent(editor._framework[pan]);
+        }
         return false;
       }
     }
@@ -1551,6 +1556,8 @@ HTMLArea.prototype.generate = function ()
       if(!HTMLArea.hasParentNode(panels.left.container))
       {
         this._framework.ler_row.insertBefore(panels.left.container,this._framework.ed_cell);
+        this._framework.table.insertBefore(this._framework.left,this._framework.middle);
+        this._framework.left.style.width = this.config.panel_dimensions.left;
       }
     }
 
@@ -1568,6 +1575,8 @@ HTMLArea.prototype.generate = function ()
       if(!HTMLArea.hasParentNode(panels.right.container))
       {
         this._framework.ler_row.insertBefore(panels.right.container, this._framework.ed_cell.nextSibling);
+        this._framework.table.insertBefore(this._framework.right,this._framework.middle.nextSibling);
+        this._framework.right.style.width = this.config.panel_dimensions.right;
       }
     }
 
@@ -1631,32 +1640,15 @@ HTMLArea.prototype.generate = function ()
     this._framework.tb_cell.style.height = this._toolBar.offsetHeight   + 'px';
     this._framework.sb_cell.style.height = this._statusBar.offsetHeight + 'px';
 
-    // Compatability Mode (both IE and Moz), because table cell heights are
-    // ignored in compatability mode (at least in IE, moz works, but
-    // I don't think it should so we'll do this for moz too incase it changes)
-    // we have to set an explicit pixel height on the iframe so as the table
-    // cell surrounding it takes the available height.
-    // This means that the panel heights for top & bottom MUST be pixel heights
-    // if you are using Xinha in a standards mode page.
-    if( document.compatMode && document.compatMode != 'BackCompat')
-    {
-      var edcellheight = height - this._toolBar.offsetHeight - this._statusBar.offsetHeight;
-      if(this._framework.tp_row.childNodes.length)
-      {
-        edcellheight  -= parseInt(this.config.panel_dimensions.top);
-      }
+    var edcellheight = height - this._toolBar.offsetHeight - this._statusBar.offsetHeight;
+    if(panel_is_alive('top'))    edcellheight  -= parseInt(this.config.panel_dimensions.top);
+    if(panel_is_alive('bottom')) edcellheight  -= parseInt(this.config.panel_dimensions.bottom);;
+    this._iframe.style.height    = edcellheight + 'px';
 
-      if(this._framework.bp_row.childNodes.length)
-      {
-        edcellheight  -= parseInt(this.config.panel_dimensions.bottom);
-      }
-      this._iframe.style.height   = edcellheight + 'px';
-    }
-    else
-    {
-      this._iframe.style.height   = '100%';
-    }
-    this._iframe.style.width    = '100%';
+    var edcellwidth = width;
+    if(panel_is_alive('left'))  edcellwidth -= parseInt(this.config.panel_dimensions.left);
+    if(panel_is_alive('right')) edcellwidth -= parseInt(this.config.panel_dimensions.right);
+    this._iframe.style.width     =  edcellwidth + 'px';
 
     this._textArea.style.height = this._iframe.style.height;
     this._textArea.style.width  = this._iframe.style.width;
@@ -1668,6 +1660,10 @@ HTMLArea.prototype.generate = function ()
   {
     var div = document.createElement('div');
     div.side = side;
+    if(side == 'left' || side == 'right')
+    {
+      div.style.width = this.config.panel_dimensions[side];
+    }
     HTMLArea.addClasses(div, 'panel');
     this._panels[side].panels.push(div);
     this._panels[side].div.appendChild(div);
