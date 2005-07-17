@@ -250,6 +250,12 @@ HTMLArea.Config = function () {
   //  only ! through ~) are escaped in URLs to % codes
   this.only7BitPrintablesInURLs = true;
 
+  // if you are putting the HTML written in Xinha into an email you might want it to be 7-bit
+  //  characters only.  This config option (off by default) will convert all characters consuming
+  //  more than 7bits into UNICODE decimal entity references (actually it will convert anything
+  //  below <space> (chr 20) except cr, lf and tab and above <tilde> (~, chr 7E))
+  this.sevenBitClean  = false;
+
   // sometimes we want to be able to replace some string in the html comng in and going out
   //  so that in the editor we use the "internal" string, and outside and in the source view
   //  we use the "external" string  this is useful for say making special codes for
@@ -4115,6 +4121,12 @@ HTMLArea.prototype.outwardHtml = function(html)
   html = this.outwardSpecialReplacements(html);
 
   html = this.fixRelativeLinks(html);
+
+  if(this.config.sevenBitClean)
+  {
+    html = html.replace(/[^ -~\r\n\t]/g, function(c){ return '&#'+c.charCodeAt(0)+';';});
+  }
+
   return html;
 }
 
