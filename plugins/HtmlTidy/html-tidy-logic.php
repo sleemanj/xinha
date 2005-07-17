@@ -1,7 +1,7 @@
-<?  ###################################################################
-   ##
-  ##  Plugin for htmlArea, to run code through the server's HTML Tidy
- ##   By Adam Wright, for The University of Western Australia
+<?php 
+##
+##  Plugin for htmlArea, to run code through the server's HTML Tidy
+##   By Adam Wright, for The University of Western Australia
 ##    This is the server-side script, which dirty code is run through.
 ##
 ##  Distributed under the same terms as HTMLArea itself.
@@ -60,5 +60,5 @@
 	}
 ?>
 var ns="";
-<?=$jsMakeSrc?>
+<?php $jsMakeSrc; ?>
 editor.setHTML(ns);

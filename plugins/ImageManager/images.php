@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * Show a list of images in a long horizontal table.
  * @author $Author: Wei Zhuo $
@@ -60,7 +60,7 @@ function drawFiles($list, &$manager)
 	{
 		?>
     <div class="thumb_holder" id="holder_<?php echo asc2hex($entry) ?>">
-      <a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<? echo $file['relative'];?>', '<? echo $entry; ?>', <? echo $file['image'][0];?>, <? echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
+      <a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
         <img src="<?php print $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/>
       </a>
       <div class="edit">
@@ -106,7 +106,7 @@ function drawNoResults()
 {
 ?>
 <div class="noResult">No Images Found</div>
-<?	
+<?php 
 }
 
 /**
@@ -116,7 +116,7 @@ function drawErrorBase(&$manager)
 {
 ?>
 <div class="error"><span>Invalid base directory:</span> <?php echo $manager->config['images_dir']; ?></div>
-<?	
+<?php 
 }
 
 /**
