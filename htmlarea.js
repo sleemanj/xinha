@@ -4123,6 +4123,14 @@ HTMLArea.prototype.outwardHtml = function(html)
     html = html.replace(/[^ -~\r\n\t]/g, function(c){ return '&#'+c.charCodeAt(0)+';';});
   }
 
+  // ticket:56, the "greesemonkey" plugin for Firefox adds this junk,
+  // so we strip it out.  Original submitter gave a plugin, but that's
+  // a bit much just for this IMHO - james
+  if(HTMLArea.is_gecko)
+  {
+    html = html.replace(/<script[\s]*src[\s]*=[\s]*['"]chrome:\/\/.*?["']>[\s]*<\/script>/ig, '');
+  }
+
   return html;
 }
 
