@@ -426,14 +426,12 @@ ContextMenu.prototype.popupMenu = function(ev) {
 		div.style.left = x + "px";
 		div.style.top = y + "px";
 	} else {
-		// determine the size (did I mention that IE stinks?)
-		var foobar = document.createElement("div");
-		foobar.className = "htmlarea-context-menu";
-		foobar.innerHTML = div.innerHTML;
-		document.body.appendChild(foobar);
-		var w = foobar.offsetWidth;
-		var h = foobar.offsetHeight;
-		document.body.removeChild(foobar);
+    // To get the size we need to display the popup with some width/height
+    // then we can get the actual size of the div and redisplay the popup at the
+    // correct dimensions.
+    this.iePopup.show(ev.screenX, ev.screenY, 300,50);
+		var w = div.offsetWidth;
+		var h = div.offsetHeight;
 		this.iePopup.show(ev.screenX, ev.screenY, w, h);
 	}
 
