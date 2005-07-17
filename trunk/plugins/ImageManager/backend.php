@@ -1,5 +1,4 @@
-<?
-
+<?php 
 /**
 * Unified backend for ImageManager 
 *

@@ -1,5 +1,4 @@
-<?
-
+<?php 
 /**
  * The frame that contains the image to be edited.
  * @author $Author: Wei Zhuo $

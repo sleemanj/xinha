@@ -1,6 +1,4 @@
-<?
-
-
+<?php 
 /*
 This ddt library is released under the terms of the HTMLArea license. 
 See license.txt that is shipped with Xinha.

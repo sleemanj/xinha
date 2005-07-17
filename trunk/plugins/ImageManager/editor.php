@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  * The PHP Image Editor user interface.
  * @author $Author: Wei Zhuo $
