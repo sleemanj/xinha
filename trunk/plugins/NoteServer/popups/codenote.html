@@ -106,23 +106,23 @@ else if (f_zoom.value == "1.5" || f_zoom.value == "150%") z = 1.5;
 <body class="Dialog" onload="Init()">
 <div class="title">Insert GUIDO Music Notation</div>
 
-Guido code :
+<span>Guido code</span> :
   <br><textarea rows="7" id="f_code" cols="55"></textarea><br>
 
 <div class="space"></div>
 <fieldset style="float: left; margin-left: 5px;">
 <legend>Options</legend>
-  <input type="checkbox" id="f_midi" value="ON"> Add MIDI link to allow students to hear the music
+  <input type="checkbox" id="f_midi" value="ON"> <span>Add MIDI link to allow students to hear the music</span>
   <div class="space"></div>
-  <input type="checkbox" id="f_affcode" value="ON"> Add GUIDO Code in a textbox on the page
+  <input type="checkbox" id="f_affcode" value="ON"> <span>Add GUIDO Code in a textbox on the page</span>
   <div class="space"></div>
 </fieldset>
 
 <fieldset style="float: right; margin-left: 5px;">
 <legend>Format</legend>
-  <input type="checkbox" id="f_applet" value="ON" onclick="message();" > Image in applet
+  <input type="checkbox" id="f_applet" value="ON" onclick="message();" > <span>Image in applet</span>
   <div class="space"></div>
-  Zoom :
+  <span>Zoom</span> :
   <select size="1" id="f_zoom" title="Zoom :">
     <option value="0.8">80%</option>
     <option selected="1.0">100%</option>
@@ -137,7 +137,7 @@ Guido code :
 <table width="100%" style="margin-bottom: 0.2em">
  <tr>
   <td valign="bottom">
-    Image Preview:<br />
+    <span>Image Preview</span>:<br />
     <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" height="200" width="350" src=""></iframe>
   </td>
 
@@ -150,7 +150,7 @@ Guido code :
  </tr>
  <tr>
   <td colspan="2">
-   <p>Sample Guido Codes: </p>
+   <p>Sample Guido Codes:</p>
    <p><a href="http://piano-go.chez.tiscali.fr/rachmaninoff.gmn" target="_blank">Code Sample 1</a> or type [ do re mi fa sol la si ] | <a href="http://www.informatik.tu-darmstadt.de/AFS/SALIERI/guido/demos.html" target="_blank">Code Sample 2</a></p>
    <p>Resources: </p>
    <p>The Guido Specification (<a href="http://piano-go.chez.tiscali.fr/GUIDO-Music%20Notation%20Format.pdf" target="_blank">PDF)</a> | <a href="http://www.salieri.org/guido/doc.html" target="_blank">(HTML)</a></p>
