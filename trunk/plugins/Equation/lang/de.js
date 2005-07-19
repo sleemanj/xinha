@@ -13,5 +13,8 @@
 //       that states what encoding is necessary.)
 
 {
-        "Equation Editor":                "Gleichungs-Editor"
+  "Equation Editor": "Gleichungs-Editor"
+  "Select operation": "Auswahl",
+  "Insert": "Einfügen",
+  "Cancel": "Abbrechen"
 };

@@ -46,7 +46,9 @@ function onCancel() {
 };
 
 </script>
-
+<style rel="stylesheet" type="text/css">
+.fr { width: 9em; float: left; padding: 2px 5px; text-align: right; }
+</style>
 </head>
 <body class="dialog" onload="Init()">
 <div class="title">Marquee Editor</div>
@@ -70,7 +72,7 @@ function onCancel() {
   <div class="fr">Text:</div>
   <input type="text" id="f_text" name="text" value="" size="30" />
   <p />
-  <div class="fr"><nobr>Background-Color:</nobr></div>
+  <div class="fr">Background-Color:</div>
   <input type="text" id="f_bgcolor" name="bgcolor" value="" size="30" />
   <p />
   <div class="fr">Width:</div>
@@ -81,7 +83,7 @@ function onCancel() {
   <p />
   <fieldset>
   <legend>Speed Control</legend>
-    <div class="fr"><nobr>Scroll Amount:</nobr></div>
+    <div class="fr">Scroll Amount:</div>
     <input type="text" id="f_scrollamount" name="scrollamount" value="100" maxlength="4" />
     <p />
     <div class="fr">Scroll Delay:</div>
