@@ -95,8 +95,8 @@ function HTMLArea(textarea, config)
     // Before we modify anything, get the initial textarea size
     this._initial_ta_size =
     {
-      w: textarea.style.width ? textarea.style.width : textarea.offsetWidth,
-      h: textarea.style.height ? textarea.style.height : textarea.offsetHeight
+      w: textarea.style.width ? textarea.style.width   : (textarea.offsetWidth + 'px'),
+      h: textarea.style.height ? textarea.style.height : (textarea.offsetHeight + 'px')
     }
 
     this._editMode = "wysiwyg";
