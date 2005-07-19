@@ -91,7 +91,7 @@ function HTMLArea(textarea, config)
       textarea = HTMLArea.getElementById('textarea', textarea);
     }
     this._textArea = textarea;
-
+       
     // Before we modify anything, get the initial textarea size
     this._initial_ta_size =
     {
@@ -146,7 +146,10 @@ function HTMLArea(textarea, config)
     {
       panels[i].div = panels[i].container; // legacy
       panels[i].container.className = 'panels ' + i;
+      HTMLArea.freeLater(panels[i], 'container');
+      HTMLArea.freeLater(panels[i], 'div');      
     }
+    HTMLArea.freeLater(this, '_textArea');
   }
 };
 
@@ -482,6 +485,7 @@ HTMLArea.Config = function () {
     }
     btn[0] = HTMLArea._lc(btn[0]); //initialize tooltip
   }
+
 };
 
 /** Helper function: register a new button with the configuration.  It can be
@@ -716,12 +720,16 @@ HTMLArea.prototype._createToolbar = function () {
   toolbar.className = "toolbar";
   toolbar.unselectable = "1";
 
+  HTMLArea.freeLater(this, '_toolBar');
+  HTMLArea.freeLater(this, '_toolbar');
+  
   var tb_row = null;
   var tb_objects = new Object();
   this._toolbarObjects = tb_objects;
 
 	this._createToolbar1(editor, toolbar, tb_objects);
-	this._htmlArea.appendChild(toolbar);
+	this._htmlArea.appendChild(toolbar);      
+  
   return toolbar;
 }
 
@@ -866,7 +874,11 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         state	: setButtonStatus, // for changing state
         context : context
       };
+      
+      HTMLArea.freeLater(obj);
+      
       tb_objects[txt] = obj;
+      
       for (var i in options) {
         var op = document.createElement("option");
         op.innerHTML = HTMLArea._lc(i);
@@ -912,6 +924,9 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         cmd	: "textindicator", // the command ID
         state	: setButtonStatus // for changing state
       };
+      
+      HTMLArea.freeLater(obj);
+      
       tb_objects[txt] = obj;
       break;
         default:
@@ -936,6 +951,9 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
         state	: setButtonStatus, // for changing state
         context : btn[4] || null // enabled in a certain context?
       };
+      
+      HTMLArea.freeLater(obj);
+      
       tb_objects[txt] = obj;
       // handlers to emulate nice flat toolbar buttons
       HTMLArea._addEvent(el, "mouseout", function () {
@@ -971,7 +989,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       var img = i_contain.firstChild;
       el.appendChild(i_contain);
 
-      obj.imgel = img;
+      obj.imgel = img;      
       obj.swapImage = function(newimg)
       {
         if(typeof newimg != 'string')
@@ -988,7 +1006,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
           img.style.left = '0px';
         }
       }
-
+      
     } else if (!el) {
       el = createSelect(txt);
     }
@@ -1063,6 +1081,7 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
   if(!doc._htmlareaImgCache)
   {
     doc._htmlareaImgCache = { };
+    HTMLArea.freeLater(doc._htmlareaImgCache);
   }
 
   var i_contain = null;
@@ -1123,19 +1142,22 @@ HTMLArea.prototype._createStatusBar = function() {
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
   this._statusBar = statusbar;
-
+  HTMLArea.freeLater(this, '_statusBar');
+  
   // statusbar.appendChild(document.createTextNode(HTMLArea._lc("Path") + ": "));
   // creates a holder for the path view
   div = document.createElement("span");
   div.className = "statusBarTree";
   div.innerHTML = HTMLArea._lc("Path") + ": ";
   this._statusBarTree = div;
+  HTMLArea.freeLater(this, '_statusBarTree');
   this._statusBar.appendChild(div);
 
   div = document.createElement("span");
   div.innerHTML = HTMLArea._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
   div.style.display = "none";
   this._statusBarTextMode = div;
+  HTMLArea.freeLater(this, '_statusBarTextMode');
   this._statusBar.appendChild(div);
 
   if (!this.config.statusBar)
@@ -1256,6 +1278,8 @@ HTMLArea.prototype.generate = function ()
 
   }
 
+  HTMLArea.freeLater(this._framework);
+  
   var fw = this._framework;
   fw.table.border="0";
   fw.table.cellPadding="0";
@@ -1297,6 +1321,7 @@ HTMLArea.prototype.generate = function ()
 
   var htmlarea = this._framework.table;
   this._htmlArea = htmlarea;
+  HTMLArea.freeLater(this, '_htmlArea');
   htmlarea.className = "htmlarea";
 
     // create the toolbar and put in the area
@@ -1309,7 +1334,8 @@ HTMLArea.prototype.generate = function ()
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
   this._iframe.className = 'xinha_iframe';
-
+  HTMLArea.freeLater(this, '_iframe');
+  
     // creates & appends the status bar
   var statusbar = this._createStatusBar();
   this._framework.sb_cell.appendChild(statusbar);
@@ -1818,13 +1844,13 @@ HTMLArea.prototype.generate = function ()
     {
       if (editor._iframe.contentDocument)
       {
-        this._doc = editor._iframe.contentDocument;
+        this._doc = editor._iframe.contentDocument;        
       }
       else
       {
         this._doc = editor._iframe.contentWindow.document;
       }
-      doc = this._doc;
+      doc = this._doc;      
       if (!doc) { // try later
         if (HTMLArea.is_gecko) {
           setTimeout(function() { editor.initIframe()}, 50);
@@ -1838,7 +1864,9 @@ HTMLArea.prototype.generate = function ()
     { // try later
       setTimeout(function() { editor.initIframe()}, 50);
     }
-
+    
+    HTMLArea.freeLater(this, '_doc');
+    
     doc.open();
     if (!editor.config.fullPage) {
       var html = "<html>\n";
@@ -4339,22 +4367,27 @@ HTMLArea.flushEvents = function()
       x++;
     }
   }
-
-  if(document.all)
-  {
-    for(var i = 0; i < document.all.length; i++)
+  
+  /* 
+    // This code is very agressive, and incredibly slow in IE, so I've disabled it.
+    
+    if(document.all)
     {
-      for(var j in document.all[i])
+      for(var i = 0; i < document.all.length; i++)
       {
-        if(/^on/.test(j) && typeof document.all[i][j] == 'function')
+        for(var j in document.all[i])
         {
-          document.all[i][j] = null;
-          x++;
+          if(/^on/.test(j) && typeof document.all[i][j] == 'function')
+          {
+            document.all[i][j] = null;
+            x++;
+          }
         }
       }
     }
-  }
-  alert('Flushed ' + x + ' events.');
+  */
+  
+  // alert('Flushed ' + x + ' events.');
 }
 
 HTMLArea._addEvent = function(el, evname, func) {
@@ -4438,7 +4471,11 @@ HTMLArea.prependDom0Event = function(el, ev, fn)
 HTMLArea._prepareForDom0Events = function(el, ev)
 {
   // Create a structure to hold our lists of event handlers
-  if(typeof el._xinha_dom0Events == 'undefined')     el._xinha_dom0Events = { };
+  if(typeof el._xinha_dom0Events == 'undefined')
+  {
+    el._xinha_dom0Events = { };
+    HTMLArea.freeLater(el, '_xinha_dom0Events');
+  }
 
   // Create a list of handlers for this event type
   if(typeof el._xinha_dom0Events[ev] == 'undefined')
@@ -4481,6 +4518,7 @@ HTMLArea.prototype.notifyOn = function(ev, fn)
   if(typeof this._notifyListeners[ev] == 'undefined')
   {
     this._notifyListeners[ev] = [ ];
+    HTMLArea.freeLater(this, '_notifyListeners');
   }
 
   this._notifyListeners[ev].push(fn);
@@ -5417,5 +5455,40 @@ HTMLArea.getOuterHTML = function(element)
   }
 }
 
+HTMLArea.toFree = [ ];
+HTMLArea.freeLater = function(obj,prop)
+{
+  HTMLArea.toFree.push({o:obj,p:prop});
+}
+
+HTMLArea.free = function(obj, prop)
+{
+  if(obj && !prop)
+  {
+    for(var p in obj)
+    {
+      HTMLArea.free(obj, p);
+    }
+  }
+  else if (obj)
+  {
+    obj[prop] = null;
+  }
+}
+
+/** IE's Garbage Collector is broken very badly.  We will do our best to 
+ *   do it's job for it, but we can't be perfect.
+ */
+
+HTMLArea.collectGarbageForIE = function() 
+{  
+  HTMLArea.flushEvents();   
+  for(var x = 0; x < HTMLArea.toFree.length; x++)
+  {
+    if(!HTMLArea.toFree[x].o) alert("What is " + x + ' ' + HTMLArea.toFree[x].o);
+    HTMLArea.free(HTMLArea.toFree[x].o, HTMLArea.toFree[x].p);
+  }
+}
 
 HTMLArea.init();
+HTMLArea.addDom0Event(window,'unload',HTMLArea.collectGarbageForIE);

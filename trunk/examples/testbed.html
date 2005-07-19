@@ -54,7 +54,7 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'FullScreen'
+        
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -83,7 +83,18 @@
        *************************************************************************/
 
        xinha_config = xinha_config ? xinha_config : new HTMLArea.Config();
+/*
+       // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
+      //  otherwise it won't work!
+      xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
 
+      // Or we can load styles directly
+      xinha_config.stylistLoadStyles('p.red_text { color:red }');
+
+      // If you want to provide "friendly" names you can do so like
+      // (you can do this for stylistLoadStylesheet as well)
+      xinha_config.stylistLoadStyles('p.pink_text { color:pink }', {'p.pink_text' : 'Pretty Pink'});
+*/
       /** STEP 3 ***************************************************************
        * We first create editors for the textareas.
        *
@@ -124,7 +135,7 @@
     }
 
     window.onload   = xinha_init;
-    window.onunload = HTMLArea.flushEvents;
+    // window.onunload = HTMLArea.collectGarbageForIE;
   </script>
 </head>
 
@@ -157,5 +168,7 @@
   <script language="javascript">
     document.write(document.compatMode);
   </script>
+  <a href="#" onclick="xinha_editors.myTextArea.hidePanels();">Hide</a>
+  <a href="#" onclick="xinha_editors.myTextArea.showPanels();">Show</a>
 </body>
 </html>
