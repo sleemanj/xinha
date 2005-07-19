@@ -4,6 +4,7 @@
 
 // - translated by ses<ses@online.no>
 // Additional translations by Håvard Wigtil <havardw@extend.no>
+// Additional translations by Kim Steinhaug <kim@steinhaug.com>
 
 {
   "Bold": "Fet",
@@ -35,9 +36,12 @@
   "Redoes your last action": "Gjør om siste angring",
   "Cut selection": "Klipp ut område",
   "Copy selection": "Kopier område",
+  "Save as": "Lagre som",
   "Paste from clipboard": "Lim inn",
+  "Remove formatting": "Fjern formattering",
   "Direction left to right": "Fra venstre mot høyre",
   "Direction right to left": "Fra høyre mot venstre",
+  "Insert/Overwrite": "Sett inn/Overskriv",
   "OK": "OK",
   "Cancel": "Avbryt",
   "Path": "Tekstvelger",
