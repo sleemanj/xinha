@@ -1252,11 +1252,8 @@ HTMLArea.prototype.generate = function ()
     'bp_cell'   :this._panels.bottom.container,// bottom panel
 
     'sb_row'    :document.createElement('tr'),
-    'sb_cell'   :document.createElement('td'),  // status bar
+    'sb_cell'   :document.createElement('td')  // status bar
 
-    'left'      :document.createElement('col'),
-    'middle'      :document.createElement('col'),
-    'right'      :document.createElement('col')
   }
 
   var fw = this._framework;
@@ -1294,11 +1291,6 @@ HTMLArea.prototype.generate = function ()
   fw.tbody.appendChild(fw.ler_row);  // Editor/Textarea
   fw.tbody.appendChild(fw.bp_row);  // Bottom panel
   fw.tbody.appendChild(fw.sb_row);  // Statusbar
-
-  // cols in the table
-  fw.table.appendChild(fw.left);
-  fw.table.appendChild(fw.middle);
-  fw.table.appendChild(fw.right);
 
   // and body in the table
   fw.table.appendChild(fw.tbody);
@@ -1465,9 +1457,8 @@ HTMLArea.prototype.generate = function ()
     // isn't "pushed out" when we get it's height, so we can change them later.
     this._iframe.style.height   = '100%';
     this._textArea.style.height = '100%';
-    this._iframe.style.width    = '100%';
-    this._textArea.style.width  = '100%';
-    this._framework.ed_cell.style.width = '';
+    this._iframe.style.width    = '';
+    this._textArea.style.width  = '';
 
     if(includingBars != null)     this._htmlArea.sizeIncludesToolbars = includingBars;
     if(includingPanels != null)   this._htmlArea.sizeIncludesPanels   = includingPanels;
@@ -1534,57 +1525,36 @@ HTMLArea.prototype.generate = function ()
     {
       if(panels[pan].on && panels[pan].panels.length && HTMLArea.hasDisplayedChildren(panels[pan].container))
       {
+        panels[pan].container.style.display = '';
         return true;
       }
 
       // Otherwise make sure it's been removed from the framework
       else
       {
-        HTMLArea.removeFromParent(panels[pan].container);
-        if(typeof editor._framework[pan] != 'undefined')
-        {
-          HTMLArea.removeFromParent(editor._framework[pan]);
-        }
+        panels[pan].container.style.display='none';
         return false;
       }
     }
 
     if(panel_is_alive('left'))
     {
-      col_span += 1;
-      if(!HTMLArea.hasParentNode(panels.left.container))
-      {
-        this._framework.ler_row.insertBefore(panels.left.container,this._framework.ed_cell);
-        this._framework.table.insertBefore(this._framework.left,this._framework.middle);
-        this._framework.left.style.width = this.config.panel_dimensions.left;
-      }
+      col_span += 1;      
     }
 
     if(panel_is_alive('top'))
     {
-      if(!HTMLArea.hasParentNode(panels.top.container))
-      {
-        this._framework.tp_row.appendChild(panels.top.container);
-      }
+      // NOP
     }
 
     if(panel_is_alive('right'))
     {
       col_span += 1;
-      if(!HTMLArea.hasParentNode(panels.right.container))
-      {
-        this._framework.ler_row.insertBefore(panels.right.container, this._framework.ed_cell.nextSibling);
-        this._framework.table.insertBefore(this._framework.right,this._framework.middle.nextSibling);
-        this._framework.right.style.width = this.config.panel_dimensions.right;
-      }
     }
 
     if(panel_is_alive('bottom'))
     {
-      if(!HTMLArea.hasParentNode(panels.bottom.container))
-      {
-        this._framework.bp_row.appendChild(panels.bottom.container);
-      }
+      // NOP
     }
 
     this._framework.tb_cell.colSpan = col_span;

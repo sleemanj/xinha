@@ -11,8 +11,8 @@ HTMLArea.Dialog = function(editor, html, localizer)
   this.rootElem.style.position = 'absolute';
   this.rootElem.style.display  = 'none';
   this.editor._framework.ed_cell.insertBefore(this.rootElem, this.editor._framework.ed_cell.firstChild);
-  this.rootElem.style.width  = this.width  =  this.editor._framework.ed_cell.offsetWidth;
-  this.rootElem.style.height = this.height =  this.editor._framework.ed_cell.offsetHeight;
+  this.rootElem.style.width  = this.width  =  this.editor._framework.ed_cell.offsetWidth + 'px';
+  this.rootElem.style.height = this.height =  this.editor._framework.ed_cell.offsetHeight + 'px';
 
   var dialog = this;
   if(typeof localizer == 'function')
@@ -65,8 +65,8 @@ HTMLArea.Dialog = function(editor, html, localizer)
    ('resize',
       function(e, args)
       {
-        dialog.rootElem.style.width  = dialog.width  =  dialog.editor._framework.ed_cell.offsetWidth;
-        dialog.rootElem.style.height = dialog.height =  dialog.editor._framework.ed_cell.offsetHeight;
+        dialog.rootElem.style.width  = dialog.width  =  dialog.editor._framework.ed_cell.offsetWidth + 'px';
+        dialog.rootElem.style.height = dialog.height =  dialog.editor._framework.ed_cell.offsetHeight + 'px';
         dialog.onresize();
       }
     );
