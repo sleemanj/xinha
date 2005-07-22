@@ -4,6 +4,5 @@
 
 {
   "Insert special character": "Sett inn tegn",
-  "HTML value:": "HTML verdi:",
   "Cancel": "Avbryt"
 }

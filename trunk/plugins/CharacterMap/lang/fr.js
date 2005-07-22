@@ -14,6 +14,5 @@
 
 {
   "Insert special character": "Insérer caractère spécial",
-  "HTML value:": "entité HTML:",
   "Cancel": "Annuler"
 }

@@ -10,6 +10,5 @@
 
 {
   "Insert special character": "Sonderzeichen einfügen",
-  "HTML value:": "HTML Wert:",
   "Cancel": "Abbrechen"
 }
