@@ -6,6 +6,5 @@
 
 {
   "Insert special character"  : "Inserisca il carattere speciale",
-  "HTML value:"               : "Valore del HTML:",
   "Cancel"                    : "Annullamento"
 }
