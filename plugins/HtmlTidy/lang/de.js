@@ -13,6 +13,5 @@
 //       that states what encoding is necessary.)
 
 {
-  "\n Tidying up the HTML source, please wait...": "\n Code wird gesäubert, bitte warten...",
   "HTML Tidy": "HTML Tidy"
 }
