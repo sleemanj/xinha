@@ -1,7 +1,4 @@
-.htmlarea .toolbar, .htmlarea .toolbar .button
-{
-  background-color:#f7f8fd;
-}
+.htmlarea .toolbar { background-color:#f7f8fd;}
 
 .htmlarea .toolbarRow
 {
@@ -9,10 +6,9 @@
   background-color: #C5DCEC;
   margin-top:2px;
   margin-bottom:2px;
-  border:1px dotted #DEDEDE;
+  border:1px solid #7A8A99;
   padding:2px;
-  -moz-border-radius:5px;
-  margin: 1px;
+  -moz-border-radius:4px;
   margin:4px;
 }
 
@@ -20,8 +16,8 @@
   background-image: url(button-background.png);
   width:20px;
   height:20px;
-  padding:0px;
-  border:1px solid #f7f8fd;
+  padding:1px;
+  border:0px;
 }
 
 .buttonImageContainer
@@ -41,27 +37,20 @@
   padding: 0px;
 }
 
-.htmlarea .toolbar a.button:hover
-{
-  border: 1px solid;
-  border-color: #316AC5;
-  background-image: none !important;
-  background-color : #FFE1AC !important;
-}
-
+.htmlarea .toolbar a.button:hover,
 .htmlarea .toolbar a.buttonDisabled:hover
 {
-  border-color: #316AC5;
-  background-color : #FFE1AC;
+  padding: 0px;
+  border: 1px solid;
+  border-color: #7A8A99;
 }
 
 .htmlarea .toolbar .button.buttonActive,
 .htmlarea .toolbar .button.buttonPressed
 {
+  padding: 0px;
   border: 1px solid;
   border-color: #79A4CC #FFFFFF #FFFFFF #79A4CC;
-  background-image: none !important;
-  background-color : #FFBE6D !important;
 }
 
 .htmlarea .statusBar {
@@ -96,7 +85,7 @@
 }
 
 .dialog {
-  background-color:#f7f8fd;
+  background-color: #EEEEEE;
 }
 .dialog .title {
   background-image: url(button-background.png);
