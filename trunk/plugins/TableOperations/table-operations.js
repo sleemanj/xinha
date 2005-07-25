@@ -284,7 +284,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 	// this.editor.selectNodeContents(element);
 	// this.editor.updateToolbar();
 
-	var dialog = new PopupWin(this.editor, cell ? HTMLArea._lc("Cell Properties", "TableOperations") : HTMLArea._lc("Row Properties", "TableOperations")), function(dialog, params) {
+	var dialog = new PopupWin(this.editor, cell ? HTMLArea._lc("Cell Properties", "TableOperations") : HTMLArea._lc("Row Properties", "TableOperations"), function(dialog, params) {
 		TableOperations.processStyle(params, element);
 		for (var i in params) {
       if(typeof params[i] == 'function') continue;
