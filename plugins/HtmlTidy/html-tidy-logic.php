@@ -60,5 +60,5 @@
 	}
 ?>
 var ns="";
-<?php $jsMakeSrc; ?>
+<?php echo $jsMakeSrc; ?>
 editor.setHTML(ns);
