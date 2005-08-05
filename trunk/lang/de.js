@@ -129,5 +129,10 @@
         "For browsers that don't support images": "für Browser, die keine Bilder unterstützen",
         "Positioning of this image": "Positionierung dieses Bildes",
         "Image Preview:": "Bild Voransicht:",
-        "You must enter the URL": "Bitte geben Sie die URL ein"
+        "You must enter the URL": "Bitte geben Sie die URL ein",
+
+        "button_bold": "de/bold.gif",
+        "button_italic": "de/italic.gif",
+        "button_underline": "de/underline.gif"
+        
 }
