@@ -1,5 +1,5 @@
 <?php
-die("this script is disabled for security");
+//die("this script is disabled for security");
 
 /**
   * LC-Parse-Strings-Script
@@ -39,10 +39,18 @@ foreach($files as $file)
         if(trim($i)=="") continue;
         $ret[] = $i;
     }
-    if($file=="htmlarea.js") {
+
+    if(eregi('htmlarea\\.js$', $file)) {
         //toolbar-buttons
         //bold:          [ "Bold"
         preg_match_all('#[a-z]+: *\[ * "([^"]+)"#', $data, $m);
+        foreach($m[1] as $i) {
+            if(trim($i)=="") continue;
+            $ret[] = $i;
+        }
+
+        //HTMLArea._lc({key: 'button_bold', string
+        preg_match_all('#HTMLArea\\._lc\\({key: \'([^\']*)\'#', $data, $m);
         foreach($m[1] as $i) {
             if(trim($i)=="") continue;
             $ret[] = $i;
