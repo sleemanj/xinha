@@ -394,12 +394,12 @@ HTMLArea.Config = function () {
   //            See images/buttons_main.gif to see how it's done.
   //    - Enabled in text mode: if false the button gets disabled for text-only mode; otherwise enabled all the time.
   this.btnList = {
-    bold:          [ "Bold",   ["ed_buttons_main.gif",3,2], false, function(e) {e.execCommand("bold");} ],
-    italic:        [ "Italic", ["ed_buttons_main.gif",2,2], false, function(e) {e.execCommand("italic");} ],
-    underline:     [ "Underline", ["ed_buttons_main.gif",2,0], false, function(e) {e.execCommand("underline");} ],
-    strikethrough: [ "Strikethrough", ["ed_buttons_main.gif",3,0], false, function(e) {e.execCommand("strikethrough");} ],
-    subscript:     [ "Subscript", ["ed_buttons_main.gif",3,1], false, function(e) {e.execCommand("subscript");} ],
-    superscript:   [ "Superscript", ["ed_buttons_main.gif",2,1], false, function(e) {e.execCommand("superscript");} ],
+    bold:          [ "Bold",   HTMLArea._lc({key: 'button_bold', string: ["ed_buttons_main.gif",3,2]}, 'HTMLArea'), false, function(e) {e.execCommand("bold");} ],
+    italic:        [ "Italic", HTMLArea._lc({key: 'button_italic', string: ["ed_buttons_main.gif",2,2]}, 'HTMLArea'), false, function(e) {e.execCommand("italic");} ],
+    underline:     [ "Underline", HTMLArea._lc({key: 'button_underline', string: ["ed_buttons_main.gif",2,0]}, 'HTMLArea'), false, function(e) {e.execCommand("underline");} ],
+    strikethrough: [ "Strikethrough", HTMLArea._lc({key: 'button_strikethrough', string: ["ed_buttons_main.gif",3,0]}, 'HTMLArea'), false, function(e) {e.execCommand("strikethrough");} ],
+    subscript:     [ "Subscript", HTMLArea._lc({key: 'button_subscript', string: ["ed_buttons_main.gif",3,1]}, 'HTMLArea'), false, function(e) {e.execCommand("subscript");} ],
+    superscript:   [ "Superscript", HTMLArea._lc({key: 'button_superscript', string: ["ed_buttons_main.gif",2,1]}, 'HTMLArea'), false, function(e) {e.execCommand("superscript");} ],
 
     justifyleft:   [ "Justify Left", ["ed_buttons_main.gif",0,0], false, function(e) {e.execCommand("justifyleft");} ],
     justifycenter: [ "Justify Center", ["ed_buttons_main.gif",1,1], false, function(e){e.execCommand("justifycenter");}],
@@ -5212,7 +5212,11 @@ HTMLArea._lc = function(string, context, replace)
   var ret;
   if(_editor_lang == "en")
   {
-    ret = string;
+    if(typeof string == 'object' && string.string) {
+        ret = string.string;
+    } else {
+        ret = string;
+    }
   }
   else
   {
@@ -5231,24 +5235,43 @@ HTMLArea._lc = function(string, context, replace)
       HTMLArea._lc_catalog[context] = HTMLArea._loadlang(context);
     }
 
-    if(typeof HTMLArea._lc_catalog[context][string] == 'undefined')
+    var key;
+    if(typeof string == 'object' && string.key)
+    {
+      key = string.key;
+    }
+    else
+    {
+      key = string;
+    }
+
+    if(typeof HTMLArea._lc_catalog[context][key] == 'undefined')
     {
       if(context=='HTMLArea')
       {
-        ret = string; // Indicate it's untranslated
+        // Indicate it's untranslated
+        if(typeof string == 'object' && string.string) {
+          ret = string.string;
+        } else {
+          ret = string;
+        }
       }
       else
       {
         //if string is not found and context is not HTMLArea try if it is in HTMLArea
-        ret = HTMLArea._lc(string, 'HTMLArea');
+        return HTMLArea._lc(string, 'HTMLArea', replace);
       }
     }
     else
     {
-      ret = HTMLArea._lc_catalog[context][string];
+      ret = HTMLArea._lc_catalog[context][key];
     }
   }
 
+  if(typeof string == 'object' && string.replace)
+  {
+    replace = string.replace;
+  }
   if(typeof replace != "undefined")
   {
     for(var i in replace)

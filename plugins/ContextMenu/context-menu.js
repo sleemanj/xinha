@@ -213,7 +213,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 
 	if (!/html|body/i.test(currentTarget.tagName))
 		menu.push(null,
-			  [ HTMLArea._lc("Remove the $elem Element...", "ContextMenu", {elem: "&lt;" + currentTarget.tagName + "&gt;"}),
+			  [ HTMLArea._lc({string: "Remove the $elem Element...", replace: {elem: "&lt;" + currentTarget.tagName + "&gt;"}}, "ContextMenu"),
 			    function() {
 				    if (confirm(HTMLArea._lc("Please confirm that you want to remove this element:", "ContextMenu") + " " +
 						currentTarget.tagName)) {
