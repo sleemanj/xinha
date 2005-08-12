@@ -289,7 +289,7 @@ HTMLArea.Dialog.prototype.getValues = function()
 
             if(i.checked)
             {
-              if(typeof v == 'object' && v.push)
+              if(v != null && typeof v == 'object' && v.push)
               {
                 v.push(i.value);
               }
