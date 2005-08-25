@@ -125,6 +125,7 @@ function drawErrorBase(&$manager)
 function asc2hex ($temp)
 {
   $len = strlen($temp);
+  $data = "";
   for ($i=0; $i<$len; $i++) $data.=sprintf("%02x",ord(substr($temp,$i,1)));
   return $data;
 }
