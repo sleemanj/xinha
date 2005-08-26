@@ -81,7 +81,7 @@ $langData['HTMLArea'] = $ret;
 $plugins = getFiles("../plugins/");
 foreach($plugins as $pluginDir)
 {
-    $plugin = substr($pluginDir, 11);
+    $plugin = substr($pluginDir, 12);
     if($plugin=="ibrowser") continue;
     $ret = array();
 
