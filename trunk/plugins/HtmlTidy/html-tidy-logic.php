@@ -58,7 +58,11 @@
 	foreach ($srcLines as $line) {
 		$jsMakeSrc .= "\tns += '" . str_replace("'","\'",$line) . "\\n';\n";
 	}
+if(!sizeof($srcLines)) {
+    echo "alert(HTMLArea._lc('Tidy failed.  Check your HTML for syntax errors.', 'HtmlTidy'));\n";
+} else {
 ?>
 var ns="";
 <?php echo $jsMakeSrc; ?>
 editor.setHTML(ns);
+<? } ?>
