@@ -21,7 +21,7 @@
   "H Space": "horizontaler Freiraum",
   "Refresh": "Aktualisieren",
   "Uploading...": "Hochladen...",
-  "Crop": "Beschneiden"
+  "Crop": "Beschneiden",
 	"Resize": "Größe ändern",
   "Rotate": "Drehen",
   "Measure": "Abmessungen",
