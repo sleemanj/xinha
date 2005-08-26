@@ -174,8 +174,8 @@ if (param["f_applet"] == false ){
   string2 = string2 + stringapplet + "<br>";
 }
 
-if (param["f_affcode"]) string2 = string2 + _lc("NoteServer") + ":"  + param["f_code"] + "<br>";
-if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + _lc("NodeServer") + "</a> <br>";
+if (param["f_affcode"]) string2 = string2 + this._lc("NoteServer") + ":"  + param["f_code"] + "<br>";
+if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + this._lc("NodeServer") + "</a> <br>";
 
   editor.focusEditor();
   editor.insertHTML(string2);
