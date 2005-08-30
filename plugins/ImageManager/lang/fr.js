@@ -9,7 +9,7 @@
   "Trash": "Détruire",
   "Edit": "Editer",
   "Image File": "Fichier",
-  //"Upload": "Télécharger",
+  "Upload": "Télécharger",
   "Width": "Largeur",
   "Height": "Hauteur",
   "Width:": "Largeur",
@@ -57,5 +57,10 @@
   "Invalid folder name, please choose another folder name.": "Nom de répertoire invalide, veuillez choisir un autre nom",
   "GIF format is not supported, image editing not supported.": "Format GIF non supporté, édition d'image non supportée",
   "No Image Available": "Aucune image disponible",
-  "No Image selected.": "Aucune image sélectionnée."
+  "No Image selected.": "Aucune image sélectionnée.",
+  "Color:": "Couleur",
+  "Align:": "Alignement",
+  "Margin:": "Marge",
+  "Padding:": "Espacement",
+  "Border:": "Bordure"
 }
