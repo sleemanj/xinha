@@ -14,7 +14,7 @@
 // Override the ordinary popup.js translation to add translation for a few other HTML elements.
 
 function __dlg_translate(context) {
-    var types = ["span", "option", "td", "button", "div", "label", "a","img", "legend"];
+    var types = ["span", "option", "td", "th", "button", "div", "label", "a","img", "legend"];
     for (var type = 0; type < types.length; ++type) {
         var spans = document.getElementsByTagName(types[type]);
         for (var i = spans.length; --i >= 0;) {
