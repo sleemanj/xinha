@@ -69,22 +69,19 @@ CharCounter.prototype.onMode = function (mode)
   }
 }
 
-CharCounter.prototype.onKeyPress = function(ev) {
-    var cnt = this.updateCharCount();
-
-    //return true makes xinha ignoring the keypress, although for EVERY
-    //keypress (incl. navigating, deleting etc...)
-    //if(cnt > 100) return(true);
-}
-
 CharCounter.prototype.updateCharCount = function(ev) {
     editor = this.editor;
     var contents = editor.getHTML();
     contents = contents.replace(/<(.+?)>/g, '');//Don't count HTML tags
-    contents = contents.replace(/([\n\r\t])/g, ' ');//convert newlines and tabs into space    
+    contents = contents.replace(/([\n\r\t])/g, ' ');//convert newlines and tabs into space
     contents = contents.replace(/(  +)/g, ' ');//count spaces only once
     contents = contents.replace(/&(.*);/g, ' ');//Count htmlentities as one keystroke
     contents = contents.replace(/^\s*|\s*$/g, '');//trim
+//    var words=0;
+//    for (var x=0;x<contents.length;x++) {
+//      if (contents.charAt(x) == " " )  {words++}
+//    }
+//    this.charCount.innerHTML = this._lc("Words") + ": " + words + " | " + this._lc("Chars") + ": " + contents.length;
     this.charCount.innerHTML = this._lc("Chars") + ": " + contents.length;
     return(contents.length);
 }
