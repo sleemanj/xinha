@@ -1,0 +1,16 @@
+// LANG: "de", ENCODING: UTF-8 | ISO-8859-1
+// Sponsored by http://www.schaffrath-neuemedien.de
+// Author: Udo Schmal (gocher), <udo.schmal@t-online.de>
+//
+// (c) Udo Schmal & Schaffrath NeueMedien 2005
+// Distributed under the same terms as HTMLArea itself.
+// This notice MUST stay intact for use (see license.txt).
+
+{
+  "The file you are uploading doesn't have the correct extension.": "Die hochgeladene Datei ist im falschen Format.",
+	"The file you are uploading already exists.": "Eine Datei mit diesem Namen existiert schon.",
+	"The file you are uploading is to big. The max Filesize is": "Die hochgeladene Datei ist zu groß. Die maximakle Dateigröße beträgt",
+	"Images on the Server:": "Bilder auf dem Server:",
+	"Upload file": "Datei hochladen",
+  "Open file in new window": "Datei in neuen Fenster anzeigen"
+};
