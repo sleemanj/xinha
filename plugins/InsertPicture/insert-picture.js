@@ -52,8 +52,7 @@ HTMLArea.prototype._insertImage = function(image) {
 	};
 
 	var manager = _editor_url + 'plugins/InsertPicture/InsertPicture.php'
-	              + '?localpicturepath=' + InsertPicture.LocalPicturePath
-	              + '&picturepath=' + InsertPicture.PicturePath;
+	              + '?picturepath=' + InsertPicture.PicturePath;
 
 	Dialog(manager, function(param) {	        
 		if (!param) {	// user must have pressed Cancel
