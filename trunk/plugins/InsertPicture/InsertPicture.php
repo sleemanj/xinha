@@ -1,35 +1,54 @@
 <?PHP
-  $PicturePath = $_REQUEST['picturepath'];
-  $LocalPicturePath = $_REQUEST['localpicturepath'];
-  $limitedext = array(".gif",".jpg",".png",".jpeg"); //Extensions you want files uploaded limited to.
-	$limitedsize = "1000000"; //size limit in bytes
-	$message = "";
-  function formatSize($size) 
-	{
-		if($size < 1024) 
-			return $size.' bytes';	
-		else if($size >= 1024 && $size < 1024*1024) 
-			return sprintf('%01.2f',$size/1024.0).' Kb';	
-		else
-			return sprintf('%01.2f',$size/(1024.0*1024)).' Mb';	
-	}
+  //this plugin only use the relativ webpath to the picturefolder
+  //default ~  /htmlarea/plugins/InsertPicture/demo_pictures/
+  strstr( PHP_OS, "WIN") ? $strPathSeparator = "\\" : $strPathSeparator = "/";
+  if (isset($_REQUEST['picturepath'])) {
+    $getRequest = true;
+    $PicturePath = 'http://'.$_SERVER['HTTP_HOST'].$_REQUEST['picturepath'];
+    //$LocalPicturePath = $_REQUEST['localpicturepath'];
 
-	if (isset($_FILES['file'])) {
+    $AInsertPicturePath = explode ('/', 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/demo_pictures/');
+    $ALocalInsertPicturePath = explode($strPathSeparator, dirname(__FILE__).$strPathSeparator.'demo_pictures');
+    $APicturePath = explode('/', 'http://'.$_SERVER['HTTP_HOST'].$_REQUEST['picturepath']);
+
+    $AtheFilePath = array_values (array_diff ($APicturePath, $AInsertPicturePath));
+    $theFilePath = implode($strPathSeparator, $AtheFilePath).$strPathSeparator;
+
+    $AtheRootPath = array_values (array_diff ($ALocalInsertPicturePath, $AInsertPicturePath));
+    $theRootPath = implode($strPathSeparator, $AtheRootPath);
+
+    $LocalPicturePath = $theRootPath.$strPathSeparator.$theFilePath.$strPathSeparator;
+  } else {
+    $getRequest = false;
+    $PicturePath =  'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/demo_pictures/';
+    $LocalPicturePath = dirname(__FILE__).$strPathSeparator.'demo_pictures';
+  }
+  $limitedext = array(".gif",".jpg",".png",".jpeg"); //Extensions you want files uploaded limited to.
+  $limitedsize = "1000000"; //size limit in bytes
+  $message = "";
+  function formatSize($size) 
+  {
+    if($size < 1024) 
+      return $size.' bytes';	
+    else if($size >= 1024 && $size < 1024*1024) 
+      return sprintf('%01.2f',$size/1024.0).' Kb';	
+    else
+      return sprintf('%01.2f',$size/(1024.0*1024)).' Mb';	
+  }
+
+  if (isset($_FILES['file'])) {
     $file = $_FILES['file'];
-		$ext = strrchr($file['name'],'.');
-		if (!in_array($ext,$limitedext)) {
+    $ext = strrchr($file['name'],'.');
+    if (!in_array($ext,$limitedext)) {
       $message = "The file you are uploading doesn't have the correct extension.";
-    }
-		else if (file_exists($LocalPicturePath.'\\'.$file['name'])) {
+    } else if (file_exists($LocalPicturePath.'\\'.$file['name'])) {
       $message = "The file you are uploading already exists.";
-    }
-		else if ($file['size'] > $limitedsize) {
+    } else if ($file['size'] > $limitedsize) {
       $message = "The file you are uploading is to big. The max Filesize is</span><span> ".formatSize($limitedsize).".";
+    } else {
+      copy($file['tmp_name'], $LocalPicturePath.$strPathSeparator.$file['name']);
     }
-		else {
-      copy($file['tmp_name'], $LocalPicturePath.'\\'.$file['name']);
-		}	
-	}
+  }
 
 ?>
 <html>
@@ -48,7 +67,7 @@ function i18n(str) {
 };
 
 function Init() {
-	__dlg_translate("InsertPicture");
+  __dlg_translate("InsertPicture");
   __dlg_init();
   window.resizeTo(470, 490);
   // Make sure the translated string appears in the drop down. (for gecko)
@@ -92,6 +111,22 @@ function onOK() {
   return false;
 };
 
+function onUpload() {
+  var required = {
+    "file": i18n("Please select a file to upload.")
+  };
+  for (var i in required) {
+    var el = document.getElementById(i);
+    if (!el.value) {
+      alert(required[i]);
+      el.focus();
+      return false;
+    }
+  }
+  submit();
+  return false;
+}
+
 function onCancel() {
   __dlg_close(null);
   return false;
@@ -132,23 +167,27 @@ function openFile() {
   <tbody>
   <tr>
     <td>Images on the Server:<br>
-		<?php //echo $PicturePath.'<br>'.$LocalPicturePath ?>
     <select value="" style="width:200" size="10" onClick="CopyToURL(this[this.selectedIndex].value);">
 <?php
-	$d = @dir($LocalPicturePath);
-	while (false !== ($entry = $d->read()))  //not a dot file or directory
-	{	if(substr($entry,0,1) != '.')
-		{ echo '<OPTION value="' . $PicturePath.$entry. '">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
-		}
-	}
-	$d->close();
+  $d = @dir($LocalPicturePath);
+  while (false !== ($entry = $d->read())) { //not a dot file or directory
+    if(substr($entry,0,1) != '.') { 
+      echo '<OPTION value="' . $PicturePath.$entry. '">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
+    }
+  }
+  $d->close();
 ?>
     </select>
-
-      <form method="post" action="<?php echo $_SERVER['PHP_SELF'].'?picturepath=' . $PicturePath. '&localpicturepath=' . $LocalPicturePath?>" enctype="multipart/form-data">
-        <input type="file" name="file" size="30"><br>
-				<button type="submit" name="ok" onclick="return submit();">Upload file</button><br>
-				<span><?php echo $message ?></span>
+<?php
+  if ($getRequest == true) {
+    echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?picturepath='.$_REQUEST['picturepath'].'" enctype="multipart/form-data">';
+  } else {
+    echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'" enctype="multipart/form-data">';
+  }
+?>
+        <input type="file" name="file" id="file" size="30"><br>
+        <button type="submit" name="ok" onclick="return onUpload();">Upload file</button><br>
+        <span><?php echo $message ?></span>
       </form>
 
     </td>
