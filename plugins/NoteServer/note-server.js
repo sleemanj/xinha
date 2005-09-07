@@ -174,8 +174,11 @@ if (param["f_applet"] == false ){
   string2 = string2 + stringapplet + "<br>";
 }
 
-if (param["f_affcode"]) string2 = string2 + this._lc("NoteServer") + ":"  + param["f_code"] + "<br>";
-if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + this._lc("NodeServer") + "</a> <br>";
+// To test code source in textarea
+//if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("Source Code","NoteServer") + " :" + '<br> <textarea  cols=60 rows=10 style = "background: #FFFFE6">' +  param["f_code"] + '</textarea> <br>';
+
+if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("GUIDO Code","NoteServer") + " : "  + param["f_code"] + "<br>";
+if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + HTMLArea._lc("MIDI File","NoteServer") + "</a> <br>";
 
   editor.focusEditor();
   editor.insertHTML(string2);
