@@ -21,5 +21,9 @@
   "Document title:": "Dokumenttitel:",
   "OK": "OK",
   "Primary style-sheet:": "Stylesheet:",
-  "Text color:": "Textfarbe:"
+  "Text color:": "Textfarbe:",
+	"Character set:": "Zeichensatz",
+	"Description:": "Beschreibung",
+	"Keywords:": "Schlüsselworte",
+	"UTF-8 (recommended)": "UTF-8 (empfohlen)"
 }
