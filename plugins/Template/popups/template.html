@@ -9,6 +9,7 @@ function Init() {
   __dlg_translate("Template");
   __dlg_init();
   window.resizeTo(400, 200);
+  document.getElementById("cancel").focus();
 };
 
 function onOK(sel) {
@@ -44,7 +45,7 @@ function onCancel() {
   </table>
 
   <div id="buttons">
-    <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
+    <button type="button" name="cancel" id="cancel" onclick="return onCancel();">Cancel</button>
   </div>
 </form>
 </body>
