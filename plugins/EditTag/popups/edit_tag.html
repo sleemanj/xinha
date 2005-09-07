@@ -6,20 +6,13 @@
   <script type="text/javascript" src="../../../popups/popup.js"></script>
 <script language="javascript">
 
-function _CloseOnEsc(event) {
-  if ( event.keyCode == 27 ) {
-    window.close();
-    return;
-  }
-}
-
 function Init() {
   __dlg_translate("EditTag");
   __dlg_init();
   window.resizeTo(600, 450);
-  document.body.onkeypress = _CloseOnEsc;
   var param = window.dialogArguments;
   document.getElementById("TAG").value = param["content"];
+  document.getElementById("TAG").focus();
 }
 
 function onCancel() {
