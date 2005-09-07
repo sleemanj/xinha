@@ -30,23 +30,14 @@ var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
 var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
 window.moveTo(x, y);
 
-function _CloseOnEsc()
-{
-    if ( event.keyCode == 27 )
-    {
-        window.close();
-        return;
-    }
-}
-
 function Init()                                                         // run on page load
 {
    __dlg_translate('CharacterMap');
    __dlg_init();
-    document.body.onkeypress = _CloseOnEsc;
 
     var character = '';                                                   // set default input to empty
     View( null, character );
+    document.getElementById("cancel").focus();
 }
 
 var oldView = null;
@@ -75,7 +66,7 @@ function onCancel()                   // cancel selection
 
 </script>
 </head>
-<body class="dialog" onload="Init();self.focus();">
+<body class="dialog" onload="Init();">
 <table border="0" cellspacing="1" cellpadding="0" width="100%" style="cursor: pointer; background: #ADAD9C; border: 1px inset;">
 <tr>
 <td class="character" onMouseOver="View(this,'&amp;Yuml;')" onClick="Set('&Yuml;')">&Yuml;</td>
@@ -214,6 +205,6 @@ function onCancel()                   // cancel selection
 <td class="character">&nbsp;</td>
 <td class="character">&nbsp;</td>
 </table><br />
-<form style="text-align: center;"><button type="button" name="cancel" onclick="return onCancel();" class="submitInsertTable">Cancel</button></form>
+<form style="text-align: center;"><button type="button" id="cancel" name="cancel" onclick="return onCancel();" class="submitInsertTable">Cancel</button></form>
 </body>
 </html>
