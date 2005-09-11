@@ -124,11 +124,10 @@ ListType.prototype.updateValue = function( editor, combo )
 ListType.prototype.onUpdateToolbar = function()
 {
   if ( this.editor.config.ListType.mode == 'toolbar' ) return ;
-  var courant = this.editor.getParentElement();
-  var parent = courant;
-  if ( ( courant.tagName.toLowerCase() == 'li' ) && ( typeof courant.parentNode != 'undefined' ) )
-   parent = courant.parentNode;
-  if ( ( parent.tagName.toLowerCase() == 'ul' ) || ( parent.tagName.toLowerCase() == 'ol' ) )
+  var parent = editor.getParentElement();
+  while ( parent && !/^[o|u]l$/i.test( parent.tagName ) )
+    parent = parent.parentNode;
+  if (parent)
   {
     this.showPanel( parent );
   }
