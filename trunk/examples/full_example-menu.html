@@ -14,10 +14,23 @@ full_example-body.html, and full_example.js.
 form, p {margin:0; padding:0;}
 label {display:block;}
 #numeditor {width:25px;}
+.options {display:none;}
 </style>
+<script type="text/javascript">
+function checkPluginsOptions()
+{
+  var plugins = document.forms[0].elements['plugins'];
+  for(var x = 0; x < plugins.length; x++)
+    if (document.getElementById(plugins[x].value + 'Options'))
+      document.getElementById(plugins[x].value + 'Options').style.display = (plugins[x].checked)? 'block':'none';
+}
+function toggleOnChange(elt) {
+  document.getElementById(elt.value + 'Options').style.display = (elt.checked)? 'block':'none';
+}
+</script>
 </head>
 
-<body>
+<body onload="checkPluginsOptions();">
   <form action="full_example-body.html" target="body">
     <p>
       Select from the options below and <input type="submit" value="click to show Example">
@@ -55,8 +68,14 @@ label {display:block;}
         <input type="checkbox" name="plugins" value="Abbreviation"> Abbreviation
       </label>
       <label>
-        <input type="checkbox" name="plugins" value="CharacterMap" checked="checked"> CharacterMap
+        <input type="checkbox" name="plugins" value="CharacterMap" checked="checked" onchange="toggleOnChange(this);"> CharacterMap
       </label>
+      <div id="CharacterMapOptions" class="options">
+        mode : <select name="CharacterMapMode">
+          <option value="popup">popup</option>
+          <option value="panel">panel</option>
+        </select>
+      </div>
       <label>
         <input type="checkbox" name="plugins" value="CharCounter"> CharCounter
       </label>
@@ -109,8 +128,14 @@ label {display:block;}
         <input type="checkbox" name="plugins" value="LangMarks"> LangMarks
       </label>
       <label>
-        <input type="checkbox" name="plugins" value="ListType" checked="checked"> ListType
+        <input type="checkbox" name="plugins" value="ListType" checked="checked" onchange="toggleOnChange(this);"> ListType
       </label>
+      <div id="ListTypeOptions" class="options">
+        mode : <select name="ListTypeMode">
+          <option value="toolbar">toolbar</option>
+          <option value="panel">panel</option>
+        </select>
+      </div>
       <label>
         <input type="checkbox" name="plugins" value="NoteServer"> NoteServer
       </label>
