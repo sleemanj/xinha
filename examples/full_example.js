@@ -84,6 +84,24 @@
       }
 
     }
+    
+    if (typeof ListType != 'undefined')
+    {
+      if(window.parent && window.parent != window)
+      {
+        var f = window.parent.menu.document.forms[0];
+        config.ListType.mode = f.elements['ListTypeMode'].options[f.elements['ListTypeMode'].selectedIndex].value;
+      }
+    }
+
+    if (typeof CharacterMap != 'undefined')
+    {
+      if(window.parent && window.parent != window)
+      {
+        var f = window.parent.menu.document.forms[0];
+        config.CharacterMap.mode = f.elements['CharacterMapMode'].options[f.elements['CharacterMapMode'].selectedIndex].value;
+      }
+    }
 
     return config;
   }
