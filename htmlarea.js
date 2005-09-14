@@ -4730,7 +4730,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
             // It's in both browsers too, so either I'm doing something wrong, or
             // something else is going on?
 
-            if(editor.config.only7BitPrintablesInURLs)
+            if(editor.config.only7BitPrintablesInURLs && (name == "href" || name == "src"))
             {
               value = value.replace(/([^!-~]+)/g, function(match) { return escape(match); });
             }
