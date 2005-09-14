@@ -51,20 +51,26 @@ function ListType( editor )
 
     var elts_ul = ['disc', 'circle', 'square', 'none'];
     var elts_ol = ['decimal', 'lower-alpha', 'upper-alpha', 'lower-roman', 'upper-roman', 'none'];
+    var divglobal = document.createElement( 'div' );
+    divglobal.style.height = '90px';
     var div = document.createElement( 'div' );
     div.id = 'LTdivUL';
     div.style.display = 'none';
-    for ( var i=0; i<elts_ul.length; i++ ) {
+    for ( var i=0; i<elts_ul.length; i++ )
+    {
       div.appendChild( this.createImage( elts_ul[i] ) );
     }
-    editor._ListType.appendChild( div );
+    divglobal.appendChild( div );
     var div = document.createElement( 'div' );
     div.id = 'LTdivOL';
     div.style.display = 'none';
-    for ( var i=0; i<elts_ol.length; i++ ) {
+    for ( var i=0; i<elts_ol.length; i++ )
+    {
       div.appendChild( this.createImage( elts_ol[i] ) );
     }
-    editor._ListType.appendChild( div );
+    divglobal.appendChild( div );
+
+    editor._ListType.appendChild( divglobal );
 
     editor.hidePanel( editor._ListType );
   }
@@ -78,7 +84,7 @@ HTMLArea.Config.prototype.ListType =
 ListType._pluginInfo =
 {
   name          : "ListType",
-  version       : "2.0",
+  version       : "2.1",
   developer     : "Laurent Vilday",
   developer_url : "http://www.mokhet.com/",
   c_owner       : "Xinha community",
@@ -124,10 +130,10 @@ ListType.prototype.updateValue = function( editor, combo )
 ListType.prototype.onUpdateToolbar = function()
 {
   if ( this.editor.config.ListType.mode == 'toolbar' ) return ;
-  var parent = editor.getParentElement();
+  var parent = this.editor.getParentElement();
   while ( parent && !/^[o|u]l$/i.test( parent.tagName ) )
     parent = parent.parentNode;
-  if (parent)
+  if (parent && /^[o|u]l$/i.test( parent.tagName ) )
   {
     this.showPanel( parent );
   }
