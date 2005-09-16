@@ -71,8 +71,12 @@ function FormOperations(editor)
 
   var buttonsImage = editor.imgURL('buttons.gif', 'FormOperations');
 
+  FormOperations.prototype._lc = function(string) {
+    return HTMLArea._lc(string, 'FormOperations');
+  }
+
   this.editor.config.btnList.insert_form =
-  [ "Insert a form.",
+  [ this._lc("Insert a Form."),
     [buttonsImage, 0, 0],
     false,
     function()
@@ -95,7 +99,7 @@ function FormOperations(editor)
   ];
 
   this.editor.config.btnList.insert_text_field =
-  [ "Insert a text, password or hidden field.",
+  [ this._lc("Insert a text, password or hidden field."),
     [buttonsImage, 1, 0],
     false,
     function()
@@ -106,7 +110,7 @@ function FormOperations(editor)
   ];
 
   this.editor.config.btnList.insert_textarea_field =
-  [ "Insert a multi-line text field.",
+  [ this._lc("Insert a multi-line text field."),
     [buttonsImage, 2, 0],
     false,
     function()
@@ -117,7 +121,7 @@ function FormOperations(editor)
   ];
 
   this.editor.config.btnList.insert_select_field =
-  [ "Insert a select field.",
+  [ this._lc("Insert a select field."),
     [buttonsImage, 3, 0],
     false,
     function()
@@ -128,7 +132,7 @@ function FormOperations(editor)
   ];
 
   this.editor.config.btnList.insert_cb_field =
-  [ "Insert a check box.",
+  [ this._lc("Insert a check box."),
     [buttonsImage, 4, 0],
     false,
     function()
@@ -139,7 +143,7 @@ function FormOperations(editor)
   ];
 
   this.editor.config.btnList.insert_rb_field =
-  [ "Insert a radio button.",
+  [ this._lc("Insert a radio button."),
     [buttonsImage, 5, 0],
     false,
     function()
