@@ -8,7 +8,7 @@
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
 .htmlarea .toolbar table { margin: 0; font-family: tahoma,verdana,sans-serif; font-size: 11px; }
-.htmlarea .toolbar img { border: none; }
+.htmlarea .toolbar img { border: none; vertical-align: top; }
 .htmlarea .toolbar .label { padding: 0px 3px; }
 
 .htmlarea .toolbar .button {
@@ -67,7 +67,12 @@
 
 .htmlarea .toolbar select,
 .htmlarea .toolbar select:hover,
-.htmlarea .toolbar select:active { background: FieldFace; color: ButtonText; }
+.htmlarea .toolbar select:active { 
+  margin-top: 2px;
+  margin-bottom: 1px;
+  background: FieldFace;
+  color: ButtonText;
+}
 
 .htmlarea iframe.xinha_iframe, .htmlarea textarea.xinha_textarea
 {
