@@ -452,7 +452,7 @@ HTMLArea.ripStylesFromCSSFile = function(URL)
 
 HTMLArea.ripStylesFromCSSString = function(css)
 {
-  // We are holy interested in the selectors, the rules are not important
+  // We are only interested in the selectors, the rules are not important
   //  so we'll drop out all coments and rules
   RE_comment = /\/\*(.|\r|\n)*?\*\//g;
   RE_rule    = /\{(.|\r|\n)*?\}/g;
