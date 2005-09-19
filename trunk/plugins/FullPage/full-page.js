@@ -69,9 +69,9 @@ FullPage.prototype.buttonPress = function(editor, id) {
 			if (/content-type/i.test(meta.httpEquiv)) {
 				r = /^text\/html; *charset=(.*)$/i.exec(meta.content);
 				charset = r[1];
-			}	else if (/keywords/i.test(meta.name)) {
+			} else if ((/keywords/i.test(meta.name)) || (/keywords/i.test(meta.id))) {
 				keywords = meta.content;
-			}	else if (/description/i.test(meta.name)) {
+			}	else if ((/description/i.test(meta.name)) || (/description/i.test(meta.id))) {
 				description = meta.content;
 			}
 		}
@@ -123,9 +123,9 @@ FullPage.prototype.setDocProp = function(params) {
 			r = /^text\/html; *charset=(.*)$/i.exec(meta.content);
 			charset = r[1];
 			charset_meta = meta;
-		} else if (/keywords/i.test(meta.name)) {
+		} else if ((/keywords/i.test(meta.name)) || (/keywords/i.test(meta.id))) {
 			keywords = meta;
-		}	else if (/description/i.test(meta.name)) {
+		}	else if ((/description/i.test(meta.name)) || (/description/i.test(meta.id))) {
 			description = meta;
 		}
 	}
@@ -139,6 +139,7 @@ FullPage.prototype.setDocProp = function(params) {
 		var meta = doc.createElement("meta");
 		if (httpEquiv!="") meta.httpEquiv = httpEquiv;
 		if (name!="") meta.name = name;
+		if (name!="") meta.id = name;
 		meta.content = content;
 		head.appendChild(meta);
 		return meta;
