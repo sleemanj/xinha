@@ -113,6 +113,8 @@
 
 
   var f = document.forms[0];
+  f.method = 'post';
+  f.action = 'ext_example-dest.php';
   f.innerHTML = '';
 
   var lipsum = document.getElementById('lipsum').innerHTML;
@@ -138,8 +140,7 @@
   //check submitted values
   var submit = document.createElement('input');
   submit.type = "submit";
-  submit.id = "submit";
-  submit.value = "submit";
+  submit.value = "Submit";
   f.appendChild(submit);
   
   var _oldSubmitHandler = null;
@@ -147,7 +148,6 @@
     _oldSubmitHandler = document.forms[0].onsubmit;
   }
   function frame_onSubmit(){
-    alert(document.getElementById("myTextarea0").value);
     if (_oldSubmitHandler != null) {
       _oldSubmitHandler();
     }
