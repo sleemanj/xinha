@@ -154,7 +154,7 @@ function FormOperations(editor)
   ];
 
   this.editor.config.btnList.insert_button =
-  [ "Insert a submit/reset button.",
+  [ this._lc("Insert a submit/reset button."),
     [buttonsImage, 6, 0],
     false,
     function()

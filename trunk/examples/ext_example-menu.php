@@ -163,6 +163,7 @@ Dialog._geckoOpenModal = function(url, action, init) {
           <option value="de">German</option>
           <option value="fr">French</option>
           <option value="it">Italian</option>
+          <option value="no">Norwegian</option>
           <option value="pl">Polish</option>
           </select>
         </label>
