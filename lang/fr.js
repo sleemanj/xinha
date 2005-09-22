@@ -90,9 +90,10 @@
   "Top frame (_top)": "Frame principale (_top)",
   "Other": "Autre",
   "Target:": "Cible",
-  "Title (tooltip):": "Text alternatif",
+  "Title (tooltip):": "Texte alternatif",
   "URL:": "URL:",
   "You must enter the URL where this link points to": "Vous devez entrer l'URL de ce lien",
+  "You need to select some text before creating a link": "Vous devez sélectionner du texte avant de créer un lien",
   
   // Insert Table
   "Insert Table": "Insérer un tableau",
