@@ -179,6 +179,7 @@
       _oldSubmitHandler = document.forms[0].onsubmit;
     }
     function frame_onSubmit(){
+      document.getElementById('myTextarea0').value = document.getElementById('myTextarea0').value.replace(/^[\r\n]+|\s+$/, '')
       window.parent.menu.document.getElementById('myTextarea0').value = document.getElementById('myTextarea0').value;
       if (_oldSubmitHandler != null) {
         _oldSubmitHandler();
