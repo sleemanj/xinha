@@ -2,25 +2,19 @@
 <html>
 <head>
 
-  <!--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
-    --  Xinha example usage.  This file shows how a developer might make use of
-    --  Xinha, it forms the primary example file for the entire Xinha project.
-    --  This file can be copied and used as a template for development by the
-    --  end developer who should simply removed the area indicated at the bottom
-    --  of the file to remove the auto-example-generating code and allow for the
-    --  use of the file as a boilerplate.
-    --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/full_example-body.html $
+  <!-- ---------------------------------------------------------------------
+    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/ext_example-body.html $
     --  $LastChangedDate: 2005-07-27 16:43:19 +0200 (Mi, 27 Jul 2005) $
     --  $LastChangedRevision: 287 $
     --  $LastChangedBy: gocher $
-    --------------------------------------------------------------------------->
+    ------------------------------------------------------------------------ -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Example of Xinha</title>
   <link rel="stylesheet" href="full_example.css" />
 
   <script type="text/javascript">
+    var f = window.parent.menu.document.forms[0];
     // You must set _editor_url to the URL (including trailing slash) where
     // where xinha is installed, it's highly recommended to use an absolute URL
     //  eg: _editor_url = "/path/to/xinha/";
@@ -28,7 +22,8 @@
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/ext_example-body\.html.*/, '')
-    _editor_lang = "en";      // And the language we need to use in the editor.
+    _editor_lang = f.lang.value; // And the language we need to use in the editor.
+    _editor_skin = f.skin.value; // the skin we use in the editor
   </script>
 
   <!-- Load up the actual editor core -->
@@ -39,93 +34,135 @@
     xinha_init    = null;
     xinha_config  = null;
     xinha_plugins = null;
+    
+    xinha_init = xinha_init ? xinha_init : function() {
+      var f = window.parent.menu.document.forms[0];
+// What are the plugins you will be using in the editors on this page.
+// List all the plugins you will need, even if not all the editors will use all the plugins.
+      xinha_plugins = [ ];
+      for(var x = 0; x < f.plugins.length; x++) {
+        if(f.plugins[x].checked) xinha_plugins.push(f.plugins[x].value);
+      }
 
-    // This contains the names of textareas we will make into Xinha editors
-    xinha_init = xinha_init ? xinha_init : function()
-    {
-      /** STEP 1 ***************************************************************
-       * First, what are the plugins you will be using in the editors on this
-       * page.  List all the plugins you will need, even if not all the editors
-       * will use all the plugins.
-       ************************************************************************/
+      // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
+      if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
 
-      xinha_plugins = xinha_plugins ? xinha_plugins :
-      [
-       'CharacterMap',
-       'ContextMenu',
-       'FullScreen',
-       'ListType',
-       'SpellChecker',
-       'Stylist',
-       'SuperClean',
-       'TableOperations'
-      ];
+// What are the names of the textareas you will be turning into editors?
+      var num = 1;
+      num = parseInt(f.num.value);
+      if(isNaN(num)) {
+        num = 1;
+        f.num.value = 1;
+      }
+      var b = document.forms[0];
+      var lipsum = window.parent.menu.document.getElementById('myTextarea0').value;
 
-             // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-             if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+      xinha_editors = [ ]
+      for(var x = 0; x < num; x++) {
+        var ta = 'myTextarea' + x;
+        xinha_editors.push(ta);
+        
+        var div = document.createElement('div');
+        div.className = 'area_holder';
 
-      /** STEP 2 ***************************************************************
-       * Now, what are the names of the textareas you will be turning into
-       * editors?
-       ************************************************************************/
+        var txta = document.createElement('textarea');
+        txta.id   = ta;
+        txta.name = ta;
+        txta.value = lipsum;
+        txta.style.width="100%";
+        txta.style.height="420px";
 
-      xinha_editors = xinha_editors ? xinha_editors :
-      [
-        'myTextArea',
-        'anotherOne'
-      ];
+        div.appendChild(txta);
+        b.appendChild(div);
+      }
 
-      /** STEP 3 ***************************************************************
-       * We create a default configuration to be used by all the editors.
-       * If you wish to configure some of the editors differently this will be
-       * done in step 5.
-       *
-       * If you want to modify the default config you might do something like this.
-       *
-       *   xinha_config = new HTMLArea.Config();
-       *   xinha_config.width  = '640px';
-       *   xinha_config.height = '420px';
-       *
-       *************************************************************************/
+// Create a default configuration to be used by all the editors.
+      xinha_config = new HTMLArea.Config();
+      if (f.width) xinha_config.width = f.width.value;
+      if (f.height) xinha_config.height = f.height.value;
+      if (f.sizeIncludesBars) xinha_config.sizeIncludesBars = f.sizeIncludesBars.value;
+      if (f.statusBar) xinha_config.statusBar = f.statusBar.value;
+      if (f.mozParaHandler) xinha_config.mozParaHandler = f.mozParaHandler.value;
+      if (f.undoSteps) xinha_config.undoSteps = f.undoSteps.value;
+      if (f.baseHref) xinha_config.baseHref = f.baseHref.value;
+      if (f.stripBaseHref) xinha_config.stripBaseHref = f.stripBaseHref.value;
+      if (f.stripSelfNamedAnchors) xinha_config.stripSelfNamedAnchors = f.stripSelfNamedAnchors.value;
+      if (f.only7BitPrintablesInURLs) xinha_config.only7BitPrintablesInURLs = f.only7BitPrintablesInURLs.value;
+      if (f.sevenBitClean) xinha_config.sevenBitClean = f.sevenBitClean.value;
+      if (f.killWordOnPaste) xinha_config.killWordOnPaste = f.killWordOnPaste.value;
+      if (f.flowToolbars) xinha_config.flowToolbars = f.flowToolbars.value;
+      if ((typeof CharacterMap != 'undefined') && (f.CharacterMapMode)) xinha_config.CharacterMap.mode = f.CharacterMapMode.value;
+      if ((typeof ListType != 'undefined') && (f.ListTypeMode)) xinha_config.ListType.mode = f.ListTypeMode.value;
 
-       xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
+      if(typeof CSS != 'undefined') {
+        xinha_config.pageStyle = "@import url(custom.css);";
+      }
 
-      /** STEP 4 ***************************************************************
-       * We first create editors for the textareas.
-       *
-       * You can do this in two ways, either
-       *
-       *   xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
-       *
-       * if you want all the editor objects to use the same set of plugins, OR;
-       *
-       *   xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config);
-       *   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
-       *   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
-       *
-       * if you want to use a different set of plugins for one or more of the
-       * editors.
-       ************************************************************************/
+      if(typeof Stylist != 'undefined') {
+        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
+        //  otherwise it won't work!
+        xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
 
-      xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+        // Or we can load styles directly
+        xinha_config.stylistLoadStyles('p.red_text { color:red }');
 
-      /** STEP 5 ***************************************************************
-       * If you want to change the configuration variables of any of the
-       * editors,  this is the place to do that, for example you might want to
-       * change the width and height of one of the editors, like this...
-       *
-       *   xinha_editors.myTextArea.config.width  = '640px';
-       *   xinha_editors.myTextArea.config.height = '480px';
-       *
-       ************************************************************************/
+        // If you want to provide "friendly" names you can do so like
+        // (you can do this for stylistLoadStylesheet as well)
+        xinha_config.stylistLoadStyles('p.pink_text { color:pink }', {'p.pink_text' : 'Pretty Pink'});
+      }
 
+      if(typeof DynamicCSS != 'undefined') {
+        xinha_config.pageStyle = "@import url(dynamic.css);";
+      }
 
-      /** STEP 6 ***************************************************************
-       * Finally we "start" the editors, this turns the textareas into
-       * Xinha editors.
-       ************************************************************************/
+      if(typeof InsertWords != 'undefined') {
+        // Register the keyword/replacement list
+        var keywrds1 = new Object();
+        var keywrds2 = new Object();
 
+        keywrds1['-- Dropdown Label --'] = '';
+        keywrds1['onekey'] = 'onevalue';
+        keywrds1['twokey'] = 'twovalue';
+        keywrds1['threekey'] = 'threevalue';
+
+        keywrds2['-- Insert Keyword --'] = '';
+        keywrds2['Username'] = '%user%';
+        keywrds2['Last login date'] = '%last_login%';
+        xinha_config.InsertWords = {
+          combos : [ { options: keywrds1, context: "body" },
+                     { options: keywrds2, context: "li" } ]
+        }
+      }
+
+      if(typeof InsertPicture != 'undefined') {
+        // Path for InsertPicture plugin
+        InsertPicture.PicturePath = '/schmal/pictures/';
+      }
+
+// First create editors for the textareas.
+// You can do this in two ways, either
+//   xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+// if you want all the editor objects to use the same set of plugins, OR;
+//   xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config);
+//   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
+//   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
+// if you want to use a different set of plugins for one or more of the editors.
+      xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+
+// If you want to change the configuration variables of any of the editors,  
+// this is the place to do that, for example you might want to
+// change the width and height of one of the editors, like this...
+//   xinha_editors.myTextArea.config.width  = '640px';
+//   xinha_editors.myTextArea.config.height = '480px';
+
+// Finally we "start" the editors, this turns the textareas into Xinha editors.
       HTMLArea.startEditors(xinha_editors);
+    
+      //check submitted values
+      var submit = document.createElement('button');
+      submit.type = "submit";
+      submit.innerHTML = "Submit";
+      b.appendChild(submit);
     }
 
     window.onload = xinha_init;
@@ -133,46 +170,21 @@
 </head>
 
 <body>
-
-  <form id="editors_here">
+  <form id="editors_here" method="post" action="ext_example-dest.php">
 
   </form>
-
-
-  <!-- *************************************************************************
-    -                            !! IMPORTANT !!
-    -  The html and javascript below is the code used to create the example page.
-    -  It renders a lot of the above unused because it pre-fills xinha_editors,
-    -  xinha_config and xinha_plugins for you, and creates new textareas in place
-    -  of the ones above. The items above are not used while the example is being
-    -  used!
-    -
-    -  If you are going to take the code in this file to form the basis of your
-    -  own, then leave out this marked area.
-    -  ********************************************************************* -->
-
-        <div id="lipsum" style="display:none">
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-          Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
-          velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
-          ante elementum turpis. Aliquam nisl. Nulla posuere neque non
-          tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
-          parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
-          Curabitur pharetra bibendum lectus.</p>
-
-          <ul>
-            <li> Phasellus et massa sed diam viverra semper.  </li>
-            <li> Mauris tincidunt felis in odio.              </li>
-            <li> Nulla placerat nunc ut pede.                 </li>
-            <li> Vivamus ultrices mi sit amet urna.           </li>
-            <li> Quisque sed augue quis nunc laoreet volutpat.</li>
-            <li> Nunc sit amet metus in tortor semper mattis. </li>
-          </ul>
-        </div>
-        <script src="ext_example.js"></script>
-
-  <!-- ********************************************************************* -->
-
-
+<script type="text/javascript">
+    var _oldSubmitHandler = null;
+    if (document.forms[0].onsubmit != null) {
+      _oldSubmitHandler = document.forms[0].onsubmit;
+    }
+    function frame_onSubmit(){
+      window.parent.menu.document.getElementById('myTextarea0').value = document.getElementById('myTextarea0').value;
+      if (_oldSubmitHandler != null) {
+        _oldSubmitHandler();
+      }
+    }
+    document.forms[0].onsubmit = frame_onSubmit;
+</script>
 </body>
 </html>
