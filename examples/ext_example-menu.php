@@ -25,6 +25,43 @@
     label { display:block;}
   </style>
   <script language="JavaScript" type="text/javascript">
+  
+    function getCookieVal (offset) {
+      var endstr = document.cookie.indexOf (";", offset);
+      if (endstr == -1)
+        endstr = document.cookie.length;
+      return unescape(document.cookie.substring(offset, endstr));
+    }
+
+    function getCookie (name) {
+      var arg = name + "=";
+      var alen = arg.length;
+      var clen = document.cookie.length;
+      var i = 0;
+      while (i < clen) {
+        var j = i + alen;
+        if (document.cookie.substring(i, j) == arg)
+          return getCookieVal (j);
+        i = document.cookie.indexOf(" ", i) + 1;
+        if (i == 0) break; 
+      }
+      return null;
+    }
+
+    function setCookie (name, value) {
+      var argv = setCookie.arguments;
+      var argc = setCookie.arguments.length;
+      var expires = (argc > 2) ? argv[2] : null;
+      var path = (argc > 3) ? argv[3] : null;
+      var domain = (argc > 4) ? argv[4] : null;
+      var secure = (argc > 5) ? argv[5] : false;
+      document.cookie = name + "=" + escape (value) +
+        ((expires == null) ? "" : ("; expires=" + expires.toGMTString())) +
+        ((path == null) ? "" : ("; path=" + path)) +
+        ((domain == null) ? "" : ("; domain=" + domain)) +
+        ((secure == true) ? "; secure" : "");
+    }
+
   function _onResize() {
     var sHeight;
     if (window.innerHeight) sHeight = window.innerHeight;
@@ -143,8 +180,29 @@ Dialog._geckoOpenModal = function(url, action, init) {
 		}, outparam );
   }
 
+  function init(){
+    var co = getCookie('co_ext_Xinha');
+    if(co!=null){
+      var co_values;
+      var co_entries = co.split('###');
+      for (var i in co_entries) {
+        co_values = co_entries[i].split('=');
+        if(co_values[0]=='plugins') {
+          for(var x = 0; x < document.forms[0].plugins.length; x++) {
+            if(co_values[1].indexOf(document.forms[0].plugins[x].value)!=-1) {
+              document.forms[0].plugins[x].checked = true;
+            }
+          }
+        } else if(co_values[0]!='') {
+          document.getElementById(co_values[0]).value = co_values[1];
+        }
+      }
+    }  
+    _onResize();
+  };
+  
   window.onresize = _onResize;
-  window.onload = _onResize;
+  window.onload = init;
   </script>
 </head>
 
@@ -154,11 +212,11 @@ Dialog._geckoOpenModal = function(url, action, init) {
     <fieldset>
       <legend>Settings</legend>
         <label>
-          Number of Editors: <input type="text" name="num" value="1" style="width:25;" maxlength="2"/>
+          Number of Editors: <input type="text" name="num" id="num" value="1" style="width:25;" maxlength="2"/>
         </label>
         <label>
           Language:
-          <select name="lang">
+          <select name="lang" id="lang">
           <option value="en">English</option>
           <option value="de">German</option>
           <option value="fr">French</option>
@@ -169,7 +227,7 @@ Dialog._geckoOpenModal = function(url, action, init) {
         </label>
         <label>
           Skin:
-          <select name="skin">
+          <select name="skin" id="skin">
           <option value="">-- no skin --</option>
 <?php
 	$d = @dir($LocalSkinPath);
@@ -214,10 +272,54 @@ Dialog._geckoOpenModal = function(url, action, init) {
 ?>
       </div>
     </fieldset>
-    <center><input type="submit" value="reload editor"></center>
+    <center><button type="submit">reload editor</button></center>
+    
+        <textarea id="myTextarea0" style="display:none">
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+          Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
+          velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
+          ante elementum turpis. Aliquam nisl. Nulla posuere neque non
+          tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
+          parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
+          Curabitur pharetra bibendum lectus.</p>
+
+          <ul>
+            <li> Phasellus et massa sed diam viverra semper.  </li>
+            <li> Mauris tincidunt felis in odio.              </li>
+            <li> Nulla placerat nunc ut pede.                 </li>
+            <li> Vivamus ultrices mi sit amet urna.           </li>
+            <li> Quisque sed augue quis nunc laoreet volutpat.</li>
+            <li> Nunc sit amet metus in tortor semper mattis. </li>
+          </ul>
+        </textarea>
+        
   </form>
   <script type="text/javascript">
     top.frames["body"].location.href = document.location.href.replace(/ext_example-menu\.php.*/, 'ext_example-body.html')
+    var _oldSubmitHandler = null;
+    if (document.forms[0].onsubmit != null) {
+      _oldSubmitHandler = document.forms[0].onsubmit;
+    }
+    function frame_onSubmit(){
+      var thenewdate = new Date ();
+      thenewdate.setTime(thenewdate.getTime() + (5*24*60*60*1000));
+      var co_value = 'skin=' + document.getElementById('skin').options[document.getElementById('skin').selectedIndex].value + '###' +
+                     'lang=' + document.getElementById('lang').options[document.getElementById('lang').selectedIndex].value + '###' +
+                     'num=' + document.getElementById('num').value + '###';
+      var s_value='';
+      for(var x = 0; x < document.forms[0].plugins.length; x++) {
+        if(document.forms[0].plugins[x].checked) 
+          s_value += document.forms[0].plugins[x].value + '/';
+      }
+      if(s_value!='') {
+        co_value += 'plugins=' + s_value + '###'
+      }
+      setCookie('co_ext_Xinha', co_value, thenewdate);
+      if (_oldSubmitHandler != null) {
+        _oldSubmitHandler();
+      }
+    }
+    document.forms[0].onsubmit = frame_onSubmit;
   </script>
 
 </body>
