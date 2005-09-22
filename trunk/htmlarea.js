@@ -5240,6 +5240,10 @@ HTMLArea._lc = function(string, context, replace)
     {
       key = string.key;
     }
+    else if(typeof string == 'object' && string.string)
+    {
+      key = string.string;
+    }
     else
     {
       key = string;
