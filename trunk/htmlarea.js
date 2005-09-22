@@ -315,8 +315,9 @@ HTMLArea.Config = function () {
     ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
     ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
     ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
-    ["separator","undo","redo","selectall"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
-    ["separator","killword","removeformat","toggleborders","lefttoright", "righttoleft","separator","htmlmode","about"]
+    ["separator","undo","redo","selectall","print"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
+    ["separator","killword","clearfonts","removeformat","toggleborders","splitblock","lefttoright", "righttoleft"],
+    ["separator","htmlmode","about"]
   ];
 
 
@@ -2352,7 +2353,7 @@ HTMLArea.prototype._clearFonts = function() {
 
 HTMLArea.prototype._splitBlock = function()
 {
-  this._doc.execCommand('formatblock', false, '<div>');
+  this._doc.execCommand('formatblock', false, 'div');
 }
 
 HTMLArea.prototype.forceRedraw = function() {
