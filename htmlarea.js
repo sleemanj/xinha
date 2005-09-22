@@ -3222,10 +3222,8 @@ HTMLArea.prototype._createLink = function(link) {
   if (typeof link == "undefined") {
     link = this.getParentElement();
     if (link) {
-      if (/^img$/i.test(link.tagName))
+      while (link && !/^a$/i.test(link.tagName))
         link = link.parentNode;
-      if (!/^a$/i.test(link.tagName))
-        link = null;
     }
   }
   if (!link) {
