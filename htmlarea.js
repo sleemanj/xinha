@@ -39,7 +39,7 @@ HTMLArea.version =
   'Date'      : '$LastChangedDate$'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
   'Revision'  : '$LastChangedRevision$'.replace(/^[^:]*: (.*) \$$/, '$1'),
   'RevisionBy': '$LastChangedBy$'.replace(/^[^:]*: (.*) \$$/, '$1')
-}
+};
 
 if (typeof _editor_url == "string") {
   // Leave exactly one backslash at the end of _editor_url
@@ -97,7 +97,7 @@ function HTMLArea(textarea, config)
     {
       w: textarea.style.width ? textarea.style.width   : (textarea.offsetWidth + 'px'),
       h: textarea.style.height ? textarea.style.height : (textarea.offsetHeight + 'px')
-    }
+    };
 
     this._editMode = "wysiwyg";
     this.plugins = {};
@@ -203,7 +203,7 @@ HTMLArea.Config = function () {
     right:  '200px',
     top:    '100px', // Height
     bottom: '100px'
-  }
+  };
 
   // enable creation of a status bar?
   this.statusBar = true;
@@ -537,7 +537,7 @@ HTMLArea.prototype.registerPanel = function(side, object)
   {
     object.drawPanelIn(panel);
   }
-}
+};
 
 /** The following helper function registers a dropdown box with the editor
  * configuration.  You still have to add it to the toolbar, same as with the
@@ -696,7 +696,7 @@ HTMLArea.Config.prototype.addToolbarElement = function(id, where, position) {
       }
     }
   }
-}
+};
 
 /** Helper function: replace all TEXTAREA-s in the document with HTMLArea-s. */
 HTMLArea.replaceAll = function(config) {
@@ -732,16 +732,16 @@ HTMLArea.prototype._createToolbar = function () {
 	this._htmlArea.appendChild(toolbar);      
   
   return toolbar;
-}
+};
 
 
 HTMLArea.prototype._setConfig = function(config) {
 	this.config = config;
-}
+};
 
 HTMLArea.prototype._addToolbar = function() {
 	this._createToolbar1(this, this._toolbar, this._toolbarObjects);
-}
+};
 
 // separate from previous createToolBar to allow dynamic change of toolbar
 HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
@@ -1137,7 +1137,7 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
   }
   i_contain.appendChild(img);
   return i_contain;
-}
+};
 
 HTMLArea.prototype._createStatusBar = function() {
   var statusbar = document.createElement("div");
@@ -1277,7 +1277,7 @@ HTMLArea.prototype.generate = function ()
     'sb_row'    :document.createElement('tr'),
     'sb_cell'   :document.createElement('td')  // status bar
 
-  }
+  };
 
   HTMLArea.freeLater(this._framework);
   
@@ -1468,7 +1468,7 @@ HTMLArea.prototype.generate = function ()
     HTMLArea.addDom0Event(window, 'resize', function(e) { editor.sizeEditor(); });
 
     this.notifyOn('panel_change',function(){editor.sizeEditor();});
-  }
+  };
 
   /**
    *  Size the editor to a specific size, or just refresh the size (when window resizes for example)
@@ -1650,7 +1650,7 @@ HTMLArea.prototype.generate = function ()
     this._textArea.style.width  = this._iframe.style.width;
 
     this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
-  }
+  };
 
   HTMLArea.prototype.addPanel = function(side)
   {
@@ -1667,7 +1667,7 @@ HTMLArea.prototype.generate = function ()
     this.notifyOf('panel_change', {'action':'add','panel':div});
 
     return div;
-  }
+  };
 
   HTMLArea.prototype.removePanel = function(panel)
   {
@@ -1682,7 +1682,7 @@ HTMLArea.prototype.generate = function ()
     }
     this._panels[panel.side].panels = clean;
     this.notifyOf('panel_change', {'action':'remove','panel':panel});
-  }
+  };
 
   HTMLArea.prototype.hidePanel = function(panel)
   {
@@ -1691,7 +1691,7 @@ HTMLArea.prototype.generate = function ()
       panel.style.display = 'none';
       this.notifyOf('panel_change', {'action':'hide','panel':panel});
     }
-  }
+  };
 
   HTMLArea.prototype.showPanel = function(panel)
   {
@@ -1700,7 +1700,7 @@ HTMLArea.prototype.generate = function ()
       panel.style.display = '';
       this.notifyOf('panel_change', {'action':'show','panel':panel});
     }
-  }
+  };
 
   HTMLArea.prototype.hidePanels = function(sides)
   {
@@ -1719,7 +1719,7 @@ HTMLArea.prototype.generate = function ()
       }
     }
     this.notifyOf('panel_change', {'action':'multi_hide','sides':sides});
-  }
+  };
 
   HTMLArea.prototype.showPanels = function(sides)
   {
@@ -1738,7 +1738,7 @@ HTMLArea.prototype.generate = function ()
       }
     }
     this.notifyOf('panel_change', {'action':'multi_show','sides':sides});
-  }
+  };
 
   HTMLArea.objectProperties = function(obj)
   {
@@ -1748,7 +1748,7 @@ HTMLArea.prototype.generate = function ()
       props[props.length] = x;
     }
     return props;
-  }
+  };
 
   /*
    * EDITOR ACTIVATION NOTES:
@@ -1766,7 +1766,7 @@ HTMLArea.prototype.generate = function ()
     {
       return false;
     }
-  }
+  };
 
   HTMLArea._someEditorHasBeenActivated = false;
   HTMLArea._currentlyActiveEditor      = false;
@@ -1808,7 +1808,7 @@ HTMLArea.prototype.generate = function ()
 
     var editor = this;
     this.enableToolbar();
-  }
+  };
 
   HTMLArea.prototype.deactivateEditor = function()
   {
@@ -1834,7 +1834,7 @@ HTMLArea.prototype.generate = function ()
     }
 
     HTMLArea._currentlyActiveEditor = false;
-  }
+  };
 
   HTMLArea.prototype.initIframe = function()
   {
@@ -1940,7 +1940,7 @@ HTMLArea.prototype.generate = function ()
     if(typeof editor._onGenerate == "function") {
       editor._onGenerate();
     }
-  }
+  };
 
 // Switches editor mode; parameter can be "textmode" or "wysiwyg".  If no
 // parameter was passed this function toggles between modes.
@@ -2169,7 +2169,7 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
     setTimeout(function() { if(HTMLArea.loadPlugins(plugins, callbackIfNotReady)) callbackIfNotReady(); }, 150);
   }
   return retVal;
-}
+};
 
 // refresh plugin by calling onGenerate or onGenerateOnce method.
 HTMLArea.refreshPlugin = function(plugin) {
@@ -2349,12 +2349,12 @@ HTMLArea.prototype._clearFonts = function() {
   D = D.replace(/<(font|span)\s*>/gi, '');
   this.setHTML(D);
   this.updateToolbar();
-}
+};
 
 HTMLArea.prototype._splitBlock = function()
 {
   this._doc.execCommand('formatblock', false, 'div');
-}
+};
 
 HTMLArea.prototype.forceRedraw = function() {
   this._doc.body.style.visibility = "hidden";
@@ -2441,12 +2441,12 @@ HTMLArea.prototype.disableToolbar = function(except)
     }
     btn.state("enabled", false);
   }
-}
+};
 
 HTMLArea.prototype.enableToolbar = function()
 {
   this.updateToolbar();
-}
+};
 
 if(!Array.prototype.contains)
 {
@@ -2459,7 +2459,7 @@ if(!Array.prototype.contains)
     }
 
     return false;
-  }
+  };
 }
 
 if(!Array.prototype.indexOf)
@@ -2473,7 +2473,7 @@ if(!Array.prototype.indexOf)
     }
 
     return null;
-  }
+  };
 }
 
 
@@ -2724,7 +2724,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
   }
 
 
-}
+};
 
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
@@ -2864,7 +2864,7 @@ HTMLArea.prototype._getFirstAncestor = function(sel, types)
   }
 
   return null;
-}
+};
 
 /**
  * Returns the selected element, if any.  That is,
@@ -2942,7 +2942,7 @@ HTMLArea.prototype._activeElement = function(sel)
     }
     return null;
   }
-}
+};
 
 
 HTMLArea.prototype._selectionEmpty = function(sel)
@@ -2959,7 +2959,7 @@ HTMLArea.prototype._selectionEmpty = function(sel)
   }
 
   return true;
-}
+};
 
 HTMLArea.prototype._getAncestorBlock = function(sel)
 {
@@ -3005,7 +3005,7 @@ HTMLArea.prototype._getAncestorBlock = function(sel)
   }
 
   return null;
-}
+};
 
 HTMLArea.prototype._createImplicitBlock = function(type)
 {
@@ -3026,7 +3026,7 @@ HTMLArea.prototype._createImplicitBlock = function(type)
   // Expand UP
 
   // Expand DN
-}
+};
 
 HTMLArea.prototype._formatBlock = function(block_format)
 {
@@ -3126,7 +3126,7 @@ HTMLArea.prototype._formatBlock = function(block_format)
     }
   }
 
-}
+};
 
 // Selects the contents inside the given node
 HTMLArea.prototype.selectNodeContents = function(node, pos) {
@@ -4063,7 +4063,7 @@ HTMLArea.prototype.scrollToElement = function(e)
     }
     this._iframe.contentWindow.scrollTo(left, top);
   }
-}
+};
 
 // retrieve the HTML
 HTMLArea.prototype.getHTML = function() {
@@ -4129,7 +4129,7 @@ HTMLArea.prototype.outwardHtml = function(html)
   }
 
   return html;
-}
+};
 
 HTMLArea.prototype.inwardHtml = function(html)
 {
@@ -4153,7 +4153,7 @@ HTMLArea.prototype.inwardHtml = function(html)
 
   html = this.fixRelativeLinks(html);
   return html;
-}
+};
 
 HTMLArea.prototype.outwardSpecialReplacements = function(html)
 {
@@ -4167,7 +4167,7 @@ HTMLArea.prototype.outwardSpecialReplacements = function(html)
     //html = html.replace(from, to);
   }
   return html;
-}
+};
 
 HTMLArea.prototype.inwardSpecialReplacements = function(html)
 {
@@ -4184,7 +4184,7 @@ HTMLArea.prototype.inwardSpecialReplacements = function(html)
     html = html.replace(reg, to.replace(/\$/g, '$$$$')); // IE uses doubled dollar signs to escape backrefs, also beware that IE also implements $& $_ and $' like perl.
   }
   return html;
-}
+};
 
 
 HTMLArea.prototype.fixRelativeLinks = function(html)
@@ -4223,7 +4223,7 @@ HTMLArea.prototype.fixRelativeLinks = function(html)
   }
 
   return html;
-}
+};
 
 // retrieve the HTML (fastest version, but uses innerHTML)
 HTMLArea.prototype.getInnerHTML = function() {
@@ -4387,7 +4387,7 @@ HTMLArea.flushEvents = function()
   */
   
   // alert('Flushed ' + x + ' events.');
-}
+};
 
 HTMLArea._addEvent = function(el, evname, func) {
   if (HTMLArea.is_ie) {
@@ -4448,7 +4448,7 @@ HTMLArea.addDom0Event = function(el, ev, fn)
 {
   HTMLArea._prepareForDom0Events(el, ev);
   el._xinha_dom0Events[ev].unshift(fn);
-}
+};
 
 
 /**
@@ -4461,7 +4461,7 @@ HTMLArea.prependDom0Event = function(el, ev, fn)
 {
   HTMLArea._prepareForDom0Events(el, ev);
   el._xinha_dom0Events[ev].push(fn);
-}
+};
 
 /**
  * Prepares an element to receive more than one DOM-0 event handler
@@ -4510,7 +4510,7 @@ HTMLArea._prepareForDom0Events = function(el, ev)
 
     HTMLArea._eventFlushers.push([el, ev]);
   }
-}
+};
 
 HTMLArea.prototype.notifyOn = function(ev, fn)
 {
@@ -4521,7 +4521,7 @@ HTMLArea.prototype.notifyOn = function(ev, fn)
   }
 
   this._notifyListeners[ev].push(fn);
-}
+};
 
 HTMLArea.prototype.notifyOf = function(ev, args)
 {
@@ -4534,7 +4534,7 @@ HTMLArea.prototype.notifyOf = function(ev, args)
       this._notifyListeners[ev][i](ev, args);
     }
   }
-}
+};
 
 
 HTMLArea._removeClass = function(el, className) {
@@ -4581,7 +4581,7 @@ HTMLArea._paraContainerTags = " body td th caption fieldset div";
 HTMLArea.isParaContainer = function(el)
 {
   return el && el.nodeType == 1 && (HTMLArea._paraContainerTags.indexOf(" " + el.tagName.toLowerCase() + " ") != -1);
-}
+};
 
 HTMLArea._closingTags = " head script style div span tr td tbody table em strong b i strike code cite dfn abbr acronym font a title textarea select form ";
 HTMLArea.needsClosingTag = function(el) {
@@ -4613,7 +4613,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor){
         alert(HTMLArea._lc('Your Document is not well formed. Check JavaScript console for details.'));
         return editor._iframe.contentWindow.document.body.innerHTML;
     }
-}
+};
 
 HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent) {
   var html = "";
@@ -4936,7 +4936,7 @@ HTMLArea.prototype._toggleBorders = function()
    }
   }
   return true;
-}
+};
 
 
 HTMLArea.addClasses = function(el, classes)
@@ -4962,7 +4962,7 @@ HTMLArea.addClasses = function(el, classes)
       }
       el.className = thiers.join(' ').trim();
     }
-  }
+  };
 
 HTMLArea.removeClasses = function(el, classes)
 {
@@ -4986,7 +4986,7 @@ HTMLArea.removeClasses = function(el, classes)
     }
   }
   return new_classes.join(' ');
-}
+};
 
 /** Alias these for convenience */
 HTMLArea.addClass       = HTMLArea._addClass;
@@ -5029,7 +5029,7 @@ HTMLArea._postback = function(url, data, handler)
         alert('An error has occurred: ' + req.statusText);
       }
     }
-  }
+  };
 
   req.onreadystatechange = callBack;
 
@@ -5041,7 +5041,7 @@ HTMLArea._postback = function(url, data, handler)
   );
   //alert(content);
   req.send(content);
-}
+};
 
 HTMLArea._getback = function(url, handler)
 {
@@ -5068,12 +5068,12 @@ HTMLArea._getback = function(url, handler)
         alert('An error has occurred: ' + req.statusText);
       }
     }
-  }
+  };
 
   req.onreadystatechange = callBack;
   req.open('GET', url, true);
   req.send(null);
-}
+};
 
 HTMLArea._geturlcontent = function(url)
 {
@@ -5099,7 +5099,7 @@ HTMLArea._geturlcontent = function(url)
     return '';
   }
 
-}
+};
 
 /**
  * Unless somebody already has, make a little function to debug things
@@ -5139,7 +5139,7 @@ HTMLArea.arrayContainsArray = function(a1, a2)
     }
   }
   return all_found;
-}
+};
 
 HTMLArea.arrayFilter = function(a1, filterfn)
 {
@@ -5151,13 +5151,13 @@ HTMLArea.arrayFilter = function(a1, filterfn)
   }
 
   return new_a;
-}
+};
 
 HTMLArea.uniq_count = 0;
 HTMLArea.uniq = function(prefix)
 {
   return prefix + HTMLArea.uniq_count++;
-}
+};
 
 /** New language handling functions **/
 
@@ -5199,7 +5199,7 @@ HTMLArea._loadlang = function(context)
   }
 
   return lang;
-}
+};
 
 /** Return a localised string.
  * @param string    English language string
@@ -5284,7 +5284,7 @@ HTMLArea._lc = function(string, context, replace)
   }
 
   return ret;
-}
+};
 
 HTMLArea.hasDisplayedChildren = function(el)
 {
@@ -5300,7 +5300,7 @@ HTMLArea.hasDisplayedChildren = function(el)
     }
   }
   return false;
-}
+};
 
 
 HTMLArea._loadback = function(src, callback)
@@ -5327,7 +5327,7 @@ HTMLArea.collectionToArray = function(collection)
     array.push(collection.item(i));
   }
   return array;
-}
+};
 
 if(!Array.prototype.append)
 {
@@ -5338,7 +5338,7 @@ if(!Array.prototype.append)
       this.push(a[i]);
     }
     return this;
-  }
+  };
 }
 
 HTMLArea.makeEditors = function(editor_names, default_config, plugin_names)
@@ -5356,7 +5356,7 @@ HTMLArea.makeEditors = function(editor_names, default_config, plugin_names)
     editors[editor_names[x]] = editor;
   }
   return editors;
-}
+};
 
 HTMLArea.startEditors = function(editors)
 {
@@ -5364,7 +5364,7 @@ HTMLArea.startEditors = function(editors)
   {
     if(editors[i].generate) editors[i].generate();
   }
-}
+};
 
 HTMLArea.prototype.registerPlugins = function(plugin_names) {
   if(plugin_names)
@@ -5374,7 +5374,7 @@ HTMLArea.prototype.registerPlugins = function(plugin_names) {
       this.registerPlugin(eval(plugin_names[i]));
     }
   }
-}
+};
 
 /** Utility function to base64_encode some arbitrary data, uses the builtin btoa() if it exists (Moz) */
 
@@ -5407,7 +5407,7 @@ HTMLArea.base64_encode =  function(input)
   } while (i < input.length);
 
   return output;
-}
+};
 
 /** Utility function to base64_decode some arbitrary data, uses the builtin atob() if it exists (Moz) */
 
@@ -5443,7 +5443,7 @@ HTMLArea.base64_decode =function(input)
   } while (i < input.length);
 
   return output;
-}
+};
 
 HTMLArea.removeFromParent = function(el)
 {
@@ -5451,7 +5451,7 @@ HTMLArea.removeFromParent = function(el)
   var pN = el.parentNode;
   pN.removeChild(el);
   return el;
-}
+};
 
 HTMLArea.hasParentNode = function(el)
 {
@@ -5467,7 +5467,7 @@ HTMLArea.hasParentNode = function(el)
   }
 
   return false;
-}
+};
 
 HTMLArea.getOuterHTML = function(element)
 {
@@ -5479,13 +5479,13 @@ HTMLArea.getOuterHTML = function(element)
   {
     return (new XMLSerializer()).serializeToString(element);
   }
-}
+};
 
 HTMLArea.toFree = [ ];
 HTMLArea.freeLater = function(obj,prop)
 {
   HTMLArea.toFree.push({o:obj,p:prop});
-}
+};
 
 HTMLArea.free = function(obj, prop)
 {
@@ -5500,7 +5500,7 @@ HTMLArea.free = function(obj, prop)
   {
     obj[prop] = null;
   }
-}
+};
 
 /** IE's Garbage Collector is broken very badly.  We will do our best to 
  *   do it's job for it, but we can't be perfect.
@@ -5514,7 +5514,7 @@ HTMLArea.collectGarbageForIE = function()
     if(!HTMLArea.toFree[x].o) alert("What is " + x + ' ' + HTMLArea.toFree[x].o);
     HTMLArea.free(HTMLArea.toFree[x].o, HTMLArea.toFree[x].p);
   }
-}
+};
 
 HTMLArea.init();
 HTMLArea.addDom0Event(window,'unload',HTMLArea.collectGarbageForIE);
