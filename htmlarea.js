@@ -4138,7 +4138,7 @@ HTMLArea.prototype.inwardHtml = function(html)
   if (HTMLArea.is_gecko) {
     html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
     html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");
-    html = html.replace(/<(\/?)strike(\s|>|\/)/ig, "<$1del$2");
+    html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
   }
 
   // replace window.open to that any clicks won't open a popup in designMode
