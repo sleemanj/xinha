@@ -4,4 +4,4 @@
 
 {
   "HTML Tidy": "HTML Tidy"
-}
+};

@@ -5,4 +5,4 @@
 {
   "Insert special character": "Sett inn tegn",
   "Cancel": "Avbryt"
-}
+};

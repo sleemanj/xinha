@@ -52,4 +52,4 @@
   "Insert paragraph after": "Sett inn paragraf etter",
   "Insert a paragraph after the current node": "Sett inn paragraf etter gjeldende node",
   "How did you get here? (Please report!)": "Hva skjedde? (Vennligst beskriv)"
-}
+};

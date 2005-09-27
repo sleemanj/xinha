@@ -88,4 +88,4 @@
   "HTMLArea cowardly refuses to delete the last row in table.": "HTMLArea nekter å slette siste raden i tabellen.",
   "percent": "prosent",
   "pixels": "billedpunkter"
-}
+};

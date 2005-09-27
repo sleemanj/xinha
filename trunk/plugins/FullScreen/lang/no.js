@@ -4,4 +4,4 @@
 
 {
   "Maximize/Minimize Editor": "Maksimer/Minimer WYSIWYG vindu"
-}
+};

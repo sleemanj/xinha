@@ -24,4 +24,4 @@
   "Spell-check": "Stavekontroll",
   "Suggestions": "Forslag",
   "One moment...": "Et øyeblikk..."
-}
+};
