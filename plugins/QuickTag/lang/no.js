@@ -13,6 +13,6 @@
   "ATTRIBUTES": "ATTRIBUTTER",
   "TAGs": "TAGGer",
   "Colors": "Farger",
-  "Ok": "Ok",
+  "Ok": "OK",
   "Cancel": "Avbryt"
 };
