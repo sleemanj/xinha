@@ -5,4 +5,4 @@
 {
   "Insert Anchor": "Sett inn anker",
   "Anchor name": "Anker navn (ID)"
-}
+};

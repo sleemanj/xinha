@@ -5,4 +5,4 @@
 {
   "Image Manager": "Bildebehandler",
   "Crop": "Beskjær"
-}
+};

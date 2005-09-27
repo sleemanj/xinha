@@ -3,7 +3,7 @@
 // translated: Kim Steinhaug, http://www.steinhaug.com/, kim@steinhaug.com
 
 {
-  "Insert GUIDO Music Notation" : "Sett inn GUIDO noter",
+  "Insert GUIDO Music Notation": "Sett inn GUIDO noter",
   "Guido code": "GUIDO kode",
   "Options": "Muligheter",
   "Format": "Format",

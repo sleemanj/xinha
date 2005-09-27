@@ -1,5 +1,4 @@
 // I18N constants
-
 // LANG: "no", ENCODING: UTF-8
 // Author: Udo Schmal, <schmal@schaffrath-neuemedien.de>
 // translated: Kim Steinhaug, http://www.steinhaug.com/, kim@steinhaug.com
@@ -9,5 +8,5 @@
 // This notice MUST stay intact for use (see license.txt).
 
 {
-	"Page break"       : "Sett inn sideskift"
+  "Page break": "Sett inn sideskift"
 };

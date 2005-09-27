@@ -6,4 +6,4 @@
   "Default": "Standard",
   "Undefined": "Udefinert",
   "Choose stylesheet": "Velg stilsett"
-}
+};

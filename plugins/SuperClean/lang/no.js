@@ -14,4 +14,4 @@
   "Cancel": "Avbryt",
   "Tidy failed.  Check your HTML for syntax errors.": "Tidy (Programmet som retter HTML koden) feilet. Vennligst se over HTML koden for feil.",
   "You don't have anything to tidy!": "Det finnes ingen HTML kode å vaske!"
-}
+};

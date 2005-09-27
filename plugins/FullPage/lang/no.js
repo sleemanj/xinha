@@ -12,4 +12,4 @@
   "OK": "OK",
   "Primary style-sheet:": "Stilsett:",
   "Text color:": "Tekstfarge:"
-}
+};
