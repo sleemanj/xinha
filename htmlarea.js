@@ -278,7 +278,6 @@ HTMLArea.Config = function () {
   // URL-s
   this.imgURL = "images/";
   this.popupURL = "popups/";
-  this.helpURL  = _editor_url + "reference.html";
 
   // remove tags (these have to be a regexp, or null if this functionality is not desired)
   this.htmlRemoveTags = null;
@@ -317,7 +316,7 @@ HTMLArea.Config = function () {
     ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
     ["separator","undo","redo","selectall","print"], (HTMLArea.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
     ["separator","killword","clearfonts","removeformat","toggleborders","splitblock","lefttoright", "righttoleft"],
-    ["separator","htmlmode","about"]
+    ["separator","htmlmode","showhelp","about"]
   ];
 
 
@@ -371,7 +370,8 @@ HTMLArea.Config = function () {
    "insert_image": "insert_image.html",
    "insert_table": "insert_table.html",
    "select_color": "select_color.html",
-   "about": "about.html"
+   "about": "about.html",
+   "help": "editor_help.html"
   };
 
 
@@ -3471,7 +3471,7 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
       case "inserttable": this._insertTable(); break;
       case "insertimage": this._insertImage(); break;
       case "about"    : this._popupDialog(editor.config.URIs["about"], null, this); break;
-      case "showhelp" : window.open(this.config.helpURL, "ha_help"); break;
+      case "showhelp" : this._popupDialog(editor.config.URIs["help"], null, this); break;
 
       case "killword": this._wordClean(); break;
 
