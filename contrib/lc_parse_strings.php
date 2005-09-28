@@ -92,17 +92,20 @@ foreach($plugins as $pluginDir)
     {
         $fp = fopen($file, "r");
         $data = "";
-        while(!feof($fp)) {
-            $data .= fread($fp, 1024);
-        }
-        preg_match_all('#_lc\("([^"]+)"|_lc\(\'([^\']+)\'#', $data, $m);
-        foreach($m[1] as $i) {
-            if(trim(strip_tags($i))=="") continue;
-            $ret[] = $i;
-        }
-        foreach($m[2] as $i) {
-            if(trim(strip_tags($i))=="") continue;
-            $ret[] = $i;
+        if($fp) {
+            echo "$file open...<br>";
+            while(!feof($fp)) {
+              $data .= fread($fp, 1024);
+            }
+            preg_match_all('#_lc\("([^"]+)"|_lc\(\'([^\']+)\'#', $data, $m);
+            foreach($m[1] as $i) {
+                if(trim(strip_tags($i))=="") continue;
+                $ret[] = $i;
+            }
+            foreach($m[2] as $i) {
+                if(trim(strip_tags($i))=="") continue;
+                $ret[] = $i;
+            }
         }
     }
 
