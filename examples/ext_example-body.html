@@ -14,6 +14,15 @@
   <link rel="stylesheet" href="full_example.css" />
 
   <script type="text/javascript">
+    function showError( sMsg, sUrl, sLine){
+      document.getElementById('errors').value += 'Error: ' + sMsg + '\n' +
+                                                 'Source File: ' + sUrl + '\n' +
+                                                 'Line: ' + sLine + '\n';
+      return false;
+    }
+    window.onerror = showError;
+    document.onerror = showError;
+
     var f = window.parent.menu.document.forms[0];
     // You must set _editor_url to the URL (including trailing slash) where
     // where xinha is installed, it's highly recommended to use an absolute URL
@@ -160,7 +169,7 @@
     
       //check submitted values
       var submit = document.createElement('button');
-      submit.type = "submit";
+      submit.setAttribute('type', 'submit'); //submit.type = "submit";
       submit.innerHTML = "Submit";
       b.appendChild(submit);
     }
@@ -171,8 +180,9 @@
 
 <body>
   <form id="editors_here" method="post" action="ext_example-dest.php">
-
+  <!-- <textarea id="errors" style="width:100%; height:100px; background:silver;display:none;"></textarea> -->
   </form>
+  <textarea id="errors" style="width:100%; height:100px; background:silver;"></textarea>
 <script type="text/javascript">
     var _oldSubmitHandler = null;
     if (document.forms[0].onsubmit != null) {

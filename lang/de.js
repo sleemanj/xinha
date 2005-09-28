@@ -135,7 +135,7 @@
   "button_underline": "de/underline.gif",
 
   // Editor Help
-  "Keybord shortcuts": "Tastaturkürzel",
+  "Keyboard shortcuts": "Tastaturkürzel",
   "The editor provides the following key combinations:": "Der Editor unterstützt die folgenden kombinationen:",
   "new paragraph": "Neuer Absatz(Paragraph)",
   "insert linebreak": "Harter Umbruch einfügen",
