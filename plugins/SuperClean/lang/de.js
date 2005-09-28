@@ -24,4 +24,4 @@
   "Cancel": "Abbrechen",
   "Tidy failed.  Check your HTML for syntax errors.": "Säubern fehlgeschlagen. Überprüfen Sie Ihren Code auf Fehler.",
   "You don't have anything to tidy!": "Es gibt nichts zu säubern...!"
-}
+};

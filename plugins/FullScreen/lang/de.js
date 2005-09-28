@@ -14,4 +14,4 @@
 
 {
   "Maximize/Minimize Editor": "Editor maximieren/verkleinern"
-}
+};

@@ -8,7 +8,7 @@
 // This notice MUST stay intact for use (see license.txt).
 
 { "Insert scrolling marquee": "Marquee einfügen",
-	"Insert marquee": "Marquee einfügen",	
+	"Insert marquee": "Marquee einfügen",
 	"Direction:": "Ausrichtung:",
 	"Behavior:": "Bewegung:",
 	"Text:": "Text:",

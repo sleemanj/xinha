@@ -67,4 +67,4 @@
   "Border:": "Rand:",
   "Color:": "Farbe:",
   "Upload:": "Hochladen:"
-}
+};

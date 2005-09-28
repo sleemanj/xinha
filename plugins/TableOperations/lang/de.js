@@ -80,4 +80,4 @@
   "pixels": "Pixel",
   "OK": "OK",
   "Cancel": "Abbrechen"
-}
+};
