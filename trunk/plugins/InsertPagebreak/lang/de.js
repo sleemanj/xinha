@@ -8,5 +8,5 @@
 // This notice MUST stay intact for use (see license.txt).
 
 {
-	"Page break": "Neue Seite"
+  "Page break": "Neue Seite"
 };
