@@ -24,5 +24,5 @@
   "Replace": "Ersetzen",
   "Spell-check": "Ueberpruefung",
   "Suggestions": "Vorschlag",
-  "One moment...": "bittsche wartn ;-)"
-}
+  "One moment...": "Bitte warten..."
+};

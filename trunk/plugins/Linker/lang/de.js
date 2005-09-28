@@ -18,4 +18,4 @@
   "Message Template:": "Nachrichten Vorlage:",
   "Size:": "Größe:",
   "Name:": "Name:"
-}
+};

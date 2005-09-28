@@ -12,4 +12,4 @@
   "Default": "Standard",
   "Undefined": "Nicht definiert",
   "Choose stylesheet": "Wählen Sie einen StyleSheet aus"
-}
+};

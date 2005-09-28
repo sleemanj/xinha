@@ -1,16 +1,13 @@
 // I18N constants
-
 // LANG: "de", ENCODING: UTF-8
-
 // translated: Raimund Meyer xinha@ray-of-light.org
-
 
 {
   "Cut": "Ausschneiden",
   "Copy": "Kopieren",
   "Paste": "Einfügen",
   "_Image Properties...": "Eigenschaften",
-  "Show the image properties dialog": "Fenster für die Bildoptionen anzeigen",  
+  "Show the image properties dialog": "Fenster für die Bildoptionen anzeigen",
   "_Modify Link...": "Link ändern",
   "Current URL is": "Aktuelle URL ist",
   "Chec_k Link...": "Link testen",
@@ -51,4 +48,4 @@
   "Insert paragraph after": "Absatz einfügen hinter Position",
   "Insert a paragraph after the current node": "Absatz einfügen hinter der aktuellen Position",
   "How did you get here? (Please report!)": "Wie sind Sie denn hier hin gekommen? (Please report!)"
-}
+};
