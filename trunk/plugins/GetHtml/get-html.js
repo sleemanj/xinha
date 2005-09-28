@@ -1,4 +1,4 @@
-﻿/**
+/**
   * Based on XML_Utility functions submitted by troels_kn.
   * credit also to adios, who helped with reg exps:
   * http://www.sitepoint.com/forums/showthread.php?t=201052
@@ -30,7 +30,7 @@ GetHtml._pluginInfo = {
 HTMLArea.RegExpCache = [
 /*00*/  new RegExp().compile(/<\s*\/?([^\s\/>]+)[\s*\/>]/gi),//lowercase tags
 /*01*/  new RegExp().compile(/(\S*\s*=\s*)?_moz[^=>]*(=\s*[^>]*)?/gi),//strip _moz attributes
-/*02*/  new RegExp().compile(/\s*=\s*(([^'"][^\/>\s]*)([\s\/>])|"([^"]+)"|'([^']+)')/g),// find attributes
+/*02*/  new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),// find attributes
 /*03*/  new RegExp().compile(/\/>/g),//strip singlet terminators
 /*04*/  new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed)([^>]*)>/g),//terminate singlet tags
 /*05*/  new RegExp().compile(/(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),//expand singlet attributes
