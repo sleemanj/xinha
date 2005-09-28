@@ -132,6 +132,15 @@
 
   "button_bold": "de/bold.gif",
   "button_italic": "de/italic.gif",
-  "button_underline": "de/underline.gif"
+  "button_underline": "de/underline.gif",
 
+  // Editor Help
+  "Keybord shortcuts": "Tastaturkürzel",
+  "The editor provides the following key combinations:": "Der Editor unterstützt die folgenden kombinationen:",
+  "new paragraph": "Neuer Absatz(Paragraph)",
+  "insert linebreak": "Harter Umbruch einfügen",
+  "Set format to paragraph": "Setze Formatierung auf Absatz",
+  "Clean content pasted from Word": "Von Word eingefügter Text bereinigen",
+  "Headings": "Überschrift Typ 1 bis 6",
+  "Close": "Schließen"
 };
