@@ -1,17 +1,17 @@
-<html style="width: 400px; height: 150px;">
-
+<html>
 <head>
   <title>Insert/Edit Horizontal Rule</title>
-
-<script type="text/javascript" src="../../../popups/popup.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../../popups/popup.css" />
+  <script type="text/javascript" src="../../../popups/popup.js"></script>
 
 <script type="text/javascript">
 editor = window.opener.editor;
 
 function Init() {
-  window.resizeTo(400,170);
+	__dlg_translate("HorizontalRule");
 	__dlg_init();
-    var params = window.dialogArguments;
+	window.resizeTo(300,320);
+	var params = window.dialogArguments;
 	if(params) {
 		document.getElementById("f_size").value = params.f_size;
 		document.getElementById("f_width").value = params.f_width;
@@ -40,27 +40,6 @@ function onCancel() {
   __dlg_close(null);
   return false;
 };
-
-function MM_findObj(n, d) { //v3.0
-  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
-  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
-}
-
-function MM_swapImage() { //v3.0
-  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
-   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
-}
-function MM_swapImgRestore() { //v3.0
-  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
-}
-
-function MM_preloadImages() { //v3.0
- var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
-   var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
-   if (a[i].indexOf("##")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
-}
 
 function selectColor(id1,id2,color) {
 	Dialog(editor.popupURL("select_color.html"), function(color){
@@ -122,90 +101,59 @@ Dialog.openModal = function(url, action, init) {
 
 </head>
 
-<body onload="MM_preloadImages('../../../../images/okbtn_F2.gif', '../../../../images/cnclbtn_F2.gif');Init()">
+<body class="dialog" onload="Init()">
+<div class="title">Horizontal Rule</div>
 <form action="" method="get">
-<table width="100%">
-  <tr>
-	<td>
-	  <div class="title">Horizontal Rule</div>
-	</td>
-  </tr>
-  <tr>
-	<td>
-	  <fieldset>
-		<legend>Layout</legend>
-		<table width="100%">
-		  <tr>
-			<td align="right">Width:</td>
-			<td><input style="margin-right: 0.5em;" name="f_width" id="f_width" size="5" type="text">
-				<select style="margin-right: 0.5em;" name="f_widthUnit" id="f_widthUnit">
-					<option value="%">percent</option>
-					<option value="px">pixels</option>
-					</select>&nbsp;
-				Height:&nbsp;<input style="margin-right: 0.5em;" name="f_size" id="f_size" size="5" type="text"> pixels
-			</td>
-		  <tr>
-		  <tr>
-			<td align="right"></td>
-			<td>Alignment:<select name="f_align" id="f_align" style="margin-right: 0.5em; margin-left: 0.5em;">
-					<option value="left">Left</option>
-					<option value="center">Center</option>
-					<option value="right">Right</option>
-				</select>
-			</td>
-			</tr>
-		  </table>
-	  </fieldset>
-	</td>
-  </tr>
-  <tr>
-	<td>
-	  <fieldset>
-		<legend>Style</legend>
-			<table width="100%">
-			  <tr>
-				<td align="right">Color:</td>
-				<td>
-					<table cellpadding="2" cellspacing="0" id="hrbtn" class="buttonColor">
-					  <tr>
-						<td class="chooser" id="hrpv"
-							onMouseOver="document.getElementById('hrbtn').style.borderColor='black'"
-							onMouseOut="document.getElementById('hrbtn').style.borderColor='ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight'"
-							onClick="selectColor('hrpv','f_color',document.getElementById('f_color').value)">&nbsp;</td>
-						<td class="nocolor" id="hrclr"
-							onMouseOver="document.getElementById('hrclr').style.color='#f00'"
-							onMouseOut="document.getElementById('hrclr').style.color='#000'"
-							onClick="document.getElementById('f_color').value='';
-								document.getElementById('hrpv').style.backgroundColor=''">&#x00d7;</td>
-					  </tr>
-					</table>
-				</td>
-				<td>
-					<input type="hidden" name="f_color" id="f_color">
-				  <input type="checkbox" name="f_noshade" id="f_noshade" value="noshade">
-				  No shading
-				</td>
-			  </tr>
-			</table>
-	  </fieldset>
-	</td>
-  </tr>
-<tr>
-  <td align="right">
-    Note: To select an existing horizontal rule, a double-click may be needed.
-    <hr />
-	<img name="okbtn" src="../../../../images/okbtn.gif" width="50" height="20"
-	onClick="return onOK()" onMouseOut="MM_swapImgRestore();"
-	onMouseOver="MM_swapImage('okbtn','','../../../../images/okbtn_f2.gif',1);">
-	<img name="cnclbtn" src="../../../../images/cnclbtn.gif" width="101" height="20"
-	onClick="return onCancel()" onMouseOut="MM_swapImgRestore();"
-	onMouseOver="MM_swapImage('cnclbtn','','../../../../images/cnclbtn_f2.gif',1);">
-   <!--  <button type="button" name="ok" onclick="return onOK();">OK</button>
-    <button type="button" name="cancel" onclick="return onCancel();">Cancel</button> -->
-  </td>
-</tr>
-</table>
+  <fieldset>
+  <legend>Layout</legend>
+    <div class="fr">Width:</div>
+    <input style="margin-right: 0.5em;" name="f_width" id="f_width" size="5" type="text">
+    <select style="margin-right: 0.5em;" name="f_widthUnit" id="f_widthUnit">
+      <option value="%">percent</option>
+      <option value="px">pixels</option>
+    </select>
+    <p />
+    <div class="fr">Height:</div>
+    <input style="margin-right: 0.5em;" name="f_size" id="f_size" size="5" type="text"> <span>pixels</span>
+    <p />
+    <div class="fr">Alignment:</div>
+    <select name="f_align" id="f_align">
+      <option value="left">Left</option>
+      <option value="center">Center</option>
+      <option value="right">Right</option>
+    </select>
+    <p />
+  </fieldset>
+  <fieldset>
+  <legend>Style</legend>
+    <div class="fr">Color:</div>
+    <table cellpadding="2" cellspacing="0" id="hrbtn" class="buttonColor">
+    <tr>
+      <td class="chooser" id="hrpv"
+          onMouseOver="document.getElementById('hrbtn').style.borderColor='black'"
+          onMouseOut="document.getElementById('hrbtn').style.borderColor='ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight'"
+          onClick="selectColor('hrpv','f_color',document.getElementById('f_color').value)">&nbsp;</td>
+      <td class="nocolor" id="hrclr"
+          onMouseOver="document.getElementById('hrclr').style.color='#f00'"
+          onMouseOut="document.getElementById('hrclr').style.color='#000'"
+          onClick="document.getElementById('f_color').value='';	document.getElementById('hrpv').style.backgroundColor=''">&#x00d7;</td>
+    </tr>
+    </table>
+    <p />
+    <div class="fr"> </div>
+    <input type="hidden" name="f_color" id="f_color">
+    <input type="checkbox" name="f_noshade" id="f_noshade" value="noshade">
+    <span>No shading</span>
+    <p />
+  </fieldset>
+  <fieldset>
+	  <legend>Note:</legend>
+    <span>To select an existing horizontal rule, a double-click may be needed.</span>
+  </fieldset>
+<div id="buttons">
+  <button type="submit" name="ok" onclick="return onOK();">OK</button>
+  <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
+</div>
 </form>
-
 </body>
 </html>
