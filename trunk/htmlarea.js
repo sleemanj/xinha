@@ -444,10 +444,10 @@ HTMLArea.Config = function () {
     righttoleft: [ "Direction right to left", ["ed_buttons_main.gif",1,4], false, function(e) {e.execCommand("righttoleft");} ],
     overwrite: [ "Insert/Overwrite", "ed_overwrite.gif", false, function(e) {e.execCommand("overwrite");} ],
 
-    wordclean:     [ "MS Word Cleaner", ["ed_buttons_main.gif",5,3], false, function(e) {e._wordClean();} ],
-    clearfonts:    [ "Clear Inline Font Specifications", ["ed_buttons_main.gif",5,4], false, function(e) {e._clearFonts();} ],
+    wordclean:     [ "MS Word Cleaner", ["ed_buttons_main.gif",5,3], true, function(e) {e._wordClean();} ],
+    clearfonts:    [ "Clear Inline Font Specifications", ["ed_buttons_main.gif",5,4], true, function(e) {e._clearFonts();} ],
     removeformat:  [ "Remove formatting", ["ed_buttons_main.gif",4,4], false, function(e) {e.execCommand("removeformat");} ],
-    killword:      [ "Clear MSOffice tags", ["ed_buttons_main.gif",4,3], false, function(e) {e.execCommand("killword");} ]
+    killword:      [ "Clear MSOffice tags", ["ed_buttons_main.gif",4,3], true, function(e) {e.execCommand("killword");} ]
 
   };
   /* ADDING CUSTOM BUTTONS
