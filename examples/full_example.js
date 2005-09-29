@@ -102,6 +102,10 @@
         config.CharacterMap.mode = f.elements['CharacterMapMode'].options[f.elements['CharacterMapMode'].selectedIndex].value;
       }
     }
+    
+    if(typeof Filter != 'undefined') {
+      xinha_config.Filters = ["Word", "Paragraph"]
+    }
 
     return config;
   }

@@ -147,6 +147,10 @@
         // Path for InsertPicture plugin
         InsertPicture.PicturePath = '/schmal/pictures/';
       }
+			
+      if(typeof Filter != 'undefined') {
+        xinha_config.Filters = ["Word", "Paragraph"];
+      }
 
 // First create editors for the textareas.
 // You can do this in two ways, either
