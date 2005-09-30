@@ -2327,19 +2327,19 @@ HTMLArea.prototype._wordClean = function() {
 HTMLArea.prototype._clearFonts = function() {
   var D = this.getInnerHTML();
 
-  if(confirm('Would you like to clear font typefaces?'))
+  if(confirm(HTMLArea._lc("Would you like to clear font typefaces?")))
   {
     D = D.replace(/face="[^"]*"/gi, '');
     D = D.replace(/font-family:[^;}"']+;?/gi, '');
   }
 
-  if(confirm('Would you like to clear font sizes?'))
+  if(confirm(HTMLArea._lc("Would you like to clear font sizes?")))
   {
     D = D.replace(/size="[^"]*"/gi, '');
     D = D.replace(/font-size:[^;}"']+;?/gi, '');
   }
 
-  if(confirm('Would you like to clear font colours?'))
+  if(confirm(HTMLArea._lc("Would you like to clear font colours?")))
   {
     D = D.replace(/color="[^"]*"/gi, '');
     D = D.replace(/([^-])color:[^;}"']+;?/gi, '$1');

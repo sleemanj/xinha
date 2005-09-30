@@ -57,5 +57,9 @@
   "Title (tooltip):": "Tittel (tooltip):",
   "Top frame (_top)": "Toppramme (_top)",
   "URL:": "Adresse:",
-  "You must enter the URL where this link points to": "Du må skrive inn en adresse som denne lenken skal peke til"
-}
+  "You must enter the URL where this link points to": "Du må skrive inn en adresse som denne lenken skal peke til",
+  "Clear Inline Font Specifications": "Fjerne inline font spesifikasjoner",
+  "Would you like to clear font typefaces?": "Ønsker du å fjerne skrifttyper",
+  "Would you like to clear font sizes?": "Ønsker du å fjerne skrift størrelser",
+  "Would you like to clear font colours?": "Ønsker du å fjerne farger på skriften"
+};
