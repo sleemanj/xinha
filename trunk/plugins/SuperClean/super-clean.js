@@ -43,21 +43,21 @@ SuperClean.prototype._superClean = function(opts, obj)
     var D = editor.getInnerHTML();
     if(opts.faces)
     {
-      D = D.replace(/face="[^"]*"/gi, '');
+      D = D.replace(/face="?[^" >]*"?/gi, '');
       // { (stops jedit's fold breaking)
       D = D.replace(/font-family:[^;}"']+;?/gi, '');
     }
 
     if(opts.sizes)
     {
-      D = D.replace(/size="[^"]*"/gi, '');
+      D = D.replace(/size="?[^" >]*"?/gi, '');
       // { (stops jedit's fold breaking)
       D = D.replace(/font-size:[^;}"']+;?/gi, '');
     }
 
     if(opts.colors)
     {
-      D = D.replace(/color="[^"]*"/gi, '');
+      D = D.replace(/color="?[^" >]*"?/gi, '');
       // { (stops jedit's fold breaking)
       D = D.replace(/([^-])color:[^;}"']+;?/gi, '$1');
     }
