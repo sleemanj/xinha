@@ -105,7 +105,8 @@ HTMLArea.Config.prototype.SuperClean =
                'word_clean': HTMLArea._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),
                'remove_faces': HTMLArea._lc('Remove custom typefaces (font "styles").', 'SuperClean'),
                'remove_sizes': HTMLArea._lc('Remove custom font sizes.', 'SuperClean'),
-               'remove_colors': HTMLArea._lc('Remove custom text colors.', 'SuperClean')
+               'remove_colors': HTMLArea._lc('Remove custom text colors.', 'SuperClean'),
+               'remove_lang': HTMLArea._lc('Remove lang attributes.', 'SuperClean')
   //additional custom filters (defined in plugins/SuperClean/filters/word.js)
                //'paragraph': 'remove paragraphs'},
                //'word': 'exteded Word-Filter' },
@@ -134,6 +135,11 @@ SuperClean.filterFunctions.remove_faces = function(D)
   D = D.replace(/face="?[^" >]*"?/gi, '');
   // { (stops jedit's fold breaking)
   D = D.replace(/font-family:[^;}"']+;?/gi, '');
+  return(D);
+};
+SuperClean.filterFunctions.remove_lang = function(D)
+{
+  D = D.replace(/lang="?[^" >]*"?/gi, '');
   return(D);
 };
 SuperClean.filterFunctions.word_clean = function(html, editor)
