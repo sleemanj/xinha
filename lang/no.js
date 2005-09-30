@@ -61,5 +61,9 @@
   "Clear Inline Font Specifications": "Fjerne inline font spesifikasjoner",
   "Would you like to clear font typefaces?": "Ønsker du å fjerne skrifttyper",
   "Would you like to clear font sizes?": "Ønsker du å fjerne skrift størrelser",
-  "Would you like to clear font colours?": "Ønsker du å fjerne farger på skriften"
+  "Would you like to clear font colours?": "Ønsker du å fjerne farger på skriften",
+  "Print document": "Skriv ut dokumentet",
+  "Split Block": "Seperasjonsblokk",
+  "Toggle Borders": "Skru av/på hjelpelinjer på tabeller",
+  "Select all": "Merk alt"
 };
