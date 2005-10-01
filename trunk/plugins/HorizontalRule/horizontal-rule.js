@@ -33,7 +33,7 @@ function HorizontalRule(editor) {
 
 HorizontalRule.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'HorizontalRule');
-}
+};
 
 HorizontalRule.prototype.buttonPress = function(editor) {
 	this.editor = editor;

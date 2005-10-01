@@ -40,7 +40,7 @@ FullScreen._pluginInfo =
 
 FullScreen.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'FullScreen');
-}
+};
 
 /** fullScreen makes an editor take up the full window space (and resizes when the browser is resized)
  *  the principle is the same as the "popupwindow" functionality in the original htmlArea, except
@@ -200,4 +200,4 @@ HTMLArea.prototype._fullScreen = function()
     this.activateEditor();
   }
   this.focusEditor();
-}
+};

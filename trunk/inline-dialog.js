@@ -24,14 +24,14 @@ HTMLArea.Dialog = function(editor, html, localizer)
     this._lc = function(string)
     {
       return HTMLArea._lc(string,localizer);
-    }
+    };
   }
   else
   {
     this._lc = function(string)
     {
       return string;
-    }
+    };
   }
 
   html = html.replace(/\[([a-z0-9_]+)\]/ig,
@@ -70,12 +70,12 @@ HTMLArea.Dialog = function(editor, html, localizer)
         dialog.onresize();
       }
     );
-}
+};
 
 HTMLArea.Dialog.prototype.onresize = function()
 {
   return true;
-}
+};
 
 HTMLArea.Dialog.prototype.show = function(values)
 {
@@ -94,7 +94,7 @@ HTMLArea.Dialog.prototype.show = function(values)
   this.editor._textArea.style.display = 'none';
   this.editor._iframe.style.visibility   = 'hidden';
   this.rootElem.style.display   = '';
-}
+};
 
 HTMLArea.Dialog.prototype.hide = function()
 {
@@ -110,7 +110,7 @@ HTMLArea.Dialog.prototype.hide = function()
   }
   this.editor.updateToolbar();
   return this.getValues();
-}
+};
 
 HTMLArea.Dialog.prototype.toggle = function()
 {
@@ -122,7 +122,7 @@ HTMLArea.Dialog.prototype.toggle = function()
   {
     this.hide();
   }
-}
+};
 
 HTMLArea.Dialog.prototype.setValues = function(values)
 {
@@ -207,7 +207,7 @@ HTMLArea.Dialog.prototype.setValues = function(values)
       }
     }
   }
-}
+};
 
 HTMLArea.Dialog.prototype.getValues = function()
 {
@@ -314,14 +314,14 @@ HTMLArea.Dialog.prototype.getValues = function()
     values[this.r_id[i.name]] = v;
   }
   return values;
-}
+};
 
 HTMLArea.Dialog.prototype.getElementById = function(id)
 {
   return this.document.getElementById(this.id[id] ? this.id[id] : id);
-}
+};
 
 HTMLArea.Dialog.prototype.getElementsByName = function(name)
 {
   return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
-}
+};

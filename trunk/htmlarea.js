@@ -4512,7 +4512,7 @@ HTMLArea._prepareForDom0Events = function(el, ev)
         el._xinha_tempEventHandler = null;
       }
       return allOK;
-    }
+    };
 
     HTMLArea._eventFlushers.push([el, ev]);
   }

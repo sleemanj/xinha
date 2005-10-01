@@ -35,7 +35,7 @@ BackgroundImage._pluginInfo = {
 
 BackgroundImage.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'BackgroundImage');
-}
+};
 
 BackgroundImage.prototype.buttonPress = function(editor) {
 		//var doc = this.editor._doc;
@@ -49,4 +49,4 @@ BackgroundImage.prototype.buttonPress = function(editor) {
 					}
 				}	
     }, null);
-}
+};

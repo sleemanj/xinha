@@ -17,7 +17,7 @@ HTMLArea.Config.prototype.Linker =
 {
   'backend' : _editor_url + 'plugins/Linker/scan.php',
   'files' : null
-}
+};
 
 
 function Linker(editor, args)
@@ -46,7 +46,7 @@ function Linker(editor, args)
 Linker.prototype._lc = function(string)
 {
   return HTMLArea._lc(string, 'Linker');
-}
+};
 
 Linker.prototype._createLink = function(a)
 {
@@ -257,7 +257,7 @@ Linker.prototype._createLink = function(a)
 
   this._dialog.show(inputs, doOK);
 
-}
+};
 
 Linker.prototype._getSelectedAnchor = function()
 {
@@ -277,12 +277,12 @@ Linker.prototype._getSelectedAnchor = function()
     }
   }
   return null;
-}
+};
 
 Linker.prototype.onGenerate = function()
 {
   this._dialog = new Linker.Dialog(this);
-}
+};
 // Inline Dialog for Linker
 
 Linker.Dialog_dTrees = [ ];
@@ -303,7 +303,7 @@ Linker.Dialog = function (linker)
   // load the dTree script
   this._prepareDialog();
 
-}
+};
 
 Linker.Dialog.prototype._prepareDialog = function()
 {
@@ -388,7 +388,7 @@ Linker.Dialog.prototype._prepareDialog = function()
     }
 
   this.ready = true;
-}
+};
 
 Linker.Dialog.prototype.makeNodes = function(files, parent)
 {
@@ -427,7 +427,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
       }
     }
   }
-}
+};
 
 Linker.Dialog.prototype._lc = Linker.prototype._lc;
 
@@ -542,11 +542,10 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
 
   // Init the sizes
   this.dialog.onresize();
-}
+};
 
 Linker.Dialog.prototype.hide = function()
 {
   this.linker.editor.enableToolbar();
   return this.dialog.hide();
-}
-
+};

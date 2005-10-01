@@ -50,7 +50,7 @@ CharCounter.prototype.onGenerate = function() {
 
 CharCounter.prototype.onUpdateToolbar = function() {
     this.updateCharCount();
-}
+};
 
 CharCounter.prototype.onMode = function (mode)
 {
@@ -67,7 +67,7 @@ CharCounter.prototype.onMode = function (mode)
       alert("Mode <" + mode + "> not defined!");
       return false;
   }
-}
+};
 
 CharCounter.prototype.updateCharCount = function(ev) {
     editor = this.editor;
@@ -84,4 +84,4 @@ CharCounter.prototype.updateCharCount = function(ev) {
 //    this.charCount.innerHTML = this._lc("Words") + ": " + words + " | " + this._lc("Chars") + ": " + contents.length;
     this.charCount.innerHTML = this._lc("Chars") + ": " + contents.length;
     return(contents.length);
-}
+};

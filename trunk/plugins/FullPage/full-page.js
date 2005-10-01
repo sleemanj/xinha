@@ -41,7 +41,7 @@ FullPage._pluginInfo = {
 
 FullPage.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'FullPage');
-}
+};
 
 FullPage.prototype.buttonPress = function(editor, id) {
 	var self = this;

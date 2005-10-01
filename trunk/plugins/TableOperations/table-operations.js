@@ -57,7 +57,7 @@ TableOperations._pluginInfo = {
 
 TableOperations.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'TableOperations');
-}
+};
 
 /************************
  * UTILITIES

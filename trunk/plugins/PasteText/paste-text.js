@@ -35,7 +35,7 @@ PasteText._pluginInfo = {
 
 PasteText.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'PasteText');
-}
+};
 
 PasteText.prototype.buttonPress = function(editor) {
 
@@ -49,4 +49,4 @@ PasteText.prototype.buttonPress = function(editor) {
 		html="<p>"+html;
 		editor.insertHTML(html);
 	}, outparam);
-}
+};

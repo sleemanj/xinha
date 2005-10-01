@@ -43,7 +43,7 @@ NoteServer._pluginInfo = {
 
 NoteServer.prototype._lc = function(string) {
   return HTMLArea._lc(string, 'NoteServer');
-}
+};
 
 NoteServer.prototype.buttonPress = function(editor) {
   editor._popupDialog( "plugin://NoteServer/codenote", function(param) {
@@ -51,7 +51,7 @@ NoteServer.prototype.buttonPress = function(editor) {
       return false;
     } else IncludeGuido(editor,param);
   }, null);
-}
+};
 
 // this variable is the address of the noteserver
 // can be set to another address (local address if availalble) 

@@ -50,4 +50,4 @@ license       : "htmlArea"
 
 QuickTag.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'QuickTag');
-}
+};

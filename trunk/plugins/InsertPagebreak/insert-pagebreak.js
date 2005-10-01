@@ -36,7 +36,7 @@ InsertPagebreak._pluginInfo = {
 
 InsertPagebreak.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'InsertPagebreak');
-}
+};
 
 InsertPagebreak.prototype.buttonPress = function(editor, context, updatecontextclass) {
 	editor.insertHTML('<div style="font-size: 1px; page-break-after: always; height: 1px; background-color: rgb(192, 192, 192);" contenteditable="false" title="Page Break">');

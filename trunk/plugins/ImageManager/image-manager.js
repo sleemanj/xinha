@@ -81,7 +81,7 @@ HTMLArea.Config.prototype.ImageManager =
   'backend_config'     : null,
   'backend_config_hash': null,
   'backend_config_secret_key_location': 'Xinha:ImageManager'
-}
+};
 
 // Over ride the _insertImage function in htmlarea.js.
 // Open up the ImageManger script instead.
@@ -208,5 +208,4 @@ HTMLArea.prototype._insertImage = function(image) {
 		
 	}, outparam);
 };
-
 

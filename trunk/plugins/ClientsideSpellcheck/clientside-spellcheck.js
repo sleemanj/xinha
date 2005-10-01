@@ -43,7 +43,7 @@ ClientsideSpellcheck._pluginInfo = {
 
 ClientsideSpellcheck.prototype._lc = function(string) {
   return HTMLArea._lc(string, 'ClientsideSpellcheck');
-}
+};
 
 ClientsideSpellcheck.prototype.buttonPress = function(editor) {
 
@@ -59,4 +59,4 @@ ClientsideSpellcheck.prototype.buttonPress = function(editor) {
 			alert("ieSpell can only be used in Internet Explorer");
 		}
 	}
-}
+};
