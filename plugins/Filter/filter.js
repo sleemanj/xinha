@@ -52,11 +52,11 @@ Filter.prototype.add = function(filterName) {
     head.appendChild(script);
     //document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
   }
-}
+};
 
 Filter.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'Filter');
-}
+};
 
 Filter.prototype.buttonPress = function(editor) {
   var html = editor.getInnerHTML();
@@ -64,4 +64,4 @@ Filter.prototype.buttonPress = function(editor) {
     html = eval(editor.config.Filters[i])(html);
   }
   editor.setHTML(html);
-}
+};

@@ -17,7 +17,7 @@ HTMLArea.Config.prototype.FormOperations =
   'allow_edit_form'      : false,
   'default_form_action'  : _editor_url + 'plugins/FormOperations/formmail.php',
   'default_form_html'    : HTMLArea._geturlcontent(_editor_url + 'plugins/FormOperations/default_form.html')
-}
+};
 
 FormOperations._pluginInfo =
 {
@@ -73,7 +73,7 @@ function FormOperations(editor)
 
   FormOperations.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'FormOperations');
-  }
+  };
 
   this.editor.config.btnList.insert_form =
   [ this._lc("Insert a Form."),
@@ -163,7 +163,7 @@ function FormOperations(editor)
     },
     'form'
   ];
-}
+};
 
 FormOperations.prototype.onGenerate = function()
 {
@@ -179,7 +179,7 @@ FormOperations.prototype.onGenerate = function()
        return editor._editorEvent(event);
      });
   }
-}
+};
 
 FormOperations.prototype._preparePanel = function ()
 {
@@ -216,7 +216,7 @@ FormOperations.prototype._preparePanel = function ()
   this.panel = new HTMLArea.PanelDialog(this.editor,'bottom',this.html,'FormOperations');
   this.panel.hide();
   this.ready = true;
-}
+};
 
 FormOperations.prototype.onUpdateToolbar = function()
 {
@@ -320,7 +320,7 @@ FormOperations.prototype.onUpdateToolbar = function()
     this.panel.hide();
     return true;
   }
-}
+};
 
 
 FormOperations.prototype.hideAll = function()
@@ -331,7 +331,7 @@ FormOperations.prototype.hideAll = function()
   this.panel.getElementById('fs_select').style.display = 'none';
   this.panel.getElementById('fs_cbrd').style.display = 'none';
   this.panel.getElementById('fs_button').style.display = 'none';
-}
+};
 
 FormOperations.prototype.showForm = function(form)
 {
@@ -345,7 +345,7 @@ FormOperations.prototype.showForm = function(form)
   var f = form;
   this.panel.getElementById('action').onkeyup = function () { f.action = this.value; }
   this.panel.getElementById('method').onchange   = function () { f.method = this.options[this.selectedIndex].value; }
-}
+};
 
 FormOperations.prototype.showText = function (input)
 {
@@ -410,7 +410,7 @@ FormOperations.prototype.showText = function (input)
     }
 
   this.panel.getElementById('text_maxlength').onkeyup = function () { i.maxlength = this.value; }
-}
+};
 
 FormOperations.prototype.showCbRd = function (input)
 {
@@ -421,7 +421,7 @@ FormOperations.prototype.showCbRd = function (input)
     'cbrd_value'   : input.value,
     'cbrd_checked' : input.checked ? 1 : 0,
     'cbrd_type'    : input.type.toLowerCase()
-  }
+  };
   this.panel.setValues(vals);
 
   var i = input;
@@ -456,7 +456,7 @@ FormOperations.prototype.showCbRd = function (input)
       }
     }
   this.panel.getElementById('cbrd_checked').onclick   = function () { i.checked = this.checked; }
-}
+};
 
 FormOperations.prototype.showButton = function (input)
 {
@@ -500,7 +500,7 @@ FormOperations.prototype.showButton = function (input)
         input = i = newElement;
       }
     }
-}
+};
 
 FormOperations.prototype.showTextarea = function (input)
 {
@@ -513,7 +513,7 @@ FormOperations.prototype.showTextarea = function (input)
     'textarea_width_units' : input.style.width ? input.style.width.replace(/[0-9.]/, '').toLowerCase() : 'ex',
     'textarea_height'      : input.style.height ? parseFloat(input.style.height.replace(/[^0-9.]/, '')) : '',
     'textarea_height_units': input.style.height ? input.style.height.replace(/[0-9.]/, '').toLowerCase() : 'ex'
-  }
+  };
 
   this.panel.setValues(vals);
 
@@ -534,7 +534,7 @@ FormOperations.prototype.showTextarea = function (input)
         i.style.width = '';
       }
       i.style.width = parseFloat(w.value) + wu.options[wu.selectedIndex].value;
-    }
+    };
 
   var h  = this.panel.getElementById('textarea_height');
   var hu = this.panel.getElementById('textarea_height_units');
@@ -548,9 +548,9 @@ FormOperations.prototype.showTextarea = function (input)
         i.style.height = '';
       }
       i.style.height = parseFloat(h.value) + hu.options[hu.selectedIndex].value;
-    }
+    };
 
-}
+};
 
 FormOperations.prototype.showSelect = function (input)
 {
@@ -563,7 +563,7 @@ FormOperations.prototype.showSelect = function (input)
     'select_width_units' : input.style.width ? input.style.width.replace(/[0-9.]/, '').toLowerCase() : 'ex',
       'select_height'      : input.style.height ? parseFloat(input.style.height.replace(/[^0-9.]/, '')) : (input.size && input.size > 0 ? input.size : 1),
     'select_height_units': input.style.height ? input.style.height.replace(/[0-9.]/, '').toLowerCase() : 'items'
-  }
+  };
 
   this.panel.setValues(vals);
 
@@ -584,7 +584,7 @@ FormOperations.prototype.showSelect = function (input)
         i.style.width = '';
       }
       i.style.width = parseFloat(w.value) + wu.options[wu.selectedIndex].value;
-    }
+    };
 
   var h  = this.panel.getElementById('select_height');
   var hu = this.panel.getElementById('select_height_units');
@@ -608,7 +608,7 @@ FormOperations.prototype.showSelect = function (input)
       {
         i.style.height = parseFloat(h.value) + hu.options[hu.selectedIndex].value;
       }
-    }
+    };
 
 
   var fo_sel = this.panel.getElementById('select_options');
@@ -631,7 +631,7 @@ FormOperations.prototype.showSelect = function (input)
       }
       fo.arrayToOpts(opts, input.options);
       fo.arrayToOpts(opts, fo_sel.options);
-    }
+    };
 
   this.panel.getElementById('del_option').onclick =
     function()
@@ -645,7 +645,7 @@ FormOperations.prototype.showSelect = function (input)
       }
       fo.arrayToOpts(newOpts, input.options);
       fo.arrayToOpts(newOpts, fo_sel.options);
-    }
+    };
 
   this.panel.getElementById('up_option').onclick =
     function()
@@ -656,7 +656,7 @@ FormOperations.prototype.showSelect = function (input)
       opts.splice(fo_sel.selectedIndex - 1, 0, move);
       fo.arrayToOpts(opts, input.options);
       fo.arrayToOpts(opts, fo_sel.options);
-    }
+    };
 
   this.panel.getElementById('down_option').onclick =
     function()
@@ -667,14 +667,14 @@ FormOperations.prototype.showSelect = function (input)
       opts.splice(fo_sel.selectedIndex+1, 0, move);
       fo.arrayToOpts(opts, input.options);
       fo.arrayToOpts(opts, fo_sel.options);
-    }
+    };
 
   this.panel.getElementById('select_options').onchange =
     function()
     {
       fo.arrayToOpts(fo.optsToArray(fo_sel.options), input.options);
-    }
-}
+    };
+};
 
 FormOperations.prototype.optsToArray = function(o)
 {
@@ -691,7 +691,7 @@ FormOperations.prototype.optsToArray = function(o)
     );
   }
   return a;
-}
+};
 
 FormOperations.prototype.arrayToOpts = function(a, o)
 {
@@ -704,7 +704,7 @@ FormOperations.prototype.arrayToOpts = function(a, o)
   {
     o[i] = new Option(a[i].text, a[i].value, a[i].defaultSelected, a[i].selected);
   }
-}
+};
 
 FormOperations.prototype.formatName = function(input, name)
 {
@@ -741,7 +741,7 @@ FormOperations.prototype.formatName = function(input, name)
   }
 
   return name;
-}
+};
 
 FormOperations.prototype.deformatName = function(input, name)
 {
@@ -751,5 +751,4 @@ FormOperations.prototype.deformatName = function(input, name)
   }
 
   return name;
-}
-
+};

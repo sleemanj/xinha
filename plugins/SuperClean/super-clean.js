@@ -24,7 +24,7 @@ SuperClean._pluginInfo =
 
 SuperClean.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'SuperClean');
-}
+};
 
 /** superClean combines HTMLTidy, Word Cleaning and font stripping into a single function
  *  it works a bit differently in how it asks for parameters */
@@ -89,7 +89,7 @@ SuperClean.prototype._superClean = function(opts, obj)
       SuperClean.filterFunctions.tidy(html, editor);
     }
   }
-}
+};
 
 HTMLArea.Config.prototype.SuperClean =
 {
@@ -113,7 +113,7 @@ HTMLArea.Config.prototype.SuperClean =
               },
   //if false all filters are applied, if true a dialog asks what filters should be used
   'show_dialog': true
-}
+};
 
 SuperClean.filterFunctions = { };
 SuperClean.filterFunctions.remove_colors = function(D)
@@ -187,7 +187,7 @@ SuperClean.prototype.onGenerate = function()
       return;
     }
   }
-}
+};
 // Inline Dialog for SuperClean
 
 
@@ -206,7 +206,7 @@ SuperClean.Dialog = function (SuperClean)
   // load the dTree script
   this._prepareDialog();
 
-}
+};
 
 SuperClean.Dialog.prototype._prepareDialog = function()
 {
@@ -235,7 +235,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
   var dialog = this.dialog = new HTMLArea.Dialog(SuperClean.editor, this.html, 'SuperClean');
 
   this.ready = true;
-}
+};
 
 SuperClean.Dialog.prototype._lc = SuperClean.prototype._lc;
 
@@ -276,10 +276,10 @@ SuperClean.Dialog.prototype.show = function(inputs, ok, cancel)
 
   // Init the sizes
   this.dialog.onresize();
-}
+};
 
 SuperClean.Dialog.prototype.hide = function()
 {
   this.SuperClean.editor.enableToolbar();
   return this.dialog.hide();
-}
+};

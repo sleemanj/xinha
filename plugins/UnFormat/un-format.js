@@ -14,7 +14,7 @@ function UnFormat(editor) {
     action   : function(editor) {
                  self.buttonPress(editor);
                }
-  })
+  });
 
   cfg.addToolbarElement("unformat", "killword", 1);
 };
@@ -28,7 +28,7 @@ UnFormat._pluginInfo = {
 
 UnFormat.prototype._lc = function(string) {
   return HTMLArea._lc(string, 'UnFormat');
-}
+};
 
 UnFormat.prototype.buttonPress = function(editor){
   editor._popupDialog( "plugin://UnFormat/unformat", function( param){
@@ -62,4 +62,4 @@ UnFormat.prototype.buttonPress = function(editor){
       }
     } else { return false; }
   }, null);
-}
+};

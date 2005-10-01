@@ -59,7 +59,7 @@ function CharacterMap( editor )
 HTMLArea.Config.prototype.CharacterMap =
 {
   'mode': 'popup' // configuration mode : panel or popup
-}
+};
 
 CharacterMap._pluginInfo =
 {

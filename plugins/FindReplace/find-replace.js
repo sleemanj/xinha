@@ -39,4 +39,4 @@ FindReplace._pluginInfo = {
 
 FindReplace.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'FindReplace');
-}
+};

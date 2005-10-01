@@ -65,7 +65,7 @@ Forms.btnList = [
 
 Forms.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'Forms');
-}
+};
 
 Forms.prototype.onGenerate = function() {
   var style_id = "Form-style"
@@ -77,7 +77,7 @@ Forms.prototype.onGenerate = function() {
     style.href = _editor_url + 'plugins/Forms/forms.css';
     this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(style);
   }
-}
+};
 
 Forms.prototype.buttonPress = function(editor,button_id, node) {
   function optionValues(text,value) {

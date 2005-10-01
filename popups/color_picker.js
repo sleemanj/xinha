@@ -288,7 +288,7 @@
       {
         this.table.style.left = (left - (this.table.offsetWidth - element.offsetWidth)) + 'px';
       }
-    }
+    };
 
     /** Draw the color picker. */
     this.pick_color = function()
@@ -489,12 +489,12 @@
           }
         }
       }
-    }
+    };
 
     /** Close the color picker */
     this.close = function()
     {
       this.table.style.display = 'none';
-    }
+    };
 
   }
