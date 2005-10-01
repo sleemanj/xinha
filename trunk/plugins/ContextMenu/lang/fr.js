@@ -47,4 +47,4 @@
   "Create a link": "Créer un lien",
   "Insert a paragraph before the current node": "Insérer un paragraphe avant le noeud courant",
   "Insert a paragraph after the current node": "Insérer un paragraphe après le noeud courant"
-}
+};

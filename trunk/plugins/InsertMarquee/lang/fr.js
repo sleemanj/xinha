@@ -1,13 +1,17 @@
 // I18N constants
-
-// LANG: "fr", ENCODING: UTF-8 | ISO-8859-1
-// Author: Udo Schmal
-//
-// (c) Udo Schmal 2004
-// Distributed under the same terms as HTMLArea itself.
-// This notice MUST stay intact for use (see license.txt).
-
+// LANG: "fr", ENCODING: UTF-8
 {
-	"Insert scrolling marquee": "Insérez marquee",
-	"Cancel": "Annulation"
+  "Name/ID:": "Nom/ID",
+  "Insert scrolling marquee": "Insérer marquee défilant",
+  "Insert marquee": "Insérer marquee",
+  "Direction:": "Direction",
+  "Behavior:": "Comportement",
+  "Text:": "Texte",
+  "Background-Color:": "Couleur de fond",
+  "Width:": "Largeur",
+  "Height:": "Hauteur",
+  "Speed Control": "Controle de vitesse",
+  "Scroll Amount:": "Quantité de défilement",
+  "Scroll Delay:": "Délai du défilement",
+  "Cancel": "Annuler"
 };

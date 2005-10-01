@@ -127,4 +127,4 @@
   "Positioning of this image": "Position de l'image",
   "Image Preview:": "Prévisualisation",
   "You must enter the URL": "Vous devez entrer l'URL"
-}
+};
