@@ -14,4 +14,4 @@
   "Description:": "Description",
   "Keywords:": "Mots clés",
   "UTF-8 (recommended)": "UTF-8 (recommandé)"
-}
+};

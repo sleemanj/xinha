@@ -63,4 +63,4 @@
   "Margin:": "Marge",
   "Padding:": "Espacement",
   "Border:": "Bordure"
-}
+};

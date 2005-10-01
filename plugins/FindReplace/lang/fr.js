@@ -23,4 +23,4 @@
   "Undo":                            "Annuler",
   "Next":                            "Suivant",
   "Done":                            "Fin"
-}
+};
