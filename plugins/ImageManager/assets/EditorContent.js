@@ -102,7 +102,7 @@ initEditor = function ()
 
     if (markerImg.src.indexOf("img/t_white.gif")>0)
         toggleMarker() ;
-}
+};
 
 function init_crop() 
 {

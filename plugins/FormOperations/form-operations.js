@@ -343,8 +343,8 @@ FormOperations.prototype.showForm = function(form)
   }
   this.panel.setValues(vals);
   var f = form;
-  this.panel.getElementById('action').onkeyup = function () { f.action = this.value; }
-  this.panel.getElementById('method').onchange   = function () { f.method = this.options[this.selectedIndex].value; }
+  this.panel.getElementById('action').onkeyup = function () { f.action = this.value; };
+  this.panel.getElementById('method').onchange   = function () { f.method = this.options[this.selectedIndex].value; };
 };
 
 FormOperations.prototype.showText = function (input)
@@ -471,8 +471,8 @@ FormOperations.prototype.showButton = function (input)
 
   var i = input;
   var fo = this;
-  this.panel.getElementById('button_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); }
-  this.panel.getElementById('button_value').onkeyup  = function () { i.value = this.value; }
+  this.panel.getElementById('button_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); };
+  this.panel.getElementById('button_value').onkeyup  = function () { i.value = this.value; };
   this.panel.getElementById('button_type').onchange   = function ()
     {
       if(!HTMLArea.is_ie)
@@ -499,7 +499,7 @@ FormOperations.prototype.showButton = function (input)
         HTMLArea.removeFromParent(i);
         input = i = newElement;
       }
-    }
+    };
 };
 
 FormOperations.prototype.showTextarea = function (input)
@@ -519,8 +519,8 @@ FormOperations.prototype.showTextarea = function (input)
 
   var i = input;
   var fo = this;
-  this.panel.getElementById('textarea_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); }
-  this.panel.getElementById('textarea_value').onkeyup  = function () { i.value = i.innerHTML = this.value; }
+  this.panel.getElementById('textarea_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); };
+  this.panel.getElementById('textarea_value').onkeyup  = function () { i.value = i.innerHTML = this.value; };
 
   var w  = this.panel.getElementById('textarea_width');
   var wu = this.panel.getElementById('textarea_width_units');
@@ -569,8 +569,8 @@ FormOperations.prototype.showSelect = function (input)
 
   var i = input;
   var fo = this;
-  this.panel.getElementById('select_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); }
-  this.panel.getElementById('select_multiple').onclick   = function () { i.multiple = this.checked; }
+  this.panel.getElementById('select_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); };
+  this.panel.getElementById('select_multiple').onclick   = function () { i.multiple = this.checked; };
 
   var w  = this.panel.getElementById('select_width');
   var wu = this.panel.getElementById('select_width_units');

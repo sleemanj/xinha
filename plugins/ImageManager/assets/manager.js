@@ -98,7 +98,7 @@
 
     // For some reason dialog is not shrinkwrapping correctly in IE so we have to explicitly size it for now.
     if(HTMLArea.is_ie) window.resizeTo(600, 460);
-	}
+	};
 
 
 	function onCancel() 
