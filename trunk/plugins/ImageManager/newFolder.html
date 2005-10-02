@@ -22,21 +22,21 @@ form .elements{
 
     if(window.opener)
         HTMLArea = window.opener.HTMLArea;
-    
+
 	init = function ()
 	{
 		__dlg_init();
 		__dlg_translate('ImageManager');
 		document.getElementById("f_foldername").focus();
-	}
+	};
 
-	function onCancel() 
+	function onCancel()
 	{
 		__dlg_close(null);
 		return false;
 	}
 
-	function onOK() 
+	function onOK()
 	{
 		 // pass data back to the calling window
 	  var fields = ["f_foldername"];
@@ -51,12 +51,12 @@ form .elements{
 	}
 
 	function addEvent(obj, evType, fn)
-	{ 
-		if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; } 
-		else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  } 
-		else {  return false; } 
-	} 
-	
+	{
+		if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; }
+		else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  }
+		else {  return false; }
+	}
+
 	addEvent(window, 'load', init);
 //-->
 </script>
@@ -68,7 +68,7 @@ form .elements{
 	<label for="f_foldername">Folder Name:</label>
 	<input type="text" id="f_foldername" />
 </div>
-<div style="text-align: right;"> 
+<div style="text-align: right;">
 	  <hr />
 	  <button type="button" class="buttons" onclick="return onOK();">OK</button>
 	  <button type="button" class="buttons" onclick="return onCancel();">Cancel</button>

@@ -3646,7 +3646,7 @@ HTMLArea.prototype._editorEvent = function(ev) {
         editor._unlinkOnUndo = true;
 
         return a;
-      }
+      };
 
       switch(ev.which)
       {
