@@ -102,7 +102,7 @@
 }
 
 
-/* Hidden DIV popup dialogs (PopupDiv) */
+/* popup dialogs */
 
 .dialog {
   color: ButtonText;
@@ -171,11 +171,6 @@
 
 .dialog legend { font-weight: bold; }
 .dialog fieldset table { margin: 2px 0px; }
-
-.popupdiv {
-  border: 2px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-}
 
 .popupwin {
   padding: 0px;
