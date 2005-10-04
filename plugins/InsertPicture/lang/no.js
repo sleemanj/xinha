@@ -1,12 +1,6 @@
 // LANG: "de", ENCODING: UTF-8 | ISO-8859-1
 // Sponsored by http://www.schaffrath-neuemedien.de
-// Author: Udo Schmal (gocher), <udo.schmal@t-online.de>
 // translated: Kim Steinhaug, http://www.steinhaug.com/, kim@steinhaug.com
-//
-// (c) Udo Schmal & Schaffrath NeueMedien 2005
-// Distributed under the same terms as HTMLArea itself.
-// This notice MUST stay intact for use (see license.txt).
-
 {
   "Insert Image": "Sett inn bilde",
   "Image Preview:": "Forhåndsvisning:",

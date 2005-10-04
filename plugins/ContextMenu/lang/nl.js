@@ -1,17 +1,6 @@
 // I18N constants
-
 // LANG: "nl", ENCODING: UTF-8
 // Author: Michel Weegeerink (info@mmc-shop.nl), http://mmc-shop.nl
-
-// FOR TRANSLATORS:
-//
-//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
-//      (at least a valid email address)
-//
-//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
-//      (if this is not possible, please include a comment
-//       that states what encoding is necessary.)
-
 {
   "Cut": "Knippen",
   "Copy": "Kopiëren",
@@ -55,4 +44,4 @@
   "Insert a new column after the current one": "Voeg een nieuwe kolom in na de huidige",
   "Delete the current column": "Verwijder de huidige kolom",
   "Create a link": "Maak een hyperlink"
-}
+};

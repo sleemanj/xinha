@@ -1,8 +1,6 @@
 // I18N constants
-
 // LANG: "de", ENCODING: UTF-8
 // translated: Raimund Meyer xinha@ray-of-light.org
-
 {
   "Align": "Ausrichtung",
   "All four sides": "Alle 4 Seiten",

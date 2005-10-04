@@ -1,8 +1,6 @@
 // I18N constants
-
 // LANG: "el", ENCODING: UTF-8
 // Author: Dimitris Glezos, dimitris@glezos.com
-
 {
   "Cut": "ΞΟΞΏΞΊΞΏΟΞ�",
   "Copy": "ΞΞ½ΟΞΉΞ³ΟΞ±ΟΞ�",
@@ -46,4 +44,4 @@
   "Insert a new column after the current one": "ΞΞΉΟΞ±Ξ³ΟΞ³Ξ� Ξ½Ξ­Ξ±Ο ΟΟΞ�Ξ»Ξ·Ο ΞΌΞ΅ΟΞ¬ ΟΞ·Ξ½ Ξ΅ΟΞΉΞ»Ξ΅Ξ³ΞΌΞ­Ξ½Ξ·",
   "Delete the current column": "ΞΞΉΞ±Ξ³ΟΞ±ΟΞ� Ξ΅ΟΞΉΞ»Ξ΅Ξ³ΞΌΞ­Ξ½Ξ·Ο ΟΟΞ�Ξ»Ξ·Ο",
   "Create a link": "ΞΞ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ± ΟΟΞ½Ξ΄Ξ­ΟΞΌΞΏΟ"
-}
+};

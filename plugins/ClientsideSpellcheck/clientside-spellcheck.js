@@ -53,10 +53,10 @@ ClientsideSpellcheck.prototype.buttonPress = function(editor) {
 	}
 	catch(exception) {
  		if(exception.number==-2146827859) {
-			if (confirm("ieSpell not detected.  Click Ok to go to download page."))
+			if (confirm(this.lc("ieSpell not detected.  Click Ok to go to download page.")))
 				window.open("http://www.iespell.com/download.php","DownLoad");
 		} else {
-			alert("ieSpell can only be used in Internet Explorer");
+			alert(this.lc("ieSpell can only be used in Internet Explorer"));
 		}
 	}
 };
