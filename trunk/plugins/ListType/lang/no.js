@@ -1,7 +1,6 @@
 ﻿// I18N constants
 // LANG: "no", ENCODING: UTF-8
 // translated: Kim Steinhaug, http://www.steinhaug.com/, kim@steinhaug.com
-
 {
   "Decimal numbers": "Desimaltall",
   "Lower roman numbers": "Lower roman numbers",
@@ -10,4 +9,4 @@
   "Upper latin letters": "Upper latin letters",
   "Lower greek letters": "Lower greek letters",
   "Choose list style type (for ordered lists)": "Velg liste type (for nummererte lister)"
-}
+};

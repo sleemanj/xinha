@@ -67,4 +67,4 @@
   "Border:": "Ramka:",
   "Color:": "Kolor:",
   "Upload:": "Wgraj:"
-}
+};

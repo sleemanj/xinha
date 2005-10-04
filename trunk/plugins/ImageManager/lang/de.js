@@ -1,8 +1,8 @@
 // I18N constants
 // LANG: "de", ENCODING: UTF-8
-// translated: Udo Schmal
+// translated: Udo Schmal (gocher), http://www.schaffrath-neuemedien.de/, udo.schmal@t-online.de
 {
-	"Image Manager": "Bildmanager",
+  "Image Manager": "Bildmanager",
   "Insert Image": "Bild einfügen",
   "Directory": "Ordner",
   "Directory Up": "übergeordneter Ordner",
@@ -22,7 +22,7 @@
   "Refresh": "Aktualisieren",
   "Uploading...": "Hochladen...",
   "Crop": "Beschneiden",
-	"Resize": "Größe ändern",
+  "Resize": "Größe ändern",
   "Rotate": "Drehen",
   "Measure": "Abmessungen",
   "Marker": "Marker",

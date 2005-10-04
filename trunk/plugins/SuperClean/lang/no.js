@@ -1,7 +1,6 @@
 // I18N constants
 // LANG: "no", ENCODING: UTF-8
 // translated: Kim Steinhaug, http://www.steinhaug.com/, kim@steinhaug.com
-
 {
   "Clean up HTML": "Vask HTML kode",
   "Please select from the following cleaning options...": "Vennligst velg blandt de forskjellige mulighetene å vaske/ rydde i HTML koden",

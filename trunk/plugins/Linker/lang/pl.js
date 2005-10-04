@@ -17,4 +17,4 @@
   "Message Template:": "Szablon wiadmości:",
   "Size:": "Rozmiar:",
   "Name:": "Nazwa:"
-}
+};

@@ -1,8 +1,6 @@
 // I18N constants
-
 // LANG: "en", ENCODING: UTF-8
 // Author: Broxx, <broxx@broxx.com>
-
 {
   "Please confirm that you want to open this link": "Wollen Sie diesen Link oeffnen",
   "Cancel": "Abbrechen",
