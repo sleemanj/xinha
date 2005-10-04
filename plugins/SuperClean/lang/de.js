@@ -20,7 +20,7 @@
   "Remove custom typefaces (font \"styles\").": "Schriftarten entfernen (font face).",
   "Remove custom font sizes.": "Schriftgrößen entfernen (font size).",
   "Remove custom text colors.": "Schriftfarben entfernen (font color).",
-  "Remove lang attributes.": "Remove lang attributes.",
+  "Remove lang attributes.": "Sprachattribute entfernen.",
   "Go": "Go",
   "Cancel": "Abbrechen",
   "Tidy failed.  Check your HTML for syntax errors.": "Säubern fehlgeschlagen. Überprüfen Sie Ihren Code auf Fehler.",
