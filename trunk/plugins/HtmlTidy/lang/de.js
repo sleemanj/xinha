@@ -13,5 +13,6 @@
 //       that states what encoding is necessary.)
 
 {
-  "HTML Tidy": "HTML Tidy"
+  "HTML Tidy": "HTML Tidy",
+	"Tidy failed.  Check your HTML for syntax errors.": "Tidy fehlgeschlagen. Prüfen Sie den HTML Code nach Syntax-Fehlern."  
 }
