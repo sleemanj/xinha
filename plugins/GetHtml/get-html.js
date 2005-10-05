@@ -13,6 +13,8 @@
   *   - Formats html in an indented, readable format in html mode
   *   - Preserves script and pre formatting
   *   - Removes contenteditable from body tag in full-page mode
+  *   - Supports only7BitPrintablesInURLs config option
+  *   - Supports htmlRemoveTags config option
   */
   
 function GetHtml(editor) {
@@ -122,17 +124,30 @@ HTMLArea.indent = function(s, sindentChar) {
 
 HTMLArea.getHTML = function(root, outputRoot, editor) {
 	var html = "";
-	var closed;
-	var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : ''; //what is this for??
+
+	if(root.nodeType == 11) {//document fragment
+	    //we can't get innerHTML from the root (type 11) node, so we 
+	    //copy all the child nodes into a new div and get innerHTML from the div
+	    var div = document.createElement("div");
+	    var temp = root.insertBefore(div,root.firstChild);
+	    for (j = temp.nextSibling; j; j = j.nextSibling) { 
+	    		temp.appendChild(j.cloneNode(true));
+	    }
+	    html += temp.innerHTML.replace(/<[^\?][^>]*>/gi, function(tag){return editor.cleanHTML(tag)});
+
+	} else {
+
+	var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : ''; 
 	if (outputRoot) { //only happens with <html> tag in fullpage mode
-		outputRoot = !(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(root_tag));
-	}
-	html = "";
-	if (outputRoot) {
 		html += "<" + root_tag + ">";
 	}
+
 	//pass tags to cleanHTML() one at a time; ignore php tags
-	html += editor.getInnerHTML().replace(/<[^\?][^>]*>/gi, function(tag){return editor.cleanHTML(tag)});
+	//includes support for htmlRemoveTags config option
+	html += editor.getInnerHTML().replace(/<[^\?][^>]*>/gi, function(tag){
+		if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
+		return editor.cleanHTML(tag);
+		else return ''});
 	//IE drops  all </li> tags in a list except the last one
 	if(HTMLArea.is_ie) {
 		html = html.replace(/<li( [^>]*)?>/g,'</li><li$1>').
@@ -143,6 +158,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		html += "</" + root_tag + ">";
 	}
 	html = HTMLArea.indent(html);
+}
 //	html = HTMLArea.htmlEncode(html);
 
 	return html;
