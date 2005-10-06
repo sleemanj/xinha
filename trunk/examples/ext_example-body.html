@@ -63,7 +63,7 @@
         num = 1;
         f.num.value = 1;
       }
-      var b = document.forms[0];
+      var dest = document.getElementById("editors_here");
       var lipsum = window.parent.menu.document.getElementById('myTextarea0').value;
 
       xinha_editors = [ ]
@@ -82,7 +82,7 @@
         txta.style.height="420px";
 
         div.appendChild(txta);
-        b.appendChild(div);
+        dest.appendChild(div);
       }
 
 // Create a default configuration to be used by all the editors.
@@ -170,12 +170,6 @@
 
 // Finally we "start" the editors, this turns the textareas into Xinha editors.
       HTMLArea.startEditors(xinha_editors);
-    
-      //check submitted values
-      var submit = document.createElement('button');
-      submit.setAttribute('type', 'submit'); //submit.type = "submit";
-      submit.innerHTML = "Submit";
-      b.appendChild(submit);
     }
 
     window.onload = xinha_init;
@@ -183,10 +177,11 @@
 </head>
 
 <body>
-  <form id="editors_here" method="post" action="ext_example-dest.php">
-  <!-- <textarea id="errors" style="width:100%; height:100px; background:silver;display:none;"></textarea> -->
+  <form id="to_submit" method="post" action="ext_example-dest.php">
+  <div id="editors_here"></div>
+  <button type="submit">Submit</button>
+  <textarea id="errors" style="width:100%; height:100px; background:silver;"></textarea><!-- style="display:none;"> -->
   </form>
-  <textarea id="errors" style="width:100%; height:100px; background:silver;"></textarea>
 <script type="text/javascript">
     var _oldSubmitHandler = null;
     if (document.forms[0].onsubmit != null) {
