@@ -4,7 +4,7 @@
   // messages
   "Substitute this occurrence?": "Remplacer cette occurrence ?",
   "Enter the text you want to find": "Texte à trouver",
-  "Inform a replacement word": "Geben sie einen Text zum ersetzen ein",
+  "Inform a replacement word": "Indiquez un mot de remplacement",
   "found items": "éléments trouvés",
   "replaced items": "éléments remplacés",
   "found item": "élément trouvé",
