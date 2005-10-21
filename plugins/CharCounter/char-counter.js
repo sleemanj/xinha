@@ -24,10 +24,11 @@ CharCounter.prototype._lc = function(string) {
 
 
 CharCounter.prototype.onGenerate = function() {
-    var self = this;
+  var self = this;
+  if (this.charCount==null) {
     var charCount = document.createElement("span");
     charCount.style.padding = "2px 5px";
-     if(HTMLArea.is_ie) {
+    if(HTMLArea.is_ie) {
       charCount.style.styleFloat = "right";
     } else {
       charCount.style.cssFloat = "right";
@@ -46,6 +47,7 @@ CharCounter.prototype.onGenerate = function() {
     this.editor._statusBar.appendChild(charCount);
     this.editor._statusBar.appendChild(brk);
     this.charCount = charCount;
+  }
 };
 
 CharCounter.prototype.onUpdateToolbar = function() {
