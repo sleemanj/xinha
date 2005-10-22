@@ -1881,7 +1881,7 @@ HTMLArea.prototype.generate = function ()
            + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;} \n"
            + "</style>\n";
       html += "<style type=\"text/css\">"
-           + "html, body { border: 0px; } \n"
+           + "html, body { border: 0px;  background-color: #ffffff; } \n"
            + "span.macro, span.macro ul, span.macro div, span.macro p {background : #CCCCCC;}\n"
            + "</style>\n";
 
