@@ -238,7 +238,7 @@ function initDocument() {
   }
   else
   {
-    document.getElementById("b_learn").parent.removeChild(document.getElementById("b_learn"));
+    document.getElementById("b_learn").parentNode.removeChild(document.getElementById("b_learn"));
   }
   document.getElementById("b_replall").onclick = replaceAllClicked;
   document.getElementById("b_ignore").onclick = ignoreClicked;
