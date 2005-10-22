@@ -2817,7 +2817,19 @@ HTMLArea.prototype.getParentElement = function(sel) {
   var range = this._createRange(sel);
   if (HTMLArea.is_ie) {
     switch (sel.type) {
-        case "Text":
+        case "Text":         
+      // try to circumvent a bug in IE:
+      // the parent returned is not always the real parent element    
+      var parent = range.parentElement();
+      while (true)
+      {
+        var TestRange = range.duplicate();
+        TestRange.moveToElementText(parent);
+        if (TestRange.inRange(range)) break;
+        if ((parent.nodeType != 1) || (parent.tagName.toLowerCase() == 'body')) break;
+        parent = parent.parentElement;
+      };
+      return parent;
         case "None":
       // It seems that even for selection of type "None",
       // there _is_ a parent element and it's value is not
