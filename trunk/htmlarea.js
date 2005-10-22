@@ -4384,16 +4384,23 @@ HTMLArea.flushEvents = function()
   var e = null;
   while(e = HTMLArea._eventFlushers.pop())
   {
-    if(e.length == 3)
+    try
     {
-      HTMLArea._removeEvent(e[0], e[1], e[2]);
-      x++;
+      if(e.length == 3)
+      {
+        HTMLArea._removeEvent(e[0], e[1], e[2]);
+        x++;
+      }
+      else if (e.length == 2)
+      {
+        e[0]['on' + e[1]] = null;
+        e[0]._xinha_dom0Events[e[1]] = null;
+        x++;
+      }
     }
-    else if (e.length == 2)
+    catch(e)
     {
-      e[0]['on' + e[1]] = null;
-      e[0]._xinha_dom0Events[e[1]] = null;
-      x++;
+      // Do Nothing
     }
   }
   
@@ -5528,7 +5535,7 @@ HTMLArea.free = function(obj, prop)
   }
   else if (obj)
   {
-    obj[prop] = null;
+    try{ obj[prop] = null; } catch(e){ }
   }
 };
 
