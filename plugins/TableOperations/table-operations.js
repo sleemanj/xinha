@@ -223,7 +223,7 @@ TableOperations.prototype.dialogTableProperties = function() {
   </tr> \
   <tr> \
     <td> \
-      <fieldset><legend>Frame and borders</legend> \
+      <fieldset><legend>" + HTMLArea._lc("Frame and borders", "TableOperations") + "</legend> \
         <table width='100%'> \
           <tr> \
             <td class='label'>" + HTMLArea._lc("Borders", "TableOperations") + ":</td> \
@@ -778,12 +778,20 @@ TableOperations.processStyle = function(params, element) {
 					ch = '\\"';
 				}
 				style.textAlign = '"' + ch + '"';
+			} else if (val == "-") {
+			    style.textAlign = "";
 			} else {
 				style.textAlign = val;
 			}
 			break;
 		    case "f_st_verticalAlign":
-			style.verticalAlign = val;
+		    element.vAlign = "";
+			if (val == "-") {
+			    style.verticalAlign = "";
+			    
+		    } else {
+			    style.verticalAlign = val;
+			}
 			break;
 		    case "f_st_float":
 			style.cssFloat = val;
@@ -924,7 +932,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 	select.style.marginLeft = select.style.marginRight = "0.5em";
 	td.appendChild(select);
 	select.name = "f_st_textAlign";
-	options = ["Left", "Center", "Right", "Justify"];
+	options = ["Left", "Center", "Right", "Justify", "-"];
 	if (tagname == "td") {
 		options.push("Char");
 	}
@@ -939,7 +947,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 		option = doc.createElement("option");
 		option.value = val;
 		option.innerHTML = HTMLArea._lc(Val, "TableOperations");
-		option.selected = (el.style.textAlign.toLowerCase() == val);
+		option.selected = ((el.style.textAlign.toLowerCase() == val) || (el.style.textAlign == "" && Val == "-"));
 		select.appendChild(option);
 	}
 	function setCharVisibility(value) {
@@ -987,14 +995,14 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 	select.name = "f_st_verticalAlign";
 	select.style.marginLeft = "0.5em";
 	td.appendChild(select);
-	options = ["Top", "Middle", "Bottom", "Baseline"];
+	options = ["Top", "Middle", "Bottom", "Baseline", "-"];
 	for (var i = 0; i < options.length; ++i) {
 		var Val = options[i];
 		var val = Val.toLowerCase();
 		option = doc.createElement("option");
 		option.value = val;
 		option.innerHTML = HTMLArea._lc(Val, "TableOperations");
-		option.selected = (el.style.verticalAlign.toLowerCase() == val);
+		option.selected = ((el.style.verticalAlign.toLowerCase() == val) || (el.style.verticalAlign == "" && Val == "-"));
 		select.appendChild(option);
 	}
 
