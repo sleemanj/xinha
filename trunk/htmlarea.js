@@ -144,6 +144,7 @@ function HTMLArea(textarea, config)
 
     for(var i in panels)
     {
+      if (!panels[i].container) continue; // prevent iterating over wrong type
       panels[i].div = panels[i].container; // legacy
       panels[i].container.className = 'panels ' + i;
       HTMLArea.freeLater(panels[i], 'container');
@@ -476,7 +477,8 @@ HTMLArea.Config = function () {
   // initialize tooltips from the I18N module and generate correct image path
   for (var i in this.btnList) {
     var btn = this.btnList[i];
-    if(typeof btn[1] != 'string')
+    if (typeof btn != 'object') continue; // prevent iterating over wrong type
+    if (typeof btn[1] != 'string')
     {
       btn[1][0] = _editor_url + this.imgURL + btn[1][0];
     }
@@ -881,6 +883,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       tb_objects[txt] = obj;
       
       for (var i in options) {
+        if (typeof(options[i]) != 'string') continue;  // prevent iterating over wrong type
         var op = document.createElement("option");
         op.innerHTML = HTMLArea._lc(i);
         op.value = options[i];
@@ -2017,7 +2020,7 @@ HTMLArea.prototype.setMode = function(mode) {
 
   for (var i in this.plugins) {
     var plugin = this.plugins[i].instance;
-    if (typeof plugin.onMode == "function") plugin.onMode(mode);
+    if (plugin && typeof plugin.onMode == "function") plugin.onMode(mode);
   }
 };
 
@@ -2193,9 +2196,9 @@ HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
 
 // refresh plugin by calling onGenerate or onGenerateOnce method.
 HTMLArea.refreshPlugin = function(plugin) {
-  if (typeof plugin.onGenerate == "function")
+  if (plugin && typeof plugin.onGenerate == "function")
     plugin.onGenerate();
-  if (typeof plugin.onGenerateOnce == "function") {
+  if (plugin && typeof plugin.onGenerateOnce == "function") {
     plugin.onGenerateOnce();
     plugin.onGenerateOnce = null;
   }
@@ -2459,6 +2462,7 @@ HTMLArea.prototype.disableToolbar = function(except)
     {
       continue;
     }
+    if (typeof(btn.state) != 'function') continue;  // prevent iterating over wrong type
     btn.state("enabled", false);
   }
 };
@@ -2554,6 +2558,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
     var btn = this._toolbarObjects[i];
     var cmd = i;
     var inContext = true;
+    if (typeof(btn.state) != 'function') continue;  // prevent iterating over wrong type
     if (btn.context && !text) {
       inContext = false;
       var context = btn.context;
@@ -2635,7 +2640,10 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
         var blocks = [ ];
         for(var i in this.config['formatblock'])
         {
-          blocks[blocks.length] = this.config['formatblock'][i];
+          if (typeof(this.config['formatblock'][i]) == 'string')  // prevent iterating over wrong type
+          {
+            blocks[blocks.length] = this.config['formatblock'][i];
+          }
         }
 
         var deepestAncestor = this._getFirstAncestor(this._getSelection(), blocks);
@@ -2745,7 +2753,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
   // check if any plugins have registered refresh handlers
   for (var i in this.plugins) {
     var plugin = this.plugins[i].instance;
-    if (typeof plugin.onUpdateToolbar == "function")
+    if (plugin && typeof plugin.onUpdateToolbar == "function")
       plugin.onUpdateToolbar();
   }
 
@@ -3563,7 +3571,7 @@ HTMLArea.prototype._editorEvent = function(ev) {
     for (var i in editor.plugins)
     {
       var plugin = editor.plugins[i].instance;
-      if (typeof plugin.onKeyPress == "function")
+      if (plugin && typeof plugin.onKeyPress == "function")
         if (plugin.onKeyPress(ev))
           return false;
     }
@@ -4191,6 +4199,7 @@ HTMLArea.prototype.outwardSpecialReplacements = function(html)
   {
     var from = this.config.specialReplacements[i];
     var to   = i;
+    if (typeof(from.replace) != 'function' || typeof(to.replace) != 'function') continue;  // prevent iterating over wrong type    
     // alert('out : ' + from + '=>' + to);
     var reg = new RegExp(from.replace(HTMLArea.RE_Specials, '\\$1'), 'g');
     html = html.replace(reg, to.replace(/\$/g, '$$$$'));
@@ -4206,6 +4215,8 @@ HTMLArea.prototype.inwardSpecialReplacements = function(html)
   {
     var from = i;
     var to   = this.config.specialReplacements[i];
+
+    if (typeof(from.replace) != 'function' || typeof(to.replace) != 'function') continue;  // prevent iterating over wrong type
     // alert('in : ' + from + '=>' + to);
     //
     // html = html.replace(reg, to);
