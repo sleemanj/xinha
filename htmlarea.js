@@ -3178,6 +3178,7 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
 HTMLArea.prototype.insertHTML = function(html) {
   var sel = this._getSelection();
   var range = this._createRange(sel);
+  this.focusEditor();
   if (HTMLArea.is_ie) {
     range.pasteHTML(html);
   } else {
