@@ -1913,34 +1913,54 @@ HTMLArea.prototype.generate = function ()
     }
     doc.write(html);
     doc.close();
-
-    // if we have multiple editors some bug in Mozilla makes some lose editing ability
-    HTMLArea._addEvents
-    (
-      doc,
-      ["mousedown"],
-      function() { editor.activateEditor(); return true; }
+        
+    editor.whenDocReady(
+      function() {
+        // if we have multiple editors some bug in Mozilla makes some lose editing ability
+        HTMLArea._addEvents
+        (
+          doc,
+          ["mousedown"],
+          function() { editor.activateEditor(); return true; }
+        );
+    
+    
+        // intercept some events; for updating the toolbar & keyboard handlers
+        HTMLArea._addEvents
+          (doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"],
+           function (event) {
+             return editor._editorEvent(HTMLArea.is_ie ? editor._iframe.contentWindow.event : event);
+           });
+    
+        // check if any plugins have registered refresh handlers
+        for (var i in editor.plugins) {
+          var plugin = editor.plugins[i].instance;
+          HTMLArea.refreshPlugin(plugin);
+        }
+    
+        // specific editor initialization
+        if(typeof editor._onGenerate == "function") {
+          editor._onGenerate();
+        }
+      }
     );
-
-
-    // intercept some events; for updating the toolbar & keyboard handlers
-    HTMLArea._addEvents
-      (doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"],
-       function (event) {
-         return editor._editorEvent(HTMLArea.is_ie ? editor._iframe.contentWindow.event : event);
-       });
-
-    // check if any plugins have registered refresh handlers
-    for (var i in editor.plugins) {
-      var plugin = editor.plugins[i].instance;
-      HTMLArea.refreshPlugin(plugin);
-    }
-
-    // specific editor initialization
-    if(typeof editor._onGenerate == "function") {
-      editor._onGenerate();
-    }
+  
   };
+  
+/** Delay a function until the document is ready for operations.  See ticket:547 */
+HTMLArea.prototype.whenDocReady = function(doFunction)
+{
+  var editor = this;  
+  
+  if(!this._doc.body)
+  {
+    setTimeout(function() {editor.whenDocReady(doFunction)}, 50); 
+  }
+  else
+  {
+    doFunction();
+  }
+}
 
 // Switches editor mode; parameter can be "textmode" or "wysiwyg".  If no
 // parameter was passed this function toggles between modes.
