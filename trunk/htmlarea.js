@@ -4164,9 +4164,12 @@ HTMLArea.prototype.inwardHtml = function(html)
   // mozilla, this is the 21st century calling!
   if (HTMLArea.is_gecko) {
     html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
-    html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");
-    html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
+    html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");    
   }
+  
+  // Both IE and Gecko use strike instead of del (#523)
+  html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
+ 
 
   // replace window.open to that any clicks won't open a popup in designMode
   html = html.replace("onclick=\"window.open(", "onclick=\"try{if(document.designMode &amp;&amp; document.designMode == 'on') return false;}catch(e){} window.open(");
