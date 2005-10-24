@@ -1916,38 +1916,8 @@ HTMLArea.prototype.generate = function ()
     }
     doc.write(html);
     doc.close();
-        
-    editor.whenDocReady(
-      function() {
-        // if we have multiple editors some bug in Mozilla makes some lose editing ability
-        HTMLArea._addEvents
-        (
-          doc,
-          ["mousedown"],
-          function() { editor.activateEditor(); return true; }
-        );
-    
-    
-        // intercept some events; for updating the toolbar & keyboard handlers
-        HTMLArea._addEvents
-          (doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"],
-           function (event) {
-             return editor._editorEvent(HTMLArea.is_ie ? editor._iframe.contentWindow.event : event);
-           });
-    
-        // check if any plugins have registered refresh handlers
-        for (var i in editor.plugins) {
-          var plugin = editor.plugins[i].instance;
-          HTMLArea.refreshPlugin(plugin);
-        }
-    
-        // specific editor initialization
-        if(typeof editor._onGenerate == "function") {
-          editor._onGenerate();
-        }
-      }
-    );
-  
+
+    this.setEditorEvents();
   };
   
 /** Delay a function until the document is ready for operations.  See ticket:547 */
@@ -2046,10 +2016,45 @@ HTMLArea.prototype.setFullHTML = function(html) {
     this._doc.write(html);
     this._doc.close();
     if(reac) this.activateEditor();
+    this.setEditorEvents();
     return true;
   }
 };
 
+HTMLArea.prototype.setEditorEvents = function() {
+  var editor=this;
+  var doc=this._doc;
+  editor.whenDocReady(
+    function() {
+      // if we have multiple editors some bug in Mozilla makes some lose editing ability
+      HTMLArea._addEvents
+      (
+        doc,
+        ["mousedown"],
+        function() { editor.activateEditor(); return true; }
+      );
+
+      // intercept some events; for updating the toolbar & keyboard handlers
+      HTMLArea._addEvents
+        (doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"],
+         function (event) {
+           return editor._editorEvent(HTMLArea.is_ie ? editor._iframe.contentWindow.event : event);
+         });
+
+      // check if any plugins have registered refresh handlers
+      for (var i in editor.plugins) {
+        var plugin = editor.plugins[i].instance;
+        HTMLArea.refreshPlugin(plugin);
+      };
+
+      // specific editor initialization
+      if(typeof editor._onGenerate == "function") {
+        editor._onGenerate();
+      }
+    }
+  );
+};
+  
 /***************************************************
  *  Category: PLUGINS
  ***************************************************/
@@ -4480,8 +4485,10 @@ HTMLArea._removeEvents = function(el, evs, func) {
 
 HTMLArea._stopEvent = function(ev) {
   if (HTMLArea.is_ie) {
-    ev.cancelBubble = true;
-    ev.returnValue = false;
+    try{
+      ev.cancelBubble = true;
+      ev.returnValue = false;
+    } catch(e){}
   } else {
     ev.preventDefault();
     ev.stopPropagation();
