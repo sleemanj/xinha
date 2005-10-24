@@ -435,7 +435,7 @@ HTMLArea.Config = function () {
 
     htmlmode: [ "Toggle HTML Source", ["ed_buttons_main.gif",7,0], true, function(e) {e.execCommand("htmlmode");} ],
     toggleborders: [ "Toggle Borders", ["ed_buttons_main.gif",7,2], false, function(e) { e._toggleBorders() } ],
-    print:         [ "Print document", ["ed_buttons_main.gif",8,1], false, function(e) {e._iframe.contentWindow.print();} ],
+    print: [ "Print document", ["ed_buttons_main.gif",8,1], false, function(e) {if (HTMLArea.is_gecko) {e._iframe.contentWindow.print();} else {e.focusEditor(); print();}} ],
     saveas: [ "Save as", "ed_saveas.gif", false, function(e) {e.execCommand("saveas",false,"noname.htm");} ],
     about: [ "About this editor", ["ed_buttons_main.gif",8,2], true, function(e) {e.execCommand("about");} ],
     showhelp: [ "Help using editor", ["ed_buttons_main.gif",9,2], true, function(e) {e.execCommand("showhelp");} ],
