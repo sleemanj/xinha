@@ -2699,13 +2699,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
         default:
       cmd = cmd.replace(/(un)?orderedlist/i, "insert$1orderedlist");
       try {
-
-        // FIXME : Firefox rires alot of exception errors on this one, so to make the
-        // editor not show theese in the JS console I removed it for Firefox.
-        // Gogo or Niko, maby you could look at this one.
-        if(HTMLArea.is_ie){
         btn.state("active", (!text && doc.queryCommandState(cmd)));
-        }
       } catch (e) {}
     }
   }
