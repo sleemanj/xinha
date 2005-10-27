@@ -150,6 +150,31 @@ function HTMLArea(textarea, config)
       HTMLArea.freeLater(panels[i], 'container');
       HTMLArea.freeLater(panels[i], 'div');      
     }
+
+    this.dialogs = { };
+
+    var toolbarDlgs = { "createlink"  : HTMLArea.InsertLinkDialog,
+                        "insertimage" : HTMLArea.InsertImageDialog,
+                        "inserttable" : HTMLArea.InsertTableDialog }
+    for (var i = 0; i < this.config.toolbar.length; i++)
+    {
+      if(this.config.toolbar[i].length)
+      {
+        for (var j = 0; j < this.config.toolbar[i].length; j++)
+        {
+          if(toolbarDlgs[this.config.toolbar[i][j]]) {
+            this.addDialog(this.config.toolbar[i][j], toolbarDlgs[this.config.toolbar[i][j]]);
+          }
+        }
+      }
+      else
+      {
+        if(toolbarDlgs[this.config.toolbar[i]]) {
+            this.addDialog(this.config.toolbar[i], toolbarDlgs[this.config.toolbar[i]]);
+        }
+      }
+    }
+
     HTMLArea.freeLater(this, '_textArea');
   }
 };
@@ -296,6 +321,10 @@ HTMLArea.Config = function () {
   // even neater, if you resize the window the toolbars will reflow.  Niiiice.
 
   this.flowToolbars = true;
+
+  // Type of the popup-dialogs
+  // avaliable: popup, inline, floating
+  this.popupType = 'inline';
 
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
@@ -697,6 +726,18 @@ HTMLArea.Config.prototype.addToolbarElement = function(id, where, position) {
         toolbar[0].splice(0, 0, id);
       }
     }
+  }
+};
+
+HTMLArea.prototype.addDialog = function(name, dialog)
+{
+  this.dialogs[name] = dialog;
+};
+
+HTMLArea.prototype.removeDialog = function(name)
+{
+  if(this.dialogs[name]) {
+    this.dialogs[name] = null;
   }
 };
 
@@ -1188,7 +1229,7 @@ HTMLArea.prototype.generate = function ()
   if(typeof HTMLArea.Dialog == 'undefined')
   {
     HTMLArea._loadback
-      (_editor_url + 'inline-dialog.js', function() { editor.generate(); } );
+      (_editor_url + this.config.popupType + '-dialog.js', function() { editor.generate(); } );
       return false;
   }
 
@@ -1916,6 +1957,15 @@ HTMLArea.prototype.generate = function ()
     }
     doc.write(html);
     doc.close();
+
+    // load dialogs
+    for(var i in editor.dialogs)
+    {
+      if(editor.dialogs[i]) {
+        editor.dialogs[i] = new editor.dialogs[i](editor);
+      }
+    }
+
 
     this.setEditorEvents();
   };
@@ -3293,56 +3343,89 @@ HTMLArea.prototype._createLink = function(link) {
       alert(HTMLArea._lc("You need to select some text before creating a link"));
       return;
     }
-    outparam = {
-      f_href : '',
-      f_title : '',
-      f_target : '',
-      f_usetarget : editor.config.makeLinkShowsTarget
+    inputs = {
+      href : '',
+      title : '',
+      target : ''
     };
   } else
-    outparam = {
-      f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
-      f_title  : link.title,
-      f_target : link.target,
-      f_usetarget : editor.config.makeLinkShowsTarget
+    inputs = {
+      href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
+      title  : link.title,
+      target : link.target
     };
-  this._popupDialog(editor.config.URIs["link"], function(param) {
-    if (!param)
-      return false;
-    var a = link;
-    if (!a) try {
-      editor._doc.execCommand("createlink", false, param.f_href);
-      a = editor.getParentElement();
-      var sel = editor._getSelection();
-      var range = editor._createRange(sel);
-      if (!HTMLArea.is_ie) {
-        a = range.startContainer;
-        if (!/^a$/i.test(a.tagName)) {
-          a = a.nextSibling;
-          if (a == null)
-            a = range.startContainer.parentNode;
+    
+  // If we are not editing a link, then we need to insert links now using execCommand
+  // because for some reason IE is losing the selection between now and when doOK is
+  // complete.  I guess because we are defocusing the iframe when we click stuff in the
+  // linker dialog.
+
+  this.a = link; // Why doesn't a get into the closure below, but if I set it as a property then it's fine?
+  
+  var doOK = function()
+  {
+    var a = editor.a;
+
+    var values = editor.dialogs.createlink.hide();
+
+    var atr =
+    {
+      href: '',
+      target:'',
+      title:''
+    }
+
+    if(values.href)
+    {
+      atr.href = values.href;
+      atr.target = values.target;
+    }
+
+    if(a && a.tagName.toLowerCase() == 'a')
+    {
+      if(!atr.href)
+      {
+        if(confirm(editor.dialogs.createlink._lc('Are you sure you wish to remove this link?')))
+        {
+          var p = a.parentNode;
+          while(a.hasChildNodes())
+          {
+            p.insertBefore(a.removeChild(a.childNodes[0]), a);
+          }
+          p.removeChild(a);
         }
       }
-    } catch(e) {}
-    else {
-      var href = param.f_href.trim();
-      editor.selectNodeContents(a);
-      if (href == "") {
-        editor._doc.execCommand("unlink", false, null);
-        editor.updateToolbar();
-        return false;
-      }
-      else {
-        a.href = href;
+      // Update the link
+      for(var i in atr)
+      {
+        a.setAttribute(i, atr[i]);
       }
     }
-    if (!(a && /^a$/i.test(a.tagName)))
-      return false;
-    a.target = param.f_target.trim();
-    a.title = param.f_title.trim();
-    editor.selectNodeContents(a);
-    editor.updateToolbar();
-  }, outparam);
+    else
+    {
+      if(!atr.href) return true;
+
+      // Insert a link, we let the browser do this, we figure it knows best
+      var tmp = HTMLArea.uniq('http://www.example.com/Link');
+      editor._doc.execCommand('createlink', false, tmp);
+
+      // Fix them up
+      var anchors = editor._doc.getElementsByTagName('a');
+      for(var i = 0; i < anchors.length; i++)
+      {
+        var a = anchors[i];
+        if(a.href == tmp)
+        {
+          // Found one.
+          for(var i in atr)
+          {
+            a.setAttribute(i, atr[i]);
+          }
+        }
+      }
+    }    
+  }
+  this.dialogs.createlink.show(inputs, {'ok': doOK} );
 };
 
 // Called when the user clicks on "InsertImage" button.  If an image is already
@@ -3364,15 +3447,19 @@ HTMLArea.prototype._insertImage = function(image) {
     f_vert   : image.vspace,
     f_horiz  : image.hspace
   };
-  this._popupDialog(editor.config.URIs["insert_image"], function(param) {
-    if (!param) {	// user must have pressed Cancel
-      return false;
-    }
+  
+  this.image = image; // Why doesn't a get into the closure below, but if I set it as a property then it's fine?
+  
+  var doOK = function()
+  {      
     var img = image;
+    
+    var param = editor.dialogs.insertimage.hide();
+    
     if (!img) {
       var sel = editor._getSelection();
       var range = editor._createRange(sel);
-      editor._doc.execCommand("insertimage", false, param.f_url);
+      editor._doc.execCommand("insertimage", false, param.url);
       if (HTMLArea.is_ie) {
         img = range.parentElement();
         // wonder if this works...
@@ -3387,20 +3474,22 @@ HTMLArea.prototype._insertImage = function(image) {
         }
       }
     } else {
-      img.src = param.f_url;
+      img.src = param.url;
     }
 
     for (var field in param) {
       var value = param[field];
       switch (field) {
-          case "f_alt"    : img.alt	 = value; break;
-          case "f_border" : img.border = parseInt(value || "0"); break;
-          case "f_align"  : img.align	 = value; break;
-          case "f_vert"   : img.vspace = parseInt(value || "0"); break;
-          case "f_horiz"  : img.hspace = parseInt(value || "0"); break;
+          case "alt"    : img.alt	 = value; break;
+          case "border" : img.border = parseInt(value || "0"); break;
+          case "align"  : img.align	 = value; break;
+          case "vert"   : img.vspace = parseInt(value || "0"); break;
+          case "horiz"  : img.hspace = parseInt(value || "0"); break;
       }
-    }
-  }, outparam);
+    }  
+  }
+  this.dialogs.insertimage.show(outparam, { 'ok': doOK });
+  
 };
 
 // Called when the user clicks the Insert Table button
@@ -3408,37 +3497,38 @@ HTMLArea.prototype._insertTable = function() {
   var sel = this._getSelection();
   var range = this._createRange(sel);
   var editor = this;	// for nested functions
-  this._popupDialog(editor.config.URIs["insert_table"], function(param) {
-    if (!param) {	// user must have pressed Cancel
-      return false;
-    }
+  
+  var doOK = function()
+  {      
     var doc = editor._doc;
     // create the table element
     var table = doc.createElement("table");
     // assign the given arguments
 
+    var param = editor.dialogs.inserttable.hide();
+    
     for (var field in param) {
       var value = param[field];
       if (!value) {
         continue;
       }
       switch (field) {
-          case "f_width"   : table.style.width = value + param["f_unit"]; break;
-          case "f_align"   : table.align	 = value; break;
-          case "f_border"  : table.border	 = parseInt(value); break;
-          case "f_spacing" : table.cellSpacing = parseInt(value); break;
-          case "f_padding" : table.cellPadding = parseInt(value); break;
+          case "width"   : table.style.width = value + param["unit"]; break;
+          case "align"   : table.align	 = value; break;
+          case "border"  : table.border	 = parseInt(value); break;
+          case "spacing" : table.cellSpacing = parseInt(value); break;
+          case "padding" : table.cellPadding = parseInt(value); break;
       }
     }
     var cellwidth = 0;
-    if (param.f_fixed)
-      cellwidth = Math.floor(100 / parseInt(param.f_cols));
+    if (param.fixed)
+      cellwidth = Math.floor(100 / parseInt(param.cols));
     var tbody = doc.createElement("tbody");
     table.appendChild(tbody);
-    for (var i = 0; i < param["f_rows"]; ++i) {
+    for (var i = 0; i < param["rows"]; ++i) {
       var tr = doc.createElement("tr");
       tbody.appendChild(tr);
-      for (var j = 0; j < param["f_cols"]; ++j) {
+      for (var j = 0; j < param["cols"]; ++j) {
         var td = doc.createElement("td");
         if (cellwidth)
           td.style.width = cellwidth + "%";
@@ -3453,8 +3543,9 @@ HTMLArea.prototype._insertTable = function() {
       // insert the table
       editor.insertNodeAtSelection(table);
     }
-    return true;
-  }, null);
+  };
+  
+  this.dialogs.inserttable.show(null, { 'ok': doOK });
 };
 
 /***************************************************
@@ -3514,8 +3605,12 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param) {
     else
       this._doc.execCommand(cmdID, UI, param);
     break;
-      case "inserttable": this._insertTable(); break;
-      case "insertimage": this._insertImage(); break;
+      case "inserttable":
+        this._insertTable();
+        return false; //don't updateToolbar
+      case "insertimage":
+        this._insertImage();
+        return false; //don't updateToolbar
       case "about"    : this._popupDialog(editor.config.URIs["about"], null, this); break;
       case "showhelp" : this._popupDialog(editor.config.URIs["help"], null, this); break;
 
@@ -5576,6 +5671,242 @@ HTMLArea.collectGarbageForIE = function()
     HTMLArea.free(HTMLArea.toFree[x].o, HTMLArea.toFree[x].p);
   }
 };
+
+
+HTMLArea.InsertImageDialog = function(editor)
+{
+    this.editor = editor;
+    this.ready = false;
+    this.html = false;
+    this.dialog = false;
+    
+    this._prepeareDialog();
+}
+
+HTMLArea.InsertImageDialog.prototype._prepeareDialog = function()
+{
+    var editor = this.editor;
+    var lDialog = this;
+    
+    if(this.html == false)
+    {
+        HTMLArea._getback(_editor_url + 'dialogs/insert-image.html', function(txt) { lDialog.html = txt; lDialog._prepeareDialog(); });
+        return;
+    }
+    var html = this.html;
+    
+    var dialog = this.dialog = new HTMLArea.Dialog(editor, this.html, 'HTMLArea', {width: 400, height: 400});
+    
+    this.ready = true;
+}
+
+HTMLArea.InsertImageDialog.prototype._lc = HTMLArea.prototype._lc;
+
+HTMLArea.InsertImageDialog.prototype.show = function(inputs, param)
+{
+  var lDialog = this;
+  if(!this.ready)
+  {
+    window.setTimeout(function() {lDialog.show(inputs,ok,cancel);},100);
+    return;
+  }
+
+  //set refence so we can use it in init
+  this.dialog.iDialog = this;
+
+  this.dialog.show(inputs, param, this.init);
+};
+
+HTMLArea.InsertImageDialog.prototype.init = function(inputs, param, dialog)
+{
+  var iDialog = dialog.iDialog;
+
+  // Connect the OK and Cancel buttons
+  if(param.ok)
+  {
+    dialog.getElementById('ok').onclick = param.ok;
+  }
+  else
+  {
+    dialog.getElementById('ok').onclick = function() {iDialog.hide();};
+  }
+
+  if(param.cancel)
+  {
+    dialog.getElementById('cancel').onclick = param.cancel;
+  }
+  else
+  {
+    dialog.getElementById('cancel').onclick = function() { iDialog.hide()};
+  }
+
+  // Init the sizes
+  dialog.onresize();    
+};
+
+HTMLArea.InsertImageDialog.prototype.hide = function()
+{
+  this.editor.enableToolbar();
+  return this.dialog.hide();
+};
+
+
+HTMLArea.InsertLinkDialog = function(editor)
+{
+    this.editor = editor;
+    this.ready = false;
+    this.html = false;
+    this.dialog = false;
+    
+    this._prepeareDialog();
+}
+
+HTMLArea.InsertLinkDialog.prototype._prepeareDialog = function()
+{
+    var editor = this.editor;
+    var lDialog = this;
+    
+    if(this.html == false)
+    {
+        HTMLArea._getback(_editor_url + 'dialogs/insert-link.html', function(txt) { lDialog.html = txt; lDialog._prepeareDialog(); });
+        return;
+    }
+    var html = this.html;
+    
+    var dialog = this.dialog = new HTMLArea.Dialog(editor, this.html, 'HTMLArea', {width: 400, height: 200});
+
+    this.ready = true;
+}
+
+HTMLArea.InsertLinkDialog.prototype._lc = HTMLArea.prototype._lc;
+
+HTMLArea.InsertLinkDialog.prototype.show = function(inputs, param)
+{
+  if(!this.ready)
+  {
+    window.setTimeout(function() {lDialog.show(inputs,ok,cancel);},100);
+    return;
+  }
+
+  //set refence so we can use it in init
+  this.dialog.lDialog = this;
+
+  this.dialog.show(inputs, param, this.init);
+};
+
+HTMLArea.InsertLinkDialog.prototype.init = function(inputs, param, dialog)
+{
+  var lDialog = dialog.lDialog;
+
+  if(param.ok)
+  {
+    dialog.getElementById('ok').onclick = param.ok;
+  }
+  else
+  {
+    dialog.getElementById('ok').onclick = function() {lDialog.hide();};
+  }
+
+  if(param.cancel)
+  {
+    dialog.getElementById('cancel').onclick = param.cancel;
+  }
+  else
+  {
+    dialog.getElementById('cancel').onclick = function() { lDialog.hide()};
+  }
+
+  if(!dialog.editor.config.makeLinkShowsTarget)
+  {
+    dialog.getElementById('f_target').style.display = 'none';
+  }
+
+  // Init the sizes
+  dialog.onresize();    
+
+};
+
+HTMLArea.InsertLinkDialog.prototype.hide = function()
+{
+  return this.dialog.hide();
+}
+
+
+HTMLArea.InsertTableDialog = function(editor)
+{
+    this.editor = editor;
+    this.ready = false;
+    this.html = false;
+    this.dialog = false;
+    
+    this._prepeareDialog();
+}
+
+HTMLArea.InsertTableDialog.prototype._prepeareDialog = function()
+{
+    var editor = this.editor;
+    var lDialog = this;
+    
+    if(this.html == false)
+    {
+        HTMLArea._getback(_editor_url + 'dialogs/insert-table.html', function(txt) { lDialog.html = txt; lDialog._prepeareDialog(); });
+        return;
+    }
+    var html = this.html;
+    
+    var dialog = this.dialog = new HTMLArea.Dialog(editor, this.html, 'HTMLArea', {width: 400, height: 200});
+    
+    this.ready = true;
+}
+
+HTMLArea.InsertTableDialog.prototype._lc = HTMLArea.prototype._lc;
+
+HTMLArea.InsertTableDialog.prototype.show = function(inputs, param)
+{
+  var lDialog = this;
+  if(!this.ready)
+  {
+    window.setTimeout(function() {lDialog.show(inputs,ok,cancel);},100);
+    return;
+  }
+
+  //set refence so we can use it in init
+  this.dialog.tDialog = this;
+
+  this.dialog.show(inputs, param, this.init);
+};
+
+HTMLArea.InsertTableDialog.prototype.init = function(inputs, param, dialog)
+{
+  var tDialog = dialog.tDialog;
+
+  // Connect the OK and Cancel buttons
+  if(param.ok)
+  {
+    dialog.getElementById('ok').onclick = param.ok;
+  }
+  else
+  {
+    dialog.getElementById('ok').onclick = function() {tDialog.hide();};
+  }
+
+  if(param.cancel)
+  {
+    dialog.getElementById('cancel').onclick = param.cancel;
+  }
+  else
+  {
+    dialog.getElementById('cancel').onclick = function() { tDialog.hide()};
+  }
+
+  // Init the sizes
+  dialog.onresize();    
+}
+
+HTMLArea.InsertTableDialog.prototype.hide = function()
+{
+  return this.dialog.hide();
+}
 
 HTMLArea.init();
 HTMLArea.addDom0Event(window,'unload',HTMLArea.collectGarbageForIE);

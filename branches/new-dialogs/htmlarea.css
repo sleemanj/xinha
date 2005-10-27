@@ -172,6 +172,22 @@
 .dialog legend { font-weight: bold; }
 .dialog fieldset table { margin: 2px 0px; }
 
+.dialog div.insertlink { }
+.dialog div.insertlink div { margin-top: 5px; }
+.dialog div.insertlink label { width: 97px; display: block; float: left; text-align: right; margin-top: 3px; margin-right: 3px; }
+.dialog div.insertlink input { width: 200px; }
+.dialog div.insertlink div.buttons input { width: 90px; }
+
+.dialog div.insertimage { }
+.dialog div.insertimage div { margin-top: 5px; }
+.dialog div.insertimage label { width: 97px; display: block; float: left; text-align: right; margin-top: 3px; margin-right: 3px; }
+.dialog div.insertimage input { width: 200px; }
+.dialog div.insertimage fieldset { width: 40%; float: left; }
+.dialog div.insertimage fieldset label { width: 70px; }
+.dialog div.insertimage fieldset input { width: 50px; }
+.dialog div.insertimage fieldset select { width: 90px; }
+.dialog div.insertimage div.buttons input { width: 90px; }
+
 .popupwin {
   padding: 0px;
   margin: 0px;

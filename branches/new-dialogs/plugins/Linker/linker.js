@@ -11,8 +11,6 @@ Linker._pluginInfo =
   sponsor_url  : "http://www.gogo.co.nz/"
 };
 
-HTMLArea.loadStyle('dTree/dtree.css', 'Linker');
-
 HTMLArea.Config.prototype.Linker =
 {
   'backend' : _editor_url + 'plugins/Linker/scan.php',
@@ -23,7 +21,6 @@ HTMLArea.Config.prototype.Linker =
 function Linker(editor, args)
 {
   this.editor  = editor;
-  this.lConfig = editor.config.Linker;
 
   var linker = this;
   if(editor.config.btnList.createlink)
@@ -41,6 +38,9 @@ function Linker(editor, args)
 
   // See if we can find 'createlink'
  editor.config.addToolbarElement("createlink", "createlink", 0);
+
+ editor.removeDialog("createlink");
+ editor.addDialog("linker", Linker.Dialog);
 }
 
 Linker.prototype._lc = function(string)
@@ -149,7 +149,7 @@ Linker.prototype._createLink = function(a)
     //if(linker.a) alert(linker.a.tagName);
     var a = linker.a;
 
-    var values = linker._dialog.hide();
+    var values = linker.editor.dialogs.linker.hide();
     var atr =
     {
       href: '',
@@ -200,7 +200,7 @@ Linker.prototype._createLink = function(a)
     {
       if(!atr.href)
       {
-        if(confirm(linker._dialog._lc('Are you sure you wish to remove this link?')))
+        if(confirm(linker._lc('Are you sure you wish to remove this link?')))
         {
           var p = a.parentNode;
           while(a.hasChildNodes())
@@ -255,7 +255,7 @@ Linker.prototype._createLink = function(a)
     }
   }
 
-  this._dialog.show(inputs, doOK);
+  this.editor.dialogs.linker.show(inputs, {'ok': doOK});
 
 };
 
@@ -279,20 +279,16 @@ Linker.prototype._getSelectedAnchor = function()
   return null;
 };
 
-Linker.prototype.onGenerate = function()
-{
-  this._dialog = new Linker.Dialog(this);
-};
 // Inline Dialog for Linker
 
 Linker.Dialog_dTrees = [ ];
 
 
-Linker.Dialog = function (linker)
+Linker.Dialog = function (editor)
 {
   var  lDialog = this;
   this.Dialog_nxtid = 0;
-  this.linker = linker;
+  this.editor = editor;
   this.id = { }; // This will be filled below with a replace, nifty
 
   this.ready = false;
@@ -308,25 +304,18 @@ Linker.Dialog = function (linker)
 Linker.Dialog.prototype._prepareDialog = function()
 {
   var lDialog = this;
-  var linker = this.linker;
+  var editor = this.editor;
 
   // We load some stuff up int he background, recalling this function
   // when they have loaded.  This is to keep the editor responsive while
   // we prepare the dialog.
-  if(typeof dTree == 'undefined')
-  {
-    HTMLArea._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
-                       function() {lDialog._prepareDialog(); }
-                      );
-    return;
-  }
 
   if(this.files == false)
   {
-    if(linker.lConfig.backend)
+    if(editor.config.Linker.backend)
     {
-        //get files from backend
-        HTMLArea._getback(linker.lConfig.backend,
+      //get files from backend
+      HTMLArea._getback(editor.config.Linker.backend,
                           function(txt) {
                             try {
                                 eval('lDialog.files = '+txt);
@@ -334,58 +323,38 @@ Linker.Dialog.prototype._prepareDialog = function()
                                 lDialog.files = [ {url:'',title:Error.toString()} ];
                             }
                             lDialog._prepareDialog(); });
+      return;
     }
-    else if(linker.lConfig.files != null)
+    else if(editor.config.Linker.files != null)
     {
-        //get files from plugin-config
-        lDialog.files = linker.lConfig.files;
-        lDialog._prepareDialog();
+      //get files from plugin-config
+      lDialog.files = editor.config.Linker.files;
     }
-    return;
   }
-  var files = this.files;
 
   if(this.html == false)
   {
     HTMLArea._getback(_editor_url + 'plugins/Linker/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
     return;
   }
-  var html = this.html;
+  if(this.dialog == false)
+  {
+    // Now we have everything we need, so we can build the dialog.
+    this.dialog = new HTMLArea.Dialog(editor, this.html, 'Linker');
+    this.dialog.loadStylesheet(_editor_url + 'plugins/Linker/dTree/dtree.css');
+    this.dialog.loadScript(_editor_url + 'plugins/Linker/dTree/dtree.js', function() {lDialog._prepareDialog(); });
+  }
 
-  // Now we have everything we need, so we can build the dialog.
-  var dialog = this.dialog = new HTMLArea.Dialog(linker.editor, this.html, 'Linker');
-  var dTreeName = HTMLArea.uniq('dTree_');
 
-  this.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
-  eval(dTreeName + ' = this.dTree');
-
-  this.dTree.add(this.Dialog_nxtid++, -1, document.location.host, null, document.location.host);
-  this.makeNodes(files, 0);
-
-  // Put it in
-  var ddTree = this.dialog.getElementById('dTree');
-  //ddTree.innerHTML = this.dTree.toString();
-  ddTree.innerHTML = '';
-  ddTree.style.position = 'absolute';
-  ddTree.style.left = 1 + 'px';
-  ddTree.style.top =  0 + 'px';
-  ddTree.style.overflow = 'auto';
-  this.ddTree = ddTree;
-  this.dTree._linker_premade = this.dTree.toString();
-
-  var options = this.dialog.getElementById('options');
-  options.style.position = 'absolute';
-  options.style.top      = 0   + 'px';
-  options.style.right    = 0   + 'px';
-  options.style.width    = 320 + 'px';
-  options.style.overflow = 'auto';
-
+  var dialog = this.dialog;
   // Hookup the resizer
   this.dialog.onresize = function()
-    {
+  {
+      var options = dialog.getElementById('options');
+      var ddTree = dialog.getElementById('dTree');
       options.style.height = ddTree.style.height = (parseInt(dialog.height) - dialog.getElementById('h1').offsetHeight) + 'px';
       ddTree.style.width  = (parseInt(dialog.width)  - 322 ) + 'px';
-    }
+  }
 
   this.ready = true;
 };
@@ -398,7 +367,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
     {
       this.dTree.add(Linker.nxtid++, parent,
                      files[i].replace(/^.*\//, ''),
-                     'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
+                     'javascript:document.getElementsByName(\'' + this.dialog.getFieldNameByName('href') + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i]) + '\');document.getElementsByName(\'' + this.dialog.getFieldNameByName('type') + '\')[0].click();document.getElementsByName(\'' + this.dialog.getFieldNameByName('href') + '\')[0].focus();void(0);',
                      files[i]);
     }
     else if(files[i].length)
@@ -418,7 +387,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
       if(files[i].title) var title = files[i].title;
       else if(files[i].url) var title = files[i].url.replace(/^.*\//, '');
       else var title = "no title defined";
-      if(files[i].url) var link = 'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i].url) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);';
+      if(files[i].url) var link = 'javascript:document.getElementsByName(\'' + this.dialog.getFieldNameByName('href') + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i].url) + '\');document.getElementsByName(\'' + this.dialog.getFieldNameByName('type') + '\')[0].click();document.getElementsByName(\'' + this.dialog.getFieldNameByName('href') + '\')[0].focus();void(0);';
       else var link = '';
       
       this.dTree.add(id, parent, title, link, title);
@@ -431,54 +400,87 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
 
 Linker.Dialog.prototype._lc = Linker.prototype._lc;
 
-Linker.Dialog.prototype.show = function(inputs, ok, cancel)
+Linker.Dialog.prototype.show = function(inputs, param)
 {
   if(!this.ready)
   {
     var lDialog = this;
-    window.setTimeout(function() {lDialog.show(inputs,ok,cancel);},100);
+    window.setTimeout(function() {lDialog.show(inputs,param);},100);
     return;
   }
 
-  if(this.ddTree.innerHTML == '')
+  //set refence so we can use it in init
+  this.dialog.lDialog = this;
+
+  this.dialog.show(inputs, param, this.init);
+};
+
+Linker.Dialog.prototype.init = function(inputs, param, dialog)
+{
+  var lDialog = dialog.lDialog;
+
+  if(!lDialog.dTree)
   {
-    this.ddTree.innerHTML = this.dTree._linker_premade;
+    var dTreeName = HTMLArea.uniq('dTree_');
+    lDialog.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
+    eval(dTreeName + ' = this.dTree');
+
+    lDialog.dTree.add(lDialog.Dialog_nxtid++, -1, document.location.host, null, document.location.host);
+    lDialog.makeNodes(lDialog.files, 0);
   }
+
+  var ddTree = dialog.getElementById('dTree');
+  if(ddTree.innerHTML == '(the dTree goes in here)')
+  {
+    // Put it in
+    ddTree.innerHTML = lDialog.dTree.toString();
+    ddTree.style.position = 'absolute';
+    ddTree.style.left = 1 + 'px';
+    ddTree.style.top =  0 + 'px';
+    ddTree.style.overflow = 'auto';
+  }
+
+  var options = dialog.getElementById('options');
+  options.style.position = 'absolute';
+  options.style.top      = 0   + 'px';
+  options.style.right    = 0   + 'px';
+  options.style.width    = 320 + 'px';
+  options.style.overflow = 'auto';
 
   if(inputs.type=='url')
   {
-    this.dialog.getElementById('urltable').style.display = '';
-    this.dialog.getElementById('mailtable').style.display = 'none';
-    this.dialog.getElementById('anchortable').style.display = 'none';
+    dialog.getElementById('urltable').style.display = '';
+    dialog.getElementById('mailtable').style.display = 'none';
+    dialog.getElementById('anchortable').style.display = 'none';
   }
   else if(inputs.type=='anchor')
   {
-    this.dialog.getElementById('urltable').style.display = 'none';
-    this.dialog.getElementById('mailtable').style.display = 'none';
-    this.dialog.getElementById('anchortable').style.display = '';
+    dialog.getElementById('urltable').style.display = 'none';
+    dialog.getElementById('mailtable').style.display = 'none';
+    dialog.getElementById('anchortable').style.display = '';
   }
   else
   {
-    this.dialog.getElementById('urltable').style.display = 'none';
-    this.dialog.getElementById('mailtable').style.display = '';
-    this.dialog.getElementById('anchortable').style.display = 'none';
+    dialog.getElementById('urltable').style.display = 'none';
+    dialog.getElementById('mailtable').style.display = '';
+    dialog.getElementById('anchortable').style.display = 'none';
   }
 
   if(inputs.target=='popup')
   {
-    this.dialog.getElementById('popuptable').style.display = '';
+    dialog.getElementById('popuptable').style.display = '';
   }
   else
   {
-    this.dialog.getElementById('popuptable').style.display = 'none';
+    dialog.getElementById('popuptable').style.display = 'none';
   }
 
-  var anchor = this.dialog.getElementById('anchor');
+  var anchor = dialog.getElementById('anchor');
   for(var i=0;i<anchor.childNodes.length;i++) {
     anchor.removeChild(anchor.childNodes[i]);
   }
 
-  var html = this.linker.editor.getHTML();  
+  var html = lDialog.editor.getHTML();  
   var anchors = new Array();
 
   var m = html.match(/<a[^>]+name="([^"]+)"/gi);
@@ -510,42 +512,34 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
 
   //if no anchors found completely hide Anchor-Link
   if(anchor.childNodes.length==0) {
-    this.dialog.getElementById('anchorfieldset').style.display = "none";
+    dialog.getElementById('anchorfieldset').style.display = "none";
   }
   
 
   // Connect the OK and Cancel buttons
-  var dialog = this.dialog;
-  var lDialog = this;
-  if(ok)
+  if(param.ok)
   {
-    this.dialog.getElementById('ok').onclick = ok;
+    dialog.getElementById('ok').onclick = param.ok;
   }
   else
   {
-    this.dialog.getElementById('ok').onclick = function() {lDialog.hide();};
+    dialog.getElementById('ok').onclick = function() {lDialog.hide();};
   }
 
-  if(cancel)
+  if(param.cancel)
   {
-    this.dialog.getElementById('cancel').onclick = cancel;
+    dialog.getElementById('cancel').onclick = param.cancel;
   }
   else
   {
-    this.dialog.getElementById('cancel').onclick = function() { lDialog.hide()};
+    dialog.getElementById('cancel').onclick = function() { lDialog.hide()};
   }
-
-  // Show the dialog
-  this.linker.editor.disableToolbar(['fullscreen','linker']);
-
-  this.dialog.show(inputs);
 
   // Init the sizes
-  this.dialog.onresize();
+  dialog.onresize();
 };
 
 Linker.Dialog.prototype.hide = function()
 {
-  this.linker.editor.enableToolbar();
   return this.dialog.hide();
 };

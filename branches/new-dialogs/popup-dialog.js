@@ -1,18 +1,19 @@
-
-HTMLArea.Dialog = function(editor, html, localizer)
+HTMLArea.Dialog = function(editor, html, localizer, size)
 {
-  this.id    = { };
-  this.r_id  = { }; // reverse lookup id
   this.editor   = editor;
   this.document = document;
 
-  this.rootElem = document.createElement('div');
-  this.rootElem.className = 'dialog';
-  this.rootElem.style.position = 'absolute';
-  this.rootElem.style.display  = 'none';
-  this.editor._framework.ed_cell.insertBefore(this.rootElem, this.editor._framework.ed_cell.firstChild);
-  this.rootElem.style.width  = this.width  =  this.editor._framework.ed_cell.offsetWidth + 'px';
-  this.rootElem.style.height = this.height =  this.editor._framework.ed_cell.offsetHeight + 'px';
+  this._stylesToLoad = new Array();
+  this._scriptsToLoad = new Array();
+
+  this.width  = 400;
+  this.height = 500;
+  if(size && size.width) {
+    this.width = size.width;
+  }
+  if(size && size.height) {
+    this.height = size.height;
+  }
 
   var dialog = this;
   if(typeof localizer == 'function')
@@ -24,26 +25,17 @@ HTMLArea.Dialog = function(editor, html, localizer)
     this._lc = function(string)
     {
       return HTMLArea._lc(string,localizer);
-    };
+    }
   }
   else
   {
     this._lc = function(string)
     {
       return string;
-    };
+    }
   }
-
   html = html.replace(/\[([a-z0-9_]+)\]/ig,
-                      function(fullString, id)
-                      {
-                        if(typeof dialog.id[id] == 'undefined')
-                        {
-                          dialog.id[id] = HTMLArea.uniq('Dialog');
-                          dialog.r_id[dialog.id[id]] = id;
-                        }
-                        return dialog.id[id];
-                      }
+                      '$1'
              ).replace(/<l10n>(.*?)<\/l10n>/ig,
                        function(fullString,translate)
                        {
@@ -55,73 +47,91 @@ HTMLArea.Dialog = function(editor, html, localizer)
                          return '="' + dialog._lc(translate) + '"';
                        }
              );
+  this.html = html;
 
-  this.rootElem.innerHTML = html;
+}
 
 
-
-
-  this.editor.notifyOn
-   ('resize',
-      function(e, args)
-      {
-        dialog.rootElem.style.width  = dialog.width  =  dialog.editor._framework.ed_cell.offsetWidth + 'px';
-        dialog.rootElem.style.height = dialog.height =  dialog.editor._framework.ed_cell.offsetHeight + 'px';
-        dialog.onresize(e, args);
-      }
-    );
-};
 
 HTMLArea.Dialog.prototype.onresize = function()
 {
   return true;
-};
+}
 
 HTMLArea.Dialog.prototype.show = function(values, param, initFunction)
 {
-  // We need to preserve the selection for IE
-  if(HTMLArea.is_ie)
-  {
-    this._lastRange = this.editor._createRange(this.editor._getSelection());
+  this.window = window.open('', 'xinha-dialog', 'width='+this.width+',height='+this.height);
+  var doc = this.doc = this.window.document;
+
+  var base = document.baseURI || document.URL;
+  if (base && base.match(/(.*)\/([^\/]+)/)) {
+    base = RegExp.$1 + "/";
   }
-
-  if(initFunction)
-  {
-    initFunction(values, param, this);
+  if (typeof _editor_url != "undefined" && !/^\//.test(_editor_url) && !/http:\/\//.test(_editor_url)) {
+    // _editor_url doesn't start with '/' which means it's relative
+    // FIXME: there's a problem here, it could be http:// which
+    // doesn't start with slash but it's not relative either.
+    base += _editor_url;
+  } else
+    base = _editor_url;
+  if (!/\/$/.test(base)) {
+    // base does not end in slash, add it now
+    base += '/';
   }
+  this.baseURL = base;
 
-  if(typeof values != 'undefined')
-  {
-    this.setValues(values);
+  doc.open();
+  var html = "<html><head><title>" + "title" + "</title>\n";
+  html += "<style type=\"text/css\">@import url(" + base + "htmlarea.css);</style></head>\n";
+  for(var i=0;i<this._stylesToLoad.length;i++) {
+    html += "<style type=\"text/css\">@import url(" + base + this._stylesToLoad[i] + ");</style></head>\n";
   }
-  this._restoreTo = [this.editor._textArea.style.display, this.editor._iframe.style.visibility, this.editor.hidePanels()];
+  for(var i=0;i<this._scriptsToLoad.length;i++) {
+    html += "<script type=\"text/javascript\" src=\""+ base + this._stylesToLoad[i] +"\"></script>";
+  }
+  html += "<body class=\"dialog popupwin\">";
+  html += this.html;
+  html += "</body></html>";
+  doc.write(html);
+  doc.close();
 
-  this.editor._textArea.style.display = 'none';
-  this.editor._iframe.style.visibility   = 'hidden';
-  this.rootElem.style.display   = '';
+  var self = this;
+  function init() {
+    var body = doc.body;
+    if (!body) {
+      setTimeout(init, 25);
+      return false;
+    }
+    if(typeof values != 'undefined')
+    {
+      self.setValues(values);
+    }
 
-  this.editor.disableToolbar();
-};
+    //fixme: title
+    self.window.title = self.doc.body.firstChild.firstChild.textContent;
+
+    if(initFunction)
+    {
+      initFunction(values, param, self);
+    }
+
+    self.window.focus();
+  };
+  init();
+
+}
 
 HTMLArea.Dialog.prototype.hide = function()
 {
-  this.rootElem.style.display         = 'none';
-  this.editor._textArea.style.display = this._restoreTo[0];
-  this.editor._iframe.style.visibility   = this._restoreTo[1];
-  this.editor.showPanels(this._restoreTo[2]);
-
-  // Restore the selection
-  if(HTMLArea.is_ie)
-  {
-    this._lastRange.select();
-  }
-  this.editor.updateToolbar();
-  return this.getValues();
-};
+  var values = this.getValues();
+  this.window.close();
+  this.window = null;
+  return(values);
+}
 
 HTMLArea.Dialog.prototype.toggle = function()
 {
-  if(this.rootElem.style.display == 'none')
+  if(!this.window)
   {
     this.show();
   }
@@ -129,14 +139,13 @@ HTMLArea.Dialog.prototype.toggle = function()
   {
     this.hide();
   }
-};
+}
 
 HTMLArea.Dialog.prototype.setValues = function(values)
 {
   for(var i in values)
   {
     var elems = this.getElementsByName(i);
-    if(!elems) continue;
     for(var x = 0; x < elems.length; x++)
     {
       var e = elems[x];
@@ -214,25 +223,25 @@ HTMLArea.Dialog.prototype.setValues = function(values)
       }
     }
   }
-};
+}
 
 HTMLArea.Dialog.prototype.getValues = function()
 {
   var values = [ ];
-  var inputs = HTMLArea.collectionToArray(this.rootElem.getElementsByTagName('input'))
-              .append(HTMLArea.collectionToArray(this.rootElem.getElementsByTagName('textarea')))
-              .append(HTMLArea.collectionToArray(this.rootElem.getElementsByTagName('select')));
+  var inputs = HTMLArea.collectionToArray(this.doc.getElementsByTagName('input'))
+              .append(HTMLArea.collectionToArray(this.doc.getElementsByTagName('textarea')))
+              .append(HTMLArea.collectionToArray(this.doc.getElementsByTagName('select')));
 
   for(var x = 0; x < inputs.length; x++)
   {
     var i = inputs[x];
-    if(!(i.name && this.r_id[i.name])) continue;
+    if(!i.name) continue;
 
-    if(typeof values[this.r_id[i.name]] == 'undefined')
+    if(typeof values[i.name] == 'undefined')
     {
-      values[this.r_id[i.name]] = null;
+      values[i.name] = null;
     }
-    var v = values[this.r_id[i.name]];
+    var v = values[i.name];
 
     switch(i.tagName.toLowerCase())
     {
@@ -261,7 +270,7 @@ HTMLArea.Dialog.prototype.getValues = function()
         }
         else
         {
-          if(i.selectedIndex >= 0)
+          if(i.selectedIndex)
           {
             v = i.options[i.selectedIndex];
           }
@@ -288,7 +297,7 @@ HTMLArea.Dialog.prototype.getValues = function()
           {
             if(v == null)
             {
-              if(this.getElementsByName(this.r_id[i.name]).length > 1)
+              if(this.getElementsByName(i.name).length > 1)
               {
                 v = new Array();
               }
@@ -296,7 +305,7 @@ HTMLArea.Dialog.prototype.getValues = function()
 
             if(i.checked)
             {
-              if(v != null && typeof v == 'object' && v.push)
+              if(v!=null && v.push)
               {
                 v.push(i.value);
               }
@@ -318,33 +327,32 @@ HTMLArea.Dialog.prototype.getValues = function()
 
     }
 
-    values[this.r_id[i.name]] = v;
+    values[i.name] = v;
   }
   return values;
 };
 
 HTMLArea.Dialog.prototype.getElementById = function(id)
 {
-  return this.document.getElementById(this.id[id] ? this.id[id] : id);
+  return this.doc.getElementById(id);
 };
 
 HTMLArea.Dialog.prototype.getElementsByName = function(name)
 {
-  return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
+  return this.doc.getElementsByName(name);
 };
 
 HTMLArea.Dialog.prototype.getFieldNameByName = function(name)
 {
-  return(this.id[name] ? this.id[name] : name);
+  return(name);
 };
 
 HTMLArea.Dialog.prototype.loadStylesheet = function(href)
 {
-    HTMLArea.loadStyle(href);
+    this._stylesToLoad.push(href);
 };
 
 HTMLArea.Dialog.prototype.loadScript = function(href, callback)
 {
-    HTMLArea._loadback(href, callback);
-
+    this._scriptsToLoad.push(href);
 };

@@ -106,6 +106,8 @@
     if(typeof Filter != 'undefined') {
       xinha_config.Filters = ["Word", "Paragraph"]
     }
+    
+    config.popupType = f.popupType.value;
 
     return config;
   }

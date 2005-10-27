@@ -8,6 +8,12 @@ function SuperClean(editor, args)
 
   // See if we can find 'killword' and replace it with superclean
   editor.config.addToolbarElement("superclean", "killword", 0);
+
+  if(editor.config.SuperClean.show_dialog)
+  {
+    editor.addDialog("superclean", SuperClean.Dialog);
+  }
+
 }
 
 SuperClean._pluginInfo =
@@ -36,8 +42,9 @@ SuperClean.prototype._superClean = function(opts, obj)
   // Do the clean if we got options
   var doOK = function()
   {
-    var opts = superclean._dialog.hide();
     var editor = superclean.editor;
+    var opts = editor.dialogs.superclean.hide();
+    
 
     if(opts.word_clean) editor._wordClean();
     var D = editor.getInnerHTML();
@@ -67,7 +74,7 @@ SuperClean.prototype._superClean = function(opts, obj)
   if(this.editor.config.SuperClean.show_dialog)
   {
     var inputs = {};
-    this._dialog.show(inputs, doOK);
+    this.editor.dialogs.superclean.show(inputs, doOK);
   }
   else
   {
@@ -158,10 +165,6 @@ SuperClean.filterFunctions.tidy = function(html, editor)
 
 SuperClean.prototype.onGenerate = function()
 {
-  if(this.editor.config.SuperClean.show_dialog && !this._dialog)
-  {
-    this._dialog = new SuperClean.Dialog(this);
-  }
   if(this.editor.config.tidy_handler)
   {
     //for backwards compatibility
@@ -191,11 +194,11 @@ SuperClean.prototype.onGenerate = function()
 // Inline Dialog for SuperClean
 
 
-SuperClean.Dialog = function (SuperClean)
+SuperClean.Dialog = function (editor)
 {
   var  lDialog = this;
   this.Dialog_nxtid = 0;
-  this.SuperClean = SuperClean;
+  this.editor = editor;
   this.id = { }; // This will be filled below with a replace, nifty
 
   this.ready = false;
@@ -211,7 +214,7 @@ SuperClean.Dialog = function (SuperClean)
 SuperClean.Dialog.prototype._prepareDialog = function()
 {
   var lDialog = this;
-  var SuperClean = this.SuperClean;
+  var editor = this.editor;
 
   if(this.html == false)
   {
@@ -220,11 +223,11 @@ SuperClean.Dialog.prototype._prepareDialog = function()
   }
 
   var htmlFilters = "";
-  for(var filter in this.SuperClean.editor.config.SuperClean.filters)
+  for(var filter in editor.config.SuperClean.filters)
   {
     htmlFilters += "    <div>\n";
     htmlFilters += "        <input type=\"checkbox\" name=\"["+filter+"]\" id=\"["+filter+"]\" checked />\n";
-    htmlFilters += "        <label for=\"["+filter+"]\">"+this.SuperClean.editor.config.SuperClean.filters[filter]+"</label>\n";
+    htmlFilters += "        <label for=\"["+filter+"]\">"+editor.config.SuperClean.filters[filter]+"</label>\n";
     htmlFilters += "    </div>\n";
   }
   this.html = this.html.replace('<!--filters-->', htmlFilters);
@@ -232,7 +235,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
   var html = this.html;
 
   // Now we have everything we need, so we can build the dialog.
-  var dialog = this.dialog = new HTMLArea.Dialog(SuperClean.editor, this.html, 'SuperClean');
+  var dialog = this.dialog = new HTMLArea.Dialog(editor, this.html, 'SuperClean');
 
   this.ready = true;
 };
@@ -270,7 +273,7 @@ SuperClean.Dialog.prototype.show = function(inputs, ok, cancel)
   }
 
   // Show the dialog
-  this.SuperClean.editor.disableToolbar(['fullscreen','SuperClean']);
+  this.editor.disableToolbar(['fullscreen','SuperClean']);
 
   this.dialog.show(inputs);
 
@@ -280,6 +283,6 @@ SuperClean.Dialog.prototype.show = function(inputs, ok, cancel)
 
 SuperClean.Dialog.prototype.hide = function()
 {
-  this.SuperClean.editor.enableToolbar();
+  this.editor.enableToolbar();
   return this.dialog.hide();
 };
