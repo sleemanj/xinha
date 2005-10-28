@@ -12,6 +12,7 @@
   *   - Returns correct code for Flash objects and scripts
   *   - Formats html in an indented, readable format in html mode
   *   - Preserves script and pre formatting
+  *   - Preserves formatting in comments
   *   - Removes contenteditable from body tag in full-page mode
   *   - Supports only7BitPrintablesInURLs config option
   *   - Supports htmlRemoveTags config option
@@ -45,11 +46,12 @@ HTMLArea.RegExpCache = [
 /*12*/  new RegExp().compile(/(\S*\s*=\s*)?contenteditable[^=>]*(=\s*[^>\s\/]*)?/gi),//strip contenteditable
 /*13*/  new RegExp().compile(/((href|src)=")([^\s]*)"/g), //find href and src for stripBaseHref()
 /*14*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body)[^>]*>/g),
-/*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body)( [^>]*)?>/g),//blocklevel closing tag
-/*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body)( [^>]*)?>/g),//blocklevel opening tag
-/*17*/  new RegExp().compile(/<(br|hr|img|embed|param|pre|script)[^>]*>/g),//singlet tag
+/*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel closing tag
+/*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel opening tag
+/*17*/  new RegExp().compile(/<(br|hr|img|embed|param|pre)[^>]*>/g),//singlet tag
 /*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//exclude content between pre and script tags
-/*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g)//find content inside pre tags
+/*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g),//find content inside pre tags
+/*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g)//exclude comments
 ];
 
 /** 
@@ -91,7 +93,8 @@ HTMLArea.indent = function(s, sindentChar) {
 	if(HTMLArea.is_gecko) { //moz changes returns into <br> inside <pre> tags
 		s = s.replace(c[19], function(str){return str.replace(/<br \/>/g,"\n")});
 	}
-	s = s.replace(c[18], function(string) {
+	s = s.replace(c[20], function(st,$1,$2,$3) { //exclude comments
+	  strn = $3.replace(c[18], function(string) { //skip pre and script tags
 		string = string.replace(/[\n\r]/gi, " ").replace(/\s+/gi," ").replace(c[14], function(str) {
 			if (str.match(c[16])) {
 				var s = "\n" + HTMLArea.__sindent + str;
@@ -114,6 +117,7 @@ HTMLArea.indent = function(s, sindentChar) {
 			return str; // this won't actually happen
 		});
 		return string;
+      });return $1 + strn;
     });
     if (s.charAt(0) == "\n") {
         return s.substring(1, s.length);
@@ -133,7 +137,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 	    for (j = temp.nextSibling; j; j = j.nextSibling) { 
 	    		temp.appendChild(j.cloneNode(true));
 	    }
-	    html += temp.innerHTML.replace(/<[^\?][^>]*>/gi, function(tag){return editor.cleanHTML(tag)});
+	    html += temp.innerHTML.replace(/<[^\?!][^>]*>/gi, function(tag){return editor.cleanHTML(tag)});
 
 	} else {
 
@@ -142,9 +146,9 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		html += "<" + root_tag + ">";
 	}
 
-	//pass tags to cleanHTML() one at a time; ignore php tags
+	//pass tags to cleanHTML() one at a time; ignore comments and php tags
 	//includes support for htmlRemoveTags config option
-	html += editor.getInnerHTML().replace(/<[^\?][^>]*>/gi, function(tag){
+	html += editor.getInnerHTML().replace(/<[^\?!][^>]*>/gi, function(tag){
 		if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
 		return editor.cleanHTML(tag);
 		else return ''});
@@ -158,7 +162,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		html += "</" + root_tag + ">";
 	}
 	html = HTMLArea.indent(html);
-}
+};
 //	html = HTMLArea.htmlEncode(html);
 
 	return html;
