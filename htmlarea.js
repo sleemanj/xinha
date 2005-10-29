@@ -3473,7 +3473,7 @@ HTMLArea.prototype._comboSelected = function(el, txt) {
       case "fontsize": this.execCommand(txt, false, value); break;
       case "formatblock":
     // (HTMLArea.is_ie) && (value = "<" + value + ">");
-    value = "<" + value + ">"
+    if(!HTMLArea.is_gecko || value !== 'blockquote') {   value = "<" + value + ">";}
     this.execCommand(txt, false, value);
     break;
       default:
