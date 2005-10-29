@@ -3445,8 +3445,8 @@ HTMLArea.prototype._insertTable = function() {
         if (cellwidth)
           td.style.width = cellwidth + "%";
         tr.appendChild(td);
-        // Mozilla likes to see something inside the cell.
-        (HTMLArea.is_gecko) && td.appendChild(doc.createElement("br"));
+        // Browsers like to see something inside the cell (&nbsp;).
+        td.appendChild(doc.createTextNode('\u00a0'));
       }
     }
     if (HTMLArea.is_ie) {
