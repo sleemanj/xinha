@@ -3369,18 +3369,20 @@ HTMLArea.prototype._insertImage = function(image) {
       return false;
     }
     var img = image;
-    if (!img) {
-      var sel = editor._getSelection();
-      var range = editor._createRange(sel);
-      editor._doc.execCommand("insertimage", false, param.f_url);
+    if (!img) {      
       if (HTMLArea.is_ie) {
+        var sel = editor._getSelection();
+        var range = editor._createRange(sel);
+        editor._doc.execCommand("insertimage", false, param.f_url);
         img = range.parentElement();
         // wonder if this works...
         if (img.tagName.toLowerCase() != "img") {
           img = img.previousSibling;
         }
       } else {
-        img = range.startContainer.previousSibling;
+        img = document.createElement('img');
+        img.src = param.f_url;
+        editor.insertNodeAtSelection(img);
         if (!img.tagName) {
           // if the cursor is at the beginning of the document
           img = range.startContainer.firstChild;
