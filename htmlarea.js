@@ -1440,13 +1440,13 @@ HTMLArea.prototype.generate = function ()
 
       case 'toolbar':
       {
-        width = this._toolBar.offsetWidth;
+        width = this._toolBar.offsetWidth + 'px';
       }
       break;
 
       default :
       {
-        width = this.config.width;
+        width = /[^0-9]/.test(this.config.width) ? this.config.width : this.config.width + 'px';
       }
       break;
     }
@@ -1461,7 +1461,7 @@ HTMLArea.prototype.generate = function ()
 
       default :
       {
-        height = this.config.height;
+        height = /[^0-9]/.test(this.config.height) ? this.config.height : this.config.height + 'px';
       }
       break;
     }
