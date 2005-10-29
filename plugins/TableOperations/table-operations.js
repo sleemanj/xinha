@@ -505,18 +505,20 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		}
 		var rows = td.parentNode.parentNode.rows;
 		var index = td.cellIndex;
+    var lastColumn = (td.parentNode.cells.length == index + 1);
 		for (var i = rows.length; --i >= 0;) {
-      /*
-      var tr = rows;
-      var otd = tr.insertCell(index + (/after/.test(button_id) ? 1 : 0));
-      otd.innerHTML = mozbr;
-      */
-			var tr = rows[i];
-			var ref = tr.cells[index + (/after/.test(button_id) ? 1 : 0)];
+			var tr = rows[i];			
 			var otd = editor._doc.createElement("td");
 			otd.innerHTML = mozbr;
-			tr.insertBefore(otd, ref);
-
+      if (lastColumn && HTMLArea.is_ie) 
+      {
+        tr.insertBefore(otd);
+      } 
+      else 
+      {
+        var ref = tr.cells[index + (/after/.test(button_id) ? 1 : 0)];
+        tr.insertBefore(otd, ref);
+      }
 		}
 		editor.focusEditor();
 		break;
