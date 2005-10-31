@@ -23,7 +23,7 @@
 function ImageManager(editor)
 {
 
-};
+}
 
 ImageManager._pluginInfo = {
 	name          : "ImageManager",
@@ -252,4 +252,3 @@ HTMLArea.prototype._insertImage = function(image) {
 		
 	}, outparam);
 };
-

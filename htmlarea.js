@@ -152,7 +152,7 @@ function HTMLArea(textarea, config)
     }
     HTMLArea.freeLater(this, '_textArea');
   }
-};
+}
 
 HTMLArea.onload = function(){};
 HTMLArea.init = function() {
@@ -791,7 +791,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
     tb_body.appendChild(tb_row);
 
     table.className = 'toolbarRow'; // meh, kinda.
-  }; // END of function: newLine
+  } // END of function: newLine
 
   // init first line
   newLine();
@@ -823,7 +823,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       }
       this[id] = newval;
     }
-  }; // END of function: setButtonStatus
+  } // END of function: setButtonStatus
 
   // this function will handle creation of combo boxes.  Receives as
   // parameter the name of a button as defined in the toolBar config.
@@ -894,7 +894,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
       });
     }
     return el;
-  }; // END of function: createSelect
+  } // END of function: createSelect
 
   // appends a new button to toolbar
   function createButton(txt) {
@@ -1009,14 +1009,14 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects) {
           img.style.top = '0px';
           img.style.left = '0px';
         }
-      }
+      };
       
     } else if (!el) {
       el = createSelect(txt);
     }
 
     return el;
-  };
+  }
 
   var first = true;
   for (var i = 0; i < this.config.toolbar.length; ++i) {
@@ -2239,7 +2239,7 @@ HTMLArea.prototype.debugTree = function() {
     for (; --indent >= 0;)
       ta.value += " ";
     ta.value += str + "\n";
-  };
+  }
   function _dt(root, level) {
     var tag = root.tagName.toLowerCase(), i;
     var ns = HTMLArea.is_ie ? root.scopeName : root.prefix;
@@ -2247,7 +2247,7 @@ HTMLArea.prototype.debugTree = function() {
     for (i = root.firstChild; i; i = i.nextSibling)
       if (i.nodeType == 1)
         _dt(i, level + 2);
-  };
+  }
   _dt(this._doc.body, 0);
   document.body.appendChild(ta);
 };
@@ -2289,7 +2289,7 @@ HTMLArea.prototype._wordClean = function() {
     txt += "Final document length: " + editor._doc.body.innerHTML.length + "\n";
     txt += "Clean-up took " + (((new Date()).getTime() - stats.T) / 1000) + " seconds";
     alert(txt);
-  };
+  }
   function clearClass(node) {
     var newc = node.className.replace(/(^|\s)mso.*?(\s|$)/ig, ' ');
     if (newc != node.className) {
@@ -2299,7 +2299,7 @@ HTMLArea.prototype._wordClean = function() {
         ++stats.mso_class;
       }
     }
-  };
+  }
   function clearStyle(node) {
     var declarations = node.style.cssText.split(/\s*;\s*/);
     for (var i = declarations.length; --i >= 0;)
@@ -2309,7 +2309,7 @@ HTMLArea.prototype._wordClean = function() {
         declarations.splice(i, 1);
       }
     node.style.cssText = declarations.join("; ");
-  };
+  }
   function stripTag(el) {
     if (HTMLArea.is_ie)
       el.outerHTML = HTMLArea.htmlEncode(el.innerText);
@@ -2319,14 +2319,14 @@ HTMLArea.prototype._wordClean = function() {
       HTMLArea.removeFromParent(el);
     }
     ++stats.mso_xmlel;
-  };
+  }
   function checkEmpty(el) {
     if (/^(a|span|b|strong|i|em|font)$/i.test(el.tagName) &&
         !el.firstChild) {
       HTMLArea.removeFromParent(el);
       ++stats.empty_tags;
     }
-  };
+  }
   function parseTree(root) {
     var tag = root.tagName.toLowerCase(), i, next;
     if ((HTMLArea.is_ie && root.scopeName != 'HTML') || (!HTMLArea.is_ie && /:/.test(tag))) {
@@ -2342,7 +2342,7 @@ HTMLArea.prototype._wordClean = function() {
       }
     }
     return true;
-  };
+  }
   parseTree(this._doc.body);
   // showStats();
   // this.debugTree();
@@ -2827,7 +2827,7 @@ HTMLArea.prototype.getParentElement = function(sel) {
         if (TestRange.inRange(range)) break;
         if ((parent.nodeType != 1) || (parent.tagName.toLowerCase() == 'body')) break;
         parent = parent.parentElement;
-      };
+      }
       return parent;
         case "None":
       // It seems that even for selection of type "None",
@@ -4885,7 +4885,7 @@ HTMLArea._colorToRgb = function(v) {
   // returns the hex representation of one byte (2 digits)
   function hex(d) {
     return (d < 16) ? ("0" + d.toString(16)) : d.toString(16);
-  };
+  }
 
   if (typeof v == "number") {
     // we're talking to IE here
@@ -5096,7 +5096,7 @@ HTMLArea._postback = function(url, data, handler)
         alert('An error has occurred: ' + req.statusText);
       }
     }
-  };
+  }
 
   req.onreadystatechange = callBack;
 
@@ -5135,7 +5135,7 @@ HTMLArea._getback = function(url, handler)
         alert('An error has occurred: ' + req.statusText);
       }
     }
-  };
+  }
 
   req.onreadystatechange = callBack;
   req.open('GET', url, true);

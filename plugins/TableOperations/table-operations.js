@@ -42,7 +42,7 @@ function TableOperations(editor) {
 
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
-};
+}
 
 TableOperations._pluginInfo = {
 	name          : "TableOperations",
@@ -168,7 +168,7 @@ TableOperations.prototype.dialogTableProperties = function() {
 
 		function selected(val) {
 			return val ? " selected" : "";
-		};
+		}
 
 		// dialog contents
 		dialog.content.style.width = "400px";
@@ -321,7 +321,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 
 		function selected(val) {
 			return val ? " selected" : "";
-		};
+		}
 
 		// dialog contents
 		dialog.content.style.width = "400px";
@@ -391,7 +391,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 			td.rowSpan = 1;
 			td.innerHTML = mozbr;
 		}
-	};
+	}
 
 	function splitRow(td) {
 		var n = parseInt("" + td.rowSpan);
@@ -410,7 +410,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		}
 		editor.forceRedraw();
 		editor.updateToolbar();
-	};
+	}
 
 	function splitCol(td) {
 		var nc = parseInt("" + td.colSpan);
@@ -425,7 +425,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		}
 		editor.forceRedraw();
 		editor.updateToolbar();
-	};
+	}
 
 	function splitCell(td) {
 		var nc = parseInt("" + td.colSpan);
@@ -435,7 +435,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		while (nc-- > 0) {
 			splitRow(items[index++]);
 		}
-	};
+	}
 
 	function selectNextNode(el) {
 		var node = el.nextSibling;
@@ -452,7 +452,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 			node = el.parentNode;
 		}
 		editor.selectNodeContents(node);
-	};
+	}
 
 	switch (button_id) {
 		// ROWS
@@ -958,7 +958,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 			input.focus();
 			input.select();
 		}
-	};
+	}
 	select.onchange = function() { setCharVisibility(this.value == "char"); };
 	setCharVisibility(select.value == "char");
 
@@ -1108,7 +1108,7 @@ TableOperations.createStyleFieldset = function(doc, editor, el) {
 				el.select();
 			}
 		}
-	};
+	}
 	select.onchange = function() { setBorderFieldsStatus(this.value == "none"); };
 
 	input = doc.createElement("input");

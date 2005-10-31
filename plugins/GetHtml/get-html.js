@@ -20,7 +20,7 @@
   
 function GetHtml(editor) {
     this.editor = editor;
-};
+}
 
 GetHtml._pluginInfo = {
 	name          : "GetHtml",
@@ -75,7 +75,7 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 		replace(c[10], ' ');//trim extra whitespace
 	if(HTMLArea.is_ie && c[13].test(sHtml)) {//
 		sHtml = sHtml.replace(c[13],'$1'+this.stripBaseURL(RegExp.$3)+'"');
-	};
+	}
 	if(this.config.only7BitPrintablesInURLs && c[13].test(sHtml)) {
 	  sHtml = sHtml.replace(c[13], '$1'+RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
 	}
