@@ -49,9 +49,9 @@ HTMLArea.RegExpCache = [
 /*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel closing tag
 /*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel opening tag
 /*17*/  new RegExp().compile(/<(br|hr|img|embed|param|pre|meta|link|title)[^>]*>/g),//singlet tag
-/*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//exclude content between pre and script tags
+/*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//find content NOT inside pre and script tags
 /*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g),//find content inside pre tags
-/*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g)//exclude comments
+/*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g)//find content NOT inside comments
 ];
 
 /** 
@@ -93,9 +93,9 @@ HTMLArea.indent = function(s, sindentChar) {
 	if(HTMLArea.is_gecko) { //moz changes returns into <br> inside <pre> tags
 		s = s.replace(c[19], function(str){return str.replace(/<br \/>/g,"\n")});
 	}
-	s = s.replace(c[20], function(st,$1,$2,$3) { //exclude comments
-	  strn = $3.replace(c[18], function(string) { //skip pre and script tags
-		string = string.replace(/[\n\r]/gi, " ").replace(/\s+/gi," ").replace(c[14], function(str) {
+	s = s.replace(c[18], function(strn) { //skip pre and script tags
+	  strn = strn.replace(c[20], function(st,$1,$2,$3) { //exclude comments
+		string = $3.replace(/[\n\r]/gi, " ").replace(/\s+/gi," ").replace(c[14], function(str) {
 			if (str.match(c[16])) {
 				var s = "\n" + HTMLArea.__sindent + str;
 				// blocklevel openingtag - increase indent
@@ -116,8 +116,8 @@ HTMLArea.indent = function(s, sindentChar) {
 			}
 			return str; // this won't actually happen
 		});
-		return string;
-      });return $1 + strn;
+		return $1 + string;
+	  });return strn;
     });
     if (s.charAt(0) == "\n") {
         return s.substring(1, s.length);
@@ -161,11 +161,12 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		} else {
 			innerhtml = editor._doc.body.innerHTML;
 		}
-		//pass tags to cleanHTML() one at a time; ignore comments and php tags
+		//pass tags to cleanHTML() one at a time
 		//includes support for htmlRemoveTags config option
-		html += innerhtml.replace(/<[^\?!][^>]*>/gi, function(tag){
-			if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
-			return editor.cleanHTML(tag);
+		html += innerhtml.replace(/<((<[^>]*>)*|[^<>]*)*>/gi, function(tag){
+			if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
+			else if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
+				return editor.cleanHTML(tag);
 			else return ''});
 		//IE drops  all </li> tags in a list except the last one
 		if(HTMLArea.is_ie) {
