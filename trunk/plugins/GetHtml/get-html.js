@@ -51,7 +51,8 @@ HTMLArea.RegExpCache = [
 /*17*/  new RegExp().compile(/<(br|hr|img|embed|param|pre|meta|link|title)[^>]*>/g),//singlet tag
 /*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//find content NOT inside pre and script tags
 /*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g),//find content inside pre tags
-/*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g)//find content NOT inside comments
+/*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g),//find content NOT inside comments
+/*21*/  new RegExp().compile(/\S*=""/g) //find empty attributes
 ];
 
 /** 
@@ -64,6 +65,7 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 		replace(c[1], ' ').//strip _moz attributes
 		replace(c[12], ' ').//strip contenteditable
 		replace(c[2], '="$2$4$5"$3').//add attribute quotes
+		replace(c[21], ' ').//strip empty attributes
 		replace(c[11], function(str, p1, p2) { return ' '+p1.toLowerCase()+p2; }).//lowercase attribute names
 		replace(c[3], '>').//strip singlet terminators
 		replace(c[9], '$1>').//trim whitespace
@@ -175,7 +177,8 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 				replace(/<\/li>([\s\n]*<\/li>)+/g, '<\/li>');
 		}
 		if(HTMLArea.is_gecko)
-			html = html.replace(/(.*)<br \/>\n$/, '$1'); //strip trailing <br> added by moz
+			html = html.replace(/(.*)<br \/>\n$/, '$1'). //strip trailing <br> added by moz
+				replace(/^\n(.*)/, '$1'); //strip leading newline added by moz
 		if (outputRoot) {
 			html += "</" + root_tag + ">";
 		}
