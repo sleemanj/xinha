@@ -35,7 +35,8 @@ HTMLArea.RegExpCache = [
 /*01*/  new RegExp().compile(/(\S*\s*=\s*)?_moz[^=>]*(=\s*[^>]*)?/gi),//strip _moz attributes
 /*02*/  new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),// find attributes
 /*03*/  new RegExp().compile(/\/>/g),//strip singlet terminators
-/*04*/  new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed)([^>]*)>/g),//terminate singlet tags
+/*04*/ // new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed)([^>]*)>/g),//terminate singlet tags
+/*04*/  new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g),//terminate singlet tags
 /*05*/  new RegExp().compile(/(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),//expand singlet attributes
 /*06*/  new RegExp().compile(/(="[^']*)'([^'"]*")/),//check quote nesting
 /*07*/  new RegExp().compile(/&(?=[^<]*>)/g),//expand query ampersands
@@ -45,10 +46,10 @@ HTMLArea.RegExpCache = [
 /*11*/  new RegExp().compile(/\s+([^=\s]+)(="[^"]+")/g),// lowercase attribute names
 /*12*/  new RegExp().compile(/(\S*\s*=\s*)?contenteditable[^=>]*(=\s*[^>\s\/]*)?/gi),//strip contenteditable
 /*13*/  new RegExp().compile(/((href|src)=")([^\s]*)"/g), //find href and src for stripBaseHref()
-/*14*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title)[^>]*>/g),
+/*14*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area)[^>]*>/g),
 /*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel closing tag
 /*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel opening tag
-/*17*/  new RegExp().compile(/<(br|hr|img|embed|param|pre|meta|link|title)[^>]*>/g),//singlet tag
+/*17*/  new RegExp().compile(/<(br|hr|img|embed|param|pre|meta|link|title|area)[^>]*>/g),//singlet tag
 /*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//find content NOT inside pre and script tags
 /*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g),//find content inside pre tags
 /*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g),//find content NOT inside comments
@@ -69,8 +70,8 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 		replace(c[11], function(str, p1, p2) { return ' '+p1.toLowerCase()+p2; }).//lowercase attribute names
 		replace(c[3], '>').//strip singlet terminators
 		replace(c[9], '$1>').//trim whitespace
-		replace(c[4], '<$1$2 />').//terminate singlet tags
 		replace(c[5], '$1="$1"$3').//expand singlet attributes
+		replace(c[4], '<$1$2 />').//terminate singlet tags
 		replace(c[6], '$1$2').//check quote nesting
 	//	replace(c[7], '&amp;').//expand query ampersands
 		replace(c[8], '<').//strip tagstart whitespace
