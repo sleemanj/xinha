@@ -53,6 +53,18 @@ InsertSnippet.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'InsertSnippet');
 };
 
+InsertSnippet.prototype.onGenerate = function() {
+  var style_id = "IS-style";
+  var style = this.editor._doc.getElementById(style_id);
+  if (style == null) {
+    style = this.editor._doc.createElement("link");
+    style.id = style_id;
+    style.rel = 'stylesheet';
+    style.href = _editor_url + 'plugins/InsertSnippet/InsertSnippet.css';
+    this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(style);
+  }
+};
+
 HTMLArea.Config.prototype.InsertSnippet =
 {
   'snippets' : _editor_url+"plugins/InsertSnippet/snippets.js",
@@ -69,6 +81,7 @@ InsertSnippet.prototype.buttonPress = function(editor) {
 	    }
 				   	   
 		eval(HTMLArea._geturlcontent(editor.config.InsertSnippet.snippets));
+		editor.focusEditor();
 		if (param['how'] == 'variable') {
 			editor.insertHTML('{'+snippets[param["snippetnum"]].id+'}');
 		} else {
