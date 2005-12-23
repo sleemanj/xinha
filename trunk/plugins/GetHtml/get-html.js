@@ -162,7 +162,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		if(root_tag == "html") {
 			innerhtml = editor._doc.documentElement.innerHTML;
 		} else {
-			innerhtml = editor._doc.body.innerHTML;
+			innerhtml = root.innerHTML;
 		}
 		//pass tags to cleanHTML() one at a time
 		//includes support for htmlRemoveTags config option
