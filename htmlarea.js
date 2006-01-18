@@ -2966,20 +2966,21 @@ HTMLArea.prototype._getFirstAncestor = function(sel, types)
  *
  * @returns null | element
  */
-HTMLArea.prototype._activeElement = function(sel)
+if(HTMLArea.is_ie)
 {
-  if(sel == null) return null;
-  if(this._selectionEmpty(sel)) return null;
-
-  if(HTMLArea.is_ie)
+  HTMLArea.prototype._activeElement = function(sel)
   {
+    if((sel == null) || this._selectionEmpty(sel))
+    {
+      return null;
+    }
+
     if(sel.type.toLowerCase() == "control")
     {
       return sel.createRange().item(0);
     }
     else
     {
-
       // If it's not a control, then we need to see if
       // the selection is the _entire_ text of a parent node
       // (this happens when a node is clicked in the tree)
@@ -3012,9 +3013,17 @@ HTMLArea.prototype._activeElement = function(sel)
       */
       return null;
     }
-  }
-  else
+  };
+}
+else
+{
+  HTMLArea.prototype._activeElement = function(sel)
   {
+    if((sel == null) || this._selectionEmpty(sel))
+    {
+      return null;
+    }
+
     // For Mozilla we just see if the selection is not collapsed (something is selected)
     // and that the anchor (start of selection) is an element.  This might not be totally
     // correct, we possibly should do a simlar check to IE?
@@ -3034,9 +3043,8 @@ HTMLArea.prototype._activeElement = function(sel)
       }
     }
     return null;
-  }
-};
-
+  };
+}
 
 HTMLArea.prototype._selectionEmpty = function(sel)
 {
