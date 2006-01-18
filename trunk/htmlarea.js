@@ -4450,14 +4450,64 @@ HTMLArea.flushEvents = function()
   // alert('Flushed ' + x + ' events.');
 };
 
-HTMLArea._addEvent = function(el, evname, func) {
-  if (HTMLArea.is_ie) {
-    el.attachEvent("on" + evname, func);
-  } else {
+if (document.addEventListener)
+{
+  HTMLArea._addEvent = function(el, evname, func)
+  {
     el.addEventListener(evname, func, true);
-  }
-  HTMLArea._eventFlushers.push([el, evname, func]);
-};
+    HTMLArea._eventFlushers.push([el, evname, func]);
+  };
+  HTMLArea._removeEvent = function(el, evname, func)
+  {
+    el.removeEventListener(evname, func, true);
+  };
+  HTMLArea._stopEvent = function(ev)
+  {
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+}
+else if (document.attachEvent)
+{
+  HTMLArea._addEvent = function(el, evname, func)
+  {
+    el.attachEvent("on" + evname, func);
+    HTMLArea._eventFlushers.push([el, evname, func]);
+  };
+  HTMLArea._removeEvent = function(el, evname, func)
+  {
+    el.detachEvent("on" + evname, func);
+  };
+  HTMLArea._stopEvent = function(ev)
+  {
+    try
+    {
+      ev.cancelBubble = true;
+      ev.returnValue = false;
+    }
+    catch(e)
+    {
+      // Perhaps we could try here to stop the window.event
+      // window.event.cancelBubble = true;
+      // window.event.returnValue = false;
+    }
+  };
+}
+else
+{
+  HTMLArea._addEvent = function(el, evname, func)
+  {
+    alert('_addEvent is not supported');
+  };
+  HTMLArea._removeEvent = function(el, evname, func)
+  {
+    alert('_removeEvent is not supported');
+  };
+  HTMLArea._stopEvent = function(ev)
+  {
+    alert('_stopEvent is not supported');
+  };
+}
 
 HTMLArea._addEvents = function(el, evs, func) {
   for (var i = evs.length; --i >= 0;) {
@@ -4465,29 +4515,9 @@ HTMLArea._addEvents = function(el, evs, func) {
   }
 };
 
-HTMLArea._removeEvent = function(el, evname, func) {
-  if (HTMLArea.is_ie) {
-    el.detachEvent("on" + evname, func);
-  } else {
-    el.removeEventListener(evname, func, true);
-  }
-};
-
 HTMLArea._removeEvents = function(el, evs, func) {
   for (var i = evs.length; --i >= 0;) {
     HTMLArea._removeEvent(el, evs[i], func);
-  }
-};
-
-HTMLArea._stopEvent = function(ev) {
-  if (HTMLArea.is_ie) {
-    try{
-      ev.cancelBubble = true;
-      ev.returnValue = false;
-    } catch(e){}
-  } else {
-    ev.preventDefault();
-    ev.stopPropagation();
   }
 };
 
