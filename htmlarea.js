@@ -2829,56 +2829,83 @@ else
 }
 
 // Returns the deepest node that contains both endpoints of the selection.
-HTMLArea.prototype.getParentElement = function(sel) {
-  if(typeof sel == 'undefined')
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.getParentElement = function(sel)
   {
-    sel = this._getSelection();
-  }
-  var range = this._createRange(sel);
-  if (HTMLArea.is_ie) {
-    switch (sel.type) {
-        case "Text":         
-      // try to circumvent a bug in IE:
-      // the parent returned is not always the real parent element    
-      var parent = range.parentElement();
-      while (true)
+    if(typeof sel == 'undefined')
+    {
+      sel = this._getSelection();
+    }
+    var range = this._createRange(sel);
+    switch (sel.type)
+    {
+      case "Text":
+        // try to circumvent a bug in IE:
+        // the parent returned is not always the real parent element
+        var parent = range.parentElement();
+        while (true)
+        {
+          var TestRange = range.duplicate();
+          TestRange.moveToElementText(parent);
+          if (TestRange.inRange(range))
+          {
+            break;
+          }
+          if ((parent.nodeType != 1) || (parent.tagName.toLowerCase() == 'body'))
+          {
+            break;
+          }
+          parent = parent.parentElement;
+        }
+        return parent;
+      case "None":
+        // It seems that even for selection of type "None",
+        // there _is_ a parent element and it's value is not
+        // only correct, but very important to us.  MSIE is
+        // certainly the buggiest browser in the world and I
+        // wonder, God, how can Earth stand it?
+        return range.parentElement();
+      case "Control":
+        return range.item(0);
+      default:
+        return this._doc.body;
+    }
+  };
+}
+else
+{
+  HTMLArea.prototype.getParentElement = function(sel)
+  {
+    if(typeof sel == 'undefined')
+    {
+      sel = this._getSelection();
+    }
+    var range = this._createRange(sel);
+    try
+    {
+      var p = range.commonAncestorContainer;
+      if (!range.collapsed && range.startContainer == range.endContainer &&
+          range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes())
       {
-        var TestRange = range.duplicate();
-        TestRange.moveToElementText(parent);
-        if (TestRange.inRange(range)) break;
-        if ((parent.nodeType != 1) || (parent.tagName.toLowerCase() == 'body')) break;
-        parent = parent.parentElement;
+        p = range.startContainer.childNodes[range.startOffset];
       }
-      return parent;
-        case "None":
-      // It seems that even for selection of type "None",
-      // there _is_ a parent element and it's value is not
-      // only correct, but very important to us.  MSIE is
-      // certainly the buggiest browser in the world and I
-      // wonder, God, how can Earth stand it?
-      return range.parentElement();
-        case "Control":
-      return range.item(0);
-        default:
-      return this._doc.body;
+      /*
+      alert(range.startContainer + ":" + range.startOffset + "\n" +
+            range.endContainer + ":" + range.endOffset);
+      */
+      while (p.nodeType == 3)
+      {
+        p = p.parentNode;
+      }
+      return p;
     }
-  } else try {
-    var p = range.commonAncestorContainer;
-    if (!range.collapsed && range.startContainer == range.endContainer &&
-        range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes())
-      p = range.startContainer.childNodes[range.startOffset];
-    /*
-    alert(range.startContainer + ":" + range.startOffset + "\n" +
-          range.endContainer + ":" + range.endOffset);
-    */
-    while (p.nodeType == 3) {
-      p = p.parentNode;
+    catch (e)
+    {
+      return null;
     }
-    return p;
-  } catch (e) {
-    return null;
-  }
-};
+  };
+}
 
 // Returns an array with all the ancestor nodes of the selection.
 HTMLArea.prototype.getAllAncestors = function() {
