@@ -3046,21 +3046,35 @@ else
   };
 }
 
-HTMLArea.prototype._selectionEmpty = function(sel)
+if(HTMLArea.is_ie)
 {
-  if(!sel) return true;
-
-  if(HTMLArea.is_ie)
+  HTMLArea.prototype._selectionEmpty = function(sel)
   {
+    if(!sel)
+    {
+      return true;
+    }
+
     return this._createRange(sel).htmlText == '';
-  }
-  else if(typeof sel.isCollapsed != 'undefined')
+  };
+}
+else
+{
+  HTMLArea.prototype._selectionEmpty = function(sel)
   {
-    return sel.isCollapsed;
-  }
+    if(!sel)
+    {
+      return true;
+    }
 
-  return true;
-};
+    if(typeof sel.isCollapsed != 'undefined')
+    {
+      return sel.isCollapsed;
+    }
+
+    return true;
+  };
+}
 
 HTMLArea.prototype._getAncestorBlock = function(sel)
 {
