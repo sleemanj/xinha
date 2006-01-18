@@ -2310,15 +2310,23 @@ HTMLArea.prototype._wordClean = function() {
       }
     node.style.cssText = declarations.join("; ");
   }
-  function stripTag(el) {
-    if (HTMLArea.is_ie)
+  if (HTMLArea.is_ie)
+  {
+    function stripTag(el)
+    {
       el.outerHTML = HTMLArea.htmlEncode(el.innerText);
-    else {
+      ++stats.mso_xmlel;
+    }
+  }
+  else
+  {
+    function stripTag(el)
+    {
       var txt = document.createTextNode(HTMLArea.getInnerText(el));
       el.parentNode.insertBefore(txt, el);
       HTMLArea.removeFromParent(el);
+      ++stats.mso_xmlel;
     }
-    ++stats.mso_xmlel;
   }
   function checkEmpty(el) {
     if (/^(a|span|b|strong|i|em|font)$/i.test(el.tagName) &&
