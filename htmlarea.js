@@ -2770,8 +2770,10 @@ HTMLArea.prototype.updateToolbar = function(noStatus) {
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
  */
-HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted) {
-  if (!HTMLArea.is_ie) {
+if (!HTMLArea.is_ie)
+{
+  HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
+  {
     var sel = this._getSelection();
     var range = this._createRange(sel);
     // remove the current selection
@@ -2779,41 +2781,52 @@ HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted) {
     range.deleteContents();
     var node = range.startContainer;
     var pos = range.startOffset;
-    switch (node.nodeType) {
-        case 3: // Node.TEXT_NODE
-      // we have to split it at the caret position.
-      if (toBeInserted.nodeType == 3) {
-        // do optimized insertion
-        node.insertData(pos, toBeInserted.data);
-        range = this._createRange();
-        range.setEnd(node, pos + toBeInserted.length);
-        range.setStart(node, pos + toBeInserted.length);
-        sel.addRange(range);
-      } else {
-        node = node.splitText(pos);
+    switch (node.nodeType)
+    {
+      case 3: // Node.TEXT_NODE
+        // we have to split it at the caret position.
+        if (toBeInserted.nodeType == 3)
+        {
+          // do optimized insertion
+          node.insertData(pos, toBeInserted.data);
+          range = this._createRange();
+          range.setEnd(node, pos + toBeInserted.length);
+          range.setStart(node, pos + toBeInserted.length);
+          sel.addRange(range);
+        }
+        else
+        {
+          node = node.splitText(pos);
+          var selnode = toBeInserted;
+          if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */)
+          {
+            selnode = selnode.firstChild;
+          }
+          node.parentNode.insertBefore(toBeInserted, node);
+          this.selectNodeContents(selnode);
+          this.updateToolbar();
+        }
+      break;
+      case 1: // Node.ELEMENT_NODE
         var selnode = toBeInserted;
-        if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */) {
+        if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */)
+        {
           selnode = selnode.firstChild;
         }
-        node.parentNode.insertBefore(toBeInserted, node);
+        node.insertBefore(toBeInserted, node.childNodes[pos]);
         this.selectNodeContents(selnode);
         this.updateToolbar();
-      }
-      break;
-        case 1: // Node.ELEMENT_NODE
-      var selnode = toBeInserted;
-      if (toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */) {
-        selnode = selnode.firstChild;
-      }
-      node.insertBefore(toBeInserted, node.childNodes[pos]);
-      this.selectNodeContents(selnode);
-      this.updateToolbar();
       break;
     }
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
+  {
     return null;	// this function not yet used for IE <FIXME>
-  }
-};
+  };
+}
 
 // Returns the deepest node that contains both endpoints of the selection.
 HTMLArea.prototype.getParentElement = function(sel) {
