@@ -38,6 +38,9 @@
   "Print document": "Imprimer document",
   "Clear MSOffice tags": "Supprimer tags MSOffice",
   "Clear Inline Font Specifications": "Supprimer paramètres inline de la police",
+  "Would you like to clear font typefaces?": "Voulez-vous supprimer les types ?",
+  "Would you like to clear font sizes?": "Voulez-vous supprimer les tailles ?",
+  "Would you like to clear font colours?": "Voulez-vous supprimer les couleurs ?",
   "Split Block": "Séparer les blocs",
   "Toggle Borders": "Afficher / Masquer les bordures",
   "Save as": "Enregistrer sous",
@@ -126,5 +129,24 @@
   "For browsers that don't support images": "Pour les navigateurs qui ne supportent pas les images",
   "Positioning of this image": "Position de l'image",
   "Image Preview:": "Prévisualisation",
-  "You must enter the URL": "Vous devez entrer l'URL"
+  "You must enter the URL": "Vous devez entrer l'URL",
+
+  // toolbar
+  "button_bold": "fr/bold.gif",
+  "button_underline": "fr/underline.gif",
+  "button_strikethrough": "fr/strikethrough.gif",
+
+  // Editor Help
+  "Xinha Help": "Aide Xinha",
+  "Editor Help": "Aide de l'éditeur",
+  "Keyboard shortcuts": "Raccourcis clavier",
+  "The editor provides the following key combinations:": "L'éditeur fournit les combinaisons de touches suivantes :",
+  "ENTER": "ENTREE",
+  "new paragraph": "Nouveau paragraphe",
+  "SHIFT-ENTER": "SHIFT+ENTREE",
+  "insert linebreak": "Insère un saut de ligne",
+  "Set format to paragraph": "Applique le format paragraphe",
+  "Clean content pasted from Word": "Nettoyage du contenu copié depuis Word",
+  "Headings": "Titres",
+  "Close": "Fermer"
 };
