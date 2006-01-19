@@ -3295,25 +3295,36 @@ else
 /** Call this function to insert HTML code at the current position.  It deletes
  * the selection, if any.
  */
-HTMLArea.prototype.insertHTML = function(html) {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
-  this.focusEditor();
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.insertHTML = function(html)
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    this.focusEditor();
     range.pasteHTML(html);
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype.insertHTML = function(html)
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    this.focusEditor();
     // construct a new document fragment with the given HTML
     var fragment = this._doc.createDocumentFragment();
     var div = this._doc.createElement("div");
     div.innerHTML = html;
-    while (div.firstChild) {
+    while (div.firstChild)
+    {
       // the following call also removes the node from div
       fragment.appendChild(div.firstChild);
     }
     // this also removes the selection
     var node = this.insertNodeAtSelection(fragment);
-  }
-};
+  };
+}
 
 /**
  *  Call this function to surround the existing HTML code in the selection with
