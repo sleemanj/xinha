@@ -3244,12 +3244,14 @@ HTMLArea.prototype._formatBlock = function(block_format)
 };
 
 // Selects the contents inside the given node
-HTMLArea.prototype.selectNodeContents = function(node, pos) {
-  this.focusEditor();
-  this.forceRedraw();
-  var range;
-  var collapsed = typeof pos == "undefined" ? true : false;
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.selectNodeContents = function(node, pos)
+  {
+    this.focusEditor();
+    this.forceRedraw();
+    var range;
+    var collapsed = typeof pos == "undefined" ? true : false;
     // Tables and Images get selected as "objects" rather than the text contents
     if(collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|select|textarea/))
     {
@@ -3263,7 +3265,16 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
       //(collapsed) && range.collapse(pos);
     }
     range.select();
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype.selectNodeContents = function(node, pos)
+  {
+    this.focusEditor();
+    this.forceRedraw();
+    var range;
+    var collapsed = typeof pos == "undefined" ? true : false;
     var sel = this._getSelection();
     range = this._doc.createRange();
     // Tables and Images get selected as "objects" rather than the text contents
@@ -3278,8 +3289,8 @@ HTMLArea.prototype.selectNodeContents = function(node, pos) {
     }
     sel.removeAllRanges();
     sel.addRange(range);
-  }
-};
+  };
+}
 
 /** Call this function to insert HTML code at the current position.  It deletes
  * the selection, if any.
