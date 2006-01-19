@@ -5685,17 +5685,20 @@ HTMLArea.hasParentNode = function(el)
   return false;
 };
 
-HTMLArea.getOuterHTML = function(element)
+if(HTMLArea.is_ie)
 {
-  if(HTMLArea.is_ie)
+  HTMLArea.getOuterHTML = function(element)
   {
     return element.outerHTML;
-  }
-  else
+  };
+}
+else
+{
+  HTMLArea.getOuterHTML = function(element)
   {
     return (new XMLSerializer()).serializeToString(element);
-  }
-};
+  };
+}
 
 HTMLArea.toFree = [ ];
 HTMLArea.freeLater = function(obj,prop)
