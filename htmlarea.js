@@ -4482,22 +4482,35 @@ else
 }
 
 // returns a range for the current selection
-HTMLArea.prototype._createRange = function(sel) {
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype._createRange = function(sel)
+  {
     return sel.createRange();
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype._createRange = function(sel)
+  {
     this.activateEditor();
-    if (typeof sel != "undefined") {
-      try {
+    if (typeof sel != "undefined")
+    {
+      try
+      {
         return sel.getRangeAt(0);
-      } catch(e) {
+      }
+      catch(e)
+      {
         return this._doc.createRange();
       }
-    } else {
+    }
+    else
+    {
       return this._doc.createRange();
     }
-  }
-};
+  };
+}
 
 // event handling
 
