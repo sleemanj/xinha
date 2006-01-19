@@ -3337,17 +3337,24 @@ HTMLArea.prototype.surroundHTML = function(startTag, endTag) {
 };
 
 /// Retrieve the selected block
-HTMLArea.prototype.getSelectedHTML = function() {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
-  var existing = null;
-  if (HTMLArea.is_ie) {
-    existing = range.htmlText;
-  } else {
-    existing = HTMLArea.getHTML(range.cloneContents(), false, this);
-  }
-  return existing;
-};
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype.getSelectedHTML = function()
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    return range.htmlText;
+  };
+}
+else
+{
+  HTMLArea.prototype.getSelectedHTML = function()
+  {
+    var sel = this._getSelection();
+    var range = this._createRange(sel);
+    return HTMLArea.getHTML(range.cloneContents(), false, this);
+  };
+}
 
 /// Return true if we have some selection
 HTMLArea.prototype.hasSelectedText = function() {
