@@ -3901,12 +3901,12 @@ HTMLArea.prototype._editorEvent = function(ev) {
       break;
         case 8: // KEY backspace
         case 46: // KEY delete
-      if (HTMLArea.is_gecko && !ev.shiftKey) {
-        if (this.dom_checkBackspace())
+      if ((HTMLArea.is_gecko && !ev.shiftKey) || HTMLArea.is_ie)
+      {
+        if (this.checkBackspace())
+        {
           HTMLArea._stopEvent(ev);
-      } else if (HTMLArea.is_ie) {
-        if (this.ie_checkBackspace())
-          HTMLArea._stopEvent(ev);
+        }
       }
       break;
     }
@@ -3929,61 +3929,77 @@ HTMLArea.prototype.convertNode = function(el, newTagName) {
   return newel;
 };
 
-HTMLArea.prototype.ie_checkBackspace = function() {
-  var sel = this._getSelection();
-  if(HTMLArea.is_ie && sel.type == 'Control')
+if(HTMLArea.is_ie)
+{
+  // this function is for IE
+  HTMLArea.prototype.checkBackspace = function()
   {
-    var elm = this._activeElement(sel);
-    HTMLArea.removeFromParent(elm);
-    return true;
-  }
-
-  // This bit of code preseves links when you backspace over the
-  // endpoint of the link in IE.  Without it, if you have something like
-  //    link_here |
-  // where | is the cursor, and backspace over the last e, then the link
-  // will de-link, which is a bit tedious
-  var range = this._createRange(sel);
-  var r2 = range.duplicate();
-  r2.moveStart("character", -1);
-  var a = r2.parentElement();
-  if (a != range.parentElement() &&
-      /^a$/i.test(a.tagName)) {
-    r2.collapse(true);
-    r2.moveEnd("character", 1);
-    r2.pasteHTML('');
-    r2.select();
-    return true;
-  }
-};
-
-HTMLArea.prototype.dom_checkBackspace = function() {
-  var self = this;
-  setTimeout(function() {
-    var sel = self._getSelection();
-    var range = self._createRange(sel);
-    var SC = range.startContainer;
-    var SO = range.startOffset;
-    var EC = range.endContainer;
-    var EO = range.endOffset;
-    var newr = SC.nextSibling;
-    if (SC.nodeType == 3)
-      SC = SC.parentNode;
-    if (!/\S/.test(SC.tagName)) {
-      var p = document.createElement("p");
-      while (SC.firstChild)
-        p.appendChild(SC.firstChild);
-      SC.parentNode.insertBefore(p, SC);
-      HTMLArea.removeFromParent(SC);
-      var r = range.cloneRange();
-      r.setStartBefore(newr);
-      r.setEndAfter(newr);
-      r.extractContents();
-      sel.removeAllRanges();
-      sel.addRange(r);
+    var sel = this._getSelection();
+    if(sel.type == 'Control')
+    {
+      var elm = this._activeElement(sel);
+      HTMLArea.removeFromParent(elm);
+      return true;
     }
-  }, 10);
-};
+
+    // This bit of code preseves links when you backspace over the
+    // endpoint of the link in IE.  Without it, if you have something like
+    //    link_here |
+    // where | is the cursor, and backspace over the last e, then the link
+    // will de-link, which is a bit tedious
+    var range = this._createRange(sel);
+    var r2 = range.duplicate();
+    r2.moveStart("character", -1);
+    var a = r2.parentElement();
+    if (a != range.parentElement() &&
+        /^a$/i.test(a.tagName))
+    {
+      r2.collapse(true);
+      r2.moveEnd("character", 1);
+      r2.pasteHTML('');
+      r2.select();
+      return true;
+    }
+  };
+}
+else
+{
+  // this function is for DOM
+  HTMLArea.prototype.checkBackspace = function()
+  {
+    var self = this;
+    setTimeout(function()
+      {
+        var sel = self._getSelection();
+        var range = self._createRange(sel);
+        var SC = range.startContainer;
+        var SO = range.startOffset;
+        var EC = range.endContainer;
+        var EO = range.endOffset;
+        var newr = SC.nextSibling;
+        if (SC.nodeType == 3)
+        {
+          SC = SC.parentNode;
+        }
+        if (!/\S/.test(SC.tagName))
+        {
+          var p = document.createElement("p");
+          while (SC.firstChild)
+          {
+            p.appendChild(SC.firstChild);
+          }
+          SC.parentNode.insertBefore(p, SC);
+          HTMLArea.removeFromParent(SC);
+          var r = range.cloneRange();
+          r.setStartBefore(newr);
+          r.setEndAfter(newr);
+          r.extractContents();
+          sel.removeAllRanges();
+          sel.addRange(r);
+        }
+      }, 10);
+  };
+}
 
 /** The idea here is
  * 1. See if we are in a block element
