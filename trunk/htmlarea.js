@@ -4466,13 +4466,20 @@ HTMLArea.checkSupportedBrowser = function() {
 // selection & ranges
 
 // returns the current selection object
-HTMLArea.prototype._getSelection = function() {
-  if (HTMLArea.is_ie) {
+if (HTMLArea.is_ie)
+{
+  HTMLArea.prototype._getSelection = function()
+  {
     return this._doc.selection;
-  } else {
+  };
+}
+else
+{
+  HTMLArea.prototype._getSelection = function()
+  {
     return this._iframe.contentWindow.getSelection();
-  }
-};
+  };
+}
 
 // returns a range for the current selection
 HTMLArea.prototype._createRange = function(sel) {
