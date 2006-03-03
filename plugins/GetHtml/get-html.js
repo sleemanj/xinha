@@ -53,7 +53,8 @@ HTMLArea.RegExpCache = [
 /*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//find content NOT inside pre and script tags
 /*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g),//find content inside pre tags
 /*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g),//find content NOT inside comments
-/*21*/  new RegExp().compile(/\S*=""/g) //find empty attributes
+/*21*/  new RegExp().compile(/\S*=""/g), //find empty attributes
+/*22*/  new RegExp().compile(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<[^>]*>/g) //find all tags, including comments and php
 ];
 
 /** 
@@ -131,6 +132,7 @@ HTMLArea.indent = function(s, sindentChar) {
 
 HTMLArea.getHTML = function(root, outputRoot, editor) {
 	var html = "";
+	var c = HTMLArea.RegExpCache;
 
 	if(root.nodeType == 11) {//document fragment
 	    //we can't get innerHTML from the root (type 11) node, so we 
@@ -140,7 +142,9 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 	    for (j = temp.nextSibling; j; j = j.nextSibling) { 
 	    		temp.appendChild(j.cloneNode(true));
 	    }
-	    html += temp.innerHTML.replace(/<[^\?!][^>]*>/gi, function(tag){return editor.cleanHTML(tag)});
+	    html += temp.innerHTML.replace(c[22], function(tag){
+			if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
+			else return editor.cleanHTML(tag)});
 
 	} else {
 
@@ -166,7 +170,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		}
 		//pass tags to cleanHTML() one at a time
 		//includes support for htmlRemoveTags config option
-		html += innerhtml.replace(/<((<[^>]*>)*|[^<>]*)*>/gi, function(tag){
+		html += innerhtml.replace(c[22], function(tag){
 			if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
 			else if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
 				return editor.cleanHTML(tag);
