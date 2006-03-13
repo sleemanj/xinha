@@ -98,6 +98,43 @@ function HTMLArea(textarea, config)
       w: textarea.style.width ? textarea.style.width   : (textarea.offsetWidth ? (textarea.offsetWidth + 'px') : (textarea.cols+'em')),
       h: textarea.style.height ? textarea.style.height : (textarea.offsetHeight ? (textarea.offsetHeight + 'px') : (textarea.rows+'em'))
     };
+    // Create the loading message elements
+    if (this.config.showLoading)
+    {
+      // Create and show the main loading message and the sub loading message for details of loading actions
+      // global element
+      var loading_message = document.createElement("div");
+      loading_message.id = "loading_" + textarea.name;
+      loading_message.className = "loading";
+      try
+      {
+        // how can i find the real width in pixels without % or em *and* with no visual errors ?
+        // for instance, a textarea with a style="width:100%" and the body padding > 0 result in a horizontal scrollingbar while loading
+        // A few lines above seems to indicate offsetWidth is not always set
+        loading_message.style.width = textarea.offsetWidth + 'px';
+      }
+      catch (e)
+      {
+        // offsetWidth seems not set, so let's use this._initial_ta_size.w, but sometimes it may be too huge width
+        loading_message.style.width = this._initial_ta_size.w;
+      }
+      loading_message.style.left = HTMLArea.findPosX(textarea) +  'px';
+      loading_message.style.top = (HTMLArea.findPosY(textarea) + parseInt(this._initial_ta_size.h) / 2) +  'px';
+      // main static message
+      var loading_main = document.createElement("div");
+      loading_main.className = "loading_main";
+      loading_main.id = "loading_main_" + textarea.name;
+      loading_main.appendChild(document.createTextNode(HTMLArea._lc("Loading in progress. Please wait !")));
+      // sub dynamic message
+      var loading_sub = document.createElement("div");
+      loading_sub.className = "loading_sub";
+      loading_sub.id = "loading_sub_" + textarea.name;
+      loading_sub.appendChild(document.createTextNode(HTMLArea._lc("Constructing main object")));
+      loading_message.appendChild(loading_main);
+      loading_message.appendChild(loading_sub);
+      document.body.appendChild(loading_message);
+      this.setLoadingMessage("Constructing object");
+    }
 
     this._editMode = "wysiwyg";
     this.plugins = {};
@@ -296,6 +333,9 @@ HTMLArea.Config = function () {
   // even neater, if you resize the window the toolbars will reflow.  Niiiice.
 
   this.flowToolbars = true;
+  
+  // set to true if you want the loading panel to show at startup
+  this.showLoading = false;
 
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
@@ -534,6 +574,7 @@ HTMLArea.Config.prototype.registerButton = function(id, tooltip, image, textMode
 HTMLArea.prototype.registerPanel = function(side, object)
 {
   if(!side) side = 'right';
+  this.setLoadingMessage('Register panel ' + side);
   var panel = this.addPanel(side);
   if(object)
   {
@@ -715,6 +756,7 @@ HTMLArea.replace = function(id, config)
 
 // Creates the toolbar and appends it to the _htmlarea
 HTMLArea.prototype._createToolbar = function () {
+  this.setLoadingMessage('Create Toolbar');
   var editor = this;	// to access this in nested functions
 
   var toolbar = document.createElement("div");
@@ -1143,6 +1185,7 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
 };
 
 HTMLArea.prototype._createStatusBar = function() {
+  this.setLoadingMessage('Create StatusBar');
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
   this._statusBar = statusbar;
@@ -1176,6 +1219,7 @@ HTMLArea.prototype._createStatusBar = function() {
 // Creates the HTMLArea object and replaces the textarea with it.
 HTMLArea.prototype.generate = function ()
 {
+  this.setLoadingMessage('Generate Xinha object');
   var editor = this;	// we'll need "this" in some nested functions
 
   if(typeof Dialog == 'undefined')
@@ -1426,6 +1470,7 @@ HTMLArea.prototype.generate = function ()
 
   HTMLArea.prototype.initSize = function()
   {
+    this.setLoadingMessage('Init editor size');
     var editor = this;
 
     var width  = null;
@@ -1841,6 +1886,7 @@ HTMLArea.prototype.generate = function ()
 
   HTMLArea.prototype.initIframe = function()
   {
+    this.setLoadingMessage('Init IFrame');
     this.disableToolbar();
     var doc = null;
     var editor = this;
@@ -2051,6 +2097,7 @@ HTMLArea.prototype.setEditorEvents = function() {
       if(typeof editor._onGenerate == "function") {
         editor._onGenerate();
       }
+      editor.removeLoadingMessage();
     }
   );
 };
@@ -5604,6 +5651,7 @@ HTMLArea.prototype.registerPlugins = function(plugin_names) {
   {
     for(var i = 0; i < plugin_names.length; i++)
     {
+      this.setLoadingMessage('Register plugin $plugin', 'HTMLArea', {'plugin': plugin_names[i]});
       this.registerPlugin(eval(plugin_names[i]));
     }
   }
@@ -5716,6 +5764,57 @@ else
     return (new XMLSerializer()).serializeToString(element);
   };
 }
+
+// find X position of an element
+HTMLArea.findPosX = function(obj)
+{
+  var curleft = 0;
+  if (obj.offsetParent)
+  {
+    while (obj.offsetParent)
+    {
+      curleft += obj.offsetLeft
+      obj = obj.offsetParent;
+    }
+  }
+  else if (obj.x)
+  {
+    curleft += obj.x;
+  }
+  return curleft;
+};
+
+// find Y position of an element
+HTMLArea.findPosY = function(obj)
+{
+  var curtop = 0;
+  if (obj.offsetParent)
+  {
+    while (obj.offsetParent)
+    {
+      curtop += obj.offsetTop
+      obj = obj.offsetParent;
+    }
+  }
+  else if (obj.y)
+  {
+    curtop += obj.y;
+  }
+  return curtop;
+};
+
+HTMLArea.prototype.setLoadingMessage = function(string, context, replace)
+{
+  if (!this.config.showLoading || !document.getElementById("loading_sub_" + this._textArea.name)) { return ; }
+  var elt = document.getElementById("loading_sub_" + this._textArea.name);
+  elt.innerHTML = HTMLArea._lc(string, context, replace);
+};
+
+HTMLArea.prototype.removeLoadingMessage = function()
+{
+  if (!this.config.showLoading || !document.getElementById("loading_" + this._textArea.name)) { return ; }
+  document.body.removeChild(document.getElementById("loading_" + this._textArea.name));
+};
 
 HTMLArea.toFree = [ ];
 HTMLArea.freeLater = function(obj,prop)

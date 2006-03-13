@@ -231,3 +231,22 @@ form { margin: 0px; border: none; }
 .htmlarea .panels.right .panel { border-right:none; border-left:none; }
 .htmlarea .panels.left  h1     { border-left:none;  }
 .htmlarea { border: 1px solid black; }
+
+.loading
+{
+  background-color:#666;
+  position:absolute;
+  z-index:998;
+}
+.loading_main
+{
+  font-size:1.6em;
+  color:#ff6;
+  text-align:center;
+}
+.loading_sub
+{
+  font-size:1.0em;
+  color:#fff;
+  text-align:center;
+}
