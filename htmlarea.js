@@ -4397,6 +4397,7 @@ HTMLArea.prototype.fixRelativeLinks = function(html)
 // retrieve the HTML (fastest version, but uses innerHTML)
 HTMLArea.prototype.getInnerHTML = function() {
   if(!this._doc.body) return '';
+  var html = "";
   switch (this._editMode) {
       case "wysiwyg"  :
         if (!this.config.fullPage)
