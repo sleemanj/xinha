@@ -166,7 +166,7 @@ HTMLArea.RE_doctype = /(<!doctype((.|\n)*?)>)\n?/i;
 HTMLArea.RE_head    = /<head>((.|\n)*?)<\/head>/i;
 HTMLArea.RE_body    = /<body[^>]*>((.|\n|\r|\t)*?)<\/body>/i;
 HTMLArea.RE_Specials = /([\/\^$*+?.()|{}[\]])/g;
-HTMLArea.RE_email    = /[a-z0-9_]{3,}@[a-z0-9_-]{2,}(\.[a-z0-9_-]{2,})+/i;
+HTMLArea.RE_email    = /[_a-zA-Z\d\-\.]{3,}@[_a-zA-Z\d\-]{2,}(\.[_a-zA-Z\d\-]{2,})+/i;
 HTMLArea.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a-z0-9_-]{2,}){2,}(:[0-9]+)?(\/\S+)*)/i;
 
 HTMLArea.Config = function () {
