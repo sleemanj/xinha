@@ -3951,7 +3951,7 @@ HTMLArea.prototype._createLink = function(link)
           if ( !HTMLArea.is_ie )
           {
             a = range.startContainer;
-            if ( a.tagName.toLowerCase() != 'a' )
+            if ( ! ( /^a$/i.test(a.tagName) ) )
             {
               a = a.nextSibling;
               if ( a === null )
