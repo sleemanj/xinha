@@ -1143,8 +1143,12 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
       };
       
       HTMLArea.freeLater(obj);
-      
+
       tb_objects[txt] = obj;
+
+      // prevent drag&drop of the icon to content area
+      el.ondrag = function() { return false; };
+
       // handlers to emulate nice flat toolbar buttons
       HTMLArea._addEvent(
         el,
