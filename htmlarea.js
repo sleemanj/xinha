@@ -3882,7 +3882,7 @@ HTMLArea.prototype._createLink = function(link)
     link = this.getParentElement();
     if ( link )
     {
-      while ( link && link.tagName.toLowerCase() != 'a' )
+      while (link && !/^a$/i.test(link.tagName))
       {
         link = link.parentNode;
       }
