@@ -77,7 +77,7 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 	//	replace(c[7], '&amp;').//expand query ampersands
 		replace(c[8], '<').//strip tagstart whitespace
 		replace(c[10], ' ');//trim extra whitespace
-	if(HTMLArea.is_ie && c[13].test(sHtml)) {//
+	if(HTMLArea.is_ie && c[13].test(sHtml)) {
 		sHtml = sHtml.replace(c[13],'$1'+this.stripBaseURL(RegExp.$3)+'"');
 	}
 	if(this.config.only7BitPrintablesInURLs && c[13].test(sHtml)) {
@@ -192,6 +192,19 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 //	html = HTMLArea.htmlEncode(html);
 
 	return html;
+};
+
+//fix obscure case; stripSelfNamedAnchors fails in IE if location.href includes a query string with '&' in it
+HTMLArea.prototype._origFixRelativeLinks = HTMLArea.prototype.fixRelativeLinks;
+HTMLArea.prototype.fixRelativeLinks = function(html)
+{
+  if(typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors)
+  {
+    var stripRe = new RegExp(document.location.href.replace(/&/g,'&amp;').replace(HTMLArea.RE_Specials, '\\$1') + '(#[^\'" ]*)', 'g');
+    html = html.replace(stripRe, '$1');
+  }
+  html = this._origFixRelativeLinks(html);
+  return html;
 };
 
 //override (hack) outwardHtml() to handle onclick suppression
