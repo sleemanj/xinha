@@ -5,8 +5,8 @@ function SetId(editor) {
 
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
-  id       : "setid", 
-  tooltip  : this._lc("Set Id and Name"), 
+  id       : "setid",
+  tooltip  : this._lc("Set Id and Name"),
   image    : editor.imgURL("set-id.gif", "SetId"),
   textMode : false,
   action   : function(editor) {
@@ -60,30 +60,33 @@ SetId.prototype.buttonPress = function(editor) {
       var name = param["name"];
       if (name == "" || name == null) {
         if (node) {
-					node.removeAttribute("name");
-					node.removeAttribute("id");
-					node.removeAttribute("title");
+          node.removeAttribute("name");
+          node.removeAttribute("id");
+          node.removeAttribute("title");
+          if (node.className == "hasid") {
+            node.removeAttribute("class");
+          }
         }
         return;
-      } 
+      }
       try {
         var doc = editor._doc;
         if (!node) {
           node = doc.createElement("span");
           node.id = name;
           node.name = name;
-					node.title = name;
+          node.title = name;
           node.className = "hasid";
           node.innerHTML = html;
           if (HTMLArea.is_ie) {
-            range.pasteHTML(a.outerHTML);
+            range.pasteHTML(node.outerHTML);
           } else {
-            editor.insertNodeAtSelection(a);
+            editor.insertNodeAtSelection(node);
           }
         } else {
           node.id = name;
           node.name = name;
-					node.title = name;
+          node.title = name;
           node.className = "hasid";
         }
       }
