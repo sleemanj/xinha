@@ -4551,9 +4551,18 @@ HTMLArea.prototype._editorEvent = function(ev)
               break;
             }
 
+            RE_date = /[0-9\.]*/; //could be date or ip or something else ...
+            RE_ip = /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/;
             var mUrl = matchData.match(HTMLArea.RE_url);
             if ( mUrl )
             {
+              if (RE_date.test(matchData))
+              {
+                if (!RE_ip.test(matchData)) 
+                {
+                  break;
+                }
+              }
               var leftTextUrl  = s.anchorNode;
               var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
               var midTextUrl   = leftTextUrl.splitText(midStart);
