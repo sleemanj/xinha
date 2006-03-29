@@ -1128,6 +1128,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
       el.style.textDecoration = 'none';
       el.title = btn[0];
       el.className = "button";
+      el.style.direction = "ltr";
       // let's just pretend we have a button object, and
       // assign all the needed information to it.
       obj =
