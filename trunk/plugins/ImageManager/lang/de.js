@@ -60,6 +60,6 @@
   "Description:": "Beschreibung:",
   "Align:": "Ausrichtung:",
   "Margin:": "Außenabstand:",
-  "Padding:": "Innenabstand:"
+  "Padding:": "Innenabstand:",
   "Color:": "Farbe:"
 };
