@@ -35,7 +35,9 @@ function __dlg_onclose() {
 	opener.Dialog._return(null);
 }
 
-function __dlg_init(bottom) {
+function __dlg_init(bottom, win_dim) {
+  if(window.__dlg_init_done) return true;
+  
   if(window.opener._editor_skin != "") {
     var head = document.getElementsByTagName("head")[0];
     var link = document.createElement("link");
@@ -45,9 +47,24 @@ function __dlg_init(bottom) {
     head.appendChild(link);
   }
 	window.dialogArguments = opener.Dialog._arguments;
+
+  var body        = document.body;
   
-	var body = document.body;
-	if (window.sizeToContent) {
+  if(win_dim)
+  {
+    window.resizeTo(win_dim.width, win_dim.height);
+    if(win_dim.top && win_dim.left)
+    {
+      window.moveTo(win_dim.left,win_dim.top);
+    }
+    else
+    {
+      var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
+      var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
+      window.moveTo(x,y);
+    }
+  }
+  else if (window.sizeToContent) {
 		window.sizeToContent();
 		window.sizeToContent();	// for reasons beyond understanding,
 					// only if we call it twice we get the
@@ -63,7 +80,7 @@ function __dlg_init(bottom) {
 		var docElm      = document.documentElement ? document.documentElement : null;    
 		var body_height = body.scrollHeight;
     
-		window.resizeTo(body.offsetWidth, body_height);
+		window.resizeTo(body.scrollWidth, body_height);
 		var ch = docElm && docElm.clientHeight ? docElm.clientHeight : body.clientHeight;
 		var cw = docElm && docElm.clientWidth  ? docElm.clientWidth  : body.clientWidth;
 		
@@ -75,6 +92,7 @@ function __dlg_init(bottom) {
 		window.moveTo(x, y);
 	}
 	HTMLArea.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
+  window.__dlg_init_done = true;
 }
 
 function __dlg_translate(context) {
