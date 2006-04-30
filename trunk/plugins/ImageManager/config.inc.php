@@ -286,6 +286,10 @@ $IMConfig['ViewMode'] = 'thumbs';
 // If config specified from front end, merge it
 if(isset($_REQUEST['backend_config']))
 {
+  if(get_magic_quotes_gpc()) {
+    $_REQUEST['backend_config'] = stripslashes($_REQUEST['backend_config']);
+  }
+  
   // Config specified from front end, check that it's valid
   session_start();
   $secret = $_SESSION[$_REQUEST['backend_config_secret_key_location']];
