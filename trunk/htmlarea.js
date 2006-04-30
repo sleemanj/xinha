@@ -1901,8 +1901,10 @@ HTMLArea.prototype.sizeEditor = function(width, height, includingBars, including
   {
     edcellheight -= parseInt(this.config.panel_dimensions.bottom, 10);
   }
-  this._iframe.style.height = edcellheight + 'px';
-
+  this._iframe.style.height = edcellheight + 'px';  
+  this._framework.rp_cell.style.height = edcellheight + 'px';
+  this._framework.lp_cell.style.height = edcellheight + 'px';
+ 
   var edcellwidth = width;
   if ( panel_is_alive('left') )
   {
@@ -1910,13 +1912,25 @@ HTMLArea.prototype.sizeEditor = function(width, height, includingBars, including
   }
   if ( panel_is_alive('right') )
   {
-    edcellwidth -= parseInt(this.config.panel_dimensions.right, 10);
+    edcellwidth -= parseInt(this.config.panel_dimensions.right, 10);    
   }
   this._iframe.style.width = edcellwidth + 'px';
 
   this._textArea.style.height = this._iframe.style.height;
   this._textArea.style.width  = this._iframe.style.width;
+  
+  // (re)size the left and right panels so they are equal the editor height
+  for(var i = 0; i < this._panels.left.panels.length; i++)
+  {
+    this._panels.left.panels[i].style.height = this._iframe.style.height;
+  }
 
+  for(var i = 0; i < this._panels.right.panels.length; i++)
+  {
+    this._panels.right.panels[i].style.height = this._iframe.style.height;
+  }  
+  
+  
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
 };
 
@@ -1926,7 +1940,8 @@ HTMLArea.prototype.addPanel = function(side)
   div.side = side;
   if ( side == 'left' || side == 'right' )
   {
-    div.style.width = this.config.panel_dimensions[side];
+    div.style.width  = this.config.panel_dimensions[side];
+    if(this._iframe) div.style.height = this._iframe.style.height;     
   }
   HTMLArea.addClasses(div, 'panel');
   this._panels[side].panels.push(div);
@@ -1936,6 +1951,7 @@ HTMLArea.prototype.addPanel = function(side)
 
   return div;
 };
+
 
 HTMLArea.prototype.removePanel = function(panel)
 {
