@@ -3553,7 +3553,7 @@ else
     // and that the anchor (start of selection) is an element.  This might not be totally
     // correct, we possibly should do a simlar check to IE?
     if ( !sel.isCollapsed )
-    {
+    {      
       if ( sel.anchorNode.childNodes.length > sel.anchorOffset && sel.anchorNode.childNodes[sel.anchorOffset].nodeType == 1 )
       {
         return sel.anchorNode.childNodes[sel.anchorOffset];
@@ -3564,7 +3564,7 @@ else
       }
       else
       {
-        return sel.anchorNode.parentNode;
+        return null; // return sel.anchorNode.parentNode;
       }
     }
     return null;
@@ -3593,7 +3593,7 @@ else
     }
 
     if ( typeof sel.isCollapsed != 'undefined' )
-    {
+    {      
       return sel.isCollapsed;
     }
 
