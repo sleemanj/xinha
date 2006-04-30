@@ -834,6 +834,8 @@ HTMLArea.Config.prototype.addToolbarElement = function(id, where, position)
   }
 };
 
+HTMLArea.Config.prototype.removeToolbarElement = HTMLArea.Config.prototype.hideSomeButtons;
+
 /** Helper function: replace all TEXTAREA-s in the document with HTMLArea-s. */
 HTMLArea.replaceAll = function(config)
 {
@@ -3870,7 +3872,18 @@ if ( HTMLArea.is_ie )
   {
     var sel = this._getSelection();
     var range = this._createRange(sel);
-    return range.htmlText;
+    
+    // Need to be careful of control ranges which won't have htmlText
+    if( range.htmlText )
+    {
+      return range.htmlText
+    }
+    else if(range.length >= 1)
+    {
+      return range.item(0).outerHTML;
+    }
+    
+    return '';
   };
 }
 else
