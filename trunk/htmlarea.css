@@ -224,6 +224,8 @@ form { margin: 0px; border: none; }
   font-size:100%;
   font-weight:bold;
   padding: 2px;
+  clear:left;
+  
 }
 
 .htmlarea .panels.left  .panel { border-right:none; border-left:none; }
