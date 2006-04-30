@@ -23,8 +23,11 @@ function TableOperations(editor) {
 
 	// register the toolbar buttons provided by this plugin
 
+  // Remove existing inserttable and toggleborders, we will replace it in our group  
+  cfg.removeToolbarElement(' inserttable toggleborders '); 
+  
+	var toolbar = ["linebreak", "inserttable", "toggleborders"];
     
-	var toolbar = ["linebreak"];
 	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
 		if (!btn) {
