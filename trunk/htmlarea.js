@@ -5158,7 +5158,7 @@ HTMLArea.prototype.fixRelativeLinks = function(html)
 {
   if ( typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors )
   {
-    var stripRe = new RegExp(document.location.href.replace(HTMLArea.RE_Specials, '\\$1') + '(#[^\'" ]*)', 'g');
+    var stripRe = new RegExp(document.location.href.replace(/&/g,'&amp;').replace(HTMLArea.RE_Specials, '\\$1') + '(#[^\'" ]*)', 'g');
     html = html.replace(stripRe, '$1');
   }
 
