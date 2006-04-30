@@ -194,19 +194,6 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 	return html;
 };
 
-//fix obscure case; stripSelfNamedAnchors fails in IE if location.href includes a query string with '&' in it
-HTMLArea.prototype._origFixRelativeLinks = HTMLArea.prototype.fixRelativeLinks;
-HTMLArea.prototype.fixRelativeLinks = function(html)
-{
-  if(typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors)
-  {
-    var stripRe = new RegExp(document.location.href.replace(/&/g,'&amp;').replace(HTMLArea.RE_Specials, '\\$1') + '(#[^\'" ]*)', 'g');
-    html = html.replace(stripRe, '$1');
-  }
-  html = this._origFixRelativeLinks(html);
-  return html;
-};
-
 //override (hack) outwardHtml() to handle onclick suppression
 HTMLArea.prototype._origOutwardHtml = HTMLArea.prototype.outwardHtml;
 HTMLArea.prototype.outwardHtml = function(html) {
