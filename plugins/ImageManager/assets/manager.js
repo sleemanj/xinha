@@ -28,7 +28,7 @@
 	//initialise the form
 	init = function () 
 	{
-		__dlg_init();
+		__dlg_init(null, {width:600,height:460});
 
 		__dlg_translate('ImageManager');
         
@@ -305,16 +305,10 @@
 
 	function newFolder() 
 	{
+     var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
 		var selection = document.getElementById('dirPath');
 		var dir = selection.options[selection.selectedIndex].value;
 
-		Dialog("newFolder.html", function(param) 
-		{
-			if (!param) // user must have pressed Cancel
-				return false;
-			else
-			{
-				var folder = param['f_foldername'];
 				if(folder == thumbdir)
 				{
 					alert(i18n('Invalid folder name, please choose another folder name.'));
@@ -323,8 +317,5 @@
 
 				if (folder && folder != '' && typeof imgManager != 'undefined') 
 					imgManager.newFolder(dir, encodeURI(folder)); 
-			}
-		}, null);
-	}
-
-	addEvent(window, 'load', init);
+   }
+	 addEvent(window, 'load', init);
