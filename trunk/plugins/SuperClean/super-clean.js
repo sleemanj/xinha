@@ -101,6 +101,11 @@ HTMLArea.Config.prototype.SuperClean =
   'tidy_handler': _editor_url + 'plugins/SuperClean/tidy.php',
 
   //avaliable filters (these are built-in filters)
+  // You can either use
+  //    'filter_name' : "Label/Description String"
+  // or 'filter_name' : {label: "Label", checked: true/false, filterFunction: function(html) { ... return html;} }
+  // filterFunction in the second format above is optional.
+  
   'filters': { 'tidy': HTMLArea._lc('General tidy up and correction of some problems.', 'SuperClean'),
                'word_clean': HTMLArea._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),
                'remove_faces': HTMLArea._lc('Remove custom typefaces (font "styles").', 'SuperClean'),
@@ -187,14 +192,22 @@ SuperClean.prototype.onGenerate = function()
   var sc = this;
   //load the filter-functions
   for(var filter in this.editor.config.SuperClean.filters)
-  {
+  {    
     if(!SuperClean.filterFunctions[filter])
     {
-      HTMLArea._getback(_editor_url + 'plugins/SuperClean/filters/'+filter+'.js',
+      var filtDetail = this.editor.config.SuperClean.filters[filter];
+      if(typeof filtDetail.filterFunction != 'undefined')
+      {
+        SuperClean.filterFunctions[filter] = filterFunction;
+      }
+      else
+      {
+        HTMLArea._getback(_editor_url + 'plugins/SuperClean/filters/'+filter+'.js',
                       function(func) {
                         eval('SuperClean.filterFunctions.'+filter+'='+func+';');
                         sc.onGenerate();
                       });
+      }
       return;
     }
   }
