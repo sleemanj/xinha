@@ -278,6 +278,10 @@ HTMLArea.Config = function()
   // the time interval at which undo samples are taken
   this.undoTimeout = 500;	// 1/2 sec.
 
+  // set this to true if you want to explicitly right-justify when 
+  // setting the text direction to right-to-left
+  this.changeJustifyWithDirection = false;
+
   // if true then HTMLArea will retrieve the full HTML, starting with the
   // <HTML> tag.
   this.fullPage = false;
@@ -4357,6 +4361,10 @@ HTMLArea.prototype.execCommand = function(cmdID, UI, param)
     break;
     case "lefttoright":
     case "righttoleft":
+      if (this.config.changeJustifyWithDirection) 
+      {
+        this._doc.execCommand((cmdID == "righttoleft") ? "justifyright" : "justifyleft", UI, param);
+      }
       var dir = (cmdID == "righttoleft") ? "rtl" : "ltr";
       var el = this.getParentElement();
       while ( el && !HTMLArea.isBlockElement(el) )
