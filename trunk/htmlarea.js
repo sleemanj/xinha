@@ -1910,7 +1910,18 @@ HTMLArea.prototype.sizeEditor = function(width, height, includingBars, including
   this._iframe.style.height = edcellheight + 'px';  
   this._framework.rp_cell.style.height = edcellheight + 'px';
   this._framework.lp_cell.style.height = edcellheight + 'px';
- 
+  
+  // (re)size the left and right panels so they are equal the editor height
+  for(var i = 0; i < this._panels.left.panels.length; i++)
+  {
+    this._panels.left.panels[i].style.height = this._iframe.style.height;
+  }
+  
+  for(var i = 0; i < this._panels.right.panels.length; i++)
+  {
+    this._panels.right.panels[i].style.height = this._iframe.style.height;
+  }  
+  
   var edcellwidth = width;
   if ( panel_is_alive('left') )
   {
@@ -1924,19 +1935,7 @@ HTMLArea.prototype.sizeEditor = function(width, height, includingBars, including
 
   this._textArea.style.height = this._iframe.style.height;
   this._textArea.style.width  = this._iframe.style.width;
-  
-  // (re)size the left and right panels so they are equal the editor height
-  for(var i = 0; i < this._panels.left.panels.length; i++)
-  {
-    this._panels.left.panels[i].style.height = this._iframe.style.height;
-  }
-
-  for(var i = 0; i < this._panels.right.panels.length; i++)
-  {
-    this._panels.right.panels[i].style.height = this._iframe.style.height;
-  }  
-  
-  
+     
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
 };
 
