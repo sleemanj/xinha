@@ -40,7 +40,7 @@
     xinha_init    = null;
     xinha_config  = null;
     xinha_plugins = null;
-    
+
     xinha_init = xinha_init ? xinha_init : function() {
       window.onerror = showError;
       document.onerror = showError;
@@ -70,7 +70,7 @@
       for(var x = 0; x < num; x++) {
         var ta = 'myTextarea' + x;
         xinha_editors.push(ta);
-        
+
         var div = document.createElement('div');
         div.className = 'area_holder';
 
@@ -166,16 +166,16 @@
 //   xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 // if you want all the editor objects to use the same set of plugins, OR;
 //   xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config);
-//   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
-//   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
+//   xinha_editors['myTextarea0'].registerPlugins(['Stylist','FullScreen']);
+//   xinha_editors['myTextarea1'].registerPlugins(['CSS','SuperClean']);
 // if you want to use a different set of plugins for one or more of the editors.
       xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 
-// If you want to change the configuration variables of any of the editors,  
+// If you want to change the configuration variables of any of the editors,
 // this is the place to do that, for example you might want to
 // change the width and height of one of the editors, like this...
-//   xinha_editors.myTextArea.config.width  = '640px';
-//   xinha_editors.myTextArea.config.height = '480px';
+//   xinha_editors['myTextarea0'].config.width  = '640px';
+//   xinha_editors['myTextarea0'].config.height = '480px';
 
 // Finally we "start" the editors, this turns the textareas into Xinha editors.
       HTMLArea.startEditors(xinha_editors);
