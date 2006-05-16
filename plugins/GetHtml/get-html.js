@@ -46,15 +46,16 @@ HTMLArea.RegExpCache = [
 /*11*/  new RegExp().compile(/\s+([^=\s]+)(="[^"]+")/g),// lowercase attribute names
 /*12*/  new RegExp().compile(/(\S*\s*=\s*)?contenteditable[^=>]*(=\s*[^>\s\/]*)?/gi),//strip contenteditable
 /*13*/  new RegExp().compile(/((href|src)=")([^\s]*)"/g), //find href and src for stripBaseHref()
-/*14*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area)[^>]*>/g),
-/*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel closing tag
-/*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|html|head|body|script)( [^>]*)?>/g),//blocklevel opening tag
-/*17*/  new RegExp().compile(/<(br|hr|img|embed|param|pre|meta|link|title|area)[^>]*>/g),//singlet tag
+/*14*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g),
+/*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),//blocklevel closing tag
+/*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),//blocklevel opening tag
+/*17*/  new RegExp().compile(/<(td|th|li|option|br|hr|img|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g),//singlet tag or output on 1 line
 /*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//find content NOT inside pre and script tags
 /*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g),//find content inside pre tags
 /*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g),//find content NOT inside comments
 /*21*/  new RegExp().compile(/\S*=""/g), //find empty attributes
-/*22*/  new RegExp().compile(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<[^>]*>/g) //find all tags, including comments and php
+/*22*/  new RegExp().compile(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<\/?\w[^>]*>/g), //find all tags, including comments and php
+/*23*/  new RegExp().compile(/(^|<\/script>)(\s|[^\s])*?(<script[^>]*>|$)/g) //find content NOT inside script tags
 ];
 
 /** 
@@ -123,10 +124,10 @@ HTMLArea.indent = function(s, sindentChar) {
 		return $1 + string;
 	  });return strn;
     });
-    if (s.charAt(0) == "\n") {
-        return s.substring(1, s.length);
-    }
-    s = s.replace(/ *\n/g,'\n');//strip spaces at end of lines
+    //final cleanup
+    s = s.replace(/^\s*/,'').//strip leading whitespace
+        replace(/ +\n/g,'\n').//strip spaces at end of lines
+        replace(/[\r\n]+<\/script>/g,'\n</script>');//strip returns added into scripts
     return s;
 };
 
@@ -142,9 +143,12 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 	    for (j = temp.nextSibling; j; j = j.nextSibling) { 
 	    		temp.appendChild(j.cloneNode(true));
 	    }
-	    html += temp.innerHTML.replace(c[22], function(tag){
-			if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
-			else return editor.cleanHTML(tag)});
+		html += temp.innerHTML.replace(c[23], function(strn) { //skip content inside script tags
+			strn = strn.replace(c[22], function(tag){
+				if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
+				else return editor.cleanHTML(tag)});
+			return strn;
+		});
 
 	} else {
 
@@ -170,11 +174,14 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 		}
 		//pass tags to cleanHTML() one at a time
 		//includes support for htmlRemoveTags config option
-		html += innerhtml.replace(c[22], function(tag){
-			if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
-			else if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
-				return editor.cleanHTML(tag);
-			else return ''});
+		html += innerhtml.replace(c[23], function(strn) { //skip content inside script tags
+			strn = strn.replace(c[22], function(tag){
+				if(/^<[!\?]/.test(tag)) return tag; //skip comments and php tags
+				else if(!(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(tag.replace(/<([^\s>\/]+)/,'$1'))))
+					return editor.cleanHTML(tag);
+				else return ''});
+			return strn;
+		});
 		//IE drops  all </li> tags in a list except the last one
 		if(HTMLArea.is_ie) {
 			html = html.replace(/<li( [^>]*)?>/g,'</li><li$1>').
@@ -182,8 +189,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 				replace(/<\/li>([\s\n]*<\/li>)+/g, '<\/li>');
 		}
 		if(HTMLArea.is_gecko)
-			html = html.replace(/(.*)<br \/>\n$/, '$1'). //strip trailing <br> added by moz
-				replace(/^\n(.*)/, '$1'); //strip leading newline added by moz
+			html = html.replace(/<br \/>\n$/, ''); //strip trailing <br> added by moz
 		if (outputRoot) {
 			html += "</" + root_tag + ">";
 		}
@@ -194,7 +200,7 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 	return html;
 };
 
-//override (hack) outwardHtml() to handle onclick suppression
+//overload outwardHtml() to handle onclick suppression
 HTMLArea.prototype._origOutwardHtml = HTMLArea.prototype.outwardHtml;
 HTMLArea.prototype.outwardHtml = function(html) {
 	html = html.replace("onclick=\"try{if(document.designMode && document.designMode == 'on') return false;}catch(e){} window.open(", "onclick=\"window.open(");
