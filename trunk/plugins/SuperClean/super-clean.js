@@ -112,7 +112,7 @@ HTMLArea.Config.prototype.SuperClean =
                'remove_sizes': HTMLArea._lc('Remove custom font sizes.', 'SuperClean'),
                'remove_colors': HTMLArea._lc('Remove custom text colors.', 'SuperClean'),
                'remove_lang': HTMLArea._lc('Remove lang attributes.', 'SuperClean'),
-               'remove_fancy_quotes': {label:HTMLArea._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false},
+               'remove_fancy_quotes': {label:HTMLArea._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false}
   //additional custom filters (defined in plugins/SuperClean/filters/word.js)
                //'paragraph': 'remove paragraphs'},
                //'word': 'exteded Word-Filter' },
