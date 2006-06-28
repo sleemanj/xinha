@@ -210,6 +210,35 @@ class Files
 		else
 			return sprintf('%01.2f',$size/(1024.0*1024)).' Mb';	
 	}
+
+	/**
+	 * Returns size of a directory, with all file & subdirectory
+	 * sizes added up
+	 * @param string dir path
+	 * @return int
+	 */
+	function dirSize($dirName = '.')
+	{
+		$dir  = dir($dirName);
+		$size = 0;
+
+		while ($file = $dir->read()) {
+			if ($file != '.' && $file != '..')
+			{
+				if (is_dir("$dirName$file"))
+				{
+					$size += Files::dirSize($dirName . '/' . $file);
+				}
+				else
+				{
+					$size += filesize($dirName . '/' . $file);
+				}
+			}
+		}
+		$dir->close();
+		return $size;
+	}
+
 }
 
 ?>
