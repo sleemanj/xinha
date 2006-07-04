@@ -3,8 +3,8 @@
  * ExtendedFileManager, list images, directories, and thumbnails.
  * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
  * Version: Updated on 08-01-2005 by Afru
- * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
+ * Version: Updated on 04-07-2006 by Krzysztof Kotowicz
+ * Package: ExtendedFileManager (EFM 1.1.2)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -746,6 +746,39 @@ class ExtendedFileManager
 			Return Files::createFolder($fullpath);
 		}
 	}
+
+	/**
+	 * Renames files if certain GET variables are set
+	 * @return bool
+	 */
+	function processRenames()
+	{
+		if(!empty($_GET['rename']) && !empty($_GET['renameTo']))
+		{
+			// new file name (without path and extension)
+			$newName = Files::escape(rawurldecode($_GET['renameTo']));
+			$newName = str_replace('.', '', $newName);
+
+			// path to file (from base images directory)
+			$oldName = rawurldecode($_GET['rename']);
+
+			// strip parent dir ("..") to avoid escaping from base directiory
+			$oldName = preg_replace('#\.\.#', '', $oldName);
+
+			// path to old file
+			$oldPath = Files::makeFile($this->getImagesDir(), $oldName);
+
+			$ret = Files::renameFile($oldPath, $newName);
+			if ($ret === true) {
+				// delete old thumbnail
+				Files::delFile($this->getThumbname($oldPath));
+			}
+			return $ret;
+		}
+		
+		return null;
+	}
+
 }
 
 ?>

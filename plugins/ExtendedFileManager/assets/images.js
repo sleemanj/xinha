@@ -2,13 +2,13 @@
  * Functions for the image listing, used by images.php only
  * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
  * Version: Updated on 08-01-2005 by Afru
- * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
+ * Version: Updated on 04-07-2006 by Krzysztof Kotowicz
+ * Package: ExtendedFileManager (EFM 1.1.2)
  * http://www.afrusoft.com/htmlarea
  */
 
 function i18n(str) {
-    return HTMLArea._lc(str, 'ImageManager');
+    return HTMLArea._lc(str, 'ExtendedFileManager');
 }
 
 function changeDir(newDir)
@@ -26,6 +26,24 @@ function newFolder(dir, newDir)
     var selection = window.top.document.getElementById('viewtype');
     var viewtype = selection.options[selection.selectedIndex].value;
     location.href = _backend_url + "__function=images&mode="+mode+"&dir="+dir+"&newDir="+newDir+"&viewtype="+viewtype;
+}
+
+function renameFile(oldPath) {
+    // strip directory and extension
+    var oldName=oldPath.replace(/.*%2F/,'').replace(/\..*$/,'');
+    var newName = prompt(i18n('Please enter new name for this file...'), oldName);
+
+    if(newName == '' || newName == null || newName == oldName)
+    {
+        alert(i18n('Cancelled rename.'));
+        return false;
+    }
+    var mode=window.top.document.getElementById('manager_mode').value;
+    var selection = window.top.document.getElementById('dirPath');
+    var dir = selection.options[selection.selectedIndex].value;
+    selection = window.top.document.getElementById('viewtype');
+    var viewtype = selection.options[selection.selectedIndex].value;
+    location.href = _backend_url + "__function=images&mode="+mode+"&dir="+dir+"&rename="+oldPath+"&renameTo="+newName+"&viewtype="+viewtype;
 }
 
 //update the dir list in the parent window.

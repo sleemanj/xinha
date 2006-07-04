@@ -3,7 +3,7 @@
  * ExtendedFileManager configuration file.
  * Authors: Wei Zhuo, Afru
  * Version: Updated on 08-01-2005 by Afru
- * Version 1.1.1: Updated on 21-06-2006 by Krzysztof Kotowicz <koto@webworkers.pl>
+ * Version 1.1.2: Updated on 04-07-2006 by Krzysztof Kotowicz <koto@webworkers.pl>
  * Package: ExtendedFileManager
  * http://www.afrusoft.com/htmlarea
  */
@@ -183,6 +183,15 @@ $IMConfig['allow_new_dir'] = true;
 */
 $IMConfig['allow_edit_image'] = true;
 
+/*
+  Possible values: true, false
+
+ TRUE -  Allow the user to rename files.
+
+ FALSE - No rename icon will be displayed.
+
+*/
+$IMConfig['allow_rename'] = true;
 
 /*
   Possible values: true, false
