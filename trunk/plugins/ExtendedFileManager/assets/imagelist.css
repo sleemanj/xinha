@@ -1,6 +1,6 @@
 body { margin: 0; padding: 0;}
 .edit   { font-size: 8pt; font-family: small-caption, sans-serif; padding-top: 3px;}
-.edit a { border: none; padding: 3px; text-decoration:none; }
+.edit a { border: none; padding: 0; text-decoration:none; }
 .edit a:hover { background-color: ButtonHighlight; }
 .edit a img { border: none; vertical-align: bottom; }
 .noResult { font-size:large; font-weight:bold; color:#ccc; font-family: Helvetica, sans-serif;  text-align: center;  padding-top: 60px;   }

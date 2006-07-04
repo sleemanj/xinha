@@ -89,7 +89,7 @@ class Files
 	 * @param string $filename the orginal filename
 	 * @return string the escaped safe filename
 	 */
-	function escape($filename) 
+	function escape($filename)
 	{
 		Return preg_replace('/[^\w\._]/', '_', $filename);
 	}
@@ -237,6 +237,31 @@ class Files
 		}
 		$dir->close();
 		return $size;
+	}
+	
+	/**
+	 * Renames file, preserving its directory and extension
+	 * @param string $oldPath path to the old existing file
+	 * @param string new filename (just the name, without path or extension)
+	 * @author Krzysztof Kotowicz <koto@webworkers.pl>
+	 */
+	function renameFile($oldPath, $newName) {
+
+		if(!(file_exists($oldPath) && is_file($oldPath)))
+			return FILE_ERROR_NO_SOURCE;
+
+		$oldFileParts = pathinfo($oldPath);
+
+		$newPath = $oldFileParts['dirname'] . '/'
+				   . $newName
+				   . (!empty($oldFileParts['extension']) ? '.' . $oldFileParts['extension'] : '');
+
+		if (file_exists($newPath))
+			return false;
+
+		if (!rename($oldPath, $newPath))
+			return FILE_ERROR_COPY_FAILED;
+
 	}
 
 }

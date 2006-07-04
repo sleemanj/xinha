@@ -88,5 +88,9 @@
   "You must select some text before making a new link.": "Zaznacz tekst przed dodaniem odnośnika.",
   "Folder is not empty. Please delete all Files and Subfolders inside.": "Folder nie jest pusty. Najpierw usuń wszystkie pliki i podfoldery tego folderu.",
   "Image Size": "Wymiary",
-  "Other" : "Inne..."
+  "Other" : "Inne...",
+  "Rename": "Zmień nazwę",
+  "Please enter new name for this file...": "Podaj nową nazwę dla tego pliku...",
+  "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Nie mogłem zmienić nazwy pliku. Plik o nowej nazwie już istnieje\nlub prak praw zapisu do katalogu.",
+  "Cancelled rename.": "Anulowano zmianę nazwy pliku."
 };

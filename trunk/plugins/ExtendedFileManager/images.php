@@ -3,8 +3,8 @@
  * ExtendedFileManager images.php file. Shows folders and files.
  * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
  * Version: Updated on 08-01-2005 by Afru
- * Version: Updated on 21-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
+ * Version: Updated on 04-07-2006 by Krzysztof Kotowicz
+ * Package: ExtendedFileManager (EFM 1.1.2)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -20,6 +20,9 @@ $manager = new ExtendedFileManager($IMConfig, $insertMode);
 
 //process any file uploads
 $uploadStatus=$manager->processUploads();
+
+//process any file renames
+$renameStatus=$manager->processRenames();
 
 if ($manager->deleteFiles())
     $refreshFile = true;
@@ -104,7 +107,7 @@ function drawDirs_Files($list, &$manager)
     			?>
                 <tr>
         		  <td><img src="<?php print $IMConfig['base_url']; if(is_file('icons/'.$file['ext'].'_small.gif')) echo "icons/".$file['ext']."_small.gif"; else echo $IMConfig['default_listicon']; ?>" alt="" /></td>
-                  <th><a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" <?php if ($insertMode == 'image') { ?> onmouseover="showPreview('<?php echo $file['relative'];?>')" onmouseout="showPreview(window.parent.document.getElementById('f_url').value)" <?php } ?> >
+                  <th><a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" <?php if ($insertMode == 'image') { ?> onmouseover="showPreview('<?php echo $file['relative'];?>')" onmouseout="showPreview(window.parent.document.getElementById('f_url').value)" <?php } ?> >
         			<?php
         			if(strlen($entry)>$maxNameLength) echo substr($entry,0,$maxNameLength)."..."; else echo $entry;
         			?>
@@ -114,6 +117,9 @@ function drawDirs_Files($list, &$manager)
     			  <td nowrap><?php echo date("d.m.y H:i",$file['stat']['mtime']); ?></td>
                   <td class="actions">
                     <a href="<?php print $IMConfig['backend_url']; ?>__function=images&dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>&amp;mode=<?php echo $insertMode;?>&amp;viewtype=<?php echo $afruViewType; ?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash" border="0" /></a>
+        			<?php if ($IMConfig['allow_rename']) { ?>
+                    <a href="#" title="Rename" onclick="renameFile('<?php echo rawurlencode($file['relative']);?>'); return false;"><img src="<?php print $IMConfig['base_url'];?>img/edit_rename.gif" height="15" width="15" alt="Rename" border="0" /></a>
+                    <?php }  ?>
         			<?php if($IMConfig['img_library'] && $IMConfig['allow_edit_image'] && $file['image'][0] > 0) { ?>
                     <a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit" border="0" /></a>
                     <?php }  ?>
@@ -128,7 +134,7 @@ function drawDirs_Files($list, &$manager)
         break;
         case 'thumbview': // thumbview is default
         default:
-    		$maxFileNameLength=10;
+    		$maxFileNameLength=11;
     		$maxFolderNameLength=13;
     		// start of foreach for draw thumbview folders.
     		foreach($list[0] as $path => $dir)
@@ -152,22 +158,24 @@ function drawDirs_Files($list, &$manager)
     		foreach($list[1] as $entry => $file)
     		{
     			$afruimgdimensions=$manager->checkImageSize($file['relative']);
+    			$thisFileNameLength = $maxFileNameLength;
     			?>
                 <div class="thumb_holder" id="holder_<?php echo asc2hex($entry) ?>">
-                  <a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
+                  <a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
                     <img src="<?php print $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" />
                   </a>
                   <div class="edit">
                     <a href="<?php print $IMConfig['backend_url']; ?>__function=images&amp;mode=<?php echo $insertMode;?>&amp;dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>&amp;viewtype=<?php echo $afruViewType; ?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash" /></a>
-
+        			<?php if ($IMConfig['allow_rename']) { ?>
+                    <a href="#" title="Rename" onclick="renameFile('<?php echo rawurlencode($file['relative']);?>'); return false;"><img src="<?php print $IMConfig['base_url'];?>img/edit_rename.gif" height="15" width="15" alt="Rename" /></a>
+                    <?php $thisFileNameLength -= 3; }  ?>
                 	<?php if($IMConfig['img_library'] && $IMConfig['allow_edit_image'] && $file['image'][0] > 0 )
                     { ?>
                     <a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit" /></a>
-            		<?php $maxFileName2=$maxFileNameLength-3;}
-            		else $maxFileName2=$maxFileNameLength; ?>
+            		<?php $thisFileNameLength -= 3; } ?>
 
             		<?php
-            			if(strlen($entry)>$maxFileName2) echo strtolower(substr($entry,0,$maxFileName2))."..."; else echo $entry;
+            			if(strlen($entry) > $thisFileNameLength + 3) echo strtolower(substr($entry,0,$thisFileNameLength))."..."; else echo $entry;
             		?>
                   </div>
                 </div>
@@ -240,11 +248,17 @@ function asc2hex ($temp)
 
 		<?php
 		if(isset($uploadStatus) && !is_numeric($uploadStatus) && !is_bool($uploadStatus))
-		echo 'alert("'.$uploadStatus.'");';
+		echo 'alert(i18n("'.$uploadStatus.'"));';
 		else if(isset($uploadStatus) && $uploadStatus==false)
 		echo 'alert("Unable to upload File. \nEither Maximum file size ['.($insertMode == 'image' ? $IMConfig['max_filesize_kb_image'] : $IMConfig['max_filesize_kb_link'] ).'Kb] exceeded or\nFolder doesn\'t have write permission.");';
 		?>
-		
+
+		<?php
+		if(isset($renameStatus) && !is_numeric($renameStatus) && !is_bool($renameStatus))
+		echo 'alert(i18n("'.$renameStatus.'"));';
+		else if(isset($renameStatus) && $renameStatus===false)
+		echo 'alert(i18n("Unable to rename file. File of the same name already exists or\nfolder doesn\'t have write permission."));';
+		?>
 
 		var topDoc = window.top.document;
 

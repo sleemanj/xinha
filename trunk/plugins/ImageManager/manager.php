@@ -150,7 +150,7 @@
 
 
   <tr>
-    <th align="left">Align:</th>
+    <th align="left">Alignment:</th>
     <td colspan="2">
       <select size="1" id="f_align"  title="Positioning of this image">
         <option value=""                             >Not set</option>
