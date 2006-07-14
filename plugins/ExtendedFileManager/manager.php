@@ -3,8 +3,8 @@
  * The main GUI for the ExtendedFileManager.
  * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
  * Version: Updated on 08-01-2005 by Afru
- * Version: Updated on 21-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
+ * Version: Updated on 04-07-2006 by Krzysztof Kotowicz
+ * Package: ExtendedFileManager (EFM 1.1.2)
  * http://www.afrusoft.com/htmlarea
  */
 
