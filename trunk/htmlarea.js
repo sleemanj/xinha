@@ -2226,18 +2226,22 @@ HTMLArea.prototype.initIframe = function()
   this.setEditorEvents();
 };
   
-/** Delay a function until the document is ready for operations.  See ticket:547 */
-HTMLArea.prototype.whenDocReady = function(doFunction)
+/**
+ * Delay a function until the document is ready for operations.
+ * See ticket:547
+ * @param {object} F (Function) The function to call once the document is ready
+ * @public
+ */
+HTMLArea.prototype.whenDocReady = function(F)
 {
-  var editor = this;  
-  
-  if ( !this._doc.body )
+  var E = this;
+  if ( this._doc && this._doc.body )
   {
-    setTimeout(function() { editor.whenDocReady(doFunction); }, 50);
+    F();
   }
   else
   {
-    doFunction();
+    setTimeout(function() { E.whenDocReady(F); }, 50);
   }
 };
 
