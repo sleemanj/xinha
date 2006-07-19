@@ -1419,25 +1419,19 @@ HTMLArea.prototype.generate = function ()
 
   if ( typeof Dialog == 'undefined' )
   {
-    // why can't we use the following line instead ?
-//    HTMLArea._loadback(_editor_url + 'dialog.js', this.generate );
-    HTMLArea._loadback(_editor_url + 'dialog.js', function() { editor.generate(); } );
+    HTMLArea._loadback(_editor_url + 'dialog.js', this.generate, this );
     return false;
   }
 
   if ( typeof HTMLArea.Dialog == 'undefined' )
   {
-    // why can't we use the following line instead ?
-//    HTMLArea._loadback(_editor_url + 'inline-dialog.js', this.generate );
-    HTMLArea._loadback(_editor_url + 'inline-dialog.js', function() { editor.generate(); } );
+    HTMLArea._loadback(_editor_url + 'inline-dialog.js', this.generate, this );
     return false;
   }
 
   if ( typeof PopupWin == 'undefined' )
   {
-    // why can't we use the following line instead ?
-//    HTMLArea._loadback(_editor_url + 'ipopupwin.js', this.generate );
-    HTMLArea._loadback(_editor_url + 'popupwin.js', function() { editor.generate(); } );
+    HTMLArea._loadback(_editor_url + 'popupwin.js', this.generate, this );
     return false;
   }
 
@@ -2479,31 +2473,7 @@ HTMLArea.loadPlugin = function(pluginName, callback)
   var plugin = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
   var plugin_file = dir + "/" + plugin;
 
-  if ( callback )
-  {
-    HTMLArea._loadback(plugin_file, function() { callback(pluginName); });
-  }
-  else
-  {
-    /**
-    * @todo : try to avoid the use of document.write, it's evil
-    * @todo : better yet, try to update HTMLArea._loadback to let it include
-    *         the file without a callback function
-    *  try
-    *  {
-    *    var head = document.getElementsByTagName('head')[0];
-    *    var script = document.createElement('script');
-    *    script.type = "text/javascript";
-    *    script.src = plugin_file;
-    *    head.appendChild(script);
-    *  }
-    *  catch(ex)
-    *  {
-    *    document.write('<script type="text/javascript" src="' + plugin_file + '"></script>');
-    *  }
-    */
-    document.write('<script type="text/javascript" src="' + plugin_file + '"></script>');
-  }
+  HTMLArea._loadback(plugin_file, callback ? function() { callback(pluginName); } : null);
   return false;
 };
 
@@ -6470,24 +6440,31 @@ HTMLArea.hasDisplayedChildren = function(el)
   return false;
 };
 
-
-HTMLArea._loadback = function(src, callback)
+/**
+ * Load a javascript file by inserting it in the HEAD tag and eventually call a function when loaded
+ * @param {string} U (Url)      Source url of the file to load
+ * @param {object} C {Callback} Callback function to launch once ready (optional)
+ * @param {object} O (scOpe)    Application scope for the callback function (optional)
+ * @param {object} B (Bonus}    Arbitrary object send as a param to the callback function (optional)
+ * @public
+ */
+HTMLArea._loadback = function(U, C, O, B)
 {
-  var head = document.getElementsByTagName("head")[0];
-  var evt = HTMLArea.is_ie ? "onreadystatechange" : "onload";
-
-  var script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src = src;
-  script[evt] = function()
+  var S = document.createElement("script");
+  S.type = "text/javascript";
+  S.src = U;
+  if ( C )
   {
-    if ( HTMLArea.is_ie && ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) )
+    S[HTMLArea.is_ie ? "onreadystatechange" : "onload"] = function()
     {
-      return;
-    }
-    callback();
-  };
-  head.appendChild(script);
+      if ( HTMLArea.is_ie && ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) )
+      {
+        return;
+      }
+      C.call(O ? O : this, B);
+    };
+  }
+  document.getElementsByTagName("head")[0].appendChild(S);
 };
 
 HTMLArea.collectionToArray = function(collection)
