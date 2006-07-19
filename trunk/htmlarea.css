@@ -49,6 +49,7 @@
 .htmlarea .toolbar .buttonDisabled img {
   filter: gray() alpha(opacity = 25);
   -moz-opacity: 0.25;
+  opacity: 0.25;
 }
 
 .htmlarea .toolbar .separator {
