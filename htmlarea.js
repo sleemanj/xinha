@@ -6729,16 +6729,11 @@ HTMLArea.free = function(O, P)
     // is the try...catch really required here ?
     try
     {
-      // if the property is innerHTML, null can't be used because it is interpreted as null.toString()
-      // we need to blank it instead
-      if ( P == 'innerHTML' )
-      {
-        O[P] = '';
-      }
-      else
+      // if it is the innerHTML property, just do nothing
+      if ( P !== 'innerHTML' )
       {
         // need to unhide TD cells before delete them or they will leak in IE
-        if ( P && O[P] && O[P].tagName && O[P].tagName.toLowerCase() == 'td' )
+        if ( O[P] && O[P].tagName && O[P].tagName.toLowerCase() == 'td' )
         {
           O[P].style.display = '';
         }
