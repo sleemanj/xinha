@@ -6450,18 +6450,20 @@ HTMLArea.hasDisplayedChildren = function(el)
  */
 HTMLArea._loadback = function(U, C, O, B)
 {
+  var T = HTMLArea.is_ie ? "onreadystatechange" : "onload";
   var S = document.createElement("script");
   S.type = "text/javascript";
   S.src = U;
   if ( C )
   {
-    S[HTMLArea.is_ie ? "onreadystatechange" : "onload"] = function()
+    S[T] = function()
     {
       if ( HTMLArea.is_ie && ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) )
       {
         return;
       }
       C.call(O ? O : this, B);
+      S[T] = null;
     };
   }
   document.getElementsByTagName("head")[0].appendChild(S);
