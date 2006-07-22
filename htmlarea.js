@@ -1714,10 +1714,6 @@ HTMLArea.prototype.initSize = function()
   this.sizeEditor(width, height, this.config.sizeIncludesBars, this.config.sizeIncludesPanels);
 
   // why can't we use the following line instead ?
-//  HTMLArea.addDom0Event(window, 'resize', this.sizeEditor);
-  HTMLArea.addDom0Event(window, 'resize', function(e) { editor.sizeEditor(); });
-
-  // why can't we use the following line instead ?
 //  this.notifyOn('panel_change',this.sizeEditor);
   this.notifyOn('panel_change',function() { editor.sizeEditor(); });
 };
@@ -2382,6 +2378,8 @@ HTMLArea.prototype.setEditorEvents = function()
       {
         editor._onGenerate();
       }
+
+      HTMLArea.addDom0Event(window, 'resize', function(e) { editor.sizeEditor(); });
       editor.removeLoadingMessage();
     }
   );
