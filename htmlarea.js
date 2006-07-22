@@ -1148,7 +1148,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         state	: setButtonStatus, // for changing state
         context : btn[4] || null // enabled in a certain context?
       };
-      
+      HTMLArea.freeLater(el);
       HTMLArea.freeLater(obj);
 
       tb_objects[txt] = obj;
@@ -6743,6 +6743,7 @@ HTMLArea.collectGarbageForIE = function()
       alert("What is " + x + ' ' + HTMLArea.toFree[x].o);
     }
     HTMLArea.free(HTMLArea.toFree[x].o, HTMLArea.toFree[x].p);
+    HTMLArea.toFree[x].o = null;
   }
 };
 
