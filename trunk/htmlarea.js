@@ -199,11 +199,11 @@ function HTMLArea(textarea, config)
       panels[i].div = panels[i].container; // legacy
       panels[i].container.className = 'panels ' + i;
       HTMLArea.freeLater(panels[i], 'container');
-      HTMLArea.freeLater(panels[i], 'div');      
+      HTMLArea.freeLater(panels[i], 'div');
     }
     // finally store the variable
     this._panels = panels;
-    
+
     HTMLArea.freeLater(this, '_textArea');
   }
 }
@@ -6711,21 +6711,42 @@ HTMLArea.freeLater = function(obj,prop)
   HTMLArea.toFree.push({o:obj,p:prop});
 };
 
-HTMLArea.free = function(obj, prop)
+/**
+ * Release memory properties from object
+ * @param {object} O (Object)   The object to free memory
+ * @param (string} P (Property) The property to release (optional)
+ * @private
+ */
+HTMLArea.free = function(O, P)
 {
-  if ( obj && !prop )
+  if ( O && !P )
   {
-    for ( var p in obj )
+    for ( var p in O )
     {
-      HTMLArea.free(obj, p);
+      HTMLArea.free(O, p);
     }
   }
-  else if ( obj )
+  else if ( O )
   {
+    // is the try...catch really required here ?
     try
     {
-      obj[prop] = null;
-    } catch(ex) {}
+      // if the property is innerHTML, null can't be used because it is interpreted as null.toString()
+      // we need to blank it instead
+      if ( P == 'innerHTML' )
+      {
+        O[P] = '';
+      }
+      else
+      {
+        // need to unhide TD cells before delete them or they will leak in IE
+        if ( P && O[P] && O[P].tagName && O[P].tagName.toLowerCase() == 'td' )
+        {
+          O[P].style.display = '';
+        }
+        O[P] = null;
+      }
+    } catch(x) {}
   }
 };
 
