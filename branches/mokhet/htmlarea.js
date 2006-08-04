@@ -72,7 +72,10 @@ var __htmlareas = [];
 
 // browser identification
 HTMLArea.agt       = navigator.userAgent.toLowerCase();
-HTMLArea.is_ie	   = ((HTMLArea.agt.indexOf("msie") != -1) && (HTMLArea.agt.indexOf("opera") == -1));
+//HTMLArea.is_ie	   = ((HTMLArea.agt.indexOf("msie") != -1) && (HTMLArea.agt.indexOf("opera") == -1));
+// it is better to use a conditional comment to detect IE instead of relying on the useragent which can not be trusted
+HTMLArea.is_ie = false;
+/*@cc_on HTMLArea.is_ie = true; @*/
 HTMLArea.is_opera  = (HTMLArea.agt.indexOf("opera") != -1);
 HTMLArea.is_mac	   = (HTMLArea.agt.indexOf("mac") != -1);
 HTMLArea.is_mac_ie = (HTMLArea.is_ie && HTMLArea.is_mac);
@@ -198,13 +201,13 @@ function HTMLArea(textarea, config)
       if(!panels[i].container) { continue; } // prevent iterating over wrong type
       panels[i].div = panels[i].container; // legacy
       panels[i].container.className = 'panels ' + i;
-      HTMLArea.freeLater(panels[i], 'container');
-      HTMLArea.freeLater(panels[i], 'div');
+//      HTMLArea.freeLater(panels[i], 'container');
+//      HTMLArea.freeLater(panels[i], 'div');
     }
     // finally store the variable
     this._panels = panels;
 
-    HTMLArea.freeLater(this, '_textArea');
+//    HTMLArea.freeLater(this, '_textArea');
   }
 }
 
@@ -870,8 +873,8 @@ HTMLArea.prototype._createToolbar = function ()
   toolbar.className = "toolbar";
   toolbar.unselectable = "1";
 
-  HTMLArea.freeLater(this, '_toolBar');
-  HTMLArea.freeLater(this, '_toolbar');
+//  HTMLArea.freeLater(this, '_toolBar');
+//  HTMLArea.freeLater(this, '_toolbar');
   
   var tb_row = null;
   var tb_objects = {};
@@ -1060,7 +1063,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         context : context
       };
       
-      HTMLArea.freeLater(obj);
+//      HTMLArea.freeLater(obj);
       
       tb_objects[txt] = obj;
       
@@ -1119,7 +1122,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
           state	: setButtonStatus // for changing state
         };
       
-        HTMLArea.freeLater(obj);
+//        HTMLArea.freeLater(obj);
       
         tb_objects[txt] = obj;
       break;
@@ -1148,8 +1151,8 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         state	: setButtonStatus, // for changing state
         context : btn[4] || null // enabled in a certain context?
       };
-      HTMLArea.freeLater(el);
-      HTMLArea.freeLater(obj);
+//      HTMLArea.freeLater(el);
+//      HTMLArea.freeLater(obj);
 
       tb_objects[txt] = obj;
 
@@ -1269,7 +1272,7 @@ HTMLArea.makeBtnImg = function(imgDef, doc)
   if ( !doc._htmlareaImgCache )
   {
     doc._htmlareaImgCache = {};
-    HTMLArea.freeLater(doc._htmlareaImgCache);
+//    HTMLArea.freeLater(doc._htmlareaImgCache);
   }
 
   var i_contain = null;
@@ -1339,7 +1342,7 @@ HTMLArea.prototype._createStatusBar = function()
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
   this._statusBar = statusbar;
-  HTMLArea.freeLater(this, '_statusBar');
+//  HTMLArea.freeLater(this, '_statusBar');
   
   // statusbar.appendChild(document.createTextNode(HTMLArea._lc("Path") + ": "));
   // creates a holder for the path view
@@ -1347,14 +1350,14 @@ HTMLArea.prototype._createStatusBar = function()
   div.className = "statusBarTree";
   div.innerHTML = HTMLArea._lc("Path") + ": ";
   this._statusBarTree = div;
-  HTMLArea.freeLater(this, '_statusBarTree');
+//  HTMLArea.freeLater(this, '_statusBarTree');
   this._statusBar.appendChild(div);
 
   div = document.createElement("span");
   div.innerHTML = HTMLArea._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
   div.style.display = "none";
   this._statusBarTextMode = div;
-  HTMLArea.freeLater(this, '_statusBarTextMode');
+//  HTMLArea.freeLater(this, '_statusBarTextMode');
   this._statusBar.appendChild(div);
 
   if ( !this.config.statusBar )
@@ -1472,7 +1475,7 @@ HTMLArea.prototype.generate = function ()
     'sb_cell': document.createElement('td')  // status bar
 
   };
-  HTMLArea.freeLater(this._framework);
+//  HTMLArea.freeLater(this._framework);
   
   var fw = this._framework;
   fw.table.border = "0";
@@ -1519,7 +1522,7 @@ HTMLArea.prototype.generate = function ()
 
   var htmlarea = this._framework.table;
   this._htmlArea = htmlarea;
-  HTMLArea.freeLater(this, '_htmlArea');
+//  HTMLArea.freeLater(this, '_htmlArea');
   htmlarea.className = "htmlarea";
 
     // create the toolbar and put in the area
@@ -1531,7 +1534,7 @@ HTMLArea.prototype.generate = function ()
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
   this._iframe.className = 'xinha_iframe';
-  HTMLArea.freeLater(this, '_iframe');
+//  HTMLArea.freeLater(this, '_iframe');
   
     // creates & appends the status bar
   var statusbar = this._createStatusBar();
@@ -2078,7 +2081,7 @@ HTMLArea.prototype.initIframe = function()
     setTimeout(function() { editor.initIframe(); }, 50);
   }
   
-  HTMLArea.freeLater(this, '_doc');
+//  HTMLArea.freeLater(this, '_doc');
   
   doc.open();
   var html = '';
@@ -2890,7 +2893,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
     ancestors = this.getAllAncestors();
     if ( this.config.statusBar && !noStatus )
     {
-      this.statusBarDispose();
+      this.statusBarDispose(true);
       for ( var i = ancestors.length; --i >= 0; )
       {
         var el = ancestors[i];
@@ -3155,21 +3158,6 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
 
 };
 
-/**
- * Dispose the elements in the statusbar
- * @private
- */
-HTMLArea.prototype.statusBarDispose = function()
-{
-  for ( var i = 0, m = this._statusElements.length; i < m; i++ )
-  {
-    var a = this._statusElements[i];
-    HTMLArea.Events.remove(a, 'click', HTMLArea.onclick_status_updateToolbar);
-    HTMLArea.Events.remove(a, 'contextmenu', HTMLArea.oncontextmenu_status);
-  }
-  this._statusElements = [];
-  this._statusBarTree.innerHTML = HTMLArea._lc("Path") + ": "; // clear
-};
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
  */
@@ -5245,230 +5233,18 @@ else
   };
 }
 
-// event handling
-
-/** Event Flushing
- *  To try and work around memory leaks in the rather broken
- *  garbage collector in IE, HTMLArea.flushEvents can be called
- *  onunload, it will remove any event listeners (that were added
- *  through _addEvent(s)) and clear any DOM-0 events.
- */
-HTMLArea._eventFlushers = [];
-HTMLArea.flushEvents = function()
-{
-  var x = 0;
-  // @todo : check if Array.prototype.pop exists for every supported browsers
-  var e = HTMLArea._eventFlushers.pop();
-  while ( e )
-  {
-    try
-    {
-      if ( e.length == 3 )
-      {
-        HTMLArea._removeEvent(e[0], e[1], e[2]);
-        x++;
-      }
-      else if ( e.length == 2 )
-      {
-        e[0]['on' + e[1]] = null;
-        e[0]._xinha_dom0Events[e[1]] = null;
-        x++;
-      }
-    }
-    catch(ex)
-    {
-      // Do Nothing
-    }
-    e = HTMLArea._eventFlushers.pop();
-  }
-  
-  /* 
-    // This code is very agressive, and incredibly slow in IE, so I've disabled it.
-    
-    if(document.all)
-    {
-      for(var i = 0; i < document.all.length; i++)
-      {
-        for(var j in document.all[i])
-        {
-          if(/^on/.test(j) && typeof document.all[i][j] == 'function')
-          {
-            document.all[i][j] = null;
-            x++;
-          }
-        }
-      }
-    }
-  */
-  
-  // alert('Flushed ' + x + ' events.');
-};
-
-if ( document.addEventListener )
-{
-  HTMLArea._addEvent = function(el, evname, func)
-  {
-    el.addEventListener(evname, func, true);
-    HTMLArea._eventFlushers.push([el, evname, func]);
-  };
-  HTMLArea._removeEvent = function(el, evname, func)
-  {
-    el.removeEventListener(evname, func, true);
-  };
-  HTMLArea._stopEvent = function(ev)
-  {
-    ev.preventDefault();
-    ev.stopPropagation();
-  };
-}
-else if ( document.attachEvent )
-{
-  HTMLArea._addEvent = function(el, evname, func)
-  {
-    el.attachEvent("on" + evname, func);
-    HTMLArea._eventFlushers.push([el, evname, func]);
-  };
-  HTMLArea._removeEvent = function(el, evname, func)
-  {
-    el.detachEvent("on" + evname, func);
-  };
-  HTMLArea._stopEvent = function(ev)
-  {
-    try
-    {
-      ev.cancelBubble = true;
-      ev.returnValue = false;
-    }
-    catch (ex)
-    {
-      // Perhaps we could try here to stop the window.event
-      // window.event.cancelBubble = true;
-      // window.event.returnValue = false;
-    }
-  };
-}
-else
-{
-  HTMLArea._addEvent = function(el, evname, func)
-  {
-    alert('_addEvent is not supported');
-  };
-  HTMLArea._removeEvent = function(el, evname, func)
-  {
-    alert('_removeEvent is not supported');
-  };
-  HTMLArea._stopEvent = function(ev)
-  {
-    alert('_stopEvent is not supported');
-  };
-}
-
-HTMLArea._addEvents = function(el, evs, func)
-{
-  for ( var i = evs.length; --i >= 0; )
-  {
-    HTMLArea._addEvent(el, evs[i], func);
-  }
-};
-
-HTMLArea._removeEvents = function(el, evs, func)
-{
-  for ( var i = evs.length; --i >= 0; )
-  {
-    HTMLArea._removeEvent(el, evs[i], func);
-  }
-};
-
-/**
- * Adds a standard "DOM-0" event listener to an element.
- * The DOM-0 events are those applied directly as attributes to
- * an element - eg element.onclick = stuff;
- *
- * By using this function instead of simply overwriting any existing
- * DOM-0 event by the same name on the element it will trigger as well
- * as the existing ones.  Handlers are triggered one after the other
- * in the order they are added.
- *
- * Remember to return true/false from your handler, this will determine
- * whether subsequent handlers will be triggered (ie that the event will
- * continue or be canceled).
- *
- */
-
-HTMLArea.addDom0Event = function(el, ev, fn)
-{
-  HTMLArea._prepareForDom0Events(el, ev);
-  el._xinha_dom0Events[ev].unshift(fn);
-};
-
-
-/**
- * See addDom0Event, the difference is that handlers registered using
- * prependDom0Event will be triggered before existing DOM-0 events of the
- * same name on the same element.
- */
-
-HTMLArea.prependDom0Event = function(el, ev, fn)
-{
-  HTMLArea._prepareForDom0Events(el, ev);
-  el._xinha_dom0Events[ev].push(fn);
-};
-
-/**
- * Prepares an element to receive more than one DOM-0 event handler
- * when handlers are added via addDom0Event and prependDom0Event.
- */
-HTMLArea._prepareForDom0Events = function(el, ev)
-{
-  // Create a structure to hold our lists of event handlers
-  if ( typeof el._xinha_dom0Events == 'undefined' )
-  {
-    el._xinha_dom0Events = {};
-    HTMLArea.freeLater(el, '_xinha_dom0Events');
-  }
-
-  // Create a list of handlers for this event type
-  if ( typeof el._xinha_dom0Events[ev] == 'undefined' )
-  {
-    el._xinha_dom0Events[ev] = [ ];
-    if ( typeof el['on'+ev] == 'function' )
-    {
-      el._xinha_dom0Events[ev].push(el['on'+ev]);
-    }
-
-    // Make the actual event handler, which runs through
-    // each of the handlers in the list and executes them
-    // in the correct context.
-    el['on'+ev] = function(event)
-    {
-      var a = el._xinha_dom0Events[ev];
-      // call previous submit methods if they were there.
-      var allOK = true;
-      for ( var i = a.length; --i >= 0; )
-      {
-        // We want the handler to be a member of the form, not the array, so that "this" will work correctly
-        el._xinha_tempEventHandler = a[i];
-        if ( el._xinha_tempEventHandler(event) === false )
-        {
-          el._xinha_tempEventHandler = null;
-          allOK = false;
-          break;
-        }
-        el._xinha_tempEventHandler = null;
-      }
-      return allOK;
-    };
-
-    HTMLArea._eventFlushers.push([el, ev]);
-  }
-};
+/*
+---------------------------------------------------------------------------
+  NOTIFIERS
+---------------------------------------------------------------------------
+*/
 
 HTMLArea.prototype.notifyOn = function(ev, fn)
 {
   if ( typeof this._notifyListeners[ev] == 'undefined' )
   {
     this._notifyListeners[ev] = [];
-    HTMLArea.freeLater(this, '_notifyListeners');
+//    HTMLArea.freeLater(this, '_notifyListeners');
   }
   this._notifyListeners[ev].push(fn);
 };
@@ -5484,6 +5260,11 @@ HTMLArea.prototype.notifyOf = function(ev, args)
   }
 };
 
+/*
+---------------------------------------------------------------------------
+  CLASSNAME MANIPULATION
+---------------------------------------------------------------------------
+*/
 HTMLArea._removeClass = function(el, className)
 {
   if ( ! ( el && el.className ) )
@@ -5525,6 +5306,12 @@ HTMLArea._hasClass = function(el, className)
   }
   return false;
 };
+
+/*
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+*/
 
 HTMLArea._blockTags = " body form textarea fieldset ul ol dl li div " +
 "p h1 h2 h3 h4 h5 h6 quote pre table thead " +
@@ -6616,7 +6403,7 @@ HTMLArea.prototype.removeLoadingMessage = function()
 HTMLArea.toFree = [];
 HTMLArea.freeLater = function(obj,prop)
 {
-  HTMLArea.toFree.push({o:obj,p:prop});
+//  HTMLArea.toFree.push({o:obj,p:prop});
 };
 
 /**
@@ -6627,6 +6414,7 @@ HTMLArea.freeLater = function(obj,prop)
  */
 HTMLArea.free = function(O, P)
 {
+/*
   if ( O && !P )
   {
     for ( var p in O )
@@ -6651,24 +6439,7 @@ HTMLArea.free = function(O, P)
       }
     } catch(x) {}
   }
-};
-
-/** IE's Garbage Collector is broken very badly.  We will do our best to 
- *   do it's job for it, but we can't be perfect.
- */
-
-HTMLArea.collectGarbageForIE = function() 
-{  
-  HTMLArea.flushEvents();   
-  for ( var x = 0; x < HTMLArea.toFree.length; x++ )
-  {
-    if ( !HTMLArea.toFree[x].o )
-    {
-      alert("What is " + x + ' ' + HTMLArea.toFree[x].o);
-    }
-    HTMLArea.free(HTMLArea.toFree[x].o, HTMLArea.toFree[x].p);
-    HTMLArea.toFree[x].o = null;
-  }
+*/
 };
 
 /*
@@ -7006,7 +6777,7 @@ HTMLArea.Events =
   {
     var L, i, m;
 
-    // remove our DOM0 handlers
+    // remove remaining DOM0 handlers
     for ( i = 0, m = HTMLArea.Events.DOM0Handlers.length; i < m; i++ )
     {
       L = HTMLArea.Events.DOM0Handlers[i];
@@ -7028,17 +6799,6 @@ HTMLArea.Events =
         }
       }
     }
-
-    for ( i = __htmlareas.length; i--; )
-    {
-      // this should be in every Xinha instance disposer method instead of here
-      __htmlareas[i].statusBarDispose();
-      // we should instead do this
-      //__htmlareas[i].dispose();
-    }
-
-    // garbage IE
-    HTMLArea.collectGarbageForIE();
   }
 
 };
@@ -7285,6 +7045,170 @@ HTMLArea.onunload_backforward = function(evt, arbitraryObject)
 };
 
 
+/*
+---------------------------------------------------------------------------
+  HELPERS METHODS
+---------------------------------------------------------------------------
+*/
+
+/**
+ * Get the Xinha reference from the id, the name or the HTMLElement reference of the textarea
+ * @param {string|HTMLElement} ref The id, the name or the HTMLElement reference of the textarea
+ * @return {object} Return the Xinha reference or null if none could be found
+ * @public
+ */
+HTMLArea.getEditor = function(ref)
+{
+  for ( var i = __htmlareas.length; i--; )
+  {
+    var editor = __htmlareas[i];
+    if ( editor && ( editor._textArea.id == ref || editor._textArea.name == ref || editor._textArea == ref ) )
+    {
+      return editor;
+    }
+  }
+  return null;
+};
+
+/*
+---------------------------------------------------------------------------
+  DISPOSERS
+---------------------------------------------------------------------------
+*/
+
+/**
+ * Specific disposer, similar to _onGenerate.
+ * But instead of testing if the function exist before calling it, 
+ * we create an empty one and then the user can surcharge it
+ * @public
+ */
+HTMLArea.prototype._onDispose = function(){};
+
+/**
+ * Dispose the editor UI and bring back the textarea
+ * @public
+ */
+HTMLArea.prototype.dispose = function()
+{
+  var i, parentNode, Element;
+
+  // specific disposer set by the user
+  this._onDispose();
+  
+  // call the plugins disposer
+  for ( i in this.plugins )
+  {
+    var plugin = this.plugins[i].instance;
+    if ( plugin && typeof plugin.dispose == "function" )
+    {
+      plugin.dispose();
+    }
+  }
+  
+  // remove the events
+  HTMLArea.Events.remove(this._doc, 'mousedown', this.activateEditor);
+  HTMLArea.Events.remove(this._doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"], HTMLArea.keymousedrag_doc);
+  HTMLArea.Events.remove(window, 'resize', this.sizeEditor);
+  if ( this._textArea.form )
+  {
+    HTMLArea.Events.remove(this._textArea.form, 'submit', HTMLArea.onsubmit_form);
+    HTMLArea.Events.remove(this._textArea.form, 'reset', HTMLArea.onreset_form);
+  }
+  HTMLArea.Events.remove(window, 'unload', HTMLArea.onunload_backforward);
+  HTMLArea.Events.remove(this._iframe, 'load', HTMLArea.onload_iframe);
+
+  // dispose the statusbar
+  this.statusBarDispose(false);
+  
+  // remove the panels elements
+  for ( i in this._panels )
+  {
+    // since they are TD cells, we must show them or they will leak in IE
+    // but i cant remember where i have found that, so until i find more information, this part is commented out
+/*
+    if ( HTMLArea.is_ie )
+    {
+      this._panels[i].container.style.display = '';
+    }
+*/
+    this._panels[i].container = null;
+    this._panels[i].div = null;
+    this._panels[i] = null;
+  }
+
+  // remove the iframe
+  this._iframe.parentNode.removeChild(this._iframe);
+  this._iframe = null;
+
+  // reinsert the textarea in it's original parent
+  HTMLArea.removeFromParent(this._textArea);
+  this._framework.table.parentNode.insertBefore(this._textArea, this._framework.table);
+
+  // remove the framework
+/*
+  for ( i in this._framework )
+  {
+    Element = this._framework[i];
+    parentNode = Element ? Element.parentNode : null;
+    if ( Element && parentNode )
+    {
+      parentNode.removeChild(Element);
+    }
+    this._framework[i] = null;
+  }
+*/
+  this._framework.table.parentNode.removeChild(this._framework.table);
+  this._framework = null;
+
+  // remove the reference to the document
+  this._mdoc = null;
+
+  // remove the reference to the HTMLElement textarea
+  // if the original size failed, we fall off to 100px
+  try { this._textArea.style.width = this._initial_ta_size.w; } catch(x) { this._textArea.style.width = '100px'; }
+  try { this._textArea.style.height = this._initial_ta_size.h; } catch(x) { this._textArea.style.height = '100px'; }
+  this._textArea.style.display = '';
+
+  this._textArea = null;
+
+  // remove reference in the global array
+  __htmlareas[this.__htmlarea_id_num] = null;
+};
+
+/**
+ * Dispose the elements in the statusbar
+ * @param {boolean} showPath true if "Path: " must be show, false if the content must be emptied
+ * @private
+ */
+HTMLArea.prototype.statusBarDispose = function(showPath)
+{
+  for ( var i = this._statusElements.length; i--; )
+  {
+    var a = this._statusElements[i];
+    HTMLArea.Events.remove(a, 'click', HTMLArea.onclick_status_updateToolbar);
+    HTMLArea.Events.remove(a, 'contextmenu', HTMLArea.oncontextmenu_status);
+  }
+  this._statusElements = [];
+  this._statusBarTree.innerHTML = showPath ? HTMLArea._lc("Path") + ": " : ''; // clear
+};
+
+/**
+ * Generic disposer called onunload.
+ * @private
+ */
+HTMLArea.dispose = function()
+{
+  // Remove every Xinha instances
+  for ( var i = __htmlareas.length; i--; )
+  {
+    if ( __htmlareas[i] )
+    {
+      __htmlareas[i].dispose();
+    }
+  }
+  // call the event flusher
+  HTMLArea.Events.flusher();
+};
 
 /*
 ---------------------------------------------------------------------------
@@ -7292,4 +7216,4 @@ HTMLArea.onunload_backforward = function(evt, arbitraryObject)
 ---------------------------------------------------------------------------
 */
 HTMLArea.init();
-HTMLArea.Events.add(window,'unload',HTMLArea.Events.flusher);
+HTMLArea.Events.add(window,'unload',HTMLArea.dispose);
