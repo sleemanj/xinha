@@ -1076,7 +1076,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         op.value = options[i];
         el.appendChild(op);
       }
-      HTMLArea._addEvent(el, "change", function () { editor._comboSelected(el, txt); } );
+      HTMLArea.Events.add(el, 'change', HTMLArea.onchange_toolbar_select, editor, [el,txt]);
     }
     return el;
   } // END of function: createSelect
@@ -1157,56 +1157,12 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
       el.ondrag = function() { return false; };
 
       // handlers to emulate nice flat toolbar buttons
-      HTMLArea._addEvent(
-        el,
-        "mouseout",
-        function(ev)
-        {
-          if ( obj.enabled )
-          {
-            //HTMLArea._removeClass(el, "buttonHover");
-            HTMLArea._removeClass(el, "buttonActive");
-            if ( obj.active )
-            {
-              HTMLArea._addClass(el, "buttonPressed");
-            }
-          }
-        }
-      );
+      HTMLArea.Events.add(el, 'mouseout', HTMLArea.onmouseout_toolbar_button, el, obj);
 
-      HTMLArea._addEvent(
-        el,
-        "mousedown",
-        function(ev)
-        {
-          if ( obj.enabled )
-          {
-            HTMLArea._addClass(el, "buttonActive");
-            HTMLArea._removeClass(el, "buttonPressed");
-            HTMLArea._stopEvent(HTMLArea.is_ie ? window.event : ev);
-          }
-        }
-      );
+      HTMLArea.Events.add(el, 'mousedown', HTMLArea.onmousedown_toolbar_button, el, obj);
 
       // when clicked, do the following:
-      HTMLArea._addEvent(
-        el,
-        "click",
-        function(ev)
-        {
-          if ( obj.enabled )
-          {
-            HTMLArea._removeClass(el, "buttonActive");
-            //HTMLArea._removeClass(el, "buttonHover");
-            if ( HTMLArea.is_gecko )
-            {
-              editor.activateEditor();
-            }
-            obj.cmd(editor, obj.name, obj);
-            HTMLArea._stopEvent(HTMLArea.is_ie ? window.event : ev);
-          }
-        }
-      );
+      HTMLArea.Events.add(el, 'click', HTMLArea.onclick_toolbar_button, editor, [el, obj]);
 
       var i_contain = HTMLArea.makeBtnImg(btn[1]);
       var img = i_contain.firstChild;
@@ -1595,42 +1551,17 @@ HTMLArea.prototype.generate = function ()
   if ( textarea.form )
   {
     // onsubmit get the HTMLArea content and update original textarea.
-    HTMLArea.prependDom0Event(
-      this._textArea.form,
-      'submit',
-      function()
-      {
-        editor._textArea.value = editor.outwardHtml(editor.getHTML());
-        return true;
-      }
-    );
+    HTMLArea.Events.add(textarea.form, 'submit', HTMLArea.onsubmit_form, this, textarea, 'prepend');
 
-    var initialTAContent = textarea.value;
+//    var initialTAContent = textarea.value;
 
     // onreset revert the HTMLArea content to the textarea content
-    HTMLArea.prependDom0Event(
-      this._textArea.form,
-      'reset',
-      function()
-      {
-        editor.setHTML(editor.inwardHtml(initialTAContent));
-        editor.updateToolbar();
-        return true;
-      }
-    );
+    HTMLArea.Events.add(textarea.form, 'reset', HTMLArea.onreset_form, this, textarea.value, 'prepend');
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
   // the HTML content into the original textarea.
-  HTMLArea.prependDom0Event(
-    window,
-    'unload',
-    function()
-    {
-      textarea.value = editor.outwardHtml(editor.getHTML());
-      return true;
-    }
-  );
+  HTMLArea.Events.add(window, 'unload', HTMLArea.onunload_backforward, editor, textarea, 'prepend');
 
   // Hide textarea
   textarea.style.display = "none";
@@ -1640,20 +1571,9 @@ HTMLArea.prototype.generate = function ()
 
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
-  HTMLArea._addEvent(
-    this._iframe,
-    'load',
-    function(e)
-    {
-      if ( !editor._iframeLoadDone )
-      {
-        editor._iframeLoadDone = true;
-        editor.initIframe();
-      }
-      return true;
-    }
-  );
+  HTMLArea.Events.add(iframe, 'load', HTMLArea.onload_iframe, this);
 
+  return true;
 };
 
 /**
@@ -2340,30 +2260,21 @@ HTMLArea.prototype.setFullHTML = function(html)
 
 HTMLArea.prototype.setEditorEvents = function()
 {
-  var editor=this;
-  var doc=this._doc;
-  editor.whenDocReady(
+  var id = this.__htmlarea_id_num;
+  this.whenDocReady(
     function()
     {
+      var editor = __htmlareas[id];
+      var doc = editor._doc;
       // if we have multiple editors some bug in Mozilla makes some lose editing ability
-      HTMLArea._addEvents(
-        doc,
-        ["mousedown"],
-        function()
-        {
-          editor.activateEditor();
-          return true;
-        }
-      );
+      HTMLArea.Events.add(doc, 'mousedown', editor.activateEditor, editor);
 
       // intercept some events; for updating the toolbar & keyboard handlers
-      HTMLArea._addEvents(
+      HTMLArea.Events.add(
         doc,
         ["keydown", "keypress", "mousedown", "mouseup", "drag"],
-        function (event)
-        {
-          return editor._editorEvent(HTMLArea.is_ie ? editor._iframe.contentWindow.event : event);
-        }
+        HTMLArea.keymousedrag_doc,
+        editor
       );
 
       // check if any plugins have registered refresh handlers
@@ -2379,7 +2290,8 @@ HTMLArea.prototype.setEditorEvents = function()
         editor._onGenerate();
       }
 
-      HTMLArea.addDom0Event(window, 'resize', function(e) { editor.sizeEditor(); });
+      // on window resize, resize the editor
+      HTMLArea.Events.add(window, 'resize', editor.sizeEditor, editor);
       editor.removeLoadingMessage();
     }
   );
@@ -2964,6 +2876,7 @@ if ( !Array.prototype.indexOf )
   };
 }
 
+HTMLArea.prototype._statusElements = [];
 // FIXME : this function needs to be splitted in more functions.
 // It is actually to heavy to be understable and very scary to manipulate
 // updates enabled/disable/active state of the toolbar elements
@@ -2977,7 +2890,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
     ancestors = this.getAllAncestors();
     if ( this.config.statusBar && !noStatus )
     {
-      this._statusBarTree.innerHTML = HTMLArea._lc("Path") + ": "; // clear
+      this.statusBarDispose();
       for ( var i = ancestors.length; --i >= 0; )
       {
         var el = ancestors[i];
@@ -2990,32 +2903,13 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
           continue;
         }
         var a = document.createElement("a");
-        a.href = "javascript:void(0)";
-        a.el = el;
-        a.editor = this;
-        HTMLArea.addDom0Event(
-          a,
-          'click',
-          function() {
-            this.blur();
-            this.editor.selectNodeContents(this.el);
-            this.editor.updateToolbar(true);
-            return false;
-          }
-        );
-        HTMLArea.addDom0Event(
-          a,
-          'contextmenu',
-          function()
-          {
-            // TODO: add context menu here
-            this.blur();
-            var info = "Inline style:\n\n";
-            info += this.el.style.cssText.split(/;\s*/).join(";\n");
-            alert(info);
-            return false;
-          }
-        );
+        a.href = "#";
+//        a.el = el;
+//        a.editor = this;
+        HTMLArea.Events.add(a, 'click', HTMLArea.onclick_status_updateToolbar, this, a);
+
+        HTMLArea.Events.add(a, 'contextmenu', HTMLArea.oncontextmenu_status, a, el);
+
         var txt = el.tagName.toLowerCase();
         a.title = el.style.cssText;
         if ( el.id )
@@ -3032,6 +2926,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
         {
           this._statusBarTree.appendChild(document.createTextNode(String.fromCharCode(0xbb)));
         }
+        this._statusElements.push(a);
       }
     }
   }
@@ -3260,6 +3155,21 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
 
 };
 
+/**
+ * Dispose the elements in the statusbar
+ * @private
+ */
+HTMLArea.prototype.statusBarDispose = function()
+{
+  for ( var i = 0, m = this._statusElements.length; i < m; i++ )
+  {
+    var a = this._statusElements[i];
+    HTMLArea.Events.remove(a, 'click', HTMLArea.onclick_status_updateToolbar);
+    HTMLArea.Events.remove(a, 'contextmenu', HTMLArea.oncontextmenu_status);
+  }
+  this._statusElements = [];
+  this._statusBarTree.innerHTML = HTMLArea._lc("Path") + ": "; // clear
+};
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
  */
@@ -3530,7 +3440,7 @@ else
     // and that the anchor (start of selection) is an element.  This might not be totally
     // correct, we possibly should do a simlar check to IE?
     if ( !sel.isCollapsed )
-    {      
+    {
       if ( sel.anchorNode.childNodes.length > sel.anchorOffset && sel.anchorNode.childNodes[sel.anchorOffset].nodeType == 1 )
       {
         return sel.anchorNode.childNodes[sel.anchorOffset];
@@ -3570,7 +3480,7 @@ else
     }
 
     if ( typeof sel.isCollapsed != 'undefined' )
-    {      
+    {
       return sel.isCollapsed;
     }
 
@@ -6761,5 +6671,625 @@ HTMLArea.collectGarbageForIE = function()
   }
 };
 
+/*
+---------------------------------------------------------------------------
+  EVENTS - NEW VERSION
+---------------------------------------------------------------------------
+*/
+
+HTMLArea.Events =
+{
+  /**
+   * Events listeners
+   * @private
+   */
+  listeners : [],
+  
+  /**
+   * DOM0 handlers
+   * @private
+   */
+  DOM0Handlers : [],
+
+  /**
+   * DOM0 listeners
+   * @private
+   */
+  DOM0Listeners : [],
+  
+  /**
+   * Fix the callback event object especially for IE which provides it in window.event
+   * @param {Event} evt Event (for W3C compliant) and null for IE
+   * @return {Event} Unified event
+   * @private
+   */
+  fix : function(evt) { return evt || window.event; },
+
+  /**
+   * Add a listener to an element
+   * @param {string | HTMLElement} element      Element ID or the reference
+   * @param {string | array}       type         Event type to add or indexed array of event types to add
+   * @param {function}             handler      Event handler
+   * @param {object}               scope        Execution scope (optional) default to the element reference
+   * @param {object}               arbitraryObj Arbitrary object provided to the handler (optional) default to null
+   * @param {boolean|string}       forceDom0    true if DOM0 model is forced, 'prepend' if DOM0 model is forced and must be prepended to the existings listeners of the same name (optional) default to false
+   * @return {boolean} true if the binding is successfull
+   * @public
+   */
+  add : function(element, type, handler, scope, arbitraryObj, forceDom0)
+  {
+    // manage multiple type with an array
+    if ( typeof type !== 'string' && type.length && type.length > 0 )
+    {
+      var returnValue = true; /* return value */
+      for ( var j = 0, m = type.length; j < m; j++ )
+      {
+        returnValue = HTMLArea.Events.add(element, type[j], handler, scope, arbitraryObj, forceDom0) && returnValue;
+      }
+      return returnValue;
+    }
+    // if the element is a string, try to find its reference
+    var Element = typeof element === 'string' ? document.getElementById(element) : element;
+    if ( !Element ) { return false; }
+
+    // determine application scope
+    scope = scope ? scope : Element;
+
+    var wrapped = function(z) { return handler.call(scope, HTMLArea.Events.fix(z), arbitraryObj); }, /* Wrapped function called */
+        listenerIndex = HTMLArea.Events.listeners.length, /* global listener index */
+        isDOM0 = false; /* flag the type of event model used */
+
+    // check if DOM0 must be used
+    if ( forceDom0 || HTMLArea.Events._useDOM0(Element, type) )
+    {
+      // bind the event to the object with DOM0 model
+      var DOM0Index = HTMLArea.Events._getDOM0Index(Element, type);
+      if ( DOM0Index == -1 )
+      {
+        DOM0Index = HTMLArea.Events.DOM0Handlers.length;
+        // cache the signature for the DOM0 event
+        // [element, type, alreadySetHandler]
+        HTMLArea.Events.DOM0Handlers[DOM0Index] = [Element, type, Element['on' + type]];
+        HTMLArea.Events.DOM0Listeners[DOM0Index] = [];
+        
+        // set our own handler which will be used to fire every listeners
+        // for this type of event on this element
+        Element['on' + type] = function(evt) { return HTMLArea.Events._fireDOM0.call(Element, HTMLArea.Events.fix(evt), DOM0Index); };
+      }
+
+      // add a reference to the wrapped listener to
+      // the custom stack of events
+      if ( forceDom0 == 'prepend' && HTMLArea.Events.DOM0Listeners[DOM0Index].length > 0 )
+      {
+        HTMLArea.Events.DOM0Listeners[DOM0Index].unshift(listenerIndex);
+      }
+      else
+      {
+        HTMLArea.Events.DOM0Listeners[DOM0Index].push(listenerIndex);
+      }
+      isDOM0 = true;
+    }
+    else
+    {
+      HTMLArea.Events.bind(Element, type, wrapped);
+    }
+
+    // cache the listener so we can try to automatically unload
+    HTMLArea.Events.listeners[listenerIndex] = [Element, type, handler, wrapped, scope, arbitraryObj, isDOM0];
+
+    return true;
+  },
+
+  /**
+   * Remove an event listener
+   * @param {string | HTMLElement} element  Element ID or the reference
+   * @param {string | array}       type     Event type to remove or indexed array of event types to remove
+   * @param {function}             handler  Event handler
+   * @return {boolean} true if the removing is successfull
+   * @public
+   */
+  remove : function(element, type, handler)
+  {
+    var returnValue = true; /* return value */
+    // manage multiple type with an array
+    if ( typeof type !== 'string' && type.length && type.length > 0 )
+    {
+      for ( var j = 0, m = type.length; j < m; j++ )
+      {
+        returnValue = HTMLArea.Events.remove(element, type[j], handler) && returnValue;
+      }
+      return returnValue;
+    }
+    // if the element is a string, try to find its reference
+    var Element = typeof element == 'string' ? document.getElementById(element) : element;
+    if ( !Element ) { return false; }
+
+    var listener = null,
+        listenerIndex = HTMLArea.Events._getListenerIndex(Element, type, handler);
+    if ( listenerIndex >= 0 )
+    {
+      listener = HTMLArea.Events.listeners[listenerIndex];
+    }
+    if ( !listener ) { return false; }
+
+    // listener is set like this : [Element, type, handler, wrapped, scope, arbitraryObj, isDOM0];
+
+    // remove DOM0 listeners
+    if ( listener[6] === true )
+    {
+      returnValue = HTMLArea.Events.removeDOM0(listenerIndex, Element, type);
+    }
+    // remove DOM2 et IE listeners
+    else
+    {
+      try
+      {
+        HTMLArea.Events.unbind(Element, type, listener[3]);
+      }
+      catch(x)
+      {
+        try
+        {
+          throw('Error removing event : "' + type + '"\nExc: ' + x + '\nElt: ' + Element + ( Element.tagName ? Element.tagName : '' ) + '\nHandler : ' + listener[3]);
+        }
+        catch (x)
+        {
+          returnValue = false;
+        }
+      }
+    }
+
+    // removed the wrapped handler
+    delete HTMLArea.Events.listeners[listenerIndex][3];
+    delete HTMLArea.Events.listeners[listenerIndex][2];
+    delete HTMLArea.Events.listeners[listenerIndex];
+
+    return returnValue;
+  },
+
+  /**
+   * Cancel an event
+   * @param {Event} evt The event to cancel
+   * @public
+   */
+  stop : function(evt)
+  {
+    HTMLArea.Events.stopPropagation(evt);
+    HTMLArea.Events.preventDefault(evt);
+  },
+
+  /**
+   * Find the listener position in the listeners cache
+   * listener is set like this : [Element, type, handler, wrapped, scope, arbitraryObj, isDOM0];
+   * @param {HTMLElement} Element  Element reference
+   * @param {string}      type     Event type to search
+   * @param {function}    handler  Event handler to find
+   * @return {integer} Index in the global listeners array
+   * @private
+  */
+  _getListenerIndex : function(Element, type, handler)
+  {
+    for ( var i = 0, m = HTMLArea.Events.listeners.length; i < m; i++ )
+    {
+      var L = HTMLArea.Events.listeners[i];
+      if ( L && L[0] == Element && L[1] == type && L[2] == handler)
+      {
+        return i;
+      }
+    }
+    return -1;
+  },
+
+  /*
+  ---------------------------------------------------------------------------
+    DOM0 MODEL
+  ---------------------------------------------------------------------------
+  */
+
+  /**
+   * Find if the DOM0 must be used instead of DOM2 model
+   * @param {HTMLElement} Element Element reference
+   * @param {string}      type    Event type
+   * @return {boolean} true if DOM0 model must be used
+   * @private
+   */
+  _useDOM0 : function(Element, type)
+  {
+    return ( ( !Element.addEventListener && !Element.attachEvent ) || ( type == "click" && navigator.userAgent.match(/safari/gi) ) );
+  },
+
+  /**
+   * Find index of the DOM0 listener with the couple Element + type
+   * @param {HTMLElement} Element Element reference
+   * @param {string}      type    Event type to search
+   * @return {integer} Index in the DOM0 listeners array
+   * @private
+   */
+  _getDOM0Index : function(Element, type)
+  {
+    for ( var i = 0, m = HTMLArea.Events.DOM0Handlers.length; i < m; i++ )
+    {
+      var L = HTMLArea.Events.DOM0Handlers[i];
+      if ( L && L[0] == Element && L[1] == type )
+      {
+        return i;
+      }
+    }
+    return -1;
+  },
+
+  /**
+   * When DOM0 is used, handlers are called from this function to let us fire every listeners
+   * @param {Event}   evt The current event
+   * @param {integer} DOM0Index The index of the DOM0 listener to call
+   * @scope Original HTMLElement
+   * @private
+   */
+  _fireDOM0 : function(evt, DOM0Index)
+  {
+    var returnValue = true, /* return value */
+        DOMListeners = HTMLArea.Events.DOM0Listeners[DOM0Index], /* DOM0 listeners */
+        previousListener = HTMLArea.Events.DOM0Handlers[DOM0Index][2], /* previously set DOM0 listener */
+        returnListener; /* return value of the listener function */
+    for ( var i = 0, m = DOMListeners.length; i < m; i++ )
+    {
+      var indexListener = DOMListeners[i]; /* listeners index */
+      if ( indexListener )
+      {
+        var listener = HTMLArea.Events.listeners[indexListener]; /* real listener reference */
+        if ( listener )
+        {
+          // listener is set like this : [Element, type, handler, wrapped, scope, arbitraryObj, isDOM0];
+          // call the wrapped function
+          returnListener = listener[3].call(listener[4], evt, listener[5]);
+          returnListener = typeof returnListener == 'boolean' ? returnListener : true;
+          returnValue = returnValue && returnListener;
+        }
+      }
+    }
+    // if a previous listener was set, call it now
+    if ( typeof previousListener == 'function' )
+    {
+      returnListener = previousListener.call(this, evt);
+      returnListener = typeof returnListener == 'boolean' ? returnListener : true;
+      returnValue = returnValue && returnListener;
+    }
+    return returnValue;
+  },
+
+  /**
+   * Remove a DOM0 listener
+   * @param {integer}     index    Index of the global listener removed
+   * @param {HTMLElement} Element  Element reference
+   * @param {string}      type     Event type to remove
+   * @return {boolean} true if the remove was success, false on the contrary
+   * @private
+   */
+  removeDOM0 : function(index, Element, type)
+  {
+    var DOM0Index = HTMLArea.Events._getDOM0Index(Element, type);
+    if ( DOM0Index !== -1 )
+    {
+      for ( var j = 0, m = HTMLArea.Events.DOM0Listeners[DOM0Index].length; j < m; j++ )
+      {
+        if ( HTMLArea.Events.DOM0Listeners[DOM0Index] == index )
+        {
+          delete HTMLArea.Events.DOM0Listeners[DOM0Index][j];
+          break;
+        }
+      }
+      // check if anymore valid listeners are defined
+      for ( j = 0, m = HTMLArea.Events.DOM0Listeners[DOM0Index].length; j < m; j++ )
+      {
+        // there it is another active listener of this type for the element,
+        // since we have removed the needed listener, our job is done and we break here
+        if ( HTMLArea.Events.DOM0Listeners[DOM0Index][j] )
+        {
+          return true;
+        }
+      }
+      // no break, so there is ZERO remaining listener for this type for the element,
+      // so we remove our handler
+      Element['on' + type] = null;
+      delete HTMLArea.Events.DOM0Handlers[DOM0Index];
+      delete HTMLArea.Events.DOM0Listeners[DOM0Index];
+      return true;
+    }
+    return false;
+  },
+
+  /**
+   * Events Flushing
+   * @private
+   */
+  flusher : function()
+  {
+    var L, i, m;
+
+    // remove our DOM0 handlers
+    for ( i = 0, m = HTMLArea.Events.DOM0Handlers.length; i < m; i++ )
+    {
+      L = HTMLArea.Events.DOM0Handlers[i];
+      if ( L )
+      {
+        L[0]['on' + L[1]] = null;
+      }
+    }
+
+    // remove remaining events
+    if ( HTMLArea.Events.listeners && HTMLArea.Events.listeners.length > 0 )
+    {
+      for ( i = 0, m = HTMLArea.Events.listeners.length; i < m; i++ )
+      {
+        L = HTMLArea.Events.listeners[i];
+        if ( L )
+        {
+          HTMLArea.Events.remove(L[0], L[1], L[2]);
+        }
+      }
+    }
+
+    for ( i = __htmlareas.length; i--; )
+    {
+      // this should be in every Xinha instance disposer method instead of here
+      __htmlareas[i].statusBarDispose();
+      // we should instead do this
+      //__htmlareas[i].dispose();
+    }
+
+    // garbage IE
+    HTMLArea.collectGarbageForIE();
+  }
+
+};
+
+/*
+---------------------------------------------------------------------------
+  W3C DOM2 EVENTS MODEL
+---------------------------------------------------------------------------
+*/
+
+if ( document.addEventListener )
+{
+  /**
+   * Buttons constants
+   * @type hash
+   * @public
+   */
+  HTMLArea.Events.buttons = { left: 0, right: 2, middle: 1 };
+
+  /**
+   * Bind the element, the event and the callback function
+   * @param {HTMLElement}   Element  The element reference
+   * @param {String}        type     The event type to bind
+   * @param {Function}      handler (Function) The callback function
+   * @private
+   */
+  HTMLArea.Events.bind = function(Element, type, handler) { Element.addEventListener(type, handler, false); };
+
+  /**
+   * Unbind the element, the event and the callback function
+   * @param {HTMLElement}   Element  The element reference
+   * @param {String}        type     The event type to bind
+   * @param {Function}      handler (Function) The callback function
+   * @private
+   */
+  HTMLArea.Events.unbind = function(Element, type, handler) { Element.removeEventListener(type, handler, false); };
+
+  /**
+   * Cancel the default behavior from the event
+   * @param {Event} evt Event
+   * @public
+   */
+  HTMLArea.Events.preventDefault = function(evt) { evt.preventDefault(); };
+
+  /**
+   * Cancel the event propagation
+   * @param {Event} evt Event
+   * @public
+   */
+  HTMLArea.Events.stopPropagation = function(evt) { evt.stopPropagation(); };
+}
+
+/*
+---------------------------------------------------------------------------
+  IE EVENTS MODEL
+---------------------------------------------------------------------------
+*/
+else if ( document.attachEvent )
+{
+  HTMLArea.Events.buttons = { left: 1, right: 2, middle: 4 };
+  HTMLArea.Events.bind = function(Element, type, handler) { Element.attachEvent('on' + type, handler); };
+  HTMLArea.Events.unbind = function(Element, type, handler) { Element.detachEvent('on' + type, handler); };
+  HTMLArea.Events.preventDefault = function(evt) { evt = HTMLArea.Events.fix(evt); evt.returnValue = false; };
+  HTMLArea.Events.stopPropagation = function(evt) { evt = HTMLArea.Events.fix(evt); evt.cancelBubble = true; };
+}
+
+/*
+---------------------------------------------------------------------------
+  EVENT CALLBACK LISTENERS
+---------------------------------------------------------------------------
+*/
+
+/**
+ * Callback listener for onchange on a selectbox in the icon toolbar
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {array} [el,txt]
+ * @scope Xinha instance
+ * @private
+ */
+HTMLArea.onchange_toolbar_select = function(evt, arbitraryObject)
+{
+  this._comboSelected(arbitraryObject[0], arbitraryObject[1]);
+};
+
+/**
+ * Callback listener for onmouseout on an icon in the icon toolbar
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {object} obj
+ * @scope The icon HTMLElement
+ * @private
+ */
+HTMLArea.onmouseout_toolbar_button = function(evt, arbitraryObject)
+{
+  if ( arbitraryObject.enabled )
+  {
+    //HTMLArea._removeClass(this, "buttonHover");
+    HTMLArea._removeClass(this, "buttonActive");
+    if ( arbitraryObject.active )
+    {
+      HTMLArea._addClass(this, "buttonPressed");
+    }
+  }
+};
+
+/**
+ * Callback listener for onmousedown on an icon in the icon toolbar
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {object} obj
+ * @scope The icon HTMLElement
+ * @private
+ */
+HTMLArea.onmousedown_toolbar_button = function(evt, arbitraryObject)
+{
+  if ( arbitraryObject.enabled )
+  {
+    HTMLArea._addClass(this, "buttonActive");
+    HTMLArea._removeClass(this, "buttonPressed");
+    HTMLArea.Events.stop(evt);
+  }
+};
+
+/**
+ * Callback listener for onclick on an icon in the icon toolbar
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {array} [el,obj]
+ * @scope Xinha instance
+ * @private
+ */
+HTMLArea.onclick_toolbar_button = function(evt, arbitraryObject)
+{
+  var el = arbitraryObject[0],
+      obj = arbitraryObject[1];
+  if ( obj.enabled )
+  {
+    HTMLArea._removeClass(el, "buttonActive");
+    //HTMLArea._removeClass(el, "buttonHover");
+    if ( HTMLArea.is_gecko )
+    {
+      this.activateEditor();
+    }
+    obj.cmd(this, obj.name, obj);
+    HTMLArea.Events.stop(evt);
+  }
+};
+
+/**
+ * Callback listener for onload of the main iframe
+ * @param {Event} evt The current event
+ * @scope Xinha instance
+ * @private
+ */
+HTMLArea.onload_iframe = function(evt)
+{
+  if ( !this._iframeLoadDone )
+  {
+    this._iframeLoadDone = true;
+    this.initIframe();
+  }
+};
+
+/**
+ * Generic callback listeners for ["keydown", "keypress", "mousedown", "mouseup", "drag"] of the iframe document
+ * @param {Event} evt The current event, the event in the iframe for IE
+ * @scope Xinha instance
+ * @private
+ */
+if ( HTMLArea.is_ie )
+{
+  HTMLArea.keymousedrag_doc = function(evt) { this._editorEvent(this._iframe.contentWindow.event); };
+}
+else
+{
+  HTMLArea.keymousedrag_doc = function(evt) { this._editorEvent(evt); };
+}
+
+/**
+ * Callback listener for onclick on an element on the statusbar
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {HTMLElement} the tag A rerefence
+ * @scope Xinha instance
+ * @private
+ */
+HTMLArea.onclick_status_updateToolbar = function(evt, arbitraryObject)
+{
+  arbitraryObject.blur();
+  this.selectNodeContents(arbitraryObject.el);
+  this.updateToolbar(true);
+  HTMLArea.Events.stop(evt);
+};
+
+/**
+ * Callback listener for oncontextmenu on an element on the statusbar
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {HTMLElement} the ancestor represented by the tag A
+ * @scope the a tag HTMLElement in the statusbar
+ * @private
+ */
+HTMLArea.oncontextmenu_status = function(evt, arbitraryObject)
+{
+  // TODO: add context menu here
+  this.blur();
+  var info = "Inline style:\n\n" + arbitraryObject.style.cssText.split(/;\s*/).join(";\n");
+  HTMLArea.Events.stop(evt);
+};
+
+/**
+ * Callback listener for onsubmit (DOM0 model) on the textarea form
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {HTMLElement} textarea
+ * @scope Xinha instance
+ * @private
+ */
+HTMLArea.onsubmit_form = function(evt, arbitraryObject)
+{
+  arbitraryObject.value = this.outwardHtml(this.getHTML());
+  return true;
+};
+
+/**
+ * Callback listener for onreset (DOM0 model) on the textarea form
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {string} initial textarea value
+ * @scope Xinha instance
+ * @private
+ */
+HTMLArea.onreset_form = function(evt, arbitraryObject)
+{
+  this.setHTML(this.inwardHtml(arbitraryObject));
+  this.updateToolbar();
+  return true;
+};
+
+/**
+ * Callback listener for unload (DOM0 model) on the window for the back/forward case
+ * @param {Event} evt The current event
+ * @param {array} arbitraryObject here : {HTMLElement} textarea
+ * @scope Xinha instance
+ * @private
+ */
+HTMLArea.onunload_backforward = function(evt, arbitraryObject)
+{
+  arbitraryObject.value = this.outwardHtml(this.getHTML());
+  return true;
+};
+
+
+
+/*
+---------------------------------------------------------------------------
+  FINALIZE
+---------------------------------------------------------------------------
+*/
 HTMLArea.init();
-HTMLArea.addDom0Event(window,'unload',HTMLArea.collectGarbageForIE);
+HTMLArea.Events.add(window,'unload',HTMLArea.Events.flusher);
