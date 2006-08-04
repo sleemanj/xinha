@@ -1081,7 +1081,7 @@ EnterParagraphs.prototype.handleEnter = function(ev)
 
   this.editor.updateToolbar();
 
-	HTMLArea._stopEvent(ev);
+	HTMLArea.Events.stop(ev);
 
 	return true;
 
