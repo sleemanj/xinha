@@ -45,28 +45,43 @@ Panel.current = 'Edit';
 function manageEditor(id)
 {
   var btn = $('btngeneration' + id);
+  btn.value = ' - in progress - ';
   if ( btn.generated )
   {
-    btn.generated = false;
     degenerateEditor(id);
-    btn.value = ' - Generate ' + id + ' - ';
   }
   else
   {
-    btn.generated = true;
     generateEditor(id);
-    btn.value = ' - Degenerate ' + id + ' - ';
   }
 }
 
-function generateEditor(id)
+function generateEditor(id, gene)
 {
   // load the plugins needed
   
   // create the object
   var editor = new Xinha('ta' + id);
+  
+  // set the ongenerate function
+  editor._onGenerate = function()
+  {
+    var btn = $('btngeneration' + id);
+    btn.generated = true;
+    btn.value = ' - Degenerate ' + id + ' - ';
+  };
+  
+  // set the ondispose function
+
+  editor._onDispose = function()
+  {
+    var btn = $('btngeneration' + id);
+    btn.generated = false;
+    btn.value = ' - Regenerate ' + id + ' - ';
+  };
 
   // manipulate the configuration
+  editor.config.onDisposeRemoveUI = true;
 
   // generate
   editor.generate();
@@ -137,7 +152,7 @@ padding:2px;
 
 <body>
 
-<form action="generate_on_demand.php" method="post" id="formulaire">
+<form action="on_demand.php" method="post" id="formulaire">
 
 <ul id="menu">
 <li onclick="Panel('Edit');">Editors</li>
