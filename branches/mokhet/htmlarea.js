@@ -6556,10 +6556,11 @@ HTMLArea.Events =
    * @param {string | HTMLElement} element  Element ID or the reference
    * @param {string | array}       type     Event type to remove or indexed array of event types to remove
    * @param {function}             handler  Event handler
+   * @param {object}               scope    Execution scope (optional) default to the element reference
    * @return {boolean} true if the removing is successfull
    * @public
    */
-  remove : function(element, type, handler)
+  remove : function(element, type, handler, scope)
   {
     var returnValue = true; /* return value */
     // manage multiple type with an array
@@ -6575,8 +6576,11 @@ HTMLArea.Events =
     var Element = typeof element == 'string' ? document.getElementById(element) : element;
     if ( !Element ) { return false; }
 
+    // determine application scope
+    scope = scope ? scope : Element;
+
     var listener = null,
-        listenerIndex = HTMLArea.Events._getListenerIndex(Element, type, handler);
+        listenerIndex = HTMLArea.Events._getListenerIndex(Element, type, handler, scope);
     if ( listenerIndex >= 0 )
     {
       listener = HTMLArea.Events.listeners[listenerIndex];
@@ -6635,15 +6639,19 @@ HTMLArea.Events =
    * @param {HTMLElement} Element  Element reference
    * @param {string}      type     Event type to search
    * @param {function}    handler  Event handler to find
+   * @param {object}      scope    Execution scope to match (optional) default to the element reference
    * @return {integer} Index in the global listeners array
    * @private
   */
-  _getListenerIndex : function(Element, type, handler)
+  _getListenerIndex : function(Element, type, handler, scope)
   {
+    // determine application scope
+    scope = scope ? scope : Element;
+
     for ( var i = 0, m = HTMLArea.Events.listeners.length; i < m; i++ )
     {
       var L = HTMLArea.Events.listeners[i];
-      if ( L && L[0] == Element && L[1] == type && L[2] == handler)
+      if ( L && L[0] == Element && L[1] == type && L[2] == handler && L[4] == scope )
       {
         return i;
       }
@@ -6670,10 +6678,10 @@ HTMLArea.Events =
   },
 
   /**
-   * Find index of the DOM0 listener with the couple Element + type
+   * Find index of the DOM0 handler with the couple Element + type
    * @param {HTMLElement} Element Element reference
    * @param {string}      type    Event type to search
-   * @return {integer} Index in the DOM0 listeners array
+   * @return {integer} Index in the DOM0 handlers array
    * @private
    */
   _getDOM0Index : function(Element, type)
