@@ -6711,35 +6711,22 @@ HTMLArea.freeLater = function(obj,prop)
 
 /**
  * Release memory properties from object
- * @param {object} O (Object)   The object to free memory
- * @param (string} P (Property) The property to release (optional)
+ * @param {object} object The object to free memory
+ * @param (string} prop   The property to release (optional)
  * @private
  */
-HTMLArea.free = function(O, P)
+HTMLArea.free = function(obj, prop)
 {
-  if ( O && !P )
+  if ( obj && !prop )
   {
-    for ( var p in O )
+    for ( var p in obj )
     {
-      HTMLArea.free(O, p);
+      HTMLArea.free(obj, p);
     }
   }
-  else if ( O )
+  else if ( obj )
   {
-    // is the try...catch really required here ?
-    try
-    {
-      // if it is the innerHTML property, just do nothing
-      if ( P !== 'innerHTML' )
-      {
-        // need to unhide TD cells before delete them or they will leak in IE
-        if ( O[P] && O[P].tagName && O[P].tagName.toLowerCase() == 'td' )
-        {
-          O[P].style.display = '';
-        }
-        O[P] = null;
-      }
-    } catch(x) {}
+    try { obj[prop] = null; } catch(x) {}
   }
 };
 
