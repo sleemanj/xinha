@@ -168,7 +168,6 @@ function HTMLArea(textarea, config)
 
     this.toFree = [];
     this._notifyListeners = {};
-    this.freeLater(this, '_notifyListeners');
 
     // Panels
     var panels = 
@@ -204,13 +203,12 @@ function HTMLArea(textarea, config)
       if(!panels[i].container) { continue; } // prevent iterating over wrong type
       panels[i].div = panels[i].container; // legacy
       panels[i].container.className = 'panels ' + i;
-      this.freeLater(panels[i], 'container');
-      this.freeLater(panels[i], 'div');
+      this.freeLater(panels[i], ['container', 'div']);
     }
     // finally store the variable
     this._panels = panels;
 
-    this.freeLater(this, '_textArea');
+    this.freeLater(this, ['_textArea', '_notifyListeners']);
   }
 }
 
@@ -880,8 +878,7 @@ HTMLArea.prototype._createToolbar = function ()
   toolbar.className = "toolbar";
   toolbar.unselectable = "1";
 
-  this.freeLater(this, '_toolBar');
-  this.freeLater(this, '_toolbar');
+  this.freeLater(this, ['_toolBar', '_toolbar']);
 
   var tb_row = null;
   var tb_objects = {};
@@ -1064,7 +1061,8 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         context : context
       };
       
-      editor.freeLater(obj);
+//      editor.freeLater(obj);
+      editor.freeLater(obj, ['element', 'state']);
 
       tb_objects[txt] = obj;
       
@@ -1125,7 +1123,8 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
           state	: setButtonStatus // for changing state
         };
       
-        editor.freeLater(obj);
+//        editor.freeLater(obj);
+        editor.freeLater(obj, ['element', 'state']);
 
         tb_objects[txt] = obj;
       break;
@@ -1136,7 +1135,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
     {
       el = document.createElement("a");
       el.style.display = 'block';
-      el.href = 'javascript:void(0)';
+      el.href = '#';
       el.style.textDecoration = 'none';
       el.title = btn[0];
       el.className = "button";
@@ -1154,13 +1153,15 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         state	: setButtonStatus, // for changing state
         context : btn[4] || null // enabled in a certain context?
       };
-      editor.freeLater(el);
-      editor.freeLater(obj);
+//      editor.freeLater(el);
+//      editor.freeLater(obj);
+      editor.freeLater(obj, ['element', 'cmd', 'state', 'imgel', 'swapImage']);
 
       tb_objects[txt] = obj;
 
       // prevent drag&drop of the icon to content area
       el.ondrag = function() { return false; };
+      editor.freeLater(el, 'ondrag');
 
       // handlers to emulate nice flat toolbar buttons
       function el_onmout()
@@ -1181,8 +1182,8 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         {
           HTMLArea._addClass(el, "buttonActive");
           HTMLArea._removeClass(el, "buttonPressed");
-          HTMLArea.Events.stop(ev);
         }
+        HTMLArea.Events.stop(ev);
       }
       // when clicked, do the following:
       function el_onclick(ev)
@@ -1196,8 +1197,8 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
             editor.activateEditor();
           }
           obj.cmd(editor, obj.name, obj);
-          HTMLArea.Events.stop(ev);
         }
+        HTMLArea.Events.stop(ev);
       }
       HTMLArea.Events.add(el, 'mouseout', el_onmout);
       HTMLArea.Events.add(el, 'mousedown', el_onmdown);
@@ -1386,7 +1387,6 @@ HTMLArea.prototype._createStatusBar = function()
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
   this._statusBar = statusbar;
-  this.freeLater(this, '_statusBar');
   
   // statusbar.appendChild(document.createTextNode(HTMLArea._lc("Path") + ": "));
   // creates a holder for the path view
@@ -1394,14 +1394,13 @@ HTMLArea.prototype._createStatusBar = function()
   div.className = "statusBarTree";
   div.innerHTML = HTMLArea._lc("Path") + ": ";
   this._statusBarTree = div;
-  this.freeLater(this, '_statusBarTree');
   this._statusBar.appendChild(div);
 
   div = document.createElement("span");
   div.innerHTML = HTMLArea._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
   div.style.display = "none";
   this._statusBarTextMode = div;
-  this.freeLater(this, '_statusBarTextMode');
+  this.freeLater(this, ['_statusBar', '_statusBarTree', '_statusBarTextMode']);
   this._statusBar.appendChild(div);
 
   if ( !this.config.statusBar )
@@ -1566,7 +1565,6 @@ HTMLArea.prototype.generate = function ()
 
   var htmlarea = this._framework.table;
   this._htmlArea = htmlarea;
-  this.freeLater(this, '_htmlArea');
   htmlarea.className = "htmlarea";
 
     // create the toolbar and put in the area
@@ -1578,7 +1576,7 @@ HTMLArea.prototype.generate = function ()
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
   this._iframe.className = 'xinha_iframe';
-  this.freeLater(this, '_iframe');
+  this.freeLater(this, ['_htmlArea', '_iframe']);
   
     // creates & appends the status bar
   var statusbar = this._createStatusBar();
@@ -1600,11 +1598,45 @@ HTMLArea.prototype.generate = function ()
     // onsubmit get the HTMLArea content and update original textarea.
     function form_onsubmit()
     {
-      editor._textArea.value = editor.outwardHtml(editor.getHTML());
+      if ( !editor.isSubmited )
+      {
+        // flag to prevent the editor to update original content onDispose if the submit is already done
+        editor.isSubmited = true;
+        editor._textArea.value = editor.outwardHtml(editor.getHTML());
+      }
       return true;
     }
     HTMLArea.Events.add(textarea.form, 'submit', form_onsubmit, 'prepend');
 
+    // onDispose get the HTMLArea content and update original textarea.
+    editor.notifyOn('dispose', form_onsubmit);
+
+    // update the original form.submit() function. See ticket #823
+    if ( !textarea.form.$XINHA_submit )
+    {
+      textarea.form.$XINHA_submit = textarea.form.submit;
+      textarea.form.submit = function()
+      {
+        for ( var i = this.elements.length; i--; )
+        {
+          var element = this.elements[i];
+          if ( element.type == 'textarea' )
+          {
+            for ( var a = __htmlareas.length; a--; )
+            {
+              var editor = __htmlareas[a];
+              if ( editor && editor._textArea == element )
+              {
+//                element.value = editor.outwardHtml(editor.getHTML());
+                editor.notifyOf('dispose', editor.config.onDisposeRemoveUI);
+              }
+            }
+          }
+        }
+        this.$XINHA_submit();
+      };
+    }
+    
     // this variable should already be saved when the editor was generating
     var initialTAContent = textarea.value;
 
@@ -1755,13 +1787,13 @@ HTMLArea.prototype.sizeEditor = function(width, height, includingBars, including
       var rPanel = this._panels.right;
       if ( rPanel.on && rPanel.panels.length && HTMLArea.hasDisplayedChildren(rPanel.div) )
       {
-        this._htmlArea.style.width = this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.right, 10);
+        this._htmlArea.style.width = (this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.right, 10)) + 'px';
       }
 
       var lPanel = this._panels.left;
       if ( lPanel.on && lPanel.panels.length && HTMLArea.hasDisplayedChildren(lPanel.div) )
       {
-        this._htmlArea.style.width = this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.left, 10);
+        this._htmlArea.style.width = (this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.left, 10)) + 'px';
       }
     }
   }
@@ -2381,14 +2413,15 @@ HTMLArea.prototype.setEditorEvents = function()
       }
 
       // on window resize, resize the editor
-      HTMLArea.Events.add(window, 'resize', editor.sizeEditor, false, editor);
+      function win_onresize() { editor.sizeEditor(); }
+      HTMLArea.Events.add(window, 'resize', win_onresize, false, editor);
 
       editor.notifyOn('dispose',
         function()
         {
           HTMLArea.Events.remove(doc, 'mousedown', editor.activateEditor, editor);
           HTMLArea.Events.remove(doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"], listener);
-          HTMLArea.Events.remove(window, 'resize', editor.sizeEditor, editor);
+          HTMLArea.Events.remove(window, 'resize', win_onresize, editor);
         }
       );
 
@@ -6467,6 +6500,12 @@ else
   };
 }
 
+/*
+---------------------------------------------------------------------------
+  POSITION
+---------------------------------------------------------------------------
+*/
+
 // find X position of an element
 HTMLArea.findPosX = function(obj)
 {
@@ -6505,28 +6544,56 @@ HTMLArea.findPosY = function(obj)
   return curtop;
 };
 
+/*
+---------------------------------------------------------------------------
+  LOADING MESSAGES
+---------------------------------------------------------------------------
+*/
+
 HTMLArea.prototype.setLoadingMessage = function(string, context, replace)
 {
-  if ( !this.config.showLoading || !document.getElementById("loading_sub_" + this._textArea.name) )
-  {
-    return;
-  }
   var elt = document.getElementById("loading_sub_" + this._textArea.name);
-  elt.innerHTML = HTMLArea._lc(string, context, replace);
+  if ( this.config.showLoading && elt )
+  {
+    elt.innerHTML = HTMLArea._lc(string, context, replace);
+  }
 };
 
 HTMLArea.prototype.removeLoadingMessage = function()
 {
-  if ( !this.config.showLoading || !document.getElementById("loading_" + this._textArea.name) )
+  var elt = document.getElementById("loading_sub_" + this._textArea.name);
+  if ( this.config.showLoading && elt )
   {
-    return ;
+    document.body.removeChild(elt);
   }
-  document.body.removeChild(document.getElementById("loading_" + this._textArea.name));
 };
 
+/*
+---------------------------------------------------------------------------
+  FREE MEMORY
+---------------------------------------------------------------------------
+*/
+
+/**
+ * Cache a reference obj.prop to be later released from memory
+ * @param {object}       obj   The object to free
+ * @param {string|array} prop  The property to release or an array of properties (optional)
+ * @public
+ */
 HTMLArea.prototype.freeLater = function(obj,prop)
 {
-  this.toFree.push({o:obj,p:prop});
+  // manage multiple properties with an array
+  if ( prop && typeof prop !== 'string' && prop.length && prop.length > 0 )
+  {
+    for ( var i = prop.length; i--; )
+    {
+      this.toFree.push({o:obj,p:prop[i]});
+    }
+  }
+  else
+  {
+    this.toFree.push({o:obj,p:prop});
+  }
 };
 
 /**

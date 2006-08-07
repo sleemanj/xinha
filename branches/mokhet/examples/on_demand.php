@@ -1,6 +1,6 @@
 <?php
-$content1 = array_key_exists('ta1', $_POST) ? $_POST['ta1'] : '<p>Content ONE here</p>';
-$content2 = array_key_exists('ta2', $_POST) ? $_POST['ta2'] : '<p>Content TWO here</p>';
+$content1 = array_key_exists('ta1', $_POST) ? stripslashes($_POST['ta1']) : '<p>Content ONE here</p>';
+$content2 = array_key_exists('ta2', $_POST) ? stripslashes($_POST['ta2']) : '<p>Content TWO here</p>';
 // Entitize contents
 // Please referer to http://xinha.python-hosting.com/wiki/Entize
 $content1 = htmlspecialchars($content1, ENT_QUOTES, 'utf-8');
@@ -142,7 +142,7 @@ clear:both;
 border:1px solid #036;
 padding:2px;
 }
-#resultcontent
+#resultcontent, .fromPOST
 {
 border:1px solid black;
 padding:2px;
@@ -211,6 +211,17 @@ $conf = array(
 </div>
 
 </form>
-<div id="resultcontent"></div>
+<div id="resultcontent">
+<?php
+if ( array_key_exists('ta1', $_POST) )
+{
+  echo '<div class="fromPOST">'.stripslashes($_POST['ta1']).'</div>';
+}
+if ( array_key_exists('ta2', $_POST) )
+{
+  echo '<div class="fromPOST">'.stripslashes($_POST['ta2']).'</div>';
+}
+?>
+</div>
 </body>
 </html>
