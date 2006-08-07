@@ -1752,13 +1752,13 @@ HTMLArea.prototype.sizeEditor = function(width, height, includingBars, including
       var rPanel = this._panels.right;
       if ( rPanel.on && rPanel.panels.length && HTMLArea.hasDisplayedChildren(rPanel.div) )
       {
-        this._htmlArea.style.width = this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.right, 10);
+        this._htmlArea.style.width = (this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.right, 10)) + 'px';
       }
 
       var lPanel = this._panels.left;
       if ( lPanel.on && lPanel.panels.length && HTMLArea.hasDisplayedChildren(lPanel.div) )
       {
-        this._htmlArea.style.width = this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.left, 10);
+        this._htmlArea.style.width = (this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.left, 10)) + 'px';
       }
     }
   }
