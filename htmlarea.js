@@ -361,6 +361,11 @@ HTMLArea.Config = function()
   // set to true if you want the loading panel to show at startup
   this.showLoading = false;
 
+  // size of color picker cells
+  this.colorPickerGranularity = '6px';
+  // position of color picker from toolbar button
+  this.colorPickerPosition = 'bottom,right';
+
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
    *
@@ -1437,6 +1442,12 @@ HTMLArea.prototype.generate = function ()
   if ( typeof PopupWin == 'undefined' )
   {
     HTMLArea._loadback(_editor_url + 'popupwin.js', this.generate, this );
+    return false;
+  }
+
+  if ( typeof colorPicker == 'undefined' )
+  {
+    HTMLArea._loadback(_editor_url + 'popups/color_picker.js', this.generate, this );
     return false;
   }
 
@@ -4226,6 +4237,7 @@ HTMLArea.prototype._comboSelected = function(el, txt)
 HTMLArea.prototype._colorSelector = function(cmdID)
 {
   var editor = this;	// for nested functions
+  var btn = editor._toolbarObjects[cmdID].element;
   if ( cmdID == 'hilitecolor' )
   {
     if ( HTMLArea.is_ie )
@@ -4241,17 +4253,8 @@ HTMLArea.prototype._colorSelector = function(cmdID)
       } catch (ex) {}
     }
   }
-  this._popupDialog(
-    editor.config.URIs.select_color,
-    function(color)
-    {
-      // selection not canceled
-      if ( color )
-      {
-        editor._doc.execCommand(cmdID, false, "#" + color);
-      }
-    },
-    HTMLArea._colorToRgb(this._doc.queryCommandValue(cmdID)));
+  var picker = new colorPicker({cellsize:editor.config.colorPickerGranularity,callback:function(color){editor._doc.execCommand(cmdID, false, color);}});
+  picker.open(editor.config.colorPickerPosition, btn);
 };
 
 // the execCommand function (intercepts some commands and replaces them with
