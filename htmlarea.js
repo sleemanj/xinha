@@ -78,6 +78,11 @@ HTMLArea.is_mac	   = (HTMLArea.agt.indexOf("mac") != -1);
 HTMLArea.is_mac_ie = (HTMLArea.is_ie && HTMLArea.is_mac);
 HTMLArea.is_win_ie = (HTMLArea.is_ie && !HTMLArea.is_mac);
 HTMLArea.is_gecko  = (navigator.product == "Gecko");
+HTMLArea.isRunLocally = document.URL.toLowerCase().search(/^file:/) != -1;
+if ( HTMLArea.isRunLocally )
+{
+  alert('Xinha *must* be installed on a web server. Locally opened files (those that use the "file://" protocol) cannot properly function. Xinha will try to initialize but may not be correctly loaded.');
+}
 
 // Creates a new HTMLArea object.  Tries to replace the textarea with the given
 // ID with it.
@@ -6141,7 +6146,7 @@ HTMLArea._postback = function(url, data, handler)
   {
     if ( req.readyState == 4 )
     {
-      if ( req.status == 200 )
+      if ( req.status == 200 || HTMLArea.isRunLocally && req.status == 0 )
       {
         if ( typeof handler == 'function' )
         {
@@ -6179,7 +6184,7 @@ HTMLArea._getback = function(url, handler)
   {
     if ( req.readyState == 4 )
     {
-      if ( req.status == 200 )
+      if ( req.status == 200 || HTMLArea.isRunLocally && req.status == 0 )
       {
         handler(req.responseText, req);
       }
@@ -6210,7 +6215,7 @@ HTMLArea._geturlcontent = function(url)
   // Synchronous!
   req.open('GET', url, false);
   req.send(null);
-  if ( req.status == 200 )
+  if ( req.status == 200 || HTMLArea.isRunLocally && req.status == 0 )
   {
     return req.responseText;
   }
