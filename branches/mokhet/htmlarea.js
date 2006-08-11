@@ -81,6 +81,12 @@ HTMLArea.is_mac	   = (HTMLArea.agt.indexOf("mac") != -1);
 HTMLArea.is_mac_ie = (HTMLArea.is_ie && HTMLArea.is_mac);
 HTMLArea.is_win_ie = (HTMLArea.is_ie && !HTMLArea.is_mac);
 HTMLArea.is_gecko  = (navigator.product == "Gecko");
+// detect if run locally. see ticket #415
+HTMLArea.isRunLocally = document.URL.toLowerCase().search(/^file:/) != -1;
+if ( HTMLArea.isRunLocally )
+{
+  alert('Xinha *must* be installed on a web server. Locally opened files (those that use the "file://" protocol) cannot properly function. Xinha will try to initialize but may not be correctly loaded.');
+}
 
 // Creates a new HTMLArea object.  Tries to replace the textarea with the given
 // ID with it.
@@ -1078,9 +1084,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         op.value = options[i];
         el.appendChild(op);
       }
-      function el_onchange() { editor._comboSelected(el, txt); }
-      HTMLArea.Events.add(el, 'change', el_onchange);
-      editor.notifyOn('dispose', function() { HTMLArea.Events.remove(el, 'change', el_onchange); });
+      editor.addEvent(el, 'change', function() { editor._comboSelected(el, txt); });
     }
     return el;
   } // END of function: createSelect
@@ -1164,7 +1168,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
       editor.freeLater(el, 'ondrag');
 
       // handlers to emulate nice flat toolbar buttons
-      function el_onmout()
+      function el_onmouseout()
       {
         if ( obj.enabled )
         {
@@ -1176,7 +1180,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
           }
         }
       }
-      function el_onmdown(ev)
+      function el_onmousedown(ev)
       {
         if ( obj.enabled )
         {
@@ -1200,18 +1204,9 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         }
         HTMLArea.Events.stop(ev);
       }
-      HTMLArea.Events.add(el, 'mouseout', el_onmout);
-      HTMLArea.Events.add(el, 'mousedown', el_onmdown);
-      HTMLArea.Events.add(el, 'click', el_onclick);
-
-      editor.notifyOn('dispose',
-        function()
-        {
-          HTMLArea.Events.remove(el, 'mouseout', el_onmout);
-          HTMLArea.Events.remove(el, 'mousedown', el_onmdown);
-          HTMLArea.Events.remove(el, 'click', el_onclick);
-        }
-      );
+      editor.addEvent(el, 'mouseout', el_onmouseout);
+      editor.addEvent(el, 'mousedown', el_onmousedown);
+      editor.addEvent(el, 'click', el_onclick);
 
       var i_contain = HTMLArea.makeBtnImg(btn[1]);
       var img = i_contain.firstChild;
@@ -1606,15 +1601,15 @@ HTMLArea.prototype.generate = function ()
       }
       return true;
     }
-    HTMLArea.Events.add(textarea.form, 'submit', form_onsubmit, 'prepend');
+    editor.prependDom0Event(textarea.form, 'submit', form_onsubmit);
 
     // onDispose get the HTMLArea content and update original textarea.
     editor.notifyOn('dispose', form_onsubmit);
 
     // update the original form.submit() function. See ticket #823
-    if ( !textarea.form.$XINHA_submit )
+    if ( !textarea.form.xinha_submit )
     {
-      textarea.form.$XINHA_submit = textarea.form.submit;
+      textarea.form.xinha_submit = textarea.form.submit;
       textarea.form.submit = function()
       {
         for ( var i = this.elements.length; i--; )
@@ -1622,18 +1617,14 @@ HTMLArea.prototype.generate = function ()
           var element = this.elements[i];
           if ( element.type == 'textarea' )
           {
-            for ( var a = __htmlareas.length; a--; )
+            var editor = HTMLArea.getEditor(element);
+            if ( editor )
             {
-              var editor = __htmlareas[a];
-              if ( editor && editor._textArea == element )
-              {
-//                element.value = editor.outwardHtml(editor.getHTML());
-                editor.notifyOf('dispose', editor.config.onDisposeRemoveUI);
-              }
+              editor.notifyOf('dispose', editor.config.onDisposeRemoveUI);
             }
           }
         }
-        this.$XINHA_submit();
+        this.xinha_submit();
       };
     }
     
@@ -1647,15 +1638,7 @@ HTMLArea.prototype.generate = function ()
       editor.updateToolbar();
       return true;
     }
-    HTMLArea.Events.add(textarea.form, 'reset', form_onreset, 'prepend');
-    
-    editor.notifyOn('dispose',
-      function()
-      {
-        HTMLArea.Events.remove(textarea.form, 'submit', form_onsubmit);
-        HTMLArea.Events.remove(textarea.form, 'reset', form_onreset);
-      }
-    );
+    editor.prependDom0Event(textarea.form, 'reset', form_onreset);
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
@@ -1665,8 +1648,7 @@ HTMLArea.prototype.generate = function ()
     textarea.value = editor.outwardHtml(editor.getHTML());
     return true;
   }
-  HTMLArea.Events.add(window, 'unload', backforward, 'prepend');
-  editor.notifyOn('dispose', function() { HTMLArea.Events.remove(window, 'unload', backforward); } );
+  editor.prependDom0Event(window, 'unload', backforward);
 
   // Hide textarea
   textarea.style.display = "none";
@@ -1685,8 +1667,7 @@ HTMLArea.prototype.generate = function ()
     }
     return true;
   }
-  HTMLArea.Events.add(iframe, 'load', iframe_onload);
-  editor.notifyOn('dispose', function() { HTMLArea.Events.remove(iframe, 'load', iframe_onload); } );
+  editor.addEvent(iframe, 'load', iframe_onload);
 
   return true;
 };
@@ -2385,19 +2366,19 @@ HTMLArea.prototype.setEditorEvents = function()
       var editor = __htmlareas[id];
       var doc = editor._doc;
       // if we have multiple editors some bug in Mozilla makes some lose editing ability
-      HTMLArea.Events.add(doc, 'mousedown', editor.activateEditor, false, editor);
+      editor.addEvent(doc, 'mousedown', editor.activateEditor, false, editor);
 
       // intercept some events; for updating the toolbar & keyboard handlers
       var listener = null;
       if ( HTMLArea.is_ie )
       {
-        listener = function(evt) { editor._editorEvent(editor._iframe.contentWindow.event); };
+        listener = function() { editor._editorEvent(editor._iframe.contentWindow.event); };
       }
       else
       {
         listener = function(evt) { editor._editorEvent(evt); };
       }
-      HTMLArea.Events.add(doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"], listener);
+      editor.addEvent(doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"], listener);
 
       // check if any plugins have registered refresh handlers
       for ( var i in editor.plugins )
@@ -2413,17 +2394,7 @@ HTMLArea.prototype.setEditorEvents = function()
       }
 
       // on window resize, resize the editor
-      function win_onresize() { editor.sizeEditor(); }
-      HTMLArea.Events.add(window, 'resize', win_onresize, false, editor);
-
-      editor.notifyOn('dispose',
-        function()
-        {
-          HTMLArea.Events.remove(doc, 'mousedown', editor.activateEditor, editor);
-          HTMLArea.Events.remove(doc, ["keydown", "keypress", "mousedown", "mouseup", "drag"], listener);
-          HTMLArea.Events.remove(window, 'resize', win_onresize, editor);
-        }
-      );
+      editor.addEvent(window, 'resize', function() { editor.sizeEditor(); });
 
       editor.removeLoadingMessage();
     }
@@ -3046,7 +3017,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
           this.updateToolbar(true);
           return false;
         }
-        function a_oncmenu()
+        function a_oncontextmenu()
         {
           // TODO: add context menu here
           a.blur();
@@ -3056,12 +3027,12 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
           return false;
         }
         HTMLArea.Events.add(a, 'click', a_onclick, true, editor);
-        HTMLArea.Events.add(a, 'contextmenu', a_oncmenu, true, el);
+        HTMLArea.Events.add(a, 'contextmenu', a_oncontextmenu, true, el);
         editor.notifyOn('statusbar_dispose',
           function()
           {
             HTMLArea.Events.remove(a, 'click', a_onclick, editor);
-            HTMLArea.Events.remove(a, 'contextmenu', a_oncmenu, el);
+            HTMLArea.Events.remove(a, 'contextmenu', a_oncontextmenu, el);
           }
         );
 
@@ -5995,7 +5966,7 @@ HTMLArea._postback = function(url, data, handler)
   {
     if ( req.readyState == 4 )
     {
-      if ( req.status == 200 )
+      if ( req.status == 200 || HTMLArea.isRunLocally && req.status == 0 )
       {
         if ( typeof handler == 'function' )
         {
@@ -6033,7 +6004,7 @@ HTMLArea._getback = function(url, handler)
   {
     if ( req.readyState == 4 )
     {
-      if ( req.status == 200 )
+      if ( req.status == 200 || HTMLArea.isRunLocally && req.status == 0 )
       {
         handler(req.responseText, req);
       }
@@ -6064,7 +6035,7 @@ HTMLArea._geturlcontent = function(url)
   // Synchronous!
   req.open('GET', url, false);
   req.send(null);
-  if ( req.status == 200 )
+  if ( req.status == 200 || HTMLArea.isRunLocally && req.status == 0 )
   {
     return req.responseText;
   }
@@ -6619,6 +6590,51 @@ HTMLArea.prototype.free = function(obj, prop)
 
 /*
 ---------------------------------------------------------------------------
+  AUTODISPOSER EVENTS
+---------------------------------------------------------------------------
+*/
+
+/**
+ * Add an event listener and prepare the dispose notifier
+ * @see HTMLArea.Events.add
+ * @return {boolean} true if the binding is successfull
+ * @public
+ */
+HTMLArea.prototype.addEvent = function(element, type, handler, forceDom0, scope, arbitraryObj)
+{
+  var returnValue = HTMLArea.Events.add(element, type, handler, forceDom0, scope, arbitraryObj);
+  // if the binding is successfull, add a dispose notifier
+  if ( returnValue )
+  {
+    this.notifyOn('dispose', function() { HTMLArea.Events.remove(element, type, handler, scope); });
+  }
+  return returnValue;
+};
+
+/**
+ * Add a DOM0 event listener and prepare the dispose notifier
+ * @see HTMLArea.Events.add
+ * @return {boolean} true if the binding is successfull
+ * @public
+ */
+HTMLArea.prototype.addDom0Event = function(element, type, handler, scope, arbitraryObj)
+{
+  return this.addEvent(element, type, handler, true, scope, arbitraryObj);
+};
+
+/**
+ * Prepend a DOM0 event listener and prepare the dispose notifier
+ * @see HTMLArea.Events.add
+ * @return {boolean} true if the binding is successfull
+ * @public
+ */
+HTMLArea.prototype.prependDom0Event = function(element, type, handler, scope, arbitraryObj)
+{
+  return this.addEvent(element, type, handler, 'prepend', scope, arbitraryObj);
+};
+
+/*
+---------------------------------------------------------------------------
   EVENTS - NEW VERSION
 ---------------------------------------------------------------------------
 */
@@ -7075,14 +7091,18 @@ HTMLArea.getEditor = function(ref)
   return null;
 };
 
-function alerter(t)
+/**
+ * Enhanced version for the classic alert(), it can be canceled and so stop
+ * bugging us while testing it SHOULD NOT BE USED outside of testing purpose imo
+ */
+HTMLArea.alerterOk = true;
+HTMLArea.alerter = function(txt)
 {
-  if ( alerter.$ )
+  if ( HTMLArea.alerterOk )
   {
-    alerter.$ = window.confirm(t);
+    HTMLArea.alerterOk = window.confirm(txt);
   }
 }
-alerter.$ = true;
 
 /*
 ---------------------------------------------------------------------------
@@ -7162,7 +7182,7 @@ HTMLArea.prototype.dispose = function()
   {
     if ( !this.toFree[i].o )
     {
-      alerter("What is " + i + ' ' + this.toFree[i].o);
+      HTMLArea.alerter("What is " + i + ' ' + this.toFree[i].o + ', typeof ' + ( typeof this.toFree[i].o ));
     }
     this.free(this.toFree[i].o, this.toFree[i].p);
     this.toFree[i].o = null;
