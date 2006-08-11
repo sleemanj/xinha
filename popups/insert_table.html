@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 
-window.resizeTo(400, 100);
+window.resizeTo(410, 250);
 
 HTMLArea = window.opener.HTMLArea;
 function i18n(str) {
@@ -18,7 +18,7 @@ function i18n(str) {
 function Init() {
   HTMLArea = window.opener.HTMLArea; // load the HTMLArea plugin and lang file
   __dlg_translate('HTMLArea');
-  __dlg_init();
+  __dlg_init(null, HTMLArea.is_ie ? null : {width:410,height:250});
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_unit").selectedIndex = 1;
   document.getElementById("f_unit").selectedIndex = 0;
