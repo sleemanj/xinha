@@ -4253,7 +4253,17 @@ HTMLArea.prototype._colorSelector = function(cmdID)
       } catch (ex) {}
     }
   }
-  var picker = new colorPicker({cellsize:editor.config.colorPickerGranularity,callback:function(color){editor._doc.execCommand(cmdID, false, color);}});
+  var cback = function(color) { editor._doc.execCommand(cmdID, false, color); };
+  if ( HTMLArea.is_ie )
+  {
+    var range = editor._createRange(editor._getSelection());
+    cback = function(color)
+    {
+      range.select();
+      editor._doc.execCommand(cmdID, false, color);
+    };
+  }
+  var picker = new colorPicker({cellsize:editor.config.colorPickerGranularity,callback:cback});
   picker.open(editor.config.colorPickerPosition, btn);
 };
 
