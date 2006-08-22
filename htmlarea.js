@@ -362,7 +362,9 @@ HTMLArea.Config = function()
   this.showLoading = false;
 
   // size of color picker cells
-  this.colorPickerGranularity = '6px';
+  this.colorPickerCellSize = '6px';
+  // granularity of color picker cells (number per column/row)
+  this.colorPickerGranularity = 18;
   // position of color picker from toolbar button
   this.colorPickerPosition = 'bottom,right';
 
@@ -4263,7 +4265,7 @@ HTMLArea.prototype._colorSelector = function(cmdID)
       editor._doc.execCommand(cmdID, false, color);
     };
   }
-  var picker = new colorPicker({cellsize:editor.config.colorPickerGranularity,callback:cback});
+  var picker = new colorPicker({cellsize:editor.config.colorPickerCellSize,callback:cback,granularity:editor.config.colorPickerGranularity});
   picker.open(editor.config.colorPickerPosition, btn);
 };
 
