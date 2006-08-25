@@ -366,6 +366,13 @@ HTMLArea.Config = function()
   // set to true if you want the loading panel to show at startup
   this.showLoading = false;
 
+  // size of color picker cells
+  this.colorPickerCellsize = '6px';
+  // granularity of color picker cells (number per column/row)
+  this.colorPickerGranularity = 18;
+  // position of color picker from toolbar button
+  this.colorPickerPosition = 'bottom,right';
+
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
    *
@@ -888,7 +895,7 @@ HTMLArea.prototype._createToolbar = function ()
 
   var tb_row = null;
   var tb_objects = {};
-  // wrong case name. Should be this._toolBarObjects according to the comment 5 lines above
+  // [mokhet] wrong case name. Should be this._toolBarObjects according to the comment 5 lines above
   this._toolbarObjects = tb_objects;
 
 	this._createToolbar1(this, toolbar, tb_objects);
@@ -1127,9 +1134,7 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
           state	: setButtonStatus // for changing state
         };
       
-//        editor.freeLater(obj);
         editor.freeLater(obj, ['element', 'state']);
-
         tb_objects[txt] = obj;
       break;
       default:
@@ -1158,7 +1163,6 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         context : btn[4] || null // enabled in a certain context?
       };
 //      editor.freeLater(el);
-//      editor.freeLater(obj);
       editor.freeLater(obj, ['element', 'cmd', 'state', 'imgel', 'swapImage']);
 
       tb_objects[txt] = obj;
@@ -1168,45 +1172,56 @@ HTMLArea.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
       editor.freeLater(el, 'ondrag');
 
       // handlers to emulate nice flat toolbar buttons
-      function el_onmouseout()
-      {
-        if ( obj.enabled )
+      editor.addEvent(
+        el,
+        "mouseout",
+        function()
         {
-          //HTMLArea._removeClass(el, "buttonHover");
-          HTMLArea._removeClass(el, "buttonActive");
-          if ( obj.active )
+          if ( obj.enabled )
           {
-            HTMLArea._addClass(el, "buttonPressed");
+            //HTMLArea._removeClass(el, "buttonHover");
+            HTMLArea._removeClass(el, "buttonActive");
+            if ( obj.active )
+            {
+              HTMLArea._addClass(el, "buttonPressed");
+            }
           }
         }
-      }
-      function el_onmousedown(ev)
-      {
-        if ( obj.enabled )
+      );
+
+      editor.addEvent(
+        el,
+        "mousedown",
+        function(ev)
         {
-          HTMLArea._addClass(el, "buttonActive");
-          HTMLArea._removeClass(el, "buttonPressed");
+          if ( obj.enabled )
+          {
+            HTMLArea._addClass(el, "buttonActive");
+            HTMLArea._removeClass(el, "buttonPressed");
+          }
+          HTMLArea.Events.stop(ev);
         }
-        HTMLArea.Events.stop(ev);
-      }
+      );
+
       // when clicked, do the following:
-      function el_onclick(ev)
-      {
-        if ( obj.enabled )
+      editor.addEvent(
+        el,
+        "click",
+        function(ev)
         {
-          HTMLArea._removeClass(el, "buttonActive");
-          //HTMLArea._removeClass(el, "buttonHover");
-          if ( HTMLArea.is_gecko )
+          if ( obj.enabled )
           {
-            editor.activateEditor();
+            HTMLArea._removeClass(el, "buttonActive");
+            //HTMLArea._removeClass(el, "buttonHover");
+            if ( HTMLArea.is_gecko )
+            {
+              editor.activateEditor();
+            }
+            obj.cmd(editor, obj.name, obj);
           }
-          obj.cmd(editor, obj.name, obj);
+          HTMLArea.Events.stop(ev);
         }
-        HTMLArea.Events.stop(ev);
-      }
-      editor.addEvent(el, 'mouseout', el_onmouseout);
-      editor.addEvent(el, 'mousedown', el_onmousedown);
-      editor.addEvent(el, 'click', el_onclick);
+      );
 
       var i_contain = HTMLArea.makeBtnImg(btn[1]);
       var img = i_contain.firstChild;
@@ -1432,6 +1447,12 @@ HTMLArea.prototype.generate = function ()
     return false;
   }
 
+  if ( typeof colorPicker == 'undefined' )
+  {
+    HTMLArea._loadback(_editor_url + 'popups/color_picker.js', this.generate, this );
+    return false;
+  }
+
   if ( _editor_skin !== "" )
   {
     var found = false;
@@ -1607,6 +1628,8 @@ HTMLArea.prototype.generate = function ()
     editor.notifyOn('dispose', form_onsubmit);
 
     // update the original form.submit() function. See ticket #823
+    // disabled until a proper fix for IE is found
+/*
     if ( !textarea.form.xinha_submit )
     {
       textarea.form.xinha_submit = textarea.form.submit;
@@ -1627,28 +1650,34 @@ HTMLArea.prototype.generate = function ()
         this.xinha_submit();
       };
     }
-    
-    // this variable should already be saved when the editor was generating
+*/
+    // [mokhet] this variable should already be saved when the editor was generating
     var initialTAContent = textarea.value;
 
     // onreset revert the HTMLArea content to the textarea content
-    function form_onreset()
-    {
-      editor.setHTML(editor.inwardHtml(initialTAContent));
-      editor.updateToolbar();
-      return true;
-    }
-    editor.prependDom0Event(textarea.form, 'reset', form_onreset);
+    editor.prependDom0Event(
+      textarea.form,
+      'reset',
+      function()
+      {
+        editor.setHTML(editor.inwardHtml(initialTAContent));
+        editor.updateToolbar();
+        return true;
+      }
+    );
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
   // the HTML content into the original textarea.
-  function backforward()
-  {
-    textarea.value = editor.outwardHtml(editor.getHTML());
-    return true;
-  }
-  editor.prependDom0Event(window, 'unload', backforward);
+  editor.prependDom0Event(
+    window,
+    'unload',
+    function()
+    {
+      textarea.value = editor.outwardHtml(editor.getHTML());
+      return true;
+    }
+  );
 
   // Hide textarea
   textarea.style.display = "none";
@@ -1658,16 +1687,19 @@ HTMLArea.prototype.generate = function ()
 
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
-  function iframe_onload()
-  {
-    if ( !editor._iframeLoadDone )
+  editor.addEvent(
+    iframe,
+    'load',
+    function()
     {
-      editor._iframeLoadDone = true;
-      editor.initIframe();
+      if ( !editor._iframeLoadDone )
+      {
+        editor._iframeLoadDone = true;
+        editor.initIframe();
+      }
+      return true;
     }
-    return true;
-  }
-  editor.addEvent(iframe, 'load', iframe_onload);
+  );
 
   return true;
 };
@@ -2366,7 +2398,15 @@ HTMLArea.prototype.setEditorEvents = function()
       var editor = __htmlareas[id];
       var doc = editor._doc;
       // if we have multiple editors some bug in Mozilla makes some lose editing ability
-      editor.addEvent(doc, 'mousedown', editor.activateEditor, false, editor);
+      editor.addEvent(
+        doc,
+        "mousedown",
+        function()
+        {
+          editor.activateEditor();
+          return true;
+        }
+      );
 
       // intercept some events; for updating the toolbar & keyboard handlers
       var listener = null;
@@ -3089,7 +3129,7 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
           inContext = true;
           for ( var ka = 0; ka < attrs.length; ++ka )
           {
-            // eval ???? why not using the following line instead ?
+            // [mokhet] eval ???? why not using the following line instead ?
             // if ( !ancestors[k][attrs[ka]] )
             if ( !eval("ancestors[k]." + attrs[ka]) )
             {
@@ -3666,7 +3706,7 @@ HTMLArea.prototype._createImplicitBlock = function(type)
   // Expand DN
 };
 
-// Why is this is still in the trunk ?
+// [mokhet] move to deprecated.js ticket #829
 // there's no reference to it anywhere else even in plugins
 HTMLArea.prototype._formatBlock = function(block_format)
 {
@@ -3765,7 +3805,7 @@ HTMLArea.prototype._formatBlock = function(block_format)
       }
     }
   }
-
+  return true;
 };
 
 // Selects the contents inside the given node
@@ -4246,6 +4286,7 @@ HTMLArea.prototype._comboSelected = function(el, txt)
 HTMLArea.prototype._colorSelector = function(cmdID)
 {
   var editor = this;	// for nested functions
+  var btn = editor._toolbarObjects[cmdID].element;
   if ( cmdID == 'hilitecolor' )
   {
     if ( HTMLArea.is_ie )
@@ -4261,17 +4302,18 @@ HTMLArea.prototype._colorSelector = function(cmdID)
       } catch (ex) {}
     }
   }
-  this._popupDialog(
-    editor.config.URIs.select_color,
-    function(color)
+  var cback = function(color) { editor._doc.execCommand(cmdID, false, color); };
+  if ( HTMLArea.is_ie )
+  {
+    var range = editor._createRange(editor._getSelection());
+    cback = function(color)
     {
-      // selection not canceled
-      if ( color )
-      {
-        editor._doc.execCommand(cmdID, false, "#" + color);
-      }
-    },
-    HTMLArea._colorToRgb(this._doc.queryCommandValue(cmdID)));
+      range.select();
+      editor._doc.execCommand(cmdID, false, color);
+    };
+  }
+  var picker = new colorPicker({cellsize:editor.config.colorPickerCellsize,callback:cback,granularity:editor.config.colorPickerGranularity});
+  picker.open(editor.config.colorPickerPosition, btn);
 };
 
 // the execCommand function (intercepts some commands and replaces them with
@@ -5296,6 +5338,7 @@ HTMLArea.cloneObject = function(obj)
 };
 
 // FIXME!!! this should return false for IE < 5.5
+// @todo : this should check for objects existence and NOT on useragent strings
 HTMLArea.checkSupportedBrowser = function()
 {
   if ( HTMLArea.is_gecko )
@@ -5387,6 +5430,28 @@ HTMLArea.prototype.notifyOf = function(ev, args)
     }
   }
 };
+
+/**
+ * Remove the notifier for the couple ev / fn
+ * @param {string} ev EventNotifier type to remove
+ * @param {object} fn Function to remove
+ * @return {boolean} true if the removing was successfull
+ * @public
+ */
+HTMLArea.prototype.notifyRemove = function(ev, fn)
+{
+  if ( this._notifyListeners[ev] )
+  {
+    var index = this._notifyListeners[ev].indexOf(fn);
+    if ( index != -1 )
+    {
+      this._notifyListeners[ev].splice(index, 1);
+      return true;
+    }
+  }
+  return false;
+};
+
 
 /*
 ---------------------------------------------------------------------------
@@ -6606,7 +6671,17 @@ HTMLArea.prototype.addEvent = function(element, type, handler, forceDom0, scope,
   // if the binding is successfull, add a dispose notifier
   if ( returnValue )
   {
-    this.notifyOn('dispose', function() { HTMLArea.Events.remove(element, type, handler, scope); });
+    function notifier() { HTMLArea.Events.remove(element, type, handler, scope); }
+    function notifierRemove()
+    {
+      // call the notifier to actually remove the listener
+      notifier();
+      // remove the notifiers
+      this.notifyRemove('dispose', notifier);
+      this.notifyRemove('remove_event_autodisposer', notifierRemove);
+    }
+    this.notifyOn('dispose', notifier);
+    this.notifyOn('remove_event_autodisposer', notifierRemove);
   }
   return returnValue;
 };
@@ -6631,6 +6706,16 @@ HTMLArea.prototype.addDom0Event = function(element, type, handler, scope, arbitr
 HTMLArea.prototype.prependDom0Event = function(element, type, handler, scope, arbitraryObj)
 {
   return this.addEvent(element, type, handler, 'prepend', scope, arbitraryObj);
+};
+
+/**
+ * Remove an event listener and remove the associated dispose notifier
+ * @see HTMLArea.Events.remove, @see HTMLArea.prototype.addEvent
+ * @public
+ */
+HTMLArea.prototype.removeEvent = function(element, type, handler, scope)
+{
+  this.notifyOf('remove_event_autodisposer');
 };
 
 /*
@@ -7223,7 +7308,7 @@ HTMLArea.dispose = function()
 
 /*
 ---------------------------------------------------------------------------
-  COMPATIBILITY ALIAS
+  EVENT COMPATIBILITY ALIAS
 ---------------------------------------------------------------------------
 */
 

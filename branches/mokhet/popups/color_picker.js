@@ -74,9 +74,15 @@
 
   function colorPicker(params)
   {
+    // if the savedColors is empty, try to read the savedColors from cookie
+    if ( colorPicker.savedColors.length == 0 )
+    {
+      colorPicker.loadColors();
+    }
     var picker = this;
     this.callback = params.callback?params.callback:function(color){alert('You picked ' + color )};
 
+    this.websafe  = params.websafe?params.websafe:false;
     this.cellsize = params.cellsize?params.cellsize:'10px';
     this.side     = params.granularity?params.granularity:18;
 
@@ -288,6 +294,11 @@
       {
         this.table.style.left = (left - (this.table.offsetWidth - element.offsetWidth)) + 'px';
       }
+      // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+      /*@cc_on
+      this.iframe.style.top = this.table.style.top;
+      this.iframe.style.left = this.table.style.left;
+      @*/
     };
 
     /** Draw the color picker. */
@@ -338,7 +349,7 @@
                 picker.backSample.style.color = 'black';
               }
             }
-            td.onclick = function() { picker.callback(this.colorCode); picker.close(); }
+            td.onclick = function() { colorPicker.remember(this.colorCode); picker.callback(this.colorCode); picker.close(); }
             td.appendChild(document.createTextNode(' '));
             td.style.cursor = 'pointer';
             tr.appendChild(td);
@@ -413,7 +424,7 @@
               picker.backSample.style.color = 'black';
             }
           }
-          td.onclick = function() { picker.callback(this.colorCode); picker.close(); }
+          td.onclick = function() { colorPicker.remember(this.colorCode); picker.callback(this.colorCode); picker.close(); }
           td.appendChild(document.createTextNode(' '));
           td.style.cursor = 'pointer';
           tr.appendChild(td);
@@ -429,6 +440,8 @@
         td.colSpan = this.side + 3;
         td.style.padding = '3px';
 
+        if ( this.websafe )
+        {
         var div = document.createElement('div');
         var label = document.createElement('label');
         label.appendChild(document.createTextNode('Web Safe: '));
@@ -439,6 +452,7 @@
         label.style.fontSize = 'x-small';
         div.appendChild(label);
         td.appendChild(div);
+        }
 
         var div = document.createElement('div');
         var label = document.createElement('label');
@@ -466,10 +480,59 @@
 
         td.appendChild(sampleTable);
 
+        var savedColors = document.createElement('div');
+        savedColors.style.clear = 'both';
+
+        function createSavedColors(color)
+        {
+          var is_ie = false;
+          /*@cc_on is_ie = true; @*/
+          var div = document.createElement('div');
+          div.style.width = '13px';
+          div.style.height = '13px';
+          div.style.margin = '1px';
+          div.style.border = '1px solid black';
+          div.style.cursor = 'pointer';
+          div.style.backgroundColor = color;
+          div.style[ is_ie ? 'styleFloat' : 'cssFloat'] = 'left';
+          div.onclick = function() { picker.callback(color); picker.close(); };
+          div.onmouseover = function()
+          {
+            picker.chosenColor.value = color;
+            picker.backSample.style.backgroundColor = color;
+            picker.foreSample.style.color = color;
+          };
+          savedColors.appendChild(div);
+        }
+        for ( var savedCols = 0; savedCols < colorPicker.savedColors.length; savedCols++ )
+        {
+          createSavedColors(colorPicker.savedColors[savedCols]);
+        }
+        td.appendChild(savedColors);
 
         this.tbody.appendChild(tr);
         document.body.appendChild(this.table);
-
+        // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+        /*@cc_on
+        if ( !this.iframe )
+        {
+          this.iframe = document.createElement('iframe');
+          this.iframe.style.zIndex = 999;
+          this.table.style.zIndex = 1000;
+          this.iframe.style.position = 'absolute';
+          this.iframe.style.width = this.table.offsetWidth;
+          this.iframe.style.height = this.table.offsetHeight;
+          this.iframe.border = 0;
+          this.iframe.frameBorder = 0;
+          this.iframe.frameSpacing = 0;
+          this.iframe.marginWidth = 0;
+          this.iframe.marginHeight = 0;
+          this.iframe.hspace = 0;
+          this.iframe.vspace = 0;
+          document.body.appendChild(this.iframe);
+        }
+        this.iframe.style.display = '';
+        @*/
       }
       else
       {
@@ -495,6 +558,50 @@
     this.close = function()
     {
       this.table.style.display = 'none';
+      // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+      /*@cc_on
+      if ( this.iframe ) { this.iframe.style.display = 'none'; }
+      @*/
     };
-
   }
+
+// array of the saved colors
+colorPicker.savedColors = [];
+
+// add the color to the savedColors
+colorPicker.remember = function(color)
+{
+  // check if this color is known
+  for ( var i = colorPicker.savedColors.length; i--; )
+  {
+    if ( colorPicker.savedColors[i] == color )
+    {
+      return false;
+    }
+  }
+  // insert the new color
+  colorPicker.savedColors.splice(0, 0, color);
+  // limit elements
+  colorPicker.savedColors = colorPicker.savedColors.slice(0, 21);
+  //[mokhet] probably some more parameters to send to the cookie definition
+  // like domain, secure and such, especially with https connection i presume
+  // save the cookie
+  var expdate = new Date();
+  expdate.setMonth(expdate.getMonth() + 1);
+
+  document.cookie = 'XinhaColorPicker=' + escape (colorPicker.savedColors.join('-')) + ';expires=' + expdate.toGMTString();
+  return true;
+};
+
+// try to read the colors from the cookie
+colorPicker.loadColors = function()
+{
+  var index = document.cookie.indexOf('XinhaColorPicker');
+  if ( index != -1 )
+  {
+    var begin = (document.cookie.indexOf('=', index) + 1);
+    var end = document.cookie.indexOf(';', index);
+    if ( end == -1 ) { end = document.cookie.length; }
+    colorPicker.savedColors = unescape(document.cookie.substring(begin, end)).split('-');
+  }
+};

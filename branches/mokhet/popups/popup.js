@@ -10,7 +10,7 @@
 //   http://dynarch.com/mishoo
 //
 // $Id$
-HTMLArea = window.opener.HTMLArea;
+var HTMLArea = window.opener.HTMLArea;
 
 function getAbsolutePos(el) {
 	var r = { x: el.offsetLeft, y: el.offsetTop };
