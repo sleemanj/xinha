@@ -36,7 +36,7 @@ function ListType( editor )
   else
   {
     editor._ListType = editor.addPanel( 'right' );
-    HTMLArea.freeLater( editor, '_ListType' );
+    editor.freeLater( editor, '_ListType' );
     HTMLArea.addClass( editor._ListType, 'ListType' );
     // hurm, ok it's pretty to use the background color for the whole panel,
     // but should not it be set by default when creating the panel ?
@@ -45,7 +45,7 @@ function ListType( editor )
     editor.notifyOn( 'modechange',
       function(e,args)
       {
-        if ( args.mode == 'text' ) editor.hidePanel( editor._ListType );
+        if ( args.mode == 'text' ) { editor.hidePanel( editor._ListType ); }
       }
     );
 
@@ -129,15 +129,17 @@ ListType.prototype.updateValue = function( editor, combo )
 
 ListType.prototype.onUpdateToolbar = function()
 {
-  if ( this.editor.config.ListType.mode == 'toolbar' ) return ;
+  if ( this.editor.config.ListType.mode == 'toolbar' ) { return ; }
   var parent = this.editor.getParentElement();
-  while ( parent && !/^[o|u]l$/i.test( parent.tagName ) )
+  while ( parent && parent.tagName && !/^[o|u]l$/i.test( parent.tagName ) )
+  {
     parent = parent.parentNode;
-  if (parent && /^[o|u]l$/i.test( parent.tagName ) )
+  }
+  if (parent && parent.tagName && /^[o|u]l$/i.test( parent.tagName ) )
   {
     this.showPanel( parent );
   }
-  else if (this.editor._ListType.style.display != 'none')
+  else if ( this.editor._ListType.style.display != 'none' )
   {
     this.editor.hidePanel( this.editor._ListType );
   }
