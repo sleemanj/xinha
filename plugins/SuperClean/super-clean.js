@@ -47,7 +47,7 @@ SuperClean.prototype._superClean = function(opts, obj)
       if(filter=='tidy' || filter=='word_clean') continue;
       if(opts[filter])
       {
-        D = SuperClean.filterFunctions[filter](D);
+        D = SuperClean.filterFunctions[filter](D, editor);
       }
     }
 
@@ -105,7 +105,7 @@ HTMLArea.Config.prototype.SuperClean =
   //    'filter_name' : "Label/Description String"
   // or 'filter_name' : {label: "Label", checked: true/false, filterFunction: function(html) { ... return html;} }
   // filterFunction in the second format above is optional.
-  
+
   'filters': { 'tidy': HTMLArea._lc('General tidy up and correction of some problems.', 'SuperClean'),
                'word_clean': HTMLArea._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),
                'remove_faces': HTMLArea._lc('Remove custom typefaces (font "styles").', 'SuperClean'),
@@ -159,8 +159,12 @@ SuperClean.filterFunctions.remove_fancy_quotes = function(D)
 {
   D = D.replace(new RegExp(String.fromCharCode(8216),"g"),"'");
   D = D.replace(new RegExp(String.fromCharCode(8217),"g"),"'");
+  D = D.replace(new RegExp(String.fromCharCode(8218),"g"),"'");
+  D = D.replace(new RegExp(String.fromCharCode(8219),"g"),"'");
   D = D.replace(new RegExp(String.fromCharCode(8220),"g"),"\"");
   D = D.replace(new RegExp(String.fromCharCode(8221),"g"),"\"");
+  D = D.replace(new RegExp(String.fromCharCode(8222),"g"),"\"");
+  D = D.replace(new RegExp(String.fromCharCode(8223),"g"),"\"");
   return D;
 };
 
@@ -192,7 +196,7 @@ SuperClean.prototype.onGenerate = function()
   var sc = this;
   //load the filter-functions
   for(var filter in this.editor.config.SuperClean.filters)
-  {    
+  {
     if(!SuperClean.filterFunctions[filter])
     {
       var filtDetail = this.editor.config.SuperClean.filters[filter];
@@ -249,7 +253,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
     htmlFilters += "    <div>\n";
     var filtDetail = this.SuperClean.editor.config.SuperClean.filters[filter];
     if(typeof filtDetail.label == 'undefined')
-    {    
+    {
       htmlFilters += "        <input type=\"checkbox\" name=\"["+filter+"]\" id=\"["+filter+"]\" checked />\n";
       htmlFilters += "        <label for=\"["+filter+"]\">"+this.SuperClean.editor.config.SuperClean.filters[filter]+"</label>\n";
     }

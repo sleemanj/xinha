@@ -259,12 +259,20 @@ Dialog._geckoOpenModal = function(url, action, init) {
       <div id="div_plugins" style="width:100%; overflow:auto">
 <?php
 	$d = @dir($LocalPluginPath);
+	$dir_array = array();
 	while (false !== ($entry = $d->read()))  //not a dot file or directory
 	{	if(substr($entry,0,1) != '.')
-		{ echo '<label><input type="checkbox" name="plugins" id="plugins" value="' . $entry . '"> ' . $entry . '</label>'."\n";
+		{
+			$dir_array[] = $entry;
 		}
 	}
 	$d->close();
+	sort($dir_array);
+	foreach ($dir_array as $entry)
+	{
+		echo '<label><input type="checkbox" name="plugins" id="plugins" value="' . $entry . '"> ' . $entry . '</label>'."\n";
+	}
+
 ?>
       </div>
     </fieldset>
