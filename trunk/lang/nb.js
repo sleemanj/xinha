@@ -65,7 +65,7 @@
   "Print document": "Skriv ut dokumentet",
   "Split Block": "Seperasjonsblokk",
   "Toggle Borders": "Skru av/på hjelpelinjer på tabeller",
-  "Select all": "Merk alt"
+  "Select all": "Merk alt",
   // Loading messages
   "Loading in progress. Please wait !": "WYSIWYG laster, vennligst vent!",
   "Constructing main object": "Vennligst vent",
