@@ -6152,9 +6152,16 @@ HTMLArea._postback = function(url, data, handler)
   }
 
   var content = '';
-  for ( var i in data )
+  if (typeof data == 'string')
   {
-    content += (content.length ? '&' : '') + i + '=' + encodeURIComponent(data[i]);
+    content = data;
+  }
+  else
+  {
+    for ( var i in data )
+    {
+      content += (content.length ? '&' : '') + i + '=' + encodeURIComponent(data[i]);
+    }
   }
 
   function callBack()
