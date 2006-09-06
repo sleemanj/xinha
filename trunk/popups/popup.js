@@ -78,7 +78,7 @@ function __dlg_init(bottom, win_dim) {
 		window.moveTo(x, y);
 	} else {
 		var docElm      = document.documentElement ? document.documentElement : null;    
-		var body_height = body.scrollHeight;
+		var body_height = docElm && docElm.scrollTop ? docElm.scrollHeight : body.scrollHeight;
     
 		window.resizeTo(body.scrollWidth, body_height);
 		var ch = docElm && docElm.clientHeight ? docElm.clientHeight : body.clientHeight;
