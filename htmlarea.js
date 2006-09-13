@@ -6156,7 +6156,7 @@ HTMLArea._postback = function(url, data, handler)
   {
     content = data;
   }
-  else
+  else if(data != null)
   {
     for ( var i in data )
     {

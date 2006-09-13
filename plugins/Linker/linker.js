@@ -16,6 +16,7 @@ HTMLArea.loadStyle('dTree/dtree.css', 'Linker');
 HTMLArea.Config.prototype.Linker =
 {
   'backend' : _editor_url + 'plugins/Linker/scan.php',
+  'backend_data' : null,
   'files' : null
 };
 
@@ -326,7 +327,8 @@ Linker.Dialog.prototype._prepareDialog = function()
     if(linker.lConfig.backend)
     {
         //get files from backend
-        HTMLArea._getback(linker.lConfig.backend,
+        HTMLArea._postback(linker.lConfig.backend,
+                          linker.lConfig.backend_data,
                           function(txt) {
                             try {
                                 eval('lDialog.files = '+txt);
