@@ -2,7 +2,7 @@
 // LANG: "de", ENCODING: UTF-8
 // translated: sven schomacker, http://www.hilope.de, mail@hilope.de
 {
-  "File Manager": "Datemanager",
+  "File Manager": "Dateimanager",
   "Insert Image": "Bild einfügen",
   "Directory": "Verzeichnis",
   "Directory Up": "Vezeichnis hoch",
