@@ -146,7 +146,7 @@
           sha1($_SESSION[$bk['key_location']] . $bk['data']) 
         : md5($_SESSION[$bk['key_location']] . $bk['data']))
      {
-       return unserialize($bk['data']);
+       return unserialize(ini_get('magic_quotes_gpc') ? stripslashes($bk['data']) : $bk['data']);
      }
    }
    
