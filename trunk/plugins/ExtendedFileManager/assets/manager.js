@@ -101,6 +101,7 @@ init = function ()
 
         document.getElementById("f_url").value = param["f_url"];
         document.getElementById("f_alt").value = param["f_alt"];
+        document.getElementById("f_title").value = param["f_title"];
         document.getElementById("f_border").value = param["f_border"];
         document.getElementById("f_width").value = param["f_width"];
         document.getElementById("f_height").value = param["f_height"];
@@ -216,7 +217,7 @@ function onOK()
     if(manager_mode=="image")
     {
         // pass data back to the calling window
-        var fields = ["f_url", "f_alt", "f_align", "f_border", "f_margin", "f_padding", "f_height", "f_width", "f_borderColor", "f_backgroundColor"];
+        var fields = ["f_url", "f_alt", "f_title", "f_align", "f_border", "f_margin", "f_padding", "f_height", "f_width", "f_borderColor", "f_backgroundColor"];
         var param = new Object();
         for (var i in fields)
         {

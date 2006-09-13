@@ -62,6 +62,8 @@ ExtendedFileManager._pluginInfo = {
 HTMLArea.Config.prototype.ExtendedFileManager =
 {
   'backend'    : _editor_url + 'plugins/ExtendedFileManager/backend.php?__plugin=ExtendedFileManager&',
+  'backend_data' : null,
+  // deprecated keys, use passing data through e.g. xinha_pass_to_php_backend()
   'backend_config'     : null,
   'backend_config_hash': null,
   'backend_config_secret_key_location': 'Xinha:ImageManager'
@@ -83,6 +85,7 @@ HTMLArea.prototype._insertImage = function(image) {
         outparam = {
             f_url    : HTMLArea.is_ie ? image.src : image.getAttribute("src"),
             f_alt    : image.alt,
+            f_title  : image.title,
             f_border : image.style.borderWidth ? image.style.borderWidth : image.border,
             f_align  : image.align,
             f_width  : image.width,
@@ -114,6 +117,14 @@ HTMLArea.prototype._insertImage = function(image) {
         + encodeURIComponent(editor.config.ExtendedFileManager.backend_config_hash);
       manager += '&backend_config_secret_key_location='
         + encodeURIComponent(editor.config.ExtendedFileManager.backend_config_secret_key_location);
+    }
+
+    if(editor.config.ExtendedFileManager.backend_data != null)
+    {
+        for ( var i in editor.config.ExtendedFileManager.backend_data )
+        {
+            manager += '&' + i + '=' + encodeURIComponent(editor.config.ExtendedFileManager.backend_data[i]);
+        }
     }
 
     Dialog(manager, function(param){
@@ -150,6 +161,7 @@ HTMLArea.prototype._insertImage = function(image) {
             switch (field)
             {
                 case "f_alt"    : img.alt    = value; break;
+                case "f_title"  : img.title = value; break;
                 case "f_border" :
                     img.style.borderWidth = /[^0-9]/.test(value) ? value : (parseInt(value || "0") + 'px');
                     if(img.style.borderWidth && !img.style.borderStyle)

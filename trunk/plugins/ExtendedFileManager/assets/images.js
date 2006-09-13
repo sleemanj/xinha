@@ -72,6 +72,7 @@ function emptyProperties()
     var topDoc = window.top.document;
     topDoc.getElementById('f_url').value = '';
     topDoc.getElementById('f_alt').value = '';
+    topDoc.getElementById('f_title').value = '';
     topDoc.getElementById('f_width').value = '';
     topDoc.getElementById('f_margin').value = '';
     topDoc.getElementById('f_height').value = '';
@@ -112,7 +113,8 @@ function selectImage(filename, alt, width, height)
     if(topDoc.getElementById('manager_mode').value=="image")
     {
         var obj = topDoc.getElementById('f_url');  obj.value = filename;
-        var obj = topDoc.getElementById('f_alt'); obj.value = alt;
+        obj = topDoc.getElementById('f_alt'); obj.value = alt;
+        obj = topDoc.getElementById('f_title'); obj.value = alt;
 
         if(width==0 && height==0) toggleImageProperties(true);
         else
