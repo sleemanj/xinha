@@ -202,6 +202,9 @@ $IMConfig['allow_rename'] = true;
 */
 $IMConfig['use_color_pickers'] = true;
 
+$IMConfig['images_enable_alt'] = false;
+$IMConfig['images_enable_title'] = true;
+
 /*
   Possible values: true, false
 
@@ -253,8 +256,17 @@ $IMConfig['thumbnail_height'] = 84;
 $IMConfig['tmp_prefix'] = '.editor_';
 
 
-// If config specified from front end, merge it
-if(isset($_REQUEST['backend_config']))
+// Standard PHP Backend Data Passing
+//  if data was passed using xinha_pass_to_php_backend() we merge the items
+//  provided into the Config
+require_once(realpath(dirname(__FILE__) . '/../../contrib/php-xinha.php'));
+if($passed_data = xinha_read_passed_data())
+{
+  $IMConfig = array_merge($IMConfig, $passed_data);
+  $IMConfig['backend_url'] .= xinha_passed_data_querystring() . '&';
+}
+// Deprecated config passing, don't use this way any more!
+elseif(isset($_REQUEST['backend_config']))
 {
   if(get_magic_quotes_gpc()) {
     $_REQUEST['backend_config'] = stripslashes($_REQUEST['backend_config']);

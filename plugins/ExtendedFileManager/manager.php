@@ -93,14 +93,19 @@
 </td></tr>
 </table>
 </fieldset>
-<!-- temp -->
-<!-- /temp -->
 <!-- image properties -->
 	<table class="inputTable">
 		<tr>
 			<td align="right" nowrap><label for="f_url"><?php if($insertMode=='image') echo 'File Name'; else echo 'URL';?></label></td>
 			<td colspan="5"><input type="text" id="<?php if($insertMode=='image') echo 'f_url'; else echo 'f_href';?>" class="largelWidth" value="" /></td>
-            <td rowspan="5" colspan="2" valign="top"><?php if($insertMode=='image') { ?>
+<?php // calculate number of table rows to span for the preview cell
+$num_rows = 3; // filename & upload & disk info message
+if ($insertMode == 'image' && $IMConfig['images_enable_alt'])
+    $num_rows++;
+if ($insertMode == 'link' || $IMConfig['images_enable_title'])
+    $num_rows++;
+?>
+            <td rowspan="<?php echo $num_rows ?>" colspan="2" valign="top"><?php if($insertMode=='image') { ?>
             <div style="padding:4px;background-color:#CCC;border:1px inset;width: 100px; height: 100px;">
             <img src="" id="f_preview" />
             </div>
@@ -113,11 +118,23 @@
 		    </select><br /><br />
 <input type="text" name="f_other_target" id="f_other_target" style="visibility:hidden; width:120px;" />
             <?php } ?></td>
-		</tr>
+            </tr>
+<?php if($insertMode == 'image' && $IMConfig['images_enable_alt']) { ?>
 		<tr>
-			<td align="right"><label for="f_alt"><?php if($insertMode=='image') echo 'Alt'; else echo 'Title (tooltip)';?></label></td>
-			<td colspan="5"><input type="text" id="<?php if($insertMode=='image') echo 'f_alt'; else echo 'f_title';?>" class="largelWidth" value="" /></td>
-		</tr>
+			<td align="right"><label for="f_alt">Alt</label></td>
+			<td colspan="5"><input type="text" id="f_alt" class="largelWidth" value="" /></td>
+        </tr>
+<?php } else {
+        $hidden_fields[] = 'f_alt';
+      }
+      if ($insertMode == 'link' || $IMConfig['images_enable_title']) { ?>
+      <tr>
+			<td align="right"><label for="f_title">Title (tooltip)</label></td>
+			<td colspan="5"><input type="text" id="f_title" class="largelWidth" value="" /></td>
+      </tr>
+<?php } else { 
+        $hidden_fields[] = 'f_title';
+      } ?>
 		<tr>
 <?php
 if (!empty($IMConfig['max_foldersize_mb']) && Files::dirSize($manager->getImagesDir()) > ($IMConfig['max_foldersize_mb']*1048576))
@@ -140,13 +157,13 @@ else if($IMConfig['allow_upload']) { ?>
 <?php } ?>
 		</tr>
 		<tr>
-		 <td></td>
-		 <td colspan="5"> <span id="diskmesg"></span></td>
+		 <td>tu<?php if (!empty($hidden_fields)) foreach ($hidden_fields as $hf) echo "<input type=\"hidden\" id=\"{$hf}\" name=\"{$hf}\" value=\"\" />"; ?></td>
+		 <td colspan="5"><span id="diskmesg"></span></td>
       </tr>
 <tr>
 			<td align="right"><?php if($insertMode=='image') { ?> <label for="f_width">Width</label><?php }?></td>
 
-			<td><?php if($insertMode=='image') { ?> <input type="text" id="f_width" class="smallWidth" value="" onchange="javascript:checkConstrains('width');"/><?php } else echo "&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp";?></td>
+			<td><?php if($insertMode=='image') { ?> <input type="text" id="f_width" class="smallWidth" value="" onchange="javascript:checkConstrains('width');"/><?php } else echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";?></td>
 
 			<td rowspan="2"><?php if($insertMode=='image') { ?><img src="<?php print $IMConfig['base_url'];?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" />
 				<input type="hidden" id="orginal_width" />
