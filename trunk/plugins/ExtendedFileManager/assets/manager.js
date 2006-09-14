@@ -50,7 +50,7 @@ init = function ()
     if (manager_mode == "link")
       __dlg_init(null,  {width:650,height:500});
     else
-      __dlg_init(null,  {width:650,height:550});
+      __dlg_init(null,  {width:650,height:560});
 
     __dlg_translate('ExtendedFileManager');
 
