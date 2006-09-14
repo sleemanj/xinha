@@ -20,6 +20,13 @@
  *
  *	Best of Luck :) Afru.
  */
+ 
+/*
+ *	Getting the mode for further differentiation
+ */
+
+if(empty($insertMode))
+    $insertMode="image";
 
 /**
 * Default backend URL
@@ -61,8 +68,10 @@ $IMConfig['images_dir'] = 'demo_images';
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-$IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
-
+if ($insertMode == 'image')
+	$IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
+else if($insertMode == "link")
+	$IMConfig['images_url'] = str_replace( "manager.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
 /*
   Possible values: true, false
 
@@ -87,8 +96,6 @@ View type when the File manager is in insert image mode.
 Valid values are "thumbview" and "listview".
 */
 
-if(empty($insertMode))
-    $insertMode="image";
     
 if ($insertMode == 'image')
 	$IMConfig['view_type'] = "thumbview";
