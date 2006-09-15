@@ -155,6 +155,8 @@ HTMLArea.prototype._insertImage = function(image) {
             img.src = param.f_url;
         }
 
+        img.alt = img.alt ? img.alt : '';
+        
         for (field in param)
         {
             var value = param[field];
@@ -240,6 +242,15 @@ HTMLArea.prototype._linkFile = function(link) {
        manager += '&backend_config_secret_key_location='
                + encodeURIComponent(editor.config.ExtendedFileManager.backend_config_secret_key_location);
     }
+
+    if(editor.config.ExtendedFileManager.backend_data != null)
+    {
+        for ( var i in editor.config.ExtendedFileManager.backend_data )
+        {
+            manager += '&' + i + '=' + encodeURIComponent(editor.config.ExtendedFileManager.backend_data[i]);
+        }
+    }
+
 
     Dialog(manager, function(param){
         if (!param)

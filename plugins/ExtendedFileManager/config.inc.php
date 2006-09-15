@@ -209,8 +209,8 @@ $IMConfig['allow_rename'] = true;
 */
 $IMConfig['use_color_pickers'] = true;
 
-$IMConfig['images_enable_alt'] = false;
-$IMConfig['images_enable_title'] = true;
+$IMConfig['images_enable_alt'] = true;
+$IMConfig['images_enable_title'] = false;
 
 /*
   Possible values: true, false
