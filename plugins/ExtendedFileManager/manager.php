@@ -13,7 +13,7 @@
 
 	require_once('config.inc.php');
 	require_once('Classes/ExtendedFileManager.php');
-
+	
 	$manager = new ExtendedFileManager($IMConfig);
 	$dirs = $manager->getDirs();
 
@@ -33,7 +33,7 @@
 
 	if(window.opener)
 		HTMLArea = window.opener.HTMLArea;
-
+		
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getImagesURL(); ?>";
     var _backend_url = "<?php print $IMConfig['backend_url']; ?>";
@@ -49,7 +49,7 @@
 		echo 'var manager_mode="image";';
 	}
 	?>
-
+	
 /* ]]> */
 </script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/manager.js"></script>
@@ -132,7 +132,7 @@ if ($insertMode == 'link' || $IMConfig['images_enable_title'])
 			<td align="right"><label for="f_title">Title (tooltip)</label></td>
 			<td colspan="5"><input type="text" id="f_title" class="largelWidth" value="" /></td>
       </tr>
-<?php } else {
+<?php } else { 
         $hidden_fields[] = 'f_title';
       } ?>
 		<tr>
@@ -224,8 +224,8 @@ else if($IMConfig['allow_upload']) { ?>
 </tr>
 </table>
 
-<!--// image properties -->
-	<div style="text-align: right;">
+<!--// image properties -->	
+	<div style="text-align: right;"> 
           <hr />
 		  <button type="button" class="buttons" onclick="return refresh();">Refresh</button>
           <button type="button" class="buttons" onclick="return onOK();">OK</button>
