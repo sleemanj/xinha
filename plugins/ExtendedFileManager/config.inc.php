@@ -220,7 +220,6 @@ $IMConfig['use_color_pickers'] = true;
 */
 $IMConfig['images_enable_alt'] = true;
 
-
 /*
   Possible values: true, false
 
