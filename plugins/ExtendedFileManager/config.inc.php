@@ -209,9 +209,57 @@ $IMConfig['allow_rename'] = true;
 */
 $IMConfig['use_color_pickers'] = true;
 
+/*
+  Possible values: true, false
+
+ TRUE -  Allow the user to set alt (alternative text) attribute.
+
+ FALSE - No input field for alt attribute will be displayed.
+
+ NOTE: The alt attribute is _obligatory_ for images
+*/
 $IMConfig['images_enable_alt'] = true;
+
+
+/*
+  Possible values: true, false
+
+ TRUE -  Allow the user to set title attribute (usually displayed when mouse is over element).
+
+ FALSE - No input field for title attribute will be displayed.
+
+*/
 $IMConfig['images_enable_title'] = false;
 
+/*
+  Possible values: true, false
+
+ TRUE -  Allow the user to set align attribute.
+
+ FALSE - No selection box for align attribute will be displayed.
+
+*/
+$IMConfig['images_enable_align'] = true;
+
+/*
+  Possible values: true, false
+
+ TRUE -  Allow the user to set margin, padding, and border styles for the image
+
+ FALSE - No styling input fields will be displayed.
+
+*/
+$IMConfig['images_enable_styling'] = true; 
+
+/*
+  Possible values: true, false
+
+ TRUE -   Allow the user to set target attribute for link (the window in which the link will be opened).
+
+ FALSE - No selection box for target attribute will be displayed.
+
+*/
+$IMConfig['link_enable_target'] = true;
 /*
   Possible values: true, false
 

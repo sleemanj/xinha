@@ -165,10 +165,14 @@ HTMLArea.prototype._insertImage = function(image) {
                 case "f_alt"    : img.alt    = value; break;
                 case "f_title"  : img.title = value; break;
                 case "f_border" :
-                    img.style.borderWidth = /[^0-9]/.test(value) ? value : (parseInt(value || "0") + 'px');
+                    img.style.borderWidth = /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') :'';
                     if(img.style.borderWidth && !img.style.borderStyle)
                     {
                         img.style.borderStyle = 'solid';
+                    }
+                    else if (!img.style.borderWidth)
+                    {
+                    	img.style.border = '';
                     }
                     break;
                 case "f_borderColor": img.style.borderColor = value; break;
@@ -177,9 +181,9 @@ HTMLArea.prototype._insertImage = function(image) {
                 case "f_width"  : img.width = parseInt(value || "0"); break;
                 case "f_height"  : img.height = parseInt(value || "0"); break;
                 case "f_padding": img.style.padding =
-                                          /[^0-9]/.test(value) ? value : (parseInt(value || "0") + 'px'); break;
+                                          /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') :''; break;
                 case "f_margin": img.style.margin =
-                                          /[^0-9]/.test(value) ? value : (parseInt(value || "0") + 'px'); break;
+                                          /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') :''; break;
             }
         }
 
