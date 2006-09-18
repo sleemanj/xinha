@@ -216,7 +216,8 @@ $IMConfig['use_color_pickers'] = true;
 
  FALSE - No input field for alt attribute will be displayed.
 
- NOTE: The alt attribute is _obligatory_ for images
+ NOTE: The alt attribute is _obligatory_ for images, so <img alt="" /> will be inserted
+      if 'images_enable_alt' is set to false
 */
 $IMConfig['images_enable_alt'] = true;
 
@@ -248,7 +249,7 @@ $IMConfig['images_enable_align'] = true;
  FALSE - No styling input fields will be displayed.
 
 */
-$IMConfig['images_enable_styling'] = true; 
+$IMConfig['images_enable_styling'] = true;
 
 /*
   Possible values: true, false
