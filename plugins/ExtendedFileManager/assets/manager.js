@@ -57,7 +57,7 @@ init = function ()
     var uploadForm = document.getElementById('uploadForm');
     if(uploadForm) uploadForm.target = 'imgManager';
 
-    if (manager_mode == 'image' && typeof colorPicker != "undefined") {
+    if (manager_mode == 'image' && typeof colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
         // Hookup color pickers
         var bgCol_pick = document.getElementById('bgCol_pick');
         var f_backgroundColor = document.getElementById('f_backgroundColor');
