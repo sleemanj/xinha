@@ -7,12 +7,14 @@
  * Package: ExtendedFileManager (EFM 1.1.1)
  * http://www.afrusoft.com/htmlarea
  */
+if(isset($_REQUEST['mode'])) $insertMode=$_REQUEST['mode'];
+	if(!isset($insertMode)) $insertMode="image";
 
 require_once('config.inc.php');
 require_once('Classes/ExtendedFileManager.php');
 require_once('../ImageManager/Classes/ImageEditor.php');
 
-$manager = new ExtendedFileManager($IMConfig);
+$manager = new ExtendedFileManager($IMConfig,$insertMode);
 $editor = new ImageEditor($manager);
 
 ?>
@@ -28,7 +30,7 @@ $editor = new ImageEditor($manager);
 <script type="text/javascript">
 /*<![CDATA[*/
 
-    var _backend_url = "<?php print $IMConfig['backend_url']; ?>";
+    var _backend_url = "<?php print $IMConfig['backend_url']."&mode=$insertMode"; ?>&";
 
 	if(window.opener)
 		HTMLArea = window.opener.HTMLArea;
@@ -141,7 +143,7 @@ $editor = new ImageEditor($manager);
 <a href="javascript:toggle('save')" id="icon_save" title="Save"><img src="<?php print $IMConfig['base_url'];?>img/save.gif" height="20" width="20" alt="Save" /><span>Save</span></a>
 </div>
 <div id="contents">
-<iframe src="<?php print $IMConfig['backend_url']; ?>__function=editorFrame&img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor"  scrolling="auto" title="Image Editor" frameborder="0"></iframe>
+<iframe src="<?php print $IMConfig['backend_url']; ?>__function=editorFrame&img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>&mode=<?php echo $insertMode ?>" name="editor" id="editor"  scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>
 </body>

@@ -59,6 +59,8 @@ $IMConfig['base_url'] = '';
 		   Able to create directories is nice, but not necessary.
 */
 $IMConfig['images_dir'] = 'demo_images';
+//You may set a different directory for the link mode; if you don't, the above setting will be used for both modes
+//$IMConfig['files_dir'] = 'demo_files';
 
 /*
  The URL to the above path, the web browser needs to be able to see it.
@@ -68,10 +70,9 @@ $IMConfig['images_dir'] = 'demo_images';
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-if ($insertMode == 'image')
-	$IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
-else if($insertMode == "link")
-	$IMConfig['images_url'] = str_replace( "manager.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
+$IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
+//$IMConfig['files_url'] = 'url/to/files_dir';
+
 /*
   Possible values: true, false
 

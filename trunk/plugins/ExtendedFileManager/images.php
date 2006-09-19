@@ -107,7 +107,7 @@ function drawDirs_Files($list, &$manager)
     			?>
                 <tr>
         		  <td><img src="<?php print $IMConfig['base_url']; if(is_file('icons/'.$file['ext'].'_small.gif')) echo "icons/".$file['ext']."_small.gif"; else echo $IMConfig['default_listicon']; ?>" alt="" /></td>
-                  <th><a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" <?php if ($insertMode == 'image') { ?> onmouseover="showPreview('<?php echo $file['relative'];?>')" onmouseout="showPreview(window.parent.document.getElementById('f_url').value)" <?php } ?> >
+                  <th><a href="#" class="thumb" style="cursor: pointer;" ondblclick="this.onclick();window.top.onOK();" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" <?php if ($insertMode == 'image') { ?> onmouseover="showPreview('<?php echo $file['relative'];?>')" onmouseout="showPreview(window.parent.document.getElementById('f_url').value)" <?php } ?> >
         			<?php
         			if(strlen($entry)>$maxNameLength) echo substr($entry,0,$maxNameLength)."..."; else echo $entry;
         			?>
@@ -161,7 +161,7 @@ function drawDirs_Files($list, &$manager)
     			$thisFileNameLength = $maxFileNameLength;
     			?>
                 <div class="thumb_holder" id="holder_<?php echo asc2hex($entry) ?>">
-                  <a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
+                  <a href="#" class="thumb" style="cursor: pointer;" ondblclick="this.onclick();window.top.onOK();" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>">
                     <img src="<?php print $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" />
                   </a>
                   <div class="edit">
@@ -202,7 +202,7 @@ function drawNoResults()
 function drawErrorBase(&$manager) 
 {
 ?>
-<div class="error"><span>Invalid base directory:</span> <?php echo $manager->config['images_dir']; ?></div>
+<div class="error"><span>Invalid base directory:</span> <?php echo $manager->getImagesDir(); ?></div>
 <?php
 }
 
@@ -295,7 +295,7 @@ function asc2hex ($temp)
     
 	function editImage(image) 
 	{
-		var url = "<?php print $IMConfig['backend_url']; ?>__function=editor&img="+image;
+		var url = "<?php print $IMConfig['backend_url']; ?>__function=editor&img="+image+"&mode=<?php print $insertMode ?>";
         Dialog(url, function(param)
 		{
 			if (!param) { // user must have pressed Cancel
