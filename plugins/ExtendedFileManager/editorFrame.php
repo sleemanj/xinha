@@ -7,12 +7,14 @@
  * Package: ExtendedFileManager (EFM 1.1.1)
  * http://www.afrusoft.com/htmlarea
  */
+if(isset($_REQUEST['mode'])) $insertMode=$_REQUEST['mode'];
+	if(!isset($insertMode)) $insertMode="image";
 
 require_once('config.inc.php');
 require_once('Classes/ExtendedFileManager.php');
 require_once('../ImageManager/Classes/ImageEditor.php');
 
-$manager = new ExtendedFileManager($IMConfig);
+$manager = new ExtendedFileManager($IMConfig,$insertMode);
 $editor = new ImageEditor($manager);
 $imageInfo = $editor->processImage();
 
@@ -25,7 +27,7 @@ $imageInfo = $editor->processImage();
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/wz_jsgraphics.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/EditorContent.js"></script>
 <script type="text/javascript">
-    var _backend_url = "<?php print $IMConfig['backend_url']; ?>";
+    var _backend_url = "<?php print $IMConfig['backend_url']."&mode=$insertMode"; ?>&";
 
     if(window.top)
     	HTMLArea = window.top.HTMLArea;

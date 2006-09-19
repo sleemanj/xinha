@@ -38,18 +38,20 @@ function ExtendedFileManager(editor)
     var cfg = editor.config;
     var toolbar = cfg.toolbar;
     var self = this;
-
-    cfg.registerButton({
-        id        : "linkfile",
-        tooltip   : HTMLArea._lc("Insert File Link",'ExtendedFileManager'),
-        image     : _editor_url + 'plugins/ExtendedFileManager/img/ed_linkfile.gif',
-        textMode  : false,
-        action    : function(editor) {
-                editor._linkFile();
-              }
-        });
-    cfg.toolbar.push([ "linkfile" ]);
-};
+    
+    if (cfg.ExtendedFileManager.use_linker) {
+        cfg.registerButton({
+            id        : "linkfile",
+            tooltip   : HTMLArea._lc("Insert File Link",'ExtendedFileManager'),
+            image     : _editor_url + 'plugins/ExtendedFileManager/img/ed_linkfile.gif',
+            textMode  : false,
+            action    : function(editor) {
+                    editor._linkFile();
+                  }
+            });
+        cfg.addToolbarElement("linkfile", "createlink", 1);
+        };
+    }
 
 ExtendedFileManager._pluginInfo = {
     name          : "ExtendedFileManager",
@@ -61,6 +63,7 @@ ExtendedFileManager._pluginInfo = {
 
 HTMLArea.Config.prototype.ExtendedFileManager =
 {
+  'use_linker': true,
   'backend'    : _editor_url + 'plugins/ExtendedFileManager/backend.php?__plugin=ExtendedFileManager&',
   'backend_data' : null,
   // deprecated keys, use passing data through e.g. xinha_pass_to_php_backend()

@@ -37,7 +37,7 @@ Complete Features :
 * You can specify image margin / padding / background and border colors
 * You may edit Alt/title tags for inserted images
 
-(Most of the features can be enabled/disabled as needed)
+(Most of the features con be enabled/disabled as needed)
 
 Installation :
 --------------

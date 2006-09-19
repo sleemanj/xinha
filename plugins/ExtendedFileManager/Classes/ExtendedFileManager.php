@@ -53,7 +53,9 @@ class ExtendedFileManager
 	 */
 	function getImagesDir()
 	{
-		Return $this->config['images_dir'];
+		if ($this->mode == 'link' && isset($this->config['files_dir']))
+			Return $this->config['files_dir'];
+		else Return $this->config['images_dir'];
 	}
 
 	/**
@@ -62,7 +64,9 @@ class ExtendedFileManager
 	 */
 	function getImagesURL()
 	{
-		Return $this->config['images_url'];
+		if ($this->mode == 'link' && isset($this->config['files_url']))
+				Return $this->config['files_url'];
+		else Return $this->config['images_url'];
 	}
 
 	function isValidBase()
@@ -656,7 +660,7 @@ class ExtendedFileManager
 
 		//well, no thumbnail was found, so ask the thumbs.php
 		//to generate the thumbnail on the fly.
-		Return $IMConfig['backend_url'] . '__function=thumbs&img='.rawurlencode($relative);
+		Return $IMConfig['backend_url'] . '__function=thumbs&img='.rawurlencode($relative)."&mode=$this->mode";
 	}
 
 	/**

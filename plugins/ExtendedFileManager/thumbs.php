@@ -9,6 +9,8 @@
  * Package: ExtendedFileManager (EFM 1.1.1)
  * http://www.afrusoft.com/htmlarea
  */
+if(isset($_REQUEST['mode'])) $insertMode=$_REQUEST['mode'];
+if(!isset($insertMode)) $insertMode="image";
 
 require_once('config.inc.php');
 require_once('Classes/ExtendedFileManager.php');
@@ -18,8 +20,7 @@ require_once('../ImageManager/Classes/Thumbnail.php');
 if(!isset($_GET['img']))
 	exit();
 
-
-$manager = new ExtendedFileManager($IMConfig);
+$manager = new ExtendedFileManager($IMConfig,$insertMode);
 
 //get the image and the full path to the image
 $image = rawurldecode($_GET['img']);
