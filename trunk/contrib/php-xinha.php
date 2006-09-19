@@ -164,6 +164,7 @@
    {
      foreach($_REQUEST['backend_data'] as $k => $v)
      {
+       $v =  ini_get('magic_quotes_gpc') ? stripslashes($v) : $v;
        $qs[] = "backend_data[" . rawurlencode($k) . "]=" . rawurlencode($v);
      }       
    }
