@@ -73,7 +73,7 @@ Linker.prototype._createLink = function(a)
 
   if(a && a.tagName.toLowerCase() == 'a')
   {
-    var href =this.editor.fixRelativeLinks(a.href);
+    var href =this.editor.fixRelativeLinks(a.getAttribute('href'));
     var m = href.match(/^mailto:(.*@[^?&]*)(\?(.*))?$/);
     var anchor = href.match(/^#(.*)$/);
 
@@ -261,7 +261,7 @@ Linker.prototype._createLink = function(a)
       }
     }
     linker.editor.selectNodeContents(a);
-	linker.editor.updateToolbar();
+    linker.editor.updateToolbar();
   };
 
   this._dialog.show(inputs, doOK);
