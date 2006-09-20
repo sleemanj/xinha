@@ -213,6 +213,8 @@ Linker.prototype._createLink = function(a)
             p.insertBefore(a.removeChild(a.childNodes[0]), a);
           }
           p.removeChild(a);
+          linker.editor.updateToolbar();
+          return;
         }
       }
       else
@@ -251,13 +253,15 @@ Linker.prototype._createLink = function(a)
         if(a.href == tmp)
         {
           // Found one.
-          for(var i in atr)
+          for(var j in atr)
           {
-            a.setAttribute(i, atr[i]);
+            a.setAttribute(j, atr[j]);
           }
         }
       }
     }
+    linker.editor.selectNodeContents(a);
+	linker.editor.updateToolbar();
   };
 
   this._dialog.show(inputs, doOK);
@@ -519,7 +523,7 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
   }
 
   //if no anchors found completely hide Anchor-Link
-  if(anchor.childNodes.length==0) {
+  if(anchor.length==0) {
     this.dialog.getElementById('anchorfieldset').style.display = "none";
   }
   
