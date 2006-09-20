@@ -67,13 +67,16 @@ Linker.prototype._createLink = function(a)
     p_options: ['menubar=no','toolbar=yes','location=no','status=no','scrollbars=yes','resizeable=yes'],
     to:       'alice@example.com',
     subject:  '',
-    body:     ''
+    body:     '',
+    anchor:   ''
   };
 
   if(a && a.tagName.toLowerCase() == 'a')
   {
-    var m = a.href.match(/^mailto:(.*@[^?&]*)(\?(.*))?$/);
-    var anchor = a.href.match(/^#(.*)$/);
+    var href =this.editor.fixRelativeLinks(a.href);
+    var m = href.match(/^mailto:(.*@[^?&]*)(\?(.*))?$/);
+    var anchor = href.match(/^#(.*)$/);
+
     if(m)
     {
       // Mailto
@@ -96,7 +99,8 @@ Linker.prototype._createLink = function(a)
     {
       //Anchor-Link
       inputs.type = 'anchor';
-      inputs.anchor = m[1];
+      inputs.anchor = anchor[1];
+      
     }
     else
     {
@@ -107,7 +111,7 @@ Linker.prototype._createLink = function(a)
         var m = a.getAttribute('onclick').match(/window\.open\(\s*this\.href\s*,\s*'([a-z0-9_]*)'\s*,\s*'([a-z0-9_=,]*)'\s*\)/i);
 
         // Popup Window
-        inputs.href   = a.href ? a.href : '';
+        inputs.href   = href ? href : '';
         inputs.target = 'popup';
         inputs.p_name = m[1];
         inputs.p_options = [ ];
@@ -130,7 +134,7 @@ Linker.prototype._createLink = function(a)
       else
       {
         // Normal
-        inputs.href   = a.href;
+        inputs.href   = href;
         inputs.target = a.target;
       }
     }
@@ -480,10 +484,10 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
   {
     this.dialog.getElementById('popuptable').style.display = 'none';
   }
-
+  
   var anchor = this.dialog.getElementById('anchor');
-  for(var i=0;i<anchor.childNodes.length;i++) {
-    anchor.removeChild(anchor.childNodes[i]);
+  for(var i=anchor.length;i>=0;i--) {
+    anchor[i] = null;
   }
 
   var html = this.linker.editor.getHTML();  
@@ -510,10 +514,8 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
   
   for(i=0;i<anchors.length;i++)
   {
-    var opt = document.createElement('option');
-    opt.value = '#'+anchors[i];
-    opt.innerHTML = anchors[i];
-    anchor.appendChild(opt);
+    var opt = new Option(anchors[i],'#'+anchors[i],false,(inputs.anchor == anchors[i]));
+    anchor[anchor.length] = opt;
   }
 
   //if no anchors found completely hide Anchor-Link
