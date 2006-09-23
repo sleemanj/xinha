@@ -6359,13 +6359,25 @@ HTMLArea._loadlang = function(context)
 };
 
 /** Return a localised string.
- * @param string    English language string
+ * @param string    English language string. It can also contain variables in the form "Some text with $variable=replaced text$". 
+ *                  This replaces $variable in "Some text with $variable" with "replaced text"
  * @param context   Case sensitive context name, eg 'HTMLArea' (default), 'TableOperations'...
  * @param replace   Replace $variables in String, eg {foo: 'replaceText'} ($foo in string will be replaced)
  */
 HTMLArea._lc = function(string, context, replace)
 {
   var ret;
+  if (typeof string == 'string') var m = string.match(/\$(.*?)=(.*?)\$/g);
+  if (m) 
+  {
+    if (!replace) replace = {};
+    for (var i = 0;i<m.length;i++)
+    {
+      var n = m[i].match(/\$(.*?)=(.*?)\$/);
+      replace[n[1]] = n[2];
+      string = string.replace(n[0],'$'+n[1]);
+    }
+  }
   if ( _editor_lang == "en" )
   {
     if ( typeof string == 'object' && string.string )
