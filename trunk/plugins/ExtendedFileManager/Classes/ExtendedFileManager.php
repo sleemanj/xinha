@@ -472,13 +472,13 @@ class ExtendedFileManager
 		if(!in_array($afruext, $valid_extensions))
 		{
 			Files::delFile($file['tmp_name']);
-			Return "Cannot upload .".$afruext." Files. Permission denied.";
+			Return 'Cannot upload $extension='.$afruext.'$ Files. Permission denied.';
 		}
 
 		if($file['size']>($max_size*1024))
 		{
 			Files::delFile($file['tmp_name']);
-			Return "Unble to upload file. Maximum file size [".$max_size."Kb] exceeded.";
+			Return 'Unble to upload file. Maximum file size [$max_size='.$max_size.'$ KB] exceeded.';
 		}
 
 		if(!empty($this->config['max_foldersize_mb']) &&  (Files::dirSize($this->getImagesDir()))+$file['size']> ($this->config['max_foldersize_mb']*1048576))
@@ -495,7 +495,7 @@ class ExtendedFileManager
 		if(!is_int($result))
 		{
 			Files::delFile($file['tmp_name']);
-			Return $file['name']." successfully uploaded.";
+			Return 'File "$file='.$file['name'].'$" successfully uploaded.';
 		}
 
 		//delete tmp files.
@@ -514,7 +514,7 @@ class ExtendedFileManager
 
 		if(!is_numeric($tmpFreeSize) || $tmpFreeSize<0)	$tmpFreeSize=0;
         
-		Return 'Total Size : '.$this->config['max_foldersize_mb'].' Mb , Free Space: '.Files::formatSize($tmpFreeSize);
+		Return 'Total Size : $max_foldersize_mb='.$this->config['max_foldersize_mb'].'$ MB, Free Space: $free_space='.Files::formatSize($tmpFreeSize).'$';
 	}
 
 

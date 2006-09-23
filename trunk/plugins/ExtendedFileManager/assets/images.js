@@ -186,7 +186,7 @@ function showMessage(newMessage)
         if(message.firstChild)
             message.removeChild(message.firstChild);
 
-        message.appendChild(topDoc.createTextNode(i18n(newMessage)));
+        message.appendChild(topDoc.createTextNode(newMessage));
 
         messages.style.display = "block";
     }
@@ -216,7 +216,7 @@ function addEvent(obj, evType, fn)
 
 function confirmDeleteFile(file)
 {
-    if(confirm(file + "\n\n" + i18n("Delete file?")))
+    if(confirm(i18n('Delete file "$file=' + file +'$"?')))
         return true;
 
     return false;
@@ -230,7 +230,7 @@ function confirmDeleteDir(dir, count)
         return false;
     }
 
-    if(confirm(i18n(dir + "\n\n" + i18n("Delete folder?"))))
+    if(confirm(i18n('Delete folder "$dir=' + dir +'$"?')))
         return true;
 
     return false;
