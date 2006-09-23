@@ -51,9 +51,9 @@
   "Clear": "Wyczyść",
   "Loading": "Ładowanie",
   "Invalid base directory:": "Nieprawidłowy katalog bazowy:",
-  "Delete file?": "Usunąć plik?",
+  'Delete file "$file"?': "$file\n\nUsunąć plik?",
   "Please delete all files/folders inside the folder you wish to delete first.": "Najpierw usuń wszystkie pliki i podkatalogi katalogu.",
-  "Delete folder?": "Usunąć katalog ?",
+  'Delete folder "$dir"?': "$dir\n\nUsunąć katalog ?",
   "Folder Name:": "Nazwa katalogu",
   "No Files Found": "Nie znaleziono plików",
   "Invalid folder name, please choose another folder name.": "Nieprawidłowa nazwa katalogu, wybierz inną.",
@@ -92,5 +92,11 @@
   "Rename": "Zmień nazwę",
   "Please enter new name for this file...": "Podaj nową nazwę dla tego pliku...",
   "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Nie mogłem zmienić nazwy pliku. Plik o nowej nazwie już istnieje\nlub prak praw zapisu do katalogu.",
-  "Cancelled rename.": "Anulowano zmianę nazwy pliku."
+  "Cancelled rename.": "Anulowano zmianę nazwy pliku.",
+   'File "$file" successfully uploaded.':  'File "$file" successfully uploaded.',
+  "Cannot upload. Maximum folder size reached. Delete unwanted files and try again.":"Cannot upload. Maximum folder size reached. Delete unwanted files and try again.",
+  "Maximum file size [$max_size KB] exceeded.":"Maximum file size [$max_size KB] exceeded.",
+  "Cannot upload $extension Files. Permission denied.": "Cannot upload $extension Files. Permission denied.",
+  "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.":"Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.",
+  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Total Size : $max_foldersize_mb MB, Free Space: $free_space"
 };

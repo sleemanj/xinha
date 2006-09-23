@@ -51,9 +51,9 @@
   "Clear": "Löschen",
   "Loading": "Laden",
   "Invalid base directory:": "Ungültiges Basisverzeichnis:",
-  "Delete file?": "Datei löschen?",
+  'Delete file "$file"?': 'Datei "$file" löschen?',
   "Please delete all files/folders inside the folder you wish to delete first.": "Bitte zuerst alle untergeordneten Ordner löschen.",
-  "Delete folder?": "Verzeichnis löschen?",
+  'Delete folder "$dir"?': 'Verzeichnis "$dir" löschen?',
   "Folder Name:": "Verzeichnisname",
   "No Files Found": "Keine Dateien gefunden",
   "Invalid folder name, please choose another folder name.": "Ungültiger Verzeichnisname - bitte neu wählen.",
@@ -92,5 +92,12 @@
   "Rename": "Umbenennen",
   "Please enter new name for this file...": "Bite neuen Namen für diese Datei eingeben...",
   "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Umbenennen nicht möglich. Evtl. Dateiname schon vorhanden oder keine Schreibrechte.",
-  "Cancelled rename.": "Umbenennen abgebrochen."
+  "Cancelled rename.": "Umbenennen abgebrochen.",
+  'File "$file" successfully uploaded.': 'Datei "$file" erfolgreich hochgeladen.',
+  "Cannot upload. Maximum folder size reached. Delete unwanted files and try again.":"Die maximale Ordnergröße ist erreicht. Bitte löschen Sie Dateien, die Sie nicht mehr benötigen.",
+  "Maximum file size [$max_size KB] exceeded.":"Maximale Dateigröße [$max_size KB] überschritten.",
+  "Cannot upload $extension Files. Permission denied.": "$extension Dateien dürfen nicht hochgeladen werden.",
+  "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.":"Konnte Datei nicht hochladen.\nEntweder die maximale Dateigröße [$max_size KB] ist überschritten\noder das Verzeichnis hat keine Schreibrechte.",
+  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Max. Ordergröße: $max_foldersize_mb MB, noch frei: $free_space"
+  
 };

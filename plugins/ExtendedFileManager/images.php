@@ -248,9 +248,9 @@ function asc2hex ($temp)
 
 		<?php
 		if(isset($uploadStatus) && !is_numeric($uploadStatus) && !is_bool($uploadStatus))
-		echo 'alert(i18n("'.$uploadStatus.'"));';
+		echo "alert(i18n('$uploadStatus'));";
 		else if(isset($uploadStatus) && $uploadStatus==false)
-		echo 'alert("Unable to upload File. \nEither Maximum file size ['.($insertMode == 'image' ? $IMConfig['max_filesize_kb_image'] : $IMConfig['max_filesize_kb_link'] ).'Kb] exceeded or\nFolder doesn\'t have write permission.");';
+		echo 'alert(i18n("Unable to upload File. \nEither Maximum file size [$max_size='.($insertMode == 'image' ? $IMConfig['max_filesize_kb_image'] : $IMConfig['max_filesize_kb_link'] ).'$ KB] exceeded or\nFolder doesn\'t have write permission."));';
 		?>
 
 		<?php
@@ -316,7 +316,7 @@ function asc2hex ($temp)
 // Koto: why emptying? commented out
 //if(window.top.document.getElementById('manager_mode').value=="image")
 //emptyProperties();
-<?php if(isset($diskInfo)) echo 'updateDiskMesg("'.$diskInfo.'");'; ?>
+<?php if(isset($diskInfo)) echo 'updateDiskMesg(i18n(\''.$diskInfo.'\'));'; ?>
 //-->
 </script>
 

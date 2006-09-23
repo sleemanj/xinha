@@ -50,9 +50,9 @@
   "Clear": "Tøm",
   "Loading": "Laster",
   "Invalid base directory:": "Ugyldig sti til mappe:",
-  "Delete file?": "Slette fil?",
+  'Delete file "$file"?': "$file\n\nSlette fil?",
   "Please delete all files/folders inside the folder you wish to delete first.": "Vennligst slett alle filer og mapper i mappen du ønsker å slette først!",
-  "Delete folder?": "Slette mappe?",
+  'Delete folder "$dir"?': "$dir\n\nSlette mappe?",
   "Folder Name:": "Mappe navn",
   "No Files Found": "Ingen filer funnet",
   "Invalid folder name, please choose another folder name.": "Ugyldig mappenavn, vennligst velg et annet mappenavn",
@@ -85,5 +85,11 @@
   "Rename": "Nytt navn",
   "Please enter new name for this file...": "Vennligst skriv inn nytt navn for denne fil...",
   "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Kan ikke omdøpe fil. En fil har allerede samme navn eller\nmappen har ikke skriverettigheter.",
-  "Cancelled rename.": "Omdøping av filnavn avbrutt."
+  "Cancelled rename.": "Omdøping av filnavn avbrutt.",
+   'File "$file" successfully uploaded.':  'File "$file" successfully uploaded.',
+  "Cannot upload. Maximum folder size reached. Delete unwanted files and try again.":"Cannot upload. Maximum folder size reached. Delete unwanted files and try again.",
+  "Maximum file size [$max_size KB] exceeded.":"Maximum file size [$max_size KB] exceeded.",
+  "Cannot upload $extension Files. Permission denied.": "Cannot upload $extension Files. Permission denied.",
+  "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.":"Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.",
+  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Total Size : $max_foldersize_mb MB, Free Space: $free_space"
 };
