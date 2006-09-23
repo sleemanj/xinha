@@ -2178,7 +2178,7 @@ HTMLArea.prototype.initIframe = function()
   
   HTMLArea.freeLater(this, '_doc');
   
-  doc.open();
+  doc.open("text/html","replace");
   var html = '';
   if ( !editor.config.fullPage )
   {
@@ -2344,7 +2344,7 @@ HTMLArea.prototype.setFullHTML = function(html)
     }
     var html_re = /<html>((.|\n)*?)<\/html>/i;
     html = html.replace(html_re, "$1");
-    this._doc.open();
+    this._doc.open("text/html","replace");
     this._doc.write(html);
     this._doc.close();
     if ( reac )
