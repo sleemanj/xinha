@@ -40,7 +40,9 @@ function PopupWin(editor, title, handler, initFunction)
   doc.open();
   var html = "<html><head><title>" + title + "</title>\n";
   // html += "<base href='" + base + "htmlarea.js' />\n";
-  html += "<style type='text/css'>@import url(" + base + "htmlarea.css);</style></head>\n";
+  html += "<style type='text/css'>@import url(" + _editor_url + "htmlarea.css);</style>\n";
+  html += "<style type='text/css'>@import url(" + _editor_url + "skins/" + _editor_skin + "/skin.css);</style>\n";
+  html += "</head>\n";
   html += "<body class='dialog popupwin' id='--HA-body'></body></html>";
   doc.write(html);
   doc.close();
@@ -106,6 +108,7 @@ PopupWin.prototype.addButtons = function()
   var self = this;
   var div = this.doc.createElement("div");
   this.content.appendChild(div);
+  div.id = "buttons";
   div.className = "buttons";
   for ( var i = 0; i < arguments.length; ++i )
   {
