@@ -151,7 +151,7 @@
 			<td colspan="5"><input type="text" id="<?php if($insertMode=='image') echo 'f_url'; else echo 'f_href';?>" class="largelWidth" value="" /></td>
             <td rowspan="<?php echo $num_rows ?>" colspan="2" valign="top"><?php if($insertMode=='image') { ?>
             <div style="padding:4px;background-color:#CCC;border:1px inset;width: 100px; height: 100px;">
-            <img src="<?php print $IMConfig['base_url'];?>img/1x1_transparent.gif" id="f_preview" />
+            <img src="<?php print $IMConfig['base_url'];?>img/1x1_transparent.gif" alt="" id="f_preview" />
             </div>
             <?php } else if($insertMode=="link" && $IMConfig['link_enable_target'] !== false) {?><label for="f_align">Target Window</label>
 			<select id="f_target" style="width:125px;">
