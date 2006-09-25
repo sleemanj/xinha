@@ -206,9 +206,9 @@ class Files
 		if($size < 1024) 
 			return $size.' bytes';	
 		else if($size >= 1024 && $size < 1024*1024) 
-			return sprintf('%01.2f',$size/1024.0).' Kb';	
+			return sprintf('%01.2f',$size/1024.0).' KB';
 		else
-			return sprintf('%01.2f',$size/(1024.0*1024)).' Mb';	
+			return sprintf('%01.2f',$size/(1024.0*1024)).' MB';
 	}
 
 	/**

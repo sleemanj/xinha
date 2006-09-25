@@ -199,7 +199,7 @@ init = function ()
 
         var opt = document.createElement("option");
         opt.value = "_other";
-        opt.innerHTML = "Other";
+        opt.innerHTML = i18n("Other");
         target_select.appendChild(opt);
         target_select.onchange = onTargetChanged;
         document.getElementById("f_href").focus();
