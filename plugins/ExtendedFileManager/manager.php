@@ -105,7 +105,7 @@
 </script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/manager.js"></script>
 </head>
-<body>
+<body class="dialog" >
 <div class="title">File Manager</div>
 <form action="<?php print $IMConfig['backend_url']; ?>" id="uploadForm" method="post" enctype="multipart/form-data">
 <input type="hidden" name="__plugin" value="ExtendedFileManager" />
