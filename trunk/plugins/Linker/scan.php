@@ -97,8 +97,8 @@
 
     function dircomp($a, $b)
     {
-      if(is_array($a)) $a = $a[0];
-      if(is_array($b)) $b = $b[0];
+      if(is_array($a)) $a = array_shift($a);
+      if(is_array($b)) $b = array_shift($b);
       return strcmp(strtolower($a), strtolower($b));
     }
    
