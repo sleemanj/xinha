@@ -107,7 +107,7 @@
   "Width unit": "Jednostka",
   "Fixed width columns": "Kolumny o stałej szerokości",
   "Positioning of this table": "Pozycjonowanie tabeli",
-  "Cell spacing:": "Spacjowanie komórek:",
+  "Cell spacing:": "Odstęp komórek:",
   "Space between adjacent cells": "Przestrzeń pomiędzy komórkami",
   "Cell padding:": "Wcięcie komórek:",
   "Space between content and border in cell": "Przestrzeń między krawędzią a zawartością komórki",
