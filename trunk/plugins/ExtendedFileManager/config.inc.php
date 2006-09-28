@@ -270,7 +270,14 @@ $IMConfig['link_enable_target'] = true;
 */
 $IMConfig['allow_upload'] = true;
 
-/* Maximum upload file size in Kilobytes */
+/* Maximum upload file size
+
+  Possible values: number, "max"
+
+  number - maximum size in Kilobytes.
+
+  "max"  - the maximum allowed by the server (the value is retrieved from the server configuration).
+*/
 $IMConfig['max_filesize_kb_image'] = 2000;
 
 $IMConfig['max_filesize_kb_link'] = 5000;
@@ -354,7 +361,15 @@ elseif(isset($_REQUEST['backend_config']))
   $IMConfig['backend_url'] .= "backend_config_secret_key_location=" . rawurlencode($_REQUEST['backend_config_secret_key_location']) . '&';
 
 }
+if ($IMConfig['max_filesize_kb_link'] == "max")
+{
+  $IMConfig['max_filesize_kb_link'] = upload_max_filesize_kb();
+}
 
+if ($IMConfig['max_filesize_kb_image'] == "max")
+{
+  $IMConfig['max_filesize_kb_image'] = upload_max_filesize_kb();
+}
 // END
 
 ?>
