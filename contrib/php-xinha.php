@@ -182,5 +182,21 @@
       return str_repeat("  ", $tabs) . preg_replace('/\n(.)/', "\n" . str_repeat("  ", $tabs) . "\$1", $text);
     }
   }       
-   
+
+  /** Return upload_max_filesize value from php.ini in kilobytes (function adapted from php.net)**/
+  function upload_max_filesize_kb() 
+  {
+    $val = ini_get('upload_max_filesize');
+    $val = trim($val);
+    $last = strtolower($val{strlen($val)-1});
+    switch($last) 
+    {
+      // The 'G' modifier is available since PHP 5.1.0
+      case 'g':
+        $val *= 1024;
+      case 'm':
+        $val *= 1024;
+   }
+   return $val;
+}
 ?>
