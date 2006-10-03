@@ -23,8 +23,12 @@ function Dialog(url, action, init) {
 
 Dialog._parentEvent = function(ev) {
 	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
-	if (Dialog._modal && !Dialog._modal.closed) {
-		HTMLArea._stopEvent(ev);
+	try {
+		if (Dialog._modal && !Dialog._modal.closed) {
+			HTMLArea._stopEvent(ev);
+		} 
+	} catch (e) {
+		//after closing the popup in IE the events are not released and trying to access Dialog._modal.closed causes an error
 	}
 };
 
