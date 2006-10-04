@@ -249,13 +249,14 @@ Linker.prototype._createLink = function(a)
       var anchors = linker.editor._doc.getElementsByTagName('a');
       for(var i = 0; i < anchors.length; i++)
       {
-        var a = anchors[i];
-        if(a.href == tmp)
+        var anchor = anchors[i];
+        if(anchor.href == tmp)
         {
           // Found one.
+          if (!a) a = anchor;
           for(var j in atr)
           {
-            a.setAttribute(j, atr[j]);
+            anchor.setAttribute(j, atr[j]);
           }
         }
       }

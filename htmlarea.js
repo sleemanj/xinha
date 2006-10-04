@@ -3967,20 +3967,21 @@ HTMLArea.prototype._createLink = function(link)
       {
         try
         {
-          editor._doc.execCommand("createlink", false, param.f_href);
-          a = editor.getParentElement();
-          var sel = editor._getSelection();
-          var range = editor._createRange(sel);
-          if ( !HTMLArea.is_ie )
+          var tmp = HTMLArea.uniq('http://www.example.com/Link');
+          editor._doc.execCommand('createlink', false, tmp);
+
+          // Fix them up
+          var anchors = editor._doc.getElementsByTagName('a');
+          for(var i = 0; i < anchors.length; i++)
           {
-            a = range.startContainer;
-            if ( ! ( /^a$/i.test(a.tagName) ) )
+            var anchor = anchors[i];
+            if(anchor.href == tmp)
             {
-              a = a.nextSibling;
-              if ( a === null )
-              {
-                a = range.startContainer.parentNode;
-              }
+              // Found one.
+              if (!a) a = anchor;
+              anchor.href =  param.f_href;
+              if (param.f_target) anchor.target =  param.f_target;
+              if (param.f_title)  anchor.title =  param.f_title;
             }
           }
         } catch(ex) {}
