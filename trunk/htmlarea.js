@@ -2193,7 +2193,8 @@ HTMLArea.prototype.initIframe = function()
     html += ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;} \n";
     html += "</style>\n";
     html += "<style type=\"text/css\">";
-    html += "html, body { border: 0px;  background-color: #ffffff; } \n";
+    html += "html, body { border: 0px; } \n";
+    html += "body { background-color: #ffffff; } \n";
     html += "span.macro, span.macro ul, span.macro div, span.macro p {background : #CCCCCC;}\n";
     html += "</style>\n";
 
