@@ -272,7 +272,9 @@ ContextMenu.prototype.getContextMenu = function(target) {
 ContextMenu.prototype.popupMenu = function(ev) {
 	var self = this;
 	if (this.currentMenu)
-		this.currentMenu.parentNode.removeChild(this.currentMenu);
+	{
+		this.closeMenu();
+	}
 	function getPos(el) {
 		var r = { x: el.offsetLeft, y: el.offsetTop };
 		if (el.offsetParent) {
