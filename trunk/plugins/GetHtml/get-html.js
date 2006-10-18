@@ -32,10 +32,9 @@ GetHtml._pluginInfo = {
 
 HTMLArea.RegExpCache = [
 /*00*/  new RegExp().compile(/<\s*\/?([^\s\/>]+)[\s*\/>]/gi),//lowercase tags
-/*01*/  new RegExp().compile(/(\S*\s*=\s*)?_moz[^=>]*(=\s*[^>]*)?/gi),//strip _moz attributes
+/*01*/  new RegExp().compile(/(\s+)_moz[^=>]*=[^\s>]*/gi),//strip _moz attributes
 /*02*/  new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),// find attributes
 /*03*/  new RegExp().compile(/\/>/g),//strip singlet terminators
-/*04*/ // new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed)([^>]*)>/g),//terminate singlet tags
 /*04*/  new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g),//terminate singlet tags
 /*05*/  new RegExp().compile(/(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),//expand singlet attributes
 /*06*/  new RegExp().compile(/(="[^']*)'([^'"]*")/),//check quote nesting
@@ -43,19 +42,19 @@ HTMLArea.RegExpCache = [
 /*08*/  new RegExp().compile(/<\s+/g),//strip tagstart whitespace
 /*09*/  new RegExp().compile(/\s+(\/)?>/g),//trim whitespace
 /*10*/  new RegExp().compile(/\s{2,}/g),//trim extra whitespace
-/*11*/  new RegExp().compile(/\s+([^=\s]+)(="[^"]+")/g),// lowercase attribute names
-/*12*/  new RegExp().compile(/(\S*\s*=\s*)?contenteditable[^=>]*(=\s*[^>\s\/]*)?/gi),//strip contenteditable
+/*11*/  new RegExp().compile(/\s+([^=\s]+)((="[^"]+")|([\s>]))/g),// lowercase attribute names
+/*12*/  new RegExp().compile(/\s+contenteditable(=[^>\s\/]*)?/gi),//strip contenteditable
 /*13*/  new RegExp().compile(/((href|src)=")([^\s]*)"/g), //find href and src for stripBaseHref()
 /*14*/  new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g),
 /*15*/  new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),//blocklevel closing tag
 /*16*/  new RegExp().compile(/<(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),//blocklevel opening tag
-/*17*/  new RegExp().compile(/<(td|th|li|option|br|hr|img|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g),//singlet tag or output on 1 line
+/*17*/  new RegExp().compile(/<(td|th|li|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g),//singlet tag or output on 1 line
 /*18*/  new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),//find content NOT inside pre and script tags
-/*19*/  new RegExp().compile(/(<pre[^>]*>)(\s|[^\s])*?(<\/pre>)/g),//find content inside pre tags
-/*20*/  new RegExp().compile(/(^|<!--(\s|\S)*?-->)((\s|\S)*?)(?=<!--(\s|\S)*?-->|$)/g),//find content NOT inside comments
+/*19*/  new RegExp().compile(/(<pre[^>]*>)([\s\S])*?(<\/pre>)/g),//find content inside pre tags
+/*20*/  new RegExp().compile(/(^|<!--[\s\S]*?-->)([\s\S]*?)(?=<!--[\s\S]*?-->|$)/g),//find content NOT inside comments
 /*21*/  new RegExp().compile(/\S*=""/g), //find empty attributes
 /*22*/  new RegExp().compile(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<\/?\w[^>]*>/g), //find all tags, including comments and php
-/*23*/  new RegExp().compile(/(^|<\/script>)(\s|[^\s])*?(<script[^>]*>|$)/g) //find content NOT inside script tags
+/*23*/  new RegExp().compile(/(^|<\/script>)[\s\S]*?(<script[^>]*>|$)/g) //find content NOT inside script tags
 ];
 
 /** 
@@ -99,8 +98,8 @@ HTMLArea.indent = function(s, sindentChar) {
 		s = s.replace(c[19], function(str){return str.replace(/<br \/>/g,"\n")});
 	}
 	s = s.replace(c[18], function(strn) { //skip pre and script tags
-	  strn = strn.replace(c[20], function(st,$1,$2,$3) { //exclude comments
-		string = $3.replace(/[\n\r]/gi, " ").replace(/\s+/gi," ").replace(c[14], function(str) {
+	  strn = strn.replace(c[20], function(st,$1,$2) { //exclude comments
+		string = $2.replace(/[\n\r]/gi, " ").replace(/\s+/gi," ").replace(c[14], function(str) {
 			if (str.match(c[16])) {
 				var s = "\n" + HTMLArea.__sindent + str;
 				// blocklevel openingtag - increase indent
