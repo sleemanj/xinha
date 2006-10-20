@@ -1642,7 +1642,8 @@ HTMLArea.prototype.generate = function ()
     );
 
     //add onsubmit handlers for textareas that don't have one 
-    if ( !textarea.form.xinha_submit )
+    // doesn't work in IE!!
+   /* if ( !textarea.form.xinha_submit )
     {
       textarea.form.xinha_submit = textarea.form.submit;
       textarea.form.submit = function()
@@ -1662,7 +1663,7 @@ HTMLArea.prototype.generate = function ()
         }
         this.xinha_submit();
       };
-    }
+    }*/
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
