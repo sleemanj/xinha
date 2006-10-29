@@ -98,6 +98,20 @@
   "Maximum file size [$max_size KB] exceeded.":"Maximale Dateigröße [$max_size KB] überschritten.",
   "Cannot upload $extension Files. Permission denied.": "$extension Dateien dürfen nicht hochgeladen werden.",
   "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.":"Konnte Datei nicht hochladen.\nEntweder die maximale Dateigröße [$max_size KB] ist überschritten\noder das Verzeichnis hat keine Schreibrechte.",
-  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Max. Ordergröße: $max_foldersize_mb MB, noch frei: $free_space"
+  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Max. Ordergröße: $max_foldersize_mb MB, noch frei: $free_space",
+  "Please enter new name for this folder...":"Bitte neuen Namen für diesen Ordner eingeben...",
+
+  "Cut":"Ausschneiden",
+  "Copy":"Kopieren",
+  "Paste":"Einfügen",
   
+  'Copy "$file" from "$dir" here': '"$file" aus Ordner "$dir" hierher kopieren',
+  'Copy folder "$file" from "$dir" here' : '"Ordner $file" aus "$dir" hierher kopieren',
+  'Move "$file" from "$dir" here':'"$file" aus Ordner "$dir" hierher verschieben',
+  'Move folder "$file" from "$dir" here':'Ordner "$file" aus "$dir" hierher verschieben',
+  
+  "Source file/folder not found.":"Quelldatei/-ordner nicht gefunden",
+  "Paste failed.\nMaybe folder doesn't have write permission.": "Einfügen fehlgeschlagen.\nMöglicherweise hat der Ordner keine Schreibberechtigung.",
+  "Could not create destination folder.":"Konnte Zielordner nicht erstellen.",
+  "Destination file/folder already exists.":"Zieldatei/-ordner existiert bereits"
 };

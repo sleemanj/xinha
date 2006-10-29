@@ -206,6 +206,46 @@ init = function ()
     }
 }
 
+function pasteButton(action)
+{
+	var buttonHolder = document.getElementById('pasteBtn');
+	if (!buttonHolder.firstChild)
+	{
+		var a = document.createElement('a');
+			a.href = "javascript:void(0);";
+			
+		var img = document.createElement('img');
+			img.src = window.opener._editor_url+'plugins/ExtendedFileManager/img/edit_paste.gif';
+			img.alt = i18n('Paste');
+			a.appendChild(img);
+			buttonHolder.appendChild(a);
+	}
+	buttonHolder.onclick = function() {  
+				if(typeof imgManager != 'undefined') imgManager.paste(action);
+				if (action.action ==  'moveFile' || action.action ==  'moveDir' )
+				{
+					this.onclick = null;
+					this.removeChild(this.firstChild)
+				}
+	}
+	switch (action.action)
+	{
+		case 'copyFile':
+			buttonHolder.firstChild.title = i18n('Copy "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');			
+		break;
+		case 'copyDir':
+			buttonHolder.firstChild.title = i18n('Copy folder "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');		
+		break;
+		case 'moveFile':
+			buttonHolder.firstChild.title = i18n('Move "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');
+		break;
+		break;
+		case 'moveDir':
+			buttonHolder.firstChild.title = i18n('Move folder "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');
+		break;	
+	}
+	
+}
 function onCancel()
 {
     __dlg_close(null);

@@ -97,5 +97,20 @@
   "Maximum file size [$max_size KB] exceeded.": "Maximale bestandgrootte [$max_size KB] overschreden.",
   "Cannot upload $extension Files. Permission denied.": "Niet mogelijk om $extension bestanden te uploaden.",
   "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.": "Bestands upload niet mogelijk.\nMaximale bestandsgrootte [$max_size KB] overtreden\nof map heeft geen schrijf toestemming.",
-  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Totaalgrootte: $max_foldersize_mb MB, noch vrij: $free_space"
+  "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Totaalgrootte: $max_foldersize_mb MB, noch vrij: $free_space",
+  "Please enter new name for this folder...":"Please enter new name for this folder...",
+
+  "Cut":"Cut",
+  "Copy":"Copy",
+  "Paste":"Paste",
+  
+  'Copy "$file" from "$dir" here': 'Copy "$file" from "$dir" here',
+  'Copy folder "$file" from "$dir" here' : 'Copy folder "$file" from "$dir" here',
+  'Move "$file" from "$dir" here':'Move "$file" from "$dir" here',
+  'Move folder "$file" from "$dir" here':'Move folder "$file" from "$dir" here',
+  
+  "Source file/folder not found.":"Source file/folder not found.",
+  "Paste failed.\nMaybe folder doesn't have write permission.": "Paste failed.\nMaybe folder doesn't have write permission.",
+  "Could not create destination folder.":"Could not create destination folder.",
+  "Destination file/folder already exists.":"Destination file/folder already exists."
 };

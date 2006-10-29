@@ -45,7 +45,44 @@ function renameFile(oldPath) {
     var viewtype = selection.options[selection.selectedIndex].value;
     location.href = _backend_url + "__function=images&mode="+mode+"&dir="+dir+"&rename="+oldPath+"&renameTo="+newName+"&viewtype="+viewtype;
 }
+function renameDir(oldName) {
+    // strip directory and extension
+   
+    var newName = prompt(i18n('Please enter new name for this folder...'), oldName);
 
+    if(newName == '' || newName == null || newName == oldName)
+    {
+        alert(i18n('Cancelled rename.'));
+        return false;
+    }
+    var mode=window.top.document.getElementById('manager_mode').value;
+    var selection = window.top.document.getElementById('dirPath');
+    var dir = selection.options[selection.selectedIndex].value;
+    selection = window.top.document.getElementById('viewtype');
+    var viewtype = selection.options[selection.selectedIndex].value;
+    location.href = _backend_url + "__function=images&mode="+mode+"&dir="+dir+"&rename="+oldName+"&renameTo="+newName+"&viewtype="+viewtype;
+}
+function copyFile(file,action)
+{
+	var selection = window.top.document.getElementById('dirPath');
+    var dir = selection.options[selection.selectedIndex].value;
+	window.top.pasteButton({'dir':dir,'file':file,'action':action+'File'});
+}
+function copyDir(dirToCopy,action)
+{
+	var selection = window.top.document.getElementById('dirPath');
+    var dir = selection.options[selection.selectedIndex].value;
+	window.top.pasteButton({'dir':dir,'file':dirToCopy,'action':action+'Dir'});
+}
+function paste(action)
+{
+    var mode=window.top.document.getElementById('manager_mode').value;
+    var selection = window.top.document.getElementById('dirPath');
+    var dir = selection.options[selection.selectedIndex].value;
+    selection = window.top.document.getElementById('viewtype');
+    var viewtype = selection.options[selection.selectedIndex].value;
+	location.href = _backend_url + "__function=images&mode="+mode+"&dir="+dir+"&paste="+action.action+"&srcdir="+action.dir+"&file="+action.file+"&viewtype="+viewtype;
+}
 //update the dir list in the parent window.
 function updateDir(newDir)
 {
@@ -224,11 +261,11 @@ function confirmDeleteFile(file)
 
 function confirmDeleteDir(dir, count)
 {
-    if(count > 0)
+   /* if(count > 0)
     {
         alert(i18n("Folder is not empty. Please delete all Files and Subfolders inside."));
         return false;
-    }
+    }*/
 
     if(confirm(i18n('Delete folder "$dir=' + dir +'$"?')))
         return true;
@@ -239,7 +276,7 @@ function confirmDeleteDir(dir, count)
 function showPreview(f_url)
 {
     window.parent.document.getElementById('f_preview').src =
-    f_url ? window.parent._backend_url + '__function=thumbs&img=' + f_url : "";
+    f_url ? window.parent._backend_url + '__function=thumbs&img=' + f_url :window.parent.opener._editor_url+'plugins/ExtendedFileManager/img/1x1_transparent.gif';
 }
 
 addEvent(window, 'load', init);

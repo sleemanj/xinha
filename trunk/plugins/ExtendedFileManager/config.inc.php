@@ -70,7 +70,7 @@ $IMConfig['images_dir'] = 'demo_images';
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-$IMConfig['images_url'] = str_replace( "backend.php", "", $_SERVER["PHP_SELF"] ) . "demo_images";
+$IMConfig['images_url'] = str_replace( array("backend.php","manager.php"), "", $_SERVER["PHP_SELF"] ) . $IMConfig['images_dir'];
 //$IMConfig['files_url'] = 'url/to/files_dir';
 
 /*
@@ -178,7 +178,6 @@ $IMConfig['resized_dir'] = '';
 */
 $IMConfig['allow_new_dir'] = true;
 
-
 /*
   Possible values: true, false
 
@@ -194,12 +193,22 @@ $IMConfig['allow_edit_image'] = true;
 /*
   Possible values: true, false
 
- TRUE -  Allow the user to rename files.
+ TRUE -  Allow the user to rename files and folders.
 
  FALSE - No rename icon will be displayed.
 
 */
 $IMConfig['allow_rename'] = true;
+
+/*
+  Possible values: true, false
+
+ TRUE -  Allow the user to perform cut/copy/paste actions.
+
+ FALSE - No cut/copy/paste icons will be displayed.
+
+*/
+$IMConfig['allow_cut_copy_paste'] = true;
 
 /*
   Possible values: true, false
@@ -278,7 +287,7 @@ $IMConfig['allow_upload'] = true;
 
   "max"  - the maximum allowed by the server (the value is retrieved from the server configuration).
 */
-$IMConfig['max_filesize_kb_image'] = 2000;
+$IMConfig['max_filesize_kb_image'] = 2000000;
 
 $IMConfig['max_filesize_kb_link'] = 5000;
 

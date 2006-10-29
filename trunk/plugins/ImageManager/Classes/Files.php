@@ -10,6 +10,7 @@ define('FILE_ERROR_NO_SOURCE', 100);
 define('FILE_ERROR_COPY_FAILED', 101);
 define('FILE_ERROR_DST_DIR_FAILED', 102);
 define('FILE_COPY_OK', 103);
+define('FILE_ERROR_DST_DIR_EXIST', 104);
 
 /**
  * File Utilities
@@ -263,7 +264,70 @@ class Files
 			return FILE_ERROR_COPY_FAILED;
 
 	}
+	
+	function rename ($oldPath,$newPath)
+	{
+		if(!(is_dir($oldPath) || is_file($oldPath)))
+			return FILE_ERROR_NO_SOURCE;
+		
+		if (file_exists($newPath))
+			return FILE_ERROR_DST_DIR_EXIST;
 
+		$ret = rename($oldPath, $newPath);
+		if (!$ret)
+			return FILE_ERROR_COPY_FAILED;
+		else return FILE_COPY_OK;
+	}
+	
+		/**
+	 * copy a directory and all subdirectories and files (recursive)
+	 * @author SBoisvert at Don'tSpamMe dot Bryxal dot ca (adapted from php.net)
+	 * @author Raimund Meyer
+	 * @param string base path
+	 * @param string source directory
+	 * @param string destination directory
+	 * @param bool   overwrite existing files
+	 *  
+	 * @return mixed bool true on pass, number on fail
+	 */
+  	function copyDir($basePath, $source, $dest, $overwrite = false)
+	{
+		if(!is_dir($basePath . $dest))
+		{
+			if (!@mkdir($basePath . $dest)) return FILE_ERROR_DST_DIR_FAILED;	
+		}
+		if($handle = opendir($basePath . $source))
+		{        // if the folder exploration is sucsessful, continue
+			while( ($file = readdir($handle)) !== false)
+			{ // as long as storing the next file to $file is successful, continue
+				if($file != '.' && $file != '..')
+				{
+					$path = $source . '/' . $file;
+					if(is_file($basePath . $path))
+					{
+						/*if(!is_file($basePath . $dest . '/' . $file) || $overwrite)
+						{
+							if(!@copy($basePath . $path, $basePath . $dest . '/' . $file))
+							{
+							  return FILE_ERROR_COPY_FAILED;
+							}
+						}*/
+						Files::copyFile($basePath . $path, $basePath . $dest . '/', $file, true);
+					} 
+					elseif(is_dir($basePath . $path))
+					{
+						if(!is_dir($basePath . $dest . '/' . $file))
+						{
+							mkdir($basePath . $dest . '/' . $file); // make subdirectory before subdirectory is copied
+							Files::copyDir($basePath, $path, $dest . '/' . $file, $overwrite); //recurse!
+						}
+					}
+				}
+			}
+			closedir($handle);
+		}
+		return true;
+	}
 }
 
 ?>
