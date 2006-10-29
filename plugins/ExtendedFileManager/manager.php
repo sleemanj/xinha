@@ -131,6 +131,7 @@
 <?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
 	<a href="#" onclick="newFolder();" title="New Folder"><img src="<?php print $IMConfig['base_url'];?>img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
 <?php } ?>
+<span id="pasteBtn"></span>
 
 	<select name="viewtype" id="viewtype" onChange="updateView()">
 	<option value="thumbview" <?php if($IMConfig['view_type']=="thumbview") echo "selected";?> >Thumbnail View</option>
@@ -149,7 +150,7 @@
 		<tr>
 			<td align="right" nowrap><label for="f_url"><?php if($insertMode=='image') echo 'File Name'; else echo 'URL';?></label></td>
 			<td colspan="5"><input type="text" id="<?php if($insertMode=='image') echo 'f_url'; else echo 'f_href';?>" class="largelWidth" value="" /></td>
-            <td rowspan="<?php echo $num_rows ?>" colspan="2" valign="top"><?php if($insertMode=='image') { ?>
+            <td rowspan="<?php echo $num_rows ?>" colspan="2" valign="top" align="center"><?php if($insertMode=='image') { ?>
             <div style="padding:4px;background-color:#CCC;border:1px inset;width: 100px; height: 100px;">
             <img src="<?php print $IMConfig['base_url'];?>img/1x1_transparent.gif" alt="" id="f_preview" />
             </div>

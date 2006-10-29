@@ -722,10 +722,10 @@ class ExtendedFileManager
 	function _delDir($relative) 
 	{
 		$fullpath = Files::makePath($this->getImagesDir(),$relative);
-		if($this->countFiles($fullpath) <= 0)
+	//	if($this->countFiles($fullpath) <= 0)
 			return Files::delFolder($fullpath,true); //delete recursively.
-		else
-			Return false;
+		//else
+			//Return false;
 	}
 
 	/**
@@ -769,13 +769,21 @@ class ExtendedFileManager
 			// strip parent dir ("..") to avoid escaping from base directiory
 			$oldName = preg_replace('#\.\.#', '', $oldName);
 
-			// path to old file
-			$oldPath = Files::makeFile($this->getImagesDir(), $oldName);
-
-			$ret = Files::renameFile($oldPath, $newName);
-			if ($ret === true) {
-				// delete old thumbnail
-				Files::delFile($this->getThumbname($oldPath));
+			if (is_dir($oldPath = Files::makeFile($this->getImagesDir(), $_GET['dir'].$oldName)))
+			{
+				$newPath = Files::makeFile($this->getImagesDir(), $_GET['dir'].$newName);
+				return Files::rename($oldPath,$newPath);
+			}
+			else 
+			{
+				// path to old file
+				$oldPath = Files::makeFile($this->getImagesDir(), $oldName);
+	
+				$ret = Files::renameFile($oldPath, $newName);
+				if ($ret === true) {
+					// delete old thumbnail
+					Files::delFile($this->getThumbname($oldPath));
+				}
 			}
 			return $ret;
 		}
@@ -783,6 +791,34 @@ class ExtendedFileManager
 		return null;
 	}
 
+	function processPaste()
+	{
+		switch ($_GET['paste'])
+		{
+			case 'copyFile':
+				$src = Files::makeFile($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
+				$file = $_GET['file'];
+				$dest = Files::makeFile($this->getImagesDir(), $_GET['dir']);
+				return  Files::copyFile($src,$dest,$file);
+			break;
+			case 'copyDir':
+				$basePath = $this->getImagesDir();
+				$src = $_GET['srcdir'].$_GET['file'];
+				$dest = $_GET['dir'].$_GET['file'];
+				return Files::copyDir($basePath,$src,$dest);
+			break;
+			case 'moveFile':
+				$src = Files::makePath($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
+				$dest = Files::makePath($this->getImagesDir(), $_GET['dir'].$_GET['file']);
+				return Files::rename($src,$dest);
+			break;
+			case 'moveDir':
+				$src = Files::makeFile($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
+				$dest = Files::makeFile($this->getImagesDir(), $_GET['dir'].$_GET['file']);
+				return Files::rename($src,$dest);
+			break;
+		}
+	}
 }
 
 ?>
