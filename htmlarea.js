@@ -110,6 +110,7 @@ function HTMLArea(textarea, config)
       textarea = HTMLArea.getElementById('textarea', textarea);
     }
     this._textArea = textarea;
+    this._textArea.spellcheck = false;
        
     // Before we modify anything, get the initial textarea size
     this._initial_ta_size =
