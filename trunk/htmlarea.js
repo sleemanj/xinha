@@ -1642,29 +1642,19 @@ HTMLArea.prototype.generate = function ()
       }
     );
 
-    //add onsubmit handlers for textareas that don't have one 
-    // doesn't work in IE!!
-   /* if ( !textarea.form.xinha_submit )
+    // attach onsubmit handler to form.submit()
+    // note: catch error in IE if any form element has id='submit'
+    if ( !textarea.form.xinha_submit )
     {
-      textarea.form.xinha_submit = textarea.form.submit;
-      textarea.form.submit = function()
-      {
-        for ( var i = this.elements.length; i--; )
-        {
-          var element = this.elements[i];
-          if ( element.type != 'textarea' ) continue;
-          for ( var a = __htmlareas.length; a--; )
-          {
-            var editor = __htmlareas[a];
-            if ( editor && editor._textArea == element)
-            {
-              element.value = editor.outwardHtml(editor.getHTML());
-            }
-          }
-        }
-        this.xinha_submit();
-      };
-    }*/
+    	  try {
+		textarea.form.xinha_submit = textarea.form.submit;
+		textarea.form.submit = function() {
+			this.onsubmit();
+			this.xinha_submit();
+		};
+	  } catch(ex) {}
+    };
+    
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
