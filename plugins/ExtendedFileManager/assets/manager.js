@@ -1,9 +1,10 @@
 /**
  * Functions for the ExtendedFileManager, used by manager.php only
- * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
+ * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz, Raimund Meyer
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
+ * Version: Updated on 17-11-2006 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.1.3)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -154,10 +155,21 @@ init = function ()
         param.f_href = param.f_href.replace( href_regex, "" );
 
         // Locate to the correct directory
+        var startDir;
         var dreg = new RegExp('^(.*/)([^/]+)$');
         if (dreg.test(param['f_href']))
         {
-          changeDir(RegExp.$1);
+        	startDir = RegExp.$1;
+        }
+        else
+        {
+        	startDir = document.cookie.match(/EFMStartDirlink=(.*?)(;|$)/);
+        	if (startDir) startDir = startDir[1];
+        }
+        
+        if (startDir)
+        {
+          changeDir(startDir);
           var dirPath = document.getElementById('dirPath');
           for(var i = 0; i < dirPath.options.length; i++)
           {
@@ -203,6 +215,24 @@ init = function ()
         target_select.appendChild(opt);
         target_select.onchange = onTargetChanged;
         document.getElementById("f_href").focus();
+    }
+    else if (!param)
+    {
+    	var startDir = document.cookie.match(new RegExp ("EFMStartDir" + manager_mode + "=(.*?)(;|$)"));
+    	if (startDir)
+    	{
+    		startDir = startDir[1];
+    		changeDir(startDir);
+	        var dirPath = document.getElementById('dirPath');
+	        for(var i = 0; i < dirPath.options.length; i++)
+	        {
+	          if(dirPath.options[i].value == encodeURIComponent(startDir))
+	          {
+	            dirPath.options[i].selected = true;
+	            break;
+	          }
+	        }
+    	}
     }
 }
 

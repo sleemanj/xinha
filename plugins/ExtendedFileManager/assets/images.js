@@ -1,9 +1,10 @@
 /**
  * Functions for the image listing, used by images.php only
- * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
+ * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz, Raimund Meyer
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 04-07-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.2)
+ * Version: Updated on 17-11-2006 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.1.3)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -18,6 +19,7 @@ function changeDir(newDir)
     var selection = window.top.document.getElementById('viewtype');
     var viewtype = selection.options[selection.selectedIndex].value;
     location.href = _backend_url + "__function=images&mode="+mode+"&dir="+newDir+"&viewtype="+viewtype;
+	document.cookie = "EFMStartDir" + mode + "="+newDir;
 }
 
 function newFolder(dir, newDir)
@@ -86,7 +88,10 @@ function paste(action)
 //update the dir list in the parent window.
 function updateDir(newDir)
 {
-    var selection = window.top.document.getElementById('dirPath');
+	var mode = window.top.document.getElementById('manager_mode').value;
+	document.cookie = "EFMStartDir" + mode + "="+newDir;
+    
+	var selection = window.top.document.getElementById('dirPath');
     if(selection)
     {
         for(var i = 0; i < selection.length; i++)

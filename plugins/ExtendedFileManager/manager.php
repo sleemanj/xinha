@@ -1,10 +1,11 @@
 <?php
 /**
  * The main GUI for the ExtendedFileManager.
- * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
+ * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz, Raimund Meyer
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 04-07-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.2)
+ * Version: Updated on 29-10-2006 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.1.3)
  * http://www.afrusoft.com/htmlarea
  */
 
