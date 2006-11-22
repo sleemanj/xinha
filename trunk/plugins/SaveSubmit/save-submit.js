@@ -2,13 +2,7 @@
 SaveSubmit for Xinha
 ____________________
 
-Registers a button for submiting the Xinha form using asynchronous
-postback for sending the data to the server
-
-Usage: This should be a drop-in replacement for a normal submit button.
-While saving a message is displayed to inform the user what's going on.
-On successful transmission the output of the target script is shown, so it should print some information
-about the success of saving.
+See README.txt for information
 
 \*------------------------------------------*/
 
@@ -32,11 +26,11 @@ function SaveSubmit(editor) {
 		}
 	});
 	cfg.addToolbarElement("savesubmit", "popupeditor", -1);
-};
+}
 
 SaveSubmit.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'SaveSubmit');
-};
+}
 
 SaveSubmit._pluginInfo = {
   name          : "SaveSubmit",
@@ -47,7 +41,7 @@ SaveSubmit._pluginInfo = {
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
-};
+}
 
 SaveSubmit.prototype.onGenerate = function() {
 	var self = this;
@@ -56,7 +50,7 @@ SaveSubmit.prototype.onGenerate = function() {
 			    function (event) {
 			    return self.onEvent(HTMLArea.is_ie ? self.editor._iframe.contentWindow.event : event);
 			    });
-};
+}
 
 SaveSubmit.prototype.onEvent = function(ev) {
 
@@ -68,9 +62,9 @@ SaveSubmit.prototype.onEvent = function(ev) {
 	else {
 		if (!this.changed) {
 			if (this.getChanged()) this.setChanged();
-		};
-	};
-};
+		}
+	}
+}
 
 SaveSubmit.prototype.getChanged = function() {
 	if (this.initial_html == null) this.initial_html = this.editor.getHTML();
@@ -87,10 +81,10 @@ SaveSubmit.prototype.setChanged = function() {
 		var btn = toolbar_objects[i];
 		if (btn.name == 'savesubmit') {
 			btn.swapImage(this.imgage_changed);
-		};
-	};
+		}
+	}
 	this.editor.updateToolbar();
-};
+}
 SaveSubmit.prototype.changedReset = function() {
 	this.changed = false;
 	this.initial_html = null;
@@ -99,9 +93,9 @@ SaveSubmit.prototype.changedReset = function() {
 		var btn = toolbar_objects[i];
 		if (btn.name == 'savesubmit') {
 			btn.swapImage(this.imgage_unchanged);
-		};
-	};
-};
+		}
+	}
+}
 
 SaveSubmit.prototype.save =  function(editor) {
 	this.buildMessage()
@@ -122,25 +116,25 @@ SaveSubmit.prototype.save =  function(editor) {
 			self.setMessage(getback);
 			//self.setMessage(self._lc("Ready"));
 			self.changedReset();
-		};
+		}
 		removeMessage = function() { self.removeMessage()} ;
 		window.setTimeout("removeMessage()",1000);
 
 	});
-};
+}
 
 SaveSubmit.prototype.setMessage = function(string) {
   var textarea = this.textarea;
   if ( !document.getElementById("message_sub_" + textarea.name)) { return ; }
   var elt = document.getElementById("message_sub_" + textarea.name);
   elt.innerHTML = HTMLArea._lc(string, 'SaveSubmit');
-};
+}
 
 SaveSubmit.prototype.removeMessage = function() {
   var textarea = this.textarea;
   if (!document.getElementById("message_" + textarea.name)) { return ; }
   document.body.removeChild(document.getElementById("message_" + textarea.name));
-};
+}
 
 //ripped mokhet's loading message function
 SaveSubmit.prototype.buildMessage   = function() {
@@ -167,4 +161,4 @@ SaveSubmit.prototype.buildMessage   = function() {
 	loading_message.appendChild(loading_main);
 	loading_message.appendChild(loading_sub);
 	document.body.appendChild(loading_message);
-};
+}
