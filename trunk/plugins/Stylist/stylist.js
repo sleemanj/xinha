@@ -407,7 +407,7 @@ HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
 
   while(prnt)
   {
-    if(prnt.nodeType == 1)
+    if(prnt.nodeType == 1 && prnt.className)
     {
       if(tag == null || prnt.tagName.toLowerCase() == tag)
       {
