@@ -20,7 +20,6 @@
                                                  'Line: ' + sLine + '\n';
       return false;
     }
-    var f = top.frames["menu"].document.forms["fsettings"];
     // You must set _editor_url to the URL (including trailing slash) where
     // where xinha is installed, it's highly recommended to use an absolute URL
     //  eg: _editor_url = "/path/to/xinha/";
@@ -28,8 +27,7 @@
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/ext_example-body\.html.*/, '')
-    _editor_lang = f.lang[f.lang.selectedIndex].value; // the language we need to use in the editor.
-    _editor_skin = f.skin[f.skin.selectedIndex].value; // the skin we use in the editor
+    //moved _editor_lang & _editor_skin to init function because of error thrown when frame document not ready  
   </script>
 
   <!-- Load up the actual editor core -->
@@ -46,6 +44,8 @@
       document.onerror = showError;
 
       var f = top.frames["menu"].document.forms["fsettings"];
+      _editor_lang = f.lang[f.lang.selectedIndex].value; // the language we need to use in the editor.
+      _editor_skin = f.skin[f.skin.selectedIndex].value; // the skin we use in the editor
 // What are the plugins you will be using in the editors on this page.
 // List all the plugins you will need, even if not all the editors will use all the plugins.
       xinha_plugins = [ ];
