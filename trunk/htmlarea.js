@@ -4484,72 +4484,7 @@ HTMLArea.prototype._editorEvent = function(ev)
 
   if ( keyEvent && ev.ctrlKey && !ev.altKey )
   {
-    var sel = null;
-    var range = null;
-    var key = String.fromCharCode(HTMLArea.is_ie ? ev.keyCode : ev.charCode).toLowerCase();
-    var cmd = null;
-    var value = null;
-    switch (key)
-    {
-      case 'a':
-        if ( !HTMLArea.is_ie )
-        {
-          // KEY select all
-          sel = this._getSelection();
-          sel.removeAllRanges();
-          range = this._createRange();
-          range.selectNodeContents(this._doc.body);
-          sel.addRange(range);
-          HTMLArea._stopEvent(ev);
-        }
-      break;
-
-      // simple key commands follow
-
-      case 'b': cmd = "bold"; break;
-      case 'i': cmd = "italic"; break;
-      case 'u': cmd = "underline"; break;
-      case 's': cmd = "strikethrough"; break;
-      case 'l': cmd = "justifyleft"; break;
-      case 'e': cmd = "justifycenter"; break;
-      case 'r': cmd = "justifyright"; break;
-      case 'j': cmd = "justifyfull"; break;
-      case 'z': cmd = "undo"; break;
-      case 'y': cmd = "redo"; break;
-      case 'v':
-        if ( HTMLArea.is_ie || editor.config.htmlareaPaste )
-        {
-          cmd = "paste";
-        }
-      break;
-      case 'n':
-        cmd = "formatblock";
-        value = HTMLArea.is_ie ? "<p>" : "p";
-      break;
-
-      case '0': cmd = "killword"; break;
-
-      // headings
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-      case '6':
-        cmd = "formatblock";
-        value = "h" + key;
-        if ( HTMLArea.is_ie )
-        {
-          value = "<" + value + ">";
-        }
-      break;
-    }
-    if ( cmd )
-    {
-      // execute simple command
-      this.execCommand(cmd, false, value);
-      HTMLArea._stopEvent(ev);
-    }
+  	this._shortCuts(ev);
   }
   else if ( keyEvent )
   {
@@ -4748,7 +4683,77 @@ HTMLArea.prototype._editorEvent = function(ev)
     },
     250);
 };
+// handles ctrl + key shortcuts 
+HTMLArea.prototype._shortCuts = function (ev)
+{
+  var editor = this;
+  var sel = null;
+  var range = null;
+  var key = String.fromCharCode(HTMLArea.is_ie ? ev.keyCode : ev.charCode).toLowerCase();
+  var cmd = null;
+  var value = null;
+  switch (key)
+  {
+    case 'a':
+    if ( !HTMLArea.is_ie )
+    {
+      // KEY select all
+      sel = this._getSelection();
+      sel.removeAllRanges();
+      range = this._createRange();
+      range.selectNodeContents(this._doc.body);
+      sel.addRange(range);
+      HTMLArea._stopEvent(ev);
+    }
+    break;
 
+    // simple key commands follow
+
+    case 'b': cmd = "bold"; break;
+    case 'i': cmd = "italic"; break;
+    case 'u': cmd = "underline"; break;
+    case 's': cmd = "strikethrough"; break;
+    case 'l': cmd = "justifyleft"; break;
+    case 'e': cmd = "justifycenter"; break;
+    case 'r': cmd = "justifyright"; break;
+    case 'j': cmd = "justifyfull"; break;
+    case 'z': cmd = "undo"; break;
+    case 'y': cmd = "redo"; break;
+    case 'v':
+    if ( HTMLArea.is_ie || editor.config.htmlareaPaste )
+    {
+      cmd = "paste";
+    }
+    break;
+    case 'n':
+    cmd = "formatblock";
+    value = HTMLArea.is_ie ? "<p>" : "p";
+    break;
+
+    case '0': cmd = "killword"; break;
+
+    // headings
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    cmd = "formatblock";
+    value = "h" + key;
+    if ( HTMLArea.is_ie )
+    {
+      value = "<" + value + ">";
+    }
+    break;
+  }
+  if ( cmd )
+  {
+    // execute simple command
+    this.execCommand(cmd, false, value);
+    HTMLArea._stopEvent(ev);
+  }
+}
 HTMLArea.prototype.convertNode = function(el, newTagName)
 {
   var newel = this._doc.createElement(newTagName);
