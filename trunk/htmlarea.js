@@ -4239,7 +4239,12 @@ HTMLArea.prototype._comboSelected = function(el, txt)
       this.execCommand(txt, false, value);
     break;
     case "formatblock":
-      // (HTMLArea.is_ie) && (value = "<" + value + ">");
+      // Mozilla inserts an empty tag (<>) if no parameter is passed  
+      if ( !value )
+      {
+      	this.updateToolbar();
+      	break;
+      }
       if( !HTMLArea.is_gecko || value !== 'blockquote' )
       {
         value = "<" + value + ">";
