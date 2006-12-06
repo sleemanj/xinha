@@ -426,7 +426,7 @@ EnterParagraphs.prototype._fenEmptySet = function( node, next_node, mode, last_f
 				// does not return content.
 
 		    return new Array(true, false );
-				breal;
+				break;
 
 			case "find_cursorpoint":
 
