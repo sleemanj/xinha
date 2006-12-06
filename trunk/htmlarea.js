@@ -5225,14 +5225,14 @@ HTMLArea.prototype.fixRelativeLinks = function(html)
     var baseRe = null;
     if ( typeof this.config.baseHref != 'undefined' && this.config.baseHref !== null )
     {
-      baseRe = new RegExp(this.config.baseHref.replace(HTMLArea.RE_Specials, '\\$1'), 'g');
+      baseRe = new RegExp( "((href|src|background)=\")(" + this.config.baseHref.replace( HTMLArea.RE_Specials, '\\$1' ) + ")", 'g' );
     }
     else
     {
-      baseRe = new RegExp(document.location.href.replace(/([^\/]*\/?)$/, '').replace(HTMLArea.RE_Specials, '\\$1'), 'g');
+      baseRe = new RegExp( "((href|src|background)=\")(" + document.location.href.replace( /([^\/]*\/?)$/, '' ).replace( HTMLArea.RE_Specials, '\\$1' ) + ")", 'g' );
     }
 
-    html = html.replace(baseRe, '');
+    html = html.replace(baseRe, '$1');
   }
 
 //  if ( HTMLArea.is_ie )

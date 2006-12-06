@@ -104,7 +104,7 @@ function __dlg_init(bottom, win_dim) {
 }
 
 function __dlg_translate(context) {
-	var types = ["input", "select", "legend", "span", "option", "td", "button", "div", "label", "a", "img"];
+	var types = ["input", "select", "legend", "span", "option", "td", "th", "button", "div", "label", "a", "img"];
 	for (var type = 0; type < types.length; ++type) {
 		var spans = document.getElementsByTagName(types[type]);
 		for (var i = spans.length; --i >= 0;) {
