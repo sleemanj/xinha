@@ -5,6 +5,11 @@
 
 function CharCounter(editor) {
   this.editor = editor;
+  this._Chars = 0;
+  this._Words = 0;
+  this._HTML = 0;
+  this.maxHTML = 1024;
+  this.onKeyPress = this.__onKeyPress;
 }
 
 HTMLArea.Config.prototype.CharCounter =
@@ -17,7 +22,7 @@ HTMLArea.Config.prototype.CharCounter =
 
 CharCounter._pluginInfo = {
   name          : "CharCounter",
-  version       : "1.2",
+  version       : "1.3",
   developer     : "Udo Schmal",
   developer_url : "http://www.schaffrath-neuemedien.de",
   sponsor       : "L.N.Schaffrath NeueMedien",
@@ -58,7 +63,19 @@ CharCounter.prototype.onGenerate = function() {
   }
 };
 
-CharCounter.prototype._updateCharCount = function() {
+CharCounter.prototype.__onKeyPress= function(ev) {
+  if ((ev.keyCode != 8) && (ev.keyCode !=46)) { // not backspace & delete
+    if (this.maxHTML!=-1) {
+      var contents = this.editor.getHTML();
+      if (contents.length>=this.maxHTML) {
+        HTMLArea._stopEvent(ev);
+        return true;
+      }
+    }
+  }
+}
+
+CharCounter.prototype._updateCharCount= function() {
   var editor = this.editor;
   var cfg = editor.config;
   var contents = editor.getHTML();
@@ -66,6 +83,7 @@ CharCounter.prototype._updateCharCount = function() {
   if (cfg.CharCounter.showHtml) {
     string[string.length] = this._lc("HTML") + ": " + contents.length;
   }
+  this._HTML = contents.length;
   if (cfg.CharCounter.showWord || cfg.CharCounter.showChar) {
     contents = contents.replace(/<\/?\s*!--[^-->]*-->/gi, "" );
     contents = contents.replace(/<(.+?)>/g, '');//Don't count HTML tags
@@ -76,19 +94,18 @@ CharCounter.prototype._updateCharCount = function() {
     contents = contents.replace(/^\s*|\s*$/g, '');//trim
   }
   if (cfg.CharCounter.showWord) {
-    var words=0;
+    this._Words = 0;
     for (var x=0;x<contents.length;x++)
     {
-      if (contents.charAt(x) == " " ) {words++;}
+      if (contents.charAt(x) == " " ) {this._Words++;}
     }
-    if (words>=1) { words++; }
-    string[string.length] = this._lc("Words") + ": " + words;
+    if (this._Words >=1) { this._Words++; }
+    string[string.length] = this._lc("Words") + ": " + this._Words ;
   }
-
   if (cfg.CharCounter.showChar) {
     string[string.length] = this._lc("Chars") + ": " + contents.length;
+    this._Chars = contents.length;
   }
-
   this.charCount.innerHTML = string.join(cfg.CharCounter.separator);
 };
 
