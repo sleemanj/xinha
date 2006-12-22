@@ -362,6 +362,9 @@ HTMLArea.Config = function()
   // set to true if you want the loading panel to show at startup
   this.showLoading = false;
 
+  // set to false if you want to allow JavaScript in the content, otherwise <script> tags are stripped out
+  this.stripScripts = true;
+  
   // size of color picker cells
   this.colorPickerCellSize = '6px';
   // granularity of color picker cells (number per column/row)
@@ -5139,6 +5142,8 @@ HTMLArea.prototype.outwardHtml = function(html)
   {
     html = html.replace(/<script[\s]*src[\s]*=[\s]*['"]chrome:\/\/.*?["']>[\s]*<\/script>/ig, '');
   }
+  //prevent execution of JavaScript (Ticket #685)
+  html = html.replace(/(<script[^>]*)(freezescript)/gi,"$1javascript");
 
   return html;
 };
@@ -5160,6 +5165,8 @@ HTMLArea.prototype.inwardHtml = function(html)
   html = html.replace("onclick=\"window.open(", "onclick=\"try{if(document.designMode &amp;&amp; document.designMode == 'on') return false;}catch(e){} window.open(");
 
   html = this.inwardSpecialReplacements(html);
+
+  html = html.replace(/(<script[^>]*)(javascript)/gi,"$1freezescript");
 
   // For IE's sake, make any URLs that are semi-absolute (="/....") to be
   // truely absolute
@@ -5697,7 +5704,7 @@ HTMLArea._hasClass = function(el, className)
 
 HTMLArea._blockTags = " body form textarea fieldset ul ol dl li div " +
 "p h1 h2 h3 h4 h5 h6 quote pre table thead " +
-"tbody tfoot tr td th iframe address blockquote";
+"tbody tfoot tr td th iframe address blockquote ";
 HTMLArea.isBlockElement = function(el)
 {
   return el && el.nodeType == 1 && (HTMLArea._blockTags.indexOf(" " + el.tagName.toLowerCase() + " ") != -1);
@@ -5799,6 +5806,10 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
       var closed;
       var i;
       var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : '';
+      if ( ( root_tag == "script" || root_tag == "noscript" ) && editor.config.stripScripts )
+      {
+        break;
+      }
       if ( outputRoot )
       {
         outputRoot = !(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(root_tag));
@@ -5820,7 +5831,8 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
           html += (HTMLArea.is_ie ? ('\n' + indent) : '') + "</head>";
         }
         break;
-      } else if ( outputRoot )
+      }
+      else if ( outputRoot )
       {
         closed = (!(root.hasChildNodes() || HTMLArea.needsClosingTag(root)));
         html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
@@ -5923,17 +5935,28 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
         }
       }
       var containsBlock = false;
-      for ( i = root.firstChild; i; i = i.nextSibling )
+      if ( root_tag == "script" || root_tag == "noscript" )
       {
-        if ( !containsBlock && i.nodeType == 1 && HTMLArea.isBlockElement(i) )
+        if ( !editor.config.stripScripts )
         {
-          containsBlock = true;
+          var innerText = (HTMLArea.is_ie) ? "\n" + root.innerHTML.replace(/^[\n\r]*/,'').replace(/\s+$/,'') + '\n' + indent : root.firstChild.nodeValue;
+          html += innerText + '</'+root_tag+'>' + ((HTMLArea.is_ie) ? '\n' : '');
         }
-        html += HTMLArea.getHTMLWrapper(i, true, editor, indent + '  ');
       }
-      if ( outputRoot && !closed )
+      else
       {
-        html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
+        for ( i = root.firstChild; i; i = i.nextSibling )
+        {
+          if ( !containsBlock && i.nodeType == 1 && HTMLArea.isBlockElement(i) )
+          {
+            containsBlock = true;
+          }
+          html += HTMLArea.getHTMLWrapper(i, true, editor, indent + '  ');
+        }
+        if ( outputRoot && !closed )
+        {
+          html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
+        }
       }
     break;
 
