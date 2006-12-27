@@ -80,8 +80,15 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 	if(HTMLArea.is_ie && c[13].test(sHtml)) {
 		sHtml = sHtml.replace(c[13],'$1'+this.stripBaseURL(RegExp.$3)+'"');
 	}
-	if(this.config.only7BitPrintablesInURLs && c[13].test(sHtml)) {
-	  sHtml = sHtml.replace(c[13], '$1'+RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
+	if(this.config.only7BitPrintablesInURLs) {
+		if (HTMLArea.is_ie) c[13].test(sHtml); // oddly the test below only triggers when we call this once before (IE6), in Moz it fails if tested twice
+		if ( c[13].test(sHtml)) {
+			try { //Mozilla returns an incorrectly encoded value with innerHTML
+				sHtml = sHtml.replace(c[13], '$1'+decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
+			} catch (e) { // once the URL is escape()ed, you can't decodeURIComponent() it anymore
+				sHtml = sHtml.replace(c[13], '$1'+RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
+			}
+		}
 	}
 	return sHtml;
 };
