@@ -111,6 +111,7 @@
     this.table.appendChild(this.tbody);
     this.table.style.border = '1px solid WindowFrame';
     this.table.style.backgroundColor = '#fff';
+    this.table.style.zIndex = '1000';
     // Add a title bar and close button
     var tr = document.createElement('tr');
     
