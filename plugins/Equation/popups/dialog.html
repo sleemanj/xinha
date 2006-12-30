@@ -75,16 +75,12 @@ function Init() {
 	mathfontfamily = cfg.Equation.mathfontfamily;
 	
 	var inputField = document.getElementById("inputText"); 
-	if (param["editedNode"] && param["editedNode"].tagName.toLowerCase() == 'math')
+	
+	if (param["editedNode"] && param["editedNode"].tagName.toLowerCase() == 'span')
 	{
-		var formula = param["editedNode"].getAttribute("title");
-		inputField.value = formula; 
-		preview();
-	}
-	else if (param["editedNode"] && param["editedNode"].tagName.toLowerCase() == 'span')
-	{
-		var formula = param["editedNode"].innerHTML.replace(/^`?(.*?)`?$/m,"$1");;
+		var formula = param["editedNode"].getAttribute("title").replace(/^`*(.*?)`*$/m,"$1");;
 		inputField.value = formula;
+		preview();
 	}
 	else inputField.value = '';
 	inputField.focus();
@@ -291,12 +287,13 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
     </td>
   </tr>
   <tr><td colspan="2">
-  Based on ASCIIMathML by <a href="http://www.chapman.edu/~jipsen" target="new">Peter Jipsen</a>, 
+  <span>Based on ASCIIMathML by </span><a href="http://www.chapman.edu/~jipsen" target="new">Peter Jipsen</a>, 
 <a href="http://www.chapman.edu" target="new">Chapman University</a><br />
-  For more information on AsciiMathML visit this page: <a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html" onclick="window.open(this.href,'_blank','');return false;">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a></td></tr>
+  <span>For more information on AsciiMathML visit this page: </span><a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html" onclick="window.open(this.href,'_blank','');return false;">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a></td></tr>
 </table>
 
 <div id="buttons">
+<span style="color:red">Attention: Editing the formula in the editor is not possible, please use this dialog!</span>
   <button type="submit" name="ok" onclick="return onOK();">OK</button>
   <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
 </div>
