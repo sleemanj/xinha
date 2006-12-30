@@ -148,7 +148,7 @@ Equation.prototype.buttonPress = function()
 	
 	args['editor'] = editor;
 	
-	var parent = editor._getFirstAncestor(editor._getSelection(),['span','math']);
+	var parent = editor._getFirstAncestor(editor._getSelection(),['span']);
 	if (parent)
 	{
 		args["editedNode"] = parent;
@@ -160,33 +160,25 @@ Equation.prototype.buttonPress = function()
 
 Equation.prototype.insert = function (param)
 {
-	if (param["formula"])
+	if (typeof param["formula"] != "undefined")
 	{
-		var formula = param["formula"].replace(/^`?(.*)`?$/m,"`$1`");
+		var formula = (param["formula"] != '') ? param["formula"].replace(/^`?(.*)`?$/m,"`$1`") : '';
 
-		if (param["editedNode"] && (param["editedNode"].tagName.toLowerCase() == 'math'))
-		{
-			var parent = param["editedNode"].parentNode; 
-			if (parent.tagName.toLowerCase() == 'span')
-			{
-				parent.innerHTML = formula;
-				parent.title = formula;
-				
-			}
-			else
-			{
-				parent.removeChild(param["editedNode"]);
-				param["editedNode"] = null;
-			}
-		}
-		
 		if (param["editedNode"] && (param["editedNode"].tagName.toLowerCase() == 'span')) 
 		{
 			var span = param["editedNode"]; 
+			if (formula != '')
+			{
 				span.innerHTML = formula;
 				span.title = formula;
+			}
+			else
+			{
+				span.parentNode.removeChild(span);
+			}
+			
 		}
-		else if (!param["editedNode"])
+		else if (!param["editedNode"] && formula != '')
 		{
 			if (!HTMLArea.is_ie)
 			{			
