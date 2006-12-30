@@ -4761,7 +4761,8 @@ HTMLArea.prototype._shortCuts = function (ev)
     this.execCommand(cmd, false, value);
     HTMLArea._stopEvent(ev);
   }
-}
+};
+
 HTMLArea.prototype.convertNode = function(el, newTagName)
 {
   var newel = this._doc.createElement(newTagName);
