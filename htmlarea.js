@@ -3902,7 +3902,7 @@ if ( HTMLArea.is_ie )
     // Need to be careful of control ranges which won't have htmlText
     if( range.htmlText )
     {
-      return range.htmlText
+      return range.htmlText;
     }
     else if(range.length >= 1)
     {
@@ -4639,7 +4639,7 @@ HTMLArea.prototype._editorEvent = function(ev)
                   var fnUrl = function()
                   {
                     // @fixme: Alert, sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
-                    var m = txtNode.data.match(HTMLArea.RE_url);
+                    m = txtNode.data.match(HTMLArea.RE_url);
                     a.href = (m[1] ? m[1] : 'http://') + m[2];
                     // @fixme: why the hell do another timeout is started ?
                     //         This lead to never ending timer if we dont remove this line
@@ -6246,7 +6246,7 @@ HTMLArea._postback = function(url, data, handler)
   {
     content = data;
   }
-  else if(data != null)
+  else if(typeof data == "object")
   {
     for ( var i in data )
     {
@@ -6457,7 +6457,8 @@ HTMLArea._loadlang = function(context)
 HTMLArea._lc = function(string, context, replace)
 {
   var ret;
-  if (typeof string == 'string') var m = string.match(/\$(.*?)=(.*?)\$/g);
+  var m = null;
+  if (typeof string == 'string') m = string.match(/\$(.*?)=(.*?)\$/g);
   if (m) 
   {
     if (!replace) replace = {};
