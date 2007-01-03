@@ -5940,7 +5940,14 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
       {
         if ( !editor.config.stripScripts )
         {
-          var innerText = (root.hasChildNodes()) ? ((HTMLArea.is_ie) ? "\n" + root.innerHTML.replace(/^[\n\r]*/,'').replace(/\s+$/,'') + '\n' + indent : root.firstChild.nodeValue) : '';
+          if (HTMLArea.is_ie)
+          {
+            var innerText = "\n" + root.innerHTML.replace(/^[\n\r]*/,'').replace(/\s+$/,'') + '\n' + indent;
+          }
+          else
+          {
+            var innerText = (root.hasChildNodes()) ? root.firstChild.nodeValue : '';
+          }
           html += innerText + '</'+root_tag+'>' + ((HTMLArea.is_ie) ? '\n' : '');
         }
       }
