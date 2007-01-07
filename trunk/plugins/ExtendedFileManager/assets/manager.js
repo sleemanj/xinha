@@ -46,12 +46,22 @@ function onTargetChanged() {
 }
 
 //initialise the form
+
+if (manager_mode == "link")
+{
+    var offsetForInputs = (HTMLArea.is_ie) ? 155 : 140;
+}
+else
+{
+    var offsetForInputs = (HTMLArea.is_ie) ? 220 : 200;
+}    
 init = function ()
 {
-    if (manager_mode == "link")
-      __dlg_init(null,  {width:650,height:500});
-    else
-      __dlg_init(null,  {width:650,height:560});
+    var h =  100 // space above files 
+           + 250 // files iframe
+           + offsetForInputs;
+    
+    __dlg_init(null,  {width:650,height:h});
 
     __dlg_translate('ExtendedFileManager');
 
@@ -293,7 +303,7 @@ function onOK()
         {
             var id = fields[i];
             var el = document.getElementById(id);
-            if(id == "f_url" && el.value.indexOf('://') < 0 )
+            if(id == "f_url" && el.value.indexOf('://') < 0 && el.value )
                 param[id] = makeURL(base_url,el.value);
             else
                 param[id] = el.value;
@@ -319,7 +329,6 @@ function onOK()
             param.f_url = makeURL(base_url, resized);
           }
         }
-
         __dlg_close(param);
         return false;
     }
@@ -516,4 +525,13 @@ function newFolder()
         imgManager.newFolder(dir, encodeURI(folder));
 }
 
+
+function resize()
+{
+	var win = HTMLArea.viewportSize(window);
+	document.getElementById('imgManager').style.height = win.y - 150 - offsetForInputs + 'px';
+	
+	return true;
+}
 addEvent(window, 'load', init);
+addEvent(window, 'resize', resize);

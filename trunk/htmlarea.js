@@ -6775,6 +6775,30 @@ else
     return (new XMLSerializer()).serializeToString(element);
   };
 }
+// detect the size of visible area
+// when calling from a popup window, call HTMLArea.viewportSize(window) to get the size of the popup
+HTMLArea.viewportSize = function(scope)
+{
+  scope = (scope) ? scope : window;
+  var x,y;
+  if (window.innerHeight) // all except Explorer
+  {
+    x = scope.innerWidth;
+    y = scope.innerHeight;
+  }
+  else if (document.documentElement && document.documentElement.clientHeight)
+  // Explorer 6 Strict Mode
+  {
+    x = scope.document.documentElement.clientWidth;
+    y = scope.document.documentElement.clientHeight;
+  }
+  else if (document.body) // other Explorers
+  {
+    x = scope.document.body.clientWidth;
+    y = scope.document.body.clientHeight;
+  }
+  return {'x':x,'y':y};
+};
 
 // find X position of an element
 HTMLArea.findPosX = function(obj)
