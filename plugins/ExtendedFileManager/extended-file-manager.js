@@ -138,6 +138,7 @@ HTMLArea.prototype._insertImage = function(image) {
 
         var img = image;
         if (!img) {
+        	if ( !param.f_url ) return false;
             if (HTMLArea.is_ie) {
                 var sel = editor._getSelection();
                 var range = editor._createRange(sel);
@@ -155,7 +156,13 @@ HTMLArea.prototype._insertImage = function(image) {
             }
 
         } else {
-            img.src = param.f_url;
+        	if ( !param.f_url ) { // delete the image if empty url passed
+        		img.parentNode.removeChild(img);
+        		editor.updateToolbar();
+        		return false;
+        	} else {
+                img.src = param.f_url;
+        	}
         }
 
         img.alt = img.alt ? img.alt : '';
@@ -167,18 +174,21 @@ HTMLArea.prototype._insertImage = function(image) {
             {
                 case "f_alt"    : img.alt    = value; break;
                 case "f_title"  : img.title = value; break;
-                case "f_border" :
-                    img.style.borderWidth = /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') :'';
-                    if(img.style.borderWidth && !img.style.borderStyle)
+                case "f_border" : 
+                    if (value)
                     {
-                        img.style.borderStyle = 'solid';
+                        img.style.borderWidth = /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') : '';
+                        if(img.style.borderWidth && !img.style.borderStyle)
+                        {
+                            img.style.borderStyle = 'solid';
+                        }
+                        else if (!img.style.borderWidth)
+                        {
+                        	img.style.border = '';
+                        }
                     }
-                    else if (!img.style.borderWidth)
-                    {
-                    	img.style.border = '';
-                    }
-                    break;
-                case "f_borderColor": img.style.borderColor = value; break;
+                break;
+                case "f_borderColor": img.style.borderColor =  value; break;
                 case "f_backgroundColor": img.style.backgroundColor = value; break;
                 case "f_align"  : img.align  = value; break;
                 case "f_width"  : img.width = parseInt(value || "0"); break;
