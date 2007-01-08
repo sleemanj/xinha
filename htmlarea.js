@@ -301,7 +301,13 @@ HTMLArea.Config = function()
   // specify a base href for relative links
   this.baseHref = null;
 
-  // we can strip the base href out of relative links to leave them relative, reason for this
+  // when the editor is in different directory depth as the edited page relative image sources
+  // will break the display of your images
+  // this fixes an issue where Mozilla converts the urls of images and links that are on the same server 
+  // to relative ones (../) when dragging them around in the editor (Ticket #448)
+  this.expandRelativeUrl = true;
+  
+  //   we can strip the base href out of relative links to leave them relative, reason for this
   //   especially if you don't specify a baseHref is that mozilla at least (& IE ?) will prefix
   //   the baseHref to any relative links to make them absolute, which isn't what you want most the time.
   this.stripBaseHref = true;
@@ -5222,6 +5228,26 @@ HTMLArea.prototype.inwardSpecialReplacements = function(html)
 
 HTMLArea.prototype.fixRelativeLinks = function(html)
 {
+  if ( typeof this.config.expandRelativeUrl != 'undefined' && this.config.expandRelativeUrl ) 
+  var src = html.match(/(src|href)="([^"]*)"/gi);
+  var b = document.location.href;
+  if ( src )
+  {
+    var url,url_m,relPath,base_m,absPath
+    for ( var i=0;i<src.length;++i )
+    {
+      url = src[i].match(/(src|href)="([^"]*)"/i);
+      url_m = url[2].match( /\.\.\//g );
+      if ( url_m )
+      {
+        relPath = new RegExp( "(.*?)(([^\/]*\/){"+ url_m.length+"})[^\/]*$" );
+        base_m = b.match( relPath );
+        absPath = url[2].replace(/(\.\.\/)*/,base_m[1]);
+        html = html.replace( new RegExp(url[2].replace( HTMLArea.RE_Specials, '\\$1' ) ),absPath );
+      }
+    }
+  }
+  
   if ( typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors )
   {
     var stripRe = new RegExp(document.location.href.replace(/&/g,'&amp;').replace(HTMLArea.RE_Specials, '\\$1') + '(#[^\'" ]*)', 'g');
