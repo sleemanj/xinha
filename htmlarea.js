@@ -374,7 +374,7 @@ HTMLArea.Config = function()
   // see if the text just typed looks like a URL, or email address
   // and link it appropriatly
   this.convertUrlsToLinks = false;
-  
+
   // size of color picker cells
   this.colorPickerCellSize = '6px';
   // granularity of color picker cells (number per column/row)
@@ -1527,6 +1527,24 @@ HTMLArea.prototype.generate = function ()
     editor.registerPlugin('EnterParagraphs');
   }
 
+  if ( typeof HTMLArea.getHTML == 'undefined' )
+  {
+      HTMLArea._loadback(_editor_url + "getHTML.js", function() { editor.generate(); } );
+  	  return false;
+  }
+  
+  if ( typeof HTMLArea.prototype._insertImage == 'undefined' )
+  {
+      HTMLArea._loadback(_editor_url + "popups/insert_image.js", function() { editor.generate(); } );
+  	  return false;
+  }
+
+  if ( typeof HTMLArea.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' )
+  {
+      HTMLArea._loadback(_editor_url + "popups/link.js", function() { editor.generate(); } );
+  	  return false;
+  }
+
   // create the editor framework, yah, table layout I know, but much easier
   // to get it working correctly this way, sorry about that, patches welcome.
 
@@ -2537,11 +2555,25 @@ HTMLArea.loadPlugin = function(pluginName, callback)
 };
 
 HTMLArea._pluginLoadStatus = {};
+HTMLArea._browserSpecificFunctionsLoaded = false;
 HTMLArea.loadPlugins = function(plugins, callbackIfNotReady)
 {
   // Rip the ones that are loaded and look for ones that have failed
   var retVal = true;
   var nuPlugins = HTMLArea.cloneObject(plugins);
+
+  if ( !HTMLArea._browserSpecificFunctionsLoaded )
+  {
+  	if (HTMLArea.is_ie)
+  	{
+  		HTMLArea._loadback(_editor_url + "functionsIE.js",callbackIfNotReady);
+  	}
+  	else
+  	{
+  		HTMLArea._loadback(_editor_url + "functionsMozilla.js",callbackIfNotReady);
+  	}
+  	return false;
+  }
   while ( nuPlugins.length )
   {
     var p = nuPlugins.pop();
@@ -3321,144 +3353,9 @@ HTMLArea.prototype.updateToolbar = function(noStatus)
 
 };
 
-/** Returns a node after which we can insert other nodes, in the current
- * selection.  The selection is removed.  It splits a text node, if needed.
- */
-if ( !HTMLArea.is_ie )
-{
-  HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
-  {
-    var sel = this._getSelection();
-    var range = this._createRange(sel);
-    // remove the current selection
-    sel.removeAllRanges();
-    range.deleteContents();
-    var node = range.startContainer;
-    var pos = range.startOffset;
-    var selnode = toBeInserted;
-    switch ( node.nodeType )
-    {
-      case 3: // Node.TEXT_NODE
-        // we have to split it at the caret position.
-        if ( toBeInserted.nodeType == 3 )
-        {
-          // do optimized insertion
-          node.insertData(pos, toBeInserted.data);
-          range = this._createRange();
-          range.setEnd(node, pos + toBeInserted.length);
-          range.setStart(node, pos + toBeInserted.length);
-          sel.addRange(range);
-        }
-        else
-        {
-          node = node.splitText(pos);
-          if ( toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */ )
-          {
-            selnode = selnode.firstChild;
-          }
-          node.parentNode.insertBefore(toBeInserted, node);
-          this.selectNodeContents(selnode);
-          this.updateToolbar();
-        }
-      break;
-      case 1: // Node.ELEMENT_NODE
-        if ( toBeInserted.nodeType == 11 /* Node.DOCUMENT_FRAGMENT_NODE */ )
-        {
-          selnode = selnode.firstChild;
-        }
-        node.insertBefore(toBeInserted, node.childNodes[pos]);
-        this.selectNodeContents(selnode);
-        this.updateToolbar();
-      break;
-    }
-  };
-}
-else
-{
-  HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
-  {
-    return null;	// this function not yet used for IE <FIXME>
-  };
-}
 
-// Returns the deepest node that contains both endpoints of the selection.
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype.getParentElement = function(sel)
-  {
-    if ( typeof sel == 'undefined' )
-    {
-      sel = this._getSelection();
-    }
-    var range = this._createRange(sel);
-    switch ( sel.type )
-    {
-      case "Text":
-        // try to circumvent a bug in IE:
-        // the parent returned is not always the real parent element
-        var parent = range.parentElement();
-        while ( true )
-        {
-          var TestRange = range.duplicate();
-          TestRange.moveToElementText(parent);
-          if ( TestRange.inRange(range) )
-          {
-            break;
-          }
-          if ( ( parent.nodeType != 1 ) || ( parent.tagName.toLowerCase() == 'body' ) )
-          {
-            break;
-          }
-          parent = parent.parentElement;
-        }
-        return parent;
-      case "None":
-        // It seems that even for selection of type "None",
-        // there _is_ a parent element and it's value is not
-        // only correct, but very important to us.  MSIE is
-        // certainly the buggiest browser in the world and I
-        // wonder, God, how can Earth stand it?
-        return range.parentElement();
-      case "Control":
-        return range.item(0);
-      default:
-        return this._doc.body;
-    }
-  };
-}
-else
-{
-  HTMLArea.prototype.getParentElement = function(sel)
-  {
-    if ( typeof sel == 'undefined' )
-    {
-      sel = this._getSelection();
-    }
-    var range = this._createRange(sel);
-    try
-    {
-      var p = range.commonAncestorContainer;
-      if ( !range.collapsed && range.startContainer == range.endContainer &&
-          range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes() )
-      {
-        p = range.startContainer.childNodes[range.startOffset];
-      }
-      /*
-      alert(range.startContainer + ":" + range.startOffset + "\n" +
-            range.endContainer + ":" + range.endOffset);
-      */
-      while ( p.nodeType == 3 )
-      {
-        p = p.parentNode;
-      }
-      return p;
-    }
-    catch (ex)
-    {
-      return null;
-    }
-  };
-}
+// moved HTMLArea.prototype.insertNodeAtSelection() to browser specific file
+// moved HTMLArea.prototype.getParentElement() to browser specific file
 
 // Returns an array with all the ancestor nodes of the selection.
 HTMLArea.prototype.getAllAncestors = function()
@@ -3522,122 +3419,8 @@ HTMLArea.prototype._getFirstAncestor = function(sel, types)
   return null;
 };
 
-/**
- * Returns the selected element, if any.  That is,
- * the element that you have last selected in the "path"
- * at the bottom of the editor, or a "control" (eg image)
- *
- * @returns null | element
- */
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype._activeElement = function(sel)
-  {
-    if ( ( sel === null ) || this._selectionEmpty(sel) )
-    {
-      return null;
-    }
-
-    if ( sel.type.toLowerCase() == "control" )
-    {
-      return sel.createRange().item(0);
-    }
-    else
-    {
-      // If it's not a control, then we need to see if
-      // the selection is the _entire_ text of a parent node
-      // (this happens when a node is clicked in the tree)
-      var range = sel.createRange();
-      var p_elm = this.getParentElement(sel);
-      if ( p_elm.innerHTML == range.htmlText )
-      {
-        return p_elm;
-      }
-      /*
-      if ( p_elm )
-      {
-        var p_rng = this._doc.body.createTextRange();
-        p_rng.moveToElementText(p_elm);
-        if ( p_rng.isEqual(range) )
-        {
-          return p_elm;
-        }
-      }
-
-      if ( range.parentElement() )
-      {
-        var prnt_range = this._doc.body.createTextRange();
-        prnt_range.moveToElementText(range.parentElement());
-        if ( prnt_range.isEqual(range) )
-        {
-          return range.parentElement();
-        }
-      }
-      */
-      return null;
-    }
-  };
-}
-else
-{
-  HTMLArea.prototype._activeElement = function(sel)
-  {
-    if ( ( sel === null ) || this._selectionEmpty(sel) )
-    {
-      return null;
-    }
-
-    // For Mozilla we just see if the selection is not collapsed (something is selected)
-    // and that the anchor (start of selection) is an element.  This might not be totally
-    // correct, we possibly should do a simlar check to IE?
-    if ( !sel.isCollapsed )
-    {      
-      if ( sel.anchorNode.childNodes.length > sel.anchorOffset && sel.anchorNode.childNodes[sel.anchorOffset].nodeType == 1 )
-      {
-        return sel.anchorNode.childNodes[sel.anchorOffset];
-      }
-      else if ( sel.anchorNode.nodeType == 1 )
-      {
-        return sel.anchorNode;
-      }
-      else
-      {
-        return null; // return sel.anchorNode.parentNode;
-      }
-    }
-    return null;
-  };
-}
-
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype._selectionEmpty = function(sel)
-  {
-    if ( !sel )
-    {
-      return true;
-    }
-
-    return this._createRange(sel).htmlText === '';
-  };
-}
-else
-{
-  HTMLArea.prototype._selectionEmpty = function(sel)
-  {
-    if ( !sel )
-    {
-      return true;
-    }
-
-    if ( typeof sel.isCollapsed != 'undefined' )
-    {      
-      return sel.isCollapsed;
-    }
-
-    return true;
-  };
-}
+// moved HTMLArea.prototype._activeElement() to browser specific file
+// moved HTMLArea.prototype._selectionEmpty() to browser specific file
 
 HTMLArea.prototype._getAncestorBlock = function(sel)
 {
@@ -3706,188 +3489,9 @@ HTMLArea.prototype._createImplicitBlock = function(type)
   // Expand DN
 };
 
-HTMLArea.prototype._formatBlock = function(block_format)
-{
-  var ancestors = this.getAllAncestors();
-  var apply_to, x = null;
-  // Block format can be a tag followed with class defs
-  //  eg div.blue.left
-  var target_tag = null;
-  var target_classNames = [ ];
 
-  if ( block_format.indexOf('.') >= 0 )
-  {
-    target_tag = block_format.substr(0, block_format.indexOf('.')).toLowerCase();
-    target_classNames = block_format.substr(block_format.indexOf('.'), block_format.length - block_format.indexOf('.')).replace(/\./g, '').replace(/^\s*/, '').replace(/\s*$/, '').split(' ');
-  }
-  else
-  {
-    target_tag = block_format.toLowerCase();
-  }
-
-  var sel = this._getSelection();
-  var rng = this._createRange(sel);
-
-  if ( HTMLArea.is_gecko )
-  {
-    if ( sel.isCollapsed )
-    {
-      // With no selection we want to apply to the whole contents of the ancestor block
-      apply_to = this._getAncestorBlock(sel);
-      if ( apply_to === null )
-      {
-        // If there wasn't an ancestor, make one.
-        apply_to = this._createImplicitBlock(sel, target_tag);
-      }
-    }
-    else
-    {
-      // With a selection it's more tricky
-      switch ( target_tag )
-      {
-
-        case 'h1':
-        case 'h2':
-        case 'h3':
-        case 'h4':
-        case 'h5':
-        case 'h6':
-        case 'h7':
-          apply_to = [];
-          var search_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7'];
-          for ( var y = 0; y < search_tags.length; y++ )
-          {
-            var headers = this._doc.getElementsByTagName(search_tags[y]);
-            for ( x = 0; x < headers.length; x++ )
-            {
-              if ( sel.containsNode(headers[x]) )
-              {
-                apply_to[apply_to.length] = headers[x];
-              }
-            }
-          }
-          if ( apply_to.length > 0)
-          {
-            break;
-          }
-          // If there wern't any in the selection drop through
-        case 'div':
-          apply_to = this._doc.createElement(target_tag);
-          apply_to.appendChild(rng.extractContents());
-          rng.insertNode(apply_to);
-        break;
-
-        case 'p':
-        case 'center':
-        case 'pre':
-        case 'ins':
-        case 'del':
-        case 'blockquote':
-        case 'address':
-          apply_to = [];
-          var paras = this._doc.getElementsByTagName(target_tag);
-          for ( x = 0; x < paras.length; x++ )
-          {
-            if ( sel.containsNode(paras[x]) )
-            {
-              apply_to[apply_to.length] = paras[x];
-            }
-          }
-
-          if ( apply_to.length === 0 )
-          {
-            sel.collapseToStart();
-            return this._formatBlock(block_format);
-          }
-        break;
-      }
-    }
-  }
-
-};
-
-// Selects the contents inside the given node
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype.selectNodeContents = function(node, pos)
-  {
-    this.focusEditor();
-    this.forceRedraw();
-    var range;
-    var collapsed = typeof pos == "undefined" ? true : false;
-    // Tables and Images get selected as "objects" rather than the text contents
-    if ( collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|select|textarea/) )
-    {
-      range = this._doc.body.createControlRange();
-      range.add(node);
-    }
-    else
-    {
-      range = this._doc.body.createTextRange();
-      range.moveToElementText(node);
-      //(collapsed) && range.collapse(pos);
-    }
-    range.select();
-  };
-}
-else
-{
-  HTMLArea.prototype.selectNodeContents = function(node, pos)
-  {
-    this.focusEditor();
-    this.forceRedraw();
-    var range;
-    var collapsed = typeof pos == "undefined" ? true : false;
-    var sel = this._getSelection();
-    range = this._doc.createRange();
-    // Tables and Images get selected as "objects" rather than the text contents
-    if ( collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|textarea|select/) )
-    {
-      range.selectNode(node);
-    }
-    else
-    {
-      range.selectNodeContents(node);
-      //(collapsed) && range.collapse(pos);
-    }
-    sel.removeAllRanges();
-    sel.addRange(range);
-  };
-}
-
-/** Call this function to insert HTML code at the current position.  It deletes
- * the selection, if any.
- */
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype.insertHTML = function(html)
-  {
-    var sel = this._getSelection();
-    var range = this._createRange(sel);
-    this.focusEditor();
-    range.pasteHTML(html);
-  };
-}
-else
-{
-  HTMLArea.prototype.insertHTML = function(html)
-  {
-    var sel = this._getSelection();
-    var range = this._createRange(sel);
-    this.focusEditor();
-    // construct a new document fragment with the given HTML
-    var fragment = this._doc.createDocumentFragment();
-    var div = this._doc.createElement("div");
-    div.innerHTML = html;
-    while ( div.firstChild )
-    {
-      // the following call also removes the node from div
-      fragment.appendChild(div.firstChild);
-    }
-    // this also removes the selection
-    var node = this.insertNodeAtSelection(fragment);
-  };
-}
+// moved HTMLArea.prototype.selectNodeContents() to browser specific file
+// moved HTMLArea.prototype.insertHTML() to browser specific file
 
 /**
  *  Call this function to surround the existing HTML code in the selection with
@@ -3901,36 +3505,7 @@ HTMLArea.prototype.surroundHTML = function(startTag, endTag)
   this.insertHTML(startTag + html + endTag);
 };
 
-/// Retrieve the selected block
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype.getSelectedHTML = function()
-  {
-    var sel = this._getSelection();
-    var range = this._createRange(sel);
-    
-    // Need to be careful of control ranges which won't have htmlText
-    if( range.htmlText )
-    {
-      return range.htmlText;
-    }
-    else if(range.length >= 1)
-    {
-      return range.item(0).outerHTML;
-    }
-    
-    return '';
-  };
-}
-else
-{
-  HTMLArea.prototype.getSelectedHTML = function()
-  {
-    var sel = this._getSelection();
-    var range = this._createRange(sel);
-    return HTMLArea.getHTML(range.cloneContents(), false, this);
-  };
-}
+// moved  HTMLArea.prototype.getSelectedHTML() to browser specific file
 
 /// Return true if we have some selection
 HTMLArea.prototype.hasSelectedText = function()
@@ -3939,216 +3514,8 @@ HTMLArea.prototype.hasSelectedText = function()
   return this.getSelectedHTML() !== '';
 };
 
-HTMLArea.prototype._createLink = function(link)
-{
-  var editor = this;
-  var outparam = null;
-  if ( typeof link == "undefined" )
-  {
-    link = this.getParentElement();
-    if ( link )
-    {
-      while (link && !/^a$/i.test(link.tagName))
-      {
-        link = link.parentNode;
-      }
-    }
-  }
-  if ( !link )
-  {
-    var sel = editor._getSelection();
-    var range = editor._createRange(sel);
-    var compare = 0;
-    if ( HTMLArea.is_ie )
-    {
-      if ( sel.type == "Control" )
-      {
-        compare = range.length;
-      }
-      else
-      {
-        compare = range.compareEndPoints("StartToEnd", range);
-      }
-    }
-    else
-    {
-      compare = range.compareBoundaryPoints(range.START_TO_END, range);
-    }
-    if ( compare === 0 )
-    {
-      alert(HTMLArea._lc("You need to select some text before creating a link"));
-      return;
-    }
-    outparam =
-    {
-      f_href : '',
-      f_title : '',
-      f_target : '',
-      f_usetarget : editor.config.makeLinkShowsTarget
-    };
-  }
-  else
-  {
-    outparam =
-    {
-      f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
-      f_title  : link.title,
-      f_target : link.target,
-      f_usetarget : editor.config.makeLinkShowsTarget
-    };
-  }
-  this._popupDialog(
-    editor.config.URIs.link,
-    function(param)
-    {
-      if ( !param )
-      {
-        return false;
-      }
-      var a = link;
-      if ( !a )
-      {
-        try
-        {
-          var tmp = HTMLArea.uniq('http://www.example.com/Link');
-          editor._doc.execCommand('createlink', false, tmp);
-
-          // Fix them up
-          var anchors = editor._doc.getElementsByTagName('a');
-          for(var i = 0; i < anchors.length; i++)
-          {
-            var anchor = anchors[i];
-            if(anchor.href == tmp)
-            {
-              // Found one.
-              if (!a) a = anchor;
-              anchor.href =  param.f_href;
-              if (param.f_target) anchor.target =  param.f_target;
-              if (param.f_title)  anchor.title =  param.f_title;
-            }
-          }
-        } catch(ex) {}
-      }
-      else
-      {
-        var href = param.f_href.trim();
-        editor.selectNodeContents(a);
-        if ( href === '' )
-        {
-          editor._doc.execCommand("unlink", false, null);
-          editor.updateToolbar();
-          return false;
-        }
-        else
-        {
-          a.href = href;
-        }
-      }
-      if ( ! ( a && a.tagName.toLowerCase() == 'a' ) )
-      {
-        return false;
-      }
-      a.target = param.f_target.trim();
-      a.title = param.f_title.trim();
-      editor.selectNodeContents(a);
-      editor.updateToolbar();
-    },
-    outparam);
-};
-
-// Called when the user clicks on "InsertImage" button.  If an image is already
-// there, it will just modify it's properties.
-HTMLArea.prototype._insertImage = function(image)
-{
-  var editor = this;	// for nested functions
-  var outparam = null;
-  if ( typeof image == "undefined" )
-  {
-    image = this.getParentElement();
-    if ( image && image.tagName.toLowerCase() != 'img' )
-    {
-      image = null;
-    }
-  }
-  if ( image )
-  {
-    outparam =
-    {
-      f_base   : editor.config.baseHref,
-      f_url    : HTMLArea.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
-      f_alt    : image.alt,
-      f_border : image.border,
-      f_align  : image.align,
-      f_vert   : image.vspace,
-      f_horiz  : image.hspace
-    };
-  }
-  this._popupDialog(
-    editor.config.URIs.insert_image,
-    function(param)
-    {
-      // user must have pressed Cancel
-      if ( !param )
-      {
-        return false;
-      }
-      var img = image;
-      if ( !img )
-      {
-        if ( HTMLArea.is_ie )
-        {
-          var sel = editor._getSelection();
-          var range = editor._createRange(sel);
-          editor._doc.execCommand("insertimage", false, param.f_url);
-          img = range.parentElement();
-          // wonder if this works...
-          if ( img.tagName.toLowerCase() != "img" )
-          {
-            img = img.previousSibling;
-          }
-        }
-        else
-        {
-          img = document.createElement('img');
-          img.src = param.f_url;
-          editor.insertNodeAtSelection(img);
-          if ( !img.tagName )
-          {
-            // if the cursor is at the beginning of the document
-            img = range.startContainer.firstChild;
-          }
-        }
-      }
-      else
-      {
-        img.src = param.f_url;
-      }
-
-      for ( var field in param )
-      {
-        var value = param[field];
-        switch (field)
-        {
-          case "f_alt":
-            img.alt = value;
-          break;
-          case "f_border":
-            img.border = parseInt(value || "0", 10);
-          break;
-          case "f_align":
-            img.align = value;
-          break;
-          case "f_vert":
-            img.vspace = parseInt(value || "0", 10);
-          break;
-          case "f_horiz":
-            img.hspace = parseInt(value || "0", 10);
-          break;
-        }
-      }
-    },
-    outparam);
-};
+// moved HTMLArea.prototype._createLink() to popups/link.js
+// moved HTMLArea.prototype._insertImage() to popups/insert_image.js
 
 // Called when the user clicks the Insert Table button
 HTMLArea.prototype._insertTable = function()
@@ -4506,186 +3873,7 @@ HTMLArea.prototype._editorEvent = function(ev)
   }
   else if ( keyEvent )
   {
-    // IE's textRange and selection object is woefully inadequate,
-    // which means this fancy stuff is gecko only sorry :-|
-    // Die Bill, Die.  (IE supports it somewhat nativly though)
-    if ( HTMLArea.is_gecko )
-    {
-      var s = editor._getSelection();
-      var autoWrap = function (textNode, tag)
-      {
-        var rightText = textNode.nextSibling;
-        if ( typeof tag == 'string')
-        {
-          tag = editor._doc.createElement(tag);
-        }
-        var a = textNode.parentNode.insertBefore(tag, rightText);
-        HTMLArea.removeFromParent(textNode);
-        a.appendChild(textNode);
-        rightText.data = ' ' + rightText.data;
-
-        if ( HTMLArea.is_ie )
-        {
-          var r = editor._createRange(s);
-          s.moveToElementText(rightText);
-          s.move('character', 1);
-        }
-        else
-        {
-          s.collapse(rightText, 1);
-        }
-        HTMLArea._stopEvent(ev);
-
-        editor._unLink = function()
-        {
-          var t = a.firstChild;
-          a.removeChild(t);
-          a.parentNode.insertBefore(t, a);
-          HTMLArea.removeFromParent(a);
-          editor._unLink = null;
-          editor._unlinkOnUndo = false;
-        };
-        editor._unlinkOnUndo = true;
-
-        return a;
-      };
-
-      switch ( ev.which )
-      {
-        // Space, see if the text just typed looks like a URL, or email address
-        // and link it appropriatly
-        case 32:
-          if ( this.config.convertUrlsToLinks && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0 )
-          {
-            var midStart = s.anchorNode.data.substring(0,s.anchorOffset).search(/\S{4,}$/);
-            if ( midStart == -1 )
-            {
-              break;
-            }
-
-            if ( this._getFirstAncestor(s, 'a') )
-            {
-              break; // already in an anchor
-            }
-
-            var matchData = s.anchorNode.data.substring(0,s.anchorOffset).replace(/^.*?(\S*)$/, '$1');
-
-            var mEmail = matchData.match(HTMLArea.RE_email);
-            if ( mEmail )
-            {
-              var leftTextEmail  = s.anchorNode;
-              var rightTextEmail = leftTextEmail.splitText(s.anchorOffset);
-              var midTextEmail   = leftTextEmail.splitText(midStart);
-
-              autoWrap(midTextEmail, 'a').href = 'mailto:' + mEmail[0];
-              break;
-            }
-
-            RE_date = /([0-9]+\.)+/; //could be date or ip or something else ...
-            RE_ip = /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/;
-            var mUrl = matchData.match(HTMLArea.RE_url);
-            if ( mUrl )
-            {
-              if (RE_date.test(matchData))
-              {
-                if (!RE_ip.test(matchData)) 
-                {
-                  break;
-                }
-              }
-              var leftTextUrl  = s.anchorNode;
-              var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
-              var midTextUrl   = leftTextUrl.splitText(midStart);
-              autoWrap(midTextUrl, 'a').href = (mUrl[1] ? mUrl[1] : 'http://') + mUrl[2];
-              break;
-            }
-          }
-        break;
-
-        default:
-          if ( ev.keyCode == 27 || ( this._unlinkOnUndo && ev.ctrlKey && ev.which == 122 ) )
-          {
-            if ( this._unLink )
-            {
-              this._unLink();
-              HTMLArea._stopEvent(ev);
-            }
-            break;
-          }
-          else if ( ev.which || ev.keyCode == 8 || ev.keyCode == 46 )
-          {
-            this._unlinkOnUndo = false;
-
-            if ( s.anchorNode && s.anchorNode.nodeType == 3 )
-            {
-              // See if we might be changing a link
-              var a = this._getFirstAncestor(s, 'a');
-              // @todo: we probably need here to inform the setTimeout below that we not changing a link and not start another setTimeout
-              if ( !a )
-              {
-                break; // not an anchor
-              } 
-              if ( !a._updateAnchTimeout )
-              {
-                if ( s.anchorNode.data.match(HTMLArea.RE_email) && a.href.match('mailto:' + s.anchorNode.data.trim()) )
-                {
-                  var textNode = s.anchorNode;
-                  var fnAnchor = function()
-                  {
-                    a.href = 'mailto:' + textNode.data.trim();
-                    // @fixme: why the hell do another timeout is started ?
-                    //         This lead to never ending timer if we dont remove this line
-                    //         But when removed, the email is not correctly updated
-                    a._updateAnchTimeout = setTimeout(fnAnchor, 250);
-                  };
-                  a._updateAnchTimeout = setTimeout(fnAnchor, 1000);
-                  break;
-                }
-
-                var m = s.anchorNode.data.match(HTMLArea.RE_url);
-                if ( m && a.href.match(s.anchorNode.data.trim()) )
-                {
-                  var txtNode = s.anchorNode;
-                  var fnUrl = function()
-                  {
-                    // @fixme: Alert, sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
-                    m = txtNode.data.match(HTMLArea.RE_url);
-                    a.href = (m[1] ? m[1] : 'http://') + m[2];
-                    // @fixme: why the hell do another timeout is started ?
-                    //         This lead to never ending timer if we dont remove this line
-                    //         But when removed, the url is not correctly updated
-                    a._updateAnchTimeout = setTimeout(fnUrl, 250);
-                  };
-                  a._updateAnchTimeout = setTimeout(fnUrl, 1000);
-                }
-              }
-            }
-          }
-        break;
-      }
-    }
-
-    // other keys here
-    switch (ev.keyCode)
-    {
-      case 13: // KEY enter
-        if ( HTMLArea.is_gecko && !ev.shiftKey && this.config.mozParaHandler == 'dirty' )
-        {
-          this.dom_checkInsertP();
-          HTMLArea._stopEvent(ev);
-        }
-      break;
-      case 8: // KEY backspace
-      case 46: // KEY delete
-        if ( ( HTMLArea.is_gecko && !ev.shiftKey ) || HTMLArea.is_ie )
-        {
-          if ( this.checkBackspace() )
-          {
-            HTMLArea._stopEvent(ev);
-          }
-        }
-      break;
-    }
+    this.mozKey( ev, keyEvent );
   }
 
   // update the toolbar state after some time
@@ -4701,6 +3889,7 @@ HTMLArea.prototype._editorEvent = function(ev)
     },
     250);
 };
+
 // handles ctrl + key shortcuts 
 HTMLArea.prototype._shortCuts = function (ev)
 {
@@ -4783,79 +3972,7 @@ HTMLArea.prototype.convertNode = function(el, newTagName)
   return newel;
 };
 
-if ( HTMLArea.is_ie )
-{
-  // this function is for IE
-  HTMLArea.prototype.checkBackspace = function()
-  {
-    var sel = this._getSelection();
-    if ( sel.type == 'Control' )
-    {
-      var elm = this._activeElement(sel);
-      HTMLArea.removeFromParent(elm);
-      return true;
-    }
-
-    // This bit of code preseves links when you backspace over the
-    // endpoint of the link in IE.  Without it, if you have something like
-    //    link_here |
-    // where | is the cursor, and backspace over the last e, then the link
-    // will de-link, which is a bit tedious
-    var range = this._createRange(sel);
-    var r2 = range.duplicate();
-    r2.moveStart("character", -1);
-    var a = r2.parentElement();
-    // @fixme: why using again a regex to test a single string ???
-    if ( a != range.parentElement() && ( /^a$/i.test(a.tagName) ) )
-    {
-      r2.collapse(true);
-      r2.moveEnd("character", 1);
-      r2.pasteHTML('');
-      r2.select();
-      return true;
-    }
-  };
-}
-else
-{
-  // this function is for DOM
-  HTMLArea.prototype.checkBackspace = function()
-  {
-    var self = this;
-    setTimeout(
-      function()
-      {
-        var sel = self._getSelection();
-        var range = self._createRange(sel);
-        var SC = range.startContainer;
-        var SO = range.startOffset;
-        var EC = range.endContainer;
-        var EO = range.endOffset;
-        var newr = SC.nextSibling;
-        if ( SC.nodeType == 3 )
-        {
-          SC = SC.parentNode;
-        }
-        if ( ! ( /\S/.test(SC.tagName) ) )
-        {
-          var p = document.createElement("p");
-          while ( SC.firstChild )
-          {
-            p.appendChild(SC.firstChild);
-          }
-          SC.parentNode.insertBefore(p, SC);
-          HTMLArea.removeFromParent(SC);
-          var r = range.cloneRange();
-          r.setStartBefore(newr);
-          r.setEndAfter(newr);
-          r.extractContents();
-          sel.removeAllRanges();
-          sel.addRange(r);
-        }
-      },
-      10);
-  };
-}
+// moved HTMLArea.prototype.checkBackspace() to browser specific file
 
 /** The idea here is
  * 1. See if we are in a block element
@@ -5405,52 +4522,8 @@ HTMLArea.checkSupportedBrowser = function()
 
 // selection & ranges
 
-// returns the current selection object
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype._getSelection = function()
-  {
-    return this._doc.selection;
-  };
-}
-else
-{
-  HTMLArea.prototype._getSelection = function()
-  {
-    return this._iframe.contentWindow.getSelection();
-  };
-}
-
-// returns a range for the current selection
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.prototype._createRange = function(sel)
-  {
-    return sel.createRange();
-  };
-}
-else
-{
-  HTMLArea.prototype._createRange = function(sel)
-  {
-    this.activateEditor();
-    if ( typeof sel != "undefined" )
-    {
-      try
-      {
-        return sel.getRangeAt(0);
-      }
-      catch(ex)
-      {
-        return this._doc.createRange();
-      }
-    }
-    else
-    {
-      return this._doc.createRange();
-    }
-  };
-}
+// moved HTMLArea.prototype._getSelection() to browser specific file
+// moved HTMLArea.prototype._createRange()  to browser specific file
 
 // event handling
 
@@ -5775,242 +4848,7 @@ HTMLArea.htmlEncode = function(str)
   return str;
 };
 
-// Retrieves the HTML code from the given node.	 This is a replacement for
-// getting innerHTML, using standard DOM calls.
-// Wrapper catch a Mozilla-Exception with non well formed html source code
-HTMLArea.getHTML = function(root, outputRoot, editor)
-{
-  try
-  {
-    return HTMLArea.getHTMLWrapper(root,outputRoot,editor);
-  }
-  catch(ex)
-  {
-    alert(HTMLArea._lc('Your Document is not well formed. Check JavaScript console for details.'));
-    return editor._iframe.contentWindow.document.body.innerHTML;
-  }
-};
-
-HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
-{
-  var html = "";
-  if ( !indent )
-  {
-    indent = '';
-  }
-
-  switch ( root.nodeType )
-  {
-    case 10:// Node.DOCUMENT_TYPE_NODE
-    case 6: // Node.ENTITY_NODE
-    case 12:// Node.NOTATION_NODE
-      // this all are for the document type, probably not necessary
-    break;
-
-    case 2: // Node.ATTRIBUTE_NODE
-      // Never get here, this has to be handled in the ELEMENT case because
-      // of IE crapness requring that some attributes are grabbed directly from
-      // the attribute (nodeValue doesn't return correct values), see
-      //http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&oe=UTF-8&safe=off&selm=3porgu4mc4ofcoa1uqkf7u8kvv064kjjb4%404ax.com
-      // for information
-    break;
-
-    case 4: // Node.CDATA_SECTION_NODE
-      // Mozilla seems to convert CDATA into a comment when going into wysiwyg mode,
-      //  don't know about IE
-      html += (HTMLArea.is_ie ? ('\n' + indent) : '') + '<![CDATA[' + root.data + ']]>' ;
-    break;
-
-    case 5: // Node.ENTITY_REFERENCE_NODE
-      html += '&' + root.nodeValue + ';';
-    break;
-
-    case 7: // Node.PROCESSING_INSTRUCTION_NODE
-      // PI's don't seem to survive going into the wysiwyg mode, (at least in moz)
-      // so this is purely academic
-      html += (HTMLArea.is_ie ? ('\n' + indent) : '') + '<?' + root.target + ' ' + root.data + ' ?>';
-    break;
-
-    case 1: // Node.ELEMENT_NODE
-    case 11: // Node.DOCUMENT_FRAGMENT_NODE
-    case 9: // Node.DOCUMENT_NODE
-      var closed;
-      var i;
-      var root_tag = (root.nodeType == 1) ? root.tagName.toLowerCase() : '';
-      if ( ( root_tag == "script" || root_tag == "noscript" ) && editor.config.stripScripts )
-      {
-        break;
-      }
-      if ( outputRoot )
-      {
-        outputRoot = !(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(root_tag));
-      }
-      if ( HTMLArea.is_ie && root_tag == "head" )
-      {
-        if ( outputRoot )
-        {
-          html += (HTMLArea.is_ie ? ('\n' + indent) : '') + "<head>";
-        }
-        // lowercasize
-        var save_multiline = RegExp.multiline;
-        RegExp.multiline = true;
-        var txt = root.innerHTML.replace(HTMLArea.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); });
-        RegExp.multiline = save_multiline;
-        html += txt + '\n';
-        if ( outputRoot )
-        {
-          html += (HTMLArea.is_ie ? ('\n' + indent) : '') + "</head>";
-        }
-        break;
-      }
-      else if ( outputRoot )
-      {
-        closed = (!(root.hasChildNodes() || HTMLArea.needsClosingTag(root)));
-        html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
-        var attrs = root.attributes;
-        for ( i = 0; i < attrs.length; ++i )
-        {
-          var a = attrs.item(i);
-          if ( !a.specified && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value') )
-          {
-            continue;
-          }
-          var name = a.nodeName.toLowerCase();
-          if ( /_moz_editor_bogus_node/.test(name) )
-          {
-            html = "";
-            break;
-          }
-          if ( /(_moz)|(contenteditable)|(_msh)/.test(name) )
-          {
-            // avoid certain attributes
-            continue;
-          }
-          var value;
-          if ( name != "style" )
-          {
-            // IE5.5 reports 25 when cellSpacing is
-            // 1; other values might be doomed too.
-            // For this reason we extract the
-            // values directly from the root node.
-            // I'm starting to HATE JavaScript
-            // development.  Browser differences
-            // suck.
-            //
-            // Using Gecko the values of href and src are converted to absolute links
-            // unless we get them using nodeValue()
-            if ( typeof root[a.nodeName] != "undefined" && name != "href" && name != "src" && !(/^on/.test(name)) )
-            {
-              value = root[a.nodeName];
-            }
-            else
-            {
-              value = a.nodeValue;
-              // IE seems not willing to return the original values - it converts to absolute
-              // links using a.nodeValue, a.value, a.stringValue, root.getAttribute("href")
-              // So we have to strip the baseurl manually :-/
-              if ( HTMLArea.is_ie && (name == "href" || name == "src") )
-              {
-                value = editor.stripBaseURL(value);
-              }
-
-              // High-ascii (8bit) characters in links seem to cause problems for some sites,
-              // while this seems to be consistent with RFC 3986 Section 2.4
-              // because these are not "reserved" characters, it does seem to
-              // cause links to international resources not to work.  See ticket:167
-
-              // IE always returns high-ascii characters un-encoded in links even if they
-              // were supplied as % codes (it unescapes them when we pul the value from the link).
-
-              // Hmmm, very strange if we use encodeURI here, or encodeURIComponent in place
-              // of escape below, then the encoding is wrong.  I mean, completely.
-              // Nothing like it should be at all.  Using escape seems to work though.
-              // It's in both browsers too, so either I'm doing something wrong, or
-              // something else is going on?
-
-              if ( editor.config.only7BitPrintablesInURLs && ( name == "href" || name == "src" ) )
-              {
-                value = value.replace(/([^!-~]+)/g, function(match) { return escape(match); });
-              }
-            }
-          }
-          else
-          {
-            // IE fails to put style in attributes list
-            // FIXME: cssText reported by IE is UPPERCASE
-            value = root.style.cssText;
-          }
-          if ( /^(_moz)?$/.test(value) )
-          {
-            // Mozilla reports some special tags
-            // here; we don't need them.
-            continue;
-          }
-          html += " " + name + '="' + HTMLArea.htmlEncode(value) + '"';
-        }
-        if ( html !== "" )
-        {
-          if ( closed && root_tag=="p" )
-          {
-            //never use <p /> as empty paragraphs won't be visible
-            html += ">&nbsp;</p>";
-          }
-          else if ( closed )
-          {
-            html += " />";
-          }
-          else
-          {
-            html += ">";
-          }
-        }
-      }
-      var containsBlock = false;
-      if ( root_tag == "script" || root_tag == "noscript" )
-      {
-        if ( !editor.config.stripScripts )
-        {
-          if (HTMLArea.is_ie)
-          {
-            var innerText = "\n" + root.innerHTML.replace(/^[\n\r]*/,'').replace(/\s+$/,'') + '\n' + indent;
-          }
-          else
-          {
-            var innerText = (root.hasChildNodes()) ? root.firstChild.nodeValue : '';
-          }
-          html += innerText + '</'+root_tag+'>' + ((HTMLArea.is_ie) ? '\n' : '');
-        }
-      }
-      else
-      {
-        for ( i = root.firstChild; i; i = i.nextSibling )
-        {
-          if ( !containsBlock && i.nodeType == 1 && HTMLArea.isBlockElement(i) )
-          {
-            containsBlock = true;
-          }
-          html += HTMLArea.getHTMLWrapper(i, true, editor, indent + '  ');
-        }
-        if ( outputRoot && !closed )
-        {
-          html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
-        }
-      }
-    break;
-
-    case 3: // Node.TEXT_NODE
-      html = /^script|style$/i.test(root.parentNode.tagName) ? root.data : HTMLArea.htmlEncode(root.data);
-    break;
-
-    case 8: // Node.COMMENT_NODE
-      html = "<!--" + root.data + "-->";
-    break;
-  }
-  return html;
-};
-
-/** @see getHTMLWrapper (search for "value = a.nodeValue;") */
-
+// moved HTMLArea.getHTML() to getHTML.js 
 HTMLArea.prototype.stripBaseURL = function(string)
 {
   if ( this.config.baseHref === null || !this.config.stripBaseHref )
@@ -6791,20 +5629,8 @@ HTMLArea.hasParentNode = function(el)
   return false;
 };
 
-if ( HTMLArea.is_ie )
-{
-  HTMLArea.getOuterHTML = function(element)
-  {
-    return element.outerHTML;
-  };
-}
-else
-{
-  HTMLArea.getOuterHTML = function(element)
-  {
-    return (new XMLSerializer()).serializeToString(element);
-  };
-}
+// moved HTMLArea.getOuterHTML() to browser specific file
+
 // detect the size of visible area
 // when calling from a popup window, call HTMLArea.viewportSize(window) to get the size of the popup
 HTMLArea.viewportSize = function(scope)
