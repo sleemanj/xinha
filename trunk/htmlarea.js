@@ -1,4 +1,4 @@
-
+ 
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
     --
@@ -1462,12 +1462,6 @@ HTMLArea.prototype.generate = function ()
   if ( typeof PopupWin == 'undefined' )
   {
     HTMLArea._loadback(_editor_url + 'popupwin.js', this.generate, this );
-    return false;
-  }
-
-  if ( typeof colorPicker == 'undefined' )
-  {
-    HTMLArea._loadback(_editor_url + 'popups/color_picker.js', this.generate, this );
     return false;
   }
 
@@ -3655,6 +3649,13 @@ HTMLArea.prototype._comboSelected = function(el, txt)
 HTMLArea.prototype._colorSelector = function(cmdID)
 {
   var editor = this;	// for nested functions
+  
+  if ( typeof colorPicker == 'undefined' )
+  {
+    HTMLArea._loadback(_editor_url + 'popups/color_picker.js', function () {editor._colorSelector(cmdID)});
+    return false;
+  }
+  
   var btn = editor._toolbarObjects[cmdID].element;
   var initcolor;
   if ( cmdID == 'hilitecolor' )
