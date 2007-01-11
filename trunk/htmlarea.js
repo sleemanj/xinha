@@ -370,6 +370,10 @@ HTMLArea.Config = function()
 
   // set to false if you want to allow JavaScript in the content, otherwise <script> tags are stripped out
   this.stripScripts = true;
+
+  // see if the text just typed looks like a URL, or email address
+  // and link it appropriatly
+  this.convertUrlsToLinks = false;
   
   // size of color picker cells
   this.colorPickerCellSize = '6px';
@@ -4551,7 +4555,7 @@ HTMLArea.prototype._editorEvent = function(ev)
         // Space, see if the text just typed looks like a URL, or email address
         // and link it appropriatly
         case 32:
-          if ( s && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0 )
+          if ( this.config.convertUrlsToLinks && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0 )
           {
             var midStart = s.anchorNode.data.substring(0,s.anchorOffset).search(/\S{4,}$/);
             if ( midStart == -1 )
@@ -4577,7 +4581,7 @@ HTMLArea.prototype._editorEvent = function(ev)
               break;
             }
 
-            RE_date = /[0-9\.]*/; //could be date or ip or something else ...
+            RE_date = /([0-9]+\.)+/; //could be date or ip or something else ...
             RE_ip = /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/;
             var mUrl = matchData.match(HTMLArea.RE_url);
             if ( mUrl )
