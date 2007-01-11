@@ -340,7 +340,8 @@ Linker.Dialog.prototype._prepareDialog = function()
                           linker.lConfig.backend_data,
                           function(txt) {
                             try {
-                                eval('lDialog.files = '+txt);
+                                eval('var f = '+txt);
+                                lDialog.files = f;
                             } catch(Error) {
                                 lDialog.files = [ {url:'',title:Error.toString()} ];
                             }
