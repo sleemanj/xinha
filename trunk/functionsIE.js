@@ -1,13 +1,13 @@
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
  */
-HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
+Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
 {
   return null;  // this function not yet used for IE <FIXME>
 };
 
 // Returns the deepest node that contains both endpoints of the selection.
-HTMLArea.prototype.getParentElement = function(sel)
+Xinha.prototype.getParentElement = function(sel)
 {
   if ( typeof sel == 'undefined' )
   {
@@ -56,7 +56,7 @@ HTMLArea.prototype.getParentElement = function(sel)
  *
  * @returns null | element
  */
-HTMLArea.prototype._activeElement = function(sel)
+Xinha.prototype._activeElement = function(sel)
 {
   if ( ( sel === null ) || this._selectionEmpty(sel) )
   {
@@ -103,7 +103,7 @@ HTMLArea.prototype._activeElement = function(sel)
   }
 };
 
-  HTMLArea.prototype._selectionEmpty = function(sel)
+  Xinha.prototype._selectionEmpty = function(sel)
 {
   if ( !sel )
   {
@@ -114,7 +114,7 @@ HTMLArea.prototype._activeElement = function(sel)
 };
 
 // Selects the contents inside the given node
-HTMLArea.prototype.selectNodeContents = function(node, pos)
+Xinha.prototype.selectNodeContents = function(node, pos)
 {
   this.focusEditor();
   this.forceRedraw();
@@ -138,7 +138,7 @@ HTMLArea.prototype.selectNodeContents = function(node, pos)
 /** Call this function to insert HTML code at the current position.  It deletes
  * the selection, if any.
  */
-HTMLArea.prototype.insertHTML = function(html)
+Xinha.prototype.insertHTML = function(html)
 {
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -148,7 +148,7 @@ HTMLArea.prototype.insertHTML = function(html)
 
 
 // Retrieve the selected block
-HTMLArea.prototype.getSelectedHTML = function()
+Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -166,13 +166,13 @@ HTMLArea.prototype.getSelectedHTML = function()
   return '';
 };
 
-HTMLArea.prototype.checkBackspace = function()
+Xinha.prototype.checkBackspace = function()
 {
   var sel = this._getSelection();
   if ( sel.type == 'Control' )
   {
     var elm = this._activeElement(sel);
-    HTMLArea.removeFromParent(elm);
+    Xinha.removeFromParent(elm);
     return true;
   }
 
@@ -197,26 +197,26 @@ HTMLArea.prototype.checkBackspace = function()
 };
   
 // returns the current selection object
-HTMLArea.prototype._getSelection = function()
+Xinha.prototype._getSelection = function()
 {
   return this._doc.selection;
 };
 
 // returns a range for the current selection
-HTMLArea.prototype._createRange = function(sel)
+Xinha.prototype._createRange = function(sel)
 {
   return sel.createRange();
 };
 
-HTMLArea.getOuterHTML = function(element)
+Xinha.getOuterHTML = function(element)
 {
   return element.outerHTML;
 };
   
 //What is this supposed to do??? it's never used 
-HTMLArea.prototype._formatBlock = function(block_format)
+Xinha.prototype._formatBlock = function(block_format)
 {
 
 };
 
-HTMLArea._browserSpecificFunctionsLoaded = true;
+Xinha._browserSpecificFunctionsLoaded = true;
