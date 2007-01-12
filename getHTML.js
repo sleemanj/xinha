@@ -1,20 +1,20 @@
 // Retrieves the HTML code from the given node.	 This is a replacement for
 // getting innerHTML, using standard DOM calls.
 // Wrapper catch a Mozilla-Exception with non well formed html source code
-HTMLArea.getHTML = function(root, outputRoot, editor)
+Xinha.getHTML = function(root, outputRoot, editor)
 {
   try
   {
-    return HTMLArea.getHTMLWrapper(root,outputRoot,editor);
+    return Xinha.getHTMLWrapper(root,outputRoot,editor);
   }
   catch(ex)
   {
-    alert(HTMLArea._lc('Your Document is not well formed. Check JavaScript console for details.'));
+    alert(Xinha._lc('Your Document is not well formed. Check JavaScript console for details.'));
     return editor._iframe.contentWindow.document.body.innerHTML;
   }
 };
 
-HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
+Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
 {
   var html = "";
   if ( !indent )
@@ -41,7 +41,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
     case 4: // Node.CDATA_SECTION_NODE
       // Mozilla seems to convert CDATA into a comment when going into wysiwyg mode,
       //  don't know about IE
-      html += (HTMLArea.is_ie ? ('\n' + indent) : '') + '<![CDATA[' + root.data + ']]>' ;
+      html += (Xinha.is_ie ? ('\n' + indent) : '') + '<![CDATA[' + root.data + ']]>' ;
     break;
 
     case 5: // Node.ENTITY_REFERENCE_NODE
@@ -51,7 +51,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
     case 7: // Node.PROCESSING_INSTRUCTION_NODE
       // PI's don't seem to survive going into the wysiwyg mode, (at least in moz)
       // so this is purely academic
-      html += (HTMLArea.is_ie ? ('\n' + indent) : '') + '<?' + root.target + ' ' + root.data + ' ?>';
+      html += (Xinha.is_ie ? ('\n' + indent) : '') + '<?' + root.target + ' ' + root.data + ' ?>';
     break;
 
     case 1: // Node.ELEMENT_NODE
@@ -68,28 +68,28 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
       {
         outputRoot = !(editor.config.htmlRemoveTags && editor.config.htmlRemoveTags.test(root_tag));
       }
-      if ( HTMLArea.is_ie && root_tag == "head" )
+      if ( Xinha.is_ie && root_tag == "head" )
       {
         if ( outputRoot )
         {
-          html += (HTMLArea.is_ie ? ('\n' + indent) : '') + "<head>";
+          html += (Xinha.is_ie ? ('\n' + indent) : '') + "<head>";
         }
         // lowercasize
         var save_multiline = RegExp.multiline;
         RegExp.multiline = true;
-        var txt = root.innerHTML.replace(HTMLArea.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); });
+        var txt = root.innerHTML.replace(Xinha.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); });
         RegExp.multiline = save_multiline;
         html += txt + '\n';
         if ( outputRoot )
         {
-          html += (HTMLArea.is_ie ? ('\n' + indent) : '') + "</head>";
+          html += (Xinha.is_ie ? ('\n' + indent) : '') + "</head>";
         }
         break;
       }
       else if ( outputRoot )
       {
-        closed = (!(root.hasChildNodes() || HTMLArea.needsClosingTag(root)));
-        html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
+        closed = (!(root.hasChildNodes() || Xinha.needsClosingTag(root)));
+        html += (Xinha.is_ie && Xinha.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
         var attrs = root.attributes;
         for ( i = 0; i < attrs.length; ++i )
         {
@@ -132,7 +132,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
               // IE seems not willing to return the original values - it converts to absolute
               // links using a.nodeValue, a.value, a.stringValue, root.getAttribute("href")
               // So we have to strip the baseurl manually :-/
-              if ( HTMLArea.is_ie && (name == "href" || name == "src") )
+              if ( Xinha.is_ie && (name == "href" || name == "src") )
               {
                 value = editor.stripBaseURL(value);
               }
@@ -169,7 +169,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
             // here; we don't need them.
             continue;
           }
-          html += " " + name + '="' + HTMLArea.htmlEncode(value) + '"';
+          html += " " + name + '="' + Xinha.htmlEncode(value) + '"';
         }
         if ( html !== "" )
         {
@@ -193,7 +193,7 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
       {
         if ( !editor.config.stripScripts )
         {
-          if (HTMLArea.is_ie)
+          if (Xinha.is_ie)
           {
             var innerText = "\n" + root.innerHTML.replace(/^[\n\r]*/,'').replace(/\s+$/,'') + '\n' + indent;
           }
@@ -201,28 +201,28 @@ HTMLArea.getHTMLWrapper = function(root, outputRoot, editor, indent)
           {
             var innerText = (root.hasChildNodes()) ? root.firstChild.nodeValue : '';
           }
-          html += innerText + '</'+root_tag+'>' + ((HTMLArea.is_ie) ? '\n' : '');
+          html += innerText + '</'+root_tag+'>' + ((Xinha.is_ie) ? '\n' : '');
         }
       }
       else
       {
         for ( i = root.firstChild; i; i = i.nextSibling )
         {
-          if ( !containsBlock && i.nodeType == 1 && HTMLArea.isBlockElement(i) )
+          if ( !containsBlock && i.nodeType == 1 && Xinha.isBlockElement(i) )
           {
             containsBlock = true;
           }
-          html += HTMLArea.getHTMLWrapper(i, true, editor, indent + '  ');
+          html += Xinha.getHTMLWrapper(i, true, editor, indent + '  ');
         }
         if ( outputRoot && !closed )
         {
-          html += (HTMLArea.is_ie && HTMLArea.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
+          html += (Xinha.is_ie && Xinha.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
         }
       }
     break;
 
     case 3: // Node.TEXT_NODE
-      html = /^script|style$/i.test(root.parentNode.tagName) ? root.data : HTMLArea.htmlEncode(root.data);
+      html = /^script|style$/i.test(root.parentNode.tagName) ? root.data : Xinha.htmlEncode(root.data);
     break;
 
     case 8: // Node.COMMENT_NODE

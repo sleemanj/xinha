@@ -1,7 +1,7 @@
 /** Returns a node after which we can insert other nodes, in the current
  * selection.  The selection is removed.  It splits a text node, if needed.
  */
-HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
+Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
 {
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -49,7 +49,7 @@ HTMLArea.prototype.insertNodeAtSelection = function(toBeInserted)
 };
   
 // Returns the deepest node that contains both endpoints of the selection.
-HTMLArea.prototype.getParentElement = function(sel)
+Xinha.prototype.getParentElement = function(sel)
 {
   if ( typeof sel == 'undefined' )
   {
@@ -87,7 +87,7 @@ HTMLArea.prototype.getParentElement = function(sel)
  *
  * @returns null | element
  */
-HTMLArea.prototype._activeElement = function(sel)
+Xinha.prototype._activeElement = function(sel)
 {
   if ( ( sel === null ) || this._selectionEmpty(sel) )
   {
@@ -115,7 +115,7 @@ HTMLArea.prototype._activeElement = function(sel)
   return null;
 };
   
-HTMLArea.prototype._selectionEmpty = function(sel)
+Xinha.prototype._selectionEmpty = function(sel)
 {
   if ( !sel )
   {
@@ -131,7 +131,7 @@ HTMLArea.prototype._selectionEmpty = function(sel)
 };
   
 // Selects the contents inside the given node
-HTMLArea.prototype.selectNodeContents = function(node, pos)
+Xinha.prototype.selectNodeContents = function(node, pos)
 {
   this.focusEditor();
   this.forceRedraw();
@@ -156,7 +156,7 @@ HTMLArea.prototype.selectNodeContents = function(node, pos)
 /** Call this function to insert HTML code at the current position.  It deletes
  * the selection, if any.
  */
-HTMLArea.prototype.insertHTML = function(html)
+Xinha.prototype.insertHTML = function(html)
 {
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -175,14 +175,14 @@ HTMLArea.prototype.insertHTML = function(html)
 };
 
 // Retrieve the selected block
-HTMLArea.prototype.getSelectedHTML = function()
+Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this._getSelection();
   var range = this._createRange(sel);
-  return HTMLArea.getHTML(range.cloneContents(), false, this);
+  return Xinha.getHTML(range.cloneContents(), false, this);
 };
   
-HTMLArea.prototype.checkBackspace = function()
+Xinha.prototype.checkBackspace = function()
 {
   var self = this;
   setTimeout(
@@ -207,7 +207,7 @@ HTMLArea.prototype.checkBackspace = function()
           p.appendChild(SC.firstChild);
         }
         SC.parentNode.insertBefore(p, SC);
-        HTMLArea.removeFromParent(SC);
+        Xinha.removeFromParent(SC);
         var r = range.cloneRange();
         r.setStartBefore(newr);
         r.setEndAfter(newr);
@@ -220,13 +220,13 @@ HTMLArea.prototype.checkBackspace = function()
 };
 
 // returns the current selection object
-HTMLArea.prototype._getSelection = function()
+Xinha.prototype._getSelection = function()
 {
   return this._iframe.contentWindow.getSelection();
 };
   
 // returns a range for the current selection
-HTMLArea.prototype._createRange = function(sel)
+Xinha.prototype._createRange = function(sel)
 {
   this.activateEditor();
   if ( typeof sel != "undefined" )
@@ -246,14 +246,14 @@ HTMLArea.prototype._createRange = function(sel)
   }
 };
 
-HTMLArea.getOuterHTML = function(element)
+Xinha.getOuterHTML = function(element)
 {
   return (new XMLSerializer()).serializeToString(element);
 };
   
 //What is this supposed to do??? it's never used 
 //ray
-HTMLArea.prototype._formatBlock = function(block_format)
+Xinha.prototype._formatBlock = function(block_format)
 {
   var ancestors = this.getAllAncestors();
   var apply_to, x = null;
@@ -275,7 +275,7 @@ HTMLArea.prototype._formatBlock = function(block_format)
   var sel = this._getSelection();
   var rng = this._createRange(sel);
 
-  if ( HTMLArea.is_gecko )
+  if ( Xinha.is_gecko )
   {
     if ( sel.isCollapsed )
     {
@@ -356,7 +356,7 @@ HTMLArea.prototype._formatBlock = function(block_format)
 // IE's textRange and selection object is woefully inadequate,
 // which means this fancy stuff is gecko only sorry :-|
 // Die Bill, Die.  (IE supports it somewhat nativly though)
-HTMLArea.prototype.mozKey = function ( ev, keyEvent )
+Xinha.prototype.mozKey = function ( ev, keyEvent )
 {
   var editor = this;
   var s = editor._getSelection();
@@ -368,11 +368,11 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
       tag = editor._doc.createElement(tag);
     }
     var a = textNode.parentNode.insertBefore(tag, rightText);
-    HTMLArea.removeFromParent(textNode);
+    Xinha.removeFromParent(textNode);
     a.appendChild(textNode);
     rightText.data = ' ' + rightText.data;
 
-    if ( HTMLArea.is_ie )
+    if ( Xinha.is_ie )
     {
       var r = editor._createRange(s);
       s.moveToElementText(rightText);
@@ -382,14 +382,14 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
     {
       s.collapse(rightText, 1);
     }
-    HTMLArea._stopEvent(ev);
+    Xinha._stopEvent(ev);
 
     editor._unLink = function()
     {
       var t = a.firstChild;
       a.removeChild(t);
       a.parentNode.insertBefore(t, a);
-      HTMLArea.removeFromParent(a);
+      Xinha.removeFromParent(a);
       editor._unLink = null;
       editor._unlinkOnUndo = false;
     };
@@ -418,7 +418,7 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
 
         var matchData = s.anchorNode.data.substring(0,s.anchorOffset).replace(/^.*?(\S*)$/, '$1');
 
-        var mEmail = matchData.match(HTMLArea.RE_email);
+        var mEmail = matchData.match(Xinha.RE_email);
         if ( mEmail )
         {
           var leftTextEmail  = s.anchorNode;
@@ -431,7 +431,7 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
 
         RE_date = /([0-9]+\.)+/; //could be date or ip or something else ...
         RE_ip = /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/;
-        var mUrl = matchData.match(HTMLArea.RE_url);
+        var mUrl = matchData.match(Xinha.RE_url);
         if ( mUrl )
         {
           if (RE_date.test(matchData))
@@ -456,7 +456,7 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
         if ( this._unLink )
         {
           this._unLink();
-          HTMLArea._stopEvent(ev);
+          Xinha._stopEvent(ev);
         }
         break;
       }
@@ -475,7 +475,7 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
           } 
           if ( !a._updateAnchTimeout )
           {
-            if ( s.anchorNode.data.match(HTMLArea.RE_email) && a.href.match('mailto:' + s.anchorNode.data.trim()) )
+            if ( s.anchorNode.data.match(Xinha.RE_email) && a.href.match('mailto:' + s.anchorNode.data.trim()) )
             {
               var textNode = s.anchorNode;
               var fnAnchor = function()
@@ -490,14 +490,14 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
               break;
             }
 
-            var m = s.anchorNode.data.match(HTMLArea.RE_url);
+            var m = s.anchorNode.data.match(Xinha.RE_url);
             if ( m && a.href.match(s.anchorNode.data.trim()) )
             {
               var txtNode = s.anchorNode;
               var fnUrl = function()
               {
                 // @fixme: Alert, sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
-                m = txtNode.data.match(HTMLArea.RE_url);
+                m = txtNode.data.match(Xinha.RE_url);
                 a.href = (m[1] ? m[1] : 'http://') + m[2];
                 // @fixme: why the hell do another timeout is started ?
                 //         This lead to never ending timer if we dont remove this line
@@ -517,23 +517,23 @@ HTMLArea.prototype.mozKey = function ( ev, keyEvent )
   switch (ev.keyCode)
   {
     case 13: // KEY enter
-      if ( HTMLArea.is_gecko && !ev.shiftKey && this.config.mozParaHandler == 'dirty' )
+      if ( Xinha.is_gecko && !ev.shiftKey && this.config.mozParaHandler == 'dirty' )
       {
         this.dom_checkInsertP();
-        HTMLArea._stopEvent(ev);
+        Xinha._stopEvent(ev);
       }
     break;
     case 8: // KEY backspace
     case 46: // KEY delete
-      if ( ( HTMLArea.is_gecko && !ev.shiftKey ) || HTMLArea.is_ie )
+      if ( ( Xinha.is_gecko && !ev.shiftKey ) || Xinha.is_ie )
       {
         if ( this.checkBackspace() )
         {
-          HTMLArea._stopEvent(ev);
+          Xinha._stopEvent(ev);
         }
       }
     break;
   }
 }
 
-HTMLArea._browserSpecificFunctionsLoaded = true;
+Xinha._browserSpecificFunctionsLoaded = true;

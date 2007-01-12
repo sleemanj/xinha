@@ -10,7 +10,9 @@
 //   http://dynarch.com/mishoo
 //
 // $Id$
-HTMLArea = window.opener.HTMLArea;
+Xinha = window.opener.Xinha;
+// Backward compatibility will be removed some time or not?
+HTMLArea = window.opener.Xinha;
 
 function getAbsolutePos(el) {
 	var r = { x: el.offsetLeft, y: el.offsetTop };
@@ -59,7 +61,7 @@ function __dlg_init(bottom, win_dim) {
     }
     else
     {
-      if (!HTMLArea.is_ie)
+      if (!Xinha.is_ie)
       {
       	var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
         var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
@@ -99,7 +101,7 @@ function __dlg_init(bottom, win_dim) {
 		var y = (screen.availHeight - H) / 2;
 		window.moveTo(x, y);
 	}
-	HTMLArea.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
+	Xinha.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
   window.__dlg_init_done = true;
 }
 
@@ -110,18 +112,18 @@ function __dlg_translate(context) {
 		for (var i = spans.length; --i >= 0;) {
 			var span = spans[i];
 			if (span.firstChild && span.firstChild.data) {
-				var txt = HTMLArea._lc(span.firstChild.data, context);
+				var txt = Xinha._lc(span.firstChild.data, context);
 				if (txt)
 					span.firstChild.data = txt;
 			}
                         if (span.title) {
-				var txt = HTMLArea._lc(span.title, context);
+				var txt = Xinha._lc(span.title, context);
 				if (txt)
 					span.title = txt;
                         }
 		}
 	}
-    document.title = HTMLArea._lc(document.title, context);
+    document.title = Xinha._lc(document.title, context);
 }
 
 // closes the dialog and passes the return info upper.

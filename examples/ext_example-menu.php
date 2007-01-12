@@ -140,15 +140,15 @@ Dialog._geckoOpenModal = function(url, action, init) {
 
 	// capture some window's events
 	function capwin(w) {
-//		HTMLArea._addEvent(w, "click", Dialog._parentEvent);
-//		HTMLArea._addEvent(w, "mousedown", Dialog._parentEvent);
-//		HTMLArea._addEvent(w, "focus", Dialog._parentEvent);
+//		Xinha._addEvent(w, "click", Dialog._parentEvent);
+//		Xinha._addEvent(w, "mousedown", Dialog._parentEvent);
+//		Xinha._addEvent(w, "focus", Dialog._parentEvent);
 	};
 	// release the captured events
 	function relwin(w) {
-//		HTMLArea._removeEvent(w, "click", Dialog._parentEvent);
-//		HTMLArea._removeEvent(w, "mousedown", Dialog._parentEvent);
-//		HTMLArea._removeEvent(w, "focus", Dialog._parentEvent);
+//		Xinha._removeEvent(w, "click", Dialog._parentEvent);
+//		Xinha._removeEvent(w, "mousedown", Dialog._parentEvent);
+//		Xinha._removeEvent(w, "focus", Dialog._parentEvent);
 	};
 	capwin(window);
 	// capture other frames

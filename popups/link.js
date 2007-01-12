@@ -1,4 +1,4 @@
-HTMLArea.prototype._createLink = function(link)
+Xinha.prototype._createLink = function(link)
 {
   var editor = this;
   var outparam = null;
@@ -18,7 +18,7 @@ HTMLArea.prototype._createLink = function(link)
     var sel = editor._getSelection();
     var range = editor._createRange(sel);
     var compare = 0;
-    if ( HTMLArea.is_ie )
+    if ( Xinha.is_ie )
     {
       if ( sel.type == "Control" )
       {
@@ -35,7 +35,7 @@ HTMLArea.prototype._createLink = function(link)
     }
     if ( compare === 0 )
     {
-      alert(HTMLArea._lc("You need to select some text before creating a link"));
+      alert(Xinha._lc("You need to select some text before creating a link"));
       return;
     }
     outparam =
@@ -50,7 +50,7 @@ HTMLArea.prototype._createLink = function(link)
   {
     outparam =
     {
-      f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
+      f_href   : Xinha.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
       f_title  : link.title,
       f_target : link.target,
       f_usetarget : editor.config.makeLinkShowsTarget
@@ -69,7 +69,7 @@ HTMLArea.prototype._createLink = function(link)
       {
         try
         {
-          var tmp = HTMLArea.uniq('http://www.example.com/Link');
+          var tmp = Xinha.uniq('http://www.example.com/Link');
           editor._doc.execCommand('createlink', false, tmp);
 
           // Fix them up

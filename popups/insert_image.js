@@ -1,6 +1,6 @@
 // Called when the user clicks on "InsertImage" button.  If an image is already
 // there, it will just modify it's properties.
-HTMLArea.prototype._insertImage = function(image)
+Xinha.prototype._insertImage = function(image)
 {
   var editor = this;	// for nested functions
   var outparam = null;
@@ -17,7 +17,7 @@ HTMLArea.prototype._insertImage = function(image)
     outparam =
     {
       f_base   : editor.config.baseHref,
-      f_url    : HTMLArea.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
+      f_url    : Xinha.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
       f_alt    : image.alt,
       f_border : image.border,
       f_align  : image.align,
@@ -37,7 +37,7 @@ HTMLArea.prototype._insertImage = function(image)
       var img = image;
       if ( !img )
       {
-        if ( HTMLArea.is_ie )
+        if ( Xinha.is_ie )
         {
           var sel = editor._getSelection();
           var range = editor._createRange(sel);

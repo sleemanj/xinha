@@ -31,7 +31,7 @@
   </script>
 
   <!-- Load up the actual editor core -->
-  <script type="text/javascript" src="../htmlarea.js"></script>
+  <script type="text/javascript" src="../XinhaCore.js"></script>
 
   <script type="text/javascript">
     xinha_editors = null;
@@ -54,7 +54,7 @@
       }
 
       // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-      if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+      if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
 
 // What are the names of the textareas you will be turning into editors?
       var num = 1;
@@ -87,7 +87,7 @@
 
 // Create a default configuration to be used by all the editors.
       settings = top.frames["menu"].settings;
-      xinha_config = new HTMLArea.Config();
+      xinha_config = new Xinha.Config();
       xinha_config.width = settings.width;
       xinha_config.height = settings.height;
       xinha_config.sizeIncludesBars = settings.sizeIncludesBars;
@@ -163,13 +163,13 @@
 
 // First create editors for the textareas.
 // You can do this in two ways, either
-//   xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+//   xinha_editors   = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 // if you want all the editor objects to use the same set of plugins, OR;
-//   xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config);
+//   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
 //   xinha_editors['myTextarea0'].registerPlugins(['Stylist','FullScreen']);
 //   xinha_editors['myTextarea1'].registerPlugins(['CSS','SuperClean']);
 // if you want to use a different set of plugins for one or more of the editors.
-      xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+      xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 
 // If you want to change the configuration variables of any of the editors,
 // this is the place to do that, for example you might want to
@@ -178,7 +178,7 @@
 //   xinha_editors['myTextarea0'].config.height = '480px';
 
 // Finally we "start" the editors, this turns the textareas into Xinha editors.
-      HTMLArea.startEditors(xinha_editors);
+      Xinha.startEditors(xinha_editors);
     }
 
 // javascript submit handler
@@ -193,7 +193,7 @@
     }
 
     window.onload = xinha_init;
-//    window.onunload = HTMLArea.collectGarbageForIE;
+//    window.onunload = Xinha.collectGarbageForIE;
   </script>
 </head>
 
