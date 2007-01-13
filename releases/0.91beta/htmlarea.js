@@ -1,4 +1,4 @@
-Xinha.version={"Release":"Trunk","Head":"$HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $".replace(/^[^:]*: (.*) \$$/,"$1"),"Date":"$LastChangedDate: 2007-01-12 13:58:32 +0100 (Fr, 12 Jan 2007) $".replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/,"$4 $2 $3"),"Revision":"$LastChangedRevision: 649 $".replace(/^[^:]*: (.*) \$$/,"$1"),"RevisionBy":"$LastChangedBy: ray $".replace(/^[^:]*: (.*) \$$/,"$1")};
+Xinha.version={"Release":"Trunk","Head":"$HeadURL: http://svn.xinha.python-hosting.com/trunk/htmlarea.js $".replace(/^[^:]*: (.*) \$$/,"$1"),"Date":"$LastChangedDate: 2007-01-11 23:39:40 +0100 (Do, 11 Jan 2007) $".replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/,"$4 $2 $3"),"Revision":"$LastChangedRevision: 647 $".replace(/^[^:]*: (.*) \$$/,"$1"),"RevisionBy":"$LastChangedBy: ray $".replace(/^[^:]*: (.*) \$$/,"$1")};
 if(typeof _editor_url=="string"){
 _editor_url=_editor_url.replace(/\x2f*$/,"/");
 }else{
@@ -1795,7 +1795,7 @@ continue;
 if(_124||(_119[k].tagName.toLowerCase()==_122)){
 _121=true;
 for(var ka=0;ka<_123.length;++ka){
-if(!eval("ancestors[k]."+_123[ka])){
+if(!_119[k].getAttribute(_123[ka])){
 _121=false;
 break;
 }

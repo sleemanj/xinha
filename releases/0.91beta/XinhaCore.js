@@ -1795,7 +1795,7 @@ continue;
 if(_124||(_119[k].tagName.toLowerCase()==_122)){
 _121=true;
 for(var ka=0;ka<_123.length;++ka){
-if(!eval("ancestors[k]."+_123[ka])){
+if(!_119[k].getAttribute(_123[ka])){
 _121=false;
 break;
 }
