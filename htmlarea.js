@@ -5,8 +5,8 @@
 
 */ 
   
-
-/*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+ 
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
     --
     --  Use of Xinha is granted by the terms of the htmlArea License (based on
@@ -3163,7 +3163,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
           inContext = true;
           for ( var ka = 0; ka < attrs.length; ++ka )
           {
-            if ( !eval("ancestors[k]." + attrs[ka]) )
+            if (!ancestors[k].getAttribute(attrs[ka]))//( !eval("ancestors[k]." + attrs[ka]) )
             {
               inContext = false;
               break;

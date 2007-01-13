@@ -3156,7 +3156,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
           inContext = true;
           for ( var ka = 0; ka < attrs.length; ++ka )
           {
-            if ( !eval("ancestors[k]." + attrs[ka]) )
+            if (!ancestors[k].getAttribute(attrs[ka]))
             {
               inContext = false;
               break;
