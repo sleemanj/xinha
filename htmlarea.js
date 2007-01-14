@@ -4,7 +4,6 @@
     IF YOU MAKE CHANGES TO THE CODE, DO IT THERE!
 
 */ 
-  
  
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
@@ -3163,7 +3162,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
           inContext = true;
           for ( var ka = 0; ka < attrs.length; ++ka )
           {
-            if (!ancestors[k].getAttribute(attrs[ka]))//( !eval("ancestors[k]." + attrs[ka]) )
+            if (!ancestors[k].getAttribute(attrs[ka]))
             {
               inContext = false;
               break;
@@ -3879,7 +3878,7 @@ Xinha.prototype._editorEvent = function(ev)
   {
   	this._shortCuts(ev);
   }
-  else if ( keyEvent )
+  else if ( keyEvent && Xinha.is_gecko )
   {
     this.mozKey( ev, keyEvent );
   }
