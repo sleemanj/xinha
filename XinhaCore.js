@@ -3872,7 +3872,7 @@ Xinha.prototype._editorEvent = function(ev)
   {
   	this._shortCuts(ev);
   }
-  else if ( keyEvent )
+  else if ( keyEvent && Xinha.is_gecko )
   {
     this.mozKey( ev, keyEvent );
   }
