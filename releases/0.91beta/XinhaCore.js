@@ -2253,7 +2253,7 @@ return false;
 if(_166&&ev.ctrlKey&&!ev.altKey){
 this._shortCuts(ev);
 }else{
-if(_166){
+if(_166&&Xinha.is_gecko){
 this.mozKey(ev,_166);
 }
 }
