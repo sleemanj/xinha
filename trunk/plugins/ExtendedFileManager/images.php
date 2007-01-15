@@ -88,16 +88,16 @@ function drawDirs_Files($list, &$manager)
     		{ ?>
     			<tr>
     			<td><img src="<?php print $IMConfig['base_url'];?>icons/folder_small.gif" alt="" /></td>
-    			<th nowrap><a href="<?php print $IMConfig['backend_url']; ?>__function=images&amp;mode=<?php echo $insertMode;?>&amp;dir=<?php echo rawurlencode($path); ?>&amp;viewtype=<?php echo $afruViewType; ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>">
+    			<th nowrap="nowrap"><a href="<?php print $IMConfig['backend_url']; ?>__function=images&amp;mode=<?php echo $insertMode;?>&amp;dir=<?php echo rawurlencode($path); ?>&amp;viewtype=<?php echo $afruViewType; ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>">
     			<?php
     			if(strlen($dir['entry'])>$maxNameLength) echo substr($dir['entry'],0,$maxNameLength)."..."; else echo $dir['entry'];
     			?>
     			</a></th>
-    			<td colspan="2" nowrap>Folder</td>
+    			<td colspan="2" nowrap="nowrap">Folder</td>
 
-    			<td nowrap><?php echo date("d.m.y H:i",$dir['stat']['mtime']); ?></td>
+    			<td nowrap="nowrap"><?php echo date("d.m.y H:i",$dir['stat']['mtime']); ?></td>
 
-    			<td class="actions" nowrap>
+    			<td class="actions" nowrap="nowrap">
     				<a href="<?php print $IMConfig['backend_url']; ?>__function=images&amp;mode=<?php echo $insertMode;?>&amp;dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>&amp;viewtype=<?php echo $afruViewType; ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);" style="border:0px;"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash" border="0" /></a>
 			    	<?php if ($IMConfig['allow_rename']) { ?>
 			                    <a href="#" title="Rename" onclick="renameDir('<?php echo rawurlencode($dir['entry']);?>'); return false;"><img src="<?php print $IMConfig['base_url'];?>img/edit_rename.gif" height="15" width="15" alt="Rename" border="0" /></a>
@@ -126,12 +126,12 @@ function drawDirs_Files($list, &$manager)
                   </a></th>
                   <td><?php echo Files::formatSize($file['stat']['size']); ?></td>
                   <td><?php if($file['image'][0] > 0){ echo $file['image'][0].'x'.$file['image'][1]; } ?></td>
-    			  <td nowrap><?php echo date("d.m.y H:i",$file['stat']['mtime']); ?></td>
+    			  <td nowrap="nowrap"><?php echo date("d.m.y H:i",$file['stat']['mtime']); ?></td>
                   <td class="actions">
                     <?php if($IMConfig['img_library'] && $IMConfig['allow_edit_image'] && $file['image'][0] > 0) { ?>
                     <a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_pencil.gif" height="15" width="15" alt="Edit" border="0" /></a>
                     <?php }  ?>  
-                    <a href="<?php print $IMConfig['backend_url']; ?>__function=images&dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>&amp;mode=<?php echo $insertMode;?>&amp;viewtype=<?php echo $afruViewType; ?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash" border="0" /></a>
+                    <a href="<?php print $IMConfig['backend_url']; ?>__function=images&amp;dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>&amp;mode=<?php echo $insertMode;?>&amp;viewtype=<?php echo $afruViewType; ?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash" border="0" /></a>
         			<?php if ($IMConfig['allow_rename']) { ?>
                     <a href="#" title="Rename" onclick="renameFile('<?php echo rawurlencode($file['relative']);?>'); return false;"><img src="<?php print $IMConfig['base_url'];?>img/edit_rename.gif" height="15" width="15" alt="Rename" border="0" /></a>
                     <?php }  ?>
@@ -249,7 +249,9 @@ function asc2hex ($temp)
 }
 
 ?>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>File List</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
