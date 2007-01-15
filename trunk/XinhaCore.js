@@ -2812,7 +2812,7 @@ Xinha.prototype._wordClean = function()
   {
     // @todo : check if this is quicker
     //  if (!['A','SPAN','B','STRONG','I','EM','FONT'].contains(el.tagName) && !el.firstChild)
-    if ( /^(a|span|b|strong|i|em|font)$/i.test(el.tagName) && !el.firstChild)
+    if ( /^(span|b|strong|i|em|font|div|p)$/i.test(el.tagName) && !el.firstChild)
     {
       Xinha.removeFromParent(el);
       ++stats.empty_tags;
