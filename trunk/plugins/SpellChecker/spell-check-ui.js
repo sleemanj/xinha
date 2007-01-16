@@ -39,7 +39,8 @@ function makeCleanDoc(leaveFixed) {
   for (var i = words.length; --i >= 0;) {
     var el = words[i];
     if (!(leaveFixed && /HA-spellcheck-fixed/.test(el.className))) {
-      el.parentNode.insertBefore(el.firstChild, el);
+      if(el.firstChild)
+        el.parentNode.insertBefore(el.firstChild, el);
       el.parentNode.removeChild(el);
     } else
       el.className = "HA-spellcheck-fixed";
