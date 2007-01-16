@@ -8,7 +8,7 @@ Xinha.getHTML = function(root, outputRoot, editor)
     return Xinha.getHTMLWrapper(root,outputRoot,editor);
   }
   catch(ex)
-  {
+  {   
     alert(Xinha._lc('Your Document is not well formed. Check JavaScript console for details.'));
     return editor._iframe.contentWindow.document.body.innerHTML;
   }
@@ -91,10 +91,15 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         closed = (!(root.hasChildNodes() || Xinha.needsClosingTag(root)));
         html += (Xinha.is_ie && Xinha.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
         var attrs = root.attributes;
+        
         for ( i = 0; i < attrs.length; ++i )
         {
           var a = attrs.item(i);
-          if ( !a.specified && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value') )
+          if ( !a.specified 
+            // IE claims these are !a.specified even though they are.  Perhaps others too?
+            && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value')                
+            && !(root.tagName.toLowerCase().match(/area/) && a.nodeName.match(/shape|coords/i)) 
+          )
           {
             continue;
           }
