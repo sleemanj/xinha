@@ -2041,6 +2041,7 @@ Xinha.prototype.hidePanel = function(panel)
   {
     panel.style.display = 'none';
     this.notifyOf('panel_change', {'action':'hide','panel':panel});
+    this.scrollToElement();
   }
 };
 
@@ -2048,8 +2049,9 @@ Xinha.prototype.showPanel = function(panel)
 {
   if ( panel && panel.style.display == 'none' )
   {
-    panel.style.display = '';
+    panel.style.display = '';    
     this.notifyOf('panel_change', {'action':'show','panel':panel});
+    this.scrollToElement();
   }
 };
 
@@ -4182,7 +4184,13 @@ Xinha.prototype.dom_checkInsertP = function()
 
 Xinha.prototype.scrollToElement = function(e)
 {
-  if ( Xinha.is_gecko )
+  if(!e)
+  {
+    e = this.getParentElement();
+    if(!e) return;
+  }
+  
+  if (1 || Xinha.is_gecko )
   {
     var top  = 0;
     var left = 0;
