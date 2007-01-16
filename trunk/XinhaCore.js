@@ -2278,6 +2278,11 @@ Xinha.prototype.initIframe = function()
       editor.setDoctype(RegExp.$1);
       html = html.replace(Xinha.RE_doctype, "");
     }
+    
+    //Fix Firefox problem with link elements not in right place (just before head)
+    var match = html.match(/<link\s+[\s\S]*?["']\s*\/?>/gi);
+    html = html.replace(/<link\s+[\s\S]*?["']\s*\/?>\s*/gi, '');
+    match ? html = html.replace(/<\/head>/i, match.join('\n') + "\n</head>") : null;    
   }
   doc.write(html);
   doc.close();
