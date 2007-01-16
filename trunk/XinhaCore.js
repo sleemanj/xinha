@@ -3805,6 +3805,23 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
         }
       }
     break;
+    
+    case 'justifyleft'  :
+    case 'justifyright' :
+    {
+      cmdID.match(/^justify(.*)$/);
+      var ae = this._activeElement(this._getSelection());      
+      if(ae && ae.tagName.toLowerCase() == 'img')
+      {
+        ae.align = ae.align == RegExp.$1 ? '' : RegExp.$1;
+      }
+      else
+      {
+        this._doc.execCommand(cmdID, UI, param);
+      }
+    }    
+    break;
+    
     default:
       try
       {
