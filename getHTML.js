@@ -227,7 +227,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
     break;
 
     case 3: // Node.TEXT_NODE
-      html = /^script|style$/i.test(root.parentNode.tagName) ? root.data : Xinha.htmlEncode(root.data);
+      html = /^script|noscript|style$/i.test(root.parentNode.tagName) ? root.data : Xinha.htmlEncode(root.data);
     break;
 
     case 8: // Node.COMMENT_NODE
