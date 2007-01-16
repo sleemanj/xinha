@@ -54,7 +54,7 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'FullPage', 'SpellChecker'
+        'CharacterMap'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -84,6 +84,7 @@
 
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
        xinha_config.fullPage = true;
+       xinha_config.CharacterMap.mode = 'panel';
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
       //  otherwise it won't work!
