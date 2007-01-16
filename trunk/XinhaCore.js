@@ -2243,15 +2243,9 @@ Xinha.prototype.initIframe = function()
     {
       html += "<base href=\"" + editor.config.baseHref + "\"/>\n";
     }
-    html += "<style title=\"table borders\">";
-    html += ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;} \n";
-    html += "</style>\n";
-    html += "<style type=\"text/css\">";
-    html += "html, body { border: 0px; } \n";
-    html += "body { background-color: #ffffff; } \n";
-    html += "span.macro, span.macro ul, span.macro div, span.macro p {background : #CCCCCC;}\n";
-    html += "</style>\n";
-
+    
+    html += Xinha.addCoreCSS();
+    
     if ( editor.config.pageStyle )
     {
       html += "<style type=\"text/css\">\n" + editor.config.pageStyle + "\n</style>";
@@ -4274,6 +4268,13 @@ Xinha.prototype.outwardHtml = function(html)
   //prevent execution of JavaScript (Ticket #685)
   html = html.replace(/(<script[^>]*)(freezescript)/gi,"$1javascript");
 
+  // If in fullPage mode, strip the coreCSS
+  if(this.config.fullPage)
+  {
+    html = Xinha.stripCoreCSS(html);
+  }
+  
+  
   return html;
 };
 
@@ -4303,6 +4304,13 @@ Xinha.prototype.inwardHtml = function(html)
   html = html.replace(nullRE, '$1' + location.href.replace(/(https?:\/\/[^\/]*)\/.*/, '$1') + '/');
 
   html = this.fixRelativeLinks(html);
+  
+  // If in fullPage mode, add the coreCSS
+  if(this.config.fullPage)
+  {
+    html = Xinha.addCoreCSS(html);
+  }
+  
   return html;
 };
 
@@ -5039,6 +5047,27 @@ Xinha.prototype._toggleBorders = function()
   return true;
 };
 
+Xinha.addCoreCSS = function(html)
+{
+    var coreCSS = 
+    "<style title=\"Xinha Internal CSS\" type=\"text/css\">"
+    + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;}\n"
+    + "html, body { border: 0px; } \n"
+    + "body { background-color: #ffffff; } \n" 
+    +"</style>\n";
+    
+    if(/<head>/i.test(html))
+    {
+      return html.replace(/<head>/i, '<head>' + coreCSS);      
+    }
+    
+    return coreCSS + html;     
+}
+
+Xinha.stripCoreCSS = function(html)
+{
+  return html.replace(/<style[^>]+title="Xinha Internal CSS"(.|\n)*?<\/style>/i, ''); 
+}
 
 Xinha.addClasses = function(el, classes)
 {
