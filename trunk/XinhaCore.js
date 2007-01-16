@@ -5804,10 +5804,6 @@ Xinha.collectGarbageForIE = function()
   Xinha.flushEvents();   
   for ( var x = 0; x < Xinha.toFree.length; x++ )
   {
-    if ( !Xinha.toFree[x].o )
-    {
-      alert("What is " + x + ' ' + Xinha.toFree[x].o);
-    }
     Xinha.free(Xinha.toFree[x].o, Xinha.toFree[x].p);
     Xinha.toFree[x].o = null;
   }
