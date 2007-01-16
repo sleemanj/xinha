@@ -5086,12 +5086,18 @@ Xinha.addCoreCSS = function(html)
     + "body { background-color: #ffffff; } \n" 
     +"</style>\n";
     
-    if(/<head>/i.test(html))
+    if( html && /<head>/i.test(html))
     {
       return html.replace(/<head>/i, '<head>' + coreCSS);      
     }
-    
-    return coreCSS + html;     
+    else if ( html)
+    {
+      return coreCSS + html;
+    }
+    else
+    {
+      return coreCSS;
+    }
 }
 
 Xinha.stripCoreCSS = function(html)
