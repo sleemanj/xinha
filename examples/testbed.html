@@ -83,6 +83,7 @@
        *************************************************************************/
 
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
+       xinha_config.fullPage = true;
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
       //  otherwise it won't work!
@@ -143,6 +144,14 @@
 
   <form action="javascript:var x = document.getElementById('editors_here');alert(x.myTextArea.value);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
     <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;title&gt;Hello&lt;/title&gt;
+        &lt;style type="text/css"&gt;
+          li { color:red; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
       &lt;p&gt;
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
         Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
@@ -161,6 +170,8 @@
         &lt;li&gt; Quisque sed augue quis nunc laoreet volutpat.&lt;/li&gt;
         &lt;li&gt; Nunc sit amet metus in tortor semper mattis. &lt;/li&gt;
       &lt;/ul&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
     </textarea>
 
     <input type="submit" /> <input type="reset" />
