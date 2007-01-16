@@ -11,7 +11,9 @@
 // internationalization file was already loaded in parent ;-)
 var SpellChecker = window.opener.SpellChecker;
 
-var HTMLArea = window.opener.HTMLArea;
+var Xinha    = window.opener.Xinha;
+var HTMLArea = Xinha;
+
 var _editor_url = window.opener._editor_url;
 
 var is_ie = HTMLArea.is_ie;
@@ -45,7 +47,7 @@ function makeCleanDoc(leaveFixed) {
   // we should use innerHTML here, but IE6's implementation fucks up the
   // HTML to such extent that our poor Perl parser doesn't understand it
   // anymore.
-  return window.opener.HTMLArea.getHTML(frame.contentWindow.document.body, false, editor);
+  return Xinha.getHTML(frame.contentWindow.document.body, true, editor);
 }
 
 function recheckClicked() {
