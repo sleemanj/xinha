@@ -1,6 +1,283 @@
-/** Returns a node after which we can insert other nodes, in the current
- * selection.  The selection is removed.  It splits a text node, if needed.
+
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    -- This is the Gecko compatability plugin, part of the Xinha core.
+    --
+    --  The file is loaded as a special plugin by the Xinha Core when
+    --  Xinha is being run under a Gecko based browser with the Midas
+    --  editing API.
+    --
+    --  It provides implementation and specialisation for various methods
+    --  in the core where different approaches per browser are required.
+    --
+    --  Design Notes::
+    --   Most methods here will simply be overriding Xinha.prototype.<method>
+    --   and should be called that, but methods specific to Gecko should 
+    --   be a part of the Gecko.prototype, we won't trample on namespace
+    --   that way.
+    --
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
+    --------------------------------------------------------------------------*/
+                                                    
+Gecko._pluginInfo = {
+  name          : "Gecko",
+  origin        : "Xinha Core",
+  version       : "$LastChangedRevision$",
+  developer     : "The Xinha Core Developer Team",
+  developer_url : "$HeadURL$",
+  license       : "htmlArea"
+};
+
+function Gecko(editor) {
+  this.editor = editor;  
+  editor.Gecko = this;
+}
+
+/** Allow Gecko to handle some key events in a special way.
  */
+  
+Gecko.prototype.onKeyPress = function(ev)
+{
+  var editor = this.editor;
+  
+  if ( ev.ctrlKey &&  editor._unLink && editor._unlinkOnUndo )
+  {
+    if ( String.fromCharCode(ev.charCode).toLowerCase() == 'z' )
+    {
+      Xinha._stopEvent(ev);
+      editor._unLink();
+      editor.updateToolbar();
+      return true; // Stop further
+    }
+  }
+  
+  var s = editor._getSelection();
+  var autoWrap = function (textNode, tag)
+  {
+    var rightText = textNode.nextSibling;
+    if ( typeof tag == 'string')
+    {
+      tag = editor._doc.createElement(tag);
+    }
+    var a = textNode.parentNode.insertBefore(tag, rightText);
+    Xinha.removeFromParent(textNode);
+    a.appendChild(textNode);
+    rightText.data = ' ' + rightText.data;
+
+    s.collapse(rightText, 1);
+    // Xinha._stopEvent(ev);
+
+    editor._unLink = function()
+    {
+      var t = a.firstChild;
+      a.removeChild(t);
+      a.parentNode.insertBefore(t, a);
+      Xinha.removeFromParent(a);
+      editor._unLink = null;
+      editor._unlinkOnUndo = false;
+    };
+    editor._unlinkOnUndo = true;
+
+    return a;
+  };
+
+  switch ( ev.which )
+  {
+    // Space, see if the text just typed looks like a URL, or email address
+    // and link it appropriatly
+    case 32:
+      if ( editor.config.convertUrlsToLinks && s && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0 )
+      {
+        var midStart = s.anchorNode.data.substring(0,s.anchorOffset).search(/\S{4,}$/);
+        if ( midStart == -1 )
+        {
+          break;
+        }
+
+        if ( editor._getFirstAncestor(s, 'a') )
+        {
+          break; // already in an anchor
+        }
+
+        var matchData = s.anchorNode.data.substring(0,s.anchorOffset).replace(/^.*?(\S*)$/, '$1');
+
+        var mEmail = matchData.match(Xinha.RE_email);
+        if ( mEmail )
+        {
+          var leftTextEmail  = s.anchorNode;
+          var rightTextEmail = leftTextEmail.splitText(s.anchorOffset);
+          var midTextEmail   = leftTextEmail.splitText(midStart);
+
+          autoWrap(midTextEmail, 'a').href = 'mailto:' + mEmail[0];
+          break;
+        }
+
+        RE_date = /([0-9]+\.)+/; //could be date or ip or something else ...
+        RE_ip = /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/;
+        var mUrl = matchData.match(Xinha.RE_url);
+        if ( mUrl )
+        {
+          if (RE_date.test(matchData))
+          {
+            if (!RE_ip.test(matchData)) 
+            {
+              break;
+            }
+          } 
+          var leftTextUrl  = s.anchorNode;
+          var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
+          var midTextUrl   = leftTextUrl.splitText(midStart);
+          autoWrap(midTextUrl, 'a').href = (mUrl[1] ? mUrl[1] : 'http://') + mUrl[2];
+          break;
+        }
+      }
+    break;
+
+    default:
+      if ( ev.keyCode == 27 || ( editor._unlinkOnUndo && ev.ctrlKey && ev.which == 122 ) )
+      {
+        if ( editor._unLink )
+        {
+          editor._unLink();
+          Xinha._stopEvent(ev);
+        }
+        break;
+      }
+      else if ( ev.which || ev.keyCode == 8 || ev.keyCode == 46 )
+      {
+        editor._unlinkOnUndo = false;
+
+        if ( s.anchorNode && s.anchorNode.nodeType == 3 )
+        {
+          // See if we might be changing a link
+          var a = editor._getFirstAncestor(s, 'a');
+          // @todo: we probably need here to inform the setTimeout below that we not changing a link and not start another setTimeout
+          if ( !a )
+          {
+            break; // not an anchor
+          } 
+          if ( !a._updateAnchTimeout )
+          {
+            if ( s.anchorNode.data.match(Xinha.RE_email) && a.href.match('mailto:' + s.anchorNode.data.trim()) )
+            {
+              var textNode = s.anchorNode;
+              var fnAnchor = function()
+              {
+                a.href = 'mailto:' + textNode.data.trim();
+                // @fixme: why the hell do another timeout is started ?
+                //         This lead to never ending timer if we dont remove this line
+                //         But when removed, the email is not correctly updated
+                a._updateAnchTimeout = setTimeout(fnAnchor, 250);
+              };
+              a._updateAnchTimeout = setTimeout(fnAnchor, 1000);
+              break;
+            }
+
+            var m = s.anchorNode.data.match(Xinha.RE_url);
+            if ( m && a.href.match(s.anchorNode.data.trim()) )
+            {
+              var txtNode = s.anchorNode;
+              var fnUrl = function()
+              {
+                // @fixme: Alert, sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
+                m = txtNode.data.match(Xinha.RE_url);
+                a.href = (m[1] ? m[1] : 'http://') + m[2];
+                // @fixme: why the hell do another timeout is started ?
+                //         This lead to never ending timer if we dont remove this line
+                //         But when removed, the url is not correctly updated
+                a._updateAnchTimeout = setTimeout(fnUrl, 250);
+              };
+              a._updateAnchTimeout = setTimeout(fnUrl, 1000);
+            }
+          }
+        }
+      }
+    break;
+  }
+
+  // other keys here
+  switch (ev.keyCode)
+  {
+    case 13: // KEY enter
+      if( !ev.shiftKey && editor.config.mozParaHandler == 'dirty' )
+      {
+        editor.dom_checkInsertP();
+        Xinha._stopEvent(ev);
+      }
+    break;
+    case 8: // KEY backspace
+    case 46: // KEY delete
+      if ( !ev.shiftKey && this.handleBackspace() )
+      {
+        Xinha._stopEvent(ev);
+      }
+    break;
+  }
+  
+  return false; // Let other plugins etc continue from here.
+}
+
+/** When backspace is hit, the Gecko onKeyPress will execute this method.
+ *  I don't remember what the exact purpose of this is though :-(
+ */
+ 
+Gecko.prototype.handleBackspace = function()
+{
+  var editor = this.editor;
+  setTimeout(
+    function()
+    {
+      var sel   = editor.getSelection();
+      var range = editor.createRange(sel);
+      var SC = range.startContainer;
+      var SO = range.startOffset;
+      var EC = range.endContainer;
+      var EO = range.endOffset;
+      var newr = SC.nextSibling;
+      if ( SC.nodeType == 3 )
+      {
+        SC = SC.parentNode;
+      }
+      if ( ! ( /\S/.test(SC.tagName) ) )
+      {
+        var p = document.createElement("p");
+        while ( SC.firstChild )
+        {
+          p.appendChild(SC.firstChild);
+        }
+        SC.parentNode.insertBefore(p, SC);
+        Xinha.removeFromParent(SC);
+        var r = range.cloneRange();
+        r.setStartBefore(newr);
+        r.setEndAfter(newr);
+        r.extractContents();
+        sel.removeAllRanges();
+        sel.addRange(r);
+      }
+    },
+    10);
+};
+
+/*--------------------------------------------------------------------------*/
+/*------- IMPLEMENTATION OF THE ABSTRACT "Xinha.prototype" METHODS ---------*/
+/*--------------------------------------------------------------------------*/
+
+/** Insert a node at the current selection point. 
+ * @param toBeInserted DomNode
+ */
+
 Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
 {
   var sel = this._getSelection();
@@ -48,11 +325,16 @@ Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
   }
 };
   
-// Returns the deepest node that contains both endpoints of the selection.
+/** Get the parent element of the supplied or current selection. 
+ *  @param   sel optional selection as returned by getSelection
+ *  @returns DomNode
+ */
+ 
 Xinha.prototype.getParentElement = function(sel)
 {
   if ( typeof sel == 'undefined' )
   {
+    debugger;
     sel = this._getSelection();
   }
   var range = this._createRange(sel);
@@ -64,10 +346,7 @@ Xinha.prototype.getParentElement = function(sel)
     {
       p = range.startContainer.childNodes[range.startOffset];
     }
-    /*
-    alert(range.startContainer + ":" + range.startOffset + "\n" +
-          range.endContainer + ":" + range.endOffset);
-    */
+
     while ( p.nodeType == 3 )
     {
       p = p.parentNode;
@@ -85,9 +364,10 @@ Xinha.prototype.getParentElement = function(sel)
  * the element that you have last selected in the "path"
  * at the bottom of the editor, or a "control" (eg image)
  *
- * @returns null | element
+ * @returns null | DomNode
  */
-Xinha.prototype._activeElement = function(sel)
+
+Xinha.prototype.activeElement = function(sel)
 {
   if ( ( sel === null ) || this._selectionEmpty(sel) )
   {
@@ -114,8 +394,14 @@ Xinha.prototype._activeElement = function(sel)
   }
   return null;
 };
-  
-Xinha.prototype._selectionEmpty = function(sel)
+
+/** 
+ * Determines if the given selection is empty (collapsed).
+ * @param selection Selection object as returned by getSelection
+ * @returns true|false
+ */
+ 
+Xinha.prototype.selectionEmpty = function(sel)
 {
   if ( !sel )
   {
@@ -129,8 +415,16 @@ Xinha.prototype._selectionEmpty = function(sel)
 
   return true;
 };
-  
-// Selects the contents inside the given node
+
+
+/**
+ * Selects the contents of the given node.  If the node is a "control" type element, (image, form input, table)
+ * the node itself is selected for manipulation.
+ *
+ * @param node DomNode 
+ * @param pos  Set to a numeric position inside the node to collapse the cursor here if possible. 
+ */
+ 
 Xinha.prototype.selectNodeContents = function(node, pos)
 {
   this.focusEditor();
@@ -153,9 +447,11 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   sel.addRange(range);
 };
   
-/** Call this function to insert HTML code at the current position.  It deletes
- * the selection, if any.
+/** Insert HTML at the current position, deleting the selection if any. 
+ *  
+ *  @param html string
  */
+ 
 Xinha.prototype.insertHTML = function(html)
 {
   var sel = this._getSelection();
@@ -174,7 +470,11 @@ Xinha.prototype.insertHTML = function(html)
   var node = this.insertNodeAtSelection(fragment);
 };
 
-// Retrieve the selected block
+/** Get the HTML of the current selection.  HTML returned has not been passed through outwardHTML.
+ *
+ * @returns string
+ */
+ 
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this._getSelection();
@@ -182,51 +482,24 @@ Xinha.prototype.getSelectedHTML = function()
   return Xinha.getHTML(range.cloneContents(), false, this);
 };
   
-Xinha.prototype.checkBackspace = function()
-{
-  var self = this;
-  setTimeout(
-    function()
-    {
-      var sel = self._getSelection();
-      var range = self._createRange(sel);
-      var SC = range.startContainer;
-      var SO = range.startOffset;
-      var EC = range.endContainer;
-      var EO = range.endOffset;
-      var newr = SC.nextSibling;
-      if ( SC.nodeType == 3 )
-      {
-        SC = SC.parentNode;
-      }
-      if ( ! ( /\S/.test(SC.tagName) ) )
-      {
-        var p = document.createElement("p");
-        while ( SC.firstChild )
-        {
-          p.appendChild(SC.firstChild);
-        }
-        SC.parentNode.insertBefore(p, SC);
-        Xinha.removeFromParent(SC);
-        var r = range.cloneRange();
-        r.setStartBefore(newr);
-        r.setEndAfter(newr);
-        r.extractContents();
-        sel.removeAllRanges();
-        sel.addRange(r);
-      }
-    },
-    10);
-};
 
-// returns the current selection object
-Xinha.prototype._getSelection = function()
+/** Get a Selection object of the current selection.  Note that selection objects are browser specific.
+ *
+ * @returns Selection
+ */
+ 
+Xinha.prototype.getSelection = function()
 {
   return this._iframe.contentWindow.getSelection();
 };
   
-// returns a range for the current selection
-Xinha.prototype._createRange = function(sel)
+/** Create a Range object from the given selection.  Note that range objects are browser specific.
+ *
+ *  @param sel Selection object (see getSelection)
+ *  @returns Range
+ */
+ 
+Xinha.prototype.createRange = function(sel)
 {
   this.activateEditor();
   if ( typeof sel != "undefined" )
@@ -246,294 +519,24 @@ Xinha.prototype._createRange = function(sel)
   }
 };
 
+/** Determine if the given event object is a keydown/press event.
+ *
+ *  @param event Event 
+ *  @returns true|false
+ */
+ 
+Xinha.prototype.isKeyEvent = function(event)
+{
+  return event.type == "keypress";
+}
+
+/** Return the HTML string of the given Element, including the Element.
+ * 
+ * @param element HTML Element DomNode
+ * @returns string
+ */
+ 
 Xinha.getOuterHTML = function(element)
 {
   return (new XMLSerializer()).serializeToString(element);
 };
-  
-//What is this supposed to do??? it's never used 
-//ray
-Xinha.prototype._formatBlock = function(block_format)
-{
-  var ancestors = this.getAllAncestors();
-  var apply_to, x = null;
-  // Block format can be a tag followed with class defs
-  //  eg div.blue.left
-  var target_tag = null;
-  var target_classNames = [ ];
-
-  if ( block_format.indexOf('.') >= 0 )
-  {
-    target_tag = block_format.substr(0, block_format.indexOf('.')).toLowerCase();
-    target_classNames = block_format.substr(block_format.indexOf('.'), block_format.length - block_format.indexOf('.')).replace(/\./g, '').replace(/^\s*/, '').replace(/\s*$/, '').split(' ');
-  }
-  else
-  {
-    target_tag = block_format.toLowerCase();
-  }
-
-  var sel = this._getSelection();
-  var rng = this._createRange(sel);
-
-  if ( Xinha.is_gecko )
-  {
-    if ( sel.isCollapsed )
-    {
-      // With no selection we want to apply to the whole contents of the ancestor block
-      apply_to = this._getAncestorBlock(sel);
-      if ( apply_to === null )
-      {
-        // If there wasn't an ancestor, make one.
-        apply_to = this._createImplicitBlock(sel, target_tag);
-      }
-    }
-    else
-    {
-      // With a selection it's more tricky
-      switch ( target_tag )
-      {
-
-        case 'h1':
-        case 'h2':
-        case 'h3':
-        case 'h4':
-        case 'h5':
-        case 'h6':
-        case 'h7':
-          apply_to = [];
-          var search_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7'];
-          for ( var y = 0; y < search_tags.length; y++ )
-          {
-            var headers = this._doc.getElementsByTagName(search_tags[y]);
-            for ( x = 0; x < headers.length; x++ )
-            {
-              if ( sel.containsNode(headers[x]) )
-              {
-                apply_to[apply_to.length] = headers[x];
-              }
-            }
-          }
-          if ( apply_to.length > 0)
-          {
-            break;
-          }
-          // If there wern't any in the selection drop through
-        case 'div':
-          apply_to = this._doc.createElement(target_tag);
-          apply_to.appendChild(rng.extractContents());
-          rng.insertNode(apply_to);
-        break;
-
-        case 'p':
-        case 'center':
-        case 'pre':
-        case 'ins':
-        case 'del':
-        case 'blockquote':
-        case 'address':
-          apply_to = [];
-          var paras = this._doc.getElementsByTagName(target_tag);
-          for ( x = 0; x < paras.length; x++ )
-          {
-            if ( sel.containsNode(paras[x]) )
-            {
-              apply_to[apply_to.length] = paras[x];
-            }
-          }
-
-          if ( apply_to.length === 0 )
-          {
-            sel.collapseToStart();
-            return this._formatBlock(block_format);
-          }
-        break;
-      }
-    }
-  }
-};
-
-
-// IE's textRange and selection object is woefully inadequate,
-// which means this fancy stuff is gecko only sorry :-|
-// Die Bill, Die.  (IE supports it somewhat nativly though)
-Xinha.prototype.mozKey = function ( ev, keyEvent )
-{
-  var editor = this;
-  var s = editor._getSelection();
-  var autoWrap = function (textNode, tag)
-  {
-    var rightText = textNode.nextSibling;
-    if ( typeof tag == 'string')
-    {
-      tag = editor._doc.createElement(tag);
-    }
-    var a = textNode.parentNode.insertBefore(tag, rightText);
-    Xinha.removeFromParent(textNode);
-    a.appendChild(textNode);
-    rightText.data = ' ' + rightText.data;
-
-    if ( Xinha.is_ie )
-    {
-      var r = editor._createRange(s);
-      s.moveToElementText(rightText);
-      s.move('character', 1);
-    }
-    else
-    {
-      s.collapse(rightText, 1);
-    }
-    Xinha._stopEvent(ev);
-
-    editor._unLink = function()
-    {
-      var t = a.firstChild;
-      a.removeChild(t);
-      a.parentNode.insertBefore(t, a);
-      Xinha.removeFromParent(a);
-      editor._unLink = null;
-      editor._unlinkOnUndo = false;
-    };
-    editor._unlinkOnUndo = true;
-
-    return a;
-  };
-
-  switch ( ev.which )
-  {
-    // Space, see if the text just typed looks like a URL, or email address
-    // and link it appropriatly
-    case 32:
-      if ( this.config.convertUrlsToLinks && s && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0 )
-      {
-        var midStart = s.anchorNode.data.substring(0,s.anchorOffset).search(/\S{4,}$/);
-        if ( midStart == -1 )
-        {
-          break;
-        }
-
-        if ( this._getFirstAncestor(s, 'a') )
-        {
-          break; // already in an anchor
-        }
-
-        var matchData = s.anchorNode.data.substring(0,s.anchorOffset).replace(/^.*?(\S*)$/, '$1');
-
-        var mEmail = matchData.match(Xinha.RE_email);
-        if ( mEmail )
-        {
-          var leftTextEmail  = s.anchorNode;
-          var rightTextEmail = leftTextEmail.splitText(s.anchorOffset);
-          var midTextEmail   = leftTextEmail.splitText(midStart);
-
-          autoWrap(midTextEmail, 'a').href = 'mailto:' + mEmail[0];
-          break;
-        }
-
-        RE_date = /([0-9]+\.)+/; //could be date or ip or something else ...
-        RE_ip = /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/;
-        var mUrl = matchData.match(Xinha.RE_url);
-        if ( mUrl )
-        {
-          if (RE_date.test(matchData))
-          {
-            if (!RE_ip.test(matchData)) 
-            {
-              break;
-            }
-          } 
-          var leftTextUrl  = s.anchorNode;
-          var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
-          var midTextUrl   = leftTextUrl.splitText(midStart);
-          autoWrap(midTextUrl, 'a').href = (mUrl[1] ? mUrl[1] : 'http://') + mUrl[2];
-          break;
-        }
-      }
-    break;
-
-    default:
-      if ( ev.keyCode == 27 || ( this._unlinkOnUndo && ev.ctrlKey && ev.which == 122 ) )
-      {
-        if ( this._unLink )
-        {
-          this._unLink();
-          Xinha._stopEvent(ev);
-        }
-        break;
-      }
-      else if ( ev.which || ev.keyCode == 8 || ev.keyCode == 46 )
-      {
-        this._unlinkOnUndo = false;
-
-        if ( s.anchorNode && s.anchorNode.nodeType == 3 )
-        {
-          // See if we might be changing a link
-          var a = this._getFirstAncestor(s, 'a');
-          // @todo: we probably need here to inform the setTimeout below that we not changing a link and not start another setTimeout
-          if ( !a )
-          {
-            break; // not an anchor
-          } 
-          if ( !a._updateAnchTimeout )
-          {
-            if ( s.anchorNode.data.match(Xinha.RE_email) && a.href.match('mailto:' + s.anchorNode.data.trim()) )
-            {
-              var textNode = s.anchorNode;
-              var fnAnchor = function()
-              {
-                a.href = 'mailto:' + textNode.data.trim();
-                // @fixme: why the hell do another timeout is started ?
-                //         This lead to never ending timer if we dont remove this line
-                //         But when removed, the email is not correctly updated
-                a._updateAnchTimeout = setTimeout(fnAnchor, 250);
-              };
-              a._updateAnchTimeout = setTimeout(fnAnchor, 1000);
-              break;
-            }
-
-            var m = s.anchorNode.data.match(Xinha.RE_url);
-            if ( m && a.href.match(s.anchorNode.data.trim()) )
-            {
-              var txtNode = s.anchorNode;
-              var fnUrl = function()
-              {
-                // @fixme: Alert, sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
-                m = txtNode.data.match(Xinha.RE_url);
-                a.href = (m[1] ? m[1] : 'http://') + m[2];
-                // @fixme: why the hell do another timeout is started ?
-                //         This lead to never ending timer if we dont remove this line
-                //         But when removed, the url is not correctly updated
-                a._updateAnchTimeout = setTimeout(fnUrl, 250);
-              };
-              a._updateAnchTimeout = setTimeout(fnUrl, 1000);
-            }
-          }
-        }
-      }
-    break;
-  }
-
-
-  // other keys here
-  switch (ev.keyCode)
-  {
-    case 13: // KEY enter
-      if ( Xinha.is_gecko && !ev.shiftKey && this.config.mozParaHandler == 'dirty' )
-      {
-        this.dom_checkInsertP();
-        Xinha._stopEvent(ev);
-      }
-    break;
-    case 8: // KEY backspace
-    case 46: // KEY delete
-      if ( ( Xinha.is_gecko && !ev.shiftKey ) || Xinha.is_ie )
-      {
-        if ( this.checkBackspace() )
-        {
-          Xinha._stopEvent(ev);
-        }
-      }
-    break;
-  }
-}
-
-Xinha._browserSpecificFunctionsLoaded = true;

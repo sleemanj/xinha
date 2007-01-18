@@ -1,12 +1,131 @@
-/** Returns a node after which we can insert other nodes, in the current
- * selection.  The selection is removed.  It splits a text node, if needed.
- */
-Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
-{
-  return null;  // this function not yet used for IE <FIXME>
+
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    -- This is the Internet Explorer compatability plugin, part of the 
+    -- Xinha core.
+    --
+    --  The file is loaded as a special plugin by the Xinha Core when
+    --  Xinha is being run under an Internet Explorer based browser.
+    --
+    --  It provides implementation and specialisation for various methods
+    --  in the core where different approaches per browser are required.
+    --
+    --  Design Notes::
+    --   Most methods here will simply be overriding Xinha.prototype.<method>
+    --   and should be called that, but methods specific to IE should 
+    --   be a part of the InternetExplorer.prototype, we won't trample on 
+    --   namespace that way.
+    --
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
+    --------------------------------------------------------------------------*/
+                                                    
+InternetExplorer._pluginInfo = {
+  name          : "Internet Explorer",
+  origin        : "Xinha Core",
+  version       : "$LastChangedRevision$",
+  developer     : "The Xinha Core Developer Team",
+  developer_url : "$HeadURL$",
+  license       : "htmlArea"
 };
 
-// Returns the deepest node that contains both endpoints of the selection.
+function InternetExplorer(editor) {
+  this.editor = editor;  
+  editor.InternetExplorer = this; // So we can do my_editor.InternetExplorer.doSomethingIESpecific();
+}
+
+/** Allow Internet Explorer to handle some key events in a special way.
+ */
+  
+InternetExplorer.prototype.onKeyPress = function(ev)
+{
+  switch(ev.keyCode) 
+  {
+    case 8: // KEY backspace
+    case 46: // KEY delete
+    {
+      if(this.handleBackspace())
+      {
+        Xinha._stopEvent(ev);
+        return true;
+      }
+    }
+    break;
+  }
+  
+  return false;
+}
+
+/** When backspace is hit, the IE onKeyPress will execute this method.
+ *  It preserves links when you backspace over them and apparently 
+ *  deletes control elements (tables, images, form fields) in a better
+ *  way.
+ *
+ *  @returns true|false True when backspace has been handled specially
+ *   false otherwise (should pass through). 
+ */
+
+InternetExplorer.prototype.handleBackspace = function()
+{
+  var editor = this.editor;
+  var sel = editor._getSelection();
+  if ( sel.type == 'Control' )
+  {
+    var elm = editor._activeElement(sel);
+    Xinha.removeFromParent(elm);
+    return true;
+  }
+
+  // This bit of code preseves links when you backspace over the
+  // endpoint of the link in IE.  Without it, if you have something like
+  //    link_here |
+  // where | is the cursor, and backspace over the last e, then the link
+  // will de-link, which is a bit tedious
+  var range = editor._createRange(sel);
+  var r2 = range.duplicate();
+  r2.moveStart("character", -1);
+  var a = r2.parentElement();
+  // @fixme: why using again a regex to test a single string ???
+  if ( a != range.parentElement() && ( /^a$/i.test(a.tagName) ) )
+  {
+    r2.collapse(true);
+    r2.moveEnd("character", 1);
+    r2.pasteHTML('');
+    r2.select();
+    return true;
+  }
+};
+
+/*--------------------------------------------------------------------------*/
+/*------- IMPLEMENTATION OF THE ABSTRACT "Xinha.prototype" METHODS ---------*/
+/*--------------------------------------------------------------------------*/
+
+/** Insert a node at the current selection point. 
+ * @param toBeInserted DomNode
+ */
+
+Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
+{
+  Xinha.notImplemented('insertNodeAtSelection');
+};
+
+  
+/** Get the parent element of the supplied or current selection. 
+ *  @param   sel optional selection as returned by getSelection
+ *  @returns DomNode
+ */
+ 
 Xinha.prototype.getParentElement = function(sel)
 {
   if ( typeof sel == 'undefined' )
@@ -54,8 +173,9 @@ Xinha.prototype.getParentElement = function(sel)
  * the element that you have last selected in the "path"
  * at the bottom of the editor, or a "control" (eg image)
  *
- * @returns null | element
+ * @returns null | DomNode
  */
+ 
 Xinha.prototype._activeElement = function(sel)
 {
   if ( ( sel === null ) || this._selectionEmpty(sel) )
@@ -103,7 +223,13 @@ Xinha.prototype._activeElement = function(sel)
   }
 };
 
-  Xinha.prototype._selectionEmpty = function(sel)
+/** 
+ * Determines if the given selection is empty (collapsed).
+ * @param selection Selection object as returned by getSelection
+ * @returns true|false
+ */
+ 
+Xinha.prototype.selectionEmpty = function(sel)
 {
   if ( !sel )
   {
@@ -113,7 +239,14 @@ Xinha.prototype._activeElement = function(sel)
   return this._createRange(sel).htmlText === '';
 };
 
-// Selects the contents inside the given node
+/**
+ * Selects the contents of the given node.  If the node is a "control" type element, (image, form input, table)
+ * the node itself is selected for manipulation.
+ *
+ * @param node DomNode 
+ * @param pos  Set to a numeric position inside the node to collapse the cursor here if possible. 
+ */
+ 
 Xinha.prototype.selectNodeContents = function(node, pos)
 {
   this.focusEditor();
@@ -135,9 +268,11 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   range.select();
 };
   
-/** Call this function to insert HTML code at the current position.  It deletes
- * the selection, if any.
+/** Insert HTML at the current position, deleting the selection if any. 
+ *  
+ *  @param html string
  */
+ 
 Xinha.prototype.insertHTML = function(html)
 {
   var sel = this._getSelection();
@@ -147,7 +282,11 @@ Xinha.prototype.insertHTML = function(html)
 };
 
 
-// Retrieve the selected block
+/** Get the HTML of the current selection.  HTML returned has not been passed through outwardHTML.
+ *
+ * @returns string
+ */
+ 
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this._getSelection();
@@ -165,58 +304,47 @@ Xinha.prototype.getSelectedHTML = function()
   
   return '';
 };
-
-Xinha.prototype.checkBackspace = function()
-{
-  var sel = this._getSelection();
-  if ( sel.type == 'Control' )
-  {
-    var elm = this._activeElement(sel);
-    Xinha.removeFromParent(elm);
-    return true;
-  }
-
-  // This bit of code preseves links when you backspace over the
-  // endpoint of the link in IE.  Without it, if you have something like
-  //    link_here |
-  // where | is the cursor, and backspace over the last e, then the link
-  // will de-link, which is a bit tedious
-  var range = this._createRange(sel);
-  var r2 = range.duplicate();
-  r2.moveStart("character", -1);
-  var a = r2.parentElement();
-  // @fixme: why using again a regex to test a single string ???
-  if ( a != range.parentElement() && ( /^a$/i.test(a.tagName) ) )
-  {
-    r2.collapse(true);
-    r2.moveEnd("character", 1);
-    r2.pasteHTML('');
-    r2.select();
-    return true;
-  }
-};
   
-// returns the current selection object
-Xinha.prototype._getSelection = function()
+/** Get a Selection object of the current selection.  Note that selection objects are browser specific.
+ *
+ * @returns Selection
+ */
+ 
+Xinha.prototype.getSelection = function()
 {
   return this._doc.selection;
 };
 
-// returns a range for the current selection
-Xinha.prototype._createRange = function(sel)
+/** Create a Range object from the given selection.  Note that range objects are browser specific.
+ *
+ *  @param sel Selection object (see getSelection)
+ *  @returns Range
+ */
+ 
+Xinha.prototype.createRange = function(sel)
 {
   return sel.createRange();
 };
 
+/** Determine if the given event object is a keydown/press event.
+ *
+ *  @param event Event 
+ *  @returns true|false
+ */
+ 
+Xinha.prototype.isKeyEvent = function(event)
+{
+  return event.type == "keydown";
+}
+
+/** Return the HTML string of the given Element, including the Element.
+ * 
+ * @param element HTML Element DomNode
+ * @returns string
+ */
+ 
 Xinha.getOuterHTML = function(element)
 {
   return element.outerHTML;
 };
   
-//What is this supposed to do??? it's never used 
-Xinha.prototype._formatBlock = function(block_format)
-{
-
-};
-
-Xinha._browserSpecificFunctionsLoaded = true;
