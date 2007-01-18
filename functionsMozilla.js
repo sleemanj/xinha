@@ -334,7 +334,6 @@ Xinha.prototype.getParentElement = function(sel)
 {
   if ( typeof sel == 'undefined' )
   {
-    debugger;
     sel = this._getSelection();
   }
   var range = this._createRange(sel);
