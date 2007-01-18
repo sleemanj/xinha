@@ -373,7 +373,7 @@ Xinha.Config = function()
 
   // see if the text just typed looks like a URL, or email address
   // and link it appropriatly
-  this.convertUrlsToLinks = false;
+  this.convertUrlsToLinks = true;
 
   // size of color picker cells
   this.colorPickerCellSize = '6px';
@@ -1445,6 +1445,27 @@ Xinha.prototype.generate = function ()
 {
   var i;
   var editor = this;	// we'll need "this" in some nested functions
+  
+  // Now load a specific browser plugin which will implement the above for us.
+  if (Xinha.is_ie)
+  {
+    if ( typeof InternetExplorer == 'undefined' )
+    {            
+      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, _editor_url + 'functionsIE.js' );
+      return false;
+    }
+    editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
+  }
+  else
+  {
+    if ( typeof Gecko == 'undefined' )
+    {            
+      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, _editor_url + 'functionsMozilla.js' );
+      return false;
+    }
+    editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
+  }
+
   this.setLoadingMessage('Generate Xinha object');
 
   if ( typeof Dialog == 'undefined' )
@@ -2528,7 +2549,7 @@ Xinha.getPluginDir = function(pluginName)
   return _editor_url + "plugins/" + pluginName;
 };
 
-Xinha.loadPlugin = function(pluginName, callback)
+Xinha.loadPlugin = function(pluginName, callback, plugin_file)
 {
   // @todo : try to avoid the use of eval()
   // Might already be loaded
@@ -2541,34 +2562,25 @@ Xinha.loadPlugin = function(pluginName, callback)
     return true;
   }
 
-  var dir = this.getPluginDir(pluginName);
-  var plugin = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-  var plugin_file = dir + "/" + plugin;
-
+  if(!plugin_file)
+  {
+    var dir = this.getPluginDir(pluginName);
+    var plugin = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+    plugin_file = dir + "/" + plugin;
+  }
+  
   Xinha._loadback(plugin_file, callback ? function() { callback(pluginName); } : null);
   return false;
 };
 
 Xinha._pluginLoadStatus = {};
-Xinha._browserSpecificFunctionsLoaded = false;
+
 Xinha.loadPlugins = function(plugins, callbackIfNotReady)
 {
   // Rip the ones that are loaded and look for ones that have failed
   var retVal = true;
   var nuPlugins = Xinha.cloneObject(plugins);
 
-  if ( !Xinha._browserSpecificFunctionsLoaded )
-  {
-  	if (Xinha.is_ie)
-  	{
-  		Xinha._loadback(_editor_url + "functionsIE.js",callbackIfNotReady);
-  	}
-  	else
-  	{
-  		Xinha._loadback(_editor_url + "functionsMozilla.js",callbackIfNotReady);
-  	}
-  	return false;
-  }
   while ( nuPlugins.length )
   {
     var p = nuPlugins.pop();
@@ -3852,30 +3864,23 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
 Xinha.prototype._editorEvent = function(ev)
 {
   var editor = this;
-  var keyEvent = (Xinha.is_ie && ev.type == "keydown") || (!Xinha.is_ie && ev.type == "keypress");
+  var keyEvent = this.isKeyEvent(ev);
 
   //call events of textarea
   if ( typeof editor._textArea['on'+ev.type] == "function" )
   {
     editor._textArea['on'+ev.type]();
   }
-
-  if ( Xinha.is_gecko && keyEvent && ev.ctrlKey &&  this._unLink && this._unlinkOnUndo )
-  {
-    if ( String.fromCharCode(ev.charCode).toLowerCase() == 'z' )
-    {
-      Xinha._stopEvent(ev);
-      this._unLink();
-      editor.updateToolbar();
-      return;
-    }
-  }
-
+  
   if ( keyEvent )
   {
+    // Run the ordinary plugins first
     for ( var i in editor.plugins )
     {
       var plugin = editor.plugins[i].instance;
+      
+      if ( plugin == editor._browserSpecificPlugin) continue;
+      
       if ( plugin && typeof plugin.onKeyPress == "function" )
       {
         if ( plugin.onKeyPress(ev) )
@@ -3884,17 +3889,22 @@ Xinha.prototype._editorEvent = function(ev)
         }
       }
     }
+    
+    // Now run the browser specific one
+    if(typeof editor._browserSpecificPlugin.onKeyPress == "function")
+    {
+      if(editor._browserSpecificPlugin.onKeyPress(ev)) 
+      {
+        return false;
+      }
+    }
   }
 
   if ( keyEvent && ev.ctrlKey && !ev.altKey )
   {
   	this._shortCuts(ev);
   }
-  else if ( keyEvent && Xinha.is_gecko )
-  {
-    this.mozKey( ev, keyEvent );
-  }
-
+  
   // update the toolbar state after some time
   if ( editor._timerToolbar )
   {
@@ -5819,7 +5829,110 @@ Xinha.collectGarbageForIE = function()
     Xinha.toFree[x].o = null;
   }
 };
-// backward compatibility
+
+
+// The following methods may be over-ridden or extended by the browser specific
+// javascript files.
+
+
+/** Insert a node at the current selection point. 
+ * @param toBeInserted DomNode
+ */
+
+Xinha.prototype.insertNodeAtSelection = function(toBeInserted) { Xinha.notImplemented("insertNodeAtSelection"); }
+
+/** Get the parent element of the supplied or current selection. 
+ *  @param   sel optional selection as returned by getSelection
+ *  @returns DomNode
+ */
+  
+Xinha.prototype.getParentElement      = function(sel) { Xinha.notImplemented("getParentElement"); }
+
+/**
+ * Returns the selected element, if any.  That is,
+ * the element that you have last selected in the "path"
+ * at the bottom of the editor, or a "control" (eg image)
+ *
+ * @returns null | DomNode
+ */
+ 
+Xinha.prototype.activeElement         = function(sel) { Xinha.notImplemented("activeElement"); }
+
+/** 
+ * Determines if the given selection is empty (collapsed).
+ * @param selection Selection object as returned by getSelection
+ * @returns true|false
+ */
+ 
+Xinha.prototype.selectionEmpty        = function(sel) { Xinha.notImplemented("selectionEmpty"); }
+
+/**
+ * Selects the contents of the given node.  If the node is a "control" type element, (image, form input, table)
+ * the node itself is selected for manipulation.
+ *
+ * @param node DomNode 
+ * @param pos  Set to a numeric position inside the node to collapse the cursor here if possible. 
+ */
+ 
+Xinha.prototype.selectNodeContents    = function(node,pos) { Xinha.notImplemented("selectNodeContents"); }
+
+/** Insert HTML at the current position, deleting the selection if any. 
+ *  
+ *  @param html string
+ */
+ 
+Xinha.prototype.insertHTML            = function(html) { Xinha.notImplemented("insertHTML"); }
+
+/** Get the HTML of the current selection.  HTML returned has not been passed through outwardHTML.
+ *
+ * @returns string
+ */
+Xinha.prototype.getSelectedHTML       = function() { Xinha.notImplemented("getSelectedHTML"); }
+
+/** Get a Selection object of the current selection.  Note that selection objects are browser specific.
+ *
+ * @returns Selection
+ */
+ 
+Xinha.prototype.getSelection          = function() { Xinha.notImplemented("getSelection"); }
+
+/** Create a Range object from the given selection.  Note that range objects are browser specific.
+ *
+ *  @param sel Selection object (see getSelection)
+ *  @returns Range
+ */
+ 
+Xinha.prototype.createRange           = function(sel) { Xinha.notImplemented("createRange"); }
+
+/** Determine if the given event object is a keydown/press event.
+ *
+ *  @param event Event 
+ *  @returns true|false
+ */
+ 
+Xinha.prototype.isKeyEvent            = function(event) { Xinha.notImplemented("isKeyEvent"); }
+
+/** Return the HTML string of the given Element, including the Element.
+ * 
+ * @param element HTML Element DomNode
+ * @returns string
+ */
+ 
+Xinha.getOuterHTML = function(element) { Xinha.notImplemented("getOuterHTML"); }
+
+
+
+// Compatability - all these names are deprecated and will be removed in a future version
+Xinha.prototype._activeElement  = function(sel) { return this.activeElement(sel); }
+Xinha.prototype._selectionEmpty = function(sel) { return this.selectionEmpty(sel); }
+Xinha.prototype._getSelection   = function() { return this.getSelection(); }
+Xinha.prototype._createRange    = function(sel) { return this.createRange(sel); }
 HTMLArea = Xinha;
+
 Xinha.init();
 Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
+
+Xinha.notImplemented = function(methodName) 
+{
+  throw new Error("Method Not Implemented", "Part of Xinha has tried to call the " + methodName + " method which has not been implemented.");
+}
