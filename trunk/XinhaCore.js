@@ -3668,6 +3668,18 @@ Xinha.prototype._colorSelector = function(cmdID)
     Xinha._loadback(_editor_url + 'popups/color_picker.js', function () {editor._colorSelector(cmdID)});
     return false;
   }
+
+  // backcolor only works with useCSS/styleWithCSS (see mozilla bug #279330 & Midas doc)
+  // and its also nicer as <font>
+  if ( Xinha.is_gecko )
+  {
+    try
+    {
+     editor._doc.execCommand('useCSS', false, false); // useCSS deprecated & replaced by styleWithCSS 
+     editor._doc.execCommand('styleWithCSS', false, true); 
+     
+    } catch (ex) {}
+  }
   
   var btn = editor._toolbarObjects[cmdID].element;
   var initcolor;
@@ -3682,15 +3694,6 @@ Xinha.prototype._colorSelector = function(cmdID)
     {
       initcolor = Xinha._colorToRgb(editor._doc.queryCommandValue("hilitecolor"));
     }
-    // @todo : useCSS is deprecated, see ticket #619
-    //[wymsy]: mozilla bug #279330 has been fixed, I don't think we need this any more
-  /*  if ( Xinha.is_gecko )
-    {
-      try
-      {
-     //   editor._doc.execCommand('useCSS', false, false); //switch on useCSS (mozilla bug #279330)
-      } catch (ex) {}
-    }*/
   }
   else
   {
@@ -3724,12 +3727,14 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
   var editor = this;	// for nested functions
   this.focusEditor();
   cmdID = cmdID.toLowerCase();
-  // @todo : useCSS is deprecated, see ticket #619
+  // useCSS deprecated & replaced by styleWithCSS
   if ( Xinha.is_gecko )
   {
     try
     {
       this._doc.execCommand('useCSS', false, true); //switch useCSS off (true=off)
+      this._doc.execCommand('styleWithCSS', false, false); //switch styleWithCSS off 
+      
     } catch (ex) {}
   }
   switch (cmdID)
