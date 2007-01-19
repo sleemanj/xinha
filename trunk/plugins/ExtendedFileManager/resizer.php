@@ -6,8 +6,8 @@ header('Content-Type: text/javascript');
  * resize.php?img=/relative/path/to/image.jpg&width=<pixels>&height=<pixels>[&to=/relative/path/to/newimage.jpg]
  * relative to the base_dir given in config.inc.php
  * This is pretty much just thumbs.php with some mods, I'm too lazy to do it properly
- * @author $Author: James Sleeman $
- * @version $Id: thumbs.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @author $Author$
+ * @version $Id$
  * @package ImageManager
  */
 
