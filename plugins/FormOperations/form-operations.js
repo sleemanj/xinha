@@ -2,10 +2,10 @@
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  FormOperations Plugin
     --
-    --  $HeadURL: http://gogo@svn.xinha.python-hosting.com/trunk/htmlarea.js $
-    --  $LastChangedDate: 2005-05-25 09:30:03 +1200 (Wed, 25 May 2005) $
-    --  $LastChangedRevision: 193 $
-    --  $LastChangedBy: gogo $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
 HTMLArea.Config.prototype.FormOperations =
