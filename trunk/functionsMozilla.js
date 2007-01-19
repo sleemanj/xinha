@@ -73,10 +73,10 @@ Gecko.prototype.onKeyPress = function(ev)
       case 'a':
       {
         // KEY select all
-        sel = this._getSelection();
+        sel = editor._getSelection();
         sel.removeAllRanges();
-        range = this._createRange();
-        range.selectNodeContents(this._doc.body);
+        range = editor._createRange();
+        range.selectNodeContents(editor._doc.body);
         sel.addRange(range);
         Xinha._stopEvent(ev);
         return true;
