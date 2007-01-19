@@ -50,6 +50,34 @@ function InternetExplorer(editor) {
   
 InternetExplorer.prototype.onKeyPress = function(ev)
 {
+  // Shortcuts
+  if(this.editor.isShortCut(ev))
+  {
+    switch(this.editor.getKey(ev).toLowerCase())
+    {
+      case 'n':
+      {
+        this.editor.execCommand('formatblock', false, '<p>');        
+        Xinha._stopEvent(ev);
+        return true;
+      }
+      break;
+      
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      {
+        this.editor.execCommand('formatblock', false, '<h'+this.editor.getKey(ev).toLowerCase()+'>');
+        Xinha._stopEvent(ev);
+        return true;
+      }
+      break;
+    }
+  }
+  
   switch(ev.keyCode) 
   {
     case 8: // KEY backspace
@@ -106,6 +134,15 @@ InternetExplorer.prototype.handleBackspace = function()
     return true;
   }
 };
+
+InternetExplorer.prototype.inwardHtml = function(html)
+{
+   // Both IE and Gecko use strike internally instead of del (#523)
+   // Xinha will present del externally (see Xinha.prototype.outwardHtml
+   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
+   
+   return html;
+}
 
 /*--------------------------------------------------------------------------*/
 /*------- IMPLEMENTATION OF THE ABSTRACT "Xinha.prototype" METHODS ---------*/
@@ -337,6 +374,19 @@ Xinha.prototype.isKeyEvent = function(event)
   return event.type == "keydown";
 }
 
+/** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
+ *  this method will return 'a', press SHIFT-a and it will return 'A'.
+ * 
+ *  @param   keyEvent
+ *  @returns string
+ */
+                                   
+Xinha.prototype.getKey = function(keyEvent)
+{
+  return String.fromCharCode(keyEvent.keyCode);
+}
+
+
 /** Return the HTML string of the given Element, including the Element.
  * 
  * @param element HTML Element DomNode
@@ -348,3 +398,9 @@ Xinha.getOuterHTML = function(element)
   return element.outerHTML;
 };
   
+/** Get a new XMLHTTPRequest Object ready to be used. 
+ *
+ * @returns object XMLHTTPRequest 
+ */
+
+Xinha.getXMLHTTPRequestObject = function () { return new ActiveXObject("Microsoft.XMLHTTP"); }

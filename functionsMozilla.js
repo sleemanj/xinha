@@ -51,53 +51,86 @@ function Gecko(editor) {
 Gecko.prototype.onKeyPress = function(ev)
 {
   var editor = this.editor;
+  var s = editor._getSelection();
   
-  if ( ev.ctrlKey &&  editor._unLink && editor._unlinkOnUndo )
+  // Handle shortcuts
+  if(editor.isShortCut(ev))
   {
-    if ( String.fromCharCode(ev.charCode).toLowerCase() == 'z' )
+    switch(editor.getKey(ev).toLowerCase())
     {
-      Xinha._stopEvent(ev);
-      editor._unLink();
-      editor.updateToolbar();
-      return true; // Stop further
+      case 'z':
+      {
+        if(editor._unLink && editor._unlinkOnUndo)
+        {
+          Xinha._stopEvent(ev);
+          editor._unLink();
+          editor.updateToolbar();
+          return true;
+        }
+      }
+      break;
+      
+      case 'a':
+      {
+        // KEY select all
+        sel = this._getSelection();
+        sel.removeAllRanges();
+        range = this._createRange();
+        range.selectNodeContents(this._doc.body);
+        sel.addRange(range);
+        Xinha._stopEvent(ev);
+        return true;
+      }
+      break;
+      
+      case 'v':
+      {
+        // If we are not using htmlareaPaste, don't let Xinha try and be fancy but let the 
+        // event be handled normally by the browser (don't stopEvent it)
+        if(!editor.config.htmlareaPaste)
+        {          
+          return true;
+        }
+      }
+      break;
     }
   }
   
-  var s = editor._getSelection();
-  var autoWrap = function (textNode, tag)
-  {
-    var rightText = textNode.nextSibling;
-    if ( typeof tag == 'string')
-    {
-      tag = editor._doc.createElement(tag);
-    }
-    var a = textNode.parentNode.insertBefore(tag, rightText);
-    Xinha.removeFromParent(textNode);
-    a.appendChild(textNode);
-    rightText.data = ' ' + rightText.data;
-
-    s.collapse(rightText, 1);
-    // Xinha._stopEvent(ev);
-
-    editor._unLink = function()
-    {
-      var t = a.firstChild;
-      a.removeChild(t);
-      a.parentNode.insertBefore(t, a);
-      Xinha.removeFromParent(a);
-      editor._unLink = null;
-      editor._unlinkOnUndo = false;
-    };
-    editor._unlinkOnUndo = true;
-
-    return a;
-  };
-
-  switch ( ev.which )
+  // Handle normal characters
+  switch(editor.getKey(ev))
   {
     // Space, see if the text just typed looks like a URL, or email address
     // and link it appropriatly
-    case 32:
+    case ' ':
+    {      
+      var autoWrap = function (textNode, tag)
+      {
+        var rightText = textNode.nextSibling;
+        if ( typeof tag == 'string')
+        {
+          tag = editor._doc.createElement(tag);
+        }
+        var a = textNode.parentNode.insertBefore(tag, rightText);
+        Xinha.removeFromParent(textNode);
+        a.appendChild(textNode);
+        rightText.data = ' ' + rightText.data;
+    
+        s.collapse(rightText, 1);
+    
+        editor._unLink = function()
+        {
+          var t = a.firstChild;
+          a.removeChild(t);
+          a.parentNode.insertBefore(t, a);
+          Xinha.removeFromParent(a);
+          editor._unLink = null;
+          editor._unlinkOnUndo = false;
+        };
+        editor._unlinkOnUndo = true;
+    
+        return a;
+      };
+  
       if ( editor.config.convertUrlsToLinks && s && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0 )
       {
         var midStart = s.anchorNode.data.substring(0,s.anchorOffset).search(/\S{4,}$/);
@@ -143,22 +176,50 @@ Gecko.prototype.onKeyPress = function(ev)
           break;
         }
       }
+    }
+    break;    
+  }
+  
+  // Handle special keys
+  switch ( ev.keyCode )
+  {    
+    case 13: // ENTER
+      if( !ev.shiftKey && editor.config.mozParaHandler == 'dirty' )
+      {
+        editor.dom_checkInsertP();
+        Xinha._stopEvent(ev);
+      }
     break;
 
-    default:
-      if ( ev.keyCode == 27 || ( editor._unlinkOnUndo && ev.ctrlKey && ev.which == 122 ) )
+    case 27: // ESCAPE
+    {
+      if ( editor._unLink )
       {
-        if ( editor._unLink )
-        {
-          editor._unLink();
-          Xinha._stopEvent(ev);
-        }
-        break;
+        editor._unLink();
+        Xinha._stopEvent(ev);
       }
-      else if ( ev.which || ev.keyCode == 8 || ev.keyCode == 46 )
+      break;
+    }
+    break;
+    
+    case 8: // KEY backspace
+    case 46: // KEY delete
+    {
+      // We handle the mozilla backspace directly??
+      if ( !ev.shiftKey && this.handleBackspace() )
       {
+        Xinha._stopEvent(ev);
+      }
+    }
+    
+    default:
+    {
         editor._unlinkOnUndo = false;
 
+        // Handle the "auto-linking", specifically this bit of code sets up a handler on
+        // an self-titled anchor (eg <a href="http://www.gogo.co.nz/">www.gogo.co.nz</a>)
+        // when the text content is edited, such that it will update the href on the anchor
+        
         if ( s.anchorNode && s.anchorNode.nodeType == 3 )
         {
           // See if we might be changing a link
@@ -168,6 +229,7 @@ Gecko.prototype.onKeyPress = function(ev)
           {
             break; // not an anchor
           } 
+          
           if ( !a._updateAnchTimeout )
           {
             if ( s.anchorNode.data.match(Xinha.RE_email) && a.href.match('mailto:' + s.anchorNode.data.trim()) )
@@ -179,6 +241,9 @@ Gecko.prototype.onKeyPress = function(ev)
                 // @fixme: why the hell do another timeout is started ?
                 //         This lead to never ending timer if we dont remove this line
                 //         But when removed, the email is not correctly updated
+                //
+                // - to fix this we should make fnAnchor check to see if textNode.data has
+                //   stopped changing for say 5 seconds and if so we do not make this setTimeout 
                 a._updateAnchTimeout = setTimeout(fnAnchor, 250);
               };
               a._updateAnchTimeout = setTimeout(fnAnchor, 1000);
@@ -191,41 +256,29 @@ Gecko.prototype.onKeyPress = function(ev)
               var txtNode = s.anchorNode;
               var fnUrl = function()
               {
-                // @fixme: Alert, sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
+                // Sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
                 m = txtNode.data.match(Xinha.RE_url);
-                a.href = (m[1] ? m[1] : 'http://') + m[2];
+                if(m)
+                {
+                  a.href = (m[1] ? m[1] : 'http://') + m[2];
+                }
+                
                 // @fixme: why the hell do another timeout is started ?
                 //         This lead to never ending timer if we dont remove this line
                 //         But when removed, the url is not correctly updated
+                //
+                // - to fix this we should make fnUrl check to see if textNode.data has
+                //   stopped changing for say 5 seconds and if so we do not make this setTimeout
                 a._updateAnchTimeout = setTimeout(fnUrl, 250);
               };
               a._updateAnchTimeout = setTimeout(fnUrl, 1000);
             }
-          }
-        }
-      }
+          }        
+        }                
+    }
     break;
   }
 
-  // other keys here
-  switch (ev.keyCode)
-  {
-    case 13: // KEY enter
-      if( !ev.shiftKey && editor.config.mozParaHandler == 'dirty' )
-      {
-        editor.dom_checkInsertP();
-        Xinha._stopEvent(ev);
-      }
-    break;
-    case 8: // KEY backspace
-    case 46: // KEY delete
-      if ( !ev.shiftKey && this.handleBackspace() )
-      {
-        Xinha._stopEvent(ev);
-      }
-    break;
-  }
-  
   return false; // Let other plugins etc continue from here.
 }
 
@@ -269,6 +322,52 @@ Gecko.prototype.handleBackspace = function()
     },
     10);
 };
+
+Gecko.prototype.inwardHtml = function(html)
+{
+   // Midas uses b and i internally instead of strong and em
+   // Xinha will use strong and em externally (see Xinha.prototype.outwardHtml)   
+   html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
+   html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");    
+   
+   // Both IE and Gecko use strike internally instead of del (#523)
+   // Xinha will present del externally (see Xinha.prototype.outwardHtml
+   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
+   
+   return html;
+}
+
+Gecko.prototype.outwardHtml = function(html)
+{
+  // ticket:56, the "greesemonkey" plugin for Firefox adds this junk,
+  // so we strip it out.  Original submitter gave a plugin, but that's
+  // a bit much just for this IMHO - james
+  html = html.replace(/<script[\s]*src[\s]*=[\s]*['"]chrome:\/\/.*?["']>[\s]*<\/script>/ig, '');
+
+  return html;
+}
+
+Gecko.prototype.onExecCommand = function(cmdID, UI, param)
+{   
+  try
+  {
+    // useCSS deprecated & replaced by styleWithCSS
+    this.editor._doc.execCommand('useCSS', false, true); //switch useCSS off (true=off)
+    this.editor._doc.execCommand('styleWithCSS', false, false); //switch styleWithCSS off     
+  } catch (ex) {}
+    
+  switch(cmdID)
+  {
+    case 'paste':
+    {
+      alert(Xinha._lc("The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly."));
+      return true; // Indicate paste is done, stop command being issued to browser by Xinha.prototype.execCommand
+    }
+  }
+  
+  return false;
+}
+
 
 /*--------------------------------------------------------------------------*/
 /*------- IMPLEMENTATION OF THE ABSTRACT "Xinha.prototype" METHODS ---------*/
@@ -529,6 +628,18 @@ Xinha.prototype.isKeyEvent = function(event)
   return event.type == "keypress";
 }
 
+/** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
+ *  this method will return 'a', press SHIFT-a and it will return 'A'.
+ * 
+ *  @param   keyEvent
+ *  @returns string
+ */
+                                   
+Xinha.prototype.getKey = function(keyEvent)
+{
+  return String.fromCharCode(keyEvent.charCode);
+}
+
 /** Return the HTML string of the given Element, including the Element.
  * 
  * @param element HTML Element DomNode
@@ -539,3 +650,23 @@ Xinha.getOuterHTML = function(element)
 {
   return (new XMLSerializer()).serializeToString(element);
 };
+
+/*--------------------------------------------------------------------------*/
+/*------------ EXTEND SOME STANDARD "Xinha.prototype" METHODS --------------*/
+/*--------------------------------------------------------------------------*/
+
+Xinha.prototype._standardToggleBorders = Xinha.prototype._toggleBorders;
+Xinha.prototype._toggleBorders = function()
+{
+  var result = Xinha.prototype._standardToggleBorders();
+  
+  // flashing the display forces moz to listen (JB:18-04-2005) - #102
+  var tables = this._doc.getElementByTagName('TABLE');
+  for(var i = 0; i < tables.length; i++)
+  {
+    tables[i].style.display="none";
+    tables[i].style.display="table";
+  }
+  
+  return result;
+}

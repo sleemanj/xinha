@@ -2414,6 +2414,8 @@ Xinha.prototype.setFullHTML = function(html)
   }
   else
   {
+    // FIXME - can we do this without rewriting the entire document
+    //  does the above not work for IE?
     var reac = this.editorIsActivated();
     if ( reac )
     {
@@ -2427,7 +2429,7 @@ Xinha.prototype.setFullHTML = function(html)
     if ( reac )
     {
       this.activateEditor();
-    }
+    }        
     this.setEditorEvents();
     return true;
   }
@@ -2461,6 +2463,10 @@ Xinha.prototype.setEditorEvents = function()
         }
       );
 
+      // FIXME - this needs to be cleaned up and use editor.firePluginEvent
+      //  I don't like both onGenerate and onGenerateOnce, we should only
+      //  have onGenerate and it should only be called when the editor is 
+      //  generated (once and only once)
       // check if any plugins have registered refresh handlers
       for ( var i in editor.plugins )
       {
@@ -2658,6 +2664,56 @@ Xinha.refreshPlugin = function(plugin)
     plugin.onGenerateOnce = null;
   }
 };
+
+/** Call a method of all plugins which define the method using the supplied arguments.
+ *
+ *  Example: editor.firePluginEvent('onExecCommand', 'paste')
+ *  
+ *  The browser specific plugin (if any) is called last.  The result of each call is 
+ *  treated as boolean.  A true return means that the event will stop, no further plugins
+ *  will get the event, a false return means the event will continue to fire.
+ *
+ *  @param methodName
+ *  @param arguments to pass to the method, optional [2..n] 
+ */
+
+Xinha.prototype.firePluginEvent = function(methodName)
+{
+  // arguments is not a real array so we can't just .shift() it unfortunatly.
+  var argsArray = [ ];
+  for(var i = 1; i < arguments.length; i++)
+  {
+    argsArray[i-1] = arguments[i];
+  }
+  
+  for ( var i in this.plugins )
+  {
+    var plugin = this.plugins[i].instance;
+    
+    // Skip the browser specific plugin
+    if ( plugin == this._browserSpecificPlugin) continue;
+    
+    if ( plugin && typeof plugin[methodName] == "function" )
+    {
+      if ( plugin[methodName].apply(plugin, argsArray) )
+      {
+        return true;
+      }
+    }
+  }
+  
+  // Now the browser speific
+  var plugin = this._browserSpecificPlugin;
+  if ( plugin && typeof plugin[methodName] == "function" )
+  {
+    if ( plugin[methodName].apply(plugin, argsArray) )
+    {
+      return true;
+    }
+  }
+    
+  return false;
+}
 
 Xinha.loadStyle = function(style, plugin)
 {
@@ -3348,6 +3404,11 @@ Xinha.prototype.updateToolbar = function(noStatus)
     }
   }
 
+  // FIXME: this should be using this.firePluginEvent('onUpdateToolbar')
+  //   but we have to make sure that the plugins using that event return false
+  //   if they should let the event fire on other plugins, currently the below
+  //   code doesn't take the return value into account
+  
   // check if any plugins have registered refresh handlers
   for ( var indexPlugin in this.plugins )
   {
@@ -3384,6 +3445,7 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
   var prnt = this._activeElement(sel);
   if ( prnt === null )
   {
+    // Hmm, I think Xinha.getParentElement() would do the job better?? - James
     try
     {
       prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
@@ -3727,16 +3789,14 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
   var editor = this;	// for nested functions
   this.focusEditor();
   cmdID = cmdID.toLowerCase();
-  // useCSS deprecated & replaced by styleWithCSS
-  if ( Xinha.is_gecko )
+  
+  // See if any plugins want to do something special
+  if(this.firePluginEvent('onExecCommand', cmdID, UI, param))
   {
-    try
-    {
-      this._doc.execCommand('useCSS', false, true); //switch useCSS off (true=off)
-      this._doc.execCommand('styleWithCSS', false, false); //switch styleWithCSS off 
-      
-    } catch (ex) {}
+    this.updateToolbar();
+    return false;
   }
+
   switch (cmdID)
   {
     case "htmlmode":
@@ -3787,21 +3847,11 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
     case "cut":
     case "copy":
     case "paste":
-    try
-    {
       this._doc.execCommand(cmdID, UI, param);
       if ( this.config.killWordOnPaste )
       {
         this._wordClean();
       }
-    }
-    catch (ex)
-    {
-      if ( Xinha.is_gecko )
-      {
-        alert(Xinha._lc("The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly."));
-      }
-    }
     break;
     case "lefttoright":
     case "righttoleft":
@@ -3869,7 +3919,6 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
 Xinha.prototype._editorEvent = function(ev)
 {
   var editor = this;
-  var keyEvent = this.isKeyEvent(ev);
 
   //call events of textarea
   if ( typeof editor._textArea['on'+ev.type] == "function" )
@@ -3877,37 +3926,19 @@ Xinha.prototype._editorEvent = function(ev)
     editor._textArea['on'+ev.type]();
   }
   
-  if ( keyEvent )
+  if ( this.isKeyEvent(ev) )
   {
     // Run the ordinary plugins first
-    for ( var i in editor.plugins )
+    if(editor.firePluginEvent('onKeyPress', ev))
     {
-      var plugin = editor.plugins[i].instance;
-      
-      if ( plugin == editor._browserSpecificPlugin) continue;
-      
-      if ( plugin && typeof plugin.onKeyPress == "function" )
-      {
-        if ( plugin.onKeyPress(ev) )
-        {
-          return false;
-        }
-      }
+      return false;
     }
     
-    // Now run the browser specific one
-    if(typeof editor._browserSpecificPlugin.onKeyPress == "function")
+    // Handle the core shortcuts
+    if ( this.isShortCut( ev ) )
     {
-      if(editor._browserSpecificPlugin.onKeyPress(ev)) 
-      {
-        return false;
-      }
+      this._shortCuts(ev);
     }
-  }
-
-  if ( keyEvent && ev.ctrlKey && !ev.altKey )
-  {
-  	this._shortCuts(ev);
   }
   
   // update the toolbar state after some time
@@ -3927,27 +3958,11 @@ Xinha.prototype._editorEvent = function(ev)
 // handles ctrl + key shortcuts 
 Xinha.prototype._shortCuts = function (ev)
 {
-  var editor = this;
-  var sel = null;
-  var range = null;
-  var key = String.fromCharCode(Xinha.is_ie ? ev.keyCode : ev.charCode).toLowerCase();
+  var key = this.getKey(ev).toLowerCase();
   var cmd = null;
   var value = null;
   switch (key)
   {
-    case 'a':
-    if ( !Xinha.is_ie )
-    {
-      // KEY select all
-      sel = this._getSelection();
-      sel.removeAllRanges();
-      range = this._createRange();
-      range.selectNodeContents(this._doc.body);
-      sel.addRange(range);
-      Xinha._stopEvent(ev);
-    }
-    break;
-
     // simple key commands follow
 
     case 'b': cmd = "bold"; break;
@@ -3960,15 +3975,10 @@ Xinha.prototype._shortCuts = function (ev)
     case 'j': cmd = "justifyfull"; break;
     case 'z': cmd = "undo"; break;
     case 'y': cmd = "redo"; break;
-    case 'v':
-    if ( Xinha.is_ie || editor.config.htmlareaPaste )
-    {
-      cmd = "paste";
-    }
-    break;
+    case 'v': cmd = "paste"; break;
     case 'n':
     cmd = "formatblock";
-    value = Xinha.is_ie ? "<p>" : "p";
+    value = "p";
     break;
 
     case '0': cmd = "killword"; break;
@@ -3982,10 +3992,6 @@ Xinha.prototype._shortCuts = function (ev)
     case '6':
     cmd = "formatblock";
     value = "h" + key;
-    if ( Xinha.is_ie )
-    {
-      value = "<" + value + ">";
-    }
     break;
   }
   if ( cmd )
@@ -4227,25 +4233,9 @@ Xinha.prototype.scrollToElement = function(e)
     if(!e) return;
   }
   
-  if (1 || Xinha.is_gecko )
-  {
-    var top  = 0;
-    var left = 0;
-    while ( e )
-    {
-      top  += e.offsetTop;
-      left += e.offsetLeft;
-      if ( e.offsetParent && e.offsetParent.tagName.toLowerCase() != 'body' )
-      {
-        e = e.offsetParent;
-      }
-      else
-      {
-        e = null;
-      }
-    }
-    this._iframe.contentWindow.scrollTo(left, top);
-  }
+  // This was at one time limited to Gecko only, but I see no reason for it to be. - James
+  var position = Xinha.getElementTopLeft(e);  
+  this._iframe.contentWindow.scrollTo(position.left, position.top);
 };
 
 // retrieve the HTML
@@ -4276,6 +4266,15 @@ Xinha.prototype.getHTML = function()
 
 Xinha.prototype.outwardHtml = function(html)
 {
+  for ( var i in this.plugins )
+  {
+    var plugin = this.plugins[i].instance;    
+    if ( plugin && typeof plugin.outwardHtml == "function" )
+    {
+      html = plugin.outwardHtml(html);
+    }
+  }
+  
   html = html.replace(/<(\/?)b(\s|>|\/)/ig, "<$1strong$2");
   html = html.replace(/<(\/?)i(\s|>|\/)/ig, "<$1em$2");
   html = html.replace(/<(\/?)strike(\s|>|\/)/ig, "<$1del$2");
@@ -4287,6 +4286,9 @@ Xinha.prototype.outwardHtml = function(html)
   var serverBase = location.href.replace(/(https?:\/\/[^\/]*)\/.*/, '$1') + '/';
 
   // IE puts this in can't figure out why
+  //  leaving this in the core instead of InternetExplorer 
+  //  because it might be something we are doing so could present itself
+  //  in other browsers - James 
   html = html.replace(/https?:\/\/null\//g, serverBase);
 
   // Make semi-absolute links to be truely absolute
@@ -4302,14 +4304,7 @@ Xinha.prototype.outwardHtml = function(html)
   {
     html = html.replace(/[^ -~\r\n\t]/g, function(c) { return '&#'+c.charCodeAt(0)+';'; });
   }
-
-  // ticket:56, the "greesemonkey" plugin for Firefox adds this junk,
-  // so we strip it out.  Original submitter gave a plugin, but that's
-  // a bit much just for this IMHO - james
-  if ( Xinha.is_gecko )
-  {
-    html = html.replace(/<script[\s]*src[\s]*=[\s]*['"]chrome:\/\/.*?["']>[\s]*<\/script>/ig, '');
-  }
+  
   //prevent execution of JavaScript (Ticket #685)
   html = html.replace(/(<script[^>]*)(freezescript)/gi,"$1javascript");
 
@@ -4318,21 +4313,21 @@ Xinha.prototype.outwardHtml = function(html)
   {
     html = Xinha.stripCoreCSS(html);
   }
-  
-  
+    
   return html;
 };
 
 Xinha.prototype.inwardHtml = function(html)
-{
-  // Midas uses b and i instead of strong and em, um, hello,
-  // mozilla, this is the 21st century calling!
-  if ( Xinha.is_gecko )
+{  
+  for ( var i in this.plugins )
   {
-    html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
-    html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");    
+    var plugin = this.plugins[i].instance;    
+    if ( plugin && typeof plugin.inwardHtml == "function" )
+    {
+      html = plugin.inwardHtml(html);
+    }    
   }
-  
+    
   // Both IE and Gecko use strike instead of del (#523)
   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
 
@@ -4443,16 +4438,6 @@ Xinha.prototype.fixRelativeLinks = function(html)
 
     html = html.replace(baseRe, '$1');
   }
-
-//  if ( Xinha.is_ie )
-//  {
-    // This is now done in inward & outward
-    // Don't know why but IE is doing this (putting http://null/ on links?!
-    // alert(html);
-    // var nullRE = new RegExp('https?:\/\/null\/', 'g');
-    // html = html.replace(nullRE, location.href.replace(/(https?:\/\/[^\/]*\/).*/, '$1'));
-    // alert(html);
-//  }
 
   return html;
 };
@@ -5061,13 +5046,11 @@ Xinha.prototype._toggleBorders = function()
   if ( tables.length !== 0 )
   {
    if ( !this.borders )
-   {
-    name = "bordered";
+   {    
     this.borders = true;
    }
    else
    {
-     name = "";
      this.borders = false;
    }
 
@@ -5075,12 +5058,6 @@ Xinha.prototype._toggleBorders = function()
    {
      if ( this.borders )
      {
-        // flashing the display forces moz to listen (JB:18-04-2005) - #102
-        if ( Xinha.is_gecko )
-        {
-          tables[i].style.display="none";
-          tables[i].style.display="table";
-        }
         Xinha._addClass(tables[i], 'htmtableborders');
      }
      else
@@ -5181,14 +5158,7 @@ Xinha._removeClasses = Xinha.removeClasses;
 Xinha._postback = function(url, data, handler)
 {
   var req = null;
-  if ( Xinha.is_ie )
-  {
-   req = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  else
-  {
-   req = new XMLHttpRequest();
-  }
+  req = Xinha.getXMLHTTPRequestObject();
 
   var content = '';
   if (typeof data == 'string')
@@ -5232,14 +5202,7 @@ Xinha._postback = function(url, data, handler)
 Xinha._getback = function(url, handler)
 {
   var req = null;
-  if ( Xinha.is_ie )
-  {
-   req = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  else
-  {
-   req = new XMLHttpRequest();
-  }
+  req = Xinha.getXMLHTTPRequestObject();
 
   function callBack()
   {
@@ -5264,14 +5227,7 @@ Xinha._getback = function(url, handler)
 Xinha._geturlcontent = function(url)
 {
   var req = null;
-  if ( Xinha.is_ie )
-  {
-   req = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  else
-  {
-   req = new XMLHttpRequest();
-  }
+  req = Xinha.getXMLHTTPRequestObject();
 
   // Synchronous!
   req.open('GET', url, false);
@@ -5519,27 +5475,35 @@ Xinha.hasDisplayedChildren = function(el)
 
 /**
  * Load a javascript file by inserting it in the HEAD tag and eventually call a function when loaded
+ *
+ * Note that this method cannot be abstracted into browser specific files
+ *  because this method LOADS the browser specific files.  Hopefully it should work for most
+ *  browsers as it is.
+ *
  * @param {string} U (Url)      Source url of the file to load
  * @param {object} C {Callback} Callback function to launch once ready (optional)
  * @param {object} O (scOpe)    Application scope for the callback function (optional)
  * @param {object} B (Bonus}    Arbitrary object send as a param to the callback function (optional)
  * @public
+ * 
  */
-Xinha._loadback = function(U, C, O, B)
-{
-  var T = Xinha.is_ie ? "onreadystatechange" : "onload";
+ 
+Xinha._loadback = function(Url, Callback, Scope, Bonus)
+{  
+  var T = !Xinha.is_ie ? "onload" : 'onreadystatechange';
   var S = document.createElement("script");
   S.type = "text/javascript";
-  S.src = U;
-  if ( C )
+  S.src = Url;
+  if ( Callback )
   {
     S[T] = function()
-    {
-      if ( Xinha.is_ie && ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) )
+    {      
+      if ( Xinha.is_ie && ( ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) ) )
       {
         return;
       }
-      C.call(O ? O : this, B);
+      
+      Callback.call(Scope ? Scope : this, Bonus);
       S[T] = null;
     };
   }
@@ -5737,17 +5701,40 @@ Xinha.viewportSize = function(scope)
   return {'x':x,'y':y};
 };
 
+/** 
+ *  Calculate the top and left pixel position of an element in the DOM.
+ *
+ *  @param   element HTML Element DOM Node
+ *  @returns Object with integer properties top and left
+ */
+ 
+Xinha.getElementTopLeft = function(element)
+{
+  var position = { top:0, left:0 };
+  while ( element )
+  {
+    position.top  += element.offsetTop;
+    position.left += element.offsetLeft;
+    if ( element.offsetParent && element.offsetParent.tagName.toLowerCase() != 'body' )
+    {
+      element = element.offsetParent;
+    }
+    else
+    {
+      element = null;
+    }
+  }
+  
+  return position;
+}
+
 // find X position of an element
 Xinha.findPosX = function(obj)
 {
   var curleft = 0;
   if ( obj.offsetParent )
   {
-    while ( obj.offsetParent )
-    {
-      curleft += obj.offsetLeft;
-      obj = obj.offsetParent;
-    }
+    return Xinha.getElementTopLeft(obj).left;    
   }
   else if ( obj.x )
   {
@@ -5762,11 +5749,7 @@ Xinha.findPosY = function(obj)
   var curtop = 0;
   if ( obj.offsetParent )
   {
-    while ( obj.offsetParent )
-    {
-      curtop += obj.offsetTop;
-      obj = obj.offsetParent;
-    }
+    return Xinha.getElementTopLeft(obj).top;    
   }
   else if ( obj.y )
   {
@@ -5917,6 +5900,32 @@ Xinha.prototype.createRange           = function(sel) { Xinha.notImplemented("cr
  
 Xinha.prototype.isKeyEvent            = function(event) { Xinha.notImplemented("isKeyEvent"); }
 
+/** Determines if the given key event object represents a combination of CTRL-<key>,
+ *  which for Xinha is a shortcut.  Note that CTRL-ALT-<key> is not a shortcut.
+ *
+ *  @param    keyEvent
+ *  @returns  true|false
+ */
+ 
+Xinha.prototype.isShortCut = function(keyEvent)
+{
+  if(keyEvent.ctrlKey && !keyEvent.altKey)
+  {
+    return true;
+  }
+  
+  return false;
+}
+
+/** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
+ *  this method will return 'a', press SHIFT-a and it will return 'A'.
+ * 
+ *  @param   keyEvent
+ *  @returns string
+ */
+                                   
+Xinha.prototype.getKey = function(keyEvent) { Xinha.notImplemented("getKey"); }
+
 /** Return the HTML string of the given Element, including the Element.
  * 
  * @param element HTML Element DomNode
@@ -5925,8 +5934,23 @@ Xinha.prototype.isKeyEvent            = function(event) { Xinha.notImplemented("
  
 Xinha.getOuterHTML = function(element) { Xinha.notImplemented("getOuterHTML"); }
 
+/** Get a new XMLHTTPRequest Object ready to be used. 
+ *
+ * @returns object XMLHTTPRequest 
+ */
 
-
+Xinha.getXMLHTTPRequestObject = function() 
+{       
+  try
+  {    
+    return new XMLHttpRequest();
+  }
+  catch(e)
+  {
+    Xinha.notImplemented('getXMLHTTPRequestObject');
+  }
+}
+ 
 // Compatability - all these names are deprecated and will be removed in a future version
 Xinha.prototype._activeElement  = function(sel) { return this.activeElement(sel); }
 Xinha.prototype._selectionEmpty = function(sel) { return this.selectionEmpty(sel); }
