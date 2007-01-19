@@ -40,10 +40,13 @@ function PopupWin(editor, title, handler, initFunction)
   doc.open();
   var html = "<html><head><title>" + title + "</title>\n";
   // html += "<base href='" + base + "htmlarea.js' />\n";
-  html += "<style type='text/css'>@import url(" + _editor_url + "htmlarea.css);</style>\n";
-  html += "<style type='text/css'>@import url(" + _editor_url + "skins/" + _editor_skin + "/skin.css);</style>\n";
+  html += '<style type="text/css">@import url(' + _editor_url + 'Xinha.css);</style>\n';
+  if ( _editor_skin != "" )
+  {
+    html += '<style type="text/css">@import url(' + _editor_url + 'skins/' + _editor_skin + '/skin.css);</style>\n';
+  }
   html += "</head>\n";
-  html += "<body class='dialog popupwin' id='--HA-body'></body></html>";
+  html += '<body class="dialog popupwin" id="--HA-body"></body></html>';
   doc.write(html);
   doc.close();
 
