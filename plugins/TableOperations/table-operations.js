@@ -598,6 +598,10 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		var cells = null;
 		if (!HTMLArea.is_ie) {
 			try {
+				if (sel.rangeCount < 2) {
+					alert("Please select the cells you want to merge.")
+					break;
+				}
 				while (range = sel.getRangeAt(i++)) {
 					var td = range.startContainer.childNodes[range.startOffset];
 					if (td.parentNode != row) {

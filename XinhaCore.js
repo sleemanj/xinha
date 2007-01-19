@@ -3223,9 +3223,18 @@ Xinha.prototype.updateToolbar = function(noStatus)
         if ( match || ( ancestors[k].tagName.toLowerCase() == context ) )
         {
           inContext = true;
+          var contextSplit = null;
+          var att = null;
+          var comp = null;
+          var attVal = null;
           for ( var ka = 0; ka < attrs.length; ++ka )
           {
-            if (!ancestors[k].getAttribute(attrs[ka]))
+            contextSplit = attrs[ka].match(/(.*)(==|!=|===|!==|>|>=|<|<=)(.*)/);
+            att = contextSplit[1];
+            comp = contextSplit[2];
+            attVal = contextSplit[3];
+
+            if (!eval(ancestors[k][att] + comp + attVal))
             {
               inContext = false;
               break;
