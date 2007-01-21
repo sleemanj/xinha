@@ -1,3 +1,26 @@
+
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    --  This is the standard implementation of the method for rendering HTML code from the DOM
+    --
+    --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
+    --
+    --
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
+    --------------------------------------------------------------------------*/
+
 // Retrieves the HTML code from the given node.	 This is a replacement for
 // getting innerHTML, using standard DOM calls.
 // Wrapper catch a Mozilla-Exception with non well formed html source code

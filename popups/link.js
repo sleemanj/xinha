@@ -1,3 +1,28 @@
+
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    --  This is the standard implementation of the Xinha.prototype._createLink method,
+    --  which provides the functionality to insert a hyperlink in the editor.
+    --
+    --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
+    --
+    --
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
+    --------------------------------------------------------------------------*/
+                                                    
+
 Xinha.prototype._createLink = function(link)
 {
   var editor = this;
@@ -15,8 +40,8 @@ Xinha.prototype._createLink = function(link)
   }
   if ( !link )
   {
-    var sel = editor._getSelection();
-    var range = editor._createRange(sel);
+    var sel = editor.getSelection();
+    var range = editor.createRange(sel);
     var compare = 0;
     if ( Xinha.is_ie )
     {
