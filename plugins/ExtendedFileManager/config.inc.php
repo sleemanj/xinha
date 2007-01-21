@@ -36,7 +36,7 @@ if(empty($insertMode))
 * The ?__plugin=ExtendedFileManager& is required.
 */
 
-$IMConfig['backend_url'] = "backend.php?__plugin=ExtendedFileManager&amp;";
+$IMConfig['backend_url'] = "backend.php?__plugin=ExtendedFileManager&";
 
 /**
 * Backend Installation Directory
