@@ -3310,7 +3310,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
           }
         }
 
-        var deepestAncestor = this._getFirstAncestor(this._getSelection(), blocks);
+        var deepestAncestor = this._getFirstAncestor(this.getSelection(), blocks);
         if ( deepestAncestor )
         {
           for ( var x = 0; x < blocks.length; x++ )
@@ -3393,7 +3393,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
   // @todo : since this part is disabled since a long time, does it still need to be in the source ?
   if( 0 && Xinha.is_gecko )
   {
-    var s = this._getSelection();
+    var s = this.getSelection();
     // If the last character in the last text node of the parent tag
     // and the parent tag is not a block tag
     if ( s && s.isCollapsed && s.anchorNode &&
@@ -3451,13 +3451,13 @@ Xinha.prototype.getAllAncestors = function()
 // Returns the deepest ancestor of the selection that is of the current type
 Xinha.prototype._getFirstAncestor = function(sel, types)
 {
-  var prnt = this._activeElement(sel);
+  var prnt = this.activeElement(sel);
   if ( prnt === null )
   {
     // Hmm, I think Xinha.getParentElement() would do the job better?? - James
     try
     {
-      prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+      prnt = (Xinha.is_ie ? this.createRange(sel).parentElement() : this.createRange(sel).commonAncestorContainer);
     }
     catch(ex)
     {
@@ -3503,7 +3503,7 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
 Xinha.prototype._getAncestorBlock = function(sel)
 {
   // Scan upwards to find a block level element that we can change or apply to
-  var prnt = (Xinha.is_ie ? this._createRange(sel).parentElement : this._createRange(sel).commonAncestorContainer);
+  var prnt = (Xinha.is_ie ? this.createRange(sel).parentElement : this.createRange(sel).commonAncestorContainer);
 
   while ( prnt && ( prnt.nodeType == 1 ) )
   {
@@ -3550,7 +3550,7 @@ Xinha.prototype._createImplicitBlock = function(type)
 {
   // expand it until we reach a block element in either direction
   // then wrap the selection in a block and return
-  var sel = this._getSelection();
+  var sel = this.getSelection();
   if ( Xinha.is_ie )
   {
     sel.empty();
@@ -3560,7 +3560,7 @@ Xinha.prototype._createImplicitBlock = function(type)
     sel.collapseToStart();
   }
 
-  var rng = this._createRange(sel);
+  var rng = this.createRange(sel);
 
   // Expand UP
 
@@ -3598,8 +3598,8 @@ Xinha.prototype.hasSelectedText = function()
 // Called when the user clicks the Insert Table button
 Xinha.prototype._insertTable = function()
 {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+  var sel = this.getSelection();
+  var range = this.createRange(sel);
   var editor = this;	// for nested functions
   this._popupDialog(
     editor.config.URIs.insert_table,
@@ -3773,7 +3773,7 @@ Xinha.prototype._colorSelector = function(cmdID)
   var cback = function(color) { editor._doc.execCommand(cmdID, false, color); };
   if ( Xinha.is_ie )
   {
-    var range = editor._createRange(editor._getSelection());
+    var range = editor.createRange(editor.getSelection());
     cback = function(color)
     {
       range.select();
@@ -3891,7 +3891,7 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
     case 'justifyright' :
     {
       cmdID.match(/^justify(.*)$/);
-      var ae = this._activeElement(this._getSelection());      
+      var ae = this.activeElement(this.getSelection());      
       if(ae && ae.tagName.toLowerCase() == 'img')
       {
         ae.align = ae.align == RegExp.$1 ? '' : RegExp.$1;
@@ -4044,8 +4044,8 @@ Xinha.prototype.dom_checkInsertP = function()
 {
   var p, body;
   // Get the insertion point, we'll scrub any highlighted text the user wants rid of while we are there.
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+  var sel = this.getSelection();
+  var range = this.createRange(sel);
   if ( !range.collapsed )
   {
     range.deleteContents();
@@ -4223,7 +4223,7 @@ Xinha.prototype.dom_checkInsertP = function()
 
   this.activateEditor();
 
-  sel = this._getSelection();
+  sel = this.getSelection();
   sel.removeAllRanges();
   sel.collapse(newblock,0);
 

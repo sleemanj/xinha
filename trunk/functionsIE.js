@@ -34,9 +34,9 @@
 InternetExplorer._pluginInfo = {
   name          : "Internet Explorer",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision$",
+  version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL$",
+  developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
   license       : "htmlArea"
 };
 
@@ -107,10 +107,10 @@ InternetExplorer.prototype.onKeyPress = function(ev)
 InternetExplorer.prototype.handleBackspace = function()
 {
   var editor = this.editor;
-  var sel = editor._getSelection();
+  var sel = editor.getSelection();
   if ( sel.type == 'Control' )
   {
-    var elm = editor._activeElement(sel);
+    var elm = editor.activeElement(sel);
     Xinha.removeFromParent(elm);
     return true;
   }
@@ -120,7 +120,7 @@ InternetExplorer.prototype.handleBackspace = function()
   //    link_here |
   // where | is the cursor, and backspace over the last e, then the link
   // will de-link, which is a bit tedious
-  var range = editor._createRange(sel);
+  var range = editor.createRange(sel);
   var r2 = range.duplicate();
   r2.moveStart("character", -1);
   var a = r2.parentElement();
@@ -167,9 +167,9 @@ Xinha.prototype.getParentElement = function(sel)
 {
   if ( typeof sel == 'undefined' )
   {
-    sel = this._getSelection();
+    sel = this.getSelection();
   }
-  var range = this._createRange(sel);
+  var range = this.createRange(sel);
   switch ( sel.type )
   {
     case "Text":
@@ -213,9 +213,9 @@ Xinha.prototype.getParentElement = function(sel)
  * @returns null | DomNode
  */
  
-Xinha.prototype._activeElement = function(sel)
+Xinha.prototype.activeElement = function(sel)
 {
-  if ( ( sel === null ) || this._selectionEmpty(sel) )
+  if ( ( sel === null ) || this.selectionEmpty(sel) )
   {
     return null;
   }
@@ -273,7 +273,7 @@ Xinha.prototype.selectionEmpty = function(sel)
     return true;
   }
 
-  return this._createRange(sel).htmlText === '';
+  return this.createRange(sel).htmlText === '';
 };
 
 /**
@@ -312,8 +312,8 @@ Xinha.prototype.selectNodeContents = function(node, pos)
  
 Xinha.prototype.insertHTML = function(html)
 {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+  var sel = this.getSelection();
+  var range = this.createRange(sel);
   this.focusEditor();
   range.pasteHTML(html);
 };
@@ -326,8 +326,8 @@ Xinha.prototype.insertHTML = function(html)
  
 Xinha.prototype.getSelectedHTML = function()
 {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+  var sel = this.getSelection();
+  var range = this.createRange(sel);
   
   // Need to be careful of control ranges which won't have htmlText
   if( range.htmlText )

@@ -34,9 +34,9 @@
 Gecko._pluginInfo = {
   name          : "Gecko",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision$",
+  version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL$",
+  developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
   license       : "htmlArea"
 };
 
@@ -51,7 +51,7 @@ function Gecko(editor) {
 Gecko.prototype.onKeyPress = function(ev)
 {
   var editor = this.editor;
-  var s = editor._getSelection();
+  var s = editor.getSelection();
   
   // Handle shortcuts
   if(editor.isShortCut(ev))
@@ -73,9 +73,9 @@ Gecko.prototype.onKeyPress = function(ev)
       case 'a':
       {
         // KEY select all
-        sel = editor._getSelection();
+        sel = editor.getSelection();
         sel.removeAllRanges();
-        range = editor._createRange();
+        range = editor.createRange();
         range.selectNodeContents(editor._doc.body);
         sel.addRange(range);
         Xinha._stopEvent(ev);
@@ -379,8 +379,8 @@ Gecko.prototype.onExecCommand = function(cmdID, UI, param)
 
 Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
 {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+  var sel = this.getSelection();
+  var range = this.createRange(sel);
   // remove the current selection
   sel.removeAllRanges();
   range.deleteContents();
@@ -395,7 +395,7 @@ Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
       {
         // do optimized insertion
         node.insertData(pos, toBeInserted.data);
-        range = this._createRange();
+        range = this.createRange();
         range.setEnd(node, pos + toBeInserted.length);
         range.setStart(node, pos + toBeInserted.length);
         sel.addRange(range);
@@ -433,9 +433,9 @@ Xinha.prototype.getParentElement = function(sel)
 {
   if ( typeof sel == 'undefined' )
   {
-    sel = this._getSelection();
+    sel = this.getSelection();
   }
-  var range = this._createRange(sel);
+  var range = this.createRange(sel);
   try
   {
     var p = range.commonAncestorContainer;
@@ -467,7 +467,7 @@ Xinha.prototype.getParentElement = function(sel)
 
 Xinha.prototype.activeElement = function(sel)
 {
-  if ( ( sel === null ) || this._selectionEmpty(sel) )
+  if ( ( sel === null ) || this.selectionEmpty(sel) )
   {
     return null;
   }
@@ -529,7 +529,7 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   this.forceRedraw();
   var range;
   var collapsed = typeof pos == "undefined" ? true : false;
-  var sel = this._getSelection();
+  var sel = this.getSelection();
   range = this._doc.createRange();
   // Tables and Images get selected as "objects" rather than the text contents
   if ( collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|textarea|select/) )
@@ -552,8 +552,8 @@ Xinha.prototype.selectNodeContents = function(node, pos)
  
 Xinha.prototype.insertHTML = function(html)
 {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+  var sel = this.getSelection();
+  var range = this.createRange(sel);
   this.focusEditor();
   // construct a new document fragment with the given HTML
   var fragment = this._doc.createDocumentFragment();
@@ -575,8 +575,8 @@ Xinha.prototype.insertHTML = function(html)
  
 Xinha.prototype.getSelectedHTML = function()
 {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+  var sel = this.getSelection();
+  var range = this.createRange(sel);
   return Xinha.getHTML(range.cloneContents(), false, this);
 };
   
