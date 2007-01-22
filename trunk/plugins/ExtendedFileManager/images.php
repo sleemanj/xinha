@@ -263,7 +263,7 @@ function asc2hex ($temp)
     var _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 
 	if(window.top)
-		HTMLArea = window.top.HTMLArea;
+		Xinha = window.top.Xinha;
 
 	function hideMessage()
 	{

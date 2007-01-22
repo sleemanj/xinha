@@ -85,7 +85,7 @@
 /* <![CDATA[ */
 
 	if(window.opener)
-		HTMLArea = window.opener.HTMLArea;
+		Xinha = window.opener.Xinha;
 		
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getImagesURL(); ?>";

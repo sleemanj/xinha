@@ -3,7 +3,7 @@
 /**
 * @fileoverview By Adam Wright, for The University of Western Australia
 *
-* Distributed under the same terms as HTMLArea itself.
+* Distributed under the same terms as Xinha itself.
 * This notice MUST stay intact for use (see license.txt).
 *
 * Heavily modified by Yermo Lamers of DTLink, LLC, College Park, Md., USA.
@@ -107,7 +107,7 @@ function EnterParagraphs(editor)
   // hook into the event handler to intercept key presses if we are using
 	// gecko (Mozilla/FireFox)
 
-  if (HTMLArea.is_gecko)
+  if (Xinha.is_gecko)
 		{
 		//this.ddt._ddt( "enter-paragraphs.js","23", "EnterParagraphs(): we are gecko. Setting event handler." );
     this.onKeyPress = this.__onKeyPress;
@@ -782,7 +782,7 @@ EnterParagraphs.prototype.processRng = function(rng, search_direction, roam, nei
 			{
 
 			// FIXME:/CHECKME: When Xinha is switched from WYSIWYG to text mode
-			// HTMLArea.getHTMLWrapper() will strip out the trailing br. Not sure why.
+			// Xinha.getHTMLWrapper() will strip out the trailing br. Not sure why.
 
 			// fill.appendChild(editor._doc.createElement('br'));
 
@@ -963,8 +963,8 @@ EnterParagraphs.prototype.handleEnter = function(ev)
 
   // Grab the selection and associated range
 
-  var sel = this.editor._getSelection();
-  var rng = this.editor._createRange(sel);
+  var sel = this.editor.getSelection();
+  var rng = this.editor.createRange(sel);
 
 	//this.ddt._ddtDumpNode( "enter-paragraphs.js", "757", "handleEnter(): initial range is: ", rng );
 
@@ -1081,7 +1081,7 @@ EnterParagraphs.prototype.handleEnter = function(ev)
 
   this.editor.updateToolbar();
 
-	HTMLArea._stopEvent(ev);
+	Xinha._stopEvent(ev);
 
 	return true;
 

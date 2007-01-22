@@ -21,7 +21,7 @@ function Init() {
  
 	var snippets = config.snippets;
 	
-	if ( config.pageStyle && !HTMLArea.is_ie)
+	if ( config.pageStyle && !Xinha.is_ie)
     {
 		var style = document.createElement("style");
 		style.type = "text/css";
@@ -54,10 +54,10 @@ function Init() {
 		var insertAsVariable = '';
 		if (config.InsertSnippet.showInsertVariable)
 		{
-			insertAsVariable = ' | <a href="javascript:onOK('+i+','+'\'variable\''+')">'+HTMLArea._lc("Variable","InsertSnippet")+'</a>';
+			insertAsVariable = ' | <a href="javascript:onOK('+i+','+'\'variable\''+')">'+Xinha._lc("Variable","InsertSnippet")+'</a>';
 		}
 		var new_cell = trow.insertCell(0);
-		new_cell.innerHTML = snippet_name +': '+HTMLArea._lc("Insert as","InsertSnippet")+' <a href="javascript:onOK('+i+','+'\'html\''+')">HTML</a>'+insertAsVariable + ' (<a id="show_preview'+i+'" href="javascript:preview(\'show\','+i+')">'+HTMLArea._lc("Show preview","InsertSnippet")+'</a>)<div id="preview'+i+'" style="display:none">'+snippets[i]['HTML']+'</div>'; 
+		new_cell.innerHTML = snippet_name +': '+Xinha._lc("Insert as","InsertSnippet")+' <a href="javascript:onOK('+i+','+'\'html\''+')">HTML</a>'+insertAsVariable + ' (<a id="show_preview'+i+'" href="javascript:preview(\'show\','+i+')">'+Xinha._lc("Show preview","InsertSnippet")+'</a>)<div id="preview'+i+'" style="display:none">'+snippets[i]['HTML']+'</div>'; 
 		new_cell.id = 'cell' + i;
 			
 	}
@@ -71,13 +71,13 @@ function preview(action,i) {
 	{
 		case 'show':
 			document.getElementById('preview'+i).style.display = 'block';
-			show_preview_link.innerHTML = HTMLArea._lc("Hide preview","InsertSnippet");
+			show_preview_link.innerHTML = Xinha._lc("Hide preview","InsertSnippet");
 			show_preview_link.href = "javascript:preview('hide','"+i+"');";
 			
 		break;
 		case 'hide':
 			document.getElementById('preview'+i).style.display = 'none';
-			show_preview_link.innerHTML = HTMLArea._lc("Show preview","InsertSnippet");
+			show_preview_link.innerHTML = Xinha._lc("Show preview","InsertSnippet");
 			show_preview_link.href = "javascript:preview('show','"+i+"');";
 		break;
 	}
