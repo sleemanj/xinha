@@ -95,7 +95,6 @@ Xinha.prototype._insertImage = function(image)
       for ( var field in param )
       {
         var value = param[field];
-        alert(field + "=" + value);
         switch (field)
         {
           case "f_alt":
