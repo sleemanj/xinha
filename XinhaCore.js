@@ -2062,7 +2062,7 @@ Xinha.prototype.hidePanel = function(panel)
   {
     panel.style.display = 'none';
     this.notifyOf('panel_change', {'action':'hide','panel':panel});
-    try { this.scrollToElement(); } catch(e) { }
+    //try { this.scrollToElement(); } catch(e) { }
   }
 };
 
@@ -2072,7 +2072,7 @@ Xinha.prototype.showPanel = function(panel)
   {
     panel.style.display = '';    
     this.notifyOf('panel_change', {'action':'show','panel':panel});
-    try { this.scrollToElement(); } catch(e) { }
+    //try { this.scrollToElement(); } catch(e) { }
   }
 };
 
