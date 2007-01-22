@@ -2060,9 +2060,10 @@ Xinha.prototype.hidePanel = function(panel)
 {
   if ( panel && panel.style.display != 'none' )
   {
+    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
     panel.style.display = 'none';
     this.notifyOf('panel_change', {'action':'hide','panel':panel});
-    //try { this.scrollToElement(); } catch(e) { }
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
   }
 };
 
@@ -2070,9 +2071,10 @@ Xinha.prototype.showPanel = function(panel)
 {
   if ( panel && panel.style.display == 'none' )
   {
-    panel.style.display = '';    
+    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
+  	panel.style.display = '';    
     this.notifyOf('panel_change', {'action':'show','panel':panel});
-    //try { this.scrollToElement(); } catch(e) { }
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
   }
 };
 
@@ -5496,6 +5498,29 @@ Xinha.viewportSize = function(scope)
   {
     x = scope.document.body.clientWidth;
     y = scope.document.body.clientHeight;
+  }
+  return {'x':x,'y':y};
+};
+
+Xinha.prototype.scrollPos = function(scope)
+{
+  scope = (scope) ? scope : window;
+  var x,y;
+  if (scope.pageYOffset) // all except Explorer
+  {
+    x = scope.pageXOffset;
+    y = scope.pageYOffset;
+  }
+  else if (document.documentElement && document.documentElement.scrollTop)
+    // Explorer 6 Strict
+  {
+    x = scope.document.documentElement.scrollLeft;
+    y = scope.document.documentElement.scrollTop;
+  }
+  else if (document.body) // all other Explorers
+  {
+    x = scope.document.body.scrollLeft;
+    y = scope.document.body.scrollTop;
   }
   return {'x':x,'y':y};
 };
