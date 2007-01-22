@@ -118,6 +118,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         for ( i = 0; i < attrs.length; ++i )
         {
           var a = attrs.item(i);
+          if (typeof a.nodeValue != 'string') continue;
           if ( !a.specified 
             // IE claims these are !a.specified even though they are.  Perhaps others too?
             && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value')                
