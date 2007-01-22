@@ -4234,7 +4234,7 @@ Xinha.prototype.fixRelativeLinks = function(html)
     }
     else
     {
-      baseRe = new RegExp( "((href|src|background)=\")(" + document.location.href.replace( /([^\/]*\/?)$/, '' ).replace( Xinha.RE_Specials, '\\$1' ) + ")", 'g' );
+      baseRe = new RegExp( "((href|src|background)=\")(" + document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' ).replace( Xinha.RE_Specials, '\\$1' ) + ")", 'g' );
     }
 
     html = html.replace(baseRe, '$1');
