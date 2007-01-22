@@ -9,7 +9,7 @@
 * Implementation by Yermo Lamers, http://www.formvista.com
 *
 * (c) DTLink, LLC 2005.
-* Distributed under the same terms as HTMLArea itself.
+* Distributed under the same terms as Xinha itself.
 * This notice MUST stay intact for use (see license.txt).
 *
 * DESCRIPTION:

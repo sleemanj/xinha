@@ -51,7 +51,7 @@ Linker.prototype._lc = function(string)
 
 Linker.prototype._createLink = function(a)
 {
-  if(!a && this.editor._selectionEmpty(this.editor.getSelection()))
+  if(!a && this.editor.selectionEmpty(this.editor.getSelection()))
   {       
     alert(this._lc("You must select some text before making a new link."));
     return false;

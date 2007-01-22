@@ -9,25 +9,8 @@
  */
 
 /**
- * Installation example for ExtendedFileManager plugin.
+ * For installation details see Readme.txt in the plugin folder
  *
- *
- *      HTMLArea.loadPlugin("ExtendedFileManager");
- *      HTMLArea.onload = function() {
- *      var myeditor = new HTMLArea("textarea_id");
- *      myeditor.registerPlugin(ExtendedFileManager);
- *      myeditor.generate();
- *      };
- *      HTMLArea.init();
- *
- *
- * Then configure the config.inc.php file, that is all.
- */
-
-/**
- * It is pretty simple, this file over rides the HTMLArea.prototype._insertImage
- * function with our own, only difference is the popupDialog url
- * point that to the php script.
  */
 
 function ExtendedFileManager(editor)
@@ -42,7 +25,7 @@ function ExtendedFileManager(editor)
     if (cfg.ExtendedFileManager.use_linker) {
         cfg.registerButton({
             id        : "linkfile",
-            tooltip   : HTMLArea._lc("Insert File Link",'ExtendedFileManager'),
+            tooltip   : Xinha._lc("Insert File Link",'ExtendedFileManager'),
             image     : _editor_url + 'plugins/ExtendedFileManager/img/ed_linkfile.gif',
             textMode  : false,
             action    : function(editor) {
@@ -61,7 +44,7 @@ ExtendedFileManager._pluginInfo = {
     license       : "htmlArea"
 };
 
-HTMLArea.Config.prototype.ExtendedFileManager =
+Xinha.Config.prototype.ExtendedFileManager =
 {
   'use_linker': true,
   'backend'    : _editor_url + 'plugins/ExtendedFileManager/backend.php?__plugin=ExtendedFileManager&',
@@ -74,7 +57,7 @@ HTMLArea.Config.prototype.ExtendedFileManager =
 
 // Over ride the _insertImage function in htmlarea.js.
 // Open up the ExtendedFileManger script instead.
-HTMLArea.prototype._insertImage = function(image) {
+Xinha.prototype._insertImage = function(image) {
 
     var editor = this;  // for nested functions
     var outparam = null;
@@ -86,7 +69,7 @@ HTMLArea.prototype._insertImage = function(image) {
 
     if (image) {
         outparam = {
-            f_url    : HTMLArea.is_ie ? image.src : image.getAttribute("src"),
+            f_url    : Xinha.is_ie ? image.src : image.getAttribute("src"),
             f_alt    : image.alt,
             f_title  : image.title,
             f_border : image.style.borderWidth ? image.style.borderWidth : image.border,
@@ -139,9 +122,9 @@ HTMLArea.prototype._insertImage = function(image) {
         var img = image;
         if (!img) {
         	if ( !param.f_url ) return false;
-            if (HTMLArea.is_ie) {
-                var sel = editor._getSelection();
-                var range = editor._createRange(sel);
+            if (Xinha.is_ie) {
+                var sel = editor.getSelection();
+                var range = editor.createRange(sel);
                 editor._doc.execCommand("insertimage", false, param.f_url);
                 img = range.parentElement();
                 // wonder if this works...
@@ -204,7 +187,7 @@ HTMLArea.prototype._insertImage = function(image) {
 
 };
 
-HTMLArea.prototype._linkFile = function(link) {
+Xinha.prototype._linkFile = function(link) {
 
     var editor = this;
     var outparam = null;
@@ -218,10 +201,10 @@ HTMLArea.prototype._linkFile = function(link) {
         }
     }
     if (!link) {
-        var sel = editor._getSelection();
-        var range = editor._createRange(sel);
+        var sel = editor.getSelection();
+        var range = editor.createRange(sel);
         var compare = 0;
-        if (HTMLArea.is_ie) {
+        if (Xinha.is_ie) {
             if ( sel.type == "Control" )
                 compare = range.length;
             else
@@ -230,7 +213,7 @@ HTMLArea.prototype._linkFile = function(link) {
             compare = range.compareBoundaryPoints(range.START_TO_END, range);
         }
         if (compare == 0) {
-            alert(HTMLArea._lc("You must select some text before making a new link.", 'ExtendedFileManager'));
+            alert(Xinha._lc("You must select some text before making a new link.", 'ExtendedFileManager'));
             return;
         }
         outparam = {
@@ -242,7 +225,7 @@ HTMLArea.prototype._linkFile = function(link) {
         };
     } else
         outparam = {
-            f_href   : HTMLArea.is_ie ? link.href : link.getAttribute("href"),
+            f_href   : Xinha.is_ie ? link.href : link.getAttribute("href"),
             f_title  : link.title,
             f_target : link.target,
             f_usetarget : editor.config.makeLinkShowsTarget,
@@ -276,9 +259,9 @@ HTMLArea.prototype._linkFile = function(link) {
         if (!a) try {
             editor._doc.execCommand("createlink", false, param.f_href);
             a = editor.getParentElement();
-            var sel = editor._getSelection();
-            var range = editor._createRange(sel);
-            if (!HTMLArea.is_ie) {
+            var sel = editor.getSelection();
+            var range = editor.createRange(sel);
+            if (!Xinha.is_ie) {
                 a = range.startContainer;
                 if (!/^a$/i.test(a.tagName)) {
                     a = a.nextSibling;
@@ -338,12 +321,12 @@ function convertToHex(color) {
         var colors = color.split(' ');
         var colorstring = '';
         for (var i = 0; i < colors.length; i++) {
-            colorstring += HTMLArea._colorToRgb(colors[i]);
+            colorstring += Xinha._colorToRgb(colors[i]);
             if (i + 1 < colors.length)
                 colorstring += " ";
         }
         return colorstring;
     }
 
-    return HTMLArea._colorToRgb(color);
+    return Xinha._colorToRgb(color);
 }

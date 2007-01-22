@@ -23,7 +23,7 @@ SuperClean._pluginInfo =
 };
 
 SuperClean.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'SuperClean');
+    return Xinha._lc(string, 'SuperClean');
 };
 
 /** superClean combines HTMLTidy, Word Cleaning and font stripping into a single function
@@ -58,7 +58,7 @@ SuperClean.prototype._superClean = function(opts, obj)
 
     if(opts.tidy)
     {
-      HTMLArea._postback(editor.config.SuperClean.tidy_handler, {'content' : editor.getInnerHTML()},
+      Xinha._postback(editor.config.SuperClean.tidy_handler, {'content' : editor.getInnerHTML()},
                          function(javascriptResponse) { eval(javascriptResponse) });
     }
     return true;
@@ -91,7 +91,7 @@ SuperClean.prototype._superClean = function(opts, obj)
   }
 };
 
-HTMLArea.Config.prototype.SuperClean =
+Xinha.Config.prototype.SuperClean =
 {
   // set to the URL of a handler for html tidy, this handler
   //  (see tidy.php for an example) must that a single post variable
@@ -106,13 +106,13 @@ HTMLArea.Config.prototype.SuperClean =
   // or 'filter_name' : {label: "Label", checked: true/false, filterFunction: function(html) { ... return html;} }
   // filterFunction in the second format above is optional.
 
-  'filters': { 'tidy': HTMLArea._lc('General tidy up and correction of some problems.', 'SuperClean'),
-               'word_clean': HTMLArea._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),
-               'remove_faces': HTMLArea._lc('Remove custom typefaces (font "styles").', 'SuperClean'),
-               'remove_sizes': HTMLArea._lc('Remove custom font sizes.', 'SuperClean'),
-               'remove_colors': HTMLArea._lc('Remove custom text colors.', 'SuperClean'),
-               'remove_lang': HTMLArea._lc('Remove lang attributes.', 'SuperClean'),
-               'remove_fancy_quotes': {label:HTMLArea._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false}
+  'filters': { 'tidy': Xinha._lc('General tidy up and correction of some problems.', 'SuperClean'),
+               'word_clean': Xinha._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),
+               'remove_faces': Xinha._lc('Remove custom typefaces (font "styles").', 'SuperClean'),
+               'remove_sizes': Xinha._lc('Remove custom font sizes.', 'SuperClean'),
+               'remove_colors': Xinha._lc('Remove custom text colors.', 'SuperClean'),
+               'remove_lang': Xinha._lc('Remove lang attributes.', 'SuperClean'),
+               'remove_fancy_quotes': {label:Xinha._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false}
   //additional custom filters (defined in plugins/SuperClean/filters/word.js)
                //'paragraph': 'remove paragraphs'},
                //'word': 'exteded Word-Filter' },
@@ -170,7 +170,7 @@ SuperClean.filterFunctions.remove_fancy_quotes = function(D)
 
 SuperClean.filterFunctions.tidy = function(html, editor)
 {
-  HTMLArea._postback(editor.config.SuperClean.tidy_handler, {'content' : html},
+  Xinha._postback(editor.config.SuperClean.tidy_handler, {'content' : html},
                       function(javascriptResponse) { eval(javascriptResponse) });
 };
 
@@ -206,7 +206,7 @@ SuperClean.prototype.onGenerate = function()
       }
       else
       {
-        HTMLArea._getback(_editor_url + 'plugins/SuperClean/filters/'+filter+'.js',
+        Xinha._getback(_editor_url + 'plugins/SuperClean/filters/'+filter+'.js',
                       function(func) {
                         eval('SuperClean.filterFunctions.'+filter+'='+func+';');
                         sc.onGenerate();
@@ -243,7 +243,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
 
   if(this.html == false)
   {
-    HTMLArea._getback(_editor_url + 'plugins/SuperClean/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
+    Xinha._getback(_editor_url + 'plugins/SuperClean/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
     return;
   }
 
@@ -269,7 +269,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
   var html = this.html;
 
   // Now we have everything we need, so we can build the dialog.
-  var dialog = this.dialog = new HTMLArea.Dialog(SuperClean.editor, this.html, 'SuperClean');
+  var dialog = this.dialog = new Xinha.Dialog(SuperClean.editor, this.html, 'SuperClean');
 
   this.ready = true;
 };

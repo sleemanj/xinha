@@ -33,7 +33,7 @@ $editor = new ImageEditor($manager);
     var _backend_url = "<?php print $IMConfig['backend_url']."&mode=$insertMode"; ?>&";
 
 	if(window.opener)
-		HTMLArea = window.opener.HTMLArea;
+		Xinha = window.opener.Xinha;
 /*]]>*/
 </script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/editor.js"></script>

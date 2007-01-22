@@ -33,7 +33,7 @@ function InsertSnippet(editor) {
             backend += '&' + i + '=' + encodeURIComponent(cfg.InsertSnippet.backend_data[i]);
         }
     }
-    HTMLArea._getback(backend,function (getback) {eval(getback); self.snippets = snippets;});
+    Xinha._getback(backend,function (getback) {eval(getback); self.snippets = snippets;});
 }
 
 InsertSnippet.prototype.onUpdateToolbar = function() {
@@ -55,7 +55,7 @@ InsertSnippet._pluginInfo = {
 };
 
 InsertSnippet.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'InsertSnippet');
+    return Xinha._lc(string, 'InsertSnippet');
 };
 
 InsertSnippet.prototype.onGenerate = function() {
@@ -70,7 +70,7 @@ InsertSnippet.prototype.onGenerate = function() {
   }
 };
 
-HTMLArea.Config.prototype.InsertSnippet =
+Xinha.Config.prototype.InsertSnippet =
 {
   'snippets' : _editor_url+"plugins/InsertSnippet/demosnippets.js", // purely demo purposes, you should change this
   'css' : ['../InsertSnippet.css'], //deprecated, CSS is now pulled from xinha_config

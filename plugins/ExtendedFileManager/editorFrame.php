@@ -30,10 +30,10 @@ $imageInfo = $editor->processImage();
     var _backend_url = "<?php print $IMConfig['backend_url']."&mode=$insertMode"; ?>&";
 
     if(window.top)
-    	HTMLArea = window.top.HTMLArea;
+    	Xinha = window.top.Xinha;
 
     function i18n(str) {
-        return HTMLArea._lc(str, 'ImageManager');
+        return Xinha._lc(str, 'ImageManager');
     }
 
 	var mode = "<?php echo $editor->getAction(); ?>" //crop, scale, measure

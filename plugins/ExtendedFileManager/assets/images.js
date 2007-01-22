@@ -9,7 +9,7 @@
  */
 
 function i18n(str) {
-    return HTMLArea._lc(str, 'ExtendedFileManager');
+    return Xinha._lc(str, 'ExtendedFileManager');
 }
 
 function changeDir(newDir)

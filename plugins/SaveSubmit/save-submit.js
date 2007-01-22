@@ -29,7 +29,7 @@ function SaveSubmit(editor) {
 }
 
 SaveSubmit.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'SaveSubmit');
+    return Xinha._lc(string, 'SaveSubmit');
 }
 
 SaveSubmit._pluginInfo = {
@@ -46,17 +46,17 @@ SaveSubmit._pluginInfo = {
 SaveSubmit.prototype.onGenerate = function() {
 	var self = this;
 	var doc = this.editordoc = this.editor._iframe.contentWindow.document;
-	HTMLArea._addEvents(doc, ["mouseup","keyup","keypress","keydown"],
+	Xinha._addEvents(doc, ["mouseup","keyup","keypress","keydown"],
 			    function (event) {
-			    return self.onEvent(HTMLArea.is_ie ? self.editor._iframe.contentWindow.event : event);
+			    return self.onEvent(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
 			    });
 }
 
 SaveSubmit.prototype.onEvent = function(ev) {
 
-	var keyEvent = (HTMLArea.is_ie && ev.type == "keydown") || (!HTMLArea.is_ie && ev.type == "keypress");
+	var keyEvent = (Xinha.is_ie && ev.type == "keydown") || (!Xinha.is_ie && ev.type == "keypress");
 
-	if (keyEvent && ev.ctrlKey && String.fromCharCode(HTMLArea.is_ie ? ev.keyCode : ev.charCode).toLowerCase() == 's') {
+	if (keyEvent && ev.ctrlKey && String.fromCharCode(Xinha.is_ie ? ev.keyCode : ev.charCode).toLowerCase() == 's') {
 			this.save(this.editor);
 	}
 	else {
@@ -110,7 +110,7 @@ SaveSubmit.prototype.save =  function(editor) {
 		content += ((i>0) ? '&' : '') + form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value);
 	}
 
-	HTMLArea._postback(editor._textArea.form.action, content, function(getback) {
+	Xinha._postback(editor._textArea.form.action, content, function(getback) {
 
 		if (getback) {
 			self.setMessage(getback);
@@ -127,7 +127,7 @@ SaveSubmit.prototype.setMessage = function(string) {
   var textarea = this.textarea;
   if ( !document.getElementById("message_sub_" + textarea.name)) { return ; }
   var elt = document.getElementById("message_sub_" + textarea.name);
-  elt.innerHTML = HTMLArea._lc(string, 'SaveSubmit');
+  elt.innerHTML = Xinha._lc(string, 'SaveSubmit');
 }
 
 SaveSubmit.prototype.removeMessage = function() {
@@ -146,8 +146,8 @@ SaveSubmit.prototype.buildMessage   = function() {
 	loading_message.className = "loading";
 	loading_message.style.width    = htmlarea.offsetWidth +'px' ;//(this.editor._iframe.offsetWidth != 0) ? this.editor._iframe.offsetWidth +'px' : this.editor._initial_ta_size.w;
 
-	loading_message.style.left     = HTMLArea.findPosX(htmlarea) +  'px';
-	loading_message.style.top      = (HTMLArea.findPosY(htmlarea) + parseInt(htmlarea.offsetHeight) / 2) - 50 +  'px';
+	loading_message.style.left     = Xinha.findPosX(htmlarea) +  'px';
+	loading_message.style.top      = (Xinha.findPosY(htmlarea) + parseInt(htmlarea.offsetHeight) / 2) - 50 +  'px';
 
 	var loading_main = document.createElement("div");
 	loading_main.className = "loading_main";

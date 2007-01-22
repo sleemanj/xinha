@@ -46,8 +46,8 @@ function Equation(editor) {
 	mathcolor = cfg.Equation.mathcolor;       // change it to "" (to inherit) or any other color
 	mathfontfamily = cfg.Equation.mathfontfamily;
 	
-	//if (HTMLArea.is_ie) return;
-	if (!HTMLArea.is_ie)
+	//if (Xinha.is_ie) return;
+	if (!Xinha.is_ie)
 	{	
 		editor.notifyOn( 'modechange',
 			function( e, args )
@@ -55,16 +55,16 @@ function Equation(editor) {
 					self.onModeChange( args );
 				}
 			);
-    	HTMLArea.prependDom0Event (editor._textArea.form,'submit',function () {self.unParse();self.reParse = true});
+    	Xinha.prependDom0Event (editor._textArea.form,'submit',function () {self.unParse();self.reParse = true});
 	}
 	
 	if (typeof  AMprocessNode != "function")
 	{
-		HTMLArea._loadback(_editor_url + "plugins/Equation/ASCIIMathML.js", function () { translate(); });
+		Xinha._loadback(_editor_url + "plugins/Equation/ASCIIMathML.js", function () { translate(); });
 	}
 }
 
-HTMLArea.Config.prototype.Equation =
+Xinha.Config.prototype.Equation =
 {
 	"mathcolor" : "red",       // change it to "" (to inherit) or any other color
 	"mathfontfamily" : "serif" // change to "" to inherit (works in IE) 
@@ -84,7 +84,7 @@ Equation._pluginInfo = {
 
 Equation.prototype._lc = function(string) 
 {
-    return HTMLArea._lc(string, 'Equation');
+    return Xinha._lc(string, 'Equation');
 };
 Equation.prototype.onGenerate = function() 
 {
@@ -92,7 +92,7 @@ Equation.prototype.onGenerate = function()
 };
 Equation.prototype.onUpdateToolbar = function() 
 {
-	if (!HTMLArea.is_ie && this.reParse) AMprocessNode(this.editor._doc.body, false);
+	if (!Xinha.is_ie && this.reParse) AMprocessNode(this.editor._doc.body, false);
 };
 
 Equation.prototype.onModeChange = function( args )
@@ -111,7 +111,7 @@ Equation.prototype.onModeChange = function( args )
 
 Equation.prototype.parse = function ()
 {
-	if (!HTMLArea.is_ie)
+	if (!Xinha.is_ie)
 	{
 		var doc = this.editor._doc;
 		var spans = doc.getElementsByTagName("span");
@@ -148,7 +148,7 @@ Equation.prototype.buttonPress = function()
 	
 	args['editor'] = editor;
 	
-	var parent = editor._getFirstAncestor(editor._getSelection(),['span']);
+	var parent = editor._getFirstAncestor(editor.getSelection(),['span']);
 	if (parent)
 	{
 		args["editedNode"] = parent;
@@ -180,7 +180,7 @@ Equation.prototype.insert = function (param)
 		}
 		else if (!param["editedNode"] && formula != '')
 		{
-			if (!HTMLArea.is_ie)
+			if (!Xinha.is_ie)
 			{			
 				var span = document.createElement('span');
 				span.className = 'AM';
@@ -193,6 +193,6 @@ Equation.prototype.insert = function (param)
 				this.editor.insertHTML('<span class="AM" title="'+formula+'">'+formula+'</span>');
 			}
 		}
-		if (!HTMLArea.is_ie) AMprocessNode(this.editor._doc.body, false);
+		if (!Xinha.is_ie) AMprocessNode(this.editor._doc.body, false);
 	}
 }

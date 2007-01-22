@@ -19,7 +19,7 @@ function comboSelectValue(c, val) {
 
 //Translation
 function i18n(str) {
-    return HTMLArea._lc(str, 'ExtendedFileManager');
+    return Xinha._lc(str, 'ExtendedFileManager');
 }
 
 //set the alignment options
@@ -49,11 +49,11 @@ function onTargetChanged() {
 
 if (manager_mode == "link")
 {
-    var offsetForInputs = (HTMLArea.is_ie) ? 155 : 140;
+    var offsetForInputs = (Xinha.is_ie) ? 155 : 140;
 }
 else
 {
-    var offsetForInputs = (HTMLArea.is_ie) ? 220 : 200;
+    var offsetForInputs = (Xinha.is_ie) ? 220 : 200;
 }    
 init = function ()
 {
@@ -99,8 +99,8 @@ init = function ()
         // The image URL may reference one of the automatically resized images
         // (when the user alters the dimensions in the picker), clean that up
         // so it looks right and we get back to a normal f_url
-        var rd = _resized_dir.replace(HTMLArea.RE_Specials, '\\$1');
-        var rp = _resized_prefix.replace(HTMLArea.RE_Specials, '\\$1');
+        var rd = _resized_dir.replace(Xinha.RE_Specials, '\\$1');
+        var rp = _resized_prefix.replace(Xinha.RE_Specials, '\\$1');
         var dreg = new RegExp('^(.*/)' + rd + '/' + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
 
         if(dreg.test(param.f_url))
@@ -320,7 +320,7 @@ function onOK()
           || (origsize.h != param.f_height) )
         {
           // Yup, need to resize
-          var resized = HTMLArea._geturlcontent(window.opener._editor_url + 'plugins/ExtendedFileManager/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
+          var resized = Xinha._geturlcontent(window.opener._editor_url + 'plugins/ExtendedFileManager/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
 
           // alert(resized);
           resized = eval(resized);
@@ -528,7 +528,7 @@ function newFolder()
 
 function resize()
 {
-	var win = HTMLArea.viewportSize(window);
+	var win = Xinha.viewportSize(window);
 	document.getElementById('imgManager').style.height = win.y - 150 - offsetForInputs + 'px';
 	
 	return true;
