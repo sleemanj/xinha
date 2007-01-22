@@ -21,7 +21,6 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
-                                                    
 
 // Called when the user clicks on "InsertImage" button.  If an image is already
 // there, it will just modify it's properties.
@@ -47,7 +46,9 @@ Xinha.prototype._insertImage = function(image)
       f_border : image.border,
       f_align  : image.align,
       f_vert   : image.vspace,
-      f_horiz  : image.hspace
+      f_horiz  : image.hspace,
+      f_width  : image.width,
+      f_height : image.height
     };
   }
   this._popupDialog(
@@ -94,23 +95,51 @@ Xinha.prototype._insertImage = function(image)
       for ( var field in param )
       {
         var value = param[field];
+        alert(field + "=" + value);
         switch (field)
         {
           case "f_alt":
-            img.alt = value;
-          break;
+            if (value)
+              img.alt = value
+            else
+              img.removeAttribute("alt");
+            break;
           case "f_border":
-            img.border = parseInt(value || "0", 10);
-          break;
+            if (value)
+              img.border = parseInt(value || "0")
+            else
+              img.removeAttribute("border");
+            break;
           case "f_align":
-            img.align = value;
-          break;
+            if (value)
+              img.align = value
+            else
+              img.removeAttribute("align");
+            break;
           case "f_vert":
-            img.vspace = parseInt(value || "0", 10);
-          break;
+            if (value)
+              img.vspace = parseInt(value || "0")
+            else
+              img.removeAttribute("vspace");
+            break;
           case "f_horiz":
-            img.hspace = parseInt(value || "0", 10);
-          break;
+            if (value)
+              img.hspace = parseInt(value || "0")
+            else
+              img.removeAttribute("hspace");
+            break;
+          case "f_width":
+            if (value)
+              img.width = parseInt(value || "0");
+            else
+              img.removeAttribute("width");
+            break;
+          case "f_height":
+            if (value)
+              img.height = parseInt(value || "0");
+            else
+              img.removeAttribute("height");
+            break;
         }
       }
     },

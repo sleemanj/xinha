@@ -11,7 +11,7 @@
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Example of Xinha</title>
-  <link rel="stylesheet" href="full_example.css" />
+  <link rel="stylesheet" type="text/css" href="full_example.css" />
 
   <script type="text/javascript">
     function showError( sMsg, sUrl, sLine){
@@ -27,7 +27,7 @@
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/ext_example-body\.html.*/, '')
-    //moved _editor_lang & _editor_skin to init function because of error thrown when frame document not ready  
+    //moved _editor_lang & _editor_skin to init function because of error thrown when frame document not ready
   </script>
 
   <!-- Load up the actual editor core -->
@@ -150,11 +150,6 @@
           combos : [ { options: keywrds1, context: "body" },
                      { options: keywrds2, context: "li" } ]
         }
-      }
-
-      if(typeof InsertPicture != 'undefined') {
-        // Path for InsertPicture plugin
-        InsertPicture.PicturePath = '/schmal/pictures/';
       }
 
       if(typeof Filter != 'undefined') {
