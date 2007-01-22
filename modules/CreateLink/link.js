@@ -13,7 +13,7 @@
     --  This is the standard implementation of the Xinha.prototype._createLink method,
     --  which provides the functionality to insert a hyperlink in the editor.
     --
-    --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
+    --  he file is loaded as a special plugin by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
     --  $HeadURL$
@@ -21,7 +21,19 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
-                                                    
+CreateLink._pluginInfo = {
+  name          : "CreateLink",
+  origin        : "Xinha Core",
+  version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer     : "The Xinha Core Developer Team",
+  developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  sponsor       : "",
+  sponsor_url   : "",
+  license       : "htmlArea"
+};
+
+function CreateLink(editor) {
+}                                                       
 
 Xinha.prototype._createLink = function(link)
 {
@@ -81,7 +93,7 @@ Xinha.prototype._createLink = function(link)
       f_usetarget : editor.config.makeLinkShowsTarget
     };
   }
-  this._popupDialog(
+  Dialog(
     editor.config.URIs.link,
     function(param)
     {

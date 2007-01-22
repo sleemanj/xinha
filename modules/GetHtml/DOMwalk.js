@@ -20,6 +20,20 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
+function GetHtmlImplementation(editor) {
+    this.editor = editor;
+}
+
+GetHtmlImplementation._pluginInfo = {
+  name          : "GetHtmlImplementation DOMwalk",
+  origin        : "Xinha Core",
+  version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer     : "The Xinha Core Developer Team",
+  developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  sponsor       : "",
+  sponsor_url   : "",
+  license       : "htmlArea"
+};
 
 // Retrieves the HTML code from the given node.	 This is a replacement for
 // getting innerHTML, using standard DOM calls.

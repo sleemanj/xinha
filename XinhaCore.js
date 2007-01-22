@@ -278,6 +278,12 @@ Xinha.Config = function()
                                 //   and will probably be slower than 'dirty'.  This is the "EnterParagraphs"
                                 //   plugin from "hipikat", rolled in to be part of the core code
 
+  
+  // possible values 
+  //    'DOMwalk' (the "original")
+  //    'TransformInnerHTML' (this used to be the GetHtml plugin)
+  this.getHtmlMethod = 'DOMwalk';
+  
   // maximum size of the undo queue
   this.undoSteps = 20;
 
@@ -458,9 +464,9 @@ Xinha.Config = function()
   this.URIs =
   {
    "blank": "popups/blank.html",
-   "link": "link.html",
-   "insert_image": "insert_image.html",
-   "insert_table": "insert_table.html",
+   "link":  _editor_url + "modules/CreateLink/link.html",
+   "insert_image": _editor_url + "modules/InsertImage/insert_image.html",
+   "insert_table":  _editor_url + "modules/InsertTable/insert_table.html",
    "select_color": "select_color.html",
    "about": "about.html",
    "help": "editor_help.html"
@@ -1444,14 +1450,14 @@ Xinha.prototype._createStatusBar = function()
 Xinha.prototype.generate = function ()
 {
   var i;
-  var editor = this;	// we'll need "this" in some nested functions
+  var editor = this;  // we'll need "this" in some nested functions
   
   // Now load a specific browser plugin which will implement the above for us.
   if (Xinha.is_ie)
   {
     if ( typeof InternetExplorer == 'undefined' )
     {            
-      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, _editor_url + 'functionsIE.js' );
+      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, _editor_url + 'modules/InternetExplorer/InternetExplorer.js' );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
@@ -1460,7 +1466,7 @@ Xinha.prototype.generate = function ()
   {
     if ( typeof Gecko == 'undefined' )
     {            
-      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, _editor_url + 'functionsMozilla.js' );
+      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, _editor_url + 'modules/Gecko/Gecko.js' );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
@@ -1470,21 +1476,96 @@ Xinha.prototype.generate = function ()
 
   if ( typeof Dialog == 'undefined' )
   {
-    Xinha._loadback(_editor_url + 'dialog.js', this.generate, this );
+    Xinha._loadback(_editor_url + 'modules/Dialogs/dialog.js', this.generate, this );
     return false;
   }
 
   if ( typeof Xinha.Dialog == 'undefined' )
   {
-    Xinha._loadback(_editor_url + 'inline-dialog.js', this.generate, this );
+    Xinha._loadback(_editor_url + 'modules/Dialogs/inline-dialog.js', this.generate, this );
     return false;
   }
 
-  if ( typeof PopupWin == 'undefined' )
+  var toolbar = editor.config.toolbar;
+  for ( i = toolbar.length; --i >= 0; )
   {
-    Xinha._loadback(_editor_url + 'popupwin.js', this.generate, this );
-    return false;
+    for ( var j = toolbar[i].length; --j >= 0; )
+    {
+      switch (toolbar[i][j])
+      {
+        case "popupeditor":
+          if ( typeof FullScreen == "undefined" )
+          {
+            Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, _editor_url + 'modules/FullScreen/full-screen.js' );
+            return false;
+          }
+          editor.registerPlugin('FullScreen');
+        break;
+        case "insertimage":
+          if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' )
+          {
+            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , _editor_url + 'modules/InsertImage/insert_image.js');
+            return false;
+          }
+          else if ( typeof InsertImage != 'undefined') editor.registerPlugin('InsertImage');
+        break;
+        case "createlink":
+          if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' )
+          {
+            Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , _editor_url + 'modules/CreateLink/link.js');
+            return false;
+          }
+          else if ( typeof CreateLink != 'undefined') editor.registerPlugin('CreateLink');
+        break;
+        case "inserttable":
+          if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' )
+          {
+            Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , _editor_url + 'modules/InsertTable/insert_table.js');
+            return false;
+          }
+          else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
+        break;
+      }
+    }
   }
+
+  // If this is gecko, set up the paragraph handling now
+  if ( Xinha.is_gecko && ( editor.config.mozParaHandler == 'best' || editor.config.mozParaHandler == 'dirty' ) )
+  {
+    switch (this.config.mozParaHandler)
+    {
+      case 'dirty':
+        var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerDirty.js';
+      break;
+      default:
+        var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerBest.js';
+      break;
+    }
+    if ( typeof EnterParagraphs == 'undefined' )
+    {
+      Xinha.loadPlugin("EnterParagraphs", function() { editor.generate(); }, ParaHandlerPlugin );
+      return false;
+    }
+    editor.registerPlugin('EnterParagraphs');
+  }
+
+  switch (this.config.getHtmlMethod)
+  {
+    case 'TransformInnerHTML':
+      var getHtmlMethodPlugin = _editor_url + 'modules/GetHtml/TransformInnerHTML.js';
+    break;
+    default:
+      var getHtmlMethodPlugin = _editor_url + 'modules/GetHtml/DOMwalk.js';
+    break;
+  }
+  
+  if (typeof GetHtmlImplementation == 'undefined')
+  {
+    Xinha.loadPlugin("GetHtmlImplementation", function() { editor.generate(); } , getHtmlMethodPlugin);
+    return false;        
+  }
+  else editor.registerPlugin('GetHtmlImplementation');
+  
 
   if ( _editor_skin !== "" )
   {
@@ -1507,59 +1588,7 @@ Xinha.prototype.generate = function ()
       head.appendChild(link);
     }
   }
-
-  //backwards-compatibility: load FullScreen-Plugin if we find a "popupeditor"-button in the toolbar
-  // @todo: remove the backward compatibility in release 2.0
-  var toolbar = editor.config.toolbar;
-  for ( i = toolbar.length; --i >= 0; )
-  {
-    for ( var j = toolbar[i].length; --j >= 0; )
-    {
-      if ( toolbar[i][j]=="popupeditor" )
-      {
-        if ( typeof FullScreen == "undefined" )
-        {
-          // why can't we use the following line instead ?
-//          Xinha.loadPlugin("FullScreen", this.generate );
-          Xinha.loadPlugin("FullScreen", function() { editor.generate(); } );
-          return false;
-        }
-        editor.registerPlugin('FullScreen');
-      }
-    }
-  }
-
-  // If this is gecko, set up the paragraph handling now
-  if ( Xinha.is_gecko && editor.config.mozParaHandler == 'best' )
-  {
-    if ( typeof EnterParagraphs == 'undefined' )
-    {
-      // why can't we use the following line instead ?
-//      Xinha.loadPlugin("EnterParagraphs", this.generate );
-      Xinha.loadPlugin("EnterParagraphs", function() { editor.generate(); } );
-      return false;
-    }
-    editor.registerPlugin('EnterParagraphs');
-  }
-
-  if ( typeof Xinha.getHTML == 'undefined' )
-  {
-      Xinha._loadback(_editor_url + "getHTML.js", function() { editor.generate(); } );
-  	  return false;
-  }
   
-  if ( typeof Xinha.prototype._insertImage == 'undefined' )
-  {
-      Xinha._loadback(_editor_url + "popups/insert_image.js", function() { editor.generate(); } );
-  	  return false;
-  }
-
-  if ( typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' )
-  {
-      Xinha._loadback(_editor_url + "popups/link.js", function() { editor.generate(); } );
-  	  return false;
-  }
-
   // create the editor framework, yah, table layout I know, but much easier
   // to get it working correctly this way, sorry about that, patches welcome.
 
@@ -3598,89 +3627,7 @@ Xinha.prototype.hasSelectedText = function()
 // moved Xinha.prototype._insertImage() to popups/insert_image.js
 
 // Called when the user clicks the Insert Table button
-Xinha.prototype._insertTable = function()
-{
-  var sel = this.getSelection();
-  var range = this.createRange(sel);
-  var editor = this;	// for nested functions
-  this._popupDialog(
-    editor.config.URIs.insert_table,
-    function(param)
-    {
-      // user must have pressed Cancel
-      if ( !param )
-      {
-        return false;
-      }
-      var doc = editor._doc;
-      // create the table element
-      var table = doc.createElement("table");
-      // assign the given arguments
 
-      for ( var field in param )
-      {
-        var value = param[field];
-        if ( !value )
-        {
-          continue;
-        }
-        switch (field)
-        {
-          case "f_width":
-            table.style.width = value + param.f_unit;
-          break;
-          case "f_align":
-            table.align = value;
-          break;
-          case "f_border":
-            table.border = parseInt(value, 10);
-          break;
-          case "f_spacing":
-            table.cellSpacing = parseInt(value, 10);
-          break;
-          case "f_padding":
-            table.cellPadding = parseInt(value, 10);
-          break;
-        }
-      }
-      var cellwidth = 0;
-      if ( param.f_fixed )
-      {
-        cellwidth = Math.floor(100 / parseInt(param.f_cols, 10));
-      }
-      var tbody = doc.createElement("tbody");
-      table.appendChild(tbody);
-      for ( var i = 0; i < param.f_rows; ++i )
-      {
-        var tr = doc.createElement("tr");
-        tbody.appendChild(tr);
-        for ( var j = 0; j < param.f_cols; ++j )
-        {
-          var td = doc.createElement("td");
-          // @todo : check if this line doesnt stop us to use pixel width in cells
-          if (cellwidth)
-          {
-            td.style.width = cellwidth + "%";
-          }
-          tr.appendChild(td);
-          // Browsers like to see something inside the cell (&nbsp;).
-          td.appendChild(doc.createTextNode('\u00a0'));
-        }
-      }
-      if ( Xinha.is_ie )
-      {
-        range.pasteHTML(table.outerHTML);
-      }
-      else
-      {
-        // insert the table
-        editor.insertNodeAtSelection(table);
-      }
-      return true;
-    },
-    null
-  );
-};
 
 /***************************************************
  *  Category: EVENT HANDLERS
@@ -3738,7 +3685,7 @@ Xinha.prototype._colorSelector = function(cmdID)
   
   if ( typeof colorPicker == 'undefined' )
   {
-    Xinha._loadback(_editor_url + 'popups/color_picker.js', function () {editor._colorSelector(cmdID)});
+    Xinha._loadback(_editor_url + 'modules/ColorPicker/ColorPicker.js', function () {editor._colorSelector(cmdID)});
     return false;
   }
 
