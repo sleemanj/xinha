@@ -16,17 +16,17 @@
     --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/Gecko/paraHandlerDirty.js $
+    --  $LastChangedDate: 2007-01-23 09:22:22 +1300 (Tue, 23 Jan 2007) $
+    --  $LastChangedRevision: 688 $
+    --  $LastChangedBy: ray $
     --------------------------------------------------------------------------*/
 EnterParagraphs._pluginInfo = {
   name          : "EnterParagraphs",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  version       : "$LastChangedRevision: 688 $".replace(/^[^:]*: (.*) \$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer_url : "$HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/Gecko/paraHandlerDirty.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
