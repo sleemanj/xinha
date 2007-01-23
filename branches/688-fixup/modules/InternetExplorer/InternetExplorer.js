@@ -37,6 +37,8 @@ InternetExplorer._pluginInfo = {
   version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
   developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  sponsor       : "",
+  sponsor_url   : "",
   license       : "htmlArea"
 };
 

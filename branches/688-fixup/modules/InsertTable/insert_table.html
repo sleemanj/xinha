@@ -3,12 +3,12 @@
 <head>
   <title>Insert Table</title>
 
-<script type="text/javascript" src="popup.js"></script>
-<link rel="stylesheet" type="text/css" href="popup.css" />
+<script type="text/javascript" src="../../popups/popup.js"></script>
+<link rel="stylesheet" type="text/css" href="../../popups/popup.css" />
 
 <script type="text/javascript">
 
-window.resizeTo(410, 250);
+window.resizeTo(425, 250);
 
 Xinha = window.opener.Xinha;
 function i18n(str) {
@@ -18,7 +18,7 @@ function i18n(str) {
 function Init() {
   Xinha = window.opener.Xinha; // load the Xinha plugin and lang file
   __dlg_translate('Xinha');
-  __dlg_init(null, Xinha.is_ie ? null : {width:410,height:250});
+  __dlg_init(null, Xinha.is_ie ? null : {width:425,height:250});
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_unit").selectedIndex = 1;
   document.getElementById("f_unit").selectedIndex = 0;

@@ -45,6 +45,11 @@ function TableOperations(editor) {
 
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
+	
+  if ( typeof PopupWin == 'undefined' )
+  {
+    Xinha._loadback(_editor_url + 'modules/Dialogs/popupwin.js');
+  }
 }
 
 TableOperations._pluginInfo = {

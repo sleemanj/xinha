@@ -18,15 +18,17 @@
   *   - Supports htmlRemoveTags config option
   */
   
-function GetHtml(editor) {
+function GetHtmlImplementation(editor) {
     this.editor = editor;
 }
 
-GetHtml._pluginInfo = {
-	name          : "GetHtml",
+GetHtmlImplementation._pluginInfo = {
+	name          : "GetHtmlImplementation TransformInnerHTML",
 	version       : "1.0",
 	developer     : "Nelson Bright",
 	developer_url : "http://www.brightworkweb.com/",
+	sponsor       : "",
+    sponsor_url   : "",
 	license       : "htmlArea"
 };
 
@@ -203,13 +205,5 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 	};
 //	html = HTMLArea.htmlEncode(html);
 
-	return html;
-};
-
-//overload outwardHtml() to handle onclick suppression
-HTMLArea.prototype._origOutwardHtml = HTMLArea.prototype.outwardHtml;
-HTMLArea.prototype.outwardHtml = function(html) {
-	html = html.replace("onclick=\"try{if(document.designMode && document.designMode == 'on') return false;}catch(e){} window.open(", "onclick=\"window.open(");
-	html = this._origOutwardHtml(html);
 	return html;
 };

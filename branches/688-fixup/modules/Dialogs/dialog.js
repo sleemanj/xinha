@@ -1,18 +1,27 @@
-// htmlArea v3.0 - Copyright (c) 2003-2004 interactivetools.com, inc.
-// This copyright notice MUST stay intact for use (see license.txt).
-//
-// Portions (c) dynarch.com, 2003-2004
-//
-// A free WYSIWYG editor replacement for <textarea> fields.
-// For full source code and docs, visit http://www.interactivetools.com/
-//
-// Version 3.0 developed by Mihai Bazon.
-//   http://dynarch.com/mishoo
-//
-// $Id$
 
-// Though "Dialog" looks like an object, it isn't really an object.  Instead
-// it's just namespace for protecting global symbols.
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    --  This is the implementation of the standard popup dialog
+    --
+    --   Though "Dialog" looks like an object, it isn't really an object.  Instead
+    --   it's just namespace for protecting global symbols.
+    --
+    --
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
+    --------------------------------------------------------------------------*/
+
 
 function Dialog(url, action, init) {
 	if (typeof init == "undefined") {
