@@ -39,7 +39,7 @@ FullScreen._pluginInfo =
 };
 
 FullScreen.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'FullScreen');
+    return HTMLArea._lc(string, {url : _editor_url + 'modules/FullScreen/lang/'});
 };
 
 /** fullScreen makes an editor take up the full window space (and resizes when the browser is resized)

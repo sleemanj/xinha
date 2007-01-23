@@ -5060,6 +5060,11 @@ Xinha.uniq = function(prefix)
 Xinha._loadlang = function(context)
 {
   var url, lang;
+  if (typeof context == 'object' && context.url)
+  {
+    url = context.url + _editor_lang + ".js";
+    context = context.context;
+  }
   if ( typeof _editor_lcbackend == "string" )
   {
     //use backend
@@ -5067,7 +5072,7 @@ Xinha._loadlang = function(context)
     url = url.replace(/%lang%/, _editor_lang);
     url = url.replace(/%context%/, context);
   }
-  else
+  else if (!url)
   {
     //use internal files
     if ( context != 'Xinha')
