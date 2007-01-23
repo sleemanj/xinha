@@ -661,10 +661,10 @@ Xinha.getOuterHTML = function(element)
 Xinha.prototype._standardToggleBorders = Xinha.prototype._toggleBorders;
 Xinha.prototype._toggleBorders = function()
 {
-  var result = Xinha.prototype._standardToggleBorders();
+  var result = this._standardToggleBorders();
   
   // flashing the display forces moz to listen (JB:18-04-2005) - #102
-  var tables = this._doc.getElementByTagName('TABLE');
+  var tables = this._doc.getElementsByTagName('TABLE');
   for(var i = 0; i < tables.length; i++)
   {
     tables[i].style.display="none";
