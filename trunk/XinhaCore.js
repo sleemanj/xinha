@@ -5716,10 +5716,17 @@ Xinha.getOuterHTML = function(element) { Xinha.notImplemented("getOuterHTML"); }
  */
 
 Xinha.getXMLHTTPRequestObject = function() 
-{       
+{
   try
   {    
-    return new XMLHttpRequest();
+    if (typeof XMLHttpRequest == "function")
+    {
+  	  return new XMLHttpRequest();
+    }
+  	else if (typeof ActiveXObject == "function")
+  	{
+  	  return new ActiveXObject("Microsoft.XMLHTTP");
+  	}
   }
   catch(e)
   {
