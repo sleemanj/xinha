@@ -399,10 +399,3 @@ Xinha.getOuterHTML = function(element)
 {
   return element.outerHTML;
 };
-  
-/** Get a new XMLHTTPRequest Object ready to be used. 
- *
- * @returns object XMLHTTPRequest 
- */
-
-Xinha.getXMLHTTPRequestObject = function () { return new ActiveXObject("Microsoft.XMLHTTP"); }
