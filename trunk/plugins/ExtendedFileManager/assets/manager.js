@@ -529,7 +529,7 @@ function newFolder()
 function resize()
 {
 	var win = Xinha.viewportSize(window);
-	document.getElementById('imgManager').style.height = win.y - 150 - offsetForInputs + 'px';
+	document.getElementById('imgManager').style.height = parseInt( win.y - 150 - offsetForInputs, 10 ) + 'px';
 	
 	return true;
 }
