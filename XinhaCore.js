@@ -5435,18 +5435,18 @@ Xinha.viewportSize = function(scope)
 {
   scope = (scope) ? scope : window;
   var x,y;
-  if (window.innerHeight) // all except Explorer
+  if (scope.innerHeight) // all except Explorer
   {
     x = scope.innerWidth;
     y = scope.innerHeight;
   }
-  else if (document.documentElement && document.documentElement.clientHeight)
+  else if (scope.document.documentElement && scope.document.documentElement.clientHeight)
   // Explorer 6 Strict Mode
   {
     x = scope.document.documentElement.clientWidth;
     y = scope.document.documentElement.clientHeight;
   }
-  else if (document.body) // other Explorers
+  else if (scope.document.body) // other Explorers
   {
     x = scope.document.body.clientWidth;
     y = scope.document.body.clientHeight;
