@@ -85,13 +85,13 @@ Xinha.prototype._insertImage = function(image) {
         };
 
         // compress 'top right bottom left' syntax into one value if possible
-        outparam.param.f_border = shortSize(outparam.f_border);
-        outparam.param.f_padding = shortSize(outparam.f_padding);
-        outparam.param.f_margin = shortSize(outparam.f_margin);
+        outparam.param.f_border = shortSize(outparam.param.f_border);
+        outparam.param.f_padding = shortSize(outparam.param.f_padding);
+        outparam.param.f_margin = shortSize(outparam.param.f_margin);
 
         // convert rgb() calls to rgb hex
-        outparam.param.f_backgroundColor = convertToHex(outparam.f_backgroundColor);
-        outparam.param.f_borderColor = convertToHex(outparam.f_borderColor);
+        outparam.param.f_backgroundColor = convertToHex(outparam.param.f_backgroundColor);
+        outparam.param.f_borderColor = convertToHex(outparam.param.f_borderColor);
 
     }
 
@@ -191,7 +191,7 @@ Xinha.prototype._insertImage = function(image) {
 Xinha.prototype._linkFile = function(link) {
 
     var editor = this;
-    var outparam = null;
+    var outparam = {"editor" : this, param : null};
     if (typeof link == "undefined") {
         link = this.getParentElement();
         if (link) {
@@ -217,7 +217,7 @@ Xinha.prototype._linkFile = function(link) {
             alert(Xinha._lc("You must select some text before making a new link.", 'ExtendedFileManager'));
             return;
         }
-        outparam = {
+        outparam.param = {
             f_href : '',
             f_title : '',
             f_target : '',
@@ -225,7 +225,7 @@ Xinha.prototype._linkFile = function(link) {
             baseHref: editor.config.baseHref
         };
     } else
-        outparam = {
+        outparam.param = {
             f_href   : Xinha.is_ie ? link.href : link.getAttribute("href"),
             f_title  : link.title,
             f_target : link.target,
