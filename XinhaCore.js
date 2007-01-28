@@ -2370,6 +2370,8 @@ Xinha.prototype.whenDocReady = function(F)
     setTimeout(function() { E.whenDocReady(F); }, 50);
   }
 };
+//Control character for retaining edit location when switching modes
+Xinha.prototype.cc = String.fromCharCode(173); 
 
 // Switches editor mode; parameter can be "textmode" or "wysiwyg".  If no
 // parameter was passed this function toggles between modes.
@@ -2383,6 +2385,7 @@ Xinha.prototype.setMode = function(mode)
   switch ( mode )
   {
     case "textmode":
+      this.setCC("iframe");
       html = this.outwardHtml(this.getHTML());
       this.setHTML(html);
 
@@ -2396,11 +2399,12 @@ Xinha.prototype.setMode = function(mode)
         this._statusBarTree.style.display = "none";
         this._statusBarTextMode.style.display = "";
       }
-
       this.notifyOf('modechange', {'mode':'text'});
+      this.findCC("textarea"); 
     break;
 
     case "wysiwyg":
+      this.setCC("textarea");
       html = this.inwardHtml(this.getHTML());
       this.deactivateEditor();
       this.setHTML(html);
@@ -2412,8 +2416,8 @@ Xinha.prototype.setMode = function(mode)
         this._statusBarTree.style.display = "";
         this._statusBarTextMode.style.display = "none";
       }
-
       this.notifyOf('modechange', {'mode':'wysiwyg'});
+      this.findCC("iframe");
     break;
 
     default:
@@ -5469,13 +5473,13 @@ Xinha.prototype.scrollPos = function(scope)
     x = scope.pageXOffset;
     y = scope.pageYOffset;
   }
-  else if (document.documentElement && document.documentElement.scrollTop)
+  else if (scope.document.documentElement && document.documentElement.scrollTop)
     // Explorer 6 Strict
   {
     x = scope.document.documentElement.scrollLeft;
     y = scope.document.documentElement.scrollTop;
   }
-  else if (document.body) // all other Explorers
+  else if (scope.document.body) // all other Explorers
   {
     x = scope.document.body.scrollLeft;
     y = scope.document.body.scrollTop;

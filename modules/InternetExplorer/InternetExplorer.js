@@ -399,3 +399,43 @@ Xinha.getOuterHTML = function(element)
 {
   return element.outerHTML;
 };
+
+Xinha.prototype.setCC = function ( target )
+{
+  if ( target == "textarea" )
+  {
+    var ta = this._textArea;
+    var pos = document.selection.createRange();
+    pos.collapse();
+    pos.text = this.cc;
+    var index = ta.value.indexOf( this.cc );
+    var before = ta.value.substring( 0, index );
+    var after  = ta.value.substring( index + this.cc.length , ta.value.length );
+    
+    if ( after.match(/^[^<]*>/) )
+    {
+      var tagEnd = after.indexOf(">") + 1;
+      ta.value = before + after.substring( 0, tagEnd ) + this.cc + after.substring( tagEnd, after.length );
+    }
+    else ta.value = before + this.cc + after;
+  }
+  else
+  {
+    var sel = this.getSelection();
+    var r = sel.createRange(); 
+    r.collapse();
+    r.text = this.cc;
+  }
+};
+
+Xinha.prototype.findCC = function ( target )
+{
+  var findIn = ( target == 'textarea' ) ? this._textArea : this._doc.body;
+  range = findIn.createTextRange();
+  if( range.findText( this.cc ) )
+  {
+    range.select();
+    range.text = '';
+  }
+  if ( target == 'textarea' ) this._textArea.focus();
+};
