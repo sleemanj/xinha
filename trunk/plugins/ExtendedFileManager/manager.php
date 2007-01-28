@@ -80,7 +80,7 @@
 <script type="text/javascript" src="../../popups/popup.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/popup.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/dialog.js"></script>
-<?php if (!empty($IMConfig['use_color_pickers'])) { ?><script type="text/javascript" src="../../popups/color_picker.js"></script><?php } ?>
+<?php if (!empty($IMConfig['use_color_pickers'])) { ?><script type="text/javascript" src="../../modules/ColorPicker/ColorPicker.js"></script><?php } ?>
 <script type="text/javascript">
 /* <![CDATA[ */
 

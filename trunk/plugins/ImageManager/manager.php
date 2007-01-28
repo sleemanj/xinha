@@ -29,7 +29,7 @@
  <link href="<?php print $IMConfig['base_url'];?>assets/manager.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../../popups/popup.js"></script>
 <script type="text/javascript" src="assets/popup.js"></script>
-<script type="text/javascript" src="../../popups/color_picker.js"></script>
+<script type="text/javascript" src="../../modules/ColorPicker/ColorPicker.js"></script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/dialog.js"></script>
 <script type="text/javascript">
 /*<![CDATA[*/
