@@ -60,7 +60,8 @@ Xinha.Config.prototype.ExtendedFileManager =
 Xinha.prototype._insertImage = function(image) {
 
     var editor = this;  // for nested functions
-    var outparam = null;
+    var outparam = {"editor" : this, param : null};
+    
     if (typeof image == "undefined") {
         image = this.getParentElement();
         if (image && !/^img$/i.test(image.tagName))
@@ -68,7 +69,7 @@ Xinha.prototype._insertImage = function(image) {
     }
 
     if (image) {
-        outparam = {
+        outparam.param = {
             f_url    : Xinha.is_ie ? image.src : image.getAttribute("src"),
             f_alt    : image.alt,
             f_title  : image.title,
@@ -84,13 +85,13 @@ Xinha.prototype._insertImage = function(image) {
         };
 
         // compress 'top right bottom left' syntax into one value if possible
-        outparam.f_border = shortSize(outparam.f_border);
-        outparam.f_padding = shortSize(outparam.f_padding);
-        outparam.f_margin = shortSize(outparam.f_margin);
+        outparam.param.f_border = shortSize(outparam.f_border);
+        outparam.param.f_padding = shortSize(outparam.f_padding);
+        outparam.param.f_margin = shortSize(outparam.f_margin);
 
         // convert rgb() calls to rgb hex
-        outparam.f_backgroundColor = convertToHex(outparam.f_backgroundColor);
-        outparam.f_borderColor = convertToHex(outparam.f_borderColor);
+        outparam.param.f_backgroundColor = convertToHex(outparam.f_backgroundColor);
+        outparam.param.f_borderColor = convertToHex(outparam.f_borderColor);
 
     }
 

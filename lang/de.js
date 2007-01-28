@@ -153,5 +153,11 @@
   "Register panel right": "Erzeugt rechte Leiste",
   "Register panel left": "Erzeugt linke Leiste",
   "Register panel top": "Erzeugt obere Leiste",
-  "Register panel bottom": "Erzeugt untere Leiste"
+  "Register panel bottom": "Erzeugt untere Leiste",
+  
+  // ColorPicker
+  "Click a color..." : "Farbe wählen",
+  "Sample" : "Beispiel",
+  "Web Safe: " : "Web Safe: ",
+  "Color: " : "Farbe: "
 };

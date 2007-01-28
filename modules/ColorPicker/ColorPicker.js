@@ -76,7 +76,22 @@
    *  </script>
    * }}}
    */
-
+  ColorPicker._pluginInfo =
+  {
+    name     : "colorPicker",
+    version  : "1.0",
+    developer: "James Sleeman",
+    developer_url: "http://www.gogo.co.nz/",
+    c_owner      : "Gogo Internet Services",
+    license      : "htmlArea",
+    sponsor      : "Gogo Internet Services",
+    sponsor_url  : "http://www.gogo.co.nz/"
+  };
+  function ColorPicker() 
+  {
+	// dummy function for Xinha plugin api, note the different names
+  }
+  //the actual function is below
   function colorPicker(params)
   {
     // if the savedColors is empty, try to read the savedColors from cookie
@@ -101,6 +116,7 @@
     this.value = 1;
     this.saved_cells = null;
     this.table = document.createElement('table');
+    this.table.className = "dialog";
     this.table.cellSpacing = this.table.cellPadding = 0;
     this.table.onmouseup = function()
     {
@@ -110,32 +126,34 @@
     this.tbody = document.createElement('tbody');
     this.table.appendChild(this.tbody);
     this.table.style.border = '1px solid WindowFrame';
-    this.table.style.backgroundColor = '#fff';
     this.table.style.zIndex = '1000';
     // Add a title bar and close button
     var tr = document.createElement('tr');
     
     var td = document.createElement('td');
     td.colSpan = this.side;
-    td.style.backgroundColor = '#ccc';
-    td.style.color = '#000';
+    td.className= "title";
     td.style.fontFamily = 'small-caption,caption,sans-serif';
     td.style.fontSize = 'x-small';
-    td.appendChild(document.createTextNode('Click a color...'));
+    td.appendChild(document.createTextNode(Xinha._lc('Click a color...')));
     td.style.borderBottom = '1px solid WindowFrame';
     tr.appendChild(td);
     td = null;
 
     var td = document.createElement('td');
+    td.className= "title";
     td.colSpan = 2;
-    td.style.backgroundColor = '#ccc'; //'ActiveCaption';
+    td.style.fontFamily = 'Tahoma,Verdana,sans-serif';
     td.style.borderBottom = '1px solid WindowFrame';
+    td.style.paddingRight = '0';
     tr.appendChild(td);
+    
 
     var but = document.createElement('div');
-    but.style.height = '12px';
-    but.style.width = '12px';
-    but.style.border = '2px outset';
+    but.title = Xinha._lc("Close");
+    but.className= 'buttonColor';
+    but.style.height = '11px';
+    but.style.width = '11px';
     but.style.cursor = 'pointer';
     but.onclick = function() { picker.close(); };
     but.appendChild(document.createTextNode('\u00D7'));
@@ -144,7 +162,14 @@
     but.style.position = 'relative';
     but.style.cssFloat = 'right';
     but.style.styleFloat = 'right';
-    but.style.backgroundColor = '#eee';
+    but.style.padding = '0';
+    but.style.margin = '2px';
+    but.style.backgroundColor = 'transparent';
+    but.style.fontSize= '11px';
+    if ( !Xinha.is_ie) but.style.lineHeight= '9px'; // line-height:9px is better for centering the x, but IE cuts it off at the bottom :(
+    but.style.letterSpacing= '0';
+    
+        
     td.appendChild(but);
 
     this.tbody.appendChild(tr);
@@ -156,7 +181,9 @@
     this.chosenColor = document.createElement('input');
     this.chosenColor.type = 'text';
     this.chosenColor.maxLength = 7;
-    this.chosenColor.style.width = '56px';
+    this.chosenColor.style.width = '50px';
+    this.chosenColor.style.fontSize = '11px';
+    
     this.chosenColor.onchange = function()
       {
       	if(/#[0-9a-f]{6,6}/i.test(this.value))
@@ -173,7 +200,7 @@
     this.backSample.fontSize = 'x-small';
 
     this.foreSample = document.createElement('div');
-    this.foreSample.appendChild(document.createTextNode('Sample'));
+    this.foreSample.appendChild(document.createTextNode(Xinha._lc('Sample')));
     this.foreSample.style.fontWeight = 'bold';
     this.foreSample.style.fontFamily = 'small-caption,caption,sans-serif';
     this.foreSample.fontSize = 'x-small';
@@ -608,7 +635,7 @@
         {
         var div = document.createElement('div');
         var label = document.createElement('label');
-        label.appendChild(document.createTextNode('Web Safe: '));
+        label.appendChild(document.createTextNode(Xinha._lc('Web Safe: ')));
 
         this.constrain_cb.onclick = function() { picker.pick_color(); };
         label.appendChild(this.constrain_cb);
@@ -623,15 +650,15 @@
         var label = document.createElement('label');
         label.style.fontFamily = 'small-caption,caption,sans-serif';
         label.style.fontSize = 'x-small';
-        label.appendChild(document.createTextNode('Color: '));
+        label.appendChild(document.createTextNode(Xinha._lc('Color: ')));
         label.appendChild(this.chosenColor);
         div.appendChild(label);
         var but = document.createElement('span');
-        but.style.height = '12px';
+        but.className = "buttonColor ";
+        but.style.fontSize = '13px';
         but.style.width = '24px';
-        but.style.border = '2px outset';
-        but.style.backgroundColor = '#eee';
-        but.style.marginLeft = '6px';
+        but.style.marginLeft = '2px';
+        but.style.padding = '0px 4px';
         but.style.cursor = 'pointer';
         but.onclick = function() { colorPicker.remember(picker.chosenColor.value, picker.savecolors); picker.callback(picker.chosenColor.value); picker.close(); };
         but.appendChild(document.createTextNode('OK'));
@@ -750,7 +777,6 @@
       if ( this.iframe ) { this.iframe.style.display = 'none'; }
       @*/
     };
-
   }
 
 // array of the saved colors
@@ -793,3 +819,7 @@ colorPicker.loadColors = function()
     colorPicker.savedColors = unescape(document.cookie.substring(begin, end)).split('-');
   }
 };
+
+colorPicker._lc = function(string) {
+  return Xinha._lc(string);
+}

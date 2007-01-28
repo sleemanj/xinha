@@ -1525,6 +1525,16 @@ Xinha.prototype.generate = function ()
           }
           else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
         break;
+        case "hilitecolor":
+        case "forecolor":
+          if ( typeof ColorPicker == 'undefined')
+          {
+            Xinha.loadPlugin("ColorPicker", function() { editor.generate(); } , _editor_url + 'modules/ColorPicker/ColorPicker.js');
+            return false;
+          }
+          else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
+        break;
+        
       }
     }
   }
@@ -3682,12 +3692,6 @@ Xinha.prototype._comboSelected = function(el, txt)
 Xinha.prototype._colorSelector = function(cmdID)
 {
   var editor = this;	// for nested functions
-  
-  if ( typeof colorPicker == 'undefined' )
-  {
-    Xinha._loadback(_editor_url + 'modules/ColorPicker/ColorPicker.js', function () {editor._colorSelector(cmdID)});
-    return false;
-  }
 
   // backcolor only works with useCSS/styleWithCSS (see mozilla bug #279330 & Midas doc)
   // and its also nicer as <font>
@@ -5057,14 +5061,10 @@ Xinha.uniq = function(prefix)
  *  This function should not be used directly, Xinha._lc will use it when necessary.
  * @param context Case sensitive context name, eg 'Xinha', 'TableOperations', ...
  */
-Xinha._loadlang = function(context)
+Xinha._loadlang = function(context,url)
 {
-  var url, lang;
-  if (typeof context == 'object' && context.url)
-  {
-    url = context.url + _editor_lang + ".js";
-    context = context.context;
-  }
+  var lang;
+  
   if ( typeof _editor_lcbackend == "string" )
   {
     //use backend
@@ -5114,7 +5114,13 @@ Xinha._loadlang = function(context)
  */
 Xinha._lc = function(string, context, replace)
 {
-  var ret;
+  var url,ret;
+  if (typeof context == 'object' && context.url && context.context)
+  {
+    url = context.url + _editor_lang + ".js";
+    context = context.context;
+  }
+
   var m = null;
   if (typeof string == 'string') m = string.match(/\$(.*?)=(.*?)\$/g);
   if (m) 
@@ -5152,7 +5158,7 @@ Xinha._lc = function(string, context, replace)
 
     if ( typeof Xinha._lc_catalog[context] == 'undefined' )
     {
-      Xinha._lc_catalog[context] = Xinha._loadlang(context);
+      Xinha._lc_catalog[context] = Xinha._loadlang(context,url);
     }
 
     var key;
