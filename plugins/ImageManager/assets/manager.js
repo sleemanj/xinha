@@ -61,9 +61,9 @@
       // The image URL may reference one of the automatically resized images 
       // (when the user alters the dimensions in the picker), clean that up
       // so it looks right and we get back to a normal f_url
-      var rd = _resized_dir.replace(HTMLArea.RE_Specials, '\\$1');
-      var rp = _resized_prefix.replace(HTMLArea.RE_Specials, '\\$1');
-      var dreg = new RegExp('^(.*/)' + rd + '/' + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
+      var rd = (_resized_dir) ? _resized_dir.replace(Xinha.RE_Specials, '\\$1') + '/' : '';
+      var rp = _resized_prefix.replace(Xinha.RE_Specials, '\\$1');
+      var dreg = new RegExp('^(.*/)' + rd + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
   
       if(dreg.test(param.f_url))
       {

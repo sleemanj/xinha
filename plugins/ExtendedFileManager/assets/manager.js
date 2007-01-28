@@ -57,7 +57,8 @@ else
 }    
 init = function ()
 {
-    var h =  100 // space above files 
+    
+	var h =  100 // space above files 
            + 250 // files iframe
            + offsetForInputs;
     
@@ -67,21 +68,31 @@ init = function ()
 
     var uploadForm = document.getElementById('uploadForm');
     if(uploadForm) uploadForm.target = 'imgManager';
-
+    
+    var editor = window.dialogArguments.editor;
     if (manager_mode == 'image' && typeof colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
         // Hookup color pickers
+        var pickerConfig = {
+            cellsize:editor.config.colorPickerCellSize,
+            granularity:editor.config.colorPickerGranularity,
+            websafe:editor.config.colorPickerWebSafe,
+            savecolors:editor.config.colorPickerSaveColors
+        };
+
         var bgCol_pick = document.getElementById('bgCol_pick');
         var f_backgroundColor = document.getElementById('f_backgroundColor');
-        var bgColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
+        pickerConfig.callback = function(color){f_backgroundColor.value=color;};
+        var bgColPicker = new colorPicker(pickerConfig);
         bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
 
         var bdCol_pick = document.getElementById('bdCol_pick');
         var f_borderColor = document.getElementById('f_borderColor');
-        var bdColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
+        pickerConfig.callback = function(color){f_borderColor.value=color;};
+        var bgColPicker = new colorPicker(pickerConfig);
         bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
     }
 
-    var param = window.dialogArguments;
+    var param = window.dialogArguments.param;
 
     if(manager_mode=="image" && param)
     {
@@ -99,9 +110,11 @@ init = function ()
         // The image URL may reference one of the automatically resized images
         // (when the user alters the dimensions in the picker), clean that up
         // so it looks right and we get back to a normal f_url
-        var rd = _resized_dir.replace(Xinha.RE_Specials, '\\$1');
+        var rd = (_resized_dir) ? _resized_dir.replace(Xinha.RE_Specials, '\\$1') + '/' : '';
         var rp = _resized_prefix.replace(Xinha.RE_Specials, '\\$1');
-        var dreg = new RegExp('^(.*/)' + rd + '/' + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
+        var dreg = new RegExp('^(.*/)' + rd + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
+
+        var match = param.f_url.match(dreg);
 
         if(dreg.test(param.f_url))
         {
