@@ -156,7 +156,7 @@
             <div style="padding:4px;background-color:#CCC;border:1px inset;width: 100px; height: 100px;">
             <img src="<?php print $IMConfig['base_url'];?>img/1x1_transparent.gif" alt="" id="f_preview" />
             </div>
-            <?php } else if($insertMode=="link" && $IMConfig['link_enable_target'] !== false) {?><label for="f_align">Target Window</label>
+            <?php } else if($insertMode=="link" && $IMConfig['link_enable_target'] !== false) {?><label for="f_align" id="f_target_label">Target Window</label>
 			<select id="f_target" style="width:125px;">
 			  <option value="">None (use implicit)</option>
 			  <option value="_blank">New window (_blank)</option>

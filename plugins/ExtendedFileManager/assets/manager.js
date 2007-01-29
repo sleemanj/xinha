@@ -229,7 +229,7 @@ init = function ()
         {
             document.getElementById("f_target_label").style.visibility = "hidden";
             document.getElementById("f_target").style.visibility = "hidden";
-            document.getElementById("f_target_other").style.visibility = "hidden";
+            document.getElementById("f_other_target").style.visibility = "hidden";
         }
 
         var opt = document.createElement("option");
