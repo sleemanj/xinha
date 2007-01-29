@@ -39,12 +39,12 @@
     // Hookup color pickers
     var bgCol_pick = document.getElementById('bgCol_pick');
     var f_backgroundColor = document.getElementById('f_backgroundColor');
-    var bgColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
+    var bgColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
     bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
 
     var bdCol_pick = document.getElementById('bdCol_pick');
     var f_borderColor = document.getElementById('f_borderColor');
-    var bdColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
+    var bdColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
     bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
 
 
