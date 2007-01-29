@@ -3737,7 +3737,7 @@ Xinha.prototype._colorSelector = function(cmdID)
       editor._doc.execCommand(cmdID, false, color);
     };
   }
-  var picker = new colorPicker(
+  var picker = new Xinha.colorPicker(
   {
   	cellsize:editor.config.colorPickerCellSize,
   	callback:cback,

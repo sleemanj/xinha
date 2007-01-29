@@ -70,7 +70,7 @@ init = function ()
     if(uploadForm) uploadForm.target = 'imgManager';
     
     var editor = window.dialogArguments.editor;
-    if (manager_mode == 'image' && typeof colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
+    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
         // Hookup color pickers
         var pickerConfig = {
             cellsize:editor.config.colorPickerCellSize,
@@ -82,13 +82,13 @@ init = function ()
         var bgCol_pick = document.getElementById('bgCol_pick');
         var f_backgroundColor = document.getElementById('f_backgroundColor');
         pickerConfig.callback = function(color){f_backgroundColor.value=color;};
-        var bgColPicker = new colorPicker(pickerConfig);
+        var bgColPicker = new Xinha.colorPicker(pickerConfig);
         bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
 
         var bdCol_pick = document.getElementById('bdCol_pick');
         var f_borderColor = document.getElementById('f_borderColor');
         pickerConfig.callback = function(color){f_borderColor.value=color;};
-        var bgColPicker = new colorPicker(pickerConfig);
+        var bgColPicker = new Xinha.colorPicker(pickerConfig);
         bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
     }
 

@@ -92,12 +92,12 @@
 	// dummy function for Xinha plugin api, note the different names
   }
   //the actual function is below
-  function colorPicker(params)
+  Xinha.colorPicker = function (params)
   {
     // if the savedColors is empty, try to read the savedColors from cookie
-    if ( colorPicker.savedColors.length === 0 )
+    if ( Xinha.colorPicker.savedColors.length === 0 )
     {
-      colorPicker.loadColors();
+      Xinha.colorPicker.loadColors();
     }
     var picker = this;
     var enablepick = false;
@@ -500,7 +500,7 @@
                 this.style.borderColor = this.colorCode;
             	 }
             };
-            td.ondblclick = function() { colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
+            td.ondblclick = function() { Xinha.colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
             td.appendChild(document.createTextNode(' '));
             td.style.cursor = 'pointer';
             tr.appendChild(td);
@@ -616,7 +616,7 @@
               this.style.borderColor = this.colorCode;
         	   }
           };
-          td.ondblclick = function() { colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
+          td.ondblclick = function() { Xinha.colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
           td.appendChild(document.createTextNode(' '));
           td.style.cursor = 'pointer';
           tr.appendChild(td);
@@ -660,7 +660,7 @@
         but.style.marginLeft = '2px';
         but.style.padding = '0px 4px';
         but.style.cursor = 'pointer';
-        but.onclick = function() { colorPicker.remember(picker.chosenColor.value, picker.savecolors); picker.callback(picker.chosenColor.value); picker.close(); };
+        but.onclick = function() { Xinha.colorPicker.remember(picker.chosenColor.value, picker.savecolors); picker.callback(picker.chosenColor.value); picker.close(); };
         but.appendChild(document.createTextNode('OK'));
         but.align = 'center';
         div.appendChild(but);
@@ -708,9 +708,9 @@
           };
           savedColors.appendChild(div);
         }
-        for ( var savedCols = 0; savedCols < colorPicker.savedColors.length; savedCols++ )
+        for ( var savedCols = 0; savedCols < Xinha.colorPicker.savedColors.length; savedCols++ )
         {
-          createSavedColors(colorPicker.savedColors[savedCols]);
+          createSavedColors(Xinha.colorPicker.savedColors[savedCols]);
         }
         td.appendChild(savedColors);
 
@@ -780,35 +780,35 @@
   }
 
 // array of the saved colors
-colorPicker.savedColors = [];
+Xinha.colorPicker.savedColors = [];
 
 // add the color to the savedColors
-colorPicker.remember = function(color, savecolors)
+Xinha.colorPicker.remember = function(color, savecolors)
 {
   // check if this color is known
-  for ( var i = colorPicker.savedColors.length; i--; )
+  for ( var i = Xinha.colorPicker.savedColors.length; i--; )
   {
-    if ( colorPicker.savedColors[i] == color )
+    if ( Xinha.colorPicker.savedColors[i] == color )
     {
       return false;
     }
   }
   // insert the new color
-  colorPicker.savedColors.splice(0, 0, color);
+  Xinha.colorPicker.savedColors.splice(0, 0, color);
   // limit elements
-  colorPicker.savedColors = colorPicker.savedColors.slice(0, savecolors);
+  Xinha.colorPicker.savedColors = Xinha.colorPicker.savedColors.slice(0, savecolors);
   //[mokhet] probably some more parameters to send to the cookie definition
   // like domain, secure and such, especially with https connection i presume
   // save the cookie
   var expdate = new Date();
   expdate.setMonth(expdate.getMonth() + 1);
 
-  document.cookie = 'XinhaColorPicker=' + escape (colorPicker.savedColors.join('-')) + ';expires=' + expdate.toGMTString();
+  document.cookie = 'XinhaColorPicker=' + escape (Xinha.colorPicker.savedColors.join('-')) + ';expires=' + expdate.toGMTString();
   return true;
 };
 
 // try to read the colors from the cookie
-colorPicker.loadColors = function()
+Xinha.colorPicker.loadColors = function()
 {
   var index = document.cookie.indexOf('XinhaColorPicker');
   if ( index != -1 )
@@ -816,10 +816,10 @@ colorPicker.loadColors = function()
     var begin = (document.cookie.indexOf('=', index) + 1);
     var end = document.cookie.indexOf(';', index);
     if ( end == -1 ) { end = document.cookie.length; }
-    colorPicker.savedColors = unescape(document.cookie.substring(begin, end)).split('-');
+    Xinha.colorPicker.savedColors = unescape(document.cookie.substring(begin, end)).split('-');
   }
 };
 
-colorPicker._lc = function(string) {
+Xinha.colorPicker._lc = function(string) {
   return Xinha._lc(string);
 }
