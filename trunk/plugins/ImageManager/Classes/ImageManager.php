@@ -6,7 +6,7 @@
  * @package ImageManager
  */
 
-require_once('./Classes/Files.php');
+require_once('../ImageManager/Classes/Files.php');
 
 // uncomment to turn on debugging
 
