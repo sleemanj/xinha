@@ -2370,8 +2370,6 @@ Xinha.prototype.whenDocReady = function(F)
     setTimeout(function() { E.whenDocReady(F); }, 50);
   }
 };
-//Control character for retaining edit location when switching modes
-Xinha.prototype.cc = String.fromCharCode(173); 
 
 // Switches editor mode; parameter can be "textmode" or "wysiwyg".  If no
 // parameter was passed this function toggles between modes.

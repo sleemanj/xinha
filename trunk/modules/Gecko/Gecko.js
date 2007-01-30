@@ -654,6 +654,9 @@ Xinha.getOuterHTML = function(element)
   return (new XMLSerializer()).serializeToString(element);
 };
 
+//Control character for retaining edit location when switching modes
+Xinha.prototype.cc = String.fromCharCode(173); 
+
 Xinha.prototype.setCC = function ( target )
 {
   if ( target == "textarea" )
@@ -672,7 +675,7 @@ Xinha.prototype.setCC = function ( target )
   }
   else
   {
-    var sel = this._getSelection();
+    var sel = this.getSelection();
     sel.getRangeAt(0).insertNode( document.createTextNode( this.cc ) );
   }
 };

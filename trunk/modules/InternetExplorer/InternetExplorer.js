@@ -400,6 +400,9 @@ Xinha.getOuterHTML = function(element)
   return element.outerHTML;
 };
 
+// Control character for retaining edit location when switching modes
+Xinha.prototype.cc = String.fromCharCode(0x2009);
+
 Xinha.prototype.setCC = function ( target )
 {
   if ( target == "textarea" )
