@@ -423,8 +423,16 @@ Xinha.prototype.setCC = function ( target )
   {
     var sel = this.getSelection();
     var r = sel.createRange(); 
-    r.collapse();
-    r.text = this.cc;
+    if ( sel.type == 'Control' )
+    {
+      var control = r.item(0);
+      control.outerHTML += this.cc;
+    }
+    else
+    {
+      r.collapse();
+      r.text = this.cc;
+    }
   }
 };
 
