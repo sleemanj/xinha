@@ -88,7 +88,7 @@ init = function ()
         var bdCol_pick = document.getElementById('bdCol_pick');
         var f_borderColor = document.getElementById('f_borderColor');
         pickerConfig.callback = function(color){f_borderColor.value=color;};
-        var bgColPicker = new Xinha.colorPicker(pickerConfig);
+        var bdColPicker = new Xinha.colorPicker(pickerConfig);
         bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
     }
 

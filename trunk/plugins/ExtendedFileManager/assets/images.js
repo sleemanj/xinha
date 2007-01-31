@@ -228,7 +228,7 @@ function showMessage(newMessage)
         if(message.firstChild)
             message.removeChild(message.firstChild);
 
-        message.appendChild(topDoc.createTextNode(newMessage));
+        message.appendChild(topDoc.createTextNode(i18n(newMessage)));
 
         messages.style.display = "block";
     }
