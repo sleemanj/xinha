@@ -443,6 +443,13 @@ Xinha.prototype.findCC = function ( target )
 {
   var findIn = ( target == 'textarea' ) ? this._textArea : this._doc.body;
   range = findIn.createTextRange();
+  // in case the cursor is inside a link automatically created from a url
+  // the cc also appears in the url and we have to strip it out additionally 
+  if( range.findText( escape(this.cc) ) )
+  {
+    range.select();
+    range.text = '';
+  }
   if( range.findText( this.cc ) )
   {
     range.select();
