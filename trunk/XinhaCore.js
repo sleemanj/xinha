@@ -379,6 +379,8 @@ Xinha.Config = function()
 
   // see if the text just typed looks like a URL, or email address
   // and link it appropriatly
+  // Note: Setting this option to false only affects Mozilla based browsers.
+  // In InternetExplorer this is native behaviour and cannot be turned off.
   this.convertUrlsToLinks = true;
 
   // size of color picker cells
