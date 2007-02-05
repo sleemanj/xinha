@@ -8,7 +8,7 @@
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
-HTMLArea.Config.prototype.FormOperations =
+Xinha.Config.prototype.FormOperations =
 {
   // format for fields where multiple values may be selected
   //    'php'          => FieldName[]
@@ -16,7 +16,7 @@ HTMLArea.Config.prototype.FormOperations =
   'multiple_field_format': 'php',
   'allow_edit_form'      : false,
   'default_form_action'  : _editor_url + 'plugins/FormOperations/formmail.php',
-  'default_form_html'    : HTMLArea._geturlcontent(_editor_url + 'plugins/FormOperations/default_form.html')
+  'default_form_html'    : Xinha._geturlcontent(_editor_url + 'plugins/FormOperations/default_form.html')
 };
 
 FormOperations._pluginInfo =
@@ -59,7 +59,7 @@ function FormOperations(editor)
 
   function pasteAndSelect(htmlTag)
   {
-    var id = HTMLArea.uniq('fo');
+    var id = Xinha.uniq('fo');
     htmlTag = htmlTag.replace(/^<([^ \/>]+)/i, '<$1 id="'+id+'"');
     editor.insertHTML(htmlTag);
     var el = editor._doc.getElementById(id);
@@ -72,7 +72,7 @@ function FormOperations(editor)
   var buttonsImage = editor.imgURL('buttons.gif', 'FormOperations');
 
   FormOperations.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'FormOperations');
+    return Xinha._lc(string, 'FormOperations');
   };
 
   this.editor.config.btnList.insert_form =
@@ -169,11 +169,11 @@ FormOperations.prototype.onGenerate = function()
 {
   // Gecko does not register click events on select lists inside the iframe
   // so the only way of detecting that is to do an event on mouse move.
-  if( HTMLArea.is_gecko)
+  if( Xinha.is_gecko)
   {
     var editor = this.editor;
     var doc    = this.editor._doc;
-    HTMLArea._addEvents
+    Xinha._addEvents
     (doc, ["mousemove"],
      function (event) {
        return editor._editorEvent(event);
@@ -187,7 +187,7 @@ FormOperations.prototype._preparePanel = function ()
   if(this.html == false)
   {
 
-    HTMLArea._getback(_editor_url + 'plugins/FormOperations/panel.html',
+    Xinha._getback(_editor_url + 'plugins/FormOperations/panel.html',
       function(txt)
       {
         fo.html = txt;
@@ -197,23 +197,23 @@ FormOperations.prototype._preparePanel = function ()
     return false;
   }
 
-  if(typeof HTMLArea.Dialog == 'undefined')
+  if(typeof Xinha.Dialog == 'undefined')
   {
-    HTMLArea._loadback
-      (_editor_url + 'inline-dialog.js', function() { fo._preparePanel(); } );
+    Xinha._loadback
+      (_editor_url + 'modules/Dialogs/inline-dialog.js', function() { fo._preparePanel(); } );
       return false;
   }
 
-  if(typeof HTMLArea.PanelDialog == 'undefined')
+  if(typeof Xinha.PanelDialog == 'undefined')
   {
-    HTMLArea._loadback
-      (_editor_url + 'panel-dialog.js', function() { fo._preparePanel(); } );
+    Xinha._loadback
+      (_editor_url + 'modules/Dialogs/panel-dialog.js', function() { fo._preparePanel(); } );
       return false;
   }
 
 
 
-  this.panel = new HTMLArea.PanelDialog(this.editor,'bottom',this.html,'FormOperations');
+  this.panel = new Xinha.PanelDialog(this.editor,'bottom',this.html,'FormOperations');
   this.panel.hide();
   this.ready = true;
 };
@@ -371,7 +371,7 @@ FormOperations.prototype.showText = function (input)
   this.panel.getElementById('text_value').onkeyup  = function () { i.value = this.value; }
   this.panel.getElementById('text_type').onchange   = function ()
     {
-      if(!HTMLArea.is_ie)
+      if(!Xinha.is_ie)
       {
         i.type = this.options[this.selectedIndex].value;
       }
@@ -390,9 +390,9 @@ FormOperations.prototype.showText = function (input)
         {
           tmpContainer.innerHTML = i.outerHTML.replace(/type="?[a-z]+"?/i, 'type="' + this.options[this.selectedIndex].value + '"');
         }
-        var newElement = HTMLArea.removeFromParent(tmpContainer.childNodes[0]);
+        var newElement = Xinha.removeFromParent(tmpContainer.childNodes[0]);
         i.parentNode.insertBefore(newElement, i);
-        HTMLArea.removeFromParent(i);
+        Xinha.removeFromParent(i);
         input = i = newElement;
       }
     }
@@ -432,7 +432,7 @@ FormOperations.prototype.showCbRd = function (input)
   this.panel.getElementById('cbrd_value').onkeyup  = function () { i.value = this.value; }
   this.panel.getElementById('cbrd_type').onchange   = function ()
     {
-      if(!HTMLArea.is_ie)
+      if(!Xinha.is_ie)
       {
         i.type = this.options[this.selectedIndex].value;
       }
@@ -451,9 +451,9 @@ FormOperations.prototype.showCbRd = function (input)
         {
           tmpContainer.innerHTML = i.outerHTML.replace(/type="?[a-z]+"?/i, 'type="' + this.options[this.selectedIndex].value + '"');
         }
-        var newElement = HTMLArea.removeFromParent(tmpContainer.childNodes[0]);
+        var newElement = Xinha.removeFromParent(tmpContainer.childNodes[0]);
         i.parentNode.insertBefore(newElement, i);
-        HTMLArea.removeFromParent(i);
+        Xinha.removeFromParent(i);
         input = i = newElement;
       }
     }
@@ -477,7 +477,7 @@ FormOperations.prototype.showButton = function (input)
   this.panel.getElementById('button_value').onkeyup  = function () { i.value = this.value; };
   this.panel.getElementById('button_type').onchange   = function ()
     {
-      if(!HTMLArea.is_ie)
+      if(!Xinha.is_ie)
       {
         i.type = this.options[this.selectedIndex].value;
       }
@@ -496,9 +496,9 @@ FormOperations.prototype.showButton = function (input)
         {
           tmpContainer.innerHTML = i.outerHTML.replace(/type="?[a-z]+"?/i, 'type="' + this.options[this.selectedIndex].value + '"');
         }
-        var newElement = HTMLArea.removeFromParent(tmpContainer.childNodes[0]);
+        var newElement = Xinha.removeFromParent(tmpContainer.childNodes[0]);
         i.parentNode.insertBefore(newElement, i);
-        HTMLArea.removeFromParent(i);
+        Xinha.removeFromParent(i);
         input = i = newElement;
       }
     };
