@@ -370,6 +370,16 @@ Gecko.prototype.onExecCommand = function(cmdID, UI, param)
   
   return false;
 }
+Gecko.prototype.onMouseDown = function(ev)
+{   
+	// Gecko doesn't select hr's on single click
+	if (ev.target.tagName.toLowerCase() == "hr")
+	{
+	  var sel = this.editor.getSelection();
+	  var range = this.editor.createRange(sel);
+	  range.selectNode(ev.target);
+	}
+}
 
 
 /*--------------------------------------------------------------------------*/

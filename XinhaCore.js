@@ -3906,7 +3906,14 @@ Xinha.prototype._editorEvent = function(ev)
       this._shortCuts(ev);
     }
   }
-  
+
+  if ( ev.type == 'mousedown' )
+  {
+    if(editor.firePluginEvent('onMouseDown', ev))
+    {
+      return false;
+    }
+  }
   // update the toolbar state after some time
   if ( editor._timerToolbar )
   {
