@@ -17,13 +17,13 @@ function Forms(editor) {
     } else {
       var id = btn[0];
       if (i<3)
-        cfg.registerButton(id, HTMLArea._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
+        cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
              function(editor, id) {
                // dispatch button press event
                self.buttonPress(editor, id);
              });
       else
-        cfg.registerButton(id, HTMLArea._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
+        cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
              function(editor, id) {
                // dispatch button press event
                self.buttonPress(editor, id);
@@ -123,10 +123,10 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
       if (param) {
         if(frm) {
           frm.name = param["f_name"];
-          setAttr(frm, "action", param["f_action"]);
-          setAttr(frm, "method", param["f_method"]);
-          setAttr(frm, "enctype",param["f_enctype"]);
-          setAttr(frm, "target", param["f_target"]);
+          frm.setAttribute("action", param["f_action"]);
+          frm.setAttribute("method", param["f_method"]);
+          frm.setAttribute("enctype",param["f_enctype"]);
+          frm.setAttribute("target", param["f_target"]);
         } else {
           frm = '<form name="' + param["f_name"] + '"';
           if (param["f_action"] != "") frm += ' action="' + param["f_action"] + '"';
@@ -292,7 +292,7 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
         if(node) {
           //prepare existing Element
           for (field in param) {
-            alert(field.substring(2,20) + '=' + param[field]);
+            //alert(field.substring(2,20) + '=' + param[field]);  //to be silent! by htanaka
             if ((field=="f_text") || (field=="f_options") || (field=="f_onclick") || (field=="f_checked"))continue;
             if (param[field] != "")
               node.setAttribute(field.substring(2,20), param[field]);

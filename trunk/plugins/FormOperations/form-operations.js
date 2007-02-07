@@ -619,7 +619,7 @@ FormOperations.prototype.showSelect = function (input)
   this.panel.getElementById('add_option').onclick =
     function()
     {
-      var txt = prompt("Enter the name for new option.");
+      var txt = prompt(Xinha._lc("Enter the name for new option.", 'FormOperations'));
       if(txt == null) return;
       var newOpt = new Option(txt);
       var opts   = fo.optsToArray(fo_sel.options);
