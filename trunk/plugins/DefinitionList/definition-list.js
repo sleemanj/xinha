@@ -16,7 +16,7 @@ function DefinitionList(editor) {
       toolbar.push("separator");
     } else {
       var id = btn[0];
-      cfg.registerButton(id, HTMLArea._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "DefinitionList"), false,
+      cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "DefinitionList"), false,
              function(editor, id) {
                // dispatch button press event
                self.buttonPress(editor, id);
