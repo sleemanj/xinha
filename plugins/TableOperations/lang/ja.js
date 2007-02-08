@@ -33,6 +33,7 @@
   "None": "なし",
   "Padding": "余白",
   "Please click into some cell": "いずれかのセル内をクリックしてください",
+  "Please select the cells you want to merge.": "結合したいセルを複数選択してください。",
   "Right": "右",
   "Row Properties": "行プロパティ",
   "Rules will appear between all rows and columns": "すべての行間と列間に線を引く",
