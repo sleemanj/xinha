@@ -3869,7 +3869,7 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
       {
         if ( this.config.debug )
         {
-          alert(e + "\n\nby execCommand(" + cmdID + ");");
+          alert(ex + "\n\nby execCommand(" + cmdID + ");");
         }
       }
     break;
