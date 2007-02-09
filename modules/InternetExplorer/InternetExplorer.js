@@ -156,7 +156,7 @@ InternetExplorer.prototype.inwardHtml = function(html)
 
 Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
 {
-  Xinha.notImplemented('insertNodeAtSelection');
+  this.insertHTML(toBeInserted.outerHTML);
 };
 
   
