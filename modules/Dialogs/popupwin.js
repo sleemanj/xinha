@@ -5,7 +5,7 @@ function PopupWin(editor, title, handler, initFunction)
 {
   this.editor = editor;
   this.handler = handler;
-  var dlg = window.open("", "__ha_dialog", "toolbar=no,menubar=no,personalbar=no,width=600,height=600,left=20,top=40,scrollbars=no,resizable=no");
+  var dlg = window.open("", "__ha_dialog", "toolbar=no,menubar=no,personalbar=no,width=600,height=600,left=20,top=40,scrollbars=no,resizable=yes");
   this.window = dlg;
   var doc = dlg.document;
   this.doc = doc;
@@ -171,8 +171,9 @@ PopupWin.prototype.showAtElement = function()
       }
       else
       {
-        self.window.resizeTo(w + 8, h + 35);
+        self.window.resizeTo(w + 8, h + 70);
       }
+      
     },
     25);
 };
