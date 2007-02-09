@@ -200,11 +200,9 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
               }
             }
           }
-          else
+          else if ( !Xinha.is_ie )
           {
-            // IE fails to put style in attributes list
-            // FIXME: cssText reported by IE is UPPERCASE
-            value = root.style.cssText;
+            value = root.style.cssText.replace(/rgb\(.*?\)/ig,function(rgb){ return Xinha._colorToRgb(rgb) });
           }
           if ( /^(_moz)?$/.test(value) )
           {
@@ -213,6 +211,11 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
             continue;
           }
           html += " " + name + '="' + Xinha.htmlEncode(value) + '"';
+        }
+        //IE fails to put style in attributes list & cssText is UPPERCASE
+        if (  Xinha.is_ie && root.style.cssText )
+        {
+          html += ' style="' + root.style.cssText.toLowerCase() + '"';
         }
         if ( html !== "" )
         {
