@@ -9,6 +9,9 @@ Using the conversion map provided by mharrisonline in ticket #127
 If you want to adjust the list, e.g. to except the characters that are available in the used charset,
 edit Entities.js. 
 You may save it under a different name using the xinha_config.HtmlEntities.EntitiesFile variable
+
+ISO-8859-1 preset is included, load it by
+ xinha_config.HtmlEntities.EntitiesFile = _editor_url + "plugins/HtmlEntities/iso-8859-1.js"; 
 \*------------------------------------------*/
 
 function HtmlEntities(editor) {
