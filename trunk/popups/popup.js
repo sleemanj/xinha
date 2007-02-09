@@ -113,17 +113,26 @@ function __dlg_translate(context) {
 			var span = spans[i];
 			if (span.firstChild && span.firstChild.data) {
 				var txt = Xinha._lc(span.firstChild.data, context);
-				if (txt)
+				if (txt) {
 					span.firstChild.data = txt;
+				}
 			}
-                        if (span.title) {
+			if (span.title) {
 				var txt = Xinha._lc(span.title, context);
-				if (txt)
+				if (txt) {
 					span.title = txt;
-                        }
+				}
+			}
+			if (span.tagName.toLowerCase() == 'input' && 
+					(/^(button|submit|reset)$/i.test(span.type))) {
+				var txt = Xinha._lc(span.value, context);
+				if (txt) {
+					span.value = txt;
+				}
+			}
 		}
 	}
-    document.title = Xinha._lc(document.title, context);
+	document.title = Xinha._lc(document.title, context);
 }
 
 // closes the dialog and passes the return info upper.
