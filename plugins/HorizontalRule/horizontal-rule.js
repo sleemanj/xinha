@@ -32,7 +32,7 @@ function HorizontalRule(editor) {
 }
 
 HorizontalRule.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'HorizontalRule');
+    return  Xinha._lc(string, 'HorizontalRule');
 };
 
 HorizontalRule.prototype.buttonPress = function(editor) {
@@ -44,57 +44,118 @@ HorizontalRule.prototype._editHorizontalRule = function(rule) {
 	editor = this.editor;
 	var sel = editor._getSelection();
 	var range = editor._createRange(sel);
-  var outparam = null;
-  if (typeof rule == "undefined") {
-    rule = editor.getParentElement();
-    if (rule && !/^hr$/i.test(rule.tagName))
-      rule = null;
-  }
-  if (rule) outparam = {
-    f_size        : rule.size,
-    f_width       : /%/.test(rule.width)? rule.width.substring(0,rule.width.length-1):rule.width,
-    f_widthUnit   : /%/.test(rule.width)?"%":"px",
-    f_color       : rule.color,
-    f_noshade     : rule.noShade,
-    f_align       : rule.align
-  };
-
+	var outparam = null;
+	if (typeof rule == "undefined") {
+		rule = editor.getParentElement();
+		if (rule && !/^hr$/i.test(rule.tagName))
+			rule = null;
+	}
+	if (rule) {
+		var f_widthValue    = rule.style.width || rule.width;
+		outparam = {
+			f_size      : parseInt(rule.style.height,10) || rule.size,
+			f_widthUnit : (/(%|px)$/.test(f_widthValue)) ? RegExp.$1 : 'px',
+			f_width     : parseInt (f_widthValue,10),
+			f_color     : Xinha._colorToRgb(rule.style.backgroundColor) || rule.color,
+			f_align     : rule.style.textAlign || rule.align,
+			f_noshade   : (parseInt(rule.style.borderWidth,10) == 0) || rule.noShade
+		};
+	}
 	editor._popupDialog("plugin://HorizontalRule/edit_horizontal_rule.html", function(param) {
 		if (!param) {	// user pressed Cancel
 			return false;
 		}
 		var hr = rule;
 		if (!hr) {
-		  var hrule = "<hr";
+			var hrule = editor._doc.createElement("hr");
 			for (var field in param) {
 				var value = param[field];
 				if(value == "") continue;
 				switch (field) { 
 				case "f_width" :
-				if(param["f_widthUnit"]=="%")hrule += " width='" + value+"%'";
-					else hrule += " width='" + value +"'"; break;
+					if(param["f_widthUnit"]=="%")
+					{
+						hrule.style.width = value + "%";
+					}
+					else
+					{
+						hrule.style.width = value + "px";
+					}
+				break;
 				case "f_size" :
-				hrule += " size='" + value +"'"; break;
-				case "f_align" :
-				hrule += " align='" + value +"'"; break;
+					hrule.style.height = value + "px"; 
+				break;
+				case "f_align" : // Gecko needs the margins for alignment
+					hrule.style.textAlign = value;
+					switch (value) {
+						case 'left':
+							hrule.style.marginLeft = "0";
+						break;
+						case 'right':
+							hrule.style.marginRight = "0";
+						break;
+						case 'center':
+							hrule.style.marginLeft = "auto";
+							hrule.style.marginRight = "auto";
+						break;
+					}
+				break;
 				case "f_color" :
-				hrule += " color='" + value +"'"; break;
+					hrule.style.backgroundColor = value; 
+				break;
 				case "f_noshade" :
-				hrule += (value)? " noshade":""; break;
+					hrule.style.border = "0"; 
+				break;
 				}
 			}
-			hrule += ">";
-			editor.insertHTML(hrule);
+			if ( Xinha.is_gecko )
+			{   // If I use editor.insertNodeAtSelection(hrule) here I get get a </hr> closing tag
+				editor.execCommand("inserthtml",false,Xinha.getOuterHTML(hrule));
+			}
+			else editor.insertNodeAtSelection(hrule);
+			
 		} else {
 			for (var field in param) {
 			  var value = param[field];
 			  switch (field) {
-				  case "f_size"    : hr.size  = value; break;
-				  case "f_width"   : hr.width   = (param["f_widthUnit"]=="%")?value+"%":value; break;
-				  case "f_align"   : hr.align   = value; break;
-				  case "f_color"   : hr.color   = value; break;
-				  case "f_noshade" : hr.noShade = value; break;
+				case "f_width" :
+					if(param["f_widthUnit"]=="%")
+					{
+						hr.style.width = value + "%";
+					}
+					else
+					{
+						hr.style.width = value + "px";
+					}
+				break;
+				case "f_size" :
+					hr.style.height = value + "px"; 
+				break;
+				case "f_align" :
+					hr.style.textAlign = value;
+					switch (value) {
+						case 'left':
+							hr.style.marginLeft = "0";
+							hr.style.marginRight = null;
+						break;
+						case 'right':
+							hr.style.marginRight = "0";
+							hr.style.marginLeft = null;
+						break;
+						case 'center':
+							hr.style.marginLeft = "auto";
+							hr.style.marginRight = "auto";
+						break;
+					}
+				break;
+				case "f_color" :
+					hr.style.backgroundColor = value; 
+				break;
+				case "f_noshade" :
+					
+				break;
 			  }
+			  hr.style.border = (param["f_noshade"]) ? "0" : null; 
 			}
 		}
 	}, outparam);
