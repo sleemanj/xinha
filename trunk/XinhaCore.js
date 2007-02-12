@@ -1729,29 +1729,20 @@ Xinha.prototype.generate = function ()
       }
     );
 
-    //add onsubmit handlers for textareas that don't have one 
-    // doesn't work in IE!!
-   /* if ( !textarea.form.xinha_submit )
+    // attach onsubmit handler to form.submit()
+    // note: catch error in IE if any form element has id="submit"
+    if ( !textarea.form.xinha_submit )
     {
-      textarea.form.xinha_submit = textarea.form.submit;
-      textarea.form.submit = function()
+      try 
       {
-        for ( var i = this.elements.length; i--; )
+        textarea.form.xinha_submit = textarea.form.submit;
+        textarea.form.submit = function() 
         {
-          var element = this.elements[i];
-          if ( element.type != 'textarea' ) continue;
-          for ( var a = __xinhas.length; a--; )
-          {
-            var editor = __xinhas[a];
-            if ( editor && editor._textArea == element)
-            {
-              element.value = editor.outwardHtml(editor.getHTML());
-            }
-          }
+          this.onsubmit();
+          this.xinha_submit();
         }
-        this.xinha_submit();
-      };
-    }*/
+      } catch(ex) {}
+    }
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
