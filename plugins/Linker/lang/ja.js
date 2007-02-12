@@ -3,8 +3,7 @@
 {
   "You must select some text before making a new link.": "リンクを作成するにはテキストを選択する必要があります",
   "Are you sure you wish to remove this link?": "本当にこのリンクを削除しますか?",
-  "REMOVE LINK": "リンク削除",
-  "CANCEL": "中止",
+  "Remove Link": "リンク削除",
   "URL Link": "URLリンク",
   "Ordinary Link": "標準リンク",
   "Same Window (jump out of frames)": "同一ウィンドウ (フレーム最上位)",
