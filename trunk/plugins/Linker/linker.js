@@ -15,6 +15,7 @@ Xinha.loadStyle('dTree/dtree.css', 'Linker');
 
 Xinha.Config.prototype.Linker =
 {
+  'treeCaption' : document.location.host,
   'backend' : _editor_url + 'plugins/Linker/scan.php',
   'backend_data' : null,
   'files' : null
@@ -370,7 +371,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   this.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
   eval(dTreeName + ' = this.dTree');
 
-  this.dTree.add(this.Dialog_nxtid++, -1, document.location.host, null, document.location.host);
+  this.dTree.add(this.Dialog_nxtid++, -1, linker.lConfig.treeCaption , null, linker.lConfig.treeCaption);
   this.makeNodes(files, 0);
 
   // Put it in
@@ -381,6 +382,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   ddTree.style.left = 1 + 'px';
   ddTree.style.top =  0 + 'px';
   ddTree.style.overflow = 'auto';
+  ddTree.style.backgroundColor = 'white';
   this.ddTree = ddTree;
   this.dTree._linker_premade = this.dTree.toString();
 
@@ -528,7 +530,13 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
     this.dialog.getElementById('anchorfieldset').style.display = "none";
   }
   
-
+  // if we're not editing an existing link, hide the remove link button
+  if (inputs.href == 'http://www.example.com/' && inputs.to == 'alice@example.com') { 
+    this.dialog.getElementById('clear').style.display = "none";
+  }
+  else {
+    this.dialog.getElementById('clear').style.display = "";
+  }
   // Connect the OK and Cancel buttons
   var dialog = this.dialog;
   var lDialog = this;
