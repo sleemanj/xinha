@@ -15,27 +15,6 @@ function i18n(str) {
   return (Xinha._lc(str, 'Xinha'));
 }
 
-function resolveRelativeUrl(base, url){
-	if(url.match(/^([^:]+\:)?\//)){
-		return url;
-	}
-	else{
-		var b = base.split("/");
-		if(b[b.length - 1] == ""){
-			b.pop();
-		}
-		var p = url.split("/");
-		if(p[0] == "."){
-			p.shift();
-		}
-		while(p[0] == ".."){
-			b.pop();
-			p.shift();
-		}
-		return b.join("/") + "/" + p.join("/");
-	}
-}
-
 function Init() {
   __dlg_translate('Xinha');
   __dlg_init();
@@ -53,7 +32,7 @@ function Init() {
   document.getElementById("f_vert").value   = (typeof param["f_vert"]!="undefined") ? param["f_vert"] : "";
   document.getElementById("f_horiz").value  = (typeof param["f_horiz"]!="undefined") ? param["f_horiz"] : "";
   if (param["f_url"]) {
-      window.ipreview.location.replace(resolveRelativeUrl(param.f_base, param.f_url));
+      window.ipreview.location.replace(Xinha._resolveRelativeUrl(param.f_base, param.f_url));
   }
   document.getElementById("f_url").focus();
 }
@@ -97,7 +76,7 @@ function onPreview() {
     f_url.focus();
     return false;
   }
-  window.ipreview.location.replace(resolveRelativeUrl(base, url));
+  window.ipreview.location.replace(Xinha._resolveRelativeUrl(base, url));
   return false;
 }
 </script>
