@@ -40,7 +40,7 @@ function InsertImage(editor) {
 Xinha.prototype._insertImage = function(image)
 {
   var editor = this;	// for nested functions
-  var outparam = null;
+  var outparam;
   if ( typeof image == "undefined" )
   {
     image = this.getParentElement();
@@ -49,21 +49,40 @@ Xinha.prototype._insertImage = function(image)
       image = null;
     }
   }
+  
+  var base;
+  if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null ) {
+    base = editor.config.baseHref;
+  }
+  else {
+    var bdir = window.location.toString().split("/");
+    bdir.pop();
+    base = bdir.join("/");
+  }
+  
   if ( image )
   {
     outparam =
     {
-      f_base   : editor.config.baseHref,
+      f_base   : base,
       f_url    : Xinha.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
       f_alt    : image.alt,
       f_border : image.border,
       f_align  : image.align,
-      f_vert   : image.vspace,
-      f_horiz  : image.hspace,
+      f_vert   : (image.vspace!=-1 ? image.vspace : ""), //FireFox reports -1 when this attr has no value.
+      f_horiz  : (image.hspace!=-1 ? image.hspace : ""), //FireFox reports -1 when this attr has no value.
       f_width  : image.width,
       f_height : image.height
     };
   }
+  else{
+  	outparam =
+  	{
+      f_base   : base,
+      f_url    : ""      
+  	};
+  }
+  
   Dialog(
     editor.config.URIs.insert_image,
     function(param)
@@ -112,31 +131,31 @@ Xinha.prototype._insertImage = function(image)
         {
           case "f_alt":
             if (value)
-              img.alt = value
+              img.alt = value;
             else
               img.removeAttribute("alt");
             break;
           case "f_border":
             if (value)
-              img.border = parseInt(value || "0")
+              img.border = parseInt(value || "0");
             else
               img.removeAttribute("border");
             break;
           case "f_align":
             if (value)
-              img.align = value
+              img.align = value;
             else
               img.removeAttribute("align");
             break;
           case "f_vert":
             if (value)
-              img.vspace = parseInt(value || "0")
+              img.vspace = parseInt(value || "0");
             else
               img.removeAttribute("vspace");
             break;
           case "f_horiz":
             if (value)
-              img.hspace = parseInt(value || "0")
+              img.hspace = parseInt(value || "0");
             else
               img.removeAttribute("hspace");
             break;
