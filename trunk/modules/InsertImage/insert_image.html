@@ -15,6 +15,27 @@ function i18n(str) {
   return (Xinha._lc(str, 'Xinha'));
 }
 
+function resolveRelativeUrl(base, url){
+	if(url.match(/^([^:]+\:)?\//)){
+		return url;
+	}
+	else{
+		var b = base.split("/");
+		if(b[b.length - 1] == ""){
+			b.pop();
+		}
+		var p = url.split("/");
+		if(p[0] == "."){
+			p.shift();
+		}
+		while(p[0] == ".."){
+			b.pop();
+			p.shift();
+		}
+		return b.join("/") + "/" + p.join("/");
+	}
+}
+
 function Init() {
   __dlg_translate('Xinha');
   __dlg_init();
@@ -22,14 +43,17 @@ function Init() {
   document.getElementById("f_align").selectedIndex = 1;
   document.getElementById("f_align").selectedIndex = 5;
   var param = window.dialogArguments;
-  if (param) {
-      document.getElementById("f_url").value = param["f_url"];
-      document.getElementById("f_alt").value = param["f_alt"];
-      document.getElementById("f_border").value = param["f_border"];
-      document.getElementById("f_align").value = param["f_align"];
-      document.getElementById("f_vert").value = param["f_vert"];
-      document.getElementById("f_horiz").value = param["f_horiz"];
-      window.ipreview.location.replace(param.f_url);
+  if (param["f_base"]) {
+      document.getElementById("f_base").value = param["f_base"];
+  }
+  document.getElementById("f_url").value    = param["f_url"] ? param["f_url"] : "";
+  document.getElementById("f_alt").value    = param["f_alt"] ? param["f_alt"] : "";
+  document.getElementById("f_border").value = (typeof param["f_border"]!="undefined") ? param["f_border"] : "";
+  document.getElementById("f_align").value  = param["f_align"] ? param["f_align"] : "";
+  document.getElementById("f_vert").value   = (typeof param["f_vert"]!="undefined") ? param["f_vert"] : "";
+  document.getElementById("f_horiz").value  = (typeof param["f_horiz"]!="undefined") ? param["f_horiz"] : "";
+  if (param["f_url"]) {
+      window.ipreview.location.replace(resolveRelativeUrl(param.f_base, param.f_url));
   }
   document.getElementById("f_url").focus();
 }
@@ -67,12 +91,13 @@ function onCancel() {
 function onPreview() {
   var f_url = document.getElementById("f_url");
   var url = f_url.value;
+  var base = document.getElementById("f_base").value;
   if (!url) {
     alert(i18n("You must enter the URL"));
     f_url.focus();
     return false;
   }
-  window.ipreview.location.replace(url);
+  window.ipreview.location.replace(resolveRelativeUrl(base, url));
   return false;
 }
 </script>
@@ -84,6 +109,7 @@ function onPreview() {
 <div class="title">Insert Image</div>
 <!--- new stuff --->
 <form action="" method="get">
+<input type="hidden" name="base" id="f_base"/>
 <table border="0" width="100%" style="padding: 0px; margin: 0px">
   <tbody>
 
