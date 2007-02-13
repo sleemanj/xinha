@@ -758,18 +758,23 @@ Xinha.Config.prototype.addToolbarElement = function(id, where, position)
   {
     sid = id;
   }
+  
+  for ( i = 0; i < toolbar.length; ++i ) {
+    a = toolbar[i];
+    for ( j = 0; j < a.length; ++j ) {
+      // check if button/select box exists
+      if ( a[j] == sid ) {
+        return; // cancel to add elements if same button already exists
+      }
+    }
+  }
+  
 
-  for ( i = 0; !exists && !found && i < toolbar.length; ++i )
+  for ( i = 0; !found && i < toolbar.length; ++i )
   {
     a = toolbar[i];
     for ( j = 0; !found && j < a.length; ++j )
     {
-      // check if button/select box exists
-      if ( a[i] == sid )
-      { 
-        exists = true;
-        break;
-      }
       if ( whereIsArray )
       {
         for ( o = 0; o < whereLength; ++o )
@@ -803,75 +808,72 @@ Xinha.Config.prototype.addToolbarElement = function(id, where, position)
     }
   }
 
-  if ( !exists )
-  {
-    //if check found any other as the first button
-    if ( !found && whereIsArray )
-    { 
-      if ( where.length != whereLength )
-      {
-        j = whereJ;
-        a = toolbar[whereI];
-        found = true;
-      }
-    }
-    if ( found )
+  //if check found any other as the first button
+  if ( !found && whereIsArray )
+  { 
+    if ( where.length != whereLength )
     {
-      // replace the found button
-      if ( position === 0 )
+      j = whereJ;
+      a = toolbar[whereI];
+      found = true;
+    }
+  }
+  if ( found )
+  {
+    // replace the found button
+    if ( position === 0 )
+    {
+      if ( idIsArray)
       {
-        if ( idIsArray)
+        a[j] = id[id.length-1];
+        for ( i = id.length-1; --i >= 0; )
         {
-          a[j] = id[id.length-1];
-          for ( i = id.length-1; --i >= 0; )
-          {
-            a.splice(j, 0, id[i]);
-          }
-        }
-        else
-        {
-          a[j] = id;
+          a.splice(j, 0, id[i]);
         }
       }
       else
-      { 
-        // insert before/after the found button
-        if ( position < 0 )
+      {
+        a[j] = id;
+      }
+    }
+    else
+    { 
+      // insert before/after the found button
+      if ( position < 0 )
+      {
+        j = j + position + 1; //correct position before
+      }
+      else if ( position > 0 )
+      {
+        j = j + position; //correct posion after
+      }
+      if ( idIsArray )
+      {
+        for ( i = id.length; --i >= 0; )
         {
-          j = j + position + 1; //correct position before
+          a.splice(j, 0, id[i]);
         }
-        else if ( position > 0 )
-        {
-          j = j + position; //correct posion after
-        }
-        if ( idIsArray )
-        {
-          for ( i = id.length; --i >= 0; )
-          {
-            a.splice(j, 0, id[i]);
-          }
-        }
-        else
-        {
-          a.splice(j, 0, id);
-        }
+      }
+      else
+      {
+        a.splice(j, 0, id);
+      }
+    }
+  }
+  else
+  {
+    // no button found
+    toolbar[0].splice(0, 0, "separator");
+    if ( idIsArray)
+    {
+      for ( i = id.length; --i >= 0; )
+      {
+        toolbar[0].splice(0, 0, id[i]);
       }
     }
     else
     {
-      // no button found
-      toolbar[0].splice(0, 0, "separator");
-      if ( idIsArray)
-      {
-        for ( i = id.length; --i >= 0; )
-        {
-          toolbar[0].splice(0, 0, id[i]);
-        }
-      }
-      else
-      {
-        toolbar[0].splice(0, 0, id);
-      }
+      toolbar[0].splice(0, 0, id);
     }
   }
 };
