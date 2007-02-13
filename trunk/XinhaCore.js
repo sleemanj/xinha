@@ -2437,7 +2437,8 @@ Xinha.prototype.setFullHTML = function(html)
     html = html.replace(Xinha.RE_doctype, "");
   }
   RegExp.multiline = save_multiline;
-  if ( !Xinha.is_ie )
+  // disabled to save body attributes see #459
+  if ( 0 )
   {
     if ( html.match(Xinha.RE_head) )
     {
@@ -2994,7 +2995,7 @@ Xinha.prototype._splitBlock = function()
 Xinha.prototype.forceRedraw = function()
 {
   this._doc.body.style.visibility = "hidden";
-  this._doc.body.style.visibility = "visible";
+  this._doc.body.style.visibility = "";
   // this._doc.body.innerHTML = this.getInnerHTML();
 };
 

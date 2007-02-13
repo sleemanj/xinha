@@ -290,7 +290,7 @@ Linker.prototype._getSelectedAnchor = function()
   return null;
 };
 
-Linker.prototype.onGenerate = function()
+Linker.prototype.onGenerateOnce = function()
 {
   this._dialog = new Linker.Dialog(this);
 };
