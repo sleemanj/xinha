@@ -314,9 +314,9 @@ Xinha.prototype.selectNodeContents = function(node, pos)
  
 Xinha.prototype.insertHTML = function(html)
 {
+  this.focusEditor();
   var sel = this.getSelection();
   var range = this.createRange(sel);
-  this.focusEditor();
   range.pasteHTML(html);
 };
 
