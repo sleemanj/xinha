@@ -102,6 +102,7 @@ HTMLArea.prototype._fullScreen = function()
   {
     // Unmaximize
     this._htmlArea.style.position = '';
+    this._htmlArea.style.border   = '';
     try
     {
       if(HTMLArea.is_ie)
@@ -156,6 +157,7 @@ HTMLArea.prototype._fullScreen = function()
     this._htmlArea.style.zIndex   = 999;
     this._htmlArea.style.left     = 0;
     this._htmlArea.style.top      = 0;
+    this._htmlArea.style.border   = 'none';
     this._isFullScreen = true;
     resetScroll();
 
