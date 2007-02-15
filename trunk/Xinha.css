@@ -86,6 +86,7 @@
   background-color: ButtonFace;
   color: ButtonText;
   font: 11px Tahoma,Verdana,sans-serif;
+  height:16px;
 }
 
 .htmlarea .statusBar .statusBarTree a {

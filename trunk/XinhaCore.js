@@ -100,7 +100,8 @@ var __xinhas = [];
 
 // browser identification
 Xinha.agt       = navigator.userAgent.toLowerCase();
-Xinha.is_ie	   = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera") == -1));
+Xinha.is_ie    = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera") == -1));
+Xinha.ie_version= parseFloat(Xinha.agt.substring(Xinha.agt.indexOf("msie")+5));
 Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
 Xinha.is_mac	   = (Xinha.agt.indexOf("mac") != -1);
 Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
@@ -422,6 +423,13 @@ Xinha.Config = function()
   // number of recent colors to remember
   this.colorPickerSaveColors = 20;
 
+  // start up the editor in fullscreen mode
+  this.fullScreen = false;
+  
+  // you can tell the fullscreen mode to leave certain margins on each side
+  // the value is an array with the values for [top,right,bottom,left] in that order
+  this.fullScreenMargins = [0,0,0,0];
+  
   /** CUSTOMIZING THE TOOLBAR
    * -------------------------
    *
@@ -1517,6 +1525,12 @@ Xinha.prototype.generate = function ()
     Xinha._loadback(_editor_url + 'modules/Dialogs/inline-dialog.js', this.generate, this );
     return false;
   }
+  
+  if ( typeof FullScreen == "undefined" )
+  {
+    Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, _editor_url + 'modules/FullScreen/full-screen.js' );
+    return false;
+  }
 
   var toolbar = editor.config.toolbar;
   for ( i = toolbar.length; --i >= 0; )
@@ -1526,11 +1540,6 @@ Xinha.prototype.generate = function ()
       switch (toolbar[i][j])
       {
         case "popupeditor":
-          if ( typeof FullScreen == "undefined" )
-          {
-            Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, _editor_url + 'modules/FullScreen/full-screen.js' );
-            return false;
-          }
           editor.registerPlugin('FullScreen');
         break;
         case "insertimage":
@@ -2371,7 +2380,10 @@ Xinha.prototype.initIframe = function()
   }
   doc.write(html);
   doc.close();
-
+  if ( this.config.fullScreen )
+  {
+    this._fullScreen();
+  }
   this.setEditorEvents();
 };
   
@@ -4326,7 +4338,6 @@ Xinha.cloneObject = function(obj)
   return newObj;
 };
 
-// FIXME!!! this should return false for IE < 5.5
 Xinha.checkSupportedBrowser = function()
 {
   if ( Xinha.is_gecko )
@@ -4341,7 +4352,7 @@ Xinha.checkSupportedBrowser = function()
       alert("Mozilla < 1.3 Beta is not supported!\nI'll try, though, but it might not work.");
     }
   }
-  return Xinha.is_gecko || Xinha.is_ie;
+  return Xinha.is_gecko || Xinha.ie_version >= 5.5;
 };
 
 // selection & ranges
