@@ -36,8 +36,12 @@ function comboSelectValue(c, val) {
 function __dlg_onclose() {
 	opener.Dialog._return(null);
 }
+// ray: I mark this on deprecated, because bottom is never used
+function __dlg_init( bottom, win_dim ) {
+  __xinha_dlg_init(win_dim);
+}
 
-function __dlg_init(bottom, win_dim) {
+function __xinha_dlg_init( win_dim ) {
   if(window.__dlg_init_done) return true;
   
   if(window.opener._editor_skin != "") {
@@ -50,58 +54,37 @@ function __dlg_init(bottom, win_dim) {
   }
 	window.dialogArguments = opener.Dialog._arguments;
 
-  var body        = document.body;
-  
-  if(win_dim)
+  var body = document.body;
+  if ( !win_dim )
   {
-    window.resizeTo(win_dim.width, win_dim.height);
-    if(win_dim.top && win_dim.left)
+   var dim = Xinha.viewportSize(window);
+    win_dim = {width:dim.x, height: body.scrollHeight};
+  }
+  window.resizeTo(win_dim.width, win_dim.height);
+
+  var dim = Xinha.viewportSize(window);
+  window.resizeBy(0, body.scrollHeight - dim.y);
+
+  if(win_dim.top && win_dim.left)
+  {
+    window.moveTo(win_dim.left,win_dim.top);
+  }
+  else
+  {
+    if (!Xinha.is_ie)
     {
-      window.moveTo(win_dim.left,win_dim.top);
+      var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
+      var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
     }
     else
-    {
-      if (!Xinha.is_ie)
-      {
-      	var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
-        var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
-      }
-      else
-      {//IE does not have window.outer... , so center it on the screen at least
-        var x =  (self.screen.availWidth - win_dim.width) / 2;
-        var y =  (self.screen.availHeight - win_dim.height) / 2;	
-      }
-      window.moveTo(x,y);
+    {//IE does not have window.outer... , so center it on the screen at least
+      var x =  (self.screen.availWidth - win_dim.width) / 2;
+      var y =  (self.screen.availHeight - win_dim.height) / 2;	
     }
+    window.moveTo(x,y);
   }
-  else if (window.sizeToContent) {
-		window.sizeToContent();
-		window.sizeToContent();	// for reasons beyond understanding,
-					// only if we call it twice we get the
-					// correct size.
-		window.addEventListener("unload", __dlg_onclose, true);
-		window.innerWidth = body.offsetWidth + 5;
-		window.innerHeight = body.scrollHeight + 2;
-		// center on parent
-		var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
-		var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
-		window.moveTo(x, y);
-	} else {
-		var docElm      = document.documentElement ? document.documentElement : null;    
-		var body_height = docElm && docElm.scrollTop ? docElm.scrollHeight : body.scrollHeight;
-    
-		window.resizeTo(body.scrollWidth, body_height);
-		var ch = docElm && docElm.clientHeight ? docElm.clientHeight : body.clientHeight;
-		var cw = docElm && docElm.clientWidth  ? docElm.clientWidth  : body.clientWidth;
-		
-		window.resizeBy(body.offsetWidth - cw, body_height - ch);
-		var W = body.offsetWidth;
-		var H = 2 * body_height - ch;
-		var x = (screen.availWidth - W) / 2;
-		var y = (screen.availHeight - H) / 2;
-		window.moveTo(x, y);
-	}
-	Xinha.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
+  
+  Xinha.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
   window.__dlg_init_done = true;
 }
 
