@@ -51,6 +51,8 @@ Xinha.getHTML = function(root, outputRoot, editor)
   }
 };
 
+Xinha.emptyAttributes = " checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade ";
+
 Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
 {
   var html = "";
@@ -130,12 +132,19 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         var attrs = root.attributes;
         
         for ( i = 0; i < attrs.length; ++i )
-        {
+        {if (root.tagName.toLowerCase() == 'hr') dump(a);
           var a = attrs.item(i);
-          if (typeof a.nodeValue != 'string') continue;
+          if (typeof a.nodeValue == 'object' ) continue; // see #684
+          if (root.tagName.toLowerCase() == "input" 
+              && root.type.toLowerCase() == "checkbox" 
+              && a.nodeName.toLowerCase() == "value"
+              && a.nodeValue.toLowerCase() == "on") 
+          {
+            continue;
+          }
           if ( !a.specified 
             // IE claims these are !a.specified even though they are.  Perhaps others too?
-            && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value')                
+            && !(root.tagName.toLowerCase().match(/input|option/) && a.nodeName == 'value')
             && !(root.tagName.toLowerCase().match(/area/) && a.nodeName.match(/shape|coords/i)) 
           )
           {
@@ -153,7 +162,11 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
             continue;
           }
           var value;
-          if ( name != "style" )
+          if ( Xinha.emptyAttributes.indexOf(" "+name+" ") != -1)
+          {
+            value = name;
+          }
+          else if ( name != "style" )
           {
             // IE5.5 reports 25 when cellSpacing is
             // 1; other values might be doomed too.
@@ -213,9 +226,13 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
           html += " " + name + '="' + Xinha.htmlEncode(value) + '"';
         }
         //IE fails to put style in attributes list & cssText is UPPERCASE
-        if (  Xinha.is_ie && root.style.cssText )
+        if ( Xinha.is_ie && root.style.cssText )
         {
           html += ' style="' + root.style.cssText.toLowerCase() + '"';
+        }
+        if ( Xinha.is_ie && root.tagName.toLowerCase() == "option" && root.selected )
+        {
+          html += ' selected="selected"';
         }
         if ( html !== "" )
         {
@@ -278,4 +295,5 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
   return html;
 };
 
-/** @see getHTMLWrapper (search for "value = a.nodeValue;") */
+
+
