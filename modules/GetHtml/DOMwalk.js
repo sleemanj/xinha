@@ -132,7 +132,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         var attrs = root.attributes;
         
         for ( i = 0; i < attrs.length; ++i )
-        {if (root.tagName.toLowerCase() == 'hr') dump(a);
+        {
           var a = attrs.item(i);
           if (typeof a.nodeValue == 'object' ) continue; // see #684
           if (root.tagName.toLowerCase() == "input" 
