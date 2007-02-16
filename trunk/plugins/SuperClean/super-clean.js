@@ -58,8 +58,20 @@ SuperClean.prototype._superClean = function(opts, obj)
 
     if(opts.tidy)
     {
-      Xinha._postback(editor.config.SuperClean.tidy_handler, {'content' : editor.getInnerHTML()},
-                         function(javascriptResponse) { eval(javascriptResponse) });
+      var callback = function(javascriptResponse) 
+      { 
+        eval("var response = " + javascriptResponse);
+        switch (response.action)
+        {
+          case 'setHTML':
+            editor.setHTML(response.value);
+          break;
+          case 'alert':
+            alert(superclean._lc(response.value));
+          break;
+        }
+      }
+      Xinha._postback(editor.config.SuperClean.tidy_handler, {'content' : editor.getInnerHTML()},callback);
     }
     return true;
   }
