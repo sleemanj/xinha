@@ -1,5 +1,5 @@
 <?
-die("Run this script to batch-compress the current Xinha snapshot. To run the script, open the file and uncomment the die() command
+die("Run this script to batch-compress the current Xinha snapshot. To run the script, open the file and uncomment the die() command");
 
 error_reporting(E_ALL);
 ini_set('show_errors',1);
