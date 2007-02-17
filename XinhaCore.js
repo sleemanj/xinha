@@ -5350,7 +5350,12 @@ Xinha.makeEditors = function(editor_names, default_config, plugin_names)
   var editors = {};
   for ( var x = 0; x < editor_names.length; x++ )
   {
-    var editor = new Xinha(editor_names[x], Xinha.cloneObject(default_config));
+    if ( typeof editor_names[x] != 'object' )
+    {
+      var textarea = Xinha.getElementById('textarea', editor_names[x] );
+      if ( !textarea ) continue;
+    }
+    var editor = new Xinha(textarea, Xinha.cloneObject(default_config));
     editor.registerPlugins(plugin_names);
     editors[editor_names[x]] = editor;
   }
