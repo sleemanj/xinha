@@ -100,7 +100,7 @@
   "You must enter the URL where this link points to": "Sie müssen eine Ziel-URL angeben für die Verknüpfung angeben",
 
   // Insert Table
-  "Insert Table": "Table einfügen",
+  "Insert Table": "Tabelle einfügen",
   "Rows:": "Zeilen:",
   "Number of rows": "Zeilenanzahl",
   "Cols:": "Spalten:",
