@@ -52,6 +52,7 @@ Xinha.getHTML = function(root, outputRoot, editor)
 };
 
 Xinha.emptyAttributes = " checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade ";
+Xinha.elGetsNewLine = function (el) { return (" br meta link title ".indexOf(" " + el.tagName.toLowerCase() + " ") != -1);};
 
 Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
 {
@@ -113,10 +114,13 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         {
           html += (Xinha.is_ie ? ('\n' + indent) : '') + "<head>";
         }
-        // lowercasize
+        
         var save_multiline = RegExp.multiline;
         RegExp.multiline = true;
-        var txt = root.innerHTML.replace(Xinha.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); });
+        var txt = 
+        root.innerHTML.replace(Xinha.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); }) // lowercasize
+        .replace(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g, '="$2$4$5"$3') //add attribute quotes
+        .replace(/<(link|meta)((\s*\S*="[^"]*")*)>/g, '<$1$2 />'); //terminate singlet tags
         RegExp.multiline = save_multiline;
         html += txt + '\n';
         if ( outputRoot )
@@ -128,7 +132,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
       else if ( outputRoot )
       {
         closed = (!(root.hasChildNodes() || Xinha.needsClosingTag(root)));
-        html += (Xinha.is_ie && Xinha.isBlockElement(root) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
+        html += ((Xinha.isBlockElement(root) || Xinha.elGetsNewLine(root)) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
         var attrs = root.attributes;
         
         for ( i = 0; i < attrs.length; ++i )
@@ -279,13 +283,13 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         }
         if ( outputRoot && !closed )
         {
-          html += (Xinha.is_ie && Xinha.isBlockElement(root) && containsBlock ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
+          html += (((Xinha.isBlockElement(root) && containsBlock) || root_tag == 'head' || root_tag == 'html') ? ('\n' + indent) : '') + "</" + root.tagName.toLowerCase() + ">";
         }
       }
     break;
 
     case 3: // Node.TEXT_NODE
-      html = /^script|noscript|style$/i.test(root.parentNode.tagName) ? root.data : Xinha.htmlEncode(root.data);
+      html = /^script|noscript|style$/i.test(root.parentNode.tagName) ? root.data : Xinha.htmlEncode(root.data).trim();
     break;
 
     case 8: // Node.COMMENT_NODE
