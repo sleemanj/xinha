@@ -41,6 +41,34 @@ Xinha.version =
   'RevisionBy': '$LastChangedBy$'.replace(/^[^:]*: (.*) \$$/, '$1')
 };
 
+//must be here. it is called while converting _editor_url to absolute
+Xinha._resolveRelativeUrl = function( base, url )
+{
+  if(url.match(/^([^:]+\:)?\//))
+  {
+    return url;
+  }
+  else
+  {
+    var b = base.split("/");
+    if(b[b.length - 1] == "")
+    {
+      b.pop();
+    }
+    var p = url.split("/");
+    if(p[0] == ".")
+    {
+      p.shift();
+    }
+    while(p[0] == "..")
+    {
+      b.pop();
+      p.shift();
+    }
+    return b.join("/") + "/" + p.join("/");
+  }
+}
+
 if ( typeof _editor_url == "string" )
 {
   // Leave exactly one backslash at the end of _editor_url
@@ -4170,33 +4198,6 @@ Xinha.prototype.inwardSpecialReplacements = function(html)
   }
   return html;
 };
-
-Xinha._resolveRelativeUrl = function( base, url )
-{
-  if(url.match(/^([^:]+\:)?\//))
-  {
-    return url;
-  }
-  else
-  {
-    var b = base.split("/");
-    if(b[b.length - 1] == "")
-    {
-      b.pop();
-    }
-    var p = url.split("/");
-    if(p[0] == ".")
-    {
-      p.shift();
-    }
-    while(p[0] == "..")
-    {
-      b.pop();
-      p.shift();
-    }
-    return b.join("/") + "/" + p.join("/");
-  }
-}
 
 Xinha.prototype.fixRelativeLinks = function(html)
 {
