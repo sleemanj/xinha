@@ -669,51 +669,56 @@ Xinha.prototype.cc = String.fromCharCode(173);
 
 Xinha.prototype.setCC = function ( target )
 {
-  if ( target == "textarea" )
+  try
   {
-    var ta = this._textArea;
-    var index = ta.selectionStart;
-    var before = ta.value.substring( 0, index )
-    var after = ta.value.substring( index, ta.value.length );
-
-    if ( after.match(/^[^<]*>/) )
-    {
-      var tagEnd = after.indexOf(">") + 1;
-      ta.value = before + after.substring( 0, tagEnd ) + this.cc + after.substring( tagEnd, after.length );
-    }
-    else ta.value = before + this.cc + after;
-  }
-  else
-  {
-    var sel = this.getSelection();
-    sel.getRangeAt(0).insertNode( document.createTextNode( this.cc ) );
-  }
-};
-
-Xinha.prototype.findCC = function ( target )
-{
-
-  var findIn = ( target == 'textarea' ) ? window : this._iframe.contentWindow;
-  if( findIn.find( this.cc ) )
-  {
-    if (target == "textarea")
+    if ( target == "textarea" )
     {
       var ta = this._textArea;
-      var start = pos = ta.selectionStart;
-      var end = ta.selectionEnd;
-      var scrollTop = ta.scrollTop;
-      ta.value = ta.value.substring( 0, start ) + ta.value.substring( end, ta.value.length );
-      ta.selectionStart = pos;
-      ta.selectionEnd = pos;
-      ta.scrollTop = scrollTop
-      ta.focus();
+      var index = ta.selectionStart;
+      var before = ta.value.substring( 0, index )
+      var after = ta.value.substring( index, ta.value.length );
+
+      if ( after.match(/^[^<]*>/) )
+      {
+        var tagEnd = after.indexOf(">") + 1;
+        ta.value = before + after.substring( 0, tagEnd ) + this.cc + after.substring( tagEnd, after.length );
+      }
+      else ta.value = before + this.cc + after;
     }
     else
     {
       var sel = this.getSelection();
-      sel.getRangeAt(0).deleteContents();
+      sel.getRangeAt(0).insertNode( document.createTextNode( this.cc ) );
     }
-  }  
+  } catch (e) {}
+};
+
+Xinha.prototype.findCC = function ( target )
+{
+  try 
+  {
+    var findIn = ( target == 'textarea' ) ? window : this._iframe.contentWindow;
+    if( findIn.find( this.cc ) )
+    {
+      if (target == "textarea")
+      {
+        var ta = this._textArea;
+        var start = pos = ta.selectionStart;
+        var end = ta.selectionEnd;
+        var scrollTop = ta.scrollTop;
+        ta.value = ta.value.substring( 0, start ) + ta.value.substring( end, ta.value.length );
+        ta.selectionStart = pos;
+        ta.selectionEnd = pos;
+        ta.scrollTop = scrollTop
+        ta.focus();
+      }
+      else
+      {
+        var sel = this.getSelection();
+        sel.getRangeAt(0).deleteContents();
+      }
+    }
+  } catch (e) {}
 };
 /*--------------------------------------------------------------------------*/
 /*------------ EXTEND SOME STANDARD "Xinha.prototype" METHODS --------------*/
