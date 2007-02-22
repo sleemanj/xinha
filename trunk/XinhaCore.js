@@ -1746,7 +1746,19 @@ Xinha.prototype.generate = function ()
   Xinha.removeFromParent(textarea);
   this._framework.ed_cell.appendChild(textarea);
 
-
+  // if another editor is activated while this one is in text mode, toolbar is disabled   
+  Xinha.addDom0Event(
+  this._textArea,
+  'click',
+  function()
+  {
+  	if ( Xinha._currentlyActiveEditor != this)
+  	{
+  	  editor.updateToolbar();
+  	}
+    return true;
+  });
+  
   // Set up event listeners for saving the iframe content to the textarea
   if ( textarea.form )
   {
