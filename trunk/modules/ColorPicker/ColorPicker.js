@@ -91,6 +91,11 @@
   {
 	// dummy function for Xinha plugin api, note the different names
   }
+  if (window.opener && window.opener.Xinha)
+  { // this prevents that the Xinha.colorPicker object of the opening window is replaced by the one loaded in the popup
+  	var openerColorPicker = window.opener.Xinha.colorPicker;
+  	Xinha._addEvent(window,'unload', function() {Xinha.colorPicker = openerColorPicker;});
+  }
   //the actual function is below
   Xinha.colorPicker = function (params)
   {
