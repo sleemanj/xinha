@@ -271,6 +271,10 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
           html += innerText + '</'+root_tag+'>' + ((Xinha.is_ie) ? '\n' : '');
         }
       }
+      else if (root_tag == "pre")
+      {
+        html += ((Xinha.is_ie) ? '\n' : '') + root.innerHTML.replace(/<br>/g,'\n') + '</'+root_tag+'>';
+      }
       else
       {
         for ( i = root.firstChild; i; i = i.nextSibling )
@@ -289,7 +293,18 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
     break;
 
     case 3: // Node.TEXT_NODE
-      html = /^script|noscript|style$/i.test(root.parentNode.tagName) ? root.data : Xinha.htmlEncode(root.data).trim();
+      if ( /^script|noscript|style$/i.test(root.parentNode.tagName) )
+      {
+        html = root.data;
+      }
+      else if(root.data.trim() == '')
+      {
+        html = '';
+      }
+      else
+      {
+        html = Xinha.htmlEncode(root.data);
+      }
     break;
 
     case 8: // Node.COMMENT_NODE
