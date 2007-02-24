@@ -365,7 +365,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   var html = this.html;
 
   // Now we have everything we need, so we can build the dialog.
-  var dialog = this.dialog = new Xinha.Dialog(linker.editor, this.html, 'Linker');
+  var dialog = this.dialog = new Xinha.Dialog(linker.editor, this.html, 'Linker',{width:600,height:400});
   var dTreeName = Xinha.uniq('dTree_');
 
   this.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
@@ -378,34 +378,45 @@ Linker.Dialog.prototype._prepareDialog = function()
   var ddTree = this.dialog.getElementById('dTree');
   //ddTree.innerHTML = this.dTree.toString();
   ddTree.innerHTML = '';
-  ddTree.style.position = 'absolute';
-  ddTree.style.left = 1 + 'px';
-  ddTree.style.top =  0 + 'px';
+//  ddTree.style.position = 'absolute';
+//  ddTree.style.left = 1 + 'px';
+ // ddTree.style.top =  0 + 'px';
   ddTree.style.overflow = 'auto';
+  ddTree.style.height = '300px';
+  if ( Xinha.is_ie )
+  {
+    ddTree.style.styleFloat = "left";
+  }
+  else
+  {
+    ddTree.style.cssFloat = "left";
+  }
   ddTree.style.backgroundColor = 'white';
   this.ddTree = ddTree;
   this.dTree._linker_premade = this.dTree.toString();
 
   var options = this.dialog.getElementById('options');
-  options.style.position = 'absolute';
-  options.style.top      = 0   + 'px';
-  options.style.right    = 0   + 'px';
+  //options.style.position = 'absolute';
+  //options.style.top      = 0   + 'px';
+  //options.style.right    = 0   + 'px';
   options.style.width    = 320 + 'px';
   options.style.overflow = 'auto';
 
   // Hookup the resizer
+  this.dialog.rootElem.style.paddingBottom ="0";
   this.dialog.onresize = function()
     {
       var h = parseInt(dialog.height) - dialog.getElementById('h1').offsetHeight;
-      var w = parseInt(dialog.width)  - 322 ;
+      var w = parseInt(dialog.width)  - 330 ;
+
       // An error is thrown with IE when trying to set a negative width or a negative height
       // But perhaps a width / height of 0 is not the minimum required we need to set
       if (w<0) w = 0;
       if (h<0) h = 0;
-      options.style.height = ddTree.style.height = h + 'px';
+      //options.style.height =
+       ddTree.style.height = h + 'px';
       ddTree.style.width  = w + 'px';
     }
-
   this.ready = true;
 };
 

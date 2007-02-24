@@ -107,9 +107,20 @@
 
 .dialog {
   color: ButtonText;
-  background: ButtonFace;
+  background: ButtonFace; 
+  border: 1px outset; 
+  border-color: WindowFrame;
 }
-
+div.dialog {
+  padding-bottom:10px;
+}
+.xinha_dialog_background {
+  background-color:#666;
+  filter: alpha(opacity = 70);
+  -moz-opacity: 0.7;
+  opacity: 0.7;
+  border:none;
+}
 .dialog .content { padding: 2px; }
 
 .dialog, .dialog button, .dialog input, .dialog select, .dialog textarea, .dialog table {
@@ -120,15 +131,16 @@
 
 .dialog .title, .dialog h1
 {
-  background: #008;
-  color: #ff8;
+  background: ActiveCaption;
+  color: CaptionText;
   border-bottom: 1px solid #000;
   padding: 1px 0px 2px 5px;
   font-size: 12px;
   font-weight: bold;
   cursor: default;
+  letter-spacing: 0.01em;
 }
-.dialog h1 { margin:0px;}
+.dialog h1 { margin:0;}
 .dialog .title .button {
   float: right;
   border: 1px solid #66a;
@@ -141,17 +153,39 @@
 .dialog .title .button-hilite { border-color: #88f; background: #44c; }
 
 .dialog button {
-  width: 5em;
+  width: 5.5em;
   padding: 0px;
 }
-
+.dialog .closeButton {
+  padding: 0px;
+  cursor: default;
+  border: 1px solid;
+  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+  height : 11px;
+  width : 11px;
+  vertical-align : top;
+  position : absolute;
+  top : 3px;
+  right : 2px;
+  background-color: ButtonFace;
+  color: ButtonText;
+  font-size: 13px;
+  font-family: Tahoma,Verdana,sans-serif;
+  text-align:center;
+  letter-spacing:0;
+  overflow:hidden;
+}
 .dialog .buttonColor {
+  width :1em;
   padding: 1px;
   cursor: default;
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
 
+.dialog .buttonClick {
+  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
 .dialog .buttonColor-hilite {
   border-color: #000;
 }
@@ -168,11 +202,23 @@
 
 .dialog .label { text-align: right; width: 6em; }
 .dialog .value input { width: 100%; }
-.dialog .buttons { text-align: right; padding: 2px 4px 0px 4px; }
 
 .dialog legend { font-weight: bold; }
 .dialog fieldset table { margin: 2px 0px; }
+ 
+.dialog  .buttons {
 
+      padding: 1em; 
+      text-align: center;
+}
+.dialog .resizeHandle {
+    -moz-appearance : resizer;
+    width: 12px;
+    height: 12px;
+    border-bottom: 2px solid #000;
+    border-right: 2px solid #000;
+    cursor : nw-resize;
+}
 .popupwin {
   padding: 0px;
   margin: 0px;
@@ -227,7 +273,7 @@ form { margin: 0px; border: none; }
   font-weight:bold;
   padding: 2px;
   clear:left;
-  
+  letter-spacing: 0.01em;
 }
 
 .htmlarea .panel { overflow:auto; }

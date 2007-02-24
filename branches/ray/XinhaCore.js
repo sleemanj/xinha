@@ -506,6 +506,7 @@ Xinha.Config = function()
 
   this.debug = true;
 
+  // ATTENTION: implementing custom image/link/table popups using this uris is DEPRECATED
   this.URIs =
   {
    "blank": "popups/blank.html",
@@ -1277,6 +1278,8 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         "click",
         function(ev)
         {
+          ev = Xinha.is_ie ? window.event : ev;
+          editor.btnClickEvent = ev;
           if ( obj.enabled )
           {
             Xinha._removeClass(el, "buttonActive");
@@ -1286,7 +1289,7 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
               editor.activateEditor();
             }
             obj.cmd(editor, obj.name, obj);
-            Xinha._stopEvent(Xinha.is_ie ? window.event : ev);
+            Xinha._stopEvent(ev);
           }
         }
       );
@@ -1552,7 +1555,8 @@ Xinha.prototype.generate = function ()
         case "insertimage":
           if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' )
           {
-            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , _editor_url + 'modules/InsertImage/insert_image.js');
+            var url = (this.config.URIs.insert_image != _editor_url + "modules/InsertImage/insert_image.html") ? _editor_url + "modules/InsertImage/insert_image.js" : _editor_url + "modules/InsertImage/InsertImage.js";
+            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , _editor_url + 'modules/InsertImage/InsertImage.js');
             return false;
           }
           else if ( typeof InsertImage != 'undefined') editor.registerPlugin('InsertImage');
@@ -1560,7 +1564,8 @@ Xinha.prototype.generate = function ()
         case "createlink":
           if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' )
           {
-            Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , _editor_url + 'modules/CreateLink/link.js');
+            var url = (this.config.URIs.link != _editor_url + "modules/CreateLink/link.html") ? _editor_url + "modules/CreateLink/link.js" : _editor_url + "modules/CreateLink/CreateLink.js";
+          	Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , url);
             return false;
           }
           else if ( typeof CreateLink != 'undefined') editor.registerPlugin('CreateLink');
@@ -1568,7 +1573,8 @@ Xinha.prototype.generate = function ()
         case "inserttable":
           if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' )
           {
-            Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , _editor_url + 'modules/InsertTable/insert_table.js');
+            var url = (this.config.URIs.insert_table != _editor_url + "modules/InsertTable/insert_table.html") ? _editor_url + "modules/InsertTable/insert_table.js" : _editor_url + "modules/InsertTable/InsertTable.js";
+          	Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , url);
             return false;
           }
           else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
@@ -4998,9 +5004,13 @@ Xinha._postback = function(url, data, handler)
           handler(req.responseText, req);
         }
       }
+      else if (req.status == 404)
+      {
+        alert('File not found: ' + url);
+      }
       else
       {
-        alert('An error has occurred: ' + req.statusText);
+        alert('An error has occurred: ' + req.statusText + '\nURL: ' + url);
       }
     }
   }
@@ -5026,9 +5036,13 @@ Xinha._getback = function(url, handler)
       {
         handler(req.responseText, req);
       }
+      else if (req.status == 404)
+      {
+        alert('File not found: ' + url);
+      }
       else
       {
-        alert('An error has occurred: ' + req.statusText);
+        alert('An error has occurred: ' + req.statusText + '\nURL: ' + url);
       }
     }
   }

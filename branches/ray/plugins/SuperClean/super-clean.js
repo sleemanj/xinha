@@ -36,7 +36,11 @@ SuperClean.prototype._superClean = function(opts, obj)
   // Do the clean if we got options
   var doOK = function()
   {
-    var opts = superclean._dialog.hide();
+    superclean._dialog.dialog.getElementById("main").style.display = "none";
+    superclean._dialog.dialog.getElementById("waiting").style.display = "";
+    superclean._dialog.dialog.getElementById("buttons").style.display = "none";
+    
+  	var opts = superclean._dialog.dialog.getValues();
     var editor = superclean.editor;
 
     if(opts.word_clean) editor._wordClean();
@@ -65,13 +69,25 @@ SuperClean.prototype._superClean = function(opts, obj)
         {
           case 'setHTML':
             editor.setHTML(response.value);
+            superclean._dialog.hide();
           break;
           case 'alert':
-            alert(superclean._lc(response.value));
+            superclean._dialog.dialog.getElementById("buttons").style.display = "";
+            superclean._dialog.dialog.getElementById("ok").style.display = "none";
+            superclean._dialog.dialog.getElementById("waiting").style.display = "none"; 
+            superclean._dialog.dialog.getElementById("alert").style.display = ""; 
+            superclean._dialog.dialog.getElementById("alert").innerHTML = superclean._lc(response.value);
+          break;
+          default: // make the dialog go away if sth goes wrong, who knows...
+           superclean._dialog.hide();
           break;
         }
       }
       Xinha._postback(editor.config.SuperClean.tidy_handler, {'content' : editor.getInnerHTML()},callback);
+    }
+    else
+    {
+      superclean._dialog.hide();
     }
     return true;
   }
@@ -188,7 +204,7 @@ SuperClean.filterFunctions.tidy = function(html, editor)
 
 
 
-SuperClean.prototype.onGenerate = function()
+SuperClean.prototype.onGenerateOnce = function()
 {
   if(this.editor.config.SuperClean.show_dialog && !this._dialog)
   {
@@ -281,7 +297,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
   var html = this.html;
 
   // Now we have everything we need, so we can build the dialog.
-  var dialog = this.dialog = new Xinha.Dialog(SuperClean.editor, this.html, 'SuperClean');
+  var dialog = this.dialog = new Xinha.Dialog(SuperClean.editor, this.html, 'SuperClean',{width:400});
 
   this.ready = true;
 };
@@ -330,5 +346,10 @@ SuperClean.Dialog.prototype.show = function(inputs, ok, cancel)
 SuperClean.Dialog.prototype.hide = function()
 {
   this.SuperClean.editor.enableToolbar();
+  this.dialog.getElementById("main").style.display = "";
+  this.dialog.getElementById("buttons").style.display = "";
+  this.dialog.getElementById("waiting").style.display = "none";
+  this.dialog.getElementById("alert").style.display = "none";
+  this.dialog.getElementById("ok").style.display = "";
   return this.dialog.hide();
 };

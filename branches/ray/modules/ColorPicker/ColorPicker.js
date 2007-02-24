@@ -131,7 +131,7 @@
     this.tbody = document.createElement('tbody');
     this.table.appendChild(this.tbody);
     this.table.style.border = '1px solid WindowFrame';
-    this.table.style.zIndex = '1000';
+    this.table.style.zIndex = '1050';
     // Add a title bar and close button
     var tr = document.createElement('tr');
     
@@ -140,6 +140,8 @@
     td.className= "title";
     td.style.fontFamily = 'small-caption,caption,sans-serif';
     td.style.fontSize = 'x-small';
+    td.unselectable = "on";
+    td.style.MozUserSelect = "none";
     td.appendChild(document.createTextNode(Xinha._lc('Click a color...')));
     td.style.borderBottom = '1px solid WindowFrame';
     tr.appendChild(td);
@@ -827,4 +829,37 @@ Xinha.colorPicker.loadColors = function()
 
 Xinha.colorPicker._lc = function(string) {
   return Xinha._lc(string);
+}
+Xinha.colorPicker.inputBinding = function(input)
+{
+  var main = document.createElement('span');
+  main.className = "buttonColor";
+  
+  var chooser = this.chooser = document.createElement('span');
+  chooser.className = "chooser";
+  chooser.onmouseover = function() {main.style.borderColor='black';chooser.style.borderColor='black'};
+  chooser.onmouseout = function() {main.style.borderColor='ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight',chooser.style.borderColor='ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight'};
+  chooser.appendChild(document.createTextNode('\u00a0'));
+  main.appendChild(chooser);
+  var clearColor = document.createElement('span');
+  clearColor.className = "nocolor";
+  clearColor.onmouseover = function() {clearColor.style.color='#f00'};
+  clearColor.onmouseout = function() {clearColor.style.color='#000'};
+  clearColor.onclick = function() {input.value ='';chooser.style.backgroundColor = ''};
+  clearColor.appendChild(document.createTextNode('\u00d7'));
+  main.appendChild(clearColor);
+  
+  input.parentNode.insertBefore(main,input.nextSibling);
+  
+  Xinha._addEvent(input,'change',function() {chooser.style.backgroundColor = this.value;})
+  
+  chooser.onclick = function() 
+  { 
+	  var colPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color) {chooser.style.backgroundColor = color;input.value=color}});
+	  colPicker.open('left',chooser, input.value ); 
+  }
+}
+Xinha.colorPicker.inputBinding.prototype.setColor = function(color)
+{
+  this.chooser.style.backgroundColor = color;
 }

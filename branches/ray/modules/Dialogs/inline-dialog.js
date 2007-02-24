@@ -20,22 +20,87 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
-Xinha.Dialog = function(editor, html, localizer)
+Xinha.Dialog = function(editor, html, localizer, size, layer)
 {
+  var dialog = this;
   this.id    = { };
   this.r_id  = { }; // reverse lookup id
   this.editor   = editor;
   this.document = document;
+  this.layer = (layer) ? layer : 0;
+  
+  if ( !Xinha.Dialog.background[this.layer] )
+  {
+  	Xinha.Dialog.background[this.layer] = [];
+  	
+    if (Xinha.is_ie)
+    { // IE6 needs the iframe to hide select boxes
+      var backG = document.createElement("iframe");
+      backG.src = "about:blank";
+    }
+    else 
+    { // Mozilla (<FF3) can't have the iframe, because it hides the caret in text fields 
+      // see https://bugzilla.mozilla.org/show_bug.cgi?id=226933
+      // unfortunately https://bugzilla.mozilla.org/show_bug.cgi?id=230701 indicates that this is an issue with pos fixed div, too
+      var backG = document.createElement("div");
+    }
+    backG.className = "xinha_dialog_background";
+    with (backG.style)
+    {
+      position = "absolute";//(Xinha.is_ie) ? "absolute" : "fixed"; 
+      top = 0;
+      left = 0;
+      border = 'none';
+      overflow = "hidden";
+      display = "none";
+      zIndex = 1001 + this.layer;
+    }
+    document.body.appendChild(backG);
+    Xinha.Dialog.background[this.layer].push(backG);
+  
+    backG = document.createElement("div");
+    with (backG.style)
+    {
+      position =  "absolute";//(Xinha.is_ie) ? "absolute" : "fixed";
+      top = 0;
+      left = 0;
+      overflow = "hidden";
+      display = "none";
+      zIndex = 1002+ this.layer;
+    } 
+    document.body.appendChild(backG);
+    Xinha.Dialog.background[this.layer].push(backG);
+  }
+  var rootElem = document.createElement('div');
+  rootElem.style.position = 'absolute';
+  rootElem.style.zIndex = 1003+ this.layer;
+  rootElem.style.display  = 'none';
+  
+  // FIXME: This is nice, but I don't manage to get it switched off on text inputs :(
+  // rootElem.style.MozUserSelect = "none";
+  
+  rootElem.className = 'dialog';
+  
+ // Xinha.Dialog.background[this.layer][1].appendChild(rootElem);
+  document.body.appendChild(rootElem);
 
-  this.rootElem = document.createElement('div');
-  this.rootElem.className = 'dialog';
-  this.rootElem.style.position = 'absolute';
-  this.rootElem.style.display  = 'none';
-  this.editor._framework.ed_cell.insertBefore(this.rootElem, this.editor._framework.ed_cell.firstChild);
-  this.rootElem.style.width  = this.width  =  this.editor._framework.ed_cell.offsetWidth + 'px';
-  this.rootElem.style.height = this.height =  this.editor._framework.ed_cell.offsetHeight + 'px';
+  rootElem.style.paddingBottom = "10px";
+  rootElem.style.width = size.width + 'px';
 
-  var dialog = this;
+  
+  this.size = size;
+  if (size.height)
+  {
+    if (Xinha.ie_version < 7)
+    {
+      rootElem.style.height = size.height + 'px';
+    }
+    else
+    {
+      rootElem.style.minHeight =  size.height + 'px';
+    }
+  }
+
   if(typeof localizer == 'function')
   {
     this._lc = localizer;
@@ -77,21 +142,78 @@ Xinha.Dialog = function(editor, html, localizer)
                        }
              );
 
-  this.rootElem.innerHTML = html;
+  rootElem.innerHTML = html;
 
+  //make the first h1 to drag&drop the rootElem
+  var titleBar = rootElem.getElementsByTagName("h1")[0];
+  titleBar.onmousedown = function(ev) { dialog._dragStart(ev); };
+  titleBar.style.MozUserSelect = "none";
+  
+  var but = document.createElement('div');
+  but.className= 'closeButton'; 
+  
+  but.onmousedown = function(ev) { this.className = "closeButton buttonClick"; Xinha._stopEvent((ev) ? ev : window.event); return false;};
+  but.onmouseout = function(ev) { this.className = "closeButton"; Xinha._stopEvent((ev) ? ev : window.event); return false;};
+  but.onmouseup = function() { this.className = "closeButton"; dialog.hide(); return false;};
+  titleBar.appendChild(but);
+  
+  var butX = document.createElement('span');
+  butX.style.position = 'relative';
+  butX.style.top = '-3px';
 
+  butX.appendChild(document.createTextNode('\u00D7'));
+  but.appendChild(butX);
+  
+  var icon = document.createElement('img');
+  icon.src = _editor_url + 'images/xinha-small-icon.gif';
+  icon.style.position = 'absolute';
+  icon.style.top = '3px';
+  icon.style.left = '2px';
+  titleBar.style.paddingLeft = '30px';
+  titleBar.appendChild(icon);
+   
+  var all = rootElem.getElementsByTagName("*");
 
+  for (var i=0; i<all.length;i++)
+  {
+  	var el = all[i]; 
+    if (el.tagName.toLowerCase() == 'textarea' || el.tagName.toLowerCase() == 'input')
+    {
+      // FIXME: this doesn't work
+      //el.style.MozUserSelect = "text";
+    }
+    else
+    {
+      el.unselectable = "on";
+    }
+  }
 
-  this.editor.notifyOn
-   ('resize',
-      function(e, args)
-      {
-        dialog.rootElem.style.width  = dialog.width  =  dialog.editor._framework.ed_cell.offsetWidth + 'px';
-        dialog.rootElem.style.height = dialog.height =  dialog.editor._framework.ed_cell.offsetHeight + 'px';
-        dialog.onresize();
-      }
-    );
+  var resizeHandle = document.createElement('div');
+  resizeHandle.className = "resizeHandle";
+  with (resizeHandle.style)
+  {
+    position = "absolute";
+    bottom = "0px";
+    right= "0px";
+  }
+  resizeHandle.onmousedown = function(ev) { dialog._resizeStart(ev); };
+  rootElem.appendChild(resizeHandle);
+  this.rootElem = rootElem;
+  // for caching size & position after dragging & resizing
+  this.size = {};
 };
+
+Xinha.Dialog.background = [];
+Xinha.Dialog.prototype.sizeBackground = function()
+{
+  var win_dim = Xinha.viewportSize();
+  Xinha.Dialog.background[this.layer][0].style.width = win_dim.x + 'px';
+  Xinha.Dialog.background[this.layer][0].style.height = win_dim.y + 'px';
+  Xinha.Dialog.background[this.layer][1].style.width = win_dim.x + 'px';
+  Xinha.Dialog.background[this.layer][1].style.height = win_dim.y + 'px';
+  window.scroll(this.scrollPos.x, this.scrollPos.y);
+  return win_dim;
+}
 
 Xinha.Dialog.prototype.onresize = function()
 {
@@ -100,35 +222,172 @@ Xinha.Dialog.prototype.onresize = function()
 
 Xinha.Dialog.prototype.show = function(values)
 {
-  // We need to preserve the selection for IE
-  if(Xinha.is_ie)
+  var rootElem = this.rootElem;
+  var scrollPos = this.scrollPos = this.editor.scrollPos();
+  var dialog = this;
+  
+  function resetScroll()
   {
+    if ( dialog.dialogShown )
+    {
+      window.scroll(scrollPos.x,scrollPos.y);
+      window.setTimeout(resetScroll,150);
+    }
+  }
+  Xinha.Dialog.background[this.layer][0].style.left = this.scrollPos.x + 'px';
+  Xinha.Dialog.background[this.layer][0].style.top = this.scrollPos.y + 'px';
+  Xinha.Dialog.background[this.layer][1].style.left = this.scrollPos.x + 'px';
+  Xinha.Dialog.background[this.layer][1].style.top = this.scrollPos.y + 'px';
+  
+  // We need to preserve the selection
+  if(Xinha.is_ie)
+  {      
     this._lastRange = this.editor._createRange(this.editor._getSelection());
   }
+  else
+  {
+  	this._lastRange = this.editor._createRange(this.editor._getSelection()).cloneRange();
+  }
+  this.editor.deactivateEditor();
+  
+  // unfortunately we have to hide the editor (iframe/caret bug)
+  if (Xinha.is_gecko)
+  {
+    this._restoreTo = [this.editor._textArea.style.display, this.editor._iframe.style.visibility, this.editor.hidePanels()];
+    this.editor._textArea.style.display = 'none';
+    this.editor._iframe.style.visibility   = 'hidden';
+  }
+  if (!this.editor._isFullScreen)
+  {
+    if(Xinha.is_ie && document.compatMode == 'CSS1Compat')
+    {
+      var bod = document.getElementsByTagName('html');
+    }
+    else
+    {
+      var bod = document.getElementsByTagName('body');
+    }
+  
+    bod[0].style.overflow='hidden';
+    window.scroll(this.scrollPos.x, this.scrollPos.y);
+  }
 
+  Xinha.Dialog.background[this.layer][0].style.display = '';
+  Xinha.Dialog.background[this.layer][1].style.display = '';
+  
+  var backgroundSize = this.sizeBackground();
+  var backgroundHeight = backgroundSize.y;
+  var backgroundWidth = backgroundSize.x;
+  
+  this.onResizeWin = function () {dialog.sizeBackground()};
+  Xinha._addEvent(window, 'resize', this.onResizeWin );
+  
+
+  
+  var rootElemStyle = rootElem.style;
+  rootElemStyle.display   = '';
+  
+  var dialogHeight = rootElem.offsetHeight;
+  var dialogWidth = rootElem.offsetWidth;
+  
+  if (dialogHeight >  backgroundHeight)
+  {
+  	rootElemStyle.height =  backgroundHeight + "px";
+  	if (rootElem.scrollHeight > dialogHeight)
+  	{
+  	  rootElemStyle.overflowY = "auto";
+  	}
+  }
+
+  if(this.size.top && this.size.left)
+  {
+    rootElemStyle.top =  parseInt(this.size.top,10) + 'px';
+    rootElemStyle.left = parseInt(this.size.left,10) + 'px';
+  }
+  else
+  {
+    if (this.editor.btnClickEvent)
+    {
+      var btnClickEvent = this.editor.btnClickEvent; 
+      rootElemStyle.top =  btnClickEvent.clientY + this.scrollPos.y +'px';
+     
+      if (dialogHeight + rootElem.offsetTop >  backgroundHeight)
+      {
+        rootElemStyle.top = this.scrollPos.y;
+      }
+      rootElemStyle.left = btnClickEvent.clientX +  this.scrollPos.x +'px';
+      if (dialogWidth + rootElem.offsetLeft >  backgroundWidth)
+      {
+        rootElemStyle.left =  btnClickEvent.clientX - dialogWidth   + 'px';
+        if (rootElem.offsetLeft < 0) 
+        {
+        	rootElemStyle.left = 0;
+        }
+      }
+      this.editor.btnClickEvent = null;
+    }
+    else
+    {
+    var top =  ( backgroundHeight - dialogHeight) / 2;
+    var left = ( backgroundWidth - dialogWidth) / 2;
+    rootElemStyle.top =  ((top > 0) ? top : 0) +'px';
+    rootElemStyle.left = ((left > 0) ? left : 0)+'px';		
+    }
+  	
+  }
+  this.width = dialogWidth;
+  this.height = dialogHeight;  
+  
   if(typeof values != 'undefined')
   {
     this.setValues(values);
   }
-  this._restoreTo = [this.editor._textArea.style.display, this.editor._iframe.style.visibility, this.editor.hidePanels()];
-
-  this.editor._textArea.style.display = 'none';
-  this.editor._iframe.style.visibility   = 'hidden';
-  this.rootElem.style.display   = '';
+  this.dialogShown = true;
+  resetScroll();
 };
 
 Xinha.Dialog.prototype.hide = function()
 {
-  this.rootElem.style.display         = 'none';
-  this.editor._textArea.style.display = this._restoreTo[0];
-  this.editor._iframe.style.visibility   = this._restoreTo[1];
-  this.editor.showPanels(this._restoreTo[2]);
+  this.rootElem.style.display = 'none';
+  Xinha.Dialog.background[this.layer][0].style.display = 'none';
+  Xinha.Dialog.background[this.layer][1].style.display = 'none';
+  var dialog = this;
 
-  // Restore the selection
-  if(Xinha.is_ie)
+  Xinha._removeEvent(window, 'resize', this.onResizeWin);
+  
+  if (Xinha.is_gecko)
   {
+    this.editor._textArea.style.display = this._restoreTo[0];
+    this.editor._iframe.style.visibility   = this._restoreTo[1];
+    this.editor.showPanels(this._restoreTo[2]);  
+  }
+  
+  if (!this.editor._isFullScreen)
+  {
+    if(Xinha.is_ie && document.compatMode == 'CSS1Compat')
+    {
+      var bod = document.getElementsByTagName('html');
+    }
+    else
+    {
+      var bod = document.getElementsByTagName('body');
+    }
+    bod[0].style.overflow='';
+    window.scroll(this.scrollPos.x, this.scrollPos.y);
+  }
+// Restore the selection
+  this.editor.activateEditor();
+  if (Xinha.is_gecko)
+  { 	 	
+    var sel = this.editor.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(this._lastRange);
+  }
+  else
+  { 
     this._lastRange.select();
   }
+  this.dialogShown = false;
   this.editor.updateToolbar();
   return this.getValues();
 };
@@ -143,6 +402,122 @@ Xinha.Dialog.prototype.toggle = function()
   {
     this.hide();
   }
+};
+
+Xinha.Dialog.prototype.getElementById = function(id)
+{
+  return this.document.getElementById(this.id[id] ? this.id[id] : id);
+};
+
+Xinha.Dialog.prototype.getElementsByName = function(name)
+{
+  return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
+};
+
+Xinha.Dialog.prototype._dragStart = function (ev) 
+{
+
+  var dialog = this;
+  if (dialog.dragging) 
+  {
+    return;
+  }
+  dialog.dragging = true;
+
+  var st = dialog.rootElem.style;
+
+  dialog.xOffs = ((Xinha.is_ie) ? window.event.offsetX : ev.layerX);
+  dialog.yOffs = ((Xinha.is_ie) ? window.event.offsetY : ev.layerY);
+
+  Xinha._addEvent(document, "mousemove", function(ev) { dialog.dragIt(ev); } );
+  Xinha._addEvent(document, "mouseup", function (ev) { dialog.dragEnd(ev); } );
+};
+
+Xinha.Dialog.prototype.dragIt = function(ev)
+{
+  var dialog = this;
+
+  if (!dialog.dragging) 
+  {
+    return false;
+  }
+  ev = (Xinha.is_ie) ? window.event : ev;
+
+  var posY = ev.clientY + this.scrollPos.y;
+  var posX = ev.clientX + this.scrollPos.x;
+
+  var st = dialog.rootElem.style;
+
+  st.left = (posX - dialog.xOffs) + "px";
+  st.top = (posY - dialog.yOffs) + "px";
+};
+
+Xinha.Dialog.prototype.dragEnd = function(ev)
+{
+  var dialog = this;
+  dialog.dragging = false;
+
+  Xinha._removeEvent(document, "mousemove", function(ev) { dialog.dragIt(ev); } );
+  Xinha._removeEvent(document, "mouseup", function (ev) { dialog.dragEnd(ev); } );
+
+  dialog.size.top  = dialog.rootElem.style.top;
+  dialog.size.left =dialog.rootElem.style.left;
+};
+
+Xinha.Dialog.prototype._resizeStart = function (ev) {
+  var dialog = this;
+
+  if (dialog.resizing)
+  {
+    return;
+  }
+  dialog.resizing = true;
+
+  var st = dialog.rootElem.style;
+  st.minHeight = '';
+  st.overflow  =  'hidden';
+  dialog.xOffs = parseInt(st.left,10);
+  dialog.yOffs = parseInt(st.top,10);
+
+  Xinha._addEvent(document, "mousemove", function(ev) { dialog.resizeIt(ev); } );
+  Xinha._addEvent(document, "mouseup", function (ev) { dialog.resizeEnd(ev); } );
+};
+
+Xinha.Dialog.prototype.resizeIt = function(ev)
+{
+  var dialog = this;
+
+  if (!dialog.resizing) {
+    return false;
+  }
+
+  var posY = ev.clientY + dialog.scrollPos.y;
+  var posX = ev.clientX + dialog.scrollPos.x;
+
+  var st = dialog.rootElem.style;
+
+  posX = posX - dialog.xOffs;
+  posY = posY - dialog.yOffs;
+
+  st.width  = (( posX > 10) ? posX : 10) + "px";
+  st.height = (( posY > 10) ? posY : 10) + "px";
+
+  dialog.width = dialog.rootElem.offsetWidth;
+  dialog.height = dialog.rootElem.offsetHeight;
+
+  dialog.onresize();
+};
+
+Xinha.Dialog.prototype.resizeEnd = function(ev)
+{
+  var dialog = this;
+  dialog.resizing = false;
+
+  Xinha._removeEvent(document, "mousemove", function(ev) { dialog.resizeIt(ev); } );
+  Xinha._removeEvent(document, "mouseup", function (ev) { dialog.resizeEnd(ev); } );
+
+  dialog.size.width  = dialog.rootElem.offsetWidth;
+  dialog.size.height = dialog.rootElem.offsetHeight;
 };
 
 Xinha.Dialog.prototype.setValues = function(values)
@@ -335,14 +710,4 @@ Xinha.Dialog.prototype.getValues = function()
     values[this.r_id[i.name]] = v;
   }
   return values;
-};
-
-Xinha.Dialog.prototype.getElementById = function(id)
-{
-  return this.document.getElementById(this.id[id] ? this.id[id] : id);
-};
-
-Xinha.Dialog.prototype.getElementsByName = function(name)
-{
-  return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
 };

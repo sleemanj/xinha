@@ -71,7 +71,7 @@ Xinha.prototype._fullScreen = function()
    *   so we just reset the scroll ever so often while in fullscreen mode
    */
   function resetScroll()
-  {
+  {console.log('resetScroll');
     if(e._isFullScreen)
     {
       window.scroll(0,0);

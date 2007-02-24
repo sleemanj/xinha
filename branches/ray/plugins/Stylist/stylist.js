@@ -82,6 +82,7 @@ HTMLArea.prototype._fillStylist = function()
     var tag   = null;
     var className = x.trim();
     var applicable = true;
+    var idApplicable = false;
     var apply_to   = active_elem;
 
     if(applicable && /[^a-zA-Z0-9_.-]/.test(className))
@@ -95,6 +96,11 @@ HTMLArea.prototype._fillStylist = function()
     {
       // No class name, just redefines a tag
       applicable = false;
+  
+      if (className.indexOf('#') >= 0)
+      {
+        idApplicable = true;
+      }
     }
 
     if(applicable && (className.indexOf('.') > 0))
@@ -146,13 +152,75 @@ HTMLArea.prototype._fillStylist = function()
       }
     }
 
-    if(applicable)
+    if (idApplicable) // IDs
     {
-      // Remove the first .
-      className = className.substring(className.indexOf('.'), className.length);
+       // requires specific html tag
+      tag = className.substring(0, className.indexOf('#')).toLowerCase();
+      var idName = className.substring(className.indexOf('#'), className.length);
+  
+      // To apply we must have an ancestor tag that is the right type
+      if(active_elem != null && active_elem.tagName.toLowerCase() == tag)
+      {
+        idApplicable = true;
+        apply_to = active_elem;
+      }
+      else
+      {
+        if(this._getFirstAncestor(this._getSelection(), [tag]) != null)
+        {
+          idApplicable = true;
+          apply_to = this._getFirstAncestor(this._getSelection(), [tag]);
+        }
+        else
+        {
+          // alert (this._getFirstAncestor(this._getSelection(), tag));
+          // If we don't have an ancestor, but it's a div/span/p/hx stle, we can make one
+          if(( tag == 'div' || tag == 'span' || tag == 'p'
+              || (tag.substr(0,1) == 'h' && tag.length == 2 && tag != 'hr')))
+          {
+            if(!this._selectionEmpty(this._getSelection()))
+            {
+              idApplicable = true;
+              apply_to = 'new';
+            }
+            else
+            {
+              // See if we can get a paragraph or header that can be converted
+              apply_to = this._getFirstAncestor(sel, ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7']);
+              if(apply_to != null)
+              {
+                idApplicable = true;
+              }
+            }
+          }
+          else
+          {
+            idApplicable = false;
+          }
+        }
+      }    
+    }
 
-      // Replace any futher ones with spaces (for multiple class definitions)
-      className = className.replace('.', ' ');
+
+    if(applicable || idApplicable)
+    {
+
+      if (idApplicable)
+      {
+        // Remove the first .
+        idName = idName.substring(idName.indexOf('#'), idName.length);
+
+        // Replace any futher ones with spaces (for multiple id definitions (yes it happens))
+        idName = idName.replace('#', ' ');
+      }
+      else
+      {
+        // Remove the first .
+        className = className.substring(className.indexOf('.'), className.length);
+
+        // Replace any futher ones with spaces (for multiple class definitions)
+        className = className.replace('.', ' ');
+      }
 
       if(apply_to == null)
       {
@@ -169,13 +237,24 @@ HTMLArea.prototype._fillStylist = function()
       }
     }
 
-    var applied    = (this._ancestorsWithClasses(sel, tag, className).length > 0 ? true : false);
-    var applied_to = this._ancestorsWithClasses(sel, tag, className);
+    if (idApplicable)
+    {
+      var applied    = (this._ancestorsWithIDs(sel, tag, idName).length > 0 ? true : false);
+      var applied_to = this._ancestorsWithIDs(sel, tag, idName);
+    }
+    else
+    {
+      var applied    = (this._ancestorsWithClasses(sel, tag, className).length > 0 ? true : false);
+      var applied_to = this._ancestorsWithClasses(sel, tag, className);
+    }
 
-    if(applicable)
+    if(applicable || idApplicable)
     {
       var anch = document.createElement('a');
-      anch._stylist_className = className.trim();
+      if (idApplicable)
+        anch._stylist_idName = idName.trim();  
+      else
+        anch._stylist_className = className.trim();
       anch._stylist_applied   = applied;
       anch._stylist_appliedTo = applied_to;
       anch._stylist_applyTo = apply_to;
@@ -184,17 +263,35 @@ HTMLArea.prototype._fillStylist = function()
       anch.innerHTML = this.config.css_style[x];
       anch.href = 'javascript:void(0)';
       var editor = this;
-      anch.onclick = function()
+      if (idApplicable)
+      {  
+        anch.onclick = function()
+        {
+          if(this._stylist_applied == true)
+          {
+            editor._stylistRemoveIDs(this._stylist_idName, this._stylist_appliedTo);
+          }
+          else
+          {
+            editor._stylistAddIDs(this._stylist_applyTo, this._stylist_applyTag, this._stylist_idName);
+          }
+          return false;
+        }
+      }
+      else
       {
-        if(this._stylist_applied == true)
+        anch.onclick = function()
         {
-          editor._stylistRemoveClasses(this._stylist_className, this._stylist_appliedTo);
+          if(this._stylist_applied == true)
+          {
+            editor._stylistRemoveClasses(this._stylist_className, this._stylist_appliedTo);
+          }
+          else
+          {
+            editor._stylistAddClasses(this._stylist_applyTo, this._stylist_applyTag, this._stylist_className);
+          }
+          return false;
         }
-        else
-        {
-          editor._stylistAddClasses(this._stylist_applyTo, this._stylist_applyTag, this._stylist_className);
-        }
-        return false;
       }
 
       anch.style.display = 'block';
@@ -252,6 +349,40 @@ HTMLArea.prototype._stylistAddClasses = function(el, tag, classes)
     this.focusEditor();
     this.updateToolbar();
   };
+  
+HTMLArea.prototype._stylistAddIDs = function(el, tag, ids)
+  {
+    if(el == 'new')
+    {
+      this.insertHTML('<' + tag + ' id="' + ids + '">' + this.getSelectedHTML() + '</' + tag + '>');
+    }
+    else
+    {
+      if(tag != null && el.tagName.toLowerCase() != tag)
+      {
+        // Have to change the tag!
+        var new_el = this.switchElementTag(el, tag);
+
+        if(typeof el._stylist_usedToBe != 'undefined')
+        {
+          new_el._stylist_usedToBe = el._stylist_usedToBe;
+          new_el._stylist_usedToBe[new_el._stylist_usedToBe.length] = {'tagName' : el.tagName, 'id' : el.getAttribute('id')};
+        }
+        else
+        {
+          new_el._stylist_usedToBe = [{'tagName' : el.tagName, 'id' : el.getAttribute('id')}];
+        }
+
+        HTMLArea.addIDs(new_el, ids);
+      }
+      else
+      {
+        HTMLArea._addIDs(el, ids);
+      }
+    }
+    this.focusEditor();
+    this.updateToolbar();
+  };  
 
 /**
  * Remove the given classes (space seperated list) from the given elements (array of elements)
@@ -265,6 +396,16 @@ HTMLArea.prototype._stylistRemoveClasses = function(classes, from)
     this.focusEditor();
     this.updateToolbar();
   };
+  
+HTMLArea.prototype._stylistRemoveIDs = function(ids, from)
+  {
+    for(var x = 0; x < from.length; x++)
+    {
+      this._stylistRemoveIDsFull(from[x], ids);
+    }
+    this.focusEditor();
+    this.updateToolbar();
+  };  
 
 HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
 {
@@ -320,6 +461,75 @@ HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
       )
     {
       el.className = new_thiers.join(' ').trim();
+    }
+    else
+    {
+      // Must be a span with no classes and no id, so we can splice it out
+      var prnt = el.parentNode;
+      var childs = el.childNodes;
+      for(var x = 0; x < childs.length; x++)
+      {
+        prnt.insertBefore(childs[x], el);
+      }
+      prnt.removeChild(el);
+    }
+  }
+};
+
+HTMLArea.prototype._stylistRemoveIDsFull = function(el, ids)
+{
+  if(el != null)
+  {
+    var thiers = el.id.trim().split(' ');
+    var new_thiers = [ ];
+    var ours   = ids.split(' ');
+    for(var x = 0; x < thiers.length; x++)
+    {
+      var exists = false;
+      for(var i = 0; exists == false && i < ours.length; i++)
+      {
+        if(ours[i] == thiers[x])
+        {
+          exists = true;
+        }
+      }
+      if(exists == false)
+      {
+        new_thiers[new_thiers.length] = thiers[x];
+      }
+    }
+
+    if(new_thiers.length == 0 && el._stylist_usedToBe && el._stylist_usedToBe.length > 0 && el._stylist_usedToBe[el._stylist_usedToBe.length - 1].id != null)
+    {
+      // Revert back to what we were IF the classes are identical
+      var last_el = el._stylist_usedToBe[el._stylist_usedToBe.length - 1];
+      var last_ids = HTMLArea.arrayFilter(last_el.id.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
+
+      if(
+        (new_thiers.length == 0)
+        ||
+        (
+        HTMLArea.arrayContainsArray(new_thiers, last_ids)
+        && HTMLArea.arrayContainsArray(last_ids, new_thiers)
+        )
+      )
+      {
+        el = this.switchElementTag(el, last_el.tagName);
+        new_thiers = last_ids;
+      }
+      else
+      {
+        // We can't rely on the remembered tags any more
+        el._stylist_usedToBe = [ ];
+      }
+    }
+
+    if(     new_thiers.length > 0
+        ||  el.tagName.toLowerCase() != 'span'
+        || (el.id && el.id != '')
+      )
+    {
+      el.id = new_thiers.join(' ').trim();
     }
     else
     {
@@ -426,6 +636,61 @@ HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
           }
 
           if(!found_class)
+          {
+            found_all = false;
+            break;
+          }
+        }
+
+        if(found_all) ancestors[ancestors.length] = prnt;
+      }
+      if(prnt.tagName.toLowerCase() == 'body')    break;
+      if(prnt.tagName.toLowerCase() == 'table'  ) break;
+    }
+    prnt = prnt.parentNode;
+  }
+
+  return ancestors;
+};
+
+HTMLArea.prototype._ancestorsWithIDs = function(sel, tag, ids)
+{
+  var ancestors = [ ];
+  var prnt = this._activeElement(sel);
+  if(prnt == null)
+  {
+    try
+    {
+      prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+    }
+    catch(e)
+    {
+      return ancestors;
+    }
+  }
+  var search_ids = ids.trim().split(' ');
+
+  while(prnt)
+  {
+    if(prnt.nodeType == 1 && prnt.id)
+    {
+      if(tag == null || prnt.tagName.toLowerCase() == tag)
+      {
+        var ids = prnt.id.trim().split(' ');
+        var found_all = true;
+        for(var i = 0; i < search_ids.length; i++)
+        {
+          var found_id = false;
+          for(var x = 0; x < ids.length; x++)
+          {
+            if(search_ids[i] == ids[x])
+            {
+              found_id = true;
+              break;
+            }
+          }
+
+          if(!found_id)
           {
             found_all = false;
             break;

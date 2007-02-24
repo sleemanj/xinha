@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -54,7 +53,8 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'CharacterMap', 'SpellChecker', 'Linker'
+        'CharacterMap', 'SpellChecker', 'SmartReplace','PasteText','SuperClean'
+        //'Linker'//,'GetHtml'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -66,7 +66,9 @@
 
       xinha_editors = xinha_editors ? xinha_editors :
       [
-        'myTextArea'
+      'HAllo',  
+      'myTextArea'
+        
       ];
 
       /** STEP 3 ***************************************************************
@@ -83,8 +85,23 @@
        *************************************************************************/
 
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
-       xinha_config.fullPage = true;
+   xinha_config.width  = 300;
+   xinha_config.height = 300;
+       xinha_config.fullPage = false;
        xinha_config.CharacterMap.mode = 'panel';
+       xinha_config.toolbar =
+  [
+    ["popupeditor"],
+    ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
+    ["separator","forecolor","hilitecolor","textindicator"],
+    ["separator","subscript","superscript"],
+    ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
+    ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
+    ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
+    ["linebreak","separator","undo","redo","selectall","print"], (Xinha.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
+    ["separator","killword","clearfonts","removeformat","toggleborders","splitblock","lefttoright", "righttoleft"],
+    ["separator","htmlmode","showhelp","about"]
+  ];
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
       //  otherwise it won't work!
@@ -141,44 +158,43 @@
   </script>
 </head>
 
-<body>
+<body bgcolor="Aqua">
 
-  <form action="javascript:var x = document.getElementById('editors_here');alert(x.myTextArea.value);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
-    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
-      &lt;html&gt;
-      &lt;head&gt;
-        &lt;title&gt;Hello&lt;/title&gt;
-        &lt;style type="text/css"&gt;
-          li { color:red; }
-        &lt;/style&gt;
-      &lt;/head&gt;
-      &lt;body&gt;
-      &lt;img src="http://xinha.python-hosting.com/trac/logo.jpg" usemap="#m1"&gt;
-      &lt;map name="m1"&gt;
-      &lt;area shape="rect" coords="137,101,255,124" href="http://www.mydomain.com"&gt;
-      &lt;/map&gt;
+  <form action="test_dest.php" id="editors_here" onsubmit="alert(this.myTextArea.value);">
+<input type="checkbox" name="hallo" />
+<select>
+<option>Test</option>
+</select>
+  <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+    <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
 
-      &lt;p&gt;
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-        Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
-        velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
-        ante elementum turpis. Aliquam nisl. Nulla posuere neque non
-        tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
-        parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
-        Curabitur pharetra bibendum lectus.
-      &lt;/p&gt;
+    <input type="submit" /> <input type="reset" /><input type="checkbox" name="hallo" />
+<select>
+<option>Test</option>
+</select>
+  <textarea name="myTextArea" style="width:100%;height:320px;">
+    <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
 
-      &lt;ul&gt;
-        &lt;li&gt; Phasellus et massa sed diam viverra semper.  &lt;/li&gt;
-        &lt;li&gt; Mauris tincidunt felis in odio.              &lt;/li&gt;
-        &lt;li&gt; Nulla placerat nunc ut pede.                 &lt;/li&gt;
-        &lt;li&gt; Vivamus ultrices mi sit amet urna.           &lt;/li&gt;
-        &lt;li&gt; Quisque sed augue quis nunc laoreet volutpat.&lt;/li&gt;
-        &lt;li&gt; Nunc sit amet metus in tortor semper mattis. &lt;/li&gt;
-      &lt;/ul&gt;
-      &lt;/body&gt;
-      &lt;/html&gt;
-    </textarea>
+    <input type="submit" /> <input type="reset" /><input type="checkbox" name="hallo" />
+<select>
+<option>Test</option>
+</select>
+  <textarea name="myTextArea" style="width:100%;height:320px;">
+    <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
+
+    <input type="submit" /> <input type="reset" /><input type="checkbox" name="hallo" />
+<select>
+<option>Test</option>
+</select>
+  <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+    <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
+
+    <input type="submit" /> <input type="reset" /><input type="checkbox" name="hallo" />
+<select>
+<option>Test</option>
+</select>
+  <textarea name="myTextArea" style="width:100%;height:320px;">
+    <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
 
     <input type="submit" /> <input type="reset" />
   </form>
