@@ -24,11 +24,11 @@
 // | Authors: Peter Bowyer <peter@mapledesign.co.uk>                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: NetPBM.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+// $Id$
 //
 // Image Transformation interface using command line NetPBM
 
-require_once "Transform.php";
+require_once "../ImageManager/Classes/Transform.php";
 
 Class Image_Transform_Driver_NetPBM extends Image_Transform
 {

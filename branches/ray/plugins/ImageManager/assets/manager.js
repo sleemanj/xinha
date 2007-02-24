@@ -1,7 +1,7 @@
 /**
  * Functions for the ImageManager, used by manager.php only	
- * @author $Author: Wei Zhuo $
- * @version $Id: manager.js 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @author $Author$
+ * @version $Id$
  * @package ImageManager
  */
 	
@@ -39,12 +39,12 @@
     // Hookup color pickers
     var bgCol_pick = document.getElementById('bgCol_pick');
     var f_backgroundColor = document.getElementById('f_backgroundColor');
-    var bgColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
+    var bgColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
     bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
 
     var bdCol_pick = document.getElementById('bdCol_pick');
     var f_borderColor = document.getElementById('f_borderColor');
-    var bdColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
+    var bdColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
     bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
 
 
@@ -61,9 +61,9 @@
       // The image URL may reference one of the automatically resized images 
       // (when the user alters the dimensions in the picker), clean that up
       // so it looks right and we get back to a normal f_url
-      var rd = _resized_dir.replace(HTMLArea.RE_Specials, '\\$1');
-      var rp = _resized_prefix.replace(HTMLArea.RE_Specials, '\\$1');
-      var dreg = new RegExp('^(.*/)' + rd + '/' + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
+      var rd = (_resized_dir) ? _resized_dir.replace(Xinha.RE_Specials, '\\$1') + '/' : '';
+      var rp = _resized_prefix.replace(Xinha.RE_Specials, '\\$1');
+      var dreg = new RegExp('^(.*/)' + rd + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
   
       if(dreg.test(param.f_url))
       {

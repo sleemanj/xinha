@@ -45,6 +45,11 @@ function TableOperations(editor) {
 
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
+	
+  if ( typeof PopupWin == 'undefined' )
+  {
+    Xinha._loadback(_editor_url + 'modules/Dialogs/popupwin.js');
+  }
 }
 
 TableOperations._pluginInfo = {
@@ -598,6 +603,10 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		var cells = null;
 		if (!HTMLArea.is_ie) {
 			try {
+				if (sel.rangeCount < 2) {
+					alert(HTMLArea._lc("Please select the cells you want to merge.", "TableOperations"));
+					break;
+				}
 				while (range = sel.getRangeAt(i++)) {
 					var td = range.startContainer.childNodes[range.startOffset];
 					if (td.parentNode != row) {

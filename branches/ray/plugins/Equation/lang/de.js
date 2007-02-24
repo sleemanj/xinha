@@ -16,6 +16,7 @@
   "Formula Editor": "Formeleditor",
   "Input":"Eingabe",
   "Preview":"Vorschau",
-  "Based on ASCIIMathML by": "Basiert auf ASCIIMathML von",
-  "For more information on AsciiMathML visit this page:":"Für weitere Informationen besuchen Sie bitte diese Seite:"
+  "Based on ASCIIMathML by ": "Basiert auf ASCIIMathML von ",
+  "For more information on AsciiMathML visit this page: ":"Für weitere Informationen besuchen Sie bitte diese Seite: ",
+  "Attention: Editing the formula in the editor is not possible, please use this dialog!" : "Achtung, ändern der Formel im Editor ist nicht möglich. Bitte benutzen Sie diesen Dialog!"
 }

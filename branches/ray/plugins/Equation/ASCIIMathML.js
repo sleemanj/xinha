@@ -32,11 +32,22 @@ If you use it on a webpage, please send the URL to jipsen@chapman.edu
 
 var checkForMathML = true;   // check if browser can display MathML
 var notifyIfNoMathML = true; // put note at top of page if no MathML capability
-var mathcolor = "red";       // change it to "" (to inherit) or any other color
-var mathfontfamily = "serif"; // change to "" to inherit (works in IE) 
-                              // or another family (e.g. "arial")
+
+if ( typeof mathcolor == "undefined" )
+{
+	var mathcolor = "red";      // change it to "" (to inherit) or any other color
+}
+if ( typeof mathfontfamily == "undefined" ) 
+{
+	var mathfontfamily = "serif"; // change to "" to inherit (works in IE) or another family (e.g. "arial")
+}
 var displaystyle = true;      // puts limits above and below large operators
-var showasciiformulaonhover = true; // helps students learn ASCIIMath
+
+if ( typeof showasciiformulaonhover == "undefined" ) 
+{
+	var showasciiformulaonhover = true; // helps students learn ASCIIMath
+}
+
 var decimalsign = ".";        // change to "," if you like, beware of `(1,2)`!
 var AMdelimiter1 = "`", AMescape1 = "\\\\`"; // can use other characters
 var AMdelimiter2 = "$", AMescape2 = "\\\\\\$", AMdelimiter2regexp = "\\$";

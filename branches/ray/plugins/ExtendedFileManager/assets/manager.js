@@ -19,7 +19,7 @@ function comboSelectValue(c, val) {
 
 //Translation
 function i18n(str) {
-    return HTMLArea._lc(str, 'ExtendedFileManager');
+    return Xinha._lc(str, 'ExtendedFileManager');
 }
 
 //set the alignment options
@@ -46,32 +46,53 @@ function onTargetChanged() {
 }
 
 //initialise the form
+
+if (manager_mode == "link")
+{
+    var offsetForInputs = (Xinha.is_ie) ? 165 : 150;
+}
+else
+{
+    var offsetForInputs = (Xinha.is_ie) ? 230 : 210;
+}    
 init = function ()
 {
-    if (manager_mode == "link")
-      __dlg_init(null,  {width:650,height:500});
-    else
-      __dlg_init(null,  {width:650,height:560});
+    
+	var h =  100 // space above files 
+           + 250 // files iframe
+           + offsetForInputs;
+    
+    __dlg_init(null,  {width:650,height:h});
 
     __dlg_translate('ExtendedFileManager');
 
     var uploadForm = document.getElementById('uploadForm');
     if(uploadForm) uploadForm.target = 'imgManager';
-
-    if (manager_mode == 'image' && typeof colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
+    
+    var editor = window.dialogArguments.editor;
+    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
         // Hookup color pickers
+        var pickerConfig = {
+            cellsize:editor.config.colorPickerCellSize,
+            granularity:editor.config.colorPickerGranularity,
+            websafe:editor.config.colorPickerWebSafe,
+            savecolors:editor.config.colorPickerSaveColors
+        };
+
         var bgCol_pick = document.getElementById('bgCol_pick');
         var f_backgroundColor = document.getElementById('f_backgroundColor');
-        var bgColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
+        pickerConfig.callback = function(color){f_backgroundColor.value=color;};
+        var bgColPicker = new Xinha.colorPicker(pickerConfig);
         bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
 
         var bdCol_pick = document.getElementById('bdCol_pick');
         var f_borderColor = document.getElementById('f_borderColor');
-        var bdColPicker = new colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
+        pickerConfig.callback = function(color){f_borderColor.value=color;};
+        var bdColPicker = new Xinha.colorPicker(pickerConfig);
         bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
     }
 
-    var param = window.dialogArguments;
+    var param = window.dialogArguments.param;
 
     if(manager_mode=="image" && param)
     {
@@ -89,9 +110,11 @@ init = function ()
         // The image URL may reference one of the automatically resized images
         // (when the user alters the dimensions in the picker), clean that up
         // so it looks right and we get back to a normal f_url
-        var rd = _resized_dir.replace(HTMLArea.RE_Specials, '\\$1');
-        var rp = _resized_prefix.replace(HTMLArea.RE_Specials, '\\$1');
-        var dreg = new RegExp('^(.*/)' + rd + '/' + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
+        var rd = (_resized_dir) ? _resized_dir.replace(Xinha.RE_Specials, '\\$1') + '/' : '';
+        var rp = _resized_prefix.replace(Xinha.RE_Specials, '\\$1');
+        var dreg = new RegExp('^(.*/)' + rd + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
+
+        var match = param.f_url.match(dreg);
 
         if(dreg.test(param.f_url))
         {
@@ -206,7 +229,7 @@ init = function ()
         {
             document.getElementById("f_target_label").style.visibility = "hidden";
             document.getElementById("f_target").style.visibility = "hidden";
-            document.getElementById("f_target_other").style.visibility = "hidden";
+            document.getElementById("f_other_target").style.visibility = "hidden";
         }
 
         var opt = document.createElement("option");
@@ -293,7 +316,7 @@ function onOK()
         {
             var id = fields[i];
             var el = document.getElementById(id);
-            if(id == "f_url" && el.value.indexOf('://') < 0 )
+            if(id == "f_url" && el.value.indexOf('://') < 0 && el.value )
                 param[id] = makeURL(base_url,el.value);
             else
                 param[id] = el.value;
@@ -310,7 +333,7 @@ function onOK()
           || (origsize.h != param.f_height) )
         {
           // Yup, need to resize
-          var resized = HTMLArea._geturlcontent(window.opener._editor_url + 'plugins/ExtendedFileManager/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
+          var resized = Xinha._geturlcontent(window.opener._editor_url + 'plugins/ExtendedFileManager/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
 
           // alert(resized);
           resized = eval(resized);
@@ -319,7 +342,6 @@ function onOK()
             param.f_url = makeURL(base_url, resized);
           }
         }
-
         __dlg_close(param);
         return false;
     }
@@ -516,4 +538,13 @@ function newFolder()
         imgManager.newFolder(dir, encodeURI(folder));
 }
 
+
+function resize()
+{
+	var win = Xinha.viewportSize(window);
+	document.getElementById('imgManager').style.height = parseInt( win.y - 130 - offsetForInputs, 10 ) + 'px';
+	
+	return true;
+}
+addEvent(window, 'resize', resize);
 addEvent(window, 'load', init);

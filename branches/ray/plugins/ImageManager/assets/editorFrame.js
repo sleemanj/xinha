@@ -1,7 +1,7 @@
 /**
  * Javascript used by the editorFrame.php, it basically initializes the frame.
- * @author $Author: Wei Zhuo $
- * @version $Id: editorFrame.js 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @author $Author$
+ * @version $Id$
  * @package ImageManager
  */
 

@@ -37,12 +37,12 @@
 //    }
 //
 //
-// $Id: GD.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+// $Id$
 //
 // Image Transformation interface using the GD library
 //
 
-require_once "Transform.php";
+require_once "../ImageManager/Classes/Transform.php";
 
 Class Image_Transform_Driver_GD extends Image_Transform
 {

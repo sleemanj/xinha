@@ -9,7 +9,7 @@
 // Version 3.0 developed by Mihai Bazon.
 //   http://dynarch.com/mishoo
 //
-// $Id: popup.js 26 2004-03-31 02:35:21Z Wei Zhuo $
+// $Id$
 
 function __dlg_onclose() {
     if(opener.Dialog._return)
@@ -23,23 +23,23 @@ function __dlg_translate(context) {
         for (var i = spans.length; --i >= 0;) {
             var span = spans[i];
             if (span.firstChild && span.firstChild.data) {
-                var txt = HTMLArea._lc(span.firstChild.data, context);
+                var txt = Xinha._lc(span.firstChild.data, context);
                 if (txt)
                     span.firstChild.data = txt;
             }
             if (span.title) {
-                var txt = HTMLArea._lc(span.title, context);
+                var txt = Xinha._lc(span.title, context);
                 if (txt)
                     span.title = txt;
             }
             if (span.alt) {
-                var txt = HTMLArea._lc(span.alt, context);
+                var txt = Xinha._lc(span.alt, context);
                 if (txt)
                     span.alt = txt;
             }
         }
     }
-    document.title = HTMLArea._lc(document.title, context);
+    document.title = Xinha._lc(document.title, context);
 }
 
 // closes the dialog and passes the return info upper.

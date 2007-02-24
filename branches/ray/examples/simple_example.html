@@ -11,7 +11,7 @@
  * where xinha is installed, it's highly recommended to use an absolute URL
  *  eg: _editor_url = "/path/to/xinha/";
  * You may try a relative URL if you wish]
- *  eg: _editor_url = "../";
+ *  eg: _editor_url = "../";  
  * in this example we do a little regular expression to find the absolute path.
  ************************************************************************/
 var _editor_url  = document.location.href.replace(/examples\/simple_example\.html.*/, '')
@@ -19,7 +19,7 @@ var _editor_url  = document.location.href.replace(/examples\/simple_example\.htm
 var _editor_lang = "en";
 </script>
 <!-- Load up the actual editor core -->
-<script type="text/javascript" src="../htmlarea.js"></script>
+<script type="text/javascript" src="../XinhaCore.js"></script>
 <script type="text/javascript">
 /************************************************************************
  * Plugins you will be using in the editors on this page.
@@ -54,7 +54,7 @@ var xinha_editors =
 function xinha_init()
 {
   // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-  if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+  if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
   /*************************************************************************
    * We create a default configuration to be used by all the editors.
    * If you wish to configure some of the editors differently this will be
@@ -63,23 +63,23 @@ function xinha_init()
    * Please refer to http://xinha.python-hosting.com/wiki/Documentation/Customise
    * for the configuration parameters
    ************************************************************************/
-  var xinha_config = new HTMLArea.Config();
+  var xinha_config = new Xinha.Config();
   /************************************************************************
    * We first create editors for the textareas.
    * You can do this in two ways, either
    *
-   *   xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+   *   xinha_editors   = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
    *
    * if you want all the editor objects to use the same set of plugins, OR;
    *
-   *   xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config);
+   *   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
    *   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
    *   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
    *
    * if you want to use a different set of plugins for one or more of the
    * editors.
    ************************************************************************/
-  xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+  xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
   /************************************************************************
    * If you want to change the configuration variables of any of the
    * editors,  this is the place to do that, for example you might want to
@@ -97,7 +97,7 @@ function xinha_init()
    * Finally we "start" the editors, this turns the textareas into
    * Xinha editors.
    ************************************************************************/
-  HTMLArea.startEditors(xinha_editors);
+  Xinha.startEditors(xinha_editors);
 }
 window.onload = xinha_init;
 </script>

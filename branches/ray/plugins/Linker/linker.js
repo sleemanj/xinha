@@ -11,10 +11,11 @@ Linker._pluginInfo =
   sponsor_url  : "http://www.gogo.co.nz/"
 };
 
-HTMLArea.loadStyle('dTree/dtree.css', 'Linker');
+Xinha.loadStyle('dTree/dtree.css', 'Linker');
 
-HTMLArea.Config.prototype.Linker =
+Xinha.Config.prototype.Linker =
 {
+  'treeCaption' : document.location.host,
   'backend' : _editor_url + 'plugins/Linker/scan.php',
   'backend_data' : null,
   'files' : null
@@ -46,12 +47,12 @@ function Linker(editor, args)
 
 Linker.prototype._lc = function(string)
 {
-  return HTMLArea._lc(string, 'Linker');
+  return Xinha._lc(string, 'Linker');
 };
 
 Linker.prototype._createLink = function(a)
 {
-  if(!a && this.editor._selectionEmpty(this.editor._getSelection()))
+  if(!a && this.editor.selectionEmpty(this.editor.getSelection()))
   {       
     alert(this._lc("You must select some text before making a new link."));
     return false;
@@ -228,7 +229,7 @@ Linker.prototype._createLink = function(a)
         // If we change a mailto link in IE for some hitherto unknown
         // reason it sets the innerHTML of the link to be the 
         // href of the link.  Stupid IE.
-        if(HTMLArea.is_ie)
+        if(Xinha.is_ie)
         {
           if(/mailto:([^?<>]*)(\?[^<]*)?$/i.test(a.innerHTML))
           {
@@ -242,7 +243,7 @@ Linker.prototype._createLink = function(a)
       if(!atr.href) return true;
 
       // Insert a link, we let the browser do this, we figure it knows best
-      var tmp = HTMLArea.uniq('http://www.example.com/Link');
+      var tmp = Xinha.uniq('http://www.example.com/Link');
       linker.editor._doc.execCommand('createlink', false, tmp);
 
       // Fix them up
@@ -271,9 +272,9 @@ Linker.prototype._createLink = function(a)
 
 Linker.prototype._getSelectedAnchor = function()
 {
-  var sel  = this.editor._getSelection();
-  var rng  = this.editor._createRange(sel);
-  var a    = this.editor._activeElement(sel);
+  var sel  = this.editor.getSelection();
+  var rng  = this.editor.createRange(sel);
+  var a    = this.editor.activeElement(sel);
   if(a != null && a.tagName.toLowerCase() == 'a')
   {
     return a;
@@ -289,7 +290,7 @@ Linker.prototype._getSelectedAnchor = function()
   return null;
 };
 
-Linker.prototype.onGenerate = function()
+Linker.prototype.onGenerateOnce = function()
 {
   this._dialog = new Linker.Dialog(this);
 };
@@ -325,7 +326,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   // we prepare the dialog.
   if(typeof dTree == 'undefined')
   {
-    HTMLArea._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
+    Xinha._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
                        function() {lDialog._prepareDialog(); }
                       );
     return;
@@ -336,11 +337,11 @@ Linker.Dialog.prototype._prepareDialog = function()
     if(linker.lConfig.backend)
     {
         //get files from backend
-        HTMLArea._postback(linker.lConfig.backend,
+        Xinha._postback(linker.lConfig.backend,
                           linker.lConfig.backend_data,
                           function(txt) {
                             try {
-                                eval('lDialog.files = '+txt);
+                                lDialog.files = eval(txt);
                             } catch(Error) {
                                 lDialog.files = [ {url:'',title:Error.toString()} ];
                             }
@@ -358,19 +359,19 @@ Linker.Dialog.prototype._prepareDialog = function()
 
   if(this.html == false)
   {
-    HTMLArea._getback(_editor_url + 'plugins/Linker/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
+    Xinha._getback(_editor_url + 'plugins/Linker/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
     return;
   }
   var html = this.html;
 
   // Now we have everything we need, so we can build the dialog.
-  var dialog = this.dialog = new HTMLArea.Dialog(linker.editor, this.html, 'Linker');
-  var dTreeName = HTMLArea.uniq('dTree_');
+  var dialog = this.dialog = new Xinha.Dialog(linker.editor, this.html, 'Linker');
+  var dTreeName = Xinha.uniq('dTree_');
 
   this.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
   eval(dTreeName + ' = this.dTree');
 
-  this.dTree.add(this.Dialog_nxtid++, -1, document.location.host, null, document.location.host);
+  this.dTree.add(this.Dialog_nxtid++, -1, linker.lConfig.treeCaption , null, linker.lConfig.treeCaption);
   this.makeNodes(files, 0);
 
   // Put it in
@@ -381,6 +382,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   ddTree.style.left = 1 + 'px';
   ddTree.style.top =  0 + 'px';
   ddTree.style.overflow = 'auto';
+  ddTree.style.backgroundColor = 'white';
   this.ddTree = ddTree;
   this.dTree._linker_premade = this.dTree.toString();
 
@@ -528,7 +530,13 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
     this.dialog.getElementById('anchorfieldset').style.display = "none";
   }
   
-
+  // if we're not editing an existing link, hide the remove link button
+  if (inputs.href == 'http://www.example.com/' && inputs.to == 'alice@example.com') { 
+    this.dialog.getElementById('clear').style.display = "none";
+  }
+  else {
+    this.dialog.getElementById('clear').style.display = "";
+  }
   // Connect the OK and Cancel buttons
   var dialog = this.dialog;
   var lDialog = this;

@@ -9,10 +9,17 @@ AsciiMathML is a JavaScript library for translating ASCII math notation to Prese
 Usage
  The formmulae are stored in their ASCII representation, so you have to include the 
  ASCIIMathML library which can be found in the plugin folder in order render the MathML output in your pages. 
- Example:
-  <script type="text/javascript" src="/xinha/plugins/AsciiMath/ASCIIMathML.js"
+ 
+ Example (also see example.html):
+  var mathcolor = "black"; //  You may change the color of the formulae (default: red)
+  var mathfontfamily = "Arial"; //and the font (default: serif, which is good I think)
+  var showasciiformulaonhover = false; // if true helps students learn ASCIIMath (default:true)
+  <script type="text/javascript" src="/xinha/plugins/AsciiMath/ASCIIMathML.js"></script>
 
- The recommended browser for using this plugin is Mozilla/Firefox.
+  
+ The recommended browser for using this plugin is Mozilla/Firefox. At the moment showing the MathML output
+ inside the editor is not supported in Internet Explorer.
+ 
  
 License information
 

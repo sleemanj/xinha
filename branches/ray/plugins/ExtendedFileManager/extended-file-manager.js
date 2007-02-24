@@ -9,25 +9,8 @@
  */
 
 /**
- * Installation example for ExtendedFileManager plugin.
+ * For installation details see Readme.txt in the plugin folder
  *
- *
- *      HTMLArea.loadPlugin("ExtendedFileManager");
- *      HTMLArea.onload = function() {
- *      var myeditor = new HTMLArea("textarea_id");
- *      myeditor.registerPlugin(ExtendedFileManager);
- *      myeditor.generate();
- *      };
- *      HTMLArea.init();
- *
- *
- * Then configure the config.inc.php file, that is all.
- */
-
-/**
- * It is pretty simple, this file over rides the HTMLArea.prototype._insertImage
- * function with our own, only difference is the popupDialog url
- * point that to the php script.
  */
 
 function ExtendedFileManager(editor)
@@ -42,7 +25,7 @@ function ExtendedFileManager(editor)
     if (cfg.ExtendedFileManager.use_linker) {
         cfg.registerButton({
             id        : "linkfile",
-            tooltip   : HTMLArea._lc("Insert File Link",'ExtendedFileManager'),
+            tooltip   : Xinha._lc("Insert File Link",'ExtendedFileManager'),
             image     : _editor_url + 'plugins/ExtendedFileManager/img/ed_linkfile.gif',
             textMode  : false,
             action    : function(editor) {
@@ -61,7 +44,7 @@ ExtendedFileManager._pluginInfo = {
     license       : "htmlArea"
 };
 
-HTMLArea.Config.prototype.ExtendedFileManager =
+Xinha.Config.prototype.ExtendedFileManager =
 {
   'use_linker': true,
   'backend'    : _editor_url + 'plugins/ExtendedFileManager/backend.php?__plugin=ExtendedFileManager&',
@@ -74,10 +57,11 @@ HTMLArea.Config.prototype.ExtendedFileManager =
 
 // Over ride the _insertImage function in htmlarea.js.
 // Open up the ExtendedFileManger script instead.
-HTMLArea.prototype._insertImage = function(image) {
+Xinha.prototype._insertImage = function(image) {
 
     var editor = this;  // for nested functions
-    var outparam = null;
+    var outparam = {"editor" : this, param : null};
+    
     if (typeof image == "undefined") {
         image = this.getParentElement();
         if (image && !/^img$/i.test(image.tagName))
@@ -85,8 +69,8 @@ HTMLArea.prototype._insertImage = function(image) {
     }
 
     if (image) {
-        outparam = {
-            f_url    : HTMLArea.is_ie ? image.src : image.getAttribute("src"),
+        outparam.param = {
+            f_url    : Xinha.is_ie ? image.src : image.getAttribute("src"),
             f_alt    : image.alt,
             f_title  : image.title,
             f_border : image.style.borderWidth ? image.style.borderWidth : image.border,
@@ -101,13 +85,13 @@ HTMLArea.prototype._insertImage = function(image) {
         };
 
         // compress 'top right bottom left' syntax into one value if possible
-        outparam.f_border = shortSize(outparam.f_border);
-        outparam.f_padding = shortSize(outparam.f_padding);
-        outparam.f_margin = shortSize(outparam.f_margin);
+        outparam.param.f_border = shortSize(outparam.param.f_border);
+        outparam.param.f_padding = shortSize(outparam.param.f_padding);
+        outparam.param.f_margin = shortSize(outparam.param.f_margin);
 
         // convert rgb() calls to rgb hex
-        outparam.f_backgroundColor = convertToHex(outparam.f_backgroundColor);
-        outparam.f_borderColor = convertToHex(outparam.f_borderColor);
+        outparam.param.f_backgroundColor = convertToHex(outparam.param.f_backgroundColor);
+        outparam.param.f_borderColor = convertToHex(outparam.param.f_borderColor);
 
     }
 
@@ -138,9 +122,10 @@ HTMLArea.prototype._insertImage = function(image) {
 
         var img = image;
         if (!img) {
-            if (HTMLArea.is_ie) {
-                var sel = editor._getSelection();
-                var range = editor._createRange(sel);
+        	if ( !param.f_url ) return false;
+            if (Xinha.is_ie) {
+                var sel = editor.getSelection();
+                var range = editor.createRange(sel);
                 editor._doc.execCommand("insertimage", false, param.f_url);
                 img = range.parentElement();
                 // wonder if this works...
@@ -155,7 +140,13 @@ HTMLArea.prototype._insertImage = function(image) {
             }
 
         } else {
-            img.src = param.f_url;
+        	if ( !param.f_url ) { // delete the image if empty url passed
+        		img.parentNode.removeChild(img);
+        		editor.updateToolbar();
+        		return false;
+        	} else {
+                img.src = param.f_url;
+        	}
         }
 
         img.alt = img.alt ? img.alt : '';
@@ -167,18 +158,21 @@ HTMLArea.prototype._insertImage = function(image) {
             {
                 case "f_alt"    : img.alt    = value; break;
                 case "f_title"  : img.title = value; break;
-                case "f_border" :
-                    img.style.borderWidth = /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') :'';
-                    if(img.style.borderWidth && !img.style.borderStyle)
+                case "f_border" : 
+                    if (value)
                     {
-                        img.style.borderStyle = 'solid';
+                        img.style.borderWidth = /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') : '';
+                        if(img.style.borderWidth && !img.style.borderStyle)
+                        {
+                            img.style.borderStyle = 'solid';
+                        }
+                        else if (!img.style.borderWidth)
+                        {
+                        	img.style.border = '';
+                        }
                     }
-                    else if (!img.style.borderWidth)
-                    {
-                    	img.style.border = '';
-                    }
-                    break;
-                case "f_borderColor": img.style.borderColor = value; break;
+                break;
+                case "f_borderColor": img.style.borderColor =  value; break;
                 case "f_backgroundColor": img.style.backgroundColor = value; break;
                 case "f_align"  : img.align  = value; break;
                 case "f_width"  : img.width = parseInt(value || "0"); break;
@@ -194,10 +188,10 @@ HTMLArea.prototype._insertImage = function(image) {
 
 };
 
-HTMLArea.prototype._linkFile = function(link) {
+Xinha.prototype._linkFile = function(link) {
 
     var editor = this;
-    var outparam = null;
+    var outparam = {"editor" : this, param : null};
     if (typeof link == "undefined") {
         link = this.getParentElement();
         if (link) {
@@ -208,10 +202,10 @@ HTMLArea.prototype._linkFile = function(link) {
         }
     }
     if (!link) {
-        var sel = editor._getSelection();
-        var range = editor._createRange(sel);
+        var sel = editor.getSelection();
+        var range = editor.createRange(sel);
         var compare = 0;
-        if (HTMLArea.is_ie) {
+        if (Xinha.is_ie) {
             if ( sel.type == "Control" )
                 compare = range.length;
             else
@@ -220,10 +214,10 @@ HTMLArea.prototype._linkFile = function(link) {
             compare = range.compareBoundaryPoints(range.START_TO_END, range);
         }
         if (compare == 0) {
-            alert(HTMLArea._lc("You must select some text before making a new link.", 'ExtendedFileManager'));
+            alert(Xinha._lc("You must select some text before making a new link.", 'ExtendedFileManager'));
             return;
         }
-        outparam = {
+        outparam.param = {
             f_href : '',
             f_title : '',
             f_target : '',
@@ -231,8 +225,8 @@ HTMLArea.prototype._linkFile = function(link) {
             baseHref: editor.config.baseHref
         };
     } else
-        outparam = {
-            f_href   : HTMLArea.is_ie ? link.href : link.getAttribute("href"),
+        outparam.param = {
+            f_href   : Xinha.is_ie ? link.href : link.getAttribute("href"),
             f_title  : link.title,
             f_target : link.target,
             f_usetarget : editor.config.makeLinkShowsTarget,
@@ -266,9 +260,9 @@ HTMLArea.prototype._linkFile = function(link) {
         if (!a) try {
             editor._doc.execCommand("createlink", false, param.f_href);
             a = editor.getParentElement();
-            var sel = editor._getSelection();
-            var range = editor._createRange(sel);
-            if (!HTMLArea.is_ie) {
+            var sel = editor.getSelection();
+            var range = editor.createRange(sel);
+            if (!Xinha.is_ie) {
                 a = range.startContainer;
                 if (!/^a$/i.test(a.tagName)) {
                     a = a.nextSibling;
@@ -328,12 +322,12 @@ function convertToHex(color) {
         var colors = color.split(' ');
         var colorstring = '';
         for (var i = 0; i < colors.length; i++) {
-            colorstring += HTMLArea._colorToRgb(colors[i]);
+            colorstring += Xinha._colorToRgb(colors[i]);
             if (i + 1 < colors.length)
                 colorstring += " ";
         }
         return colorstring;
     }
 
-    return HTMLArea._colorToRgb(color);
+    return Xinha._colorToRgb(color);
 }
