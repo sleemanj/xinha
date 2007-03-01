@@ -115,6 +115,7 @@ Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
 Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
 Xinha.is_gecko  = (navigator.product == "Gecko");
 Xinha.isRunLocally = document.URL.toLowerCase().search(/^file:/) != -1;
+Xinha.is_designMode = (typeof document.designMode != 'undefined');
 if ( Xinha.isRunLocally )
 {
   alert('Xinha *must* be installed on a web server. Locally opened files (those that use the "file://" protocol) cannot properly function. Xinha will try to initialize but may not be correctly loaded.');
@@ -259,7 +260,7 @@ Xinha.RE_doctype  = /(<!doctype((.|\n)*?)>)\n?/i;
 Xinha.RE_head     = /<head>((.|\n)*?)<\/head>/i;
 Xinha.RE_body     = /<body[^>]*>((.|\n|\r|\t)*?)<\/body>/i;
 Xinha.RE_Specials = /([\/\^$*+?.()|{}[\]])/g;
-Xinha.RE_email    = /[_a-zA-Z\d\-\.]{3,}@[_a-zA-Z\d\-]{2,}(\.[_a-zA-Z\d\-]{2,})+/i;
+Xinha.RE_email    = /[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+/i;
 Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a-z0-9_-]{2,}){2,}(:[0-9]+)?(\/\S+)*)/i;
 
 Xinha.Config = function()
@@ -384,7 +385,7 @@ Xinha.Config = function()
   this.makeLinkShowsTarget = true;
 
   // CharSet of the iframe, default is the charset of the document
-  this.charSet = Xinha.is_gecko ? document.characterSet : document.charset;
+  this.charSet = (typeof document.characterSet != 'undefined') ? document.characterSet : document.charset;
 
   // URL-s
   this.imgURL = "images/";
@@ -1823,19 +1824,36 @@ Xinha.prototype.generate = function ()
 
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
-  Xinha._addEvent(
-    this._iframe,
-    'load',
-    function(e)
+  if (Xinha.is_opera)
     {
-      if ( !editor._iframeLoadDone )
-      {
-        editor._iframeLoadDone = true;
-        editor.initIframe();
-      }
-      return true;
+      Xinha._addEvent(
+        this._iframe.contentWindow,
+        'load',
+        function(e)
+        {
+          if ( !editor._iframeLoadDone )
+          {
+             editor._iframeLoadDone = true;
+             editor.initIframe();
+          }
+          return true;
+        }
+      )
     }
-  );
+  else
+    Xinha._addEvent(
+      this._iframe,
+      'load',
+      function(e)
+      {
+        if ( !editor._iframeLoadDone )
+        {
+          editor._iframeLoadDone = true;
+          editor.initIframe();
+        }
+        return true;
+      }
+    );
 
 };
 
@@ -2227,7 +2245,7 @@ Xinha.prototype.editorIsActivated = function()
 {
   try
   {
-    return Xinha.is_gecko? this._doc.designMode == 'on' : this._doc.body.contentEditable;
+    return Xinha.is_designMode ? this._doc.designMode == 'on' : this._doc.body.contentEditable;
   }
   catch (ex)
   {
@@ -2249,7 +2267,7 @@ Xinha.prototype.activateEditor = function()
     Xinha._currentlyActiveEditor.deactivateEditor();
   }
 
-  if ( Xinha.is_gecko && this._doc.designMode != 'on' )
+  if ( Xinha.is_designMode && this._doc.designMode != 'on' )
   {
     try
     {
@@ -2285,7 +2303,7 @@ Xinha.prototype.deactivateEditor = function()
   // If the editor isn't active then the user shouldn't use the toolbar
   this.disableToolbar();
 
-  if ( Xinha.is_gecko && this._doc.designMode != 'off' )
+  if ( Xinha.is_designMode && this._doc.designMode != 'off' )
   {
     try
     {
@@ -4370,7 +4388,16 @@ Xinha.checkSupportedBrowser = function()
       alert("Mozilla < 1.3 Beta is not supported!\nI'll try, though, but it might not work.");
     }
   }
-  return Xinha.is_gecko || Xinha.ie_version >= 5.5;
+  if ( Xinha.is_opera )
+  {
+    var ver = navigator.appVersion.substring(0, navigator.appVersion.indexOf(" "))*1;
+    if (ver<9.1)
+    {
+      alert("You need at least Opera 9.10.\nSorry, your Opera is not supported.");
+      return false;
+    }
+  }
+  return Xinha.is_gecko || Xinha.is_opera || Xinha.ie_version >= 5.5;
 };
 
 // selection & ranges
