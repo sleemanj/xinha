@@ -5580,24 +5580,20 @@ Xinha.prototype.scrollPos = function(scope)
  *  @returns Object with integer properties top and left
  */
  
-Xinha.getElementTopLeft = function(element)
+Xinha.getElementTopLeft = function(element) 
 {
-  var position = { top:0, left:0 };
-  while ( element )
+  var curleft = curtop = 0;
+  if (element.offsetParent) 
   {
-    position.top  += element.offsetTop;
-    position.left += element.offsetLeft;
-    if ( element.offsetParent && element.offsetParent.tagName.toLowerCase() != 'body' )
+    curleft = element.offsetLeft
+    curtop = element.offsetTop
+    while (element = element.offsetParent) 
     {
-      element = element.offsetParent;
-    }
-    else
-    {
-      element = null;
+      curleft += element.offsetLeft
+      curtop += element.offsetTop
     }
   }
-  
-  return position;
+  return { top:curtop, left:curleft };
 }
 
 // find X position of an element
