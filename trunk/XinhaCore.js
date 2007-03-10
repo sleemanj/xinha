@@ -1832,13 +1832,19 @@ Xinha.prototype.generate = function ()
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
-  // the HTML content into the original textarea.
+  // the HTML content into the original textarea and restore it in its place.
+  // apparently this does not work in IE?
   Xinha.prependDom0Event(
     window,
     'unload',
     function()
     {
       textarea.value = editor.outwardHtml(editor.getHTML());
+      var x = xinha.parentNode.replaceChild(textarea,xinha);
+      // put it back into the page to let Xinha.collectGarbageForIE() do its work afterwards
+      textarea.style.display = "";
+      x.style.display = 'none';
+      document.body.appendChild(x);
       return true;
     }
   );
