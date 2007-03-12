@@ -147,14 +147,11 @@
 }
 
 .dialog .buttonColor {
+  width :1em;
   padding: 1px;
   cursor: default;
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-}
-
-.dialog .buttonColor-hilite {
-  border-color: #000;
 }
 
 .dialog .buttonColor .chooser, .dialog .buttonColor .nocolor {
@@ -162,6 +159,13 @@
   border: 1px solid;
   padding: 0px 1em;
   border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
+
+.dialog .buttonClick {
+  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
+.dialog .buttonColor-hilite {
+   border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
 
 .dialog .buttonColor .nocolor { padding: 0px; }

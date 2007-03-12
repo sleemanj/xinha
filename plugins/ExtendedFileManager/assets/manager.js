@@ -70,27 +70,6 @@ init = function ()
     if(uploadForm) uploadForm.target = 'imgManager';
     
     var editor = window.dialogArguments.editor;
-    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('bgCol_pick')) {
-        // Hookup color pickers
-        var pickerConfig = {
-            cellsize:editor.config.colorPickerCellSize,
-            granularity:editor.config.colorPickerGranularity,
-            websafe:editor.config.colorPickerWebSafe,
-            savecolors:editor.config.colorPickerSaveColors
-        };
-
-        var bgCol_pick = document.getElementById('bgCol_pick');
-        var f_backgroundColor = document.getElementById('f_backgroundColor');
-        pickerConfig.callback = function(color){f_backgroundColor.value=color;};
-        var bgColPicker = new Xinha.colorPicker(pickerConfig);
-        bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
-
-        var bdCol_pick = document.getElementById('bdCol_pick');
-        var f_borderColor = document.getElementById('f_borderColor');
-        pickerConfig.callback = function(color){f_borderColor.value=color;};
-        var bdColPicker = new Xinha.colorPicker(pickerConfig);
-        bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
-    }
 
     var param = window.dialogArguments.param;
 
@@ -237,6 +216,7 @@ init = function ()
         opt.innerHTML = i18n("Other");
         target_select.appendChild(opt);
         target_select.onchange = onTargetChanged;
+        
         document.getElementById("f_href").focus();
     }
     else if (!param)
@@ -256,6 +236,19 @@ init = function ()
 	          }
 	        }
     	}
+    }
+    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor')) {
+      // Hookup color pickers
+
+      var pickerConfig = {
+        cellsize:editor.config.colorPickerCellSize,
+        granularity:editor.config.colorPickerGranularity,
+        websafe:editor.config.colorPickerWebSafe,
+        savecolors:editor.config.colorPickerSaveColors
+      };
+
+      new Xinha.colorPicker.InputBinding(document.getElementById('f_backgroundColor'),pickerConfig);
+      new Xinha.colorPicker.InputBinding(document.getElementById('f_borderColor'),pickerConfig);
     }
 }
 

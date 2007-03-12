@@ -36,18 +36,6 @@
         document.getElementById("f_align").selectedIndex = 1;
         document.getElementById("f_align").selectedIndex = 0;
         
-    // Hookup color pickers
-    var bgCol_pick = document.getElementById('bgCol_pick');
-    var f_backgroundColor = document.getElementById('f_backgroundColor');
-    var bgColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_backgroundColor.value=color;}});
-    bgCol_pick.onclick = function() { bgColPicker.open('top,right', f_backgroundColor ); }
-
-    var bdCol_pick = document.getElementById('bdCol_pick');
-    var f_borderColor = document.getElementById('f_borderColor');
-    var bdColPicker = new Xinha.colorPicker({cellsize:'5px',callback:function(color){f_borderColor.value=color;}});
-    bdCol_pick.onclick = function() { bdColPicker.open('top,right', f_borderColor ); }
-
-
 
 		var uploadForm = document.getElementById('uploadForm');
 		if(uploadForm) uploadForm.target = 'imgManager';
@@ -104,11 +92,12 @@
       }
       document.getElementById('f_preview').src = _backend_url + '__function=thumbs&img=' + param.f_url;      
 		}
+		
+		 // Hookup color pickers
+    new Xinha.colorPicker.InputBinding(document.getElementById('f_backgroundColor'));
+    new Xinha.colorPicker.InputBinding(document.getElementById('f_borderColor'));
 
 		document.getElementById("f_alt").focus();
-
-    // For some reason dialog is not shrinkwrapping correctly in IE so we have to explicitly size it for now.
-    // if(HTMLArea.is_ie) window.resizeTo(600, 460);
 	};
 
 

@@ -120,4 +120,5 @@ CharacterMap.prototype.addEntity = function ( entite, pos )
     return false;
   };
   editor._CharacterMap.appendChild( a );
+  a = null;
 };

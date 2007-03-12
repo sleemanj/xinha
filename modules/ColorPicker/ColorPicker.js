@@ -131,7 +131,7 @@
     this.tbody = document.createElement('tbody');
     this.table.appendChild(this.tbody);
     this.table.style.border = '1px solid WindowFrame';
-    this.table.style.zIndex = '1000';
+    this.table.style.zIndex = '1050';
     // Add a title bar and close button
     var tr = document.createElement('tr');
     
@@ -140,6 +140,9 @@
     td.className= "title";
     td.style.fontFamily = 'small-caption,caption,sans-serif';
     td.style.fontSize = 'x-small';
+    td.unselectable = "on";
+    td.style.MozUserSelect = "none";
+    td.style.cursor = "default";
     td.appendChild(document.createTextNode(Xinha._lc('Click a color...')));
     td.style.borderBottom = '1px solid WindowFrame';
     tr.appendChild(td);
@@ -316,7 +319,18 @@
       colors.blue = Math.ceil(colors.blue * 255);
       return colors;
     }
-
+    var self = this;
+    function closeOnBodyClick (ev)
+    {
+      ev = ev ? ev : window.event;
+      el = ev.target ? ev.target : ev.srcElement;
+      do
+      {
+        if (el == self.table) return;
+      }
+      while (el = el.parentNode);
+      self.close();
+    }
     /** Open the color picker
      *
      * @param string anchorage pair of sides of element to anchor the picker to
@@ -340,6 +354,8 @@
         this.foreSample.style.color = initcolor;
       }
 
+      Xinha._addEvent(document.body,'mousedown',closeOnBodyClick);
+      
       // Find position of the element
       this.table.style.position = 'absolute';
       var e = element;
@@ -354,7 +370,7 @@
       while(e);
 
       var x, y;
-      if(/top/.test(anchorage))
+      if(/top/.test(anchorage) || (top + this.table.offsetHeight > document.body.offsetHeight))
       {
         if(top - this.table.offsetHeight > 0)
         {
@@ -370,13 +386,9 @@
         this.table.style.top = (top + element.offsetHeight) + 'px';
       }
 
-      if(/left/.test(anchorage))
+      if(/left/.test(anchorage) || (left + this.table.offsetWidth > document.body.offsetWidth))
       {
-        this.table.style.left = left + 'px';
-      }
-      else
-      {
-        if(left - (this.table.offsetWidth - element.offsetWidth) > 0)
+        if(left - (this.table.offsetWidth - element.offsetWidth) > 0 )
         {
           this.table.style.left = (left - (this.table.offsetWidth - element.offsetWidth)) + 'px';
         }
@@ -384,6 +396,10 @@
         {
         	  this.table.style.left = 0;
         }
+      }
+      else
+      {
+        this.table.style.left = left + 'px';
       }
      // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
       /*@cc_on
@@ -776,6 +792,7 @@
     /** Close the color picker */
     this.close = function()
     {
+      Xinha._removeEvent(document.body,'mousedown',closeOnBodyClick);
       this.table.style.display = 'none';
       // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
       /*@cc_on
@@ -827,4 +844,47 @@ Xinha.colorPicker.loadColors = function()
 
 Xinha.colorPicker._lc = function(string) {
   return Xinha._lc(string);
+}
+
+
+/** Create a neat little box next to an input field
+ *    * shows actual color
+ *    * opens colorPicker on click
+ *    * has a button to clear the color with a click
+ *
+ *  @param input (DOM element) 
+ *  @param optional pickerConfig configuration object for Xinha.colorPicker()
+ */
+Xinha.colorPicker.InputBinding = function(input,pickerConfig)
+{
+  var main = document.createElement('span');
+  main.className = "buttonColor";
+  
+  var chooser = this.chooser = document.createElement('span');
+  chooser.className = "chooser";
+  if (input.value) chooser.style.backgroundColor = input.value;
+  chooser.onmouseover = function() {chooser.className = "chooser buttonColor-hilite";};
+  chooser.onmouseout = function() {chooser.className = "chooser";};
+  chooser.appendChild(document.createTextNode('\u00a0'));
+  main.appendChild(chooser);
+  var clearColor = document.createElement('span');
+  clearColor.className = "nocolor";
+  clearColor.onmouseover = function() {clearColor.className = "nocolor buttonColor-hilite"; clearColor.style.color='#f00'};
+  clearColor.onmouseout = function() {clearColor.className = "nocolor"; clearColor.style.color='#000'};
+  clearColor.onclick = function() {input.value ='';chooser.style.backgroundColor = ''};
+  clearColor.appendChild(document.createTextNode('\u00d7'));
+  main.appendChild(clearColor);
+  
+  input.parentNode.insertBefore(main,input.nextSibling);
+  
+  Xinha._addEvent(input,'change',function() {chooser.style.backgroundColor = this.value;})
+
+  pickerConfig = (pickerConfig) ? Xinha.cloneObject(pickerConfig) : { cellsize:'5px' };
+  pickerConfig.callback = (pickerConfig.callback) ? pickerConfig.callback : function(color) {chooser.style.backgroundColor = color;input.value=color};
+
+  chooser.onclick = function() 
+  { 
+    var colPicker = new Xinha.colorPicker(pickerConfig);
+	  colPicker.open("",chooser, input.value ); 
+  }
 }
