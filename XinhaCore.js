@@ -2402,7 +2402,8 @@ Xinha.prototype.initIframe = function()
   var html = '';
   if ( !editor.config.fullPage )
   {
-    html = "<html>\n";
+    html += this.doctype ? this.doctype : Xinha.getDoctype(document) + "\n";
+    html += "<html>\n";
     html += "<head>\n";
     html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
     if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null )
@@ -2440,7 +2441,7 @@ Xinha.prototype.initIframe = function()
     if ( html.match(Xinha.RE_doctype) )
     {
       editor.setDoctype(RegExp.$1);
-      html = html.replace(Xinha.RE_doctype, "");
+      //html = html.replace(Xinha.RE_doctype, "");
     }
     
     //Fix Firefox problem with link elements not in right place (just before head)
@@ -2546,7 +2547,7 @@ Xinha.prototype.setFullHTML = function(html)
   if ( html.match(Xinha.RE_doctype) )
   {
     this.setDoctype(RegExp.$1);
-    html = html.replace(Xinha.RE_doctype, "");
+   // html = html.replace(Xinha.RE_doctype, "");
   }
   RegExp.multiline = save_multiline;
   // disabled to save body attributes see #459
