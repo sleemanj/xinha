@@ -412,6 +412,9 @@ Xinha.Config = function()
   // CharSet of the iframe, default is the charset of the document
   this.charSet = (typeof document.characterSet != 'undefined') ? document.characterSet : document.charset;
 
+  // Doctype of the iframe, default is the doctype of the document
+  this.doctype = '';
+
   // URL-s
   this.imgURL = "images/";
   this.popupURL = "popups/";
@@ -2402,7 +2405,7 @@ Xinha.prototype.initIframe = function()
   var html = '';
   if ( !editor.config.fullPage )
   {
-    html += this.doctype ? this.doctype : Xinha.getDoctype(document) + "\n";
+    html += editor.config.doctype ? editor.config.doctype : Xinha.getDoctype(document) + "\n";
     html += "<html>\n";
     html += "<head>\n";
     html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
