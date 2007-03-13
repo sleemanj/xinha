@@ -738,4 +738,22 @@ Xinha.prototype._toggleBorders = function()
   }
   
   return result;
-}
+};
+
+/** Return the doctype of a document, if set
+ * 
+ * @param doc DOM element document
+ * @returns string the actual doctype
+ */
+Xinha.getDoctype = function (doc)
+{
+  var d = '';
+  if (doc.doctype)
+  {
+    d += '<!DOCTYPE ' + doc.doctype.name + " PUBLIC ";
+    d +=  doc.doctype.publicId ? '"' + doc.doctype.publicId + '"' : '';  
+    d +=  doc.doctype.systemId ? ' "'+ doc.doctype.systemId + '"' : ''; 
+    d += ">";
+  }
+  return d;
+};

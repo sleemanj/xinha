@@ -86,7 +86,7 @@ InsertTable.prototype.prepareDialog = function()
 	dialog.getElementById('ok').onclick = function() {self.apply();}
 	dialog.getElementById('cancel').onclick = function() { self.dialog.hide()};
   
-	this.borderColorPicker = new Xinha.colorPicker.inputBinding(dialog.getElementById('border_color'));
+	this.borderColorPicker = new Xinha.colorPicker.InputBinding(dialog.getElementById('border_color'));
 
 	this.dialog.onresize = function ()
 	{

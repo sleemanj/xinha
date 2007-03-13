@@ -110,12 +110,39 @@ Xinha.agt       = navigator.userAgent.toLowerCase();
 Xinha.is_ie    = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera") == -1));
 Xinha.ie_version= parseFloat(Xinha.agt.substring(Xinha.agt.indexOf("msie")+5));
 Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
+Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
+Xinha.is_safari  = (Xinha.agt.indexOf("safari") != -1);
+Xinha.opera_version = navigator.appVersion.substring(0, navigator.appVersion.indexOf(" "))*1;
 Xinha.is_mac	   = (Xinha.agt.indexOf("mac") != -1);
 Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
 Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
-Xinha.is_gecko  = (navigator.product == "Gecko");
+Xinha.is_gecko  = (navigator.product == "Gecko" && !Xinha.is_safari); // Safari lies!
 Xinha.isRunLocally = document.URL.toLowerCase().search(/^file:/) != -1;
-if ( Xinha.isRunLocally )
+Xinha.is_designMode = (typeof document.designMode != 'undefined' && !Xinha.is_ie); // IE has designMode, but we're not using it
+Xinha.checkSupportedBrowser = function()
+{
+  if ( Xinha.is_gecko )
+  {
+    if ( navigator.productSub < 20021201 )
+    {
+      alert("You need at least Mozilla-1.3 Alpha.\nSorry, your Gecko is not supported.");
+      return false;
+    }
+    if ( navigator.productSub < 20030210 )
+    {
+      alert("Mozilla < 1.3 Beta is not supported!\nI'll try, though, but it might not work.");
+    }
+  }
+  if ( Xinha.is_opera )
+  {
+    alert("Sorry, Opera is not yet supported by Xinha.");
+  }
+  return Xinha.is_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5;
+};
+
+Xinha.isSupportedBrowser = Xinha.checkSupportedBrowser();
+
+if ( Xinha.isRunLocally && Xinha.isSupportedBrowser)
 {
   alert('Xinha *must* be installed on a web server. Locally opened files (those that use the "file://" protocol) cannot properly function. Xinha will try to initialize but may not be correctly loaded.');
 }
@@ -124,130 +151,129 @@ if ( Xinha.isRunLocally )
 // ID with it.
 function Xinha(textarea, config)
 {
+  if ( !Xinha.isSupportedBrowser ) return;
+  
   if ( !textarea )
   {
     throw("Tried to create Xinha without textarea specified.");
   }
 
-  if ( Xinha.checkSupportedBrowser() )
+  if ( typeof config == "undefined" )
   {
-    if ( typeof config == "undefined" )
-    {
-      this.config = new Xinha.Config();
-    }
-    else
-    {
-      this.config = config;
-    }
-    this._htmlArea = null;
-
-    if ( typeof textarea != 'object' )
-    {
-      textarea = Xinha.getElementById('textarea', textarea);
-    }
-    this._textArea = textarea;
-    this._textArea.spellcheck = false;
-       
-    // Before we modify anything, get the initial textarea size
-    this._initial_ta_size =
-    {
-      w: textarea.style.width  ? textarea.style.width  : ( textarea.offsetWidth  ? ( textarea.offsetWidth  + 'px' ) : ( textarea.cols + 'em') ),
-      h: textarea.style.height ? textarea.style.height : ( textarea.offsetHeight ? ( textarea.offsetHeight + 'px' ) : ( textarea.rows + 'em') )
-    };
-    // Create the loading message elements
-    if ( this.config.showLoading )
-    {
-      // Create and show the main loading message and the sub loading message for details of loading actions
-      // global element
-      var loading_message = document.createElement("div");
-      loading_message.id = "loading_" + textarea.name;
-      loading_message.className = "loading";
-      try
-      {
-        // how can i find the real width in pixels without % or em *and* with no visual errors ?
-        // for instance, a textarea with a style="width:100%" and the body padding > 0 result in a horizontal scrollingbar while loading
-        // A few lines above seems to indicate offsetWidth is not always set
-        loading_message.style.width = textarea.offsetWidth + 'px';
-      }
-      catch (ex)
-      {
-        // offsetWidth seems not set, so let's use this._initial_ta_size.w, but sometimes it may be too huge width
-        loading_message.style.width = this._initial_ta_size.w;
-      }
-      loading_message.style.left = Xinha.findPosX(textarea) +  'px';
-      loading_message.style.top = (Xinha.findPosY(textarea) + parseInt(this._initial_ta_size.h, 10) / 2) +  'px';
-      // main static message
-      var loading_main = document.createElement("div");
-      loading_main.className = "loading_main";
-      loading_main.id = "loading_main_" + textarea.name;
-      loading_main.appendChild(document.createTextNode(Xinha._lc("Loading in progress. Please wait !")));
-      // sub dynamic message
-      var loading_sub = document.createElement("div");
-      loading_sub.className = "loading_sub";
-      loading_sub.id = "loading_sub_" + textarea.name;
-      loading_sub.appendChild(document.createTextNode(Xinha._lc("Constructing main object")));
-      loading_message.appendChild(loading_main);
-      loading_message.appendChild(loading_sub);
-      document.body.appendChild(loading_message);
-      this.setLoadingMessage("Constructing object");
-    }
-
-    this._editMode = "wysiwyg";
-    this.plugins = {};
-    this._timerToolbar = null;
-    this._timerUndo = null;
-    this._undoQueue = [this.config.undoSteps];
-    this._undoPos = -1;
-    this._customUndo = true;
-    this._mdoc = document; // cache the document, we need it in plugins
-    this.doctype = '';
-    this.__htmlarea_id_num = __xinhas.length;
-    __xinhas[this.__htmlarea_id_num] = this;
-
-    this._notifyListeners = {};
-
-    // Panels
-    var panels = 
-    {
-      right:
-      {
-        on: true,
-        container: document.createElement('td'),
-        panels: []
-      },
-      left:
-      {
-        on: true,
-        container: document.createElement('td'),
-        panels: []
-      },
-      top:
-      {
-        on: true,
-        container: document.createElement('td'),
-        panels: []
-      },
-      bottom:
-      {
-        on: true,
-        container: document.createElement('td'),
-        panels: []
-      }
-    };
-
-    for ( var i in panels )
-    {
-      if(!panels[i].container) { continue; } // prevent iterating over wrong type
-      panels[i].div = panels[i].container; // legacy
-      panels[i].container.className = 'panels ' + i;
-      Xinha.freeLater(panels[i], 'container');
-      Xinha.freeLater(panels[i], 'div');
-    }
-    // finally store the variable
-    this._panels = panels;
-
-    Xinha.freeLater(this, '_textArea');
+    this.config = new Xinha.Config();
   }
+  else
+  {
+    this.config = config;
+  }
+  this._htmlArea = null;
+
+  if ( typeof textarea != 'object' )
+  {
+    textarea = Xinha.getElementById('textarea', textarea);
+  }
+  this._textArea = textarea;
+  this._textArea.spellcheck = false;
+     
+  // Before we modify anything, get the initial textarea size
+  this._initial_ta_size =
+  {
+    w: textarea.style.width  ? textarea.style.width  : ( textarea.offsetWidth  ? ( textarea.offsetWidth  + 'px' ) : ( textarea.cols + 'em') ),
+    h: textarea.style.height ? textarea.style.height : ( textarea.offsetHeight ? ( textarea.offsetHeight + 'px' ) : ( textarea.rows + 'em') )
+  };
+  // Create the loading message elements
+  if ( this.config.showLoading )
+  {
+    // Create and show the main loading message and the sub loading message for details of loading actions
+    // global element
+    var loading_message = document.createElement("div");
+    loading_message.id = "loading_" + textarea.name;
+    loading_message.className = "loading";
+    try
+    {
+      // how can i find the real width in pixels without % or em *and* with no visual errors ?
+      // for instance, a textarea with a style="width:100%" and the body padding > 0 result in a horizontal scrollingbar while loading
+      // A few lines above seems to indicate offsetWidth is not always set
+      loading_message.style.width = textarea.offsetWidth + 'px';
+    }
+    catch (ex)
+    {
+      // offsetWidth seems not set, so let's use this._initial_ta_size.w, but sometimes it may be too huge width
+      loading_message.style.width = this._initial_ta_size.w;
+    }
+    loading_message.style.left = Xinha.findPosX(textarea) +  'px';
+    loading_message.style.top = (Xinha.findPosY(textarea) + parseInt(this._initial_ta_size.h, 10) / 2) +  'px';
+    // main static message
+    var loading_main = document.createElement("div");
+    loading_main.className = "loading_main";
+    loading_main.id = "loading_main_" + textarea.name;
+    loading_main.appendChild(document.createTextNode(Xinha._lc("Loading in progress. Please wait !")));
+    // sub dynamic message
+    var loading_sub = document.createElement("div");
+    loading_sub.className = "loading_sub";
+    loading_sub.id = "loading_sub_" + textarea.name;
+    loading_sub.appendChild(document.createTextNode(Xinha._lc("Constructing main object")));
+    loading_message.appendChild(loading_main);
+    loading_message.appendChild(loading_sub);
+    document.body.appendChild(loading_message);
+    this.setLoadingMessage("Constructing object");
+  }
+
+  this._editMode = "wysiwyg";
+  this.plugins = {};
+  this._timerToolbar = null;
+  this._timerUndo = null;
+  this._undoQueue = [this.config.undoSteps];
+  this._undoPos = -1;
+  this._customUndo = true;
+  this._mdoc = document; // cache the document, we need it in plugins
+  this.doctype = '';
+  this.__htmlarea_id_num = __xinhas.length;
+  __xinhas[this.__htmlarea_id_num] = this;
+
+  this._notifyListeners = {};
+
+  // Panels
+  var panels = 
+  {
+    right:
+    {
+      on: true,
+      container: document.createElement('td'),
+      panels: []
+    },
+    left:
+    {
+      on: true,
+      container: document.createElement('td'),
+      panels: []
+    },
+    top:
+    {
+      on: true,
+      container: document.createElement('td'),
+      panels: []
+    },
+    bottom:
+    {
+      on: true,
+      container: document.createElement('td'),
+      panels: []
+    }
+  };
+
+  for ( var i in panels )
+  {
+    if(!panels[i].container) { continue; } // prevent iterating over wrong type
+    panels[i].div = panels[i].container; // legacy
+    panels[i].container.className = 'panels ' + i;
+    Xinha.freeLater(panels[i], 'container');
+    Xinha.freeLater(panels[i], 'div');
+  }
+  // finally store the variable
+  this._panels = panels;
+
+  Xinha.freeLater(this, '_textArea');
 }
 
 Xinha.onload = function() { };
@@ -259,7 +285,7 @@ Xinha.RE_doctype  = /(<!doctype((.|\n)*?)>)\n?/i;
 Xinha.RE_head     = /<head>((.|\n)*?)<\/head>/i;
 Xinha.RE_body     = /<body[^>]*>((.|\n|\r|\t)*?)<\/body>/i;
 Xinha.RE_Specials = /([\/\^$*+?.()|{}[\]])/g;
-Xinha.RE_email    = /[_a-zA-Z\d\-\.]{3,}@[_a-zA-Z\d\-]{2,}(\.[_a-zA-Z\d\-]{2,})+/i;
+Xinha.RE_email    = /[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+/i;
 Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a-z0-9_-]{2,}){2,}(:[0-9]+)?(\/\S+)*)/i;
 
 Xinha.Config = function()
@@ -384,7 +410,17 @@ Xinha.Config = function()
   this.makeLinkShowsTarget = true;
 
   // CharSet of the iframe, default is the charset of the document
-  this.charSet = Xinha.is_gecko ? document.characterSet : document.charset;
+  this.charSet = (typeof document.characterSet != 'undefined') ? document.characterSet : document.charset;
+
+  // Whether the edited document should be rendered in Quirksmode or Standard Compliant (Strict) Mode
+  // This is commonly known as the "doctype switch"
+  // for details read here http://www.quirksmode.org/css/quirksmode.html
+  //
+  // Possible values:
+  //    true     :  Quirksmode is used
+  //    false    :  Strict mode is used
+  // leave empty :  the mode of the document Xinha is in is used
+  this.browserQuirksMode = '';
 
   // URL-s
   this.imgURL = "images/";
@@ -1499,6 +1535,8 @@ Xinha.prototype._createStatusBar = function()
 // Creates the Xinha object and replaces the textarea with it.
 Xinha.prototype.generate = function ()
 {
+  if ( !Xinha.isSupportedBrowser ) return;
+  
   var i;
   var editor = this;  // we'll need "this" in some nested functions
   
@@ -1810,13 +1848,19 @@ Xinha.prototype.generate = function ()
   }
 
   // add a handler for the "back/forward" case -- on body.unload we save
-  // the HTML content into the original textarea.
+  // the HTML content into the original textarea and restore it in its place.
+  // apparently this does not work in IE?
   Xinha.prependDom0Event(
     window,
     'unload',
     function()
     {
       textarea.value = editor.outwardHtml(editor.getHTML());
+      var x = xinha.parentNode.replaceChild(textarea,xinha);
+      // put it back into the page to let Xinha.collectGarbageForIE() do its work afterwards
+      textarea.style.display = "";
+      x.style.display = 'none';
+      document.body.appendChild(x);
       return true;
     }
   );
@@ -1829,19 +1873,36 @@ Xinha.prototype.generate = function ()
 
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
-  Xinha._addEvent(
-    this._iframe,
-    'load',
-    function(e)
+  if (Xinha.is_opera)
     {
-      if ( !editor._iframeLoadDone )
-      {
-        editor._iframeLoadDone = true;
-        editor.initIframe();
-      }
-      return true;
+      Xinha._addEvent(
+        this._iframe.contentWindow,
+        'load',
+        function(e)
+        {
+          if ( !editor._iframeLoadDone )
+          {
+             editor._iframeLoadDone = true;
+             editor.initIframe();
+          }
+          return true;
+        }
+      )
     }
-  );
+  else
+    Xinha._addEvent(
+      this._iframe,
+      'load',
+      function(e)
+      {
+        if ( !editor._iframeLoadDone )
+        {
+          editor._iframeLoadDone = true;
+          editor.initIframe();
+        }
+        return true;
+      }
+    );
 
 };
 
@@ -2233,7 +2294,7 @@ Xinha.prototype.editorIsActivated = function()
 {
   try
   {
-    return Xinha.is_gecko? this._doc.designMode == 'on' : this._doc.body.contentEditable;
+    return Xinha.is_designMode ? this._doc.designMode == 'on' : this._doc.body.contentEditable;
   }
   catch (ex)
   {
@@ -2255,7 +2316,7 @@ Xinha.prototype.activateEditor = function()
     Xinha._currentlyActiveEditor.deactivateEditor();
   }
 
-  if ( Xinha.is_gecko && this._doc.designMode != 'on' )
+  if ( Xinha.is_designMode && this._doc.designMode != 'on' )
   {
     try
     {
@@ -2291,7 +2352,7 @@ Xinha.prototype.deactivateEditor = function()
   // If the editor isn't active then the user shouldn't use the toolbar
   this.disableToolbar();
 
-  if ( Xinha.is_gecko && this._doc.designMode != 'off' )
+  if ( Xinha.is_designMode && this._doc.designMode != 'off' )
   {
     try
     {
@@ -2352,12 +2413,25 @@ Xinha.prototype.initIframe = function()
   }
   
   Xinha.freeLater(this, '_doc');
-  
+
   doc.open("text/html","replace");
   var html = '';
+  if ( editor.config.browserQuirksMode === false )
+  {
+    var doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+  }
+  else if ( editor.config.browserQuirksMode === true )
+  {
+     var doctype = '';
+  }
+  else
+  {
+     var doctype = Xinha.getDoctype(document);
+  }
   if ( !editor.config.fullPage )
   {
-    html = "<html>\n";
+    html += doctype + "\n";
+    html += "<html>\n";
     html += "<head>\n";
     html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
     if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null )
@@ -2395,7 +2469,7 @@ Xinha.prototype.initIframe = function()
     if ( html.match(Xinha.RE_doctype) )
     {
       editor.setDoctype(RegExp.$1);
-      html = html.replace(Xinha.RE_doctype, "");
+      //html = html.replace(Xinha.RE_doctype, "");
     }
     
     //Fix Firefox problem with link elements not in right place (just before head)
@@ -2501,7 +2575,7 @@ Xinha.prototype.setFullHTML = function(html)
   if ( html.match(Xinha.RE_doctype) )
   {
     this.setDoctype(RegExp.$1);
-    html = html.replace(Xinha.RE_doctype, "");
+   // html = html.replace(Xinha.RE_doctype, "");
   }
   RegExp.multiline = save_multiline;
   // disabled to save body attributes see #459
@@ -2598,6 +2672,8 @@ Xinha.prototype.setEditorEvents = function()
 // return the plugin created to allow refresh when necessary
 Xinha.prototype.registerPlugin = function()
 {
+  if ( !Xinha.isSupportedBrowser ) return; 
+  
   var plugin = arguments[0];
 
   // @todo : try to avoid the use of eval()
@@ -2661,6 +2737,8 @@ Xinha.getPluginDir = function(pluginName)
 
 Xinha.loadPlugin = function(pluginName, callback, plugin_file)
 {
+  if ( !Xinha.isSupportedBrowser ) return;
+  
   // @todo : try to avoid the use of eval()
   // Might already be loaded
   if ( eval('typeof ' + pluginName) != 'undefined' )
@@ -2687,6 +2765,8 @@ Xinha._pluginLoadStatus = {};
 
 Xinha.loadPlugins = function(plugins, callbackIfNotReady)
 {
+  if ( !Xinha.isSupportedBrowser ) return;
+  
   // Rip the ones that are loaded and look for ones that have failed
   var retVal = true;
   var nuPlugins = Xinha.cloneObject(plugins);
@@ -4362,23 +4442,6 @@ Xinha.cloneObject = function(obj)
   return newObj;
 };
 
-Xinha.checkSupportedBrowser = function()
-{
-  if ( Xinha.is_gecko )
-  {
-    if ( navigator.productSub < 20021201 )
-    {
-      alert("You need at least Mozilla-1.3 Alpha.\nSorry, your Gecko is not supported.");
-      return false;
-    }
-    if ( navigator.productSub < 20030210 )
-    {
-      alert("Mozilla < 1.3 Beta is not supported!\nI'll try, though, but it might not work.");
-    }
-  }
-  return Xinha.is_gecko || Xinha.ie_version >= 5.5;
-};
-
 // selection & ranges
 
 // moved Xinha.prototype._getSelection() to browser specific file
@@ -5369,6 +5432,8 @@ if ( !Array.prototype.append )
 
 Xinha.makeEditors = function(editor_names, default_config, plugin_names)
 {
+  if ( !Xinha.isSupportedBrowser ) return;
+  
   if ( typeof default_config == 'function' )
   {
     default_config = default_config();
@@ -5391,6 +5456,8 @@ Xinha.makeEditors = function(editor_names, default_config, plugin_names)
 
 Xinha.startEditors = function(editors)
 {
+  if ( !Xinha.isSupportedBrowser ) return;
+  
   for ( var i in editors )
   {
     if ( editors[i].generate )
@@ -5402,6 +5469,8 @@ Xinha.startEditors = function(editors)
 
 Xinha.prototype.registerPlugins = function(plugin_names)
 {
+  if ( !Xinha.isSupportedBrowser ) return;
+  
   if ( plugin_names )
   {
     for ( var i = 0; i < plugin_names.length; i++ )
@@ -5571,24 +5640,20 @@ Xinha.prototype.scrollPos = function(scope)
  *  @returns Object with integer properties top and left
  */
  
-Xinha.getElementTopLeft = function(element)
+Xinha.getElementTopLeft = function(element) 
 {
-  var position = { top:0, left:0 };
-  while ( element )
+  var curleft = curtop = 0;
+  if (element.offsetParent) 
   {
-    position.top  += element.offsetTop;
-    position.left += element.offsetLeft;
-    if ( element.offsetParent && element.offsetParent.tagName.toLowerCase() != 'body' )
+    curleft = element.offsetLeft
+    curtop = element.offsetTop
+    while (element = element.offsetParent) 
     {
-      element = element.offsetParent;
-    }
-    else
-    {
-      element = null;
+      curleft += element.offsetLeft
+      curtop += element.offsetTop
     }
   }
-  
-  return position;
+  return { top:curtop, left:curleft };
 }
 
 // find X position of an element

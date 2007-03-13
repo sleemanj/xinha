@@ -133,6 +133,28 @@ HTMLArea.prototype._insertImage = function(image) {
     outparam.f_border = shortSize(outparam.f_border);
     outparam.f_padding = shortSize(outparam.f_padding);
     outparam.f_margin = shortSize(outparam.f_margin);
+    
+    function convertToHex(color) {
+
+      if (typeof color == "string" && /, /.test.color)
+      color = color.replace(/, /, ','); // rgb(a, b) => rgb(a,b)
+
+      if (typeof color == "string" && / /.test.color) { // multiple values
+        var colors = color.split(' ');
+        var colorstring = '';
+        for (var i = 0; i < colors.length; i++) {
+          colorstring += Xinha._colorToRgb(colors[i]);
+          if (i + 1 < colors.length)
+          colorstring += " ";
+        }
+        return colorstring;
+      }
+
+      return Xinha._colorToRgb(color);
+    }
+    
+    outparam.f_backgroundColor = convertToHex(outparam.f_backgroundColor);
+    outparam.f_borderColor = convertToHex(outparam.f_borderColor);
 
 		} // end of if we selected an image before raising the dialog.
 

@@ -457,3 +457,14 @@ Xinha.prototype.findCC = function ( target )
   }
   if ( target == 'textarea' ) this._textArea.focus();
 };
+
+/** Return a doctype or empty string depending on whether the document is in Qirksmode or Standards Compliant Mode
+ *  It's hardly possible to detect the actual doctype without unreasonable effort, so we set HTML 4.01 just to trigger the rendering mode
+ * 
+ * @param doc DOM element document
+ * @returns string doctype || empty
+ */
+Xinha.getDoctype = function (doc)
+{
+  return (doc.compatMode == "CSS1Compat") ? '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' : '';
+};
