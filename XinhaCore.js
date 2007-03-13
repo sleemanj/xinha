@@ -412,8 +412,15 @@ Xinha.Config = function()
   // CharSet of the iframe, default is the charset of the document
   this.charSet = (typeof document.characterSet != 'undefined') ? document.characterSet : document.charset;
 
-  // Doctype of the iframe, default is the doctype of the document
-  this.doctype = '';
+  // Whether the edited document should be rendered in Quirksmode or Standard Compliant (Strict) Mode
+  // This is commonly known as the "doctype switch"
+  // for details read here http://www.quirksmode.org/css/quirksmode.html
+  //
+  // Possible values:
+  //    true     :  Quirksmode is used
+  //    false    :  Strict mode is used
+  // leave empty :  the mode of the document Xinha is in is used
+  this.browserQuirksMode = '';
 
   // URL-s
   this.imgURL = "images/";
@@ -2400,12 +2407,24 @@ Xinha.prototype.initIframe = function()
   }
   
   Xinha.freeLater(this, '_doc');
-  
+
   doc.open("text/html","replace");
   var html = '';
+  if ( editor.config.browserQuirksMode === false )
+  {
+    var doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+  }
+  else if ( editor.config.browserQuirksMode === true )
+  {
+     var doctype = '';
+  }
+  else
+  {
+     var doctype = Xinha.getDoctype(document);
+  }
   if ( !editor.config.fullPage )
   {
-    html += editor.config.doctype ? editor.config.doctype : Xinha.getDoctype(document) + "\n";
+    html += doctype + "\n";
     html += "<html>\n";
     html += "<head>\n";
     html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
