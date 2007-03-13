@@ -1329,6 +1329,9 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
 
       var i_contain = Xinha.makeBtnImg(btn[1]);
       var img = i_contain.firstChild;
+      Xinha.freeLater(i_contain);
+      Xinha.freeLater(img);
+      
       el.appendChild(i_contain);
 
       obj.imgel = img;      
@@ -3366,6 +3369,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
         {
           this._statusBarTree.appendChild(document.createTextNode(String.fromCharCode(0xbb)));
         }
+        Xinha.freeLater(a);
       }
     }
   }
