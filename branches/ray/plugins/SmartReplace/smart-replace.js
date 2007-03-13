@@ -302,7 +302,6 @@ SmartReplace.prototype._prepareDialog = function()
   
   // Now we have everything we need, so we can build the dialog.
   this.dialog = new Xinha.Dialog(editor, this.html, 'SmartReplace',{width:300});
-
   this.ready = true;
 };
 

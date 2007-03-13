@@ -53,8 +53,11 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'CharacterMap', 'SpellChecker', 'SmartReplace','PasteText','SuperClean'
-        //'Linker'//,'GetHtml'
+        //'CharacterMap', 
+        //'SpellChecker', 
+       //'SmartReplace'//,
+        //'PasteText'//,'SuperClean',
+        'Linker'//,'GetHtml'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -88,19 +91,10 @@
    xinha_config.width  = 300;
    xinha_config.height = 300;
        xinha_config.fullPage = false;
-       xinha_config.CharacterMap.mode = 'panel';
+      // xinha_config.CharacterMap.mode = 'panel';
        xinha_config.toolbar =
   [
-    ["popupeditor"],
-    ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
-    ["separator","forecolor","hilitecolor","textindicator"],
-    ["separator","subscript","superscript"],
-    ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
-    ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
-    ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
-    ["linebreak","separator","undo","redo","selectall","print"], (Xinha.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
-    ["separator","killword","clearfonts","removeformat","toggleborders","splitblock","lefttoright", "righttoleft"],
-    ["separator","htmlmode","showhelp","about"]
+   ["htmlmode","formatblock"]
   ];
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL

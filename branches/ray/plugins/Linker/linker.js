@@ -393,6 +393,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   }
   ddTree.style.backgroundColor = 'white';
   this.ddTree = ddTree;
+  
   this.dTree._linker_premade = this.dTree.toString();
 
   var options = this.dialog.getElementById('options');
@@ -414,10 +415,13 @@ Linker.Dialog.prototype._prepareDialog = function()
       if (w<0) w = 0;
       if (h<0) h = 0;
       //options.style.height =
-       ddTree.style.height = h + 'px';
-      ddTree.style.width  = w + 'px';
+      lDialog.ddTree.style.height = h + 'px';
+      lDialog.ddTree.style.width  = w + 'px';
     }
   this.ready = true;
+  ddTree = null;
+  Xinha.freeLater(lDialog, 'ddTree');
+  options = null;
 };
 
 Linker.Dialog.prototype.makeNodes = function(files, parent)

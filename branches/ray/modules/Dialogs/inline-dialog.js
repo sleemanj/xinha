@@ -57,7 +57,7 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
     }
     document.body.appendChild(backG);
     Xinha.Dialog.background[this.layer].push(backG);
-  
+    
     backG = document.createElement("div");
     with (backG.style)
     {
@@ -70,6 +70,8 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
     } 
     document.body.appendChild(backG);
     Xinha.Dialog.background[this.layer].push(backG);
+    backG = null;
+    Xinha.freeLater(Xinha.Dialog.background[this.layer]);
   }
   var rootElem = document.createElement('div');
   rootElem.style.position = 'absolute';
@@ -156,22 +158,26 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
   but.onmouseout = function(ev) { this.className = "closeButton"; Xinha._stopEvent((ev) ? ev : window.event); return false;};
   but.onmouseup = function() { this.className = "closeButton"; dialog.hide(); return false;};
   titleBar.appendChild(but);
-  
+
   var butX = document.createElement('span');
+  butX.className = 'innerX';
   butX.style.position = 'relative';
   butX.style.top = '-3px';
 
   butX.appendChild(document.createTextNode('\u00D7'));
   but.appendChild(butX);
-  
+  butX = null;
+  but = null;
   var icon = document.createElement('img');
+  icon.className = 'icon';
   icon.src = _editor_url + 'images/xinha-small-icon.gif';
   icon.style.position = 'absolute';
   icon.style.top = '3px';
   icon.style.left = '2px';
   titleBar.style.paddingLeft = '30px';
   titleBar.appendChild(icon);
-   
+  icon = null;
+  
   var all = rootElem.getElementsByTagName("*");
 
   for (var i=0; i<all.length;i++)
@@ -198,9 +204,13 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
   }
   resizeHandle.onmousedown = function(ev) { dialog._resizeStart(ev); };
   rootElem.appendChild(resizeHandle);
+  resizeHandle = null;
   this.rootElem = rootElem;
   // for caching size & position after dragging & resizing
   this.size = {};
+  titleBar = null;
+  rootElem = null;
+  Xinha.freeLater(this,'rootElem');
 };
 
 Xinha.Dialog.background = [];
