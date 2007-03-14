@@ -235,7 +235,7 @@ form { margin: 0px; border: none; }
   
 }
 
-.htmlarea .panel { overflow:auto; }
+.htmlarea .panel { overflow:hidden; }
 .htmlarea .panels.left  .panel { border-right:none; border-left:none; }
 .htmlarea .panels.left  h1     { border-right:none;  }
 .htmlarea .panels.right .panel { border-right:none; border-left:none; }
