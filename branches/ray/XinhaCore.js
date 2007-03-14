@@ -181,42 +181,14 @@ function Xinha(textarea, config)
     w: textarea.style.width  ? textarea.style.width  : ( textarea.offsetWidth  ? ( textarea.offsetWidth  + 'px' ) : ( textarea.cols + 'em') ),
     h: textarea.style.height ? textarea.style.height : ( textarea.offsetHeight ? ( textarea.offsetHeight + 'px' ) : ( textarea.rows + 'em') )
   };
-  // Create the loading message elements
-  if ( this.config.showLoading )
+
+  if ( document.getElementById("loading_" + textarea.id) || this.config.showLoading )
   {
-    // Create and show the main loading message and the sub loading message for details of loading actions
-    // global element
-    var loading_message = document.createElement("div");
-    loading_message.id = "loading_" + textarea.name;
-    loading_message.className = "loading";
-    try
+    if (!document.getElementById("loading_" + textarea.id))
     {
-      // how can i find the real width in pixels without % or em *and* with no visual errors ?
-      // for instance, a textarea with a style="width:100%" and the body padding > 0 result in a horizontal scrollingbar while loading
-      // A few lines above seems to indicate offsetWidth is not always set
-      loading_message.style.width = textarea.offsetWidth + 'px';
+    	Xinha.createLoadingMessage(textarea);
     }
-    catch (ex)
-    {
-      // offsetWidth seems not set, so let's use this._initial_ta_size.w, but sometimes it may be too huge width
-      loading_message.style.width = this._initial_ta_size.w;
-    }
-    loading_message.style.left = Xinha.findPosX(textarea) +  'px';
-    loading_message.style.top = (Xinha.findPosY(textarea) + parseInt(this._initial_ta_size.h, 10) / 2) +  'px';
-    // main static message
-    var loading_main = document.createElement("div");
-    loading_main.className = "loading_main";
-    loading_main.id = "loading_main_" + textarea.name;
-    loading_main.appendChild(document.createTextNode(Xinha._lc("Loading in progress. Please wait !")));
-    // sub dynamic message
-    var loading_sub = document.createElement("div");
-    loading_sub.className = "loading_sub";
-    loading_sub.id = "loading_sub_" + textarea.name;
-    loading_sub.appendChild(document.createTextNode(Xinha._lc("Constructing main object")));
-    loading_message.appendChild(loading_main);
-    loading_message.appendChild(loading_sub);
-    document.body.appendChild(loading_message);
-    this.setLoadingMessage("Constructing object");
+    this.setLoadingMessage(Xinha._lc("Constructing object"));
   }
 
   this._editMode = "wysiwyg";
@@ -731,7 +703,7 @@ Xinha.prototype.registerPanel = function(side, object)
   {
     side = 'right';
   }
-  this.setLoadingMessage('Register panel ' + side);
+  this.setLoadingMessage(Xinha._lc('Register '+ side + 'panel'));
   var panel = this.addPanel(side);
   if ( object )
   {
@@ -981,7 +953,7 @@ Xinha.replace = function(id, config)
 // Creates the toolbar and appends it to the _htmlarea
 Xinha.prototype._createToolbar = function ()
 {
-  this.setLoadingMessage('Create Toolbar');
+  this.setLoadingMessage(Xinha._lc('Create Toolbar'));
   var editor = this;	// to access this in nested functions
 
   var toolbar = document.createElement("div");
@@ -1501,7 +1473,7 @@ Xinha.makeBtnImg = function(imgDef, doc)
 
 Xinha.prototype._createStatusBar = function()
 {
-  this.setLoadingMessage('Create StatusBar');
+  this.setLoadingMessage(Xinha._lc('Create StatusBar'));
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
   this._statusBar = statusbar;
@@ -1539,46 +1511,63 @@ Xinha.prototype.generate = function ()
   
   var i;
   var editor = this;  // we'll need "this" in some nested functions
+  var url;
+  
+  if (!document.getElementById("XinhaCoreDesign"))
+  {
+    Xinha.loadStyle(typeof _editor_css == "string" ? _editor_css : "Xinha.css",null,"XinhaCoreDesign");
+  }
   
   // Now load a specific browser plugin which will implement the above for us.
   if (Xinha.is_ie)
   {
-    if ( typeof InternetExplorer == 'undefined' )
+    url = _editor_url + 'modules/InternetExplorer/InternetExplorer.js';
+    if ( typeof InternetExplorer == 'undefined' && !document.getElementById(url) )
     {            
-      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, _editor_url + 'modules/InternetExplorer/InternetExplorer.js' );
+      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
   }
   else
   {
-    if ( typeof Gecko == 'undefined' )
+    url = _editor_url + 'modules/Gecko/Gecko.js';
+    if ( typeof Gecko == 'undefined' && !document.getElementById(url) )
     {            
-      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, _editor_url + 'modules/Gecko/Gecko.js' );
+      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
   }
 
-  this.setLoadingMessage('Generate Xinha object');
-
-  if ( typeof Dialog == 'undefined' )
+  url = _editor_url + 'modules/Dialogs/dialog.js';
+  if ( typeof Dialog == 'undefined' && !document.getElementById(url) )
   {
-    Xinha._loadback(_editor_url + 'modules/Dialogs/dialog.js', this.generate, this );
+    Xinha._loadback( url, this.generate, this );
     return false;
   }
 
-  if ( typeof Xinha.Dialog == 'undefined' )
+  url = _editor_url + 'modules/Dialogs/inline-dialog.js';
+  if ( typeof Xinha.Dialog == 'undefined' && !document.getElementById(url) )
   {
-    Xinha._loadback(_editor_url + 'modules/Dialogs/inline-dialog.js', this.generate, this );
+    Xinha._loadback( url , this.generate, this );
     return false;
   }
   
-  if ( typeof FullScreen == "undefined" )
+  url = _editor_url + 'modules/FullScreen/full-screen.js';
+  if ( typeof FullScreen == "undefined" && !document.getElementById(url) )
   {
-    Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, _editor_url + 'modules/FullScreen/full-screen.js' );
+    Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, url );
     return false;
   }
+  
+  url = _editor_url + 'modules/ColorPicker/ColorPicker.js';
+  if ( typeof ColorPicker == 'undefined' && !document.getElementById(url) )
+  {
+    Xinha.loadPlugin("ColorPicker", function() { editor.generate(); } , url );
+    return false;
+  }
+  else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
 
   var toolbar = editor.config.toolbar;
   for ( i = toolbar.length; --i >= 0; )
@@ -1591,42 +1580,32 @@ Xinha.prototype.generate = function ()
           editor.registerPlugin('FullScreen');
         break;
         case "insertimage":
-          if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' )
+          url = _editor_url + 'modules/InsertImage/InsertImage.js';
+          if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' && !document.getElementById(url) )
           {
-            var url = (this.config.URIs.insert_image != _editor_url + "modules/InsertImage/insert_image.html") ? _editor_url + "modules/InsertImage/insert_image.js" : _editor_url + "modules/InsertImage/InsertImage.js";
-            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , _editor_url + 'modules/InsertImage/InsertImage.js');
+            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertImage != 'undefined') editor.registerPlugin('InsertImage');
         break;
         case "createlink":
-          if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' )
+          url = _editor_url + 'modules/CreateLink/CreateLink.js';
+          if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' && !document.getElementById(url))
           {
-            var url = (this.config.URIs.link != _editor_url + "modules/CreateLink/link.html") ? _editor_url + "modules/CreateLink/link.js" : _editor_url + "modules/CreateLink/CreateLink.js";
-          	Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , url);
+            Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof CreateLink != 'undefined') editor.registerPlugin('CreateLink');
         break;
         case "inserttable":
-          if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' )
+          url = _editor_url + 'modules/InsertTable/InsertTable.js';
+          if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' && !document.getElementById(url) )
           {
-            var url = (this.config.URIs.insert_table != _editor_url + "modules/InsertTable/insert_table.html") ? _editor_url + "modules/InsertTable/insert_table.js" : _editor_url + "modules/InsertTable/InsertTable.js";
-          	Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , url);
+            Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
-        break;
-        case "hilitecolor":
-        case "forecolor":
-          if ( typeof ColorPicker == 'undefined')
-          {
-            Xinha.loadPlugin("ColorPicker", function() { editor.generate(); } , _editor_url + 'modules/ColorPicker/ColorPicker.js');
-            return false;
-          }
-          else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
-        break;
-        
+        break;        
       }
     }
   }
@@ -1643,7 +1622,7 @@ Xinha.prototype.generate = function ()
         var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerBest.js';
       break;
     }
-    if ( typeof EnterParagraphs == 'undefined' )
+    if ( typeof EnterParagraphs == 'undefined'  && !document.getElementById(ParaHandlerPlugin) )
     {
       Xinha.loadPlugin("EnterParagraphs", function() { editor.generate(); }, ParaHandlerPlugin );
       return false;
@@ -1661,7 +1640,7 @@ Xinha.prototype.generate = function ()
     break;
   }
   
-  if (typeof GetHtmlImplementation == 'undefined')
+  if (typeof GetHtmlImplementation == 'undefined'  && !document.getElementById(getHtmlMethodPlugin))
   {
     Xinha.loadPlugin("GetHtmlImplementation", function() { editor.generate(); } , getHtmlMethodPlugin);
     return false;        
@@ -1693,7 +1672,9 @@ Xinha.prototype.generate = function ()
   
   // create the editor framework, yah, table layout I know, but much easier
   // to get it working correctly this way, sorry about that, patches welcome.
-
+  
+  this.setLoadingMessage(Xinha._lc('Generate Xinha framework'));
+  
   this._framework =
   {
     'table':   document.createElement('table'),
@@ -1870,7 +1851,7 @@ Xinha.prototype.generate = function ()
 
   // Initalize size
   editor.initSize();
-
+  this.setLoadingMessage(Xinha._lc('Finishing'));
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
   if (Xinha.is_opera)
@@ -1926,7 +1907,7 @@ Xinha.prototype.generate = function ()
 
 Xinha.prototype.initSize = function()
 {
-  this.setLoadingMessage('Init editor size');
+  this.setLoadingMessage(Xinha._lc('Init editor size'));
   var editor = this;
   var width = null;
   var height = null;
@@ -2179,100 +2160,6 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
 };
 
-Xinha.prototype.addPanel = function(side)
-{
-  var div = document.createElement('div');
-  div.side = side;
-  if ( side == 'left' || side == 'right' )
-  {
-    div.style.width  = this.config.panel_dimensions[side];
-    if(this._iframe) div.style.height = this._iframe.style.height;     
-  }
-  Xinha.addClasses(div, 'panel');
-  this._panels[side].panels.push(div);
-  this._panels[side].div.appendChild(div);
-
-  this.notifyOf('panel_change', {'action':'add','panel':div});
-
-  return div;
-};
-
-
-Xinha.prototype.removePanel = function(panel)
-{
-  this._panels[panel.side].div.removeChild(panel);
-  var clean = [];
-  for ( var i = 0; i < this._panels[panel.side].panels.length; i++ )
-  {
-    if ( this._panels[panel.side].panels[i] != panel )
-    {
-      clean.push(this._panels[panel.side].panels[i]);
-    }
-  }
-  this._panels[panel.side].panels = clean;
-  this.notifyOf('panel_change', {'action':'remove','panel':panel});
-};
-
-Xinha.prototype.hidePanel = function(panel)
-{
-  if ( panel && panel.style.display != 'none' )
-  {
-    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
-    panel.style.display = 'none';
-    this.notifyOf('panel_change', {'action':'hide','panel':panel});
-    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
-  }
-};
-
-Xinha.prototype.showPanel = function(panel)
-{
-  if ( panel && panel.style.display == 'none' )
-  {
-    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
-  	panel.style.display = '';    
-    this.notifyOf('panel_change', {'action':'show','panel':panel});
-    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
-  }
-};
-
-Xinha.prototype.hidePanels = function(sides)
-{
-  if ( typeof sides == 'undefined' )
-  {
-    sides = ['left','right','top','bottom'];
-  }
-
-  var reShow = [];
-  for ( var i = 0; i < sides.length;i++ )
-  {
-    if ( this._panels[sides[i]].on )
-    {
-      reShow.push(sides[i]);
-      this._panels[sides[i]].on = false;
-    }
-  }
-  this.notifyOf('panel_change', {'action':'multi_hide','sides':sides});
-};
-
-Xinha.prototype.showPanels = function(sides)
-{
-  if ( typeof sides == 'undefined' )
-  {
-    sides = ['left','right','top','bottom'];
-  }
-
-  var reHide = [];
-  for ( var i = 0; i < sides.length; i++ )
-  {
-    if ( !this._panels[sides[i]].on )
-    {
-      reHide.push(sides[i]);
-      this._panels[sides[i]].on = true;
-    }
-  }
-  this.notifyOf('panel_change', {'action':'multi_show','sides':sides});
-};
-
 Xinha.objectProperties = function(obj)
 {
   var props = [];
@@ -2378,7 +2265,6 @@ Xinha.prototype.deactivateEditor = function()
 
 Xinha.prototype.initIframe = function()
 {
-  this.setLoadingMessage('Init IFrame');
   this.disableToolbar();
   var doc = null;
   var editor = this;
@@ -2739,6 +2625,7 @@ Xinha.loadPlugin = function(pluginName, callback, plugin_file)
 {
   if ( !Xinha.isSupportedBrowser ) return;
   
+  Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin="+pluginName+"$"));
   // @todo : try to avoid the use of eval()
   // Might already be loaded
   if ( eval('typeof ' + pluginName) != 'undefined' )
@@ -2899,10 +2786,10 @@ Xinha.prototype.firePluginEvent = function(methodName)
   return false;
 }
 
-Xinha.loadStyle = function(style, plugin)
+Xinha.loadStyle = function(style, plugin, id)
 {
   var url = _editor_url || '';
-  if ( typeof plugin != "undefined" )
+  if ( plugin )
   {
     url += "plugins/" + plugin + "/";
   }
@@ -2920,10 +2807,10 @@ Xinha.loadStyle = function(style, plugin)
   var link = document.createElement("link");
   link.rel = "stylesheet";
   link.href = url;
+  if (id) link.id = id;
   head.appendChild(link);
-  //document.write("<style type='text/css'>@import url(" + url + ");</style>");
 };
-Xinha.loadStyle(typeof _editor_css == "string" ? _editor_css : "Xinha.css");
+
 
 /***************************************************
  *  Category: EDITOR UTILITIES
@@ -5067,10 +4954,6 @@ Xinha._postback = function(url, data, handler)
           handler(req.responseText, req);
         }
       }
-      else if (req.status == 404)
-      {
-        alert('File not found: ' + url);
-      }
       else
       {
         alert('An error has occurred: ' + req.statusText + '\nURL: ' + url);
@@ -5098,10 +4981,6 @@ Xinha._getback = function(url, handler)
       if ( req.status == 200 || Xinha.isRunLocally && req.status == 0 )
       {
         handler(req.responseText, req);
-      }
-      else if (req.status == 404)
-      {
-        alert('File not found: ' + url);
       }
       else
       {
@@ -5220,6 +5099,7 @@ Xinha._loadlang = function(context,url)
     }
     else
     {
+      Xinha.setLoadingMessage("Language is loaded");
       url = _editor_url+"lang/"+_editor_lang+".js";
     }
   }
@@ -5392,6 +5272,7 @@ Xinha._loadback = function(Url, Callback, Scope, Bonus)
   var S = document.createElement("script");
   S.type = "text/javascript";
   S.src = Url;
+  S.id = Url;
   if ( Callback )
   {
     S[T] = function()
@@ -5475,7 +5356,7 @@ Xinha.prototype.registerPlugins = function(plugin_names)
   {
     for ( var i = 0; i < plugin_names.length; i++ )
     {
-      this.setLoadingMessage('Register plugin $plugin', 'Xinha', {'plugin': plugin_names[i]});
+      this.setLoadingMessage(Xinha._lc('Register plugin $plugin', 'Xinha', {'plugin': plugin_names[i]}));
       this.registerPlugin(eval(plugin_names[i]));
     }
   }
@@ -5686,23 +5567,87 @@ Xinha.findPosY = function(obj)
   return curtop;
 };
 
-Xinha.prototype.setLoadingMessage = function(string, context, replace)
+Xinha.createLoadingMessages = function(xinha_editors)
 {
-  if ( !this.config.showLoading || !document.getElementById("loading_sub_" + this._textArea.name) )
+  if ( Xinha.loadingMessages || !Xinha.isSupportedBrowser ) 
   {
     return;
   }
-  var elt = document.getElementById("loading_sub_" + this._textArea.name);
-  elt.innerHTML = Xinha._lc(string, context, replace);
+  Xinha.loadingMessages = [];
+  
+  for (var i=0;i<xinha_editors.length;i++)
+  {
+     Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
+  }
+};
+
+Xinha.createLoadingMessage = function(textarea,text)
+{ 
+  if ( document.getElementById("loading_" + textarea.id) || !Xinha.isSupportedBrowser)
+  {
+    return;
+  }
+  // Create and show the main loading message and the sub loading message for details of loading actions
+  // global element
+  var loading_message = document.createElement("div");
+  loading_message.id = "loading_" + textarea.id;
+  loading_message.className = "loading";
+  
+  loading_message.style.left = (Xinha.findPosX(textarea) + textarea.offsetWidth / 2) - 106 +  'px';
+  loading_message.style.top = (Xinha.findPosY(textarea) + textarea.offsetHeight / 2) - 50 +  'px';
+  // main static message
+  var loading_main = document.createElement("div");
+  loading_main.className = "loading_main";
+  loading_main.id = "loading_main_" + textarea.id;
+  loading_main.appendChild(document.createTextNode(Xinha._lc("Loading in progress. Please wait!")));
+  // sub dynamic message
+  var loading_sub = document.createElement("div");
+  loading_sub.className = "loading_sub";
+  loading_sub.id = "loading_sub_" + textarea.id;
+  text = text ? text : Xinha._lc("Constructing main object");
+  loading_sub.appendChild(document.createTextNode(text));
+  loading_message.appendChild(loading_main);
+  loading_message.appendChild(loading_sub);
+  document.body.appendChild(loading_message);
+  
+  return loading_sub;
+};
+
+Xinha.prototype.setLoadingMessage = function(string)
+{
+  if ( !document.getElementById("loading_sub_" + this._textArea.id) )
+  {
+    return;
+  }
+  document.getElementById("loading_main_" + this._textArea.id).innerHTML = Xinha._lc("Loading in progress. Please wait!");
+  document.getElementById("loading_sub_" + this._textArea.id).innerHTML = string;
+};
+
+Xinha.setLoadingMessage = function(string)
+{
+  if (!Xinha.loadingMessages) return;  
+  for ( var i = 0; i < Xinha.loadingMessages.length; i++ )
+  {
+    Xinha.loadingMessages[i].innerHTML = string;
+  }
 };
 
 Xinha.prototype.removeLoadingMessage = function()
 {
-  if ( !this.config.showLoading || !document.getElementById("loading_" + this._textArea.name) )
+  if (document.getElementById("loading_" + this._textArea.id) )
   {
-    return ;
+   document.body.removeChild(document.getElementById("loading_" + this._textArea.id));
   }
-  document.body.removeChild(document.getElementById("loading_" + this._textArea.name));
+};
+
+Xinha.removeLoadingMessages = function(xinha_editors)
+{
+  for (var i=0;i< xinha_editors.length;i++)
+  {
+     var main = document.getElementById("loading_" + document.getElementById(xinha_editors[i]).id);
+     main.parentNode.removeChild(main);
+  }
+  Xinha.loadingMessages = null;
 };
 
 Xinha.toFree = [];
@@ -5737,7 +5682,7 @@ Xinha.free = function(obj, prop)
  */
 
 Xinha.collectGarbageForIE = function() 
-{  
+{
   Xinha.flushEvents();   
   for ( var x = 0; x < Xinha.toFree.length; x++ )
   {

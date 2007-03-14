@@ -20,18 +20,19 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
-Xinha.Dialog = function(editor, html, localizer, size, layer)
+Xinha.Dialog = function(editor, html, localizer, size, modal, layer)
 {
   var dialog = this;
   this.id    = { };
   this.r_id  = { }; // reverse lookup id
   this.editor   = editor;
   this.document = document;
+  this.modal = (modal === false) ? false : true;
   this.layer = (layer) ? layer : 0;
   
-  if ( !Xinha.Dialog.background[this.layer] )
+  if ( !this.background )
   {
-  	Xinha.Dialog.background[this.layer] = [];
+  	this.background = [];
   	
     if (Xinha.is_ie)
     { // IE6 needs the iframe to hide select boxes
@@ -56,7 +57,7 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
       zIndex = 1001 + this.layer;
     }
     document.body.appendChild(backG);
-    Xinha.Dialog.background[this.layer].push(backG);
+    this.background.push(backG);
     
     backG = document.createElement("div");
     with (backG.style)
@@ -69,9 +70,9 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
       zIndex = 1002+ this.layer;
     } 
     document.body.appendChild(backG);
-    Xinha.Dialog.background[this.layer].push(backG);
+    this.background.push(backG);
     backG = null;
-    Xinha.freeLater(Xinha.Dialog.background[this.layer]);
+    Xinha.freeLater(this.background);
   }
   var rootElem = document.createElement('div');
   rootElem.style.position = 'absolute';
@@ -83,7 +84,7 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
   
   rootElem.className = 'dialog';
   
- // Xinha.Dialog.background[this.layer][1].appendChild(rootElem);
+ // this.background[1].appendChild(rootElem);
   document.body.appendChild(rootElem);
 
   rootElem.style.paddingBottom = "10px";
@@ -122,42 +123,25 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
     };
   }
 
-  html = html.replace(/\[([a-z0-9_]+)\]/ig,
-                      function(fullString, id)
-                      {
-                        if(typeof dialog.id[id] == 'undefined')
-                        {
-                          dialog.id[id] = Xinha.uniq('Dialog');
-                          dialog.r_id[dialog.id[id]] = id;
-                        }
-                        return dialog.id[id];
-                      }
-             ).replace(/<l10n>(.*?)<\/l10n>/ig,
-                       function(fullString,translate)
-                       {
-                         return dialog._lc(translate) ;
-                       }
-             ).replace(/="_\((.*?)\)"/g,
-                       function(fullString, translate)
-                       {
-                         return '="' + dialog._lc(translate) + '"';
-                       }
-             );
+  html = this.translateHtml(html)
 
-  rootElem.innerHTML = html;
+  var main = document.createElement('div');
+  rootElem.appendChild(main);
+  main.innerHTML = html;
 
   //make the first h1 to drag&drop the rootElem
-  var titleBar = rootElem.getElementsByTagName("h1")[0];
-  titleBar.onmousedown = function(ev) { dialog._dragStart(ev); };
-  titleBar.style.MozUserSelect = "none";
+  var captionBar = main.removeChild( main.getElementsByTagName("h1")[0]);
+  rootElem.insertBefore(captionBar,main);
+  captionBar.onmousedown = function(ev) { dialog._dragStart(ev); };
+  captionBar.style.MozUserSelect = "none";
   
-  var but = document.createElement('div');
-  but.className= 'closeButton'; 
+  var closer = document.createElement('div');
+  closer.className= 'closeButton'; 
   
-  but.onmousedown = function(ev) { this.className = "closeButton buttonClick"; Xinha._stopEvent((ev) ? ev : window.event); return false;};
-  but.onmouseout = function(ev) { this.className = "closeButton"; Xinha._stopEvent((ev) ? ev : window.event); return false;};
-  but.onmouseup = function() { this.className = "closeButton"; dialog.hide(); return false;};
-  titleBar.appendChild(but);
+  closer.onmousedown = function(ev) { this.className = "closeButton buttonClick"; Xinha._stopEvent((ev) ? ev : window.event); return false;};
+  closer.onmouseout = function(ev) { this.className = "closeButton"; Xinha._stopEvent((ev) ? ev : window.event); return false;};
+  closer.onmouseup = function() { this.className = "closeButton"; dialog.hide(); return false;};
+  captionBar.appendChild(closer);
 
   var butX = document.createElement('span');
   butX.className = 'innerX';
@@ -165,18 +149,18 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
   butX.style.top = '-3px';
 
   butX.appendChild(document.createTextNode('\u00D7'));
-  but.appendChild(butX);
+  closer.appendChild(butX);
   butX = null;
-  but = null;
+
   var icon = document.createElement('img');
   icon.className = 'icon';
   icon.src = _editor_url + 'images/xinha-small-icon.gif';
   icon.style.position = 'absolute';
   icon.style.top = '3px';
   icon.style.left = '2px';
-  titleBar.style.paddingLeft = '30px';
-  titleBar.appendChild(icon);
-  icon = null;
+  captionBar.style.paddingLeft = '30px';
+  captionBar.appendChild(icon);
+  
   
   var all = rootElem.getElementsByTagName("*");
 
@@ -204,23 +188,40 @@ Xinha.Dialog = function(editor, html, localizer, size, layer)
   }
   resizeHandle.onmousedown = function(ev) { dialog._resizeStart(ev); };
   rootElem.appendChild(resizeHandle);
-  resizeHandle = null;
+  
   this.rootElem = rootElem;
+  this.captionBar = captionBar;
+  this.main = main;
+  this.closer = closer;
+  this.icon = icon;
+  this.resizer = resizeHandle;
+  
+  captionBar = 
+  rootElem = 
+  rootElem =
+  main = 
+  closer = 
+  icon = 
+  resizeHandle = null;
+  
+  Xinha.freeLater(this,'rootElem');
+  
   // for caching size & position after dragging & resizing
   this.size = {};
-  titleBar = null;
-  rootElem = null;
-  Xinha.freeLater(this,'rootElem');
+
 };
 
 Xinha.Dialog.background = [];
 Xinha.Dialog.prototype.sizeBackground = function()
 {
   var win_dim = Xinha.viewportSize();
-  Xinha.Dialog.background[this.layer][0].style.width = win_dim.x + 'px';
-  Xinha.Dialog.background[this.layer][0].style.height = win_dim.y + 'px';
-  Xinha.Dialog.background[this.layer][1].style.width = win_dim.x + 'px';
-  Xinha.Dialog.background[this.layer][1].style.height = win_dim.y + 'px';
+  if ( this.modal )
+  {
+    this.background[0].style.width = win_dim.x + 'px';
+    this.background[0].style.height = win_dim.y + 'px';
+    this.background[1].style.width = win_dim.x + 'px';
+    this.background[1].style.height = win_dim.y + 'px';
+  }
   window.scroll(this.scrollPos.x, this.scrollPos.y);
   return win_dim;
 }
@@ -236,38 +237,41 @@ Xinha.Dialog.prototype.show = function(values)
   var scrollPos = this.scrollPos = this.editor.scrollPos();
   var dialog = this;
   
-  function resetScroll()
+  if ( this.modal )
   {
-    if ( dialog.dialogShown )
+    function resetScroll()
     {
-      window.scroll(scrollPos.x,scrollPos.y);
-      window.setTimeout(resetScroll,150);
+      if ( dialog.dialogShown )
+      {
+        window.scroll(scrollPos.x,scrollPos.y);
+        window.setTimeout(resetScroll,150);
+      }
     }
+    this.background[0].style.left = this.scrollPos.x + 'px';
+    this.background[0].style.top = this.scrollPos.y + 'px';
+    this.background[1].style.left = this.scrollPos.x + 'px';
+    this.background[1].style.top = this.scrollPos.y + 'px';
   }
-  Xinha.Dialog.background[this.layer][0].style.left = this.scrollPos.x + 'px';
-  Xinha.Dialog.background[this.layer][0].style.top = this.scrollPos.y + 'px';
-  Xinha.Dialog.background[this.layer][1].style.left = this.scrollPos.x + 'px';
-  Xinha.Dialog.background[this.layer][1].style.top = this.scrollPos.y + 'px';
-  
+ 
   // We need to preserve the selection
-  if(Xinha.is_ie)
-  {      
-    this._lastRange = this.editor._createRange(this.editor._getSelection());
-  }
-  else
-  {
-  	this._lastRange = this.editor._createRange(this.editor._getSelection()).cloneRange();
-  }
-  this.editor.deactivateEditor();
+  this._lastRange = this.editor.saveSelection();
   
+  if (Xinha.is_ie && !this.modal)
+  {
+    dialog.saveSelection = function() { dialog._lastRange = dialog.editor.saveSelection();};
+    Xinha._addEvent(this.editor._doc.body,'mouseup', dialog.saveSelection);
+  }
+
+  this.editor.deactivateEditor();
+
   // unfortunately we have to hide the editor (iframe/caret bug)
-  if (Xinha.is_gecko)
+  if (Xinha.is_gecko && this.modal)
   {
     this._restoreTo = [this.editor._textArea.style.display, this.editor._iframe.style.visibility, this.editor.hidePanels()];
     this.editor._textArea.style.display = 'none';
     this.editor._iframe.style.visibility   = 'hidden';
   }
-  if (!this.editor._isFullScreen)
+  if (!this.editor._isFullScreen && this.modal)
   {
     if(Xinha.is_ie && document.compatMode == 'CSS1Compat')
     {
@@ -282,8 +286,8 @@ Xinha.Dialog.prototype.show = function(values)
     window.scroll(this.scrollPos.x, this.scrollPos.y);
   }
 
-  Xinha.Dialog.background[this.layer][0].style.display = '';
-  Xinha.Dialog.background[this.layer][1].style.display = '';
+  this.background[0].style.display = '';
+  this.background[1].style.display = '';
   
   var backgroundSize = this.sizeBackground();
   var backgroundHeight = backgroundSize.y;
@@ -348,31 +352,44 @@ Xinha.Dialog.prototype.show = function(values)
   this.width = dialogWidth;
   this.height = dialogHeight;  
   
+  if (!this.modal)
+  {
+    this.background[0].style.left =  rootElemStyle.left;
+    this.background[0].style.top  =  rootElemStyle.top;
+    this.background[1].style.left =  rootElemStyle.left;
+    this.background[1].style.top  =  rootElemStyle.top;
+
+    this.background[0].style.width  = dialogWidth + 'px';
+    this.background[0].style.height = dialogHeight + 'px';
+    this.background[1].style.width  = dialogWidth + 'px';
+    this.background[1].style.height = dialogHeight + 'px';
+  }
+  
   if(typeof values != 'undefined')
   {
     this.setValues(values);
   }
   this.dialogShown = true;
-  resetScroll();
+  if (this.modal) resetScroll();
 };
 
 Xinha.Dialog.prototype.hide = function()
 {
   this.rootElem.style.display = 'none';
-  Xinha.Dialog.background[this.layer][0].style.display = 'none';
-  Xinha.Dialog.background[this.layer][1].style.display = 'none';
+  this.background[0].style.display = 'none';
+  this.background[1].style.display = 'none';
   var dialog = this;
 
   Xinha._removeEvent(window, 'resize', this.onResizeWin);
   
-  if (Xinha.is_gecko)
+  if (Xinha.is_gecko && this.modal)
   {
     this.editor._textArea.style.display = this._restoreTo[0];
     this.editor._iframe.style.visibility   = this._restoreTo[1];
     this.editor.showPanels(this._restoreTo[2]);  
   }
   
-  if (!this.editor._isFullScreen)
+  if (!this.editor._isFullScreen && this.modal)
   {
     if(Xinha.is_ie && document.compatMode == 'CSS1Compat')
     {
@@ -385,17 +402,16 @@ Xinha.Dialog.prototype.hide = function()
     bod[0].style.overflow='';
     window.scroll(this.scrollPos.x, this.scrollPos.y);
   }
-// Restore the selection
-  this.editor.activateEditor();
-  if (Xinha.is_gecko)
-  { 	 	
-    var sel = this.editor.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(this._lastRange);
+  // Restore the selection
+  this.editor.restoreSelection(this._lastRange);
+  if (Xinha.is_ie && !this.modal)
+  {
+    Xinha._removeEvent(this.editor._doc.body,'mouseup', dialog.saveSelection);
   }
-  else
-  { 
-    this._lastRange.select();
+  
+  if (this.modal)
+  {
+    this.editor.activateEditor();
   }
   this.dialogShown = false;
   this.editor.updateToolbar();
@@ -460,6 +476,14 @@ Xinha.Dialog.prototype.dragIt = function(ev)
 
   st.left = (posX - dialog.xOffs) + "px";
   st.top = (posY - dialog.yOffs) + "px";
+  
+  if (!this.modal)
+  {
+    this.background[0].style.left =  st.left;
+    this.background[0].style.top  =  st.top;
+    this.background[1].style.left =  st.left;
+    this.background[1].style.top  =  st.top;
+  }
 };
 
 Xinha.Dialog.prototype.dragEnd = function(ev)
@@ -515,6 +539,13 @@ Xinha.Dialog.prototype.resizeIt = function(ev)
   dialog.width = dialog.rootElem.offsetWidth;
   dialog.height = dialog.rootElem.offsetHeight;
 
+  if (!this.modal)
+  {
+    this.background[0].style.width  = st.width ;
+    this.background[0].style.height = st.height;
+    this.background[1].style.width  = st.width ;
+    this.background[1].style.height = st.height;
+  }
   dialog.onresize();
 };
 
@@ -721,3 +752,201 @@ Xinha.Dialog.prototype.getValues = function()
   }
   return values;
 };
+
+Xinha.Dialog.prototype.translateHtml = function(html)
+{
+  var dialog = this;
+  html = html.replace(/\[([a-z0-9_]+)\]/ig,
+    function(fullString, id)
+    {
+      if(typeof dialog.id[id] == 'undefined')
+      {
+        dialog.id[id] = Xinha.uniq('Dialog');
+        dialog.r_id[dialog.id[id]] = id;
+      }
+      return dialog.id[id];
+    }
+    ).replace(/<l10n>(.*?)<\/l10n>/ig,
+    function(fullString,translate)
+    {
+      return dialog._lc(translate) ;
+    }
+    ).replace(/="_\((.*?)\)"/g,
+    function(fullString, translate)
+    {
+      return '="' + dialog._lc(translate) + '"';
+    }
+  );
+  return html;
+}
+
+
+Xinha.prototype.addPanel = function(side)
+{
+  var div = document.createElement('div');
+  div.side = side;
+  if ( side == 'left' || side == 'right' )
+  {
+    div.style.width  = this.config.panel_dimensions[side];
+    if(this._iframe) div.style.height = this._iframe.style.height;     
+  }
+  Xinha.addClasses(div, 'panel');
+  this._panels[side].panels.push(div);
+  this._panels[side].div.appendChild(div);
+
+  this.notifyOf('panel_change', {'action':'add','panel':div});
+
+  return div;
+};
+
+
+Xinha.prototype.removePanel = function(panel)
+{
+  this._panels[panel.side].div.removeChild(panel);
+  var clean = [];
+  for ( var i = 0; i < this._panels[panel.side].panels.length; i++ )
+  {
+    if ( this._panels[panel.side].panels[i] != panel )
+    {
+      clean.push(this._panels[panel.side].panels[i]);
+    }
+  }
+  this._panels[panel.side].panels = clean;
+  this.notifyOf('panel_change', {'action':'remove','panel':panel});
+};
+
+Xinha.prototype.hidePanel = function(panel)
+{
+  if ( panel && panel.style.display != 'none' )
+  {
+    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
+    panel.style.display = 'none';
+    this.notifyOf('panel_change', {'action':'hide','panel':panel});
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
+  }
+};
+
+Xinha.prototype.showPanel = function(panel)
+{
+  if ( panel && panel.style.display == 'none' )
+  {
+    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
+  	panel.style.display = '';    
+    this.notifyOf('panel_change', {'action':'show','panel':panel});
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
+  }
+};
+
+Xinha.prototype.hidePanels = function(sides)
+{
+  if ( typeof sides == 'undefined' )
+  {
+    sides = ['left','right','top','bottom'];
+  }
+
+  var reShow = [];
+  for ( var i = 0; i < sides.length;i++ )
+  {
+    if ( this._panels[sides[i]].on )
+    {
+      reShow.push(sides[i]);
+      this._panels[sides[i]].on = false;
+    }
+  }
+  this.notifyOf('panel_change', {'action':'multi_hide','sides':sides});
+};
+
+Xinha.prototype.showPanels = function(sides)
+{
+  if ( typeof sides == 'undefined' )
+  {
+    sides = ['left','right','top','bottom'];
+  }
+
+  var reHide = [];
+  for ( var i = 0; i < sides.length; i++ )
+  {
+    if ( !this._panels[sides[i]].on )
+    {
+      reHide.push(sides[i]);
+      this._panels[sides[i]].on = true;
+    }
+  }
+  this.notifyOf('panel_change', {'action':'multi_show','sides':sides});
+};
+
+Xinha.PanelDialog = function(editor, side, html, localizer)
+{
+  this.id    = { };
+  this.r_id  = { }; // reverse lookup id
+  this.editor   = editor;
+  this.document = document;
+  this.rootElem = editor.addPanel(side);
+
+  var dialog = this;
+  if(typeof localizer == 'function')
+  {
+    this._lc = localizer;
+  }
+  else if(localizer)
+  {
+    this._lc = function(string)
+    {
+      return Xinha._lc(string,localizer);
+    };
+  }
+  else
+  {
+    this._lc = function(string)
+    {
+      return string;
+    };
+  }
+
+  html = html.replace(/\[([a-z0-9_]+)\]/ig,
+                      function(fullString, id)
+                      {
+                        if(typeof dialog.id[id] == 'undefined')
+                        {
+                          dialog.id[id] = Xinha.uniq('Dialog');
+                          dialog.r_id[dialog.id[id]] = id;
+                        }
+                        return dialog.id[id];
+                      }
+             ).replace(/<l10n>(.*?)<\/l10n>/ig,
+                       function(fullString,translate)
+                       {
+                         return dialog._lc(translate) ;
+                       }
+             ).replace(/="_\((.*?)\)"/g,
+                       function(fullString, translate)
+                       {
+                         return '="' + dialog._lc(translate) + '"';
+                       }
+             );
+
+  this.rootElem.innerHTML = html;
+};
+
+Xinha.PanelDialog.prototype.show = function(values)
+{
+  this.editor.showPanel(this.rootElem);
+};
+
+Xinha.PanelDialog.prototype.hide = function()
+{
+  this.editor.hidePanel(this.rootElem);
+  return this.getValues();
+};
+
+Xinha.PanelDialog.prototype.onresize   = Xinha.Dialog.prototype.onresize;
+
+Xinha.PanelDialog.prototype.toggle     = Xinha.Dialog.prototype.toggle;
+
+Xinha.PanelDialog.prototype.setValues  = Xinha.Dialog.prototype.setValues;
+
+Xinha.PanelDialog.prototype.getValues  = Xinha.Dialog.prototype.getValues;
+
+Xinha.PanelDialog.prototype.getElementById    = Xinha.Dialog.prototype.getElementById;
+
+Xinha.PanelDialog.prototype.getElementsByName = Xinha.Dialog.prototype.getElementsByName;

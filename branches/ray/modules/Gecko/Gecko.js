@@ -757,3 +757,14 @@ Xinha.getDoctype = function (doc)
   }
   return d;
 };
+
+Xinha.prototype.saveSelection = function()
+{
+  return this.createRange(this.getSelection()).cloneRange();
+}
+Xinha.prototype.restoreSelection = function(savedSelection)
+{
+  var sel = this.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedSelection);
+}

@@ -468,3 +468,12 @@ Xinha.getDoctype = function (doc)
 {
   return (doc.compatMode == "CSS1Compat") ? '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' : '';
 };
+
+Xinha.prototype.saveSelection = function()
+{
+  return this.createRange(this._getSelection())
+}
+Xinha.prototype.restoreSelection = function(savedSelection)
+{
+  savedSelection.select();
+}
