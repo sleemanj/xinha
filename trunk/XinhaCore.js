@@ -1771,6 +1771,7 @@ Xinha.prototype.generate = function ()
     // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
   iframe.src = _editor_url + editor.config.URIs.blank;
+  iframe.id = "XinhaIFrame_" + this._textArea.id;
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
   this._iframe.className = 'xinha_iframe';
