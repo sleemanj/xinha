@@ -3,15 +3,15 @@
  *  the format is { '.className' : 'Description' }
  */
 
-HTMLArea.Config.prototype.css_style = { };
+Xinha.Config.prototype.css_style = { };
 
 /**
  * This method loads an external stylesheet and uses it in the stylist
  */
-HTMLArea.Config.prototype.stylistLoadStylesheet = function(url, altnames)
+Xinha.Config.prototype.stylistLoadStylesheet = function(url, altnames)
 {
   if(!altnames) altnames = { };
-  var newStyles = HTMLArea.ripStylesFromCSSFile(url);
+  var newStyles = Xinha.ripStylesFromCSSFile(url);
   for(var i in newStyles)
   {
     if(altnames[i])
@@ -29,10 +29,10 @@ HTMLArea.Config.prototype.stylistLoadStylesheet = function(url, altnames)
 /**
  * This method takes raw style definitions and uses them in the stylist
  */
-HTMLArea.Config.prototype.stylistLoadStyles = function(styles, altnames)
+Xinha.Config.prototype.stylistLoadStyles = function(styles, altnames)
 {
   if(!altnames) altnames = { };
-  var newStyles = HTMLArea.ripStylesFromCSSString(styles);
+  var newStyles = Xinha.ripStylesFromCSSString(styles);
   for(var i in newStyles)
   {
     if(altnames[i])
@@ -51,7 +51,7 @@ HTMLArea.Config.prototype.stylistLoadStyles = function(styles, altnames)
 
 /**
  * Fill the stylist panel with styles that may be applied to the current selection.  Styles
- * are supplied in the css_style property of the HTMLArea.Config object, which is in the format
+ * are supplied in the css_style property of the Xinha.Config object, which is in the format
  * { '.className' : 'Description' }
  * classes that are defined on a specific tag (eg 'a.email_link') are only shown in the panel
  *    when an element of that type is selected.
@@ -63,10 +63,10 @@ HTMLArea.Config.prototype.stylistLoadStyles = function(styles, altnames)
  * you may add multiple classes to any element
  * spans will be added where no single _and_entire_ element is selected
  */
-HTMLArea.prototype._fillStylist = function()
+Xinha.prototype._fillStylist = function()
 {
   if(!this._stylist) return false;
-  this._stylist.innerHTML = '<h1>'+HTMLArea._lc('Styles', 'Stylist')+'</h1>';
+  this.plugins.Stylist.instance.main.innerHTML = '';
 
   var may_apply = true;
   var sel       = this._getSelection();
@@ -82,6 +82,7 @@ HTMLArea.prototype._fillStylist = function()
     var tag   = null;
     var className = x.trim();
     var applicable = true;
+    var idApplicable = false;
     var apply_to   = active_elem;
 
     if(applicable && /[^a-zA-Z0-9_.-]/.test(className))
@@ -95,6 +96,11 @@ HTMLArea.prototype._fillStylist = function()
     {
       // No class name, just redefines a tag
       applicable = false;
+  
+      if (className.indexOf('#') >= 0)
+      {
+        idApplicable = true;
+      }
     }
 
     if(applicable && (className.indexOf('.') > 0))
@@ -146,13 +152,75 @@ HTMLArea.prototype._fillStylist = function()
       }
     }
 
-    if(applicable)
+    if (idApplicable) // IDs
     {
-      // Remove the first .
-      className = className.substring(className.indexOf('.'), className.length);
+       // requires specific html tag
+      tag = className.substring(0, className.indexOf('#')).toLowerCase();
+      var idName = className.substring(className.indexOf('#'), className.length);
+  
+      // To apply we must have an ancestor tag that is the right type
+      if(active_elem != null && active_elem.tagName.toLowerCase() == tag)
+      {
+        idApplicable = true;
+        apply_to = active_elem;
+      }
+      else
+      {
+        if(this._getFirstAncestor(this._getSelection(), [tag]) != null)
+        {
+          idApplicable = true;
+          apply_to = this._getFirstAncestor(this._getSelection(), [tag]);
+        }
+        else
+        {
+          // alert (this._getFirstAncestor(this._getSelection(), tag));
+          // If we don't have an ancestor, but it's a div/span/p/hx stle, we can make one
+          if(( tag == 'div' || tag == 'span' || tag == 'p'
+              || (tag.substr(0,1) == 'h' && tag.length == 2 && tag != 'hr')))
+          {
+            if(!this._selectionEmpty(this._getSelection()))
+            {
+              idApplicable = true;
+              apply_to = 'new';
+            }
+            else
+            {
+              // See if we can get a paragraph or header that can be converted
+              apply_to = this._getFirstAncestor(sel, ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7']);
+              if(apply_to != null)
+              {
+                idApplicable = true;
+              }
+            }
+          }
+          else
+          {
+            idApplicable = false;
+          }
+        }
+      }    
+    }
 
-      // Replace any futher ones with spaces (for multiple class definitions)
-      className = className.replace('.', ' ');
+
+    if(applicable || idApplicable)
+    {
+
+      if (idApplicable)
+      {
+        // Remove the first .
+        idName = idName.substring(idName.indexOf('#'), idName.length);
+
+        // Replace any futher ones with spaces (for multiple id definitions (yes it happens))
+        idName = idName.replace('#', ' ');
+      }
+      else
+      {
+        // Remove the first .
+        className = className.substring(className.indexOf('.'), className.length);
+
+        // Replace any futher ones with spaces (for multiple class definitions)
+        className = className.replace('.', ' ');
+      }
 
       if(apply_to == null)
       {
@@ -169,13 +237,24 @@ HTMLArea.prototype._fillStylist = function()
       }
     }
 
-    var applied    = (this._ancestorsWithClasses(sel, tag, className).length > 0 ? true : false);
-    var applied_to = this._ancestorsWithClasses(sel, tag, className);
+    if (idApplicable)
+    {
+      var applied    = (this._ancestorsWithIDs(sel, tag, idName).length > 0 ? true : false);
+      var applied_to = this._ancestorsWithIDs(sel, tag, idName);
+    }
+    else
+    {
+      var applied    = (this._ancestorsWithClasses(sel, tag, className).length > 0 ? true : false);
+      var applied_to = this._ancestorsWithClasses(sel, tag, className);
+    }
 
-    if(applicable)
+    if(applicable || idApplicable)
     {
       var anch = document.createElement('a');
-      anch._stylist_className = className.trim();
+      if (idApplicable)
+        anch._stylist_idName = idName.trim();  
+      else
+        anch._stylist_className = className.trim();
       anch._stylist_applied   = applied;
       anch._stylist_appliedTo = applied_to;
       anch._stylist_applyTo = apply_to;
@@ -184,17 +263,35 @@ HTMLArea.prototype._fillStylist = function()
       anch.innerHTML = this.config.css_style[x];
       anch.href = 'javascript:void(0)';
       var editor = this;
-      anch.onclick = function()
+      if (idApplicable)
+      {  
+        anch.onclick = function()
+        {
+          if(this._stylist_applied == true)
+          {
+            editor._stylistRemoveIDs(this._stylist_idName, this._stylist_appliedTo);
+          }
+          else
+          {
+            editor._stylistAddIDs(this._stylist_applyTo, this._stylist_applyTag, this._stylist_idName);
+          }
+          return false;
+        }
+      }
+      else
       {
-        if(this._stylist_applied == true)
+        anch.onclick = function()
         {
-          editor._stylistRemoveClasses(this._stylist_className, this._stylist_appliedTo);
+          if(this._stylist_applied == true)
+          {
+            editor._stylistRemoveClasses(this._stylist_className, this._stylist_appliedTo);
+          }
+          else
+          {
+            editor._stylistAddClasses(this._stylist_applyTo, this._stylist_applyTag, this._stylist_className);
+          }
+          return false;
         }
-        else
-        {
-          editor._stylistAddClasses(this._stylist_applyTo, this._stylist_applyTag, this._stylist_className);
-        }
-        return false;
       }
 
       anch.style.display = 'block';
@@ -209,7 +306,7 @@ HTMLArea.prototype._fillStylist = function()
         anch.style.color = 'HighlightText';
       }
 
-      this._stylist.appendChild(anch);
+      this.plugins.Stylist.instance.main.appendChild(anch);
     }
   }
 };
@@ -219,7 +316,7 @@ HTMLArea.prototype._fillStylist = function()
  * Add the given classes (space seperated list) to the currently selected element
  * (will add a span if none selected)
  */
-HTMLArea.prototype._stylistAddClasses = function(el, tag, classes)
+Xinha.prototype._stylistAddClasses = function(el, tag, classes)
   {
     if(el == 'new')
     {
@@ -242,21 +339,55 @@ HTMLArea.prototype._stylistAddClasses = function(el, tag, classes)
           new_el._stylist_usedToBe = [{'tagName' : el.tagName, 'className' : el.getAttribute('class')}];
         }
 
-        HTMLArea.addClasses(new_el, classes);
+        Xinha.addClasses(new_el, classes);
       }
       else
       {
-        HTMLArea._addClasses(el, classes);
+        Xinha._addClasses(el, classes);
       }
     }
     this.focusEditor();
     this.updateToolbar();
   };
+  
+Xinha.prototype._stylistAddIDs = function(el, tag, ids)
+  {
+    if(el == 'new')
+    {
+      this.insertHTML('<' + tag + ' id="' + ids + '">' + this.getSelectedHTML() + '</' + tag + '>');
+    }
+    else
+    {
+      if(tag != null && el.tagName.toLowerCase() != tag)
+      {
+        // Have to change the tag!
+        var new_el = this.switchElementTag(el, tag);
+
+        if(typeof el._stylist_usedToBe != 'undefined')
+        {
+          new_el._stylist_usedToBe = el._stylist_usedToBe;
+          new_el._stylist_usedToBe[new_el._stylist_usedToBe.length] = {'tagName' : el.tagName, 'id' : el.getAttribute('id')};
+        }
+        else
+        {
+          new_el._stylist_usedToBe = [{'tagName' : el.tagName, 'id' : el.getAttribute('id')}];
+        }
+
+        Xinha.addIDs(new_el, ids);
+      }
+      else
+      {
+        Xinha._addIDs(el, ids);
+      }
+    }
+    this.focusEditor();
+    this.updateToolbar();
+  };  
 
 /**
  * Remove the given classes (space seperated list) from the given elements (array of elements)
  */
-HTMLArea.prototype._stylistRemoveClasses = function(classes, from)
+Xinha.prototype._stylistRemoveClasses = function(classes, from)
   {
     for(var x = 0; x < from.length; x++)
     {
@@ -265,8 +396,18 @@ HTMLArea.prototype._stylistRemoveClasses = function(classes, from)
     this.focusEditor();
     this.updateToolbar();
   };
+  
+Xinha.prototype._stylistRemoveIDs = function(ids, from)
+  {
+    for(var x = 0; x < from.length; x++)
+    {
+      this._stylistRemoveIDsFull(from[x], ids);
+    }
+    this.focusEditor();
+    this.updateToolbar();
+  };  
 
-HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
+Xinha.prototype._stylistRemoveClassesFull = function(el, classes)
 {
   if(el != null)
   {
@@ -293,14 +434,14 @@ HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
     {
       // Revert back to what we were IF the classes are identical
       var last_el = el._stylist_usedToBe[el._stylist_usedToBe.length - 1];
-      var last_classes = HTMLArea.arrayFilter(last_el.className.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
+      var last_classes = Xinha.arrayFilter(last_el.className.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
 
       if(
         (new_thiers.length == 0)
         ||
         (
-        HTMLArea.arrayContainsArray(new_thiers, last_classes)
-        && HTMLArea.arrayContainsArray(last_classes, new_thiers)
+        Xinha.arrayContainsArray(new_thiers, last_classes)
+        && Xinha.arrayContainsArray(last_classes, new_thiers)
         )
       )
       {
@@ -335,16 +476,85 @@ HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
   }
 };
 
+Xinha.prototype._stylistRemoveIDsFull = function(el, ids)
+{
+  if(el != null)
+  {
+    var thiers = el.id.trim().split(' ');
+    var new_thiers = [ ];
+    var ours   = ids.split(' ');
+    for(var x = 0; x < thiers.length; x++)
+    {
+      var exists = false;
+      for(var i = 0; exists == false && i < ours.length; i++)
+      {
+        if(ours[i] == thiers[x])
+        {
+          exists = true;
+        }
+      }
+      if(exists == false)
+      {
+        new_thiers[new_thiers.length] = thiers[x];
+      }
+    }
+
+    if(new_thiers.length == 0 && el._stylist_usedToBe && el._stylist_usedToBe.length > 0 && el._stylist_usedToBe[el._stylist_usedToBe.length - 1].id != null)
+    {
+      // Revert back to what we were IF the classes are identical
+      var last_el = el._stylist_usedToBe[el._stylist_usedToBe.length - 1];
+      var last_ids = Xinha.arrayFilter(last_el.id.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
+
+      if(
+        (new_thiers.length == 0)
+        ||
+        (
+        Xinha.arrayContainsArray(new_thiers, last_ids)
+        && Xinha.arrayContainsArray(last_ids, new_thiers)
+        )
+      )
+      {
+        el = this.switchElementTag(el, last_el.tagName);
+        new_thiers = last_ids;
+      }
+      else
+      {
+        // We can't rely on the remembered tags any more
+        el._stylist_usedToBe = [ ];
+      }
+    }
+
+    if(     new_thiers.length > 0
+        ||  el.tagName.toLowerCase() != 'span'
+        || (el.id && el.id != '')
+      )
+    {
+      el.id = new_thiers.join(' ').trim();
+    }
+    else
+    {
+      // Must be a span with no classes and no id, so we can splice it out
+      var prnt = el.parentNode;
+      var childs = el.childNodes;
+      for(var x = 0; x < childs.length; x++)
+      {
+        prnt.insertBefore(childs[x], el);
+      }
+      prnt.removeChild(el);
+    }
+  }
+};
+
 /**
  * Change the tag of an element
  */
-HTMLArea.prototype.switchElementTag = function(el, tag)
+Xinha.prototype.switchElementTag = function(el, tag)
 {
   var prnt = el.parentNode;
   var new_el = this._doc.createElement(tag);
 
-  if(HTMLArea.is_ie || el.hasAttribute('id'))    new_el.setAttribute('id', el.getAttribute('id'));
-  if(HTMLArea.is_ie || el.hasAttribute('style')) new_el.setAttribute('style', el.getAttribute('style'));
+  if(Xinha.is_ie || el.hasAttribute('id'))    new_el.setAttribute('id', el.getAttribute('id'));
+  if(Xinha.is_ie || el.hasAttribute('style')) new_el.setAttribute('style', el.getAttribute('style'));
 
   var childs = el.childNodes;
   for(var x = 0; x < childs.length; x++)
@@ -359,13 +569,13 @@ HTMLArea.prototype.switchElementTag = function(el, tag)
   return new_el;
 };
 
-HTMLArea.prototype._getAncestorsClassNames = function(sel)
+Xinha.prototype._getAncestorsClassNames = function(sel)
 {
   // Scan upwards to find a block level element that we can change or apply to
   var prnt = this._activeElement(sel);
   if(prnt == null)
   {
-    prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+    prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
   }
 
   var classNames = [ ];
@@ -388,7 +598,7 @@ HTMLArea.prototype._getAncestorsClassNames = function(sel)
   return classNames;
 };
 
-HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
+Xinha.prototype._ancestorsWithClasses = function(sel, tag, classes)
 {
   var ancestors = [ ];
   var prnt = this._activeElement(sel);
@@ -396,7 +606,7 @@ HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
   {
     try
     {
-      prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+      prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
     }
     catch(e)
     {
@@ -443,14 +653,69 @@ HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
   return ancestors;
 };
 
-
-HTMLArea.ripStylesFromCSSFile = function(URL)
+Xinha.prototype._ancestorsWithIDs = function(sel, tag, ids)
 {
-  var css = HTMLArea._geturlcontent(URL);
-  return HTMLArea.ripStylesFromCSSString(css);
+  var ancestors = [ ];
+  var prnt = this._activeElement(sel);
+  if(prnt == null)
+  {
+    try
+    {
+      prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+    }
+    catch(e)
+    {
+      return ancestors;
+    }
+  }
+  var search_ids = ids.trim().split(' ');
+
+  while(prnt)
+  {
+    if(prnt.nodeType == 1 && prnt.id)
+    {
+      if(tag == null || prnt.tagName.toLowerCase() == tag)
+      {
+        var ids = prnt.id.trim().split(' ');
+        var found_all = true;
+        for(var i = 0; i < search_ids.length; i++)
+        {
+          var found_id = false;
+          for(var x = 0; x < ids.length; x++)
+          {
+            if(search_ids[i] == ids[x])
+            {
+              found_id = true;
+              break;
+            }
+          }
+
+          if(!found_id)
+          {
+            found_all = false;
+            break;
+          }
+        }
+
+        if(found_all) ancestors[ancestors.length] = prnt;
+      }
+      if(prnt.tagName.toLowerCase() == 'body')    break;
+      if(prnt.tagName.toLowerCase() == 'table'  ) break;
+    }
+    prnt = prnt.parentNode;
+  }
+
+  return ancestors;
 };
 
-HTMLArea.ripStylesFromCSSString = function(css)
+
+Xinha.ripStylesFromCSSFile = function(URL)
+{
+  var css = Xinha._geturlcontent(URL);
+  return Xinha.ripStylesFromCSSString(css);
+};
+
+Xinha.ripStylesFromCSSString = function(css)
 {
   // We are only interested in the selectors, the rules are not important
   //  so we'll drop out all coments and rules
@@ -480,29 +745,9 @@ HTMLArea.ripStylesFromCSSString = function(css)
 function Stylist(editor, args)
 {
   this.editor = editor;
-  editor._stylist = null; // This needs to be changes to be Stylist::_stylist sometime
-  editor._stylist = editor.addPanel('right');
-  HTMLArea.addClass(editor._stylist, 'stylist');
-
+ 
   var stylist = this;
-  editor.notifyOn('modechange',
-                  function(e,args)
-                  {
-                    switch(args.mode)
-                    {
-                      case 'text':
-                      {
-                        editor.hidePanel(editor._stylist);
-                        break;
-                      }
-                      case 'wysiwyg':
-                      {
-                        editor.showPanel(editor._stylist);
-                        break;
-                      }
-                    }
-                  }
-                  );
+
 }
 
 Stylist._pluginInfo =
@@ -520,12 +765,92 @@ Stylist._pluginInfo =
 Stylist.prototype.onGenerateOnce = function()
 {
   var editor = this.editor;
-  if(typeof editor.config.css_style == 'undefined' || HTMLArea.objectProperties(editor.config.css_style).length == 0)
+  var stylist = this;
+  if(typeof editor.config.css_style != 'undefined' && Xinha.objectProperties(editor.config.css_style).length != 0)
   {
-    editor.removePanel(editor._stylist);
-    editor._stylist = null;
+    editor._stylist = null; // This needs to be changes to be Stylist::_stylist sometime
+    editor._stylist = editor.addPanel('right');
+    Xinha.addClass(editor._stylist, 'stylist');
+
+    this.caption = document.createElement("h1");
+    this.caption.innerHTML = Xinha._lc('Styles', 'Stylist');
+    editor._stylist.appendChild(this.caption);
+    this.main = document.createElement("div");
+    this.main.style.overflow = "auto";
+    this.main.style.height = this.editor._framework.ed_cell.offsetHeight - this.caption.offsetHeight + 'px';
+
+    editor._stylist.appendChild(this.main);
+
+    Xinha.freeLater(this,"caption");
+    Xinha.freeLater(this,"main");
+
+    editor.notifyOn('modechange',
+      function(e,args)
+      {
+        switch(args.mode)
+        {
+          case 'text':
+          {
+            editor.hidePanel(editor._stylist);
+            break;
+          }
+          case 'wysiwyg':
+          {
+            editor.showPanel(editor._stylist);
+            break;
+          }
+        }
+      }
+    );
+    editor.notifyOn('panel_change',
+      function(e,args)
+      {
+        switch (args.action)
+        {
+          case 'show':
+          var newHeight = stylist.main.offsetHeight - args.panel.offsetHeight;
+          stylist.main.style.height = ((newHeight > 0) ?  stylist.main.offsetHeight - args.panel.offsetHeight : 0) + 'px';
+          editor._stylist.style.height = stylist.caption.offsetHeight + "px";
+          editor.sizeEditor();
+          break;
+          case 'hide':
+          stylist.resize();
+          break;
+        }
+      }
+    );
+    editor.notifyOn('before_resize',
+    function()
+      {
+        editor._stylist.style.height = stylist.caption.offsetHeight + "px";
+      }
+    );
+    editor.notifyOn('resize',
+      function()
+      {
+        stylist.resize();
+      }
+    );
   }
+
 };
+Stylist.prototype.resize = function()
+{
+  var editor = this.editor;
+  var panelContainer = editor._stylist.parentNode;
+
+  var newSize = panelContainer.offsetHeight;
+  for (var i=0; i < panelContainer.childNodes.length;++i)
+  {
+    if (panelContainer.childNodes[i]==editor._stylist || !panelContainer.childNodes[i].offsetHeight)
+    {
+      continue;
+    }
+    newSize -= panelContainer.childNodes[i].offsetHeight;
+  }
+  editor._stylist.style.height = newSize-5 + 'px';
+  this.main.style.height = newSize - this.caption.offsetHeight -5 + 'px';
+}
 
 Stylist.prototype.onUpdateToolbar = function()
 {

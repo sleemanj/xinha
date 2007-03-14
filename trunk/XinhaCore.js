@@ -1529,6 +1529,8 @@ Xinha.prototype._createStatusBar = function()
     statusbar.style.display = "none";
   }
 
+  this._statusBarItems = [];
+  
   return statusbar;
 };
 
@@ -1973,7 +1975,10 @@ Xinha.prototype.initSize = function()
  */
 Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPanels)
 {
-
+  if (this._risizing) return;
+  this._risizing = true;
+  
+  this.notifyOf('before_resize', {width:width, height:height});
   // We need to set the iframe & textarea to 100% height so that the htmlarea
   // isn't "pushed out" when we get it's height, so we can change them later.
   this._iframe.style.height   = '100%';
@@ -2145,19 +2150,6 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
     edcellheight -= parseInt(this.config.panel_dimensions.bottom, 10);
   }
   this._iframe.style.height = edcellheight + 'px';  
-//  this._framework.rp_cell.style.height = edcellheight + 'px';
-//  this._framework.lp_cell.style.height = edcellheight + 'px';
-  
-  // (re)size the left and right panels so they are equal the editor height
-//  for(var i = 0; i < this._panels.left.panels.length; i++)
-//  {
-//    this._panels.left.panels[i].style.height = this._iframe.style.height;
-//  }
-  
-//  for(var i = 0; i < this._panels.right.panels.length; i++)
-//  {
-//    this._panels.right.panels[i].style.height = this._iframe.style.height;
-//  }  
   
   var edcellwidth = width;
   if ( panel_is_alive('left') )
@@ -2174,6 +2166,7 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   this._textArea.style.width  = this._iframe.style.width;
      
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
+  this._risizing = false;
 };
 
 Xinha.prototype.addPanel = function(side)
@@ -2225,8 +2218,8 @@ Xinha.prototype.showPanel = function(panel)
 {
   if ( panel && panel.style.display == 'none' )
   {
-    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
-  	panel.style.display = '';    
+    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) {}
+    panel.style.display = '';
     this.notifyOf('panel_change', {'action':'show','panel':panel});
     try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
   }
@@ -3314,6 +3307,12 @@ Xinha.prototype.updateToolbar = function(noStatus)
     ancestors = this.getAllAncestors();
     if ( this.config.statusBar && !noStatus )
     {
+      while ( this._statusBarItems.length )
+      { 
+        var item = this._statusBarItems.pop();
+        Xinha.free(item);
+      }
+
       this._statusBarTree.innerHTML = Xinha._lc("Path") + ": "; // clear
       for ( var i = ancestors.length; --i >= 0; )
       {
@@ -3330,6 +3329,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
         a.href = "javascript:void(0)";
         a.el = el;
         a.editor = this;
+        this._statusBarItems.push(a);
         Xinha.addDom0Event(
           a,
           'click',
