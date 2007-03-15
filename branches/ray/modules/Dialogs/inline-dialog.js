@@ -211,7 +211,6 @@ Xinha.Dialog = function(editor, html, localizer, size, modal, layer)
 
 };
 
-Xinha.Dialog.background = [];
 Xinha.Dialog.prototype.sizeBackground = function()
 {
   var win_dim = Xinha.viewportSize();
@@ -262,7 +261,7 @@ Xinha.Dialog.prototype.show = function(values)
     Xinha._addEvent(this.editor._doc.body,'mouseup', dialog.saveSelection);
   }
 
-  this.editor.deactivateEditor();
+  if ( this.modal ) this.editor.deactivateEditor();
 
   // unfortunately we have to hide the editor (iframe/caret bug)
   if (Xinha.is_gecko && this.modal)
@@ -271,6 +270,7 @@ Xinha.Dialog.prototype.show = function(values)
     this.editor._textArea.style.display = 'none';
     this.editor._iframe.style.visibility   = 'hidden';
   }
+  
   if (!this.editor._isFullScreen && this.modal)
   {
     if(Xinha.is_ie && document.compatMode == 'CSS1Compat')
@@ -779,101 +779,6 @@ Xinha.Dialog.prototype.translateHtml = function(html)
   );
   return html;
 }
-
-
-Xinha.prototype.addPanel = function(side)
-{
-  var div = document.createElement('div');
-  div.side = side;
-  if ( side == 'left' || side == 'right' )
-  {
-    div.style.width  = this.config.panel_dimensions[side];
-    if(this._iframe) div.style.height = this._iframe.style.height;     
-  }
-  Xinha.addClasses(div, 'panel');
-  this._panels[side].panels.push(div);
-  this._panels[side].div.appendChild(div);
-
-  this.notifyOf('panel_change', {'action':'add','panel':div});
-
-  return div;
-};
-
-
-Xinha.prototype.removePanel = function(panel)
-{
-  this._panels[panel.side].div.removeChild(panel);
-  var clean = [];
-  for ( var i = 0; i < this._panels[panel.side].panels.length; i++ )
-  {
-    if ( this._panels[panel.side].panels[i] != panel )
-    {
-      clean.push(this._panels[panel.side].panels[i]);
-    }
-  }
-  this._panels[panel.side].panels = clean;
-  this.notifyOf('panel_change', {'action':'remove','panel':panel});
-};
-
-Xinha.prototype.hidePanel = function(panel)
-{
-  if ( panel && panel.style.display != 'none' )
-  {
-    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
-    panel.style.display = 'none';
-    this.notifyOf('panel_change', {'action':'hide','panel':panel});
-    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
-  }
-};
-
-Xinha.prototype.showPanel = function(panel)
-{
-  if ( panel && panel.style.display == 'none' )
-  {
-    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
-  	panel.style.display = '';    
-    this.notifyOf('panel_change', {'action':'show','panel':panel});
-    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
-  }
-};
-
-Xinha.prototype.hidePanels = function(sides)
-{
-  if ( typeof sides == 'undefined' )
-  {
-    sides = ['left','right','top','bottom'];
-  }
-
-  var reShow = [];
-  for ( var i = 0; i < sides.length;i++ )
-  {
-    if ( this._panels[sides[i]].on )
-    {
-      reShow.push(sides[i]);
-      this._panels[sides[i]].on = false;
-    }
-  }
-  this.notifyOf('panel_change', {'action':'multi_hide','sides':sides});
-};
-
-Xinha.prototype.showPanels = function(sides)
-{
-  if ( typeof sides == 'undefined' )
-  {
-    sides = ['left','right','top','bottom'];
-  }
-
-  var reHide = [];
-  for ( var i = 0; i < sides.length; i++ )
-  {
-    if ( !this._panels[sides[i]].on )
-    {
-      reHide.push(sides[i]);
-      this._panels[sides[i]].on = true;
-    }
-  }
-  this.notifyOf('panel_change', {'action':'multi_show','sides':sides});
-};
 
 Xinha.PanelDialog = function(editor, side, html, localizer)
 {

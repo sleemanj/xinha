@@ -1304,6 +1304,9 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
 
       var i_contain = Xinha.makeBtnImg(btn[1]);
       var img = i_contain.firstChild;
+      Xinha.freeLater(i_contain);
+      Xinha.freeLater(img);
+      
       el.appendChild(i_contain);
 
       obj.imgel = img;      
@@ -1501,6 +1504,8 @@ Xinha.prototype._createStatusBar = function()
     statusbar.style.display = "none";
   }
 
+  this._statusBarItems = [];
+  
   return statusbar;
 };
 
@@ -1753,6 +1758,7 @@ Xinha.prototype.generate = function ()
     // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
   iframe.src = _editor_url + editor.config.URIs.blank;
+  iframe.id = "XinhaIFrame_" + this._textArea.id;
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
   this._iframe.className = 'xinha_iframe';
@@ -1957,7 +1963,10 @@ Xinha.prototype.initSize = function()
  */
 Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPanels)
 {
-
+  if (this._risizing) return;
+  this._risizing = true;
+  
+  this.notifyOf('before_resize', {width:width, height:height});
   // We need to set the iframe & textarea to 100% height so that the htmlarea
   // isn't "pushed out" when we get it's height, so we can change them later.
   this._iframe.style.height   = '100%';
@@ -2129,19 +2138,6 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
     edcellheight -= parseInt(this.config.panel_dimensions.bottom, 10);
   }
   this._iframe.style.height = edcellheight + 'px';  
-//  this._framework.rp_cell.style.height = edcellheight + 'px';
-//  this._framework.lp_cell.style.height = edcellheight + 'px';
-  
-  // (re)size the left and right panels so they are equal the editor height
-//  for(var i = 0; i < this._panels.left.panels.length; i++)
-//  {
-//    this._panels.left.panels[i].style.height = this._iframe.style.height;
-//  }
-  
-//  for(var i = 0; i < this._panels.right.panels.length; i++)
-//  {
-//    this._panels.right.panels[i].style.height = this._iframe.style.height;
-//  }  
   
   var edcellwidth = width;
   if ( panel_is_alive('left') )
@@ -2158,6 +2154,101 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   this._textArea.style.width  = this._iframe.style.width;
      
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
+  this._risizing = false;
+};
+
+Xinha.prototype.addPanel = function(side)
+{
+  var div = document.createElement('div');
+  div.side = side;
+  if ( side == 'left' || side == 'right' )
+  {
+    div.style.width  = this.config.panel_dimensions[side];
+    if(this._iframe) div.style.height = this._iframe.style.height;     
+  }
+  Xinha.addClasses(div, 'panel');
+  this._panels[side].panels.push(div);
+  this._panels[side].div.appendChild(div);
+
+  this.notifyOf('panel_change', {'action':'add','panel':div});
+
+  return div;
+};
+
+
+Xinha.prototype.removePanel = function(panel)
+{
+  this._panels[panel.side].div.removeChild(panel);
+  var clean = [];
+  for ( var i = 0; i < this._panels[panel.side].panels.length; i++ )
+  {
+    if ( this._panels[panel.side].panels[i] != panel )
+    {
+      clean.push(this._panels[panel.side].panels[i]);
+    }
+  }
+  this._panels[panel.side].panels = clean;
+  this.notifyOf('panel_change', {'action':'remove','panel':panel});
+};
+
+Xinha.prototype.hidePanel = function(panel)
+{
+  if ( panel && panel.style.display != 'none' )
+  {
+    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
+    panel.style.display = 'none';
+    this.notifyOf('panel_change', {'action':'hide','panel':panel});
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
+  }
+};
+
+Xinha.prototype.showPanel = function(panel)
+{
+  if ( panel && panel.style.display == 'none' )
+  {
+    try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) {}
+    panel.style.display = '';
+    this.notifyOf('panel_change', {'action':'show','panel':panel});
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
+  }
+};
+
+Xinha.prototype.hidePanels = function(sides)
+{
+  if ( typeof sides == 'undefined' )
+  {
+    sides = ['left','right','top','bottom'];
+  }
+
+  var reShow = [];
+  for ( var i = 0; i < sides.length;i++ )
+  {
+    if ( this._panels[sides[i]].on )
+    {
+      reShow.push(sides[i]);
+      this._panels[sides[i]].on = false;
+    }
+  }
+  this.notifyOf('panel_change', {'action':'multi_hide','sides':sides});
+};
+
+Xinha.prototype.showPanels = function(sides)
+{
+  if ( typeof sides == 'undefined' )
+  {
+    sides = ['left','right','top','bottom'];
+  }
+
+  var reHide = [];
+  for ( var i = 0; i < sides.length; i++ )
+  {
+    if ( !this._panels[sides[i]].on )
+    {
+      reHide.push(sides[i]);
+      this._panels[sides[i]].on = true;
+    }
+  }
+  this.notifyOf('panel_change', {'action':'multi_show','sides':sides});
 };
 
 Xinha.objectProperties = function(obj)
@@ -3204,6 +3295,12 @@ Xinha.prototype.updateToolbar = function(noStatus)
     ancestors = this.getAllAncestors();
     if ( this.config.statusBar && !noStatus )
     {
+      while ( this._statusBarItems.length )
+      { 
+        var item = this._statusBarItems.pop();
+        Xinha.free(item);
+      }
+
       this._statusBarTree.innerHTML = Xinha._lc("Path") + ": "; // clear
       for ( var i = ancestors.length; --i >= 0; )
       {
@@ -3220,6 +3317,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
         a.href = "javascript:void(0)";
         a.el = el;
         a.editor = this;
+        this._statusBarItems.push(a);
         Xinha.addDom0Event(
           a,
           'click',
@@ -3259,6 +3357,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
         {
           this._statusBarTree.appendChild(document.createTextNode(String.fromCharCode(0xbb)));
         }
+        Xinha.freeLater(a);
       }
     }
   }

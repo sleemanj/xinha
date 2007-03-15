@@ -3,15 +3,15 @@
  *  the format is { '.className' : 'Description' }
  */
 
-HTMLArea.Config.prototype.css_style = { };
+Xinha.Config.prototype.css_style = { };
 
 /**
  * This method loads an external stylesheet and uses it in the stylist
  */
-HTMLArea.Config.prototype.stylistLoadStylesheet = function(url, altnames)
+Xinha.Config.prototype.stylistLoadStylesheet = function(url, altnames)
 {
   if(!altnames) altnames = { };
-  var newStyles = HTMLArea.ripStylesFromCSSFile(url);
+  var newStyles = Xinha.ripStylesFromCSSFile(url);
   for(var i in newStyles)
   {
     if(altnames[i])
@@ -29,10 +29,10 @@ HTMLArea.Config.prototype.stylistLoadStylesheet = function(url, altnames)
 /**
  * This method takes raw style definitions and uses them in the stylist
  */
-HTMLArea.Config.prototype.stylistLoadStyles = function(styles, altnames)
+Xinha.Config.prototype.stylistLoadStyles = function(styles, altnames)
 {
   if(!altnames) altnames = { };
-  var newStyles = HTMLArea.ripStylesFromCSSString(styles);
+  var newStyles = Xinha.ripStylesFromCSSString(styles);
   for(var i in newStyles)
   {
     if(altnames[i])
@@ -51,7 +51,7 @@ HTMLArea.Config.prototype.stylistLoadStyles = function(styles, altnames)
 
 /**
  * Fill the stylist panel with styles that may be applied to the current selection.  Styles
- * are supplied in the css_style property of the HTMLArea.Config object, which is in the format
+ * are supplied in the css_style property of the Xinha.Config object, which is in the format
  * { '.className' : 'Description' }
  * classes that are defined on a specific tag (eg 'a.email_link') are only shown in the panel
  *    when an element of that type is selected.
@@ -63,10 +63,10 @@ HTMLArea.Config.prototype.stylistLoadStyles = function(styles, altnames)
  * you may add multiple classes to any element
  * spans will be added where no single _and_entire_ element is selected
  */
-HTMLArea.prototype._fillStylist = function()
+Xinha.prototype._fillStylist = function()
 {
   if(!this._stylist) return false;
-  this._stylist.innerHTML = '<h1>'+HTMLArea._lc('Styles', 'Stylist')+'</h1>';
+  this.plugins.Stylist.instance.main.innerHTML = '';
 
   var may_apply = true;
   var sel       = this._getSelection();
@@ -306,7 +306,7 @@ HTMLArea.prototype._fillStylist = function()
         anch.style.color = 'HighlightText';
       }
 
-      this._stylist.appendChild(anch);
+      this.plugins.Stylist.instance.main.appendChild(anch);
     }
   }
 };
@@ -316,7 +316,7 @@ HTMLArea.prototype._fillStylist = function()
  * Add the given classes (space seperated list) to the currently selected element
  * (will add a span if none selected)
  */
-HTMLArea.prototype._stylistAddClasses = function(el, tag, classes)
+Xinha.prototype._stylistAddClasses = function(el, tag, classes)
   {
     if(el == 'new')
     {
@@ -339,18 +339,18 @@ HTMLArea.prototype._stylistAddClasses = function(el, tag, classes)
           new_el._stylist_usedToBe = [{'tagName' : el.tagName, 'className' : el.getAttribute('class')}];
         }
 
-        HTMLArea.addClasses(new_el, classes);
+        Xinha.addClasses(new_el, classes);
       }
       else
       {
-        HTMLArea._addClasses(el, classes);
+        Xinha._addClasses(el, classes);
       }
     }
     this.focusEditor();
     this.updateToolbar();
   };
   
-HTMLArea.prototype._stylistAddIDs = function(el, tag, ids)
+Xinha.prototype._stylistAddIDs = function(el, tag, ids)
   {
     if(el == 'new')
     {
@@ -373,11 +373,11 @@ HTMLArea.prototype._stylistAddIDs = function(el, tag, ids)
           new_el._stylist_usedToBe = [{'tagName' : el.tagName, 'id' : el.getAttribute('id')}];
         }
 
-        HTMLArea.addIDs(new_el, ids);
+        Xinha.addIDs(new_el, ids);
       }
       else
       {
-        HTMLArea._addIDs(el, ids);
+        Xinha._addIDs(el, ids);
       }
     }
     this.focusEditor();
@@ -387,7 +387,7 @@ HTMLArea.prototype._stylistAddIDs = function(el, tag, ids)
 /**
  * Remove the given classes (space seperated list) from the given elements (array of elements)
  */
-HTMLArea.prototype._stylistRemoveClasses = function(classes, from)
+Xinha.prototype._stylistRemoveClasses = function(classes, from)
   {
     for(var x = 0; x < from.length; x++)
     {
@@ -397,7 +397,7 @@ HTMLArea.prototype._stylistRemoveClasses = function(classes, from)
     this.updateToolbar();
   };
   
-HTMLArea.prototype._stylistRemoveIDs = function(ids, from)
+Xinha.prototype._stylistRemoveIDs = function(ids, from)
   {
     for(var x = 0; x < from.length; x++)
     {
@@ -407,7 +407,7 @@ HTMLArea.prototype._stylistRemoveIDs = function(ids, from)
     this.updateToolbar();
   };  
 
-HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
+Xinha.prototype._stylistRemoveClassesFull = function(el, classes)
 {
   if(el != null)
   {
@@ -434,14 +434,14 @@ HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
     {
       // Revert back to what we were IF the classes are identical
       var last_el = el._stylist_usedToBe[el._stylist_usedToBe.length - 1];
-      var last_classes = HTMLArea.arrayFilter(last_el.className.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
+      var last_classes = Xinha.arrayFilter(last_el.className.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
 
       if(
         (new_thiers.length == 0)
         ||
         (
-        HTMLArea.arrayContainsArray(new_thiers, last_classes)
-        && HTMLArea.arrayContainsArray(last_classes, new_thiers)
+        Xinha.arrayContainsArray(new_thiers, last_classes)
+        && Xinha.arrayContainsArray(last_classes, new_thiers)
         )
       )
       {
@@ -476,7 +476,7 @@ HTMLArea.prototype._stylistRemoveClassesFull = function(el, classes)
   }
 };
 
-HTMLArea.prototype._stylistRemoveIDsFull = function(el, ids)
+Xinha.prototype._stylistRemoveIDsFull = function(el, ids)
 {
   if(el != null)
   {
@@ -503,14 +503,14 @@ HTMLArea.prototype._stylistRemoveIDsFull = function(el, ids)
     {
       // Revert back to what we were IF the classes are identical
       var last_el = el._stylist_usedToBe[el._stylist_usedToBe.length - 1];
-      var last_ids = HTMLArea.arrayFilter(last_el.id.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
+      var last_ids = Xinha.arrayFilter(last_el.id.trim().split(' '), function(c) { if (c == null || c.trim() == '') { return false;} return true; });
 
       if(
         (new_thiers.length == 0)
         ||
         (
-        HTMLArea.arrayContainsArray(new_thiers, last_ids)
-        && HTMLArea.arrayContainsArray(last_ids, new_thiers)
+        Xinha.arrayContainsArray(new_thiers, last_ids)
+        && Xinha.arrayContainsArray(last_ids, new_thiers)
         )
       )
       {
@@ -548,13 +548,13 @@ HTMLArea.prototype._stylistRemoveIDsFull = function(el, ids)
 /**
  * Change the tag of an element
  */
-HTMLArea.prototype.switchElementTag = function(el, tag)
+Xinha.prototype.switchElementTag = function(el, tag)
 {
   var prnt = el.parentNode;
   var new_el = this._doc.createElement(tag);
 
-  if(HTMLArea.is_ie || el.hasAttribute('id'))    new_el.setAttribute('id', el.getAttribute('id'));
-  if(HTMLArea.is_ie || el.hasAttribute('style')) new_el.setAttribute('style', el.getAttribute('style'));
+  if(Xinha.is_ie || el.hasAttribute('id'))    new_el.setAttribute('id', el.getAttribute('id'));
+  if(Xinha.is_ie || el.hasAttribute('style')) new_el.setAttribute('style', el.getAttribute('style'));
 
   var childs = el.childNodes;
   for(var x = 0; x < childs.length; x++)
@@ -569,13 +569,13 @@ HTMLArea.prototype.switchElementTag = function(el, tag)
   return new_el;
 };
 
-HTMLArea.prototype._getAncestorsClassNames = function(sel)
+Xinha.prototype._getAncestorsClassNames = function(sel)
 {
   // Scan upwards to find a block level element that we can change or apply to
   var prnt = this._activeElement(sel);
   if(prnt == null)
   {
-    prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+    prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
   }
 
   var classNames = [ ];
@@ -598,7 +598,7 @@ HTMLArea.prototype._getAncestorsClassNames = function(sel)
   return classNames;
 };
 
-HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
+Xinha.prototype._ancestorsWithClasses = function(sel, tag, classes)
 {
   var ancestors = [ ];
   var prnt = this._activeElement(sel);
@@ -606,7 +606,7 @@ HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
   {
     try
     {
-      prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+      prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
     }
     catch(e)
     {
@@ -653,7 +653,7 @@ HTMLArea.prototype._ancestorsWithClasses = function(sel, tag, classes)
   return ancestors;
 };
 
-HTMLArea.prototype._ancestorsWithIDs = function(sel, tag, ids)
+Xinha.prototype._ancestorsWithIDs = function(sel, tag, ids)
 {
   var ancestors = [ ];
   var prnt = this._activeElement(sel);
@@ -661,7 +661,7 @@ HTMLArea.prototype._ancestorsWithIDs = function(sel, tag, ids)
   {
     try
     {
-      prnt = (HTMLArea.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
+      prnt = (Xinha.is_ie ? this._createRange(sel).parentElement() : this._createRange(sel).commonAncestorContainer);
     }
     catch(e)
     {
@@ -709,13 +709,13 @@ HTMLArea.prototype._ancestorsWithIDs = function(sel, tag, ids)
 };
 
 
-HTMLArea.ripStylesFromCSSFile = function(URL)
+Xinha.ripStylesFromCSSFile = function(URL)
 {
-  var css = HTMLArea._geturlcontent(URL);
-  return HTMLArea.ripStylesFromCSSString(css);
+  var css = Xinha._geturlcontent(URL);
+  return Xinha.ripStylesFromCSSString(css);
 };
 
-HTMLArea.ripStylesFromCSSString = function(css)
+Xinha.ripStylesFromCSSString = function(css)
 {
   // We are only interested in the selectors, the rules are not important
   //  so we'll drop out all coments and rules
@@ -745,29 +745,9 @@ HTMLArea.ripStylesFromCSSString = function(css)
 function Stylist(editor, args)
 {
   this.editor = editor;
-  editor._stylist = null; // This needs to be changes to be Stylist::_stylist sometime
-  editor._stylist = editor.addPanel('right');
-  HTMLArea.addClass(editor._stylist, 'stylist');
-
+ 
   var stylist = this;
-  editor.notifyOn('modechange',
-                  function(e,args)
-                  {
-                    switch(args.mode)
-                    {
-                      case 'text':
-                      {
-                        editor.hidePanel(editor._stylist);
-                        break;
-                      }
-                      case 'wysiwyg':
-                      {
-                        editor.showPanel(editor._stylist);
-                        break;
-                      }
-                    }
-                  }
-                  );
+
 }
 
 Stylist._pluginInfo =
@@ -785,12 +765,92 @@ Stylist._pluginInfo =
 Stylist.prototype.onGenerateOnce = function()
 {
   var editor = this.editor;
-  if(typeof editor.config.css_style == 'undefined' || HTMLArea.objectProperties(editor.config.css_style).length == 0)
+  var stylist = this;
+  if(typeof editor.config.css_style != 'undefined' && Xinha.objectProperties(editor.config.css_style).length != 0)
   {
-    editor.removePanel(editor._stylist);
-    editor._stylist = null;
+    editor._stylist = null; // This needs to be changes to be Stylist::_stylist sometime
+    editor._stylist = editor.addPanel('right');
+    Xinha.addClass(editor._stylist, 'stylist');
+
+    this.caption = document.createElement("h1");
+    this.caption.innerHTML = Xinha._lc('Styles', 'Stylist');
+    editor._stylist.appendChild(this.caption);
+    this.main = document.createElement("div");
+    this.main.style.overflow = "auto";
+    this.main.style.height = this.editor._framework.ed_cell.offsetHeight - this.caption.offsetHeight + 'px';
+
+    editor._stylist.appendChild(this.main);
+
+    Xinha.freeLater(this,"caption");
+    Xinha.freeLater(this,"main");
+
+    editor.notifyOn('modechange',
+      function(e,args)
+      {
+        switch(args.mode)
+        {
+          case 'text':
+          {
+            editor.hidePanel(editor._stylist);
+            break;
+          }
+          case 'wysiwyg':
+          {
+            editor.showPanel(editor._stylist);
+            break;
+          }
+        }
+      }
+    );
+    editor.notifyOn('panel_change',
+      function(e,args)
+      {
+        switch (args.action)
+        {
+          case 'show':
+          var newHeight = stylist.main.offsetHeight - args.panel.offsetHeight;
+          stylist.main.style.height = ((newHeight > 0) ?  stylist.main.offsetHeight - args.panel.offsetHeight : 0) + 'px';
+          editor._stylist.style.height = stylist.caption.offsetHeight + "px";
+          editor.sizeEditor();
+          break;
+          case 'hide':
+          stylist.resize();
+          break;
+        }
+      }
+    );
+    editor.notifyOn('before_resize',
+    function()
+      {
+        editor._stylist.style.height = stylist.caption.offsetHeight + "px";
+      }
+    );
+    editor.notifyOn('resize',
+      function()
+      {
+        stylist.resize();
+      }
+    );
   }
+
 };
+Stylist.prototype.resize = function()
+{
+  var editor = this.editor;
+  var panelContainer = editor._stylist.parentNode;
+
+  var newSize = panelContainer.offsetHeight;
+  for (var i=0; i < panelContainer.childNodes.length;++i)
+  {
+    if (panelContainer.childNodes[i]==editor._stylist || !panelContainer.childNodes[i].offsetHeight)
+    {
+      continue;
+    }
+    newSize -= panelContainer.childNodes[i].offsetHeight;
+  }
+  editor._stylist.style.height = newSize-5 + 'px';
+  this.main.style.height = newSize - this.caption.offsetHeight -5 + 'px';
+}
 
 Stylist.prototype.onUpdateToolbar = function()
 {
