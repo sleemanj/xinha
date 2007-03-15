@@ -1552,7 +1552,7 @@ Xinha.prototype.generate = function ()
     return false;
   }
 
-  url = _editor_url + 'modules/Dialogs/inline-dialog.js';
+  url = _editor_url + 'modules/Dialogs/XinhaDialog.js';
   if ( typeof Xinha.Dialog == 'undefined' && !document.getElementById(url) )
   {
     Xinha._loadback( url , this.generate, this );

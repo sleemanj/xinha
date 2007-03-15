@@ -63,7 +63,8 @@
        xinha_plugins = xinha_plugins ? xinha_plugins :
        [
          'CharacterMap', 
-         'Linker'
+         'Linker',
+         'Stylist'
        ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -86,6 +87,7 @@
        //  xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
          
       xinha_config.CharacterMap.mode = 'panel';
+//xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
 
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL

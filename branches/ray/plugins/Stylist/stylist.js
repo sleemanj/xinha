@@ -764,10 +764,18 @@ Stylist._pluginInfo =
 
 Stylist.prototype.onGenerateOnce = function()
 {
+  var cfg = this.editor.config;
+  if(typeof cfg.css_style != 'undefined' && Xinha.objectProperties(cfg.css_style).length != 0)
+  {
+    this._prepareDialog();
+  }
+
+};
+Stylist.prototype._prepareDialog = function()
+{
   var editor = this.editor;
   var stylist = this;
-  if(typeof editor.config.css_style != 'undefined' && Xinha.objectProperties(editor.config.css_style).length != 0)
-  {
+  
     editor._stylist = null; // This needs to be changes to be Stylist::_stylist sometime
     editor._stylist = editor.addPanel('right');
     Xinha.addClass(editor._stylist, 'stylist');
@@ -831,9 +839,7 @@ Stylist.prototype.onGenerateOnce = function()
         stylist.resize();
       }
     );
-  }
-
-};
+}
 Stylist.prototype.resize = function()
 {
   var editor = this.editor;
