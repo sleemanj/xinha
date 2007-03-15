@@ -3311,7 +3311,13 @@ Xinha.prototype.updateToolbar = function(noStatus)
       while ( this._statusBarItems.length )
       { 
         var item = this._statusBarItems.pop();
-        Xinha.free(item);
+        item.el = null;
+        item.editor = null;
+        item.onclick = null;
+        item.oncontextmenu = null;
+        item._xinha_dom0Events['click'] = null;
+        item._xinha_dom0Events['contextmenu'] = null;
+        item = null;
       }
 
       this._statusBarTree.innerHTML = Xinha._lc("Path") + ": "; // clear
