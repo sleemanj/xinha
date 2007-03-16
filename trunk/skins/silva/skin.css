@@ -110,7 +110,8 @@
 }
 
 .dialog {
-  background: url(dialog.jpg) #f0f0f0 no-repeat;
+  /* background: url(dialog.jpg) #f0f0f0 no-repeat; */
+  background-color: #f0f0f0;
  }
 body.dialog {
 	padding-top:0;
@@ -135,7 +136,7 @@ body.dialog {
   font-weight:400;
 }  
 .dialog .title {
-  margin:5px -5px;
+
 }
 
 .dialog button{
