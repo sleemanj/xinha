@@ -265,19 +265,16 @@ form { margin: 0px; border: none; }
 }
 
 .htmlarea .panel h1 {
-  background: ButtonFace;
-  border: 1px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-  margin:   0px;
-  padding:  0px;
-  font-size:100%;
-  font-weight:bold;
-  padding: 2px;
   clear:left;
-  letter-spacing: 0.01em;
+  font-size:0.9em;
 }
 
-.htmlarea .panel { overflow:hidden; }
+.htmlarea .panel { 
+  overflow:hidden; 
+  background-color:white;
+  padding-bottom:0 !IMPORTANT;
+  border: none !IMPORTANT;
+}
 .htmlarea .panels.left  .panel { border-right:none; border-left:none; }
 .htmlarea .panels.left  h1     { border-right:none;  }
 .htmlarea .panels.right .panel { border-right:none; border-left:none; }

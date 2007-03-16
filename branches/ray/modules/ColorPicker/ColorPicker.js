@@ -363,6 +363,10 @@
       var left = 0;
       do
       {
+        if (e.style.position == 'fixed') 
+        {
+          this.table.style.position = 'absolute';
+        }
         top += e.offsetTop;
         left += e.offsetLeft;
         e = e.offsetParent;

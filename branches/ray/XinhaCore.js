@@ -3287,6 +3287,8 @@ if ( !Array.prototype.indexOf )
 // updates enabled/disable/active state of the toolbar elements
 Xinha.prototype.updateToolbar = function(noStatus)
 {
+  if (this.suspendUpdateToolbar) return;
+  
   var doc = this._doc;
   var text = (this._editMode == "textmode");
   var ancestors = null;
@@ -3298,7 +3300,13 @@ Xinha.prototype.updateToolbar = function(noStatus)
       while ( this._statusBarItems.length )
       { 
         var item = this._statusBarItems.pop();
-        Xinha.free(item);
+        item.el = null;
+        item.editor = null;
+        item.onclick = null;
+        item.oncontextmenu = null;
+        item._xinha_dom0Events['click'] = null;
+        item._xinha_dom0Events['contextmenu'] = null;
+        item = null;
       }
 
       this._statusBarTree.innerHTML = Xinha._lc("Path") + ": "; // clear
@@ -4044,13 +4052,16 @@ Xinha.prototype._editorEvent = function(ev)
   {
     clearTimeout(editor._timerToolbar);
   }
-  editor._timerToolbar = setTimeout(
-    function()
-    {
-      editor.updateToolbar();
-      editor._timerToolbar = null;
-    },
-    250);
+  if (!this.suspendUpdateToolbar)
+  {
+    editor._timerToolbar = setTimeout(
+      function()
+      {
+        editor.updateToolbar();
+        editor._timerToolbar = null;
+      },
+      250);
+  }
 };
 
 // handles ctrl + key shortcuts 
@@ -5587,6 +5598,27 @@ Xinha.viewportSize = function(scope)
     x = scope.document.body.clientWidth;
     y = scope.document.body.clientHeight;
   }
+  return {'x':x,'y':y};
+};
+
+Xinha.pageSize = function(scope)
+{
+  scope = (scope) ? scope : window;
+  var x,y;
+ 
+  var test1 = scope.document.body.scrollHeight; //IE Quirks
+  var test2 = scope.document.documentElement.scrollHeight; // IE Standard + Moz Here quirksmode.org errs! 
+
+  if (test1 > test2) 
+  {
+    x = scope.document.body.scrollWidth;
+    y = scope.document.body.scrollHeight;
+  }
+  else
+  {
+    x = scope.document.documentElement.scrollWidth;
+    y = scope.document.documentElement.scrollHeight;
+  }  
   return {'x':x,'y':y};
 };
 
