@@ -21,7 +21,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady)
   Xinha.loadStyle(typeof _editor_css == "string" ? _editor_css : "Xinha.css","XinhaCoreDesign");
   Xinha.createLoadingMessages(xinha_editors);
   var loadingMessages = Xinha.loadingMessages;
-  Xinha._loadback(_editor_url + "XinhaCore.js",function () { 
+  Xinha._loadback(_editor_url + "XinhaCore.js",function () {
     Xinha.removeLoadingMessages(xinha_editors);  
     Xinha.createLoadingMessages(xinha_editors);  
     callbackIfNotReady() 

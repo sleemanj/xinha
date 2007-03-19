@@ -5741,6 +5741,10 @@ Xinha.createLoadingMessage = function(textarea,text)
   loading_message.appendChild(loading_sub);
   document.body.appendChild(loading_message);
   
+  Xinha.freeLater(loading_message);
+  Xinha.freeLater(loading_main);
+  Xinha.freeLater(loading_sub);
+  
   return loading_sub;
 };
 

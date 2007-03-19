@@ -58,7 +58,7 @@ CharacterMap.prototype.addEntity = function ( entite, pos )
     //editor.hidePanel( editor._CharacterMap );
     return false;
   };
-  this.dialog.rootElem.appendChild( a );
+  this.dialog.main.appendChild( a );
   a = null;
 };
 

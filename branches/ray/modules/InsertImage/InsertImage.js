@@ -100,15 +100,19 @@ InsertImage.prototype.prepareDialog = function()
 	}
 	this.dialog.onresize = function ()
 	{
-		this.getElementById("ipreview").style.height = 
+		
+		
+		var newHeightForPreview = 
 		parseInt(this.height,10) 
 		- this.getElementById('h1').offsetHeight 
 		- this.getElementById('buttons').offsetHeight
 		- this.getElementById('inputs').offsetHeight 
-		- parseInt(this.rootElem.style.paddingBottom,10) // we have a padding at the bottom, gotta take this into acount
-		+ 'px'; // don't forget this ;)
+		- parseInt(this.rootElem.style.paddingBottom,10); // we have a padding at the bottom, gotta take this into acount
 		
-		this.getElementById("ipreview").style.width =(this.width - 2) + 'px'; // and the width
+		
+		this.getElementById("ipreview").style.height = ((newHeightForPreview > 0) ? newHeightForPreview : 0) + "px"; // no-go beyond 0
+		
+		this.getElementById("ipreview").style.width = this.width - 2   + 'px'; // and the width
 
 	}
 	this.dialogReady = true;

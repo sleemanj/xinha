@@ -891,6 +891,7 @@ Xinha.colorPicker.InputBinding = function(input,pickerConfig)
     var colPicker = new Xinha.colorPicker(pickerConfig);
 	  colPicker.open("",chooser, input.value ); 
   }
+  Xinha.freeLater(this,"chooser");
 }
 Xinha.colorPicker.InputBinding.prototype.setColor = function (color)
 {
