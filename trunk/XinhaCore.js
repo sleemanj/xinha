@@ -1542,45 +1542,56 @@ Xinha.prototype.generate = function ()
   var i;
   var editor = this;  // we'll need "this" in some nested functions
   
+  this.setLoadingMessage("Generate Xinha object");
+  
+  var url;
+  
   // Now load a specific browser plugin which will implement the above for us.
   if (Xinha.is_ie)
   {
-    if ( typeof InternetExplorer == 'undefined' )
+    url = _editor_url + 'modules/InternetExplorer/InternetExplorer.js';
+    if ( typeof InternetExplorer == 'undefined' && !document.getElementById(url) )
     {            
-      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, _editor_url + 'modules/InternetExplorer/InternetExplorer.js' );
+      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
   }
   else
   {
-    if ( typeof Gecko == 'undefined' )
+    url = _editor_url + 'modules/Gecko/Gecko.js';
+    if ( typeof Gecko == 'undefined' && !document.getElementById(url) )
     {            
-      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, _editor_url + 'modules/Gecko/Gecko.js' );
+      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
   }
 
-  this.setLoadingMessage('Generate Xinha object');
-
-  if ( typeof Dialog == 'undefined' )
-  {
-    Xinha._loadback(_editor_url + 'modules/Dialogs/dialog.js', this.generate, this );
+  if ( typeof Dialog == 'undefined' && !Xinha._loadback( _editor_url + 'modules/Dialogs/dialog.js', this.generate, this ) )
+  {    
     return false;
   }
 
-  if ( typeof Xinha.Dialog == 'undefined' )
-  {
-    Xinha._loadback(_editor_url + 'modules/Dialogs/inline-dialog.js', this.generate, this );
+  if ( typeof Xinha.Dialog == 'undefined' &&  !Xinha._loadback( _editor_url + 'modules/Dialogs/inline-dialog.js' , this.generate, this ) )
+  {    
     return false;
   }
   
-  if ( typeof FullScreen == "undefined" )
+  url = _editor_url + 'modules/FullScreen/full-screen.js';
+  if ( typeof FullScreen == "undefined" && !document.getElementById(url) )
   {
-    Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, _editor_url + 'modules/FullScreen/full-screen.js' );
+    Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, url );
     return false;
   }
+  
+  url = _editor_url + 'modules/ColorPicker/ColorPicker.js';
+  if ( typeof ColorPicker == 'undefined' && !document.getElementById(url) )
+  {
+    Xinha.loadPlugin("ColorPicker", function() { editor.generate(); } , url );
+    return false;
+  }
+  else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
 
   var toolbar = editor.config.toolbar;
   for ( i = toolbar.length; --i >= 0; )
@@ -1593,39 +1604,32 @@ Xinha.prototype.generate = function ()
           editor.registerPlugin('FullScreen');
         break;
         case "insertimage":
-          if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' )
+          url = _editor_url + 'modules/InsertImage/insert_image.js';
+          if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' && !document.getElementById(url) )
           {
-            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , _editor_url + 'modules/InsertImage/insert_image.js');
+            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertImage != 'undefined') editor.registerPlugin('InsertImage');
         break;
         case "createlink":
-          if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' )
+          url = _editor_url + 'modules/CreateLink/link.js';
+          if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' && !document.getElementById(url))
           {
-            Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , _editor_url + 'modules/CreateLink/link.js');
+            Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof CreateLink != 'undefined') editor.registerPlugin('CreateLink');
         break;
         case "inserttable":
-          if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' )
+          url = _editor_url + 'modules/InsertTable/insert_table.js';
+          if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' && !document.getElementById(url) )
           {
-            Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , _editor_url + 'modules/InsertTable/insert_table.js');
+            Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
         break;
-        case "hilitecolor":
-        case "forecolor":
-          if ( typeof ColorPicker == 'undefined')
-          {
-            Xinha.loadPlugin("ColorPicker", function() { editor.generate(); } , _editor_url + 'modules/ColorPicker/ColorPicker.js');
-            return false;
-          }
-          else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
-        break;
-        
       }
     }
   }
@@ -1642,7 +1646,7 @@ Xinha.prototype.generate = function ()
         var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerBest.js';
       break;
     }
-    if ( typeof EnterParagraphs == 'undefined' )
+    if ( typeof EnterParagraphs == 'undefined'  && !document.getElementById(ParaHandlerPlugin) )
     {
       Xinha.loadPlugin("EnterParagraphs", function() { editor.generate(); }, ParaHandlerPlugin );
       return false;
@@ -1660,7 +1664,7 @@ Xinha.prototype.generate = function ()
     break;
   }
   
-  if (typeof GetHtmlImplementation == 'undefined')
+  if (typeof GetHtmlImplementation == 'undefined'  && !document.getElementById(getHtmlMethodPlugin))
   {
     Xinha.loadPlugin("GetHtmlImplementation", function() { editor.generate(); } , getHtmlMethodPlugin);
     return false;        
@@ -2729,10 +2733,12 @@ Xinha.getPluginDir = function(pluginName)
 Xinha.loadPlugin = function(pluginName, callback, plugin_file)
 {
   if ( !Xinha.isSupportedBrowser ) return;
-  
+
   // @todo : try to avoid the use of eval()
   // Might already be loaded
-  if ( eval('typeof ' + pluginName) != 'undefined' )
+  //if ( eval('typeof ' + pluginName) != 'undefined' )
+  // @todo: try if this works to avoid the use of eval, I've been never getting here when testing
+  if ( typeof window['pluginName'] != 'undefined' )
   {
     if ( callback )
     {
@@ -5383,26 +5389,32 @@ Xinha.hasDisplayedChildren = function(el)
  * 
  */
  
-Xinha._loadback = function(Url, Callback, Scope, Bonus)
+Xinha._loadback = function(url, callback, scope, bonus)
 {  
-  var T = !Xinha.is_ie ? "onload" : 'onreadystatechange';
-  var S = document.createElement("script");
-  S.type = "text/javascript";
-  S.src = Url;
-  if ( Callback )
+  if ( document.getElementById(url) )
   {
-    S[T] = function()
+    return true;
+  }
+  var t = !Xinha.is_ie ? "onload" : 'onreadystatechange';
+  var s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src = url;
+  s.id = url;
+  if ( callback )
+  {
+    s[t] = function()
     {      
       if ( Xinha.is_ie && ( ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) ) )
       {
         return;
       }
       
-      Callback.call(Scope ? Scope : this, Bonus);
-      S[T] = null;
+      callback.call(scope ? scope : this, bonus);
+      s[t] = null;
     };
   }
-  document.getElementsByTagName("head")[0].appendChild(S);
+  document.getElementsByTagName("head")[0].appendChild(s);
+  return false;
 };
 
 Xinha.collectionToArray = function(collection)
@@ -5473,7 +5485,7 @@ Xinha.prototype.registerPlugins = function(plugin_names)
     for ( var i = 0; i < plugin_names.length; i++ )
     {
       this.setLoadingMessage('Register plugin $plugin', 'Xinha', {'plugin': plugin_names[i]});
-      this.registerPlugin(eval(plugin_names[i]));
+      this.registerPlugin(plugin_names[i]);
     }
   }
 };
