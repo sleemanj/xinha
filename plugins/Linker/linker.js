@@ -181,7 +181,7 @@ Linker.prototype._createLink = function(a)
          {
            values.p_options.push('height=' + values.p_height);
          }
-         atr.onclick = 'try{if(document.designMode && document.designMode == \'on\') return false;}catch(e){} window.open(this.href, \'' + (values.p_name.replace(/[^a-z0-9_]/i, '_')) + '\', \'' + values.p_options.join(',') + '\');return false;';
+         atr.onclick = 'if(window.top && window.top.Xinha){return false}window.open(this.href, \'' + (values.p_name.replace(/[^a-z0-9_]/i, '_')) + '\', \'' + values.p_options.join(',') + '\');return false;';
        }
      }
     }
