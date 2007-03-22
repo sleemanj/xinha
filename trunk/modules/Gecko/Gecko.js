@@ -527,7 +527,26 @@ Xinha.prototype.selectionEmpty = function(sel)
   return true;
 };
 
-
+/** 
+ * Returns a range object to be stored 
+ * and later restored with Xinha.prototype.restoreSelection()
+ * 
+ * @returns Range
+ */
+Xinha.prototype.saveSelection = function()
+{
+  return this.createRange(this.getSelection()).cloneRange();
+}
+/** 
+ * Restores a selection previously stored
+ * @param savedSelection Range object as returned by Xinha.prototype.restoreSelection()
+ */
+Xinha.prototype.restoreSelection = function(savedSelection)
+{
+  var sel = this.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedSelection);
+}
 /**
  * Selects the contents of the given node.  If the node is a "control" type element, (image, form input, table)
  * the node itself is selected for manipulation.
