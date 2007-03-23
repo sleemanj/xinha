@@ -29,7 +29,7 @@
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/.*/, '')
-    _editor_lang = "de";      // And the language we need to use in the editor.
+    _editor_lang = "en";      // And the language we need to use in the editor.
   </script>
 
   <!-- Load up the actual editor core -->
@@ -62,9 +62,9 @@
        xinha_plugins = xinha_plugins ? xinha_plugins :
        [
          'CharacterMap', 
-        // 'Linker',
-        // 'Stylist',
-        // 'SmartReplace'
+         'Linker',
+         'Stylist',
+         'SmartReplace'
        ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -84,7 +84,7 @@
 
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
    
-       //  xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
+        xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
          
       //xinha_config.CharacterMap.mode = 'panel';
 //xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
@@ -147,23 +147,12 @@
 
 <body>
 
-  <form action="test_dest.php" id="editors_here" onsubmit="alert(this.myTextArea.value);">
-<input type="checkbox" name="hallo" />
-<select>
-<option>Test</option>
-</select>
+  <form action="" id="editors_here" onsubmit="alert(this.myTextArea.value);">
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
   <textarea id="myTextArea" name="myTextArea" style="width:100%;height:300px;">
     <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
 
-    <input type="submit" /> <input type="reset" /><input type="checkbox" name="hallo" />
-<select>
-<option>Test</option>
-</select>
-  <textarea name="myTextArea" style="width:100%;height:320px;">
-    <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
-
-    <input type="submit" /> <input type="reset" />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
   </form>
   <script language="javascript">
     document.write(document.compatMode);

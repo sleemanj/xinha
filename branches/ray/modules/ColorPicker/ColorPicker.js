@@ -365,7 +365,7 @@
       {
         if (e.style.position == 'fixed') 
         {
-          this.table.style.position = 'absolute';
+          this.table.style.position = 'fixed';
         }
         top += e.offsetTop;
         left += e.offsetLeft;

@@ -4178,8 +4178,12 @@ Xinha.prototype.outwardHtml = function(html)
   html = html.replace(/<(\/?)i(\s|>|\/)/ig, "<$1em$2");
   html = html.replace(/<(\/?)strike(\s|>|\/)/ig, "<$1del$2");
   
-  // replace window.open to that any clicks won't open a popup in designMode
-  html = html.replace("onclick=\"try{if(document.designMode &amp;&amp; document.designMode == 'on') return false;}catch(e){} window.open(", "onclick=\"window.open(");
+  // remove disabling of inline event handle inside Xinha iframe
+  html = html.replace(/(<[^>]*onclick=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmouseover=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmouseout=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmousedown=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmouseup=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
 
   // Figure out what our server name is, and how it's referenced
   var serverBase = location.href.replace(/(https?:\/\/[^\/]*)\/.*/, '$1') + '/';
@@ -4230,9 +4234,13 @@ Xinha.prototype.inwardHtml = function(html)
   // Both IE and Gecko use strike instead of del (#523)
   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
 
-  // replace window.open to that any clicks won't open a popup in designMode
-  html = html.replace("onclick=\"window.open(", "onclick=\"try{if(document.designMode &amp;&amp; document.designMode == 'on') return false;}catch(e){} window.open(");
-
+  // disable inline event handle inside Xinha iframe
+  html = html.replace(/(<[^>]*onclick=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
+  html = html.replace(/(<[^>]*onmouseover=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
+  html = html.replace(/(<[^>]*onmouseout=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
+  html = html.replace(/(<[^>]*onmouseodown=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
+  html = html.replace(/(<[^>]*onmouseup=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
+  
   html = this.inwardSpecialReplacements(html);
 
   html = html.replace(/(<script[^>]*)(javascript)/gi,"$1freezescript");
@@ -5376,27 +5384,32 @@ Xinha.hasDisplayedChildren = function(el)
  * 
  */
  
-Xinha._loadback = function(Url, Callback, Scope, Bonus)
+Xinha._loadback = function(url, callback, scope, bonus)
 {  
-  var T = !Xinha.is_ie ? "onload" : 'onreadystatechange';
-  var S = document.createElement("script");
-  S.type = "text/javascript";
-  S.src = Url;
-  S.id = Url;
-  if ( Callback )
+  if ( document.getElementById(url) )
   {
-    S[T] = function()
+    return true;
+  }
+  var t = !Xinha.is_ie ? "onload" : 'onreadystatechange';
+  var s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src = url;
+  s.id = url;
+  if ( callback )
+  {
+    s[t] = function()
     {      
       if ( Xinha.is_ie && ( ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) ) )
       {
         return;
       }
       
-      Callback.call(Scope ? Scope : this, Bonus);
-      S[T] = null;
+      callback.call(scope ? scope : this, bonus);
+      s[t] = null;
     };
   }
-  document.getElementsByTagName("head")[0].appendChild(S);
+  document.getElementsByTagName("head")[0].appendChild(s);
+  return false;
 };
 
 Xinha.collectionToArray = function(collection)
