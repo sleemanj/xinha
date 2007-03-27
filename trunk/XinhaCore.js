@@ -181,42 +181,14 @@ function Xinha(textarea, config)
     w: textarea.style.width  ? textarea.style.width  : ( textarea.offsetWidth  ? ( textarea.offsetWidth  + 'px' ) : ( textarea.cols + 'em') ),
     h: textarea.style.height ? textarea.style.height : ( textarea.offsetHeight ? ( textarea.offsetHeight + 'px' ) : ( textarea.rows + 'em') )
   };
-  // Create the loading message elements
-  if ( this.config.showLoading )
+
+  if ( document.getElementById("loading_" + textarea.id) || this.config.showLoading )
   {
-    // Create and show the main loading message and the sub loading message for details of loading actions
-    // global element
-    var loading_message = document.createElement("div");
-    loading_message.id = "loading_" + textarea.name;
-    loading_message.className = "loading";
-    try
+    if (!document.getElementById("loading_" + textarea.id))
     {
-      // how can i find the real width in pixels without % or em *and* with no visual errors ?
-      // for instance, a textarea with a style="width:100%" and the body padding > 0 result in a horizontal scrollingbar while loading
-      // A few lines above seems to indicate offsetWidth is not always set
-      loading_message.style.width = textarea.offsetWidth + 'px';
+      Xinha.createLoadingMessage(textarea);
     }
-    catch (ex)
-    {
-      // offsetWidth seems not set, so let's use this._initial_ta_size.w, but sometimes it may be too huge width
-      loading_message.style.width = this._initial_ta_size.w;
-    }
-    loading_message.style.left = Xinha.findPosX(textarea) +  'px';
-    loading_message.style.top = (Xinha.findPosY(textarea) + parseInt(this._initial_ta_size.h, 10) / 2) +  'px';
-    // main static message
-    var loading_main = document.createElement("div");
-    loading_main.className = "loading_main";
-    loading_main.id = "loading_main_" + textarea.name;
-    loading_main.appendChild(document.createTextNode(Xinha._lc("Loading in progress. Please wait !")));
-    // sub dynamic message
-    var loading_sub = document.createElement("div");
-    loading_sub.className = "loading_sub";
-    loading_sub.id = "loading_sub_" + textarea.name;
-    loading_sub.appendChild(document.createTextNode(Xinha._lc("Constructing main object")));
-    loading_message.appendChild(loading_main);
-    loading_message.appendChild(loading_sub);
-    document.body.appendChild(loading_message);
-    this.setLoadingMessage("Constructing object");
+    this.setLoadingMessage(Xinha._lc("Constructing object"));
   }
 
   this._editMode = "wysiwyg";
@@ -730,7 +702,7 @@ Xinha.prototype.registerPanel = function(side, object)
   {
     side = 'right';
   }
-  this.setLoadingMessage('Register panel ' + side);
+  this.setLoadingMessage('Register ' + side + ' panel ');
   var panel = this.addPanel(side);
   if ( object )
   {
@@ -980,7 +952,7 @@ Xinha.replace = function(id, config)
 // Creates the toolbar and appends it to the _htmlarea
 Xinha.prototype._createToolbar = function ()
 {
-  this.setLoadingMessage('Create Toolbar');
+  this.setLoadingMessage(Xinha._lc('Create Toolbar'));
   var editor = this;	// to access this in nested functions
 
   var toolbar = document.createElement("div");
@@ -1313,6 +1285,8 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         "click",
         function(ev)
         {
+          ev = Xinha.is_ie ? window.event : ev;
+          editor.btnClickEvent = ev;
           if ( obj.enabled )
           {
             Xinha._removeClass(el, "buttonActive");
@@ -1322,7 +1296,7 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
               editor.activateEditor();
             }
             obj.cmd(editor, obj.name, obj);
-            Xinha._stopEvent(Xinha.is_ie ? window.event : ev);
+            Xinha._stopEvent(ev);
           }
         }
       );
@@ -1501,7 +1475,7 @@ Xinha.makeBtnImg = function(imgDef, doc)
 
 Xinha.prototype._createStatusBar = function()
 {
-  this.setLoadingMessage('Create StatusBar');
+  this.setLoadingMessage(Xinha._lc('Create Statusbar'));
   var statusbar = document.createElement("div");
   statusbar.className = "statusBar";
   this._statusBar = statusbar;
@@ -1541,10 +1515,12 @@ Xinha.prototype.generate = function ()
   
   var i;
   var editor = this;  // we'll need "this" in some nested functions
-  
-  this.setLoadingMessage("Generate Xinha object");
-  
   var url;
+  
+  if (!document.getElementById("XinhaCoreDesign"))
+  {
+    Xinha.loadStyle(typeof _editor_css == "string" ? _editor_css : "Xinha.css",null,"XinhaCoreDesign");
+  }
   
   // Now load a specific browser plugin which will implement the above for us.
   if (Xinha.is_ie)
@@ -1696,7 +1672,9 @@ Xinha.prototype.generate = function ()
   
   // create the editor framework, yah, table layout I know, but much easier
   // to get it working correctly this way, sorry about that, patches welcome.
-
+  
+  this.setLoadingMessage(Xinha._lc('Generate Xinha framework'));
+  
   this._framework =
   {
     'table':   document.createElement('table'),
@@ -1874,7 +1852,7 @@ Xinha.prototype.generate = function ()
 
   // Initalize size
   editor.initSize();
-
+  this.setLoadingMessage(Xinha._lc('Finishing'));
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
   if (Xinha.is_opera)
@@ -1930,7 +1908,7 @@ Xinha.prototype.generate = function ()
 
 Xinha.prototype.initSize = function()
 {
-  this.setLoadingMessage('Init editor size');
+  this.setLoadingMessage(Xinha._lc('Init editor size'));
   var editor = this;
   var width = null;
   var height = null;
@@ -2373,7 +2351,6 @@ Xinha.prototype.deactivateEditor = function()
 
 Xinha.prototype.initIframe = function()
 {
-  this.setLoadingMessage('Init IFrame');
   this.disableToolbar();
   var doc = null;
   var editor = this;
@@ -2733,7 +2710,8 @@ Xinha.getPluginDir = function(pluginName)
 Xinha.loadPlugin = function(pluginName, callback, plugin_file)
 {
   if ( !Xinha.isSupportedBrowser ) return;
-
+  
+  Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin="+pluginName+"$"));
   // @todo : try to avoid the use of eval()
   // Might already be loaded
   //if ( eval('typeof ' + pluginName) != 'undefined' )
@@ -2896,10 +2874,10 @@ Xinha.prototype.firePluginEvent = function(methodName)
   return false;
 }
 
-Xinha.loadStyle = function(style, plugin)
+Xinha.loadStyle = function(style, plugin, id)
 {
   var url = _editor_url || '';
-  if ( typeof plugin != "undefined" )
+  if ( plugin )
   {
     url += "plugins/" + plugin + "/";
   }
@@ -2917,10 +2895,10 @@ Xinha.loadStyle = function(style, plugin)
   var link = document.createElement("link");
   link.rel = "stylesheet";
   link.href = url;
+  if (id) link.id = id;
   head.appendChild(link);
-  //document.write("<style type='text/css'>@import url(" + url + ");</style>");
 };
-Xinha.loadStyle(typeof _editor_css == "string" ? _editor_css : "Xinha.css");
+
 
 /***************************************************
  *  Category: EDITOR UTILITIES
@@ -5089,7 +5067,7 @@ Xinha._postback = function(url, data, handler)
       }
       else
       {
-        alert('An error has occurred: ' + req.statusText);
+        alert('An error has occurred: ' + req.statusText + '\nURL: ' + url);
       }
     }
   }
@@ -5117,7 +5095,7 @@ Xinha._getback = function(url, handler)
       }
       else
       {
-        alert('An error has occurred: ' + req.statusText);
+        alert('An error has occurred: ' + req.statusText + '\nURL: ' + url);
       }
     }
   }
@@ -5232,6 +5210,7 @@ Xinha._loadlang = function(context,url)
     }
     else
     {
+      Xinha.setLoadingMessage("Loading language");
       url = _editor_url+"lang/"+_editor_lang+".js";
     }
   }
@@ -5493,7 +5472,7 @@ Xinha.prototype.registerPlugins = function(plugin_names)
   {
     for ( var i = 0; i < plugin_names.length; i++ )
     {
-      this.setLoadingMessage('Register plugin $plugin', 'Xinha', {'plugin': plugin_names[i]});
+      this.setLoadingMessage(Xinha._lc('Register plugin $plugin', 'Xinha', {'plugin': plugin_names[i]}));
       this.registerPlugin(plugin_names[i]);
     }
   }
@@ -5628,6 +5607,27 @@ Xinha.viewportSize = function(scope)
   return {'x':x,'y':y};
 };
 
+Xinha.pageSize = function(scope)
+{
+  scope = (scope) ? scope : window;
+  var x,y;
+ 
+  var test1 = scope.document.body.scrollHeight; //IE Quirks
+  var test2 = scope.document.documentElement.scrollHeight; // IE Standard + Moz Here quirksmode.org errs! 
+
+  if (test1 > test2) 
+  {
+    x = scope.document.body.scrollWidth;
+    y = scope.document.body.scrollHeight;
+  }
+  else
+  {
+    x = scope.document.documentElement.scrollWidth;
+    y = scope.document.documentElement.scrollHeight;
+  }  
+  return {'x':x,'y':y};
+};
+
 Xinha.prototype.scrollPos = function(scope)
 {
   scope = (scope) ? scope : window;
@@ -5704,23 +5704,93 @@ Xinha.findPosY = function(obj)
   return curtop;
 };
 
-Xinha.prototype.setLoadingMessage = function(string, context, replace)
+Xinha.createLoadingMessages = function(xinha_editors)
 {
-  if ( !this.config.showLoading || !document.getElementById("loading_sub_" + this._textArea.name) )
+  if ( Xinha.loadingMessages || !Xinha.isSupportedBrowser ) 
   {
     return;
   }
-  var elt = document.getElementById("loading_sub_" + this._textArea.name);
-  elt.innerHTML = Xinha._lc(string, context, replace);
+  Xinha.loadingMessages = [];
+  
+  for (var i=0;i<xinha_editors.length;i++)
+  {
+     Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
+  }
+};
+
+Xinha.createLoadingMessage = function(textarea,text)
+{ 
+  if ( document.getElementById("loading_" + textarea.id) || !Xinha.isSupportedBrowser)
+  {
+    return;
+  }
+  // Create and show the main loading message and the sub loading message for details of loading actions
+  // global element
+  var loading_message = document.createElement("div");
+  loading_message.id = "loading_" + textarea.id;
+  loading_message.className = "loading";
+  
+  loading_message.style.left = Xinha.findPosX(textarea) +  'px';
+  loading_message.style.top = (Xinha.findPosY(textarea) + textarea.offsetHeight / 2) - 50 +  'px';
+  loading_message.style.width =  textarea.offsetWidth +  'px';
+  
+  // main static message
+  var loading_main = document.createElement("div");
+  loading_main.className = "loading_main";
+  loading_main.id = "loading_main_" + textarea.id;
+  loading_main.appendChild(document.createTextNode(Xinha._lc("Loading in progress. Please wait!")));
+  // sub dynamic message
+  var loading_sub = document.createElement("div");
+  loading_sub.className = "loading_sub";
+  loading_sub.id = "loading_sub_" + textarea.id;
+  text = text ? text : Xinha._lc("Constructing object");
+  loading_sub.appendChild(document.createTextNode(text));
+  loading_message.appendChild(loading_main);
+  loading_message.appendChild(loading_sub);
+  document.body.appendChild(loading_message);
+  
+  Xinha.freeLater(loading_message);
+  Xinha.freeLater(loading_main);
+  Xinha.freeLater(loading_sub);
+  
+  return loading_sub;
+};
+
+Xinha.prototype.setLoadingMessage = function(subMessage, mainMessage)
+{
+  if ( !document.getElementById("loading_sub_" + this._textArea.id) )
+  {
+    return;
+  }
+  document.getElementById("loading_main_" + this._textArea.id).innerHTML = mainMessage ? mainMessage : Xinha._lc("Loading in progress. Please wait!");
+  document.getElementById("loading_sub_" + this._textArea.id).innerHTML = subMessage;
+};
+
+Xinha.setLoadingMessage = function(string)
+{
+  if (!Xinha.loadingMessages) return;  
+  for ( var i = 0; i < Xinha.loadingMessages.length; i++ )
+  {
+    Xinha.loadingMessages[i].innerHTML = string;
+  }
 };
 
 Xinha.prototype.removeLoadingMessage = function()
 {
-  if ( !this.config.showLoading || !document.getElementById("loading_" + this._textArea.name) )
+  if (document.getElementById("loading_" + this._textArea.id) )
   {
-    return ;
+   document.body.removeChild(document.getElementById("loading_" + this._textArea.id));
   }
-  document.body.removeChild(document.getElementById("loading_" + this._textArea.name));
+};
+
+Xinha.removeLoadingMessages = function(xinha_editors)
+{
+  for (var i=0;i< xinha_editors.length;i++)
+  {
+     var main = document.getElementById("loading_" + document.getElementById(xinha_editors[i]).id);
+     main.parentNode.removeChild(main);
+  }
+  Xinha.loadingMessages = null;
 };
 
 Xinha.toFree = [];

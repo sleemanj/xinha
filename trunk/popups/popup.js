@@ -44,7 +44,7 @@ function __dlg_init( bottom, win_dim ) {
 function __xinha_dlg_init( win_dim ) {
   if(window.__dlg_init_done) return true;
   
-  if(window.opener._editor_skin != "") {
+  if(window.opener._editor_skin) {
     var head = document.getElementsByTagName("head")[0];
     var link = document.createElement("link");
     link.type = "text/css";
@@ -54,16 +54,16 @@ function __xinha_dlg_init( win_dim ) {
   }
 	window.dialogArguments = opener.Dialog._arguments;
 
-  var body = document.body;
+  var page = Xinha.pageSize(window);
   if ( !win_dim )
   {
-   var dim = Xinha.viewportSize(window);
-    win_dim = {width:dim.x, height: body.scrollHeight};
+    win_dim = {width:page.x, height: page.y};
   }
   window.resizeTo(win_dim.width, win_dim.height);
 
   var dim = Xinha.viewportSize(window);
-  window.resizeBy(0, body.scrollHeight - dim.y);
+
+  window.resizeBy(0, page.y - dim.y);
 
   if(win_dim.top && win_dim.left)
   {
