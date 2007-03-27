@@ -292,19 +292,44 @@
 	}
 
 
-	function newFolder() 
+	function newFolder()
 	{
-     var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
-		var selection = document.getElementById('dirPath');
-		var dir = selection.options[selection.selectedIndex].value;
+		function createFolder(folder)
+		{
+			var selection = document.getElementById('dirPath');
+			var dir = selection.options[selection.selectedIndex].value;
 
-				if(folder == thumbdir)
+			if(folder == thumbdir)
+			{
+				alert(i18n('Invalid folder name, please choose another folder name.'));
+				return false;
+			}
+
+			if (folder && folder != '' && typeof imgManager != 'undefined')
+			{
+				imgManager.newFolder(dir, encodeURI(folder));
+			}
+		}
+		// IE7 has crippled the prompt()
+		if (Xinha.ie_version > 6)
+		{
+			Dialog("newFolder.html", function(param)
+			{
+				if (!param) // user must have pressed Cancel
 				{
-					alert(i18n('Invalid folder name, please choose another folder name.'));
 					return false;
 				}
-
-				if (folder && folder != '' && typeof imgManager != 'undefined') 
-					imgManager.newFolder(dir, encodeURI(folder)); 
-   }
-	 addEvent(window, 'load', init);
+				else
+				{
+					var folder = param['f_foldername'];
+					createFolder(folder);
+				}
+			}, null);
+		}
+		else
+		{
+			var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
+			createFolder(folder);
+		}
+	}
+	addEvent(window, 'load', init);

@@ -517,18 +517,32 @@ function refresh()
 
 function newFolder()
 {
-    var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
+  function createFolder(folder)
+  {
     var selection = document.getElementById('dirPath');
     var dir = selection.options[selection.selectedIndex].value;
 
     if(folder == thumbdir)
     {
-        alert(i18n('Invalid folder name, please choose another folder name.'));
-        return false;
+      alert(i18n('Invalid folder name, please choose another folder name.'));
+      return false;
     }
 
     if (folder && folder != '' && typeof imgManager != 'undefined')
-        imgManager.newFolder(dir, encodeURI(folder));
+    {
+      imgManager.newFolder(dir, encodeURI(folder));
+    }
+  }
+    // IE7 has crippled the prompt()
+  if ( Xinha.ie_version > 6 )
+  {
+    popupPrompt(i18n('Please enter name for new folder...'), i18n('Untitled'), createFolder, i18n("New Folder"));
+  }
+  else
+  {
+    var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
+    createFolder(folder);
+  }
 }
 
 
