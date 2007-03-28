@@ -31,10 +31,11 @@ function newFolder(dir, newDir)
 }
 
 function renameFile(oldPath) {
-    // strip directory and extension
-    var oldName=oldPath.replace(/.*%2F/,'').replace(/\..*$/,'');
-    var newName = prompt(i18n('Please enter new name for this file...'), oldName);
-
+ // strip directory and extension
+  var oldName=oldPath.replace(/.*%2F/,'').replace(/\..*$/,'');
+  
+  var rename = function (newName)
+  {
     if(newName == '' || newName == null || newName == oldName)
     {
         alert(i18n('Cancelled rename.'));
@@ -46,16 +47,29 @@ function renameFile(oldPath) {
     selection = window.top.document.getElementById('viewtype');
     var viewtype = selection.options[selection.selectedIndex].value;
     location.href = _backend_url + "__function=images&mode="+mode+"&dir="+dir+"&rename="+oldPath+"&renameTo="+newName+"&viewtype="+viewtype;
+  }
+  
+   // IE7 has crippled the prompt()
+  if ( Xinha.ie_version > 6 )
+  {
+    popupPrompt(i18n("Please enter new name for this file..."), oldName, rename, i18n("Rename"));
+  }
+  else
+  {
+    var newName = prompt(i18n('Please enter new name for this file...'), oldName);
+    rename(newName);
+  }
 }
-function renameDir(oldName) {
-    // strip directory and extension
-   
-    var newName = prompt(i18n('Please enter new name for this folder...'), oldName);
+function renameDir(oldName) 
+{
+  // strip directory and extension
 
+  function rename(newName)
+  {
     if(newName == '' || newName == null || newName == oldName)
     {
-        alert(i18n('Cancelled rename.'));
-        return false;
+      alert(i18n('Cancelled rename.'));
+      return false;
     }
     var mode=window.top.document.getElementById('manager_mode').value;
     var selection = window.top.document.getElementById('dirPath');
@@ -63,6 +77,18 @@ function renameDir(oldName) {
     selection = window.top.document.getElementById('viewtype');
     var viewtype = selection.options[selection.selectedIndex].value;
     location.href = _backend_url + "__function=images&mode="+mode+"&dir="+dir+"&rename="+oldName+"&renameTo="+newName+"&viewtype="+viewtype;
+  }
+  
+  // IE7 has crippled the prompt()
+  if ( Xinha.ie_version > 6 )
+  {
+    popupPrompt(i18n('Please enter new name for this folder...'), oldName, rename, i18n("Rename"));
+  }
+  else
+  {
+    var newName = prompt(i18n('Please enter new name for this folder...'), oldName);
+    rename(newName);
+  }
 }
 function copyFile(file,action)
 {
