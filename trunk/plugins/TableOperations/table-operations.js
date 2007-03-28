@@ -460,6 +460,52 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		editor.selectNodeContents(node);
 	}
 
+	function cellMerge(table, cell_index, row_index, no_cols, no_rows) {
+		var rows = [];
+		var cells = [];
+		try {
+			for (i=row_index; i<row_index+no_rows; i++) {
+				var row = table.rows[i];
+				for (j=cell_index; j<cell_index+no_cols; j++) {
+					if (row.cells[j].colSpan > 1 || row.cells[j].rowSpan > 1) {
+						splitCell(row.cells[j]);
+					}
+					cells.push(row.cells[j]);
+				}
+				if (cells.length > 0) {
+					rows.push(cells);
+					cells = [];
+				}
+			}
+		} catch(e) { 
+			alert("Invalid selection");
+			return false;
+		}
+		var row_index1 = rows[0][0].parentNode.rowIndex;
+		var row_index2 = rows[rows.length-1][0].parentNode.rowIndex;
+		var row_span2 = rows[rows.length-1][0].rowSpan;
+		var HTML = "";
+		for (i = 0; i < rows.length; ++i) {
+			var cells = rows[i];
+			for (var j = 0; j < cells.length; ++j) {
+				var cell = cells[j];
+				HTML += cell.innerHTML;
+				(i || j) && (cell.parentNode.removeChild(cell));
+			}
+		}
+		var td = rows[0][0];
+		td.innerHTML = HTML;
+		td.rowSpan = row_index2 - row_index1 + row_span2;
+		var col_span = 0;
+		for(j=0; j<rows[0].length; j++) {
+			col_span += rows[0][j].colSpan;
+		}
+		td.colSpan = col_span;
+		editor.selectNodeContents(td);
+		editor.forceRedraw();
+		editor.focusEditor();
+	}
+
 	switch (button_id) {
 		// ROWS
 
@@ -595,83 +641,58 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		editor.updateToolbar();
 		break;
 	    case "TO-cell-merge":
-		// !! FIXME: Mozilla specific !!
+		//Mozilla, as opposed to IE, allows the selection of several cells, which is fine :)
 		var sel = editor._getSelection();
-		var range, i = 0;
-		var rows = [];
-		var row = null;
-		var cells = null;
-		if (!HTMLArea.is_ie) {
-			try {
-				if (sel.rangeCount < 2) {
-					alert(HTMLArea._lc("Please select the cells you want to merge.", "TableOperations"));
-					break;
-				}
-				while (range = sel.getRangeAt(i++)) {
-					var td = range.startContainer.childNodes[range.startOffset];
-					if (td.parentNode != row) {
-						row = td.parentNode;
-						(cells) && rows.push(cells);
-						cells = [];
+		if (!HTMLArea.is_ie && sel.rangeCount > 1) {
+			var range = sel.getRangeAt(0);
+			var td = range.startContainer.childNodes[range.startOffset];
+			var tr = td.parentNode;
+			var cell_index = td.cellIndex;		
+			var row_index = tr.rowIndex;
+			var row_index2 = 0;
+			var rownum = row_index;
+			var no_cols = 0;
+			var row_colspan = 0;
+			var td2, tr2;
+			for(i=0; i<sel.rangeCount; i++) {
+				range = sel.getRangeAt(i);
+					td2 = range.startContainer.childNodes[range.startOffset];
+					tr2 = td2.parentNode;	
+					if(tr2.rowIndex != rownum) {
+						rownum = tr2.rowIndex;
+						row_colspan = 0;
 					}
-					cells.push(td);
+					row_colspan += td2.colSpan;
+					if(row_colspan > no_cols) {
+						no_cols = row_colspan;
+					}
+					if(tr2.rowIndex + td2.rowSpan - 1 > row_index2) {
+						row_index2 = tr2.rowIndex + td2.rowSpan - 1;
+					}
 				}
-			} catch(e) {/* finished walking through selection */}
-			rows.push(cells);
+			var no_rows = row_index2 - row_index + 1;
+			var table = tr.parentNode;
+			cellMerge(table, cell_index, row_index, no_cols, no_rows); 
 		} else {
-			// Internet Explorer "browser"
+			// Internet Explorer "browser" or not more than one cell selected in Moz
 			var td = this.getClosest("td");
 			if (!td) {
 				alert(HTMLArea._lc("Please click into some cell", "TableOperations"));
 				break;
 			}
-			var tr = td.parentElement;
-			var no_cols = prompt(HTMLArea._lc("How many columns would you like to merge?", "TableOperations"), 2);
-			if (!no_cols) {
-				// cancelled
-				break;
-			}
-			var no_rows = prompt(HTMLArea._lc("How many rows would you like to merge?", "TableOperations"), 2);
-			if (!no_rows) {
-				// cancelled
-				break;
-			}
-			var cell_index = td.cellIndex;
-			while (no_rows-- > 0) {
-				td = tr.cells[cell_index];
-				cells = [td];
-				for (var i = 1; i < no_cols; ++i) {
-					td = td.nextSibling;
-					if (!td) {
-						break;
-					}
-					cells.push(td);
+			editor._popupDialog("plugin://TableOperations/merge_cells.html", function(param) {
+				if (!param) {	// user pressed Cancel
+					return false;
 				}
-				rows.push(cells);
-				tr = tr.nextSibling;
-				if (!tr) {
-					break;
-				}
-			}
+				no_cols = parseInt(param['f_cols'],10) + 1;
+				no_rows = parseInt(param['f_rows'],10) + 1;
+				var tr = td.parentNode;
+				var cell_index = td.cellIndex;
+				var row_index = tr.rowIndex;
+				var table = tr.parentNode;
+				cellMerge(table, cell_index, row_index, no_cols, no_rows);
+			}, null);	
 		}
-		var HTML = "";
-		for (i = 0; i < rows.length; ++i) {
-			// i && (HTML += "<br />");
-			var cells = rows[i];
-			for (var j = 0; j < cells.length; ++j) {
-				// j && (HTML += "&nbsp;");
-				var cell = cells[j];
-				HTML += cell.innerHTML;
-				(i || j) && (cell.parentNode.removeChild(cell));
-			}
-		}
-		var td = rows[0][0];
-		td.innerHTML = HTML;
-		td.rowSpan = rows.length;
-		td.colSpan = rows[0].length;
-		editor.selectNodeContents(td);
-		editor.forceRedraw();
-		editor.focusEditor();
 		break;
 
 		// PROPERTIES
