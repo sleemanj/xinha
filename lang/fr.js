@@ -156,7 +156,7 @@
   "Constructing object": "Construction de l'objet",
   "Create Toolbar": "Construction de la barre d'icones",
   "Create Statusbar": "Construction de la barre de status",
-  "Register right panel" : "Enregistrement du panneau droit, 
+  "Register right panel" : "Enregistrement du panneau droit", 
   "Register left panel" : "Enregistrement du panneau gauche", 
   "Register bottom panel" : "Enregistrement du panneau supérieur", 
   "Register top panel" : "Enregistrement du panneau inférieur", 
