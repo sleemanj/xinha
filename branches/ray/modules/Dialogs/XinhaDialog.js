@@ -98,9 +98,9 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   document.body.appendChild(rootElem);
 
   rootElem.style.paddingBottom = "10px";
-  rootElem.style.width = size.width  ? size.width + 'px' : '';
+  rootElem.style.width = ( size && size.width )  ? size.width + 'px' : '';
 
-  if (size.height)
+  if (size && size.height)
   {
     if (Xinha.ie_version < 7)
     {

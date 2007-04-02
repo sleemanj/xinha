@@ -242,21 +242,6 @@ SmartReplace.prototype.replaceAll = function()
 	
 	this.editor.setHTML(html);
 }
-SmartReplace.prototype.dialog = function()
-{
-	var self = this;
-	var action = function (param)
-	{
-		self.toggleActivity(param.enable); 
-		if (param.convert)
-		{
-			self.replaceAll();
-		}
-	}
-	var init = this;
-	Dialog(_editor_url+'plugins/SmartReplace/popups/dialog.html', action, init);
-}
-
 
 SmartReplace.prototype.buttonPress = function(opts, obj)
 {
@@ -303,10 +288,25 @@ SmartReplace.prototype._prepareDialog = function()
   // Now we have everything we need, so we can build the dialog.
   this.dialog = new Xinha.Dialog(editor, this.html, 'SmartReplace',{},{modal:false});
   this.dialog.attachToPanel('top');
+  
+  this.dialog.getElementById('enable').onchange = function ()
+  {
+  	self.toggleActivity(this.checked); 
+  }
+  this.dialog.getElementById('convert').onchange = function ()
+  {
+  	self.dialog.getElementById('ok').style.display = ( this.checked ) ? '' : 'none'; 
+  }
+  this.dialog.getElementById('ok').onclick = function ()
+  {
+  	self.replaceAll();
+  	self.dialog.getElementById('convert').checked = false; 
+  	this.style.display =  'none'; 
+  }
   this.ready = true;
 };
 
-SmartReplace.prototype.show = function(inputs, ok, cancel)
+SmartReplace.prototype.show = function(inputs)
 {
   if(!this.ready)
   {
@@ -317,23 +317,6 @@ SmartReplace.prototype.show = function(inputs, ok, cancel)
 
   // Connect the OK and Cancel buttons
   var self = this;
-  if(ok)
-  {
-    this.dialog.getElementById('ok').onclick = ok;
-  }
-  else
-  {
-    this.dialog.getElementById('ok').onclick = function() {self.dialog.hide();};
-  }
-
-  if(cancel)
-  {
-    this.dialog.getElementById('cancel').onclick = cancel;
-  }
-  else
-  {
-    this.dialog.getElementById('cancel').onclick = function() { self.dialog.hide()};
-  }
 
   this.dialog.show(inputs);
 

@@ -543,9 +543,13 @@ Xinha.prototype.saveSelection = function()
  */
 Xinha.prototype.restoreSelection = function(savedSelection)
 {
-  var sel = this.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(savedSelection);
+  try 
+  {
+    var sel = this.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedSelection);
+  }
+  catch (e) {}
 }
 /**
  * Selects the contents of the given node.  If the node is a "control" type element, (image, form input, table)

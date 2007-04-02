@@ -221,6 +221,10 @@ SuperClean.prototype.onGenerateOnce = function()
     this.editor.config.filters.tidy = null;
   }
 
+  this.loadFilters();
+};
+SuperClean.prototype.loadFilters = function()
+{
   var sc = this;
   //load the filter-functions
   for(var filter in this.editor.config.SuperClean.filters)
@@ -237,13 +241,13 @@ SuperClean.prototype.onGenerateOnce = function()
         Xinha._getback(_editor_url + 'plugins/SuperClean/filters/'+filter+'.js',
                       function(func) {
                         eval('SuperClean.filterFunctions.'+filter+'='+func+';');
-                        sc.onGenerate();
+                        sc.loadFilters();
                       });
       }
       return;
     }
   }
-};
+}
 // Inline Dialog for SuperClean
 
 
