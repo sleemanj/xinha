@@ -1838,11 +1838,10 @@ Xinha.prototype.generate = function ()
     function()
     {
       textarea.value = editor.outwardHtml(editor.getHTML());
-      var x = xinha.parentNode.replaceChild(textarea,xinha);
-      // put it back into the page to let Xinha.collectGarbageForIE() do its work afterwards
-      textarea.style.display = "";
-      x.style.display = 'none';
-      document.body.appendChild(x);
+      if (!Xinha.is_ie)
+      {
+        xinha.parentNode.replaceChild(textarea,xinha);
+      }
       return true;
     }
   );
@@ -4138,7 +4137,7 @@ Xinha.prototype.getHTML = function()
     case "wysiwyg":
       if ( !this.config.fullPage )
       {
-        html = Xinha.getHTML(this._doc.body, false, this);
+        html = Xinha.getHTML(this._doc.body, false, this).trim();
       }
       else
       {
@@ -5982,8 +5981,11 @@ Xinha.prototype._createRange    = function(sel) { return this.createRange(sel); 
 HTMLArea = Xinha;
 
 Xinha.init();
-Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
 
+if (Xinha.is_ie)
+{
+  Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
+}
 Xinha.notImplemented = function(methodName) 
 {
   throw new Error("Method Not Implemented", "Part of Xinha has tried to call the " + methodName + " method which has not been implemented.");
