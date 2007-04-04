@@ -735,6 +735,7 @@ Xinha.prototype.findCC = function ( target )
       {
         var sel = this.getSelection();
         sel.getRangeAt(0).deleteContents();
+        this._iframe.contentWindow.focus();
       }
     }
   } catch (e) {}
