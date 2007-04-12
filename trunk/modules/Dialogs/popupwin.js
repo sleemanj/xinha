@@ -118,11 +118,11 @@ PopupWin.prototype.addButtons = function()
     var btn = arguments[i];
     var button = this.doc.createElement("button");
     div.appendChild(button);
-    button.innerHTML = HTMLArea._lc(btn, 'HTMLArea');
+    button.innerHTML = Xinha._lc(btn, 'Xinha');
     switch (btn.toLowerCase())
     {
       case "ok":
-        HTMLArea.addDom0Event(button, 'click',
+        Xinha.addDom0Event(button, 'click',
           function()
           {
             self.callHandler();
@@ -132,7 +132,7 @@ PopupWin.prototype.addButtons = function()
         );
       break;
       case "cancel":
-        HTMLArea.addDom0Event(button, 'click',
+        Xinha.addDom0Event(button, 'click',
           function()
           {
             self.close();
@@ -164,7 +164,7 @@ PopupWin.prototype.showAtElement = function()
       s.position = "absolute";
       s.left = parseInt((w - el.offsetWidth) / 2, 10) + "px";
       s.top = parseInt((h - el.offsetHeight) / 2, 10) + "px";
-      if (HTMLArea.is_gecko)
+      if (Xinha.is_gecko)
       {
         self.window.innerWidth = w;
         self.window.innerHeight = h;
