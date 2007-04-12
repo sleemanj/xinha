@@ -73,6 +73,7 @@
   margin-top: 2px;
   margin-bottom: 1px;
   color: ButtonText;
+  height: 17px;
 }
 
 .htmlarea iframe.xinha_iframe, .htmlarea textarea.xinha_textarea
