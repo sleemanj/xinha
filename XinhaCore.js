@@ -4128,6 +4128,26 @@ Xinha.prototype.scrollToElement = function(e)
   this._iframe.contentWindow.scrollTo(position.left, position.top);
 };
 
+/** Get the edited HTML
+ *  
+ *  @public
+ *  @returns {string} HTML content
+ */
+Xinha.prototype.getEditorContent = function()
+{
+  return this.outwardHtml(this.getHTML());
+}
+
+/** Completely change the HTML inside
+ *
+ *  @public
+ *  @param {string} html new content
+ */
+Xinha.prototype.setEditorContent = function(html)
+{
+  this.setHTML(this.inwardHtml(html));
+}
+
 // retrieve the HTML
 Xinha.prototype.getHTML = function()
 {
