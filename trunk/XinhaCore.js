@@ -298,6 +298,10 @@ Xinha.Config = function()
     bottom: '100px'
   };
 
+  // to make the iframe width narrower than the toolbar width, e.g. to maintain
+  // the layout when editing a narrow column of text, set the next parameter (in pixels).
+  this.iframeWidth = null;
+
   // enable creation of a status bar?
   this.statusBar = true;
 
@@ -414,6 +418,9 @@ Xinha.Config = function()
   // even neater, if you resize the window the toolbars will reflow.  Niiiice.
 
   this.flowToolbars = true;
+  
+  // set to center or right to change button alignment in toolbar
+  this.toolbarAlign = "left";
   
   // set to true if you want the loading panel to show at startup
   this.showLoading = false;
@@ -960,6 +967,7 @@ Xinha.prototype._createToolbar = function ()
   this._toolBar = this._toolbar = toolbar;
   toolbar.className = "toolbar";
   toolbar.unselectable = "1";
+  toolbar.align = this.config.toolbarAlign;
 
   Xinha.freeLater(this, '_toolBar');
   Xinha.freeLater(this, '_toolbar');
@@ -2142,7 +2150,8 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   {
     edcellwidth -= parseInt(this.config.panel_dimensions.right, 10);    
   }
-  this._iframe.style.width = edcellwidth + 'px';
+  var iframeWidth = (this.config.iframeWidth)? parseInt(this.config.iframeWidth,10): null;
+  this._iframe.style.width = (iframeWidth && iframeWidth < edcellwidth)? iframeWidth + "px": edcellwidth + "px";
 
   this._textArea.style.height = this._iframe.style.height;
   this._textArea.style.width  = this._iframe.style.width;
