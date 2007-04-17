@@ -142,6 +142,17 @@ InternetExplorer.prototype.inwardHtml = function(html)
    // Both IE and Gecko use strike internally instead of del (#523)
    // Xinha will present del externally (see Xinha.prototype.outwardHtml
    html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
+   // ie eats scripts and comments at beginning of page, so
+   // make sure there is something before the first script on the page
+   html = html.replace(/(&nbsp;)?([\s\S]*?)(<script|<!--)/i,"$2&nbsp;$3");
+   
+   return html;
+}
+
+InternetExplorer.prototype.outwardHtml = function(html)
+{
+   // remove space added before first script on the page
+   html = html.replace(/&nbsp;(\s*)(<script|<!--)/i,"$1$2");
    
    return html;
 }
