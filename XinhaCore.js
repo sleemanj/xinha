@@ -205,7 +205,7 @@ if ( Xinha.isRunLocally && Xinha.isSupportedBrowser)
 }
 
 /** Creates a new Xinha object
- * @version $Rev 817$ $LastChangedDate$
+ * @version $Rev$ $LastChangedDate$
  * @constructor
  * @param {String|DomNode}   textarea the textarea to replace; can be either only the id or the DOM object as returned by document.getElementById()
  * @param {Xinha.Config} config optional if no Xinha.Config object is passed, the default config is used
@@ -467,7 +467,7 @@ Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a
 /**
  * This class creates an object that can be passed to the Xinha constructor as a parameter.
  * Set the object's properties as you need to configure the editor (toolbar etc.)
- * @version $Rev 817$ $LastChangedDate$
+ * @version $Rev$ $LastChangedDate$
  * @constructor
  */
 Xinha.Config = function()
