@@ -91,7 +91,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
     case 7: // Node.PROCESSING_INSTRUCTION_NODE
       // PI's don't seem to survive going into the wysiwyg mode, (at least in moz)
       // so this is purely academic
-      html += (Xinha.is_ie ? ('\n' + indent) : '') + '<?' + root.target + ' ' + root.data + ' ?>';
+      html += (Xinha.is_ie ? ('\n' + indent) : '') + '<'+'?' + root.target + ' ' + root.data + ' ?>';
     break;
 
     case 1: // Node.ELEMENT_NODE
