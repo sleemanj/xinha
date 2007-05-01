@@ -1,5 +1,5 @@
 <?
-die("Run this script to batch-compress the current Xinha snapshot. To run the script, open the file and uncomment the die() command");
+die("Run this script to batch-compress the current Xinha snapshot. To run the script, open the file and comment out the die() command");
 
 error_reporting(E_ALL);
 ini_set('show_errors',1);
@@ -55,7 +55,15 @@ foreach ($return as $file)
 	flush();
 	copy($file,$file."_uncompr.js");
 	exec("java -jar ${cwd}/dojo_js_compressor.jar -c ${file}_uncompr.js > $file 2>&1");
-	unlink($file."_uncompr.js");
+	if (preg_match('/js: ".*?", line \d+:/',file_get_contents($file)))
+	{
+		unlink($file);
+		rename($file."_uncompr.js",$file);
+	}
+	else
+	{
+		unlink($file."_uncompr.js");
+	}
 }
 print "Operation complete."
 ?>
