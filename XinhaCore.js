@@ -3128,7 +3128,7 @@ Xinha.prototype.setFullHTML = function(html)
 Xinha.prototype.setEditorEvents = function()
 {
   var editor=this;
-  var doc=this._doc;
+  var doc=this._doc.getElementsByTagName("html")[0];
   editor.whenDocReady(
     function()
     {
