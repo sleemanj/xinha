@@ -26,8 +26,11 @@
 	}
 
 	//initialise the form
+  doneinit = 0; // Seems that in Opera the load event of the iframe re-fires this one also.
 	init = function () 
 	{
+    if(doneinit++) return;
+    
 		__dlg_init(null, {width:600,height:460});
 
 		__dlg_translate('ImageManager');
