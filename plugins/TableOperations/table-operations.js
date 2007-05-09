@@ -14,6 +14,13 @@
 
 // Object that will encapsulate all the table operations provided by
 // HTMLArea-3.0 (except "insert table" which is included in the main file)
+Xinha.Config.prototype.TableOperations = 
+{
+  'showButtons' : true // Set to false to hide all but inserttable and toggleborders buttons on the toolbar
+                       // this is useful if you have the ContextMenu plugin and want to save toolbar space
+                       // (the context menu can perform all the button operations)
+}
+
 function TableOperations(editor) {
 	this.editor = editor;
 
@@ -28,10 +35,11 @@ function TableOperations(editor) {
   
 	var toolbar = ["linebreak", "inserttable", "toggleborders"];
     
+  
 	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
 		if (!btn) {
-			toolbar.push("separator");
+		  if(cfg.TableOperations.showButtons)	toolbar.push("separator");
 		} else {
 			var id = "TO-" + btn[0];
 			cfg.registerButton(id, HTMLArea._lc(btn[2], "TableOperations"), editor.imgURL(btn[0] + ".gif", "TableOperations"), false,
@@ -39,9 +47,10 @@ function TableOperations(editor) {
 						   // dispatch button press event
 						   self.buttonPress(editor, id);
 					   }, btn[1]);
-			toolbar.push(id);
+			if(cfg.TableOperations.showButtons) toolbar.push(id);
 		}
 	}
+  
 
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
