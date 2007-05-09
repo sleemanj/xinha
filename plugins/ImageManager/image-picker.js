@@ -27,7 +27,7 @@
  *     ?>
  *   }
  *
- *   window.onload = function() { ImagePicker(document.getElementById('idOfTheInputField')); }
+ *   window.onload = function() { new ImagePicker(document.getElementById('idOfTheInputField')); }
  *  </script>
  *
  *
