@@ -1997,10 +1997,39 @@ Xinha.prototype.generate = function ()
   var i;
   var editor = this;  // we'll need "this" in some nested functions
   var url;
-  
+  var found = false;
+  var links = document.getElementsByTagName("link");
+
   if (!document.getElementById("XinhaCoreDesign"))
   {
-    Xinha.loadStyle(typeof _editor_css == "string" ? _editor_css : "Xinha.css",null,"XinhaCoreDesign");
+    _editor_css = (typeof _editor_css == "string") ? _editor_css : "Xinha.css";
+    for(i = 0; i<links.length; i++)
+    {
+      if ( ( links[i].rel == "stylesheet" ) && ( links[i].href == _editor_url + _editor_css ) )
+      {
+        found = true;
+      }
+    }
+    if ( !found )
+    {
+      Xinha.loadStyle(_editor_css,null,"XinhaCoreDesign");
+    }
+  }
+  
+  if ( _editor_skin !== "" && !document.getElementById("XinhaSkin"))
+  {
+    found = false;
+    for(i = 0; i<links.length; i++)
+    {
+      if ( ( links[i].rel == "stylesheet" ) && ( links[i].href == _editor_url + 'skins/' + _editor_skin + '/skin.css' ) )
+      {
+        found = true;
+      }
+    }
+    if ( !found )
+    {
+      Xinha.loadStyle('skins/' + _editor_skin + '/skin.css',null,"XinhaSkin")
+    }
   }
   
   // Now load a specific browser plugin which will implement the above for us.
@@ -2127,29 +2156,6 @@ Xinha.prototype.generate = function ()
     return false;        
   }
   else editor.registerPlugin('GetHtmlImplementation');
-  
-
-  if ( _editor_skin !== "" )
-  {
-    var found = false;
-    var head = document.getElementsByTagName("head")[0];
-    var links = document.getElementsByTagName("link");
-    for(i = 0; i<links.length; i++)
-    {
-      if ( ( links[i].rel == "stylesheet" ) && ( links[i].href == _editor_url + 'skins/' + _editor_skin + '/skin.css' ) )
-      {
-        found = true;
-      }
-    }
-    if ( !found )
-    {
-      var link = document.createElement("link");
-      link.type = "text/css";
-      link.href = _editor_url + 'skins/' + _editor_skin + '/skin.css';
-      link.rel = "stylesheet";
-      head.appendChild(link);
-    }
-  }
   
   // create the editor framework, yah, table layout I know, but much easier
   // to get it working correctly this way, sorry about that, patches welcome.
@@ -3484,6 +3490,7 @@ Xinha.loadStyle = function(style, plugin, id)
   var link = document.createElement("link");
   link.rel = "stylesheet";
   link.href = url;
+  link.type = "text/css";
   if (id) link.id = id;
   head.appendChild(link);
 };
