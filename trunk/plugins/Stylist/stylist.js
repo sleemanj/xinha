@@ -549,7 +549,7 @@ Stylist.prototype.onGenerateOnce = function()
           editor.sizeEditor();
           break;
           case 'hide':
-          stylist.resize();
+            stylist.resize();
           break;
         }
       }
@@ -583,8 +583,8 @@ Stylist.prototype.resize = function()
     }
     newSize -= panelContainer.childNodes[i].offsetHeight;
   }
-  editor._stylist.style.height = newSize-5 + 'px';
-  this.main.style.height = newSize - this.caption.offsetHeight -5 + 'px';
+  editor._stylist.style.height = newSize + 'px';
+  this.main.style.height = newSize - this.caption.offsetHeight + 'px';
 }
 
 Stylist.prototype.onUpdateToolbar = function()
