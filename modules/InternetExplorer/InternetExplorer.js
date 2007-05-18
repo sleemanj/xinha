@@ -144,7 +144,7 @@ InternetExplorer.prototype.inwardHtml = function(html)
    html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
    // ie eats scripts and comments at beginning of page, so
    // make sure there is something before the first script on the page
-   html = html.replace(/(&nbsp;)?([\s\S]*?)(<script|<!--)/i,"$2&nbsp;$3");
+   html = html.replace(/(<script|<!--)/i,"&nbsp;$1");
    
    return html;
 }
