@@ -93,9 +93,9 @@
   "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Dostępny limit: $max_foldersize_mb MB, Wolne: $free_space",
   "Please enter new name for this folder...":"Podaj nową nazwę dla tego folderu...",
 
-  "Cut":"Cut",
-  "Copy":"Copy",
-  "Paste":"Paste",
+  "Cut":"Wytnij",
+  "Copy":"Kopiuj",
+  "Paste":"Wklej",
   
   'Copy "$file" from "$dir" here': 'Skopiuj "$file" z "$dir" tutaj',
   'Copy folder "$file" from "$dir" here' : 'Skopiuj folder "$file" z "$dir" tutaj',
