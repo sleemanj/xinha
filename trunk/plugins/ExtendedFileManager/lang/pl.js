@@ -105,5 +105,6 @@
   "Source file/folder not found.":"Source file/folder not found.",
   "Paste failed.\nMaybe folder doesn't have write permission.": "Paste failed.\nMaybe folder doesn't have write permission.",
   "Could not create destination folder.":"Could not create destination folder.",
-  "Destination file/folder already exists.":"Destination file/folder already exists."
+  "Destination file/folder already exists.":"Destination file/folder already exists.",
+  "File pasted OK.": "Wklejono plik."
 };
