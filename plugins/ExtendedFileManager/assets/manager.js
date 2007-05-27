@@ -237,7 +237,7 @@ init = function ()
 	        }
     	}
     }
-    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor')) {
+    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor') && document.getElementById('f_backgroundColor').type == 'text') {
       // Hookup color pickers
 
       var pickerConfig = {
