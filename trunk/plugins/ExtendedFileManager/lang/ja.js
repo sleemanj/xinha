@@ -114,5 +114,5 @@
   "Paste failed.\nMaybe folder doesn't have write permission.": "貼り付けに失敗しました。\nフォルダに書き込み権限がない可能性があります。",
   "Could not create destination folder.":"転送先フォルダを作成できませんでした。",
   "Destination file/folder already exists.":"転送先ファイル/フォルダはすでに存在します。",
-  "File pasted OK.": "File pasted OK."
+  "File pasted OK.": "ファイルの貼り付けに成功しました。"
 };
