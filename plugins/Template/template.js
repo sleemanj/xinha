@@ -1,4 +1,4 @@
-// Template plugin for HTMLArea
+// Template plugin for Xinha
 // Implementation by Udo Schmal based on HTMLArea 3.0
 // Original Author - Udo Schmal www.Schaffrath-NeueMedien.de
 //
@@ -7,30 +7,30 @@
 // This notice MUST stay intact for use (see license.txt).
 
 function Template(editor) {
-        this.editor = editor;
-        var cfg = editor.config;
-        var self = this;
-	
-	// register the toolbar buttons provided by this plugin
-	cfg.registerButton({
-	id       : "template",
-	tooltip  : HTMLArea._lc("Insert template","Template"),
-	image    : editor.imgURL("ed_template.gif", "Template"),
-	textMode : false,
-	action   : function(editor) {
-			self.buttonPress(editor);
-		}
-	});
-	cfg.addToolbarElement("template", "inserthorizontalrule", 1);
+  this.editor = editor;
+  var cfg = editor.config;
+  var self = this;
+
+  // register the toolbar buttons provided by this plugin
+  cfg.registerButton({
+    id       : "template",
+    tooltip  : Xinha._lc("Insert template","Template"),
+    image    : editor.imgURL("ed_template.gif", "Template"),
+    textMode : false,
+    action   : function(editor) {
+                 self.buttonPress(editor);
+               }
+  });
+  cfg.addToolbarElement("template", "inserthorizontalrule", 1);
 }
 
 Template._pluginInfo = {
-	name          : "Template",
-	version       : "1.0",
-	developer     : "Udo Schmal",
-	developer_url : "http://www.schaffrath-neuemedien.de/",
-	c_owner       : "Udo Schmal & Schaffrath NeueMedien",
-	license       : "htmlArea"
+  name          : "Template",
+  version       : "1.0",
+  developer     : "Udo Schmal",
+  developer_url : "http://www.schaffrath-neuemedien.de/",
+  c_owner       : "Udo Schmal & Schaffrath NeueMedien",
+  license       : "htmlArea"
 };
 
 Template.prototype.onGenerate = function() {
@@ -66,13 +66,13 @@ Template.prototype.buttonPress = function(editor) {
       result.removeAttribute("style");
     return result;
   }
-  
+
     var content = getElement("content");
     var menu1 = getElement("menu1");
     var menu2 = getElement("menu2");
     var menu3 = getElement("menu3");
     switch (obj["templ"]) {
-	    case "1": menu1.style.position = "absolute";
+      case "1": menu1.style.position = "absolute";
                 menu1.style.right = "0px";
                 menu1.style.width = "28%";
                 menu1.style.backgroundColor = "#e1ddd9";
