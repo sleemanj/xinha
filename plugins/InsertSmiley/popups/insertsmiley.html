@@ -21,24 +21,24 @@ function Init() {
   var trow;
   for(var i = 1; i <= totalsmileys; i++) {
     if((i - 1) % 4 == 0) {
-	  trow = tbody.insertRow((i - 1) / 4);
-	}
-	// find new number to be found in smileys folder
-	inum = "";
-	if(i < 1000) {
-	  if(i < 100) {
-		if(i < 10) {
-		  inum = "000" + i;
-		} else {
-		  inum = "00" + i;
-		}
-	  } else {
-	    inum = "0" + i;
-	  }
-	} else {
-	  inum = i;
-	}
-	trow.insertCell((i - 1) % 4).innerHTML = "<a href=\"javascript:onOK('" + inum + "')\"><img style=\"border: 0px;\" alt=\"Smiley " + + i + "\" src=\""+ param.editor_url +"plugins/InsertSmiley/smileys/" + inum + ".gif\" />";
+    trow = tbody.insertRow((i - 1) / 4);
+  }
+  // find new number to be found in smileys folder
+  inum = "";
+  if(i < 1000) {
+    if(i < 100) {
+    if(i < 10) {
+      inum = "000" + i;
+    } else {
+      inum = "00" + i;
+    }
+    } else {
+      inum = "0" + i;
+    }
+  } else {
+    inum = i;
+  }
+  trow.insertCell((i - 1) % 4).innerHTML = "<a href=\"javascript:onOK('" + inum + "')\"><img style=\"border: 0px;\" alt=\"Smiley " + + i + "\" src=\""+ param.editor_url +"plugins/InsertSmiley/smileys/" + inum + ".gif\" />";
   }
   document.body.onkeypress = __dlg_key_press;
 }
