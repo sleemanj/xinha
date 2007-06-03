@@ -1,4 +1,4 @@
-// Charcounter for HTMLArea-3.0
+// Charcounter for Xinha
 // (c) Udo Schmal & L.N.Schaffrath NeueMedien
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
@@ -11,7 +11,7 @@ function CharCounter(editor) {
   this.onKeyPress = this.__onKeyPress;
 }
 
-HTMLArea.Config.prototype.CharCounter =
+Xinha.Config.prototype.CharCounter =
 {
   'showChar': true, // show the characters count,
   'showWord': true, // show the words count,
@@ -32,7 +32,7 @@ CharCounter._pluginInfo = {
 };
 
 CharCounter.prototype._lc = function(string) {
-    return HTMLArea._lc(string, "CharCounter");
+  return Xinha._lc(string, "CharCounter");
 };
 
 
@@ -41,7 +41,7 @@ CharCounter.prototype.onGenerateOnce = function() {
   if (this.charCount==null) {
     var charCount = document.createElement("span");
     charCount.style.padding = "2px 5px";
-    if(HTMLArea.is_ie) {
+    if(Xinha.is_ie) {
       charCount.style.styleFloat = "right";
     } else {
       charCount.style.cssFloat = "right";
@@ -52,7 +52,7 @@ CharCounter.prototype.onGenerateOnce = function() {
     brk.style.lineHeight =
     brk.style.fontSize = '1px';
     brk.style.clear = 'both';
-    if(HTMLArea.is_ie) {
+    if(Xinha.is_ie) {
       this.editor._statusBarTree.style.styleFloat = "left";
     } else {
       this.editor._statusBarTree.style.cssFloat = "left";
@@ -68,7 +68,7 @@ CharCounter.prototype.__onKeyPress= function(ev) {
     if (this.editor.config.CharCounter.maxHTML!=-1) {
       var contents = this.editor.getHTML();
       if (contents.length >= this.editor.config.CharCounter.maxHTML) {
-        HTMLArea._stopEvent(ev);
+        Xinha._stopEvent(ev);
         return true;
       }
     }
