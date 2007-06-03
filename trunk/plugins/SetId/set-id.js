@@ -5,13 +5,13 @@ function SetId(editor) {
 
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
-  id       : "setid",
-  tooltip  : this._lc("Set Id and Name"),
-  image    : editor.imgURL("set-id.gif", "SetId"),
-  textMode : false,
-  action   : function(editor) {
-               self.buttonPress(editor);
-             }
+    id       : "setid",
+    tooltip  : this._lc("Set Id and Name"),
+    image    : editor.imgURL("set-id.gif", "SetId"),
+    textMode : false,
+    action   : function(editor) {
+                 self.buttonPress(editor);
+               }
   });
   cfg.addToolbarElement("setid", "createlink", 1);
 }
@@ -28,7 +28,7 @@ SetId._pluginInfo = {
 };
 
 SetId.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'SetId');
+  return Xinha._lc(string, 'SetId');
 };
 
 
@@ -78,7 +78,7 @@ SetId.prototype.buttonPress = function(editor) {
           node.title = name;
           node.className = "hasid";
           node.innerHTML = html;
-          if (HTMLArea.is_ie) {
+          if (Xinha.is_ie) {
             range.pasteHTML(node.outerHTML);
           } else {
             editor.insertNodeAtSelection(node);
