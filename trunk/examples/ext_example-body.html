@@ -91,30 +91,42 @@
       xinha_config.width = settings.width;
       xinha_config.height = settings.height;
       xinha_config.sizeIncludesBars = settings.sizeIncludesBars;
+      xinha_config.sizeIncludesPanels = settings.sizeIncludesPanels;
       xinha_config.statusBar = settings.statusBar;
+      xinha_config.htmlareaPaste = settings.htmlareaPaste;
       xinha_config.mozParaHandler = settings.mozParaHandler;
+      xinha_config.getHtmlMethod = settings.getHtmlMethod;
       xinha_config.undoSteps = settings.undoSteps;
+      xinha_config.undoTimeout = settings.undoTimeout;
+      xinha_config.changeJustifyWithDirection = settings.changeJustifyWithDirection;
+      xinha_config.fullPage = settings.fullPage;
+      xinha_config.pageStyle = settings.pageStyle;
       xinha_config.baseHref = settings.baseHref;
+      xinha_config.expandRelativeUrl = settings.expandRelativeUrl;
       xinha_config.stripBaseHref = settings.stripBaseHref;
       xinha_config.stripSelfNamedAnchors = settings.stripSelfNamedAnchors;
       xinha_config.only7BitPrintablesInURLs = settings.only7BitPrintablesInURLs;
       xinha_config.sevenBitClean = settings.sevenBitClean;
       xinha_config.killWordOnPaste = settings.killWordOnPaste;
+      xinha_config.makeLinkShowsTarget = settings.makeLinkShowsTarget;
+      xinha_config.flowToolbars = settings.flowToolbars;
+      xinha_config.stripScripts = settings.stripScripts;
       xinha_config.flowToolbars = settings.flowToolbars;
       xinha_config.showLoading = settings.showLoading;
+      xinha_config.pageStyleSheets = ["own.css"];
 
+// Create a default configuration for the plugins
       if (typeof CharCounter != 'undefined') {
         xinha_config.CharCounter.showChar = settings.showChar;
         xinha_config.CharCounter.showWord = settings.showWord;
         xinha_config.CharCounter.showHtml = settings.showHtml;
       }
 
-      if (typeof CharacterMap != 'undefined') xinha_config.CharacterMap.mode = settings.CharacterMapMode;
-      if (typeof ListType != 'undefined') xinha_config.ListType.mode = settings.ListTypeMode;
-
-      if(typeof CSS != 'undefined') {
-        xinha_config.pageStyle = "@import url(custom.css);";
-      }
+      if(typeof CharacterMap != 'undefined') xinha_config.CharacterMap.mode = settings.CharacterMapMode;
+      if(typeof ListType != 'undefined') xinha_config.ListType.mode = settings.ListTypeMode;
+      if(typeof CSS != 'undefined') xinha_config.pageStyle = xinha_config.pageStyle + "\n" + "@import url(custom.css);";
+      if(typeof DynamicCSS != 'undefined') xinha_config.pageStyle = "@import url(dynamic.css);";
+      if(typeof Filter != 'undefined') xinha_config.Filters = ["Word", "Paragraph"];
 
       if(typeof Stylist != 'undefined') {
         // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
@@ -127,10 +139,6 @@
         // If you want to provide "friendly" names you can do so like
         // (you can do this for stylistLoadStylesheet as well)
         xinha_config.stylistLoadStyles('p.pink_text { color:pink }', {'p.pink_text' : 'Pretty Pink'});
-      }
-
-      if(typeof DynamicCSS != 'undefined') {
-        xinha_config.pageStyle = "@import url(dynamic.css);";
       }
 
       if(typeof InsertWords != 'undefined') {
@@ -150,10 +158,6 @@
           combos : [ { options: keywrds1, context: "body" },
                      { options: keywrds2, context: "li" } ]
         }
-      }
-
-      if(typeof Filter != 'undefined') {
-        xinha_config.Filters = ["Word", "Paragraph"];
       }
 
 // First create editors for the textareas.
