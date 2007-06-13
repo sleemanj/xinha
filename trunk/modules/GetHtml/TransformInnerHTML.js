@@ -38,7 +38,7 @@ HTMLArea.RegExpCache = [
 /*02*/  new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),// find attributes
 /*03*/  new RegExp().compile(/\/>/g),//strip singlet terminators
 /*04*/  new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g),//terminate singlet tags
-/*05*/  new RegExp().compile(/(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),//expand singlet attributes
+/*05*/  new RegExp().compile(/(<\w+\s+(\w*="[^"]*"\s+)*)(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),//expand singlet attributes
 /*06*/  new RegExp().compile(/(="[^']*)'([^'"]*")/),//check quote nesting
 /*07*/  new RegExp().compile(/&(?=[^<]*>)/g),//expand query ampersands
 /*08*/  new RegExp().compile(/<\s+/g),//strip tagstart whitespace
@@ -73,7 +73,7 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 		replace(c[11], function(str, p1, p2) { return ' '+p1.toLowerCase()+p2; }).//lowercase attribute names
 		replace(c[3], '>').//strip singlet terminators
 		replace(c[9], '$1>').//trim whitespace
-		replace(c[5], '$1="$1"$3').//expand singlet attributes
+		replace(c[5], '$1$3="$3"$4').//expand singlet attributes
 		replace(c[4], '<$1$2 />').//terminate singlet tags
 		replace(c[6], '$1$2').//check quote nesting
 	//	replace(c[7], '&amp;').//expand query ampersands
