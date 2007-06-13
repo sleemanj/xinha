@@ -1,4 +1,4 @@
-// Marquee plugin for HTMLArea
+// Marquee plugin for HTMLArea/Xinha
 // Implementation by Udo Schmal based on HTMLArea 3.0
 // Original Author - Udo Schmal, Schaffrath-NeueMedien
 //
@@ -35,7 +35,7 @@ InsertMarquee._pluginInfo = {
 };
 
 InsertMarquee.prototype._lc = function(string) {
-    return HTMLArea._lc(string, "InsertMarquee");
+    return Xinha._lc(string, "InsertMarquee");
 };
 
 InsertMarquee.prototype.buttonPress = function(editor, node) {

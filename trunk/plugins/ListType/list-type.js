@@ -1,6 +1,6 @@
 // ListType Plugin for Xinha
 // Toolbar Implementation by Mihai Bazon, http://dynarch.com/mishoo/
-HTMLArea.loadStyle( 'ListType.css', 'ListType' );
+Xinha.loadStyle( 'ListType.css', 'ListType' );
 
 function ListType( editor )
 {
@@ -11,20 +11,20 @@ function ListType( editor )
   if ( cfg.ListType.mode == 'toolbar' )
   {
   var options = {};
-    options[HTMLArea._lc( "Decimal numbers", "ListType" )] = "decimal";
-    options[HTMLArea._lc( "Lower roman numbers", "ListType" )] = "lower-roman";
-    options[HTMLArea._lc( "Upper roman numbers", "ListType" )] = "upper-roman";
-    options[HTMLArea._lc( "Lower latin letters", "ListType" )] = "lower-alpha";
-    options[HTMLArea._lc( "Upper latin letters", "ListType" )] = "upper-alpha";
-    if (!HTMLArea.is_ie)
+    options[Xinha._lc( "Decimal numbers", "ListType" )] = "decimal";
+    options[Xinha._lc( "Lower roman numbers", "ListType" )] = "lower-roman";
+    options[Xinha._lc( "Upper roman numbers", "ListType" )] = "upper-roman";
+    options[Xinha._lc( "Lower latin letters", "ListType" )] = "lower-alpha";
+    options[Xinha._lc( "Upper latin letters", "ListType" )] = "upper-alpha";
+    if (!Xinha.is_ie)
       // IE doesn't support this property; even worse, it complains
       // with a gross error message when we tried to select it,
       // therefore let's hide it from the damn "browser".
-      options[HTMLArea._lc( "Lower greek letters", "ListType" )] = "lower-greek";
+      options[Xinha._lc( "Lower greek letters", "ListType" )] = "lower-greek";
     var obj =
     {
       id            : "listtype",
-      tooltip       : HTMLArea._lc( "Choose list style type (for ordered lists)", "ListType" ),
+      tooltip       : Xinha._lc( "Choose list style type (for ordered lists)", "ListType" ),
       options       : options,
       action        : function( editor ) { self.onSelect( editor, this ); },
       refresh       : function( editor ) { self.updateValue( editor, this ); },
@@ -36,11 +36,11 @@ function ListType( editor )
   else
   {
     editor._ListType = editor.addPanel( 'right' );
-    HTMLArea.freeLater( editor, '_ListType' );
-    HTMLArea.addClass( editor._ListType, 'ListType' );
+    Xinha.freeLater( editor, '_ListType' );
+    Xinha.addClass( editor._ListType, 'ListType' );
     // hurm, ok it's pretty to use the background color for the whole panel,
     // but should not it be set by default when creating the panel ?
-    HTMLArea.addClass( editor._ListType.parentNode, 'dialog' );
+    Xinha.addClass( editor._ListType.parentNode, 'dialog' );
 
     editor.notifyOn( 'modechange',
       function(e,args)
@@ -76,7 +76,7 @@ function ListType( editor )
   }
 }
 
-HTMLArea.Config.prototype.ListType =
+Xinha.Config.prototype.ListType =
 {
   'mode': 'toolbar' // configuration mode : toolbar or panel
 };
@@ -149,8 +149,8 @@ ListType.prototype.createImage = function( listStyleType )
   var editor = this.editor;
   var a = document.createElement( 'a' );
   a.href = 'javascript:void(0)';
-  HTMLArea._addClass( a, listStyleType );
-  HTMLArea._addEvent( a, "click", function ()
+  Xinha._addClass( a, listStyleType );
+  Xinha._addEvent( a, "click", function ()
     {
       var parent = editor._ListType.currentListTypeParent;
       parent.style.listStyleType = listStyleType;
@@ -172,13 +172,13 @@ ListType.prototype.showActive = function( parent )
   for ( var i=0; i<activeDiv.childNodes.length; i++ )
   {
     var elt = activeDiv.childNodes[i];
-    if ( HTMLArea._hasClass( elt, defaultType ) )
+    if ( Xinha._hasClass( elt, defaultType ) )
     {
-      HTMLArea._addClass( elt, 'active' );
+      Xinha._addClass( elt, 'active' );
     }
     else
     {
-      HTMLArea._removeClass( elt, 'active' );
+      Xinha._removeClass( elt, 'active' );
     }
   }
 };

@@ -7,7 +7,7 @@
 
 var FindReplace = window.opener.FindReplace;
 var editor = FindReplace.editor;
-var is_mo = window.opener.HTMLArea.is_gecko;
+var is_mo = window.opener.Xinha.is_gecko;
 var tosearch = '';
 var pater = null;
 var buffer = null;
@@ -15,7 +15,7 @@ var matches = 0;
 var replaces = 0;
 var fr_spans = new Array();
 function _lc(string) {
-    return(window.opener.HTMLArea._lc(string, 'FindReplace'));
+    return(window.opener.Xinha._lc(string, 'FindReplace'));
 }
 function execSearch(params) {
 var ihtml = editor._doc.body.innerHTML;

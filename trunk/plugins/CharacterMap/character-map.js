@@ -1,6 +1,6 @@
-// Character Map plugin for HTMLArea
+// Character Map plugin for Xinha
 // Original Author - Bernhard Pfeifer novocaine@gmx.net
-HTMLArea.loadStyle( 'CharacterMap.css', 'CharacterMap' );
+Xinha.loadStyle( 'CharacterMap.css', 'CharacterMap' );
 
 function CharacterMap( editor )
 {
@@ -10,7 +10,7 @@ function CharacterMap( editor )
   cfg.registerButton(
     {
       id       : 'insertcharacter',
-      tooltip  : HTMLArea._lc( 'Insert special character', 'CharacterMap' ),
+      tooltip  : Xinha._lc( 'Insert special character', 'CharacterMap' ),
       image    : editor.imgURL( 'ed_charmap.gif', 'CharacterMap' ),
       textMode : false,
       action   : function( editor ) { self.buttonPress( editor ); }
@@ -21,7 +21,7 @@ function CharacterMap( editor )
   if ( cfg.CharacterMap.mode == 'panel' )
   {
     editor._CharacterMap = editor.addPanel( 'right' );
-    HTMLArea._addClass( editor._CharacterMap, 'CharacterMap' );
+    Xinha._addClass( editor._CharacterMap, 'CharacterMap' );
 
     editor.notifyOn( 'modechange',
       function( e, args )
@@ -56,7 +56,7 @@ function CharacterMap( editor )
 }
 
 // configuration mode : panel or popup
-HTMLArea.Config.prototype.CharacterMap =
+Xinha.Config.prototype.CharacterMap =
 {
   'mode': 'popup' // configuration mode : panel or popup
 };
@@ -96,7 +96,7 @@ CharacterMap.prototype.buttonPress = function( editor )
     editor._popupDialog( "plugin://CharacterMap/select_character", function( entity )
     {
       if ( !entity ) return false;
-      if ( HTMLArea.is_ie ) editor.focusEditor();
+      if ( Xinha.is_ie ) editor.focusEditor();
       editor.insertHTML( entity );
     }, null);
   }
@@ -107,13 +107,13 @@ CharacterMap.prototype.addEntity = function ( entite, pos )
   var editor = this.editor;
   var self = this;
   var a = document.createElement( 'a' );
-  HTMLArea._addClass( a, 'entity' );
+  Xinha._addClass( a, 'entity' );
   a.innerHTML = entite;
   a.href = 'javascript:void(0)';
-  HTMLArea._addClass(a, (pos%2)? 'light':'dark');
+  Xinha._addClass(a, (pos%2)? 'light':'dark');
   a.onclick = function()
   {
-    if (HTMLArea.is_ie) editor.focusEditor();
+    if (Xinha.is_ie) editor.focusEditor();
     editor.insertHTML( entite );
     //self._isActive = false;
     //editor.hidePanel( editor._CharacterMap );

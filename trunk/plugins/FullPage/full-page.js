@@ -40,7 +40,7 @@ FullPage._pluginInfo = {
 };
 
 FullPage.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'FullPage');
+    return Xinha._lc(string, 'FullPage');
 };
 
 FullPage.prototype.buttonPress = function(editor, id) {
@@ -80,8 +80,8 @@ FullPage.prototype.buttonPress = function(editor, id) {
 		var init = {
 			f_doctype      : editor.doctype,
 			f_title        : title,
-			f_body_bgcolor : HTMLArea._colorToRgb(doc.body.style.backgroundColor),
-			f_body_fgcolor : HTMLArea._colorToRgb(doc.body.style.color),
+			f_body_bgcolor : Xinha._colorToRgb(doc.body.style.backgroundColor),
+			f_body_fgcolor : Xinha._colorToRgb(doc.body.style.color),
 			f_base_style   : style1,
 			f_alt_style    : style2,
 			f_charset      : charset,
@@ -190,7 +190,7 @@ FullPage.prototype.setDocProp = function(params) {
 				head.appendChild(title);
 			} else while (node = title.lastChild)
 				title.removeChild(node);
-			if (!HTMLArea.is_ie)
+			if (!Xinha.is_ie)
 				title.appendChild(doc.createTextNode(val));
 			else
 				doc.title = val;

@@ -3,11 +3,11 @@
   * credit also to adios, who helped with reg exps:
   * http://www.sitepoint.com/forums/showthread.php?t=201052
   * 
-  * A replacement for HTMLArea.getHTML
+  * A replacement for Xinha.getHTML
   *
   * Features:
   *   - Generates XHTML code
-  *   - Much faster than HTMLArea.getHTML
+  *   - Much faster than Xinha.getHTML
   *   - Eliminates the hacks to accomodate browser quirks
   *   - Returns correct code for Flash objects and scripts
   *   - Formats html in an indented, readable format in html mode
@@ -32,7 +32,7 @@ GetHtmlImplementation._pluginInfo = {
 	license       : "htmlArea"
 };
 
-HTMLArea.RegExpCache = [
+Xinha.RegExpCache = [
 /*00*/  new RegExp().compile(/<\s*\/?([^\s\/>]+)[\s*\/>]/gi),//lowercase tags
 /*01*/  new RegExp().compile(/(\s+)_moz[^=>]*=[^\s>]*/gi),//strip _moz attributes
 /*02*/  new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),// find attributes
@@ -62,8 +62,8 @@ HTMLArea.RegExpCache = [
 /** 
   * Cleans HTML into wellformed xhtml
   */
-HTMLArea.prototype.cleanHTML = function(sHtml) {
-	var c = HTMLArea.RegExpCache;
+Xinha.prototype.cleanHTML = function(sHtml) {
+	var c = Xinha.RegExpCache;
 	sHtml = sHtml.
 		replace(c[0], function(str) { return str.toLowerCase(); } ).//lowercase tags/attribute names
 		replace(c[1], ' ').//strip _moz attributes
@@ -79,11 +79,11 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 	//	replace(c[7], '&amp;').//expand query ampersands
 		replace(c[8], '<').//strip tagstart whitespace
 		replace(c[10], ' ');//trim extra whitespace
-	if(HTMLArea.is_ie && c[13].test(sHtml)) {
+	if(Xinha.is_ie && c[13].test(sHtml)) {
 		sHtml = sHtml.replace(c[13],'$1'+this.stripBaseURL(RegExp.$3)+'"');
 	}
 	if(this.config.only7BitPrintablesInURLs) {
-		if (HTMLArea.is_ie) c[13].test(sHtml); // oddly the test below only triggers when we call this once before (IE6), in Moz it fails if tested twice
+		if (Xinha.is_ie) c[13].test(sHtml); // oddly the test below only triggers when we call this once before (IE6), in Moz it fails if tested twice
 		if ( c[13].test(sHtml)) {
 			try { //Mozilla returns an incorrectly encoded value with innerHTML
 				sHtml = sHtml.replace(c[13], '$1'+decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
@@ -98,34 +98,34 @@ HTMLArea.prototype.cleanHTML = function(sHtml) {
 /**
   * Prettyfies html by inserting linebreaks before tags, and indenting blocklevel tags
   */
-HTMLArea.indent = function(s, sindentChar) {
-	HTMLArea.__nindent = 0;
-	HTMLArea.__sindent = "";
-	HTMLArea.__sindentChar = (typeof sindentChar == "undefined") ? "  " : sindentChar;
-	var c = HTMLArea.RegExpCache;
-	if(HTMLArea.is_gecko) { //moz changes returns into <br> inside <pre> tags
+Xinha.indent = function(s, sindentChar) {
+	Xinha.__nindent = 0;
+	Xinha.__sindent = "";
+	Xinha.__sindentChar = (typeof sindentChar == "undefined") ? "  " : sindentChar;
+	var c = Xinha.RegExpCache;
+	if(Xinha.is_gecko) { //moz changes returns into <br> inside <pre> tags
 		s = s.replace(c[19], function(str){return str.replace(/<br \/>/g,"\n")});
 	}
 	s = s.replace(c[18], function(strn) { //skip pre and script tags
 	  strn = strn.replace(c[20], function(st,$1,$2) { //exclude comments
 		string = $2.replace(/[\n\r]/gi, " ").replace(/\s+/gi," ").replace(c[14], function(str) {
 			if (str.match(c[16])) {
-				var s = "\n" + HTMLArea.__sindent + str;
+				var s = "\n" + Xinha.__sindent + str;
 				// blocklevel openingtag - increase indent
-				HTMLArea.__sindent += HTMLArea.__sindentChar;
-				++HTMLArea.__nindent;
+				Xinha.__sindent += Xinha.__sindentChar;
+				++Xinha.__nindent;
 				return s;
 			} else if (str.match(c[15])) {
 				// blocklevel closingtag - decrease indent
-				--HTMLArea.__nindent;
-				HTMLArea.__sindent = "";
-				for (var i=HTMLArea.__nindent;i>0;--i) {
-					HTMLArea.__sindent += HTMLArea.__sindentChar;
+				--Xinha.__nindent;
+				Xinha.__sindent = "";
+				for (var i=Xinha.__nindent;i>0;--i) {
+					Xinha.__sindent += Xinha.__sindentChar;
 				}
-				return "\n" + HTMLArea.__sindent + str;
+				return "\n" + Xinha.__sindent + str;
 			} else if (str.match(c[17])) {
 				// singlet tag
-				return "\n" + HTMLArea.__sindent + str;
+				return "\n" + Xinha.__sindent + str;
 			}
 			return str; // this won't actually happen
 		});
@@ -139,9 +139,9 @@ HTMLArea.indent = function(s, sindentChar) {
     return s;
 };
 
-HTMLArea.getHTML = function(root, outputRoot, editor) {
+Xinha.getHTML = function(root, outputRoot, editor) {
 	var html = "";
-	var c = HTMLArea.RegExpCache;
+	var c = Xinha.RegExpCache;
 
 	if(root.nodeType == 11) {//document fragment
 	    //we can't get innerHTML from the root (type 11) node, so we 
@@ -191,19 +191,19 @@ HTMLArea.getHTML = function(root, outputRoot, editor) {
 			return strn;
 		});
 		//IE drops  all </li> tags in a list except the last one
-		if(HTMLArea.is_ie) {
+		if(Xinha.is_ie) {
 			html = html.replace(/<li( [^>]*)?>/g,'</li><li$1>').
 				replace(/(<(ul|ol)[^>]*>)[\s\n]*<\/li>/g, '$1').
 				replace(/<\/li>([\s\n]*<\/li>)+/g, '<\/li>');
 		}
-		if(HTMLArea.is_gecko)
+		if(Xinha.is_gecko)
 			html = html.replace(/<br \/>\n$/, ''); //strip trailing <br> added by moz
 		if (outputRoot) {
 			html += "</" + root_tag + ">";
 		}
-		html = HTMLArea.indent(html);
+		html = Xinha.indent(html);
 	};
-//	html = HTMLArea.htmlEncode(html);
+//	html = Xinha.htmlEncode(html);
 
 	return html;
 };
