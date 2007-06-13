@@ -39,7 +39,7 @@
 
   xinha_config = function()
   {
-    var    config = new HTMLArea.Config();
+    var    config = new Xinha.Config();
 
     if(typeof CSS != 'undefined')
     {

@@ -1,4 +1,4 @@
-// GUIDO Music Notation plugin for HTMLArea
+// GUIDO Music Notation plugin for Xinha
 // Implementation by Richard Christophe
 // Original Author - Richard Christophe cvrichard@infonie.fr
 //
@@ -42,7 +42,7 @@ NoteServer._pluginInfo = {
 };
 
 NoteServer.prototype._lc = function(string) {
-  return HTMLArea._lc(string, 'NoteServer');
+  return Xinha._lc(string, 'NoteServer');
 };
 
 NoteServer.prototype.buttonPress = function(editor) {
@@ -175,10 +175,10 @@ if (param["f_applet"] == false ){
 }
 
 // To test code source in textarea
-//if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("Source Code","NoteServer") + " :" + '<br> <textarea  cols=60 rows=10 style = "background: #FFFFE6">' +  param["f_code"] + '</textarea> <br>';
+//if (param["f_affcode"]) string2 = string2 + Xinha._lc("Source Code","NoteServer") + " :" + '<br> <textarea  cols=60 rows=10 style = "background: #FFFFE6">' +  param["f_code"] + '</textarea> <br>';
 
-if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("GUIDO Code","NoteServer") + " : "  + param["f_code"] + "<br>";
-if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + HTMLArea._lc("MIDI File","NoteServer") + "</a> <br>";
+if (param["f_affcode"]) string2 = string2 + Xinha._lc("GUIDO Code","NoteServer") + " : "  + param["f_code"] + "<br>";
+if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + Xinha._lc("MIDI File","NoteServer") + "</a> <br>";
 
   editor.focusEditor();
   editor.insertHTML(string2);

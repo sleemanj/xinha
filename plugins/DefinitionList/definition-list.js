@@ -1,5 +1,5 @@
-// DefinitionList plugin for HTMLArea
-// Distributed under the same terms as HTMLArea itself.
+// DefinitionList plugin for Xinha
+// Distributed under the same terms as Xinha itself.
 // This notice MUST stay intact for use (see license.txt).
 
 
@@ -45,7 +45,7 @@ DefinitionList.btnList = [
   ];
 
 DefinitionList.prototype._lc = function(string) {
-  return HTMLArea._lc(string, 'DefinitionList');
+  return Xinha._lc(string, 'DefinitionList');
 };
 
 DefinitionList.prototype.onGenerate = function() {

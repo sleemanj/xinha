@@ -7,7 +7,7 @@
 	
 	//Translation
 	function i18n(str) {
-        return HTMLArea._lc(str, 'ImageManager');
+        return Xinha._lc(str, 'ImageManager');
 	}
 
 
@@ -147,7 +147,7 @@
       || (origsize.h != param.f_height) )
     {
       // Yup, need to resize
-      var resized = HTMLArea._geturlcontent(_backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
+      var resized = Xinha._geturlcontent(_backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
       // alert(resized);
       resized = eval(resized);
       if(resized)

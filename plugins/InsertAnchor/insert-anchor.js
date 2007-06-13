@@ -29,7 +29,7 @@ InsertAnchor._pluginInfo = {
 };
 
 InsertAnchor.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'InsertAnchor');
+    return Xinha._lc(string, 'InsertAnchor');
 };
 
 InsertAnchor.prototype.onGenerate = function() {
@@ -79,7 +79,7 @@ InsertAnchor.prototype.buttonPress = function(editor) {
           a.title = anchor;
           a.className = "anchor";
           a.innerHTML = html;
-          if (HTMLArea.is_ie) {
+          if (Xinha.is_ie) {
             range.pasteHTML(a.outerHTML);
           } else {
             editor.insertNodeAtSelection(a);
