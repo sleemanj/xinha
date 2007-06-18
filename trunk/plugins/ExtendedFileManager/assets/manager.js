@@ -54,13 +54,29 @@ if (manager_mode == "link")
 else
 {
     var offsetForInputs = (Xinha.is_ie) ? 230 : 210;
-}    
+}   
+
+var h =  100 // space above files 
+       + 250 // files iframe
+       + offsetForInputs; 
+
+var win_dim = {width:650,height:h};
+window.resizeTo(win_dim.width,win_dim.height);
+if (!Xinha.is_ie)
+{
+  var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
+  var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
+}
+else
+{//IE does not have window.outer... , so center it on the screen at least
+  var x =  (self.screen.availWidth - win_dim.width) / 2;
+  var y =  (self.screen.availHeight - win_dim.height) / 2;	
+}
+window.moveTo(x,y);
+
 init = function ()
 {
     
-	var h =  100 // space above files 
-           + 250 // files iframe
-           + offsetForInputs;
     
     __dlg_init(null,  {width:650,height:h});
 
@@ -554,4 +570,11 @@ function resize()
 	return true;
 }
 addEvent(window, 'resize', resize);
-addEvent(window, 'load', init);
+if (Xinha.is_gecko)
+{// this runs the init function (translation) before all the images in the iframe have loaded
+	document.addEventListener("DOMContentLoaded", init, false);
+}
+else
+{
+	addEvent(window, 'load', init);
+}
