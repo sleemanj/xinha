@@ -144,7 +144,8 @@
 <body>
 
   <form action="javascript:var x = document.getElementById('editors_here');alert(x.myTextArea.value);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
-    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+ <div>
+     <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
       &lt;html&gt;
       &lt;head&gt;
         &lt;title&gt;Hello&lt;/title&gt;
@@ -181,11 +182,14 @@
     </textarea>
 
     <input type="submit" /> <input type="reset" />
+</div>
   </form>
-  <script language="javascript">
+  <script type="text/javascript">
     document.write(document.compatMode);
   </script>
+<div>
   <a href="#" onclick="xinha_editors.myTextArea.hidePanels();">Hide</a>
   <a href="#" onclick="xinha_editors.myTextArea.showPanels();">Show</a>
+</div>
 </body>
 </html>
