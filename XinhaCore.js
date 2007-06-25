@@ -2843,9 +2843,15 @@ Xinha.prototype.activateEditor = function()
       }
     } catch (ex) {}
   }
-  else if ( !Xinha.is_gecko && this._doc.body.contentEditable !== true )
+  else if ( Xinha.is_ie&& this._doc.body.contentEditable !== true )
   {
     this._doc.body.contentEditable = true;
+
+    if (this._iframe.contentWindow.event.srcElement.tagName.toLowerCase() == 'html') // if  clicked below the text (=body), the text cursor does not appear, see #1019 
+    {
+      var r = this._doc.body.createTextRange();
+      setTimeout (function () { r.collapse();  r.select();},100); // won't do without timeout, dunno why
+    }
   }
 
   Xinha._someEditorHasBeenActivated = true;
@@ -3134,7 +3140,8 @@ Xinha.prototype.setFullHTML = function(html)
 Xinha.prototype.setEditorEvents = function()
 {
   var editor=this;
-  var doc=this._doc.getElementsByTagName("html")[0];
+  var doc = (Xinha.is_ie) ? this._doc.getElementsByTagName("html")[0] : this._doc; // #1019 Cusor not jumping to editable part of window when clicked in IE, see also #1039
+
   editor.whenDocReady(
     function()
     {
