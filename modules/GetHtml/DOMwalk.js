@@ -52,7 +52,7 @@ Xinha.getHTML = function(root, outputRoot, editor)
 };
 
 Xinha.emptyAttributes = " checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade ";
-Xinha.elGetsNewLine = function (el) { return (" br meta link title ".indexOf(" " + el.tagName.toLowerCase() + " ") != -1);};
+Xinha.elGetsNewLine = function (el) { return (" br hr  meta link title ".indexOf(" " + el.tagName.toLowerCase() + " ") != -1);};
 
 Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
 {
@@ -303,7 +303,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
       }
       else
       {
-        html = Xinha.htmlEncode(root.data);
+        html = Xinha.htmlEncode(root.data.trim());
       }
     break;
 
