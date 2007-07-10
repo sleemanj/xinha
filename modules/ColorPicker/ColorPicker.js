@@ -363,6 +363,10 @@
       var left = 0;
       do
       {
+        if (e.style.position == 'fixed') 
+        {
+          this.table.style.position = 'fixed';
+        }
         top += e.offsetTop;
         left += e.offsetLeft;
         e = e.offsetParent;
@@ -887,4 +891,9 @@ Xinha.colorPicker.InputBinding = function(input,pickerConfig)
     var colPicker = new Xinha.colorPicker(pickerConfig);
 	  colPicker.open("",chooser, input.value ); 
   }
+  Xinha.freeLater(this,"chooser");
+}
+Xinha.colorPicker.InputBinding.prototype.setColor = function (color)
+{
+  this.chooser.style.backgroundColor = color;
 }
