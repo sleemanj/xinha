@@ -54,13 +54,29 @@ if (manager_mode == "link")
 else
 {
     var offsetForInputs = (Xinha.is_ie) ? 230 : 210;
-}    
+}   
+
+var h =  100 // space above files 
+       + 250 // files iframe
+       + offsetForInputs; 
+
+var win_dim = {width:650,height:h};
+window.resizeTo(win_dim.width,win_dim.height);
+if (!Xinha.is_ie)
+{
+  var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
+  var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
+}
+else
+{//IE does not have window.outer... , so center it on the screen at least
+  var x =  (self.screen.availWidth - win_dim.width) / 2;
+  var y =  (self.screen.availHeight - win_dim.height) / 2;	
+}
+window.moveTo(x,y);
+
 init = function ()
 {
     
-	var h =  100 // space above files 
-           + 250 // files iframe
-           + offsetForInputs;
     
     __dlg_init(null,  {width:650,height:h});
 
@@ -237,7 +253,7 @@ init = function ()
 	        }
     	}
     }
-    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor')) {
+    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor') && document.getElementById('f_backgroundColor').type == 'text') {
       // Hookup color pickers
 
       var pickerConfig = {
@@ -517,18 +533,32 @@ function refresh()
 
 function newFolder()
 {
-    var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
+  function createFolder(folder)
+  {
     var selection = document.getElementById('dirPath');
     var dir = selection.options[selection.selectedIndex].value;
 
     if(folder == thumbdir)
     {
-        alert(i18n('Invalid folder name, please choose another folder name.'));
-        return false;
+      alert(i18n('Invalid folder name, please choose another folder name.'));
+      return false;
     }
 
     if (folder && folder != '' && typeof imgManager != 'undefined')
-        imgManager.newFolder(dir, encodeURI(folder));
+    {
+      imgManager.newFolder(dir, encodeURI(folder));
+    }
+  }
+    // IE7 has crippled the prompt()
+  if ( Xinha.ie_version > 6 )
+  {
+    popupPrompt(i18n('Please enter name for new folder...'), i18n('Untitled'), createFolder, i18n("New Folder"));
+  }
+  else
+  {
+    var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
+    createFolder(folder);
+  }
 }
 
 
@@ -540,4 +570,11 @@ function resize()
 	return true;
 }
 addEvent(window, 'resize', resize);
-addEvent(window, 'load', init);
+if (Xinha.is_gecko)
+{// this runs the init function (translation) before all the images in the iframe have loaded
+	document.addEventListener("DOMContentLoaded", init, false);
+}
+else
+{
+	addEvent(window, 'load', init);
+}

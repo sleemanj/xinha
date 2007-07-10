@@ -57,6 +57,8 @@ Xinha.Config.prototype.ExtendedFileManager =
 
 // Over ride the _insertImage function in htmlarea.js.
 // Open up the ExtendedFileManger script instead.
+if(typeof ImageManager == 'undefined')
+{
 Xinha.prototype._insertImage = function(image) {
 
     var editor = this;  // for nested functions
@@ -187,6 +189,7 @@ Xinha.prototype._insertImage = function(image) {
     }, outparam);
 
 };
+}
 
 Xinha.prototype._linkFile = function(link) {
 

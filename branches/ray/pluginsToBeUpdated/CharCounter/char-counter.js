@@ -1,4 +1,4 @@
-// Charcounter for HTMLArea-3.0
+// Charcounter for Xinha
 // (c) Udo Schmal & L.N.Schaffrath NeueMedien
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
@@ -8,21 +8,21 @@ function CharCounter(editor) {
   this._Chars = 0;
   this._Words = 0;
   this._HTML = 0;
-  this.maxHTML = 1024;
   this.onKeyPress = this.__onKeyPress;
 }
 
-HTMLArea.Config.prototype.CharCounter =
+Xinha.Config.prototype.CharCounter =
 {
   'showChar': true, // show the characters count,
   'showWord': true, // show the words count,
   'showHtml': true, // show the exact html count
-  'separator': ' | ' // separator used to join informations
+  'separator': ' | ', // separator used to join informations
+  'maxHTML' : -1 // -1 for unlimited length, other number for limiting the length of the edited HTML
 };
 
 CharCounter._pluginInfo = {
   name          : "CharCounter",
-  version       : "1.3",
+  version       : "1.31",
   developer     : "Udo Schmal",
   developer_url : "http://www.schaffrath-neuemedien.de",
   sponsor       : "L.N.Schaffrath NeueMedien",
@@ -32,16 +32,16 @@ CharCounter._pluginInfo = {
 };
 
 CharCounter.prototype._lc = function(string) {
-    return HTMLArea._lc(string, "CharCounter");
+  return Xinha._lc(string, "CharCounter");
 };
 
 
-CharCounter.prototype.onGenerate = function() {
+CharCounter.prototype.onGenerateOnce = function() {
   var self = this;
   if (this.charCount==null) {
     var charCount = document.createElement("span");
     charCount.style.padding = "2px 5px";
-    if(HTMLArea.is_ie) {
+    if(Xinha.is_ie) {
       charCount.style.styleFloat = "right";
     } else {
       charCount.style.cssFloat = "right";
@@ -52,7 +52,7 @@ CharCounter.prototype.onGenerate = function() {
     brk.style.lineHeight =
     brk.style.fontSize = '1px';
     brk.style.clear = 'both';
-    if(HTMLArea.is_ie) {
+    if(Xinha.is_ie) {
       this.editor._statusBarTree.style.styleFloat = "left";
     } else {
       this.editor._statusBarTree.style.cssFloat = "left";
@@ -65,10 +65,10 @@ CharCounter.prototype.onGenerate = function() {
 
 CharCounter.prototype.__onKeyPress= function(ev) {
   if ((ev.keyCode != 8) && (ev.keyCode !=46)) { // not backspace & delete
-    if (this.maxHTML!=-1) {
+    if (this.editor.config.CharCounter.maxHTML!=-1) {
       var contents = this.editor.getHTML();
-      if (contents.length>=this.maxHTML) {
-        HTMLArea._stopEvent(ev);
+      if (contents.length >= this.editor.config.CharCounter.maxHTML) {
+        Xinha._stopEvent(ev);
         return true;
       }
     }

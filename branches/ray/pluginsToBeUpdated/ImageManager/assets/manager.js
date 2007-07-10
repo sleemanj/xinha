@@ -7,7 +7,7 @@
 	
 	//Translation
 	function i18n(str) {
-        return HTMLArea._lc(str, 'ImageManager');
+        return Xinha._lc(str, 'ImageManager');
 	}
 
 
@@ -26,8 +26,11 @@
 	}
 
 	//initialise the form
+  doneinit = 0; // Seems that in Opera the load event of the iframe re-fires this one also.
 	init = function () 
 	{
+    if(doneinit++) return;
+    
 		__dlg_init(null, {width:600,height:460});
 
 		__dlg_translate('ImageManager');
@@ -144,7 +147,7 @@
       || (origsize.h != param.f_height) )
     {
       // Yup, need to resize
-      var resized = HTMLArea._geturlcontent(_backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
+      var resized = Xinha._geturlcontent(_backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
       // alert(resized);
       resized = eval(resized);
       if(resized)
@@ -292,19 +295,44 @@
 	}
 
 
-	function newFolder() 
+	function newFolder()
 	{
-     var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
-		var selection = document.getElementById('dirPath');
-		var dir = selection.options[selection.selectedIndex].value;
+		function createFolder(folder)
+		{
+			var selection = document.getElementById('dirPath');
+			var dir = selection.options[selection.selectedIndex].value;
 
-				if(folder == thumbdir)
+			if(folder == thumbdir)
+			{
+				alert(i18n('Invalid folder name, please choose another folder name.'));
+				return false;
+			}
+
+			if (folder && folder != '' && typeof imgManager != 'undefined')
+			{
+				imgManager.newFolder(dir, encodeURI(folder));
+			}
+		}
+		// IE7 has crippled the prompt()
+		if (Xinha.ie_version > 6)
+		{
+			Dialog("newFolder.html", function(param)
+			{
+				if (!param) // user must have pressed Cancel
 				{
-					alert(i18n('Invalid folder name, please choose another folder name.'));
 					return false;
 				}
-
-				if (folder && folder != '' && typeof imgManager != 'undefined') 
-					imgManager.newFolder(dir, encodeURI(folder)); 
-   }
-	 addEvent(window, 'load', init);
+				else
+				{
+					var folder = param['f_foldername'];
+					createFolder(folder);
+				}
+			}, null);
+		}
+		else
+		{
+			var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
+			createFolder(folder);
+		}
+	}
+	addEvent(window, 'load', init);

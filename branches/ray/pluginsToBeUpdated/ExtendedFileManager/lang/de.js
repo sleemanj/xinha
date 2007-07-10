@@ -88,7 +88,7 @@
   "Image Size": "Bildgröße",
   "Other" : "Andere...",
   "Rename": "Umbenennen",
-  "Please enter new name for this file...": "Bite neuen Namen für diese Datei eingeben...",
+  "Please enter new name for this file...": "Bitte neuen Namen für diese Datei eingeben...",
   "Unable to rename file. File of the same name already exists or\nfolder doesn't have write permission.": "Umbenennen nicht möglich. Evtl. Dateiname schon vorhanden oder keine Schreibrechte.",
   "Cancelled rename.": "Umbenennen abgebrochen.",
   'File "$file" successfully uploaded.': 'Datei "$file" erfolgreich hochgeladen.',
@@ -111,5 +111,6 @@
   "Source file/folder not found.":"Quelldatei/-ordner nicht gefunden",
   "Paste failed.\nMaybe folder doesn't have write permission.": "Einfügen fehlgeschlagen.\nMöglicherweise hat der Ordner keine Schreibberechtigung.",
   "Could not create destination folder.":"Konnte Zielordner nicht erstellen.",
-  "Destination file/folder already exists.":"Zieldatei/-ordner existiert bereits"
+  "Destination file/folder already exists.":"Zieldatei/-ordner existiert bereits",
+  "File pasted OK.": "File pasted OK."
 };

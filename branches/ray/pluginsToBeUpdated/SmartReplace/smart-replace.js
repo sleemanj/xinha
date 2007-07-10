@@ -262,18 +262,18 @@ SmartReplace.prototype.buttonPress = function(opts, obj)
 {
 	var self = this;
 
-	if ( this.dialog.rootElem.style.display != 'none')
+	if ( this._dialog.dialog.rootElem.style.display != 'none')
 	{
-		return this.dialog.hide();
+		return this._dialog.hide();
 	}
 	var doOK = function()
 	{
-		var opts = self.dialog.hide();
+		var opts = self._dialog.hide();
 		self.toggleActivity((opts.enable) ? true : false); 
 		if (opts.convert)
 		{
 			self.replaceAll();
-			self.dialog.getElementById("convert").checked = false;
+			self._dialog.dialog.getElementById("convert").checked = false;
 		}
 	}
 	var inputs = 
@@ -281,48 +281,70 @@ SmartReplace.prototype.buttonPress = function(opts, obj)
 		enable : self.active ? "on" : '',
 		convert: ''
 	};
-	this.show(inputs, doOK);
+	this._dialog.show(inputs, doOK);
 };
 
 SmartReplace.prototype.onGenerateOnce = function()
 {
-  this._prepareDialog();
+  if( !this._dialog)
+  {
+    this._dialog = new SmartReplace.Dialog(this);
+  }
 };
 
-SmartReplace.prototype._prepareDialog = function()
+SmartReplace.Dialog = function (mainPluginObject)
 {
-  var self = this;
-  var editor = this.editor;
+  this.Dialog_nxtid = 0;
+  this.mainPluginObject = mainPluginObject;
+  this.id = { }; // This will be filled below with a replace, nifty
 
-  if(!this.html)
+  this.ready = false;
+  this.files  = false;
+  this.html   = false;
+  this.dialog = false;
+
+  this._prepareDialog();
+
+};
+
+SmartReplace.Dialog.prototype._prepareDialog = function()
+{
+  var pluginDialogObject = this;
+  var editor = this.mainPluginObject.editor;
+
+  if(this.html == false)
   {
-    Xinha._getback(_editor_url + 'plugins/SmartReplace/dialog.html', function(getback) { self.html = getback; self._prepareDialog(); });
+    Xinha._getback(_editor_url + 'plugins/SmartReplace/dialog.html', function(getback) { pluginDialogObject.html = getback; pluginDialogObject._prepareDialog(); });
     return;
   }
   
   // Now we have everything we need, so we can build the dialog.
-  this.dialog = new Xinha.Dialog(editor, this.html, 'SmartReplace',{width:300});
+  this.dialog = new Xinha.Dialog(editor, this.html, 'SmartReplace');
+
   this.ready = true;
 };
 
-SmartReplace.prototype.show = function(inputs, ok, cancel)
+SmartReplace.Dialog.prototype._lc = SmartReplace.prototype._lc;
+
+SmartReplace.Dialog.prototype.show = function(inputs, ok, cancel)
 {
   if(!this.ready)
   {
-    var self = this;
-    window.setTimeout(function() {self.show(inputs,ok,cancel);},100);
+    var pluginDialogObject = this;
+    window.setTimeout(function() {pluginDialogObject.show(inputs,ok,cancel);},100);
     return;
   }
 
   // Connect the OK and Cancel buttons
-  var self = this;
+  var dialog = this.dialog;
+  var pluginDialogObject = this;
   if(ok)
   {
     this.dialog.getElementById('ok').onclick = ok;
   }
   else
   {
-    this.dialog.getElementById('ok').onclick = function() {self.dialog.hide();};
+    this.dialog.getElementById('ok').onclick = function() {pluginDialogObject.hide();};
   }
 
   if(cancel)
@@ -331,11 +353,20 @@ SmartReplace.prototype.show = function(inputs, ok, cancel)
   }
   else
   {
-    this.dialog.getElementById('cancel').onclick = function() { self.dialog.hide()};
+    this.dialog.getElementById('cancel').onclick = function() { pluginDialogObject.hide()};
   }
+
+  // Show the dialog
+  this.mainPluginObject.editor.disableToolbar(['fullscreen','smartreplace']);
 
   this.dialog.show(inputs);
 
   // Init the sizes
   this.dialog.onresize();
+};
+
+SmartReplace.Dialog.prototype.hide = function()
+{
+  this.mainPluginObject.editor.enableToolbar();
+  return this.dialog.hide();
 };

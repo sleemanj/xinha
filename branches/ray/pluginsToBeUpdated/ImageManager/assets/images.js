@@ -6,7 +6,7 @@
  */
 
 	function i18n(str) {
-        return HTMLArea._lc(str, 'ImageManager');
+        return Xinha._lc(str, 'ImageManager');
 	}
 
 	function changeDir(newDir) 
@@ -16,13 +16,13 @@
 		// backend_url is defined in the calling page. For now we 
 		// assume it has a trailing &
 
-		location.href = _backend_url + "__function=images&dir="+newDir;
+		location.href = _backend_url + "__function=images&dir="+encodeURIComponent(newDir);
 	}
 
 
 	function newFolder(dir, newDir) 
 	{
-		location.href = _backend_url + "__function=images&dir="+dir+"&newDir="+newDir;
+		location.href = _backend_url + "__function=images&dir="+encodeURIComponent(dir)+"&newDir="+encodeURIComponent(newDir);
 	}
 
 	//update the dir list in the parent window.

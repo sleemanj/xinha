@@ -168,6 +168,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     style.position = 'absolute';
     style.top = '3px';
     style.left = '2px';
+    ondrag = function () {return false;};
   }
   captionBar.style.paddingLeft = '22px';
   rootElem.appendChild(this.icon);
@@ -660,13 +661,19 @@ Xinha.Dialog.prototype.showBackground = function()
 }
 Xinha.Dialog.prototype.posBackground = function(pos)
 {
-  this.background.style.top  = pos.top;
-  this.background.style.left = pos.left;
+  if (this.background.style.display != 'none')
+  {
+    this.background.style.top  = pos.top;
+    this.background.style.left = pos.left;
+  }
 }
 Xinha.Dialog.prototype.resizeBackground = function(size)
 {
-  this.background.style.width  = size.width;
-  this.background.style.height = size.height;
+  if (this.background.style.display != 'none')
+  {
+    this.background.style.width  = size.width;
+    this.background.style.height = size.height;
+  }
 }
 Xinha.Dialog.prototype.posDialog = function(pos)
 {

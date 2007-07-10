@@ -326,6 +326,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   // we prepare the dialog.
   if(typeof dTree == 'undefined')
   {
+    this.linker.editor.setLoadingMessage('Loading Tree script');
     Xinha._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
                        function() {lDialog._prepareDialog(); }
                       );
@@ -337,6 +338,7 @@ Linker.Dialog.prototype._prepareDialog = function()
     if(linker.lConfig.backend)
     {
         //get files from backend
+        this.linker.editor.setLoadingMessage('Loading files from backend');
         Xinha._postback(linker.lConfig.backend,
                           linker.lConfig.backend_data,
                           function(txt) {

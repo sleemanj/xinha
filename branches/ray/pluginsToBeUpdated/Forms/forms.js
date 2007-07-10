@@ -1,4 +1,4 @@
-// Form plugin for HTMLArea
+// Form plugin for Xinha
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 
@@ -71,7 +71,7 @@ Forms.btnList = [
   ];
 
 Forms.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'Forms');
+    return Xinha._lc(string, 'Forms');
 };
 
 Forms.prototype.onGenerate = function() {

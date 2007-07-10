@@ -12,11 +12,10 @@
 var SpellChecker = window.opener.SpellChecker;
 
 var Xinha    = window.opener.Xinha;
-var HTMLArea = Xinha;
 
 var _editor_url = window.opener._editor_url;
 
-var is_ie = HTMLArea.is_ie;
+var is_ie = Xinha.is_ie;
 var editor = SpellChecker.editor;
 var frame = null;
 var currentElement = null;
@@ -30,7 +29,7 @@ var to_p_dict = []; // List of words to add to personal dictionary.
 var to_r_list = []; // List of words to add to replacement list.
 
 function _lc(string) {
-  return HTMLArea._lc(string, 'SpellChecker');
+  return Xinha._lc(string, 'SpellChecker');
 }
 
 function makeCleanDoc(leaveFixed) {
@@ -76,7 +75,7 @@ function saveClicked() {
       data['to_r_list[' + i + '][1]'] = to_r_list[i][1];
     }
     // var win = window;
-    window.opener.HTMLArea._postback(_editor_url + '/plugins/SpellChecker/spell-check-savedicts.php', data);
+    window.opener.Xinha._postback(_editor_url + '/plugins/SpellChecker/spell-check-savedicts.php', data);
     window.close();
   }
   else
@@ -206,7 +205,7 @@ function initDocument() {
   modified = false;
   frame = document.getElementById("i_framecontent");
   var field = document.getElementById("f_content");
-  field.value = HTMLArea.getHTML(editor._doc.body, false, editor);
+  field.value = Xinha.getHTML(editor._doc.body, false, editor);
   var dict = document.getElementById("f_dictionary");
   if(typeof editor.config.SpellChecker.defaultDictionary != "undefined"
      && editor.config.SpellChecker.defaultDictionary != "") {
@@ -379,7 +378,7 @@ function finishedSpellChecking() {
   fixedWords = [];
   suggested_words = frame.contentWindow.suggested_words;
 
-  document.getElementById("status").innerHTML = "HTMLArea Spell Checker (<a href='readme-tech.html' target='_blank' title='Technical information'>info</a>)";
+  document.getElementById("status").innerHTML = "Xinha Spell Checker (<a href='readme-tech.html' target='_blank' title='Technical information'>info</a>)";
   var doc = frame.contentWindow.document;
         var spans = doc.getElementsByTagName("span");
         var sps = [];
@@ -391,7 +390,7 @@ function finishedSpellChecking() {
       el.__msh_wordClicked = wordClicked;
       el.onclick = function(ev) {
         ev || (ev = window.event);
-        ev && HTMLArea._stopEvent(ev);
+        ev && Xinha._stopEvent(ev);
         return this.__msh_wordClicked(false);
       };
       el.onmouseover = wordMouseOver;

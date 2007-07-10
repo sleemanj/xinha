@@ -38,7 +38,7 @@ DynamicCSS.parseStyleSheet=function(editor){
             if(iframe.styleSheets[i].title == "table borders") continue;
             
             // Mozilla
-            if(HTMLArea.is_gecko){
+            if(Xinha.is_gecko){
                 try{
                     cssArray=DynamicCSS.applyCSSRule(iframe.styleSheets[i].cssRules,cssArray);
                 }
@@ -92,8 +92,8 @@ DynamicCSS.applyCSSRule=function(cssRules,cssArray){
                     }
                     else{
                         className='none';
-                        if(tagName=='all') cssName=HTMLArea._lc("Default", 'DynamicCSS');
-                        else cssName='<'+HTMLArea._lc("Default", 'DynamicCSS')+'>';
+                        if(tagName=='all') cssName=Xinha._lc("Default", 'DynamicCSS');
+                        else cssName='<'+Xinha._lc("Default", 'DynamicCSS')+'>';
                     }
                     cssArray[tagName][className]=cssName;
                     DynamicCSS.cssLength++;
@@ -120,7 +120,7 @@ DynamicCSS._pluginInfo = {
 };
 
 DynamicCSS.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'DynamicCSS');
+    return Xinha._lc(string, 'DynamicCSS');
 };
 
 DynamicCSS.prototype.onSelect = function(editor, obj) {
@@ -135,7 +135,7 @@ DynamicCSS.prototype.onSelect = function(editor, obj) {
         DynamicCSS.lastClass=className;
     }
     else{
-        if(HTMLArea.is_gecko) parent.removeAttribute('class');
+        if(Xinha.is_gecko) parent.removeAttribute('class');
         else parent.removeAttribute('className');
     }
     editor.updateToolbar();

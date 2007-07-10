@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                   <th align="left"><l10n>Name:</l10n></th>
-                  <td colspan="3"><input type="text" name="[p_name]" atyle="width:100%" value="_(PopupWindow)" /></td>
+                  <td colspan="3"><input type="text" name="[p_name]" style="width:100%" value="_(PopupWindow)" /></td>
                 </tr>
                 <tr>
                   <th align="left"><l10n>Menu Bar:</l10n></th>
@@ -98,9 +98,9 @@
     </table>
   </fieldset>
 
-  <div class="buttons">
+  <div style="text-align:right">
     <input type="button" id="[ok]"     value="_(OK)"     />
-    <input type="button" id="[clear]" value="_(Remove Link)" onclick="this.form['[href]'].value='';this.form['[to]'].value='';document.getElementById('[ok]').click();" />
+    <input type="button" id="[clear]"  value="_(Remove Link)" onclick="this.form['[href]'].value='';this.form['[to]'].value='';document.getElementById('[ok]').click();" />
     <input type="button" id="[cancel]" value="_(Cancel)" />
   </div>
 </div>

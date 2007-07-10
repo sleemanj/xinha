@@ -9,7 +9,7 @@
 // $Id$
 // @TODO This is the default and won't be very useful to others.
 // We should make this better.
-HTMLArea.Config.prototype.cssPluginConfig =
+Xinha.Config.prototype.cssPluginConfig =
   {
     combos : [
       { label: "Syntax",

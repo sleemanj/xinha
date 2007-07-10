@@ -6,16 +6,16 @@
  */
 
 /**
- * To Enable the plug-in add the following line before HTMLArea is initialised.
+ * To Enable the plug-in add the following line before Xinha is initialised.
  *
- * HTMLArea.loadPlugin("ImageManager");
+ * Xinha.loadPlugin("ImageManager");
  *
  * Then configure the config.inc.php file, that is all.
  * For up-to-date documentation, please visit http://www.zhuo.org/htmlarea/
  */
 
 /**
- * It is pretty simple, this file over rides the HTMLArea.prototype._insertImage
+ * It is pretty simple, this file over rides the Xinha.prototype._insertImage
  * function with our own, only difference is the popupDialog url
  * point that to the php script.
  */
@@ -63,7 +63,7 @@ ImageManager._pluginInfo = {
 //  (most likely), if not, you may need to modify the php-xinha.php
 //  file to suit your setup.
 
-HTMLArea.Config.prototype.ImageManager =
+Xinha.Config.prototype.ImageManager =
 {
   'backend'    : _editor_url + 'plugins/ImageManager/backend.php?__plugin=ImageManager&',
   'backend_data' : null,
@@ -79,7 +79,7 @@ HTMLArea.Config.prototype.ImageManager =
 // Over ride the _insertImage function in htmlarea.js.
 // Open up the ImageManger script instead.
 
-HTMLArea.prototype._insertImage = function(image) {
+Xinha.prototype._insertImage = function(image) {
 
 	var editor = this;	// for nested functions
 	var outparam = null;
@@ -100,7 +100,7 @@ HTMLArea.prototype._insertImage = function(image) {
 
 		outparam =
 			{
-			f_url    : HTMLArea.is_ie ? image.src : image.src,
+			f_url    : Xinha.is_ie ? image.src : image.src,
 			f_alt    : image.alt,
 			f_border : image.style.borderWidth ? image.style.borderWidth : image.border,
 			f_align  : image.align,
@@ -188,7 +188,7 @@ HTMLArea.prototype._insertImage = function(image) {
 		}
 		var img = image;
 		if (!img) {
-			if (HTMLArea.is_ie) {
+			if (Xinha.is_ie) {
         var sel = editor._getSelection();
         var range = editor._createRange(sel);
         editor._doc.execCommand("insertimage", false, param.f_url);
