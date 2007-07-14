@@ -51,8 +51,7 @@ Xinha.getHTML = function(root, outputRoot, editor)
   }
 };
 
-Xinha.emptyAttributes = " checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade ";
-Xinha.elGetsNewLine = function (el) { return (" br hr  meta link title ".indexOf(" " + el.tagName.toLowerCase() + " ") != -1);};
+Xinha.emptyAttributes = " checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade "
 
 Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
 {
@@ -132,7 +131,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
       else if ( outputRoot )
       {
         closed = (!(root.hasChildNodes() || Xinha.needsClosingTag(root)));
-        html += ((Xinha.isBlockElement(root) || Xinha.elGetsNewLine(root)) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
+        html += ((Xinha.isBlockElement(root)) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
         var attrs = root.attributes;
         
         for ( i = 0; i < attrs.length; ++i )
@@ -303,7 +302,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
       }
       else
       {
-        html = Xinha.htmlEncode(root.data.trim());
+        html = Xinha.htmlEncode(root.data);
       }
     break;
 
