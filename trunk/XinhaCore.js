@@ -969,13 +969,13 @@ Xinha.Config = function()
 
   this.URIs =
   {
-   "blank": "popups/blank.html",
+   "blank": _editor_url + "popups/blank.html",
    "link":  _editor_url + "modules/CreateLink/link.html",
    "insert_image": _editor_url + "modules/InsertImage/insert_image.html",
    "insert_table":  _editor_url + "modules/InsertTable/insert_table.html",
-   "select_color": "select_color.html",
-   "about": "about.html",
-   "help": "editor_help.html"
+   "select_color": _editor_url + "popups/select_color.html",
+   "about": _editor_url + "popups/about.html",
+   "help": _editor_url + "popups/editor_help.html"
   };
 
 
@@ -2239,7 +2239,7 @@ Xinha.prototype.generate = function ()
 
     // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
-  iframe.src = _editor_url + editor.config.URIs.blank;
+  iframe.src = this.popupURL(editor.config.URIs.blank);
   iframe.id = "XinhaIFrame_" + this._textArea.id;
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
@@ -3967,7 +3967,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
         this._statusBarTree.appendChild(a);
         if ( i !== 0 )
         {
-          this._statusBarTree.appendChild(document.createTextNode(String.fromCharCode(0xbb)));
+          this._statusBarTree.appendChild(document.createTextNode(String.fromCharCode(0xbb)));          
         }
         Xinha.freeLater(a);
       }
