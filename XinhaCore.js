@@ -4871,7 +4871,7 @@ Xinha.prototype.outwardHtml = function(html)
   }
   
   //prevent execution of JavaScript (Ticket #685)
-  html = html.replace(/(<script[^>]*)(freezescript)/gi,"$1javascript");
+  html = html.replace(/(<script[^>]*((type=[\"\']text\/)|(language=[\"\'])))(freezescript)/gi,"$1javascript");
 
   // If in fullPage mode, strip the coreCSS
   if(this.config.fullPage)
@@ -4914,7 +4914,7 @@ Xinha.prototype.inwardHtml = function(html)
   
   html = this.inwardSpecialReplacements(html);
 
-  html = html.replace(/(<script[^>]*)(javascript)/gi,"$1freezescript");
+  html = html.replace(/(<script[^>]*((type=[\"\']text\/)|(language=[\"\'])))(javascript)/gi,"$1freezescript");
 
   // For IE's sake, make any URLs that are semi-absolute (="/....") to be
   // truely absolute
