@@ -5936,6 +5936,12 @@ Xinha._hasClass = function(el, className)
  *  @param {Function} handler A function that is called when an answer is received from the server with the responseText 
  *                             as argument                             
  */
+ 
+// mod_security (an apache module which scans incoming requests for potential hack attempts)
+// has a rule which triggers when it gets an incoming Content-Type with a charset
+// see ticket:1028 to try and work around this, if we get a failure in a postback
+// then Xinha._postback_send_charset will be set to false and the request tried again (once)
+Xinha._postback_send_charset = true;
 Xinha._postback = function(url, data, handler)
 {
   var req = null;
@@ -5965,6 +5971,11 @@ Xinha._postback = function(url, data, handler)
           handler(req.responseText, req);
         }
       }
+      else if(Xinha._postback_send_charset)
+      {        
+        Xinha._postback_send_charset = false;
+        Xinha._postback(url,data,handler);
+      }
       else
       {
         alert('An error has occurred: ' + req.statusText + '\nURL: ' + url);
@@ -5975,7 +5986,7 @@ Xinha._postback = function(url, data, handler)
   req.onreadystatechange = callBack;
 
   req.open('POST', url, true);
-  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'+(Xinha._postback_send_charset ? '; charset=UTF-8' : ''));
   //alert(content);
   req.send(content);
 };

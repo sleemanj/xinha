@@ -336,19 +336,9 @@ Linker.Dialog.prototype._prepareDialog = function()
   {
     if(linker.lConfig.backend)
     {
-      if(linker.lConfig.backend_data != null)
-      {
-        linker.lConfig.backend += (linker.lConfig.backend.indexOf("?") != -1) ? "&" : "?";  
-        var param = [];
-        for ( var i in linker.lConfig.backend_data )
-        {
-            param.push(i + '=' + encodeURIComponent(linker.lConfig.backend_data[i]));
-        }
-        linker.lConfig.backend += param.join("&");
-      }  
-
       //get files from backend
-      Xinha._getback(linker.lConfig.backend,
+      Xinha._postback(linker.lConfig.backend,
+                      linker.lConfig.backend_data, 
                           function(txt) {
                             try {
                                 lDialog.files = eval(txt);
