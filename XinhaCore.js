@@ -5683,7 +5683,7 @@ Xinha.prototype.popupURL = function(file)
     }
     url = _editor_url + "plugins/" + plugin + "/popups/" + popup;
   }
-  else if ( file.match(/^\/.*?/) )
+  else if ( file.match(/^\/.*?/) || file.match(/^https?:\/\//))
   {
     url = file;
   }
