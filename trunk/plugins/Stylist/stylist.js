@@ -136,6 +136,10 @@ Xinha.prototype._fillStylist = function()
               {
                 applicable = true;
               }
+              else
+              {
+                applicable = false;
+              }
             }
           }
           else
