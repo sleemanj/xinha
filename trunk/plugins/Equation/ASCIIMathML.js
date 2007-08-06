@@ -894,7 +894,7 @@ function translate(spanclassAM) {
 if (isIE) { // avoid adding MathPlayer info explicitly to each webpage
   document.write("<object id=\"mathplayer\"\
   classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>");
-  document.write("<?import namespace=\"m\" implementation=\"#mathplayer\"?>");
+  document.write("<"+"?import namespace=\"m\" implementation=\"#mathplayer\"?>");
 }
 
 // GO1.1 Generic onload by Brothercake 
