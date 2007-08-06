@@ -3328,7 +3328,7 @@ Xinha._pluginLoadStatus = {};
 Xinha.loadPlugins = function(plugins, callbackIfNotReady)
 {
   if ( !Xinha.isSupportedBrowser ) return;
-  
+  Xinha.setLoadingMessage (Xinha._lc("Loading plugins"));
   // Rip the ones that are loaded and look for ones that have failed
   var retVal = true;
   var nuPlugins = Xinha.cloneObject(plugins);
