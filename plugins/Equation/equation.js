@@ -55,7 +55,7 @@ function Equation(editor) {
 					self.onModeChange( args );
 				}
 			);
-    	Xinha.prependDom0Event (editor._textArea.form,'submit',function () {self.unParse();self.reParse = true});
+    	this.onBeforeSubmit = function () {debugger;self.unParse();self.reParse = true};
 	}
 	
 	if (typeof  AMprocessNode != "function")
