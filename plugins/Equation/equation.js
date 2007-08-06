@@ -55,7 +55,7 @@ function Equation(editor) {
 					self.onModeChange( args );
 				}
 			);
-    	this.onBeforeSubmit = function () {debugger;self.unParse();self.reParse = true};
+    	this.onBeforeSubmit = this.onBeforeUnload = function () {self.unParse();self.reParse = true};
 	}
 	
 	if (typeof  AMprocessNode != "function")
@@ -73,7 +73,7 @@ Xinha.Config.prototype.Equation =
 
 Equation._pluginInfo = {
 	name          : "ASCIIMathML Formula Editor",
-	version       : "2.0",
+	version       : "2.1 (2007-08-06)",
 	developer     : "Raimund Meyer",
 	developer_url : "http://rheinaufCMS.de",
 	c_owner       : "",
@@ -94,6 +94,7 @@ Equation.prototype.onUpdateToolbar = function()
 {
 	if (!Xinha.is_ie && this.reParse) AMprocessNode(this.editor._doc.body, false);
 };
+
 
 Equation.prototype.onModeChange = function( args )
 {
