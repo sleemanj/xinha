@@ -2325,6 +2325,7 @@ Xinha.prototype.generate = function ()
     'unload',
     function()
     {
+      editor.firePluginEvent('onBeforeUnload');
       textarea.value = editor.outwardHtml(editor.getHTML());
       if (!Xinha.is_ie)
       {

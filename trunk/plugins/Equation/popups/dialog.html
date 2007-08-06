@@ -37,7 +37,8 @@
   <script type="text/javascript">
    window.resizeTo(500, 300);
 var showasciiformulaonhover = false;
-Xinha = window.opener.Xinha;
+if (typeof Xinha == "undefined")
+	Xinha = window.opener.Xinha;
 
 function i18n(str) {
   return (Xinha._lc(str, 'Equation'));

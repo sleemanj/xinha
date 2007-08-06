@@ -9,30 +9,26 @@ Just add the next line to your (X)HTML page with this file in the same folder:
 <script type="text/javascript" src="ASCIIMathML.js"></script>
 This is a convenient and inexpensive solution for authoring MathML.
 
-Version 1.4.7 Aug 7, 2005, (c) Peter Jipsen http://www.chapman.edu/~jipsen
+Version 1.4.7 Dec 15, 2005, (c) Peter Jipsen http://www.chapman.edu/~jipsen
 Latest version at http://www.chapman.edu/~jipsen/mathml/ASCIIMathML.js
 For changes see http://www.chapman.edu/~jipsen/mathml/asciimathchanges.txt
 If you use it on a webpage, please send the URL to jipsen@chapman.edu
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation; either version 2.1 of the License, or (at
- your option) any later version.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
 
- This program is distributed in the hope that it will be useful, 
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License (at http://www.gnu.org/licenses/lgpl.html) 
- for more details.
- 
- NOTE: I have changed the license from GPL to LGPL according to a permission 
- from the author (see http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=4150#p4150)
- Raimund Meyer 11-29-2006
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License (at http://www.gnu.org/copyleft/gpl.html) 
+for more details.
 */
 
 var checkForMathML = true;   // check if browser can display MathML
 var notifyIfNoMathML = true; // put note at top of page if no MathML capability
-
+var alertIfNoMathML = false;  // show alert box if no MathML capability
 if ( typeof mathcolor == "undefined" )
 {
 	var mathcolor = "red";      // change it to "" (to inherit) or any other color
@@ -193,6 +189,8 @@ var AMsymbols = [
 {input:"-<",  tag:"mo", output:"\u227A", tex:"prec", ttype:CONST},
 {input:"-lt", tag:"mo", output:"\u227A", tex:null, ttype:CONST},
 {input:">-",  tag:"mo", output:"\u227B", tex:"succ", ttype:CONST},
+{input:"-<=", tag:"mo", output:"\u2AAF", tex:"preceq", ttype:CONST},
+{input:">-=", tag:"mo", output:"\u2AB0", tex:"succeq", ttype:CONST},
 {input:"in",  tag:"mo", output:"\u2208", tex:null, ttype:CONST},
 {input:"!in", tag:"mo", output:"\u2209", tex:"notin", ttype:CONST},
 {input:"sub", tag:"mo", output:"\u2282", tex:"subset", ttype:CONST},
@@ -448,8 +446,10 @@ function AMgetSymbol(str) {
     st = str.slice(0,1); //take 1 character
     tagst = (("A">st || st>"Z") && ("a">st || st>"z")?"mo":"mi");
   }
-  if (st=="-" && AMpreviousSymbol==INFIX)
+  if (st=="-" && AMpreviousSymbol==INFIX) {
+    AMcurrentSymbol = INFIX;  //trick "/" into recognizing "-" on second parse
     return {input:st, tag:tagst, output:st, ttype:UNARY, func:true};
+  }
   return {input:st, tag:tagst, output:st, ttype:CONST};
 }
 
@@ -539,7 +539,7 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
                              document.createTextNode(symbol.output)),str];
       if (typeof symbol.func == "boolean" && symbol.func) { // functions hack
         st = str.charAt(0);
-        if (st=="^" || st=="_" || st=="/" || st=="|") {
+        if (st=="^" || st=="_" || st=="/" || st=="|" || st==",") {
           return [AMcreateMmlNode(symbol.tag,
                     document.createTextNode(symbol.output)),str];
         } else {
@@ -616,7 +616,6 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
     var st = "";
     if (result[0].lastChild!=null)
       st = result[0].lastChild.firstChild.nodeValue;
-//alert(result[0].lastChild+"***"+st);
     if (st == "|") { // its an absolute value subterm
       node = AMcreateMmlNode("mo",document.createTextNode(symbol.output));
       node = AMcreateMmlNode("mrow",node);
@@ -777,7 +776,8 @@ function AMparseMath(str) {
   AMnestingDepth = 0;
   node.appendChild(AMparseExpr(str.replace(/^\s+/g,""),false)[0]);
   node = AMcreateMmlNode("math",node);
-  if (showasciiformulaonhover) node.setAttribute("title",str);
+  if (showasciiformulaonhover)                      //fixed by djhsu so newline
+    node.setAttribute("title",str.replace(/\s+/g," "));//does not show in Gecko
   if (mathfontfamily != "" && (isIE || mathfontfamily != "serif")) {
     var fnode = AMcreateElementXHTML("font");
     fnode.setAttribute("face",mathfontfamily);
@@ -838,9 +838,12 @@ function AMprocessNodeR(n, linebreaks) {
         if (checkForMathML) {
           checkForMathML = false;
           var nd = AMisMathMLavailable();
-          AMnoMathML = nd != null
+          AMnoMathML = nd != null;
           if (AMnoMathML && notifyIfNoMathML) 
-            AMbody.insertBefore(nd,AMbody.childNodes[0]);
+            if (alertIfNoMathML)
+              alert("To view the ASCIIMathML notation use Internet Explorer 6 +\nMathPlayer (free from www.dessci.com)\n\
+                or Firefox/Mozilla/Netscape");
+            else AMbody.insertBefore(nd,AMbody.childNodes[0]);
         }
         if (!AMnoMathML) {
           frg = AMstrarr2docFrag(arr,n.nodeType==8);
