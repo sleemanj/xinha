@@ -54,7 +54,7 @@ function ListType( editor )
     var divglobal = document.createElement( 'div' );
     divglobal.style.height = '90px';
     var div = document.createElement( 'div' );
-    div.id = 'LTdivUL';
+    this.divUL = div;
     div.style.display = 'none';
     for ( var i=0; i<elts_ul.length; i++ )
     {
@@ -62,7 +62,7 @@ function ListType( editor )
     }
     divglobal.appendChild( div );
     var div = document.createElement( 'div' );
-    div.id = 'LTdivOL';
+    this.divOL = div;
     div.style.display = 'none';
     for ( var i=0; i<elts_ol.length; i++ )
     {
@@ -163,9 +163,9 @@ ListType.prototype.createImage = function( listStyleType )
 
 ListType.prototype.showActive = function( parent )
 {
-  var activeDiv = document.getElementById( ( parent.tagName.toLowerCase() == 'ul' )? 'LTdivUL':'LTdivOL' );
-  document.getElementById( 'LTdivUL' ).style.display = 'none';
-  document.getElementById( 'LTdivOL' ).style.display = 'none';
+  var activeDiv = ( parent.tagName.toLowerCase() == 'ul' ) ? this.divUL : this.divOL;
+  this.divUL.style.display = 'none';
+  this.divOL.style.display = 'none';
   activeDiv.style.display = 'block';
   var defaultType = parent.style.listStyleType;
   if ( '' == defaultType ) defaultType = ( parent.tagName.toLowerCase() == 'ul' )? 'disc':'decimal';
