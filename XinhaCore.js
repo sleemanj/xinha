@@ -2036,9 +2036,8 @@ Xinha.prototype.generate = function ()
   if (Xinha.is_ie)
   {
     url = _editor_url + 'modules/InternetExplorer/InternetExplorer.js';
-    if ( typeof InternetExplorer == 'undefined' && !document.getElementById(url) )
+    if ( !Xinha.loadPlugins(["InternetExplorer"], function() { editor.generate(); }, url ) )
     {            
-      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
@@ -2046,9 +2045,8 @@ Xinha.prototype.generate = function ()
   else
   {
     url = _editor_url + 'modules/Gecko/Gecko.js';
-    if ( typeof Gecko == 'undefined' && !document.getElementById(url) )
+    if ( !Xinha.loadPlugins(["Gecko"], function() { editor.generate(); }, url ) )
     {            
-      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
@@ -2065,16 +2063,14 @@ Xinha.prototype.generate = function ()
   }
   
   url = _editor_url + 'modules/FullScreen/full-screen.js';
-  if ( typeof FullScreen == "undefined" && !document.getElementById(url) )
+  if ( !Xinha.loadPlugins(["FullScreen"], function() { editor.generate(); }, url ))
   {
-    Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, url );
     return false;
   }
   
   url = _editor_url + 'modules/ColorPicker/ColorPicker.js';
-  if ( typeof ColorPicker == 'undefined' && !document.getElementById(url) )
+  if ( !Xinha.loadPlugins(["ColorPicker"], function() { editor.generate(); } , url ) )
   {
-    Xinha.loadPlugin("ColorPicker", function() { editor.generate(); } , url );
     return false;
   }
   else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
@@ -2091,27 +2087,24 @@ Xinha.prototype.generate = function ()
         break;
         case "insertimage":
           url = _editor_url + 'modules/InsertImage/insert_image.js';
-          if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' && !document.getElementById(url) )
+          if ( typeof Xinha.prototype._insertImage == 'undefined' && !Xinha.loadPlugins(["InsertImage"], function() { editor.generate(); } , url ) )
           {
-            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertImage != 'undefined') editor.registerPlugin('InsertImage');
         break;
         case "createlink":
           url = _editor_url + 'modules/CreateLink/link.js';
-          if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' && !document.getElementById(url))
+          if ( typeof Linker == 'undefined' && !Xinha.loadPlugins(["CreateLink"], function() { editor.generate(); } , url ))
           {
-            Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof CreateLink != 'undefined') editor.registerPlugin('CreateLink');
         break;
         case "inserttable":
           url = _editor_url + 'modules/InsertTable/insert_table.js';
-          if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' && !document.getElementById(url) )
+          if ( !Xinha.loadPlugins(["InsertTable"], function() { editor.generate(); } , url ) )
           {
-            Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
@@ -2132,9 +2125,8 @@ Xinha.prototype.generate = function ()
         var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerBest.js';
       break;
     }
-    if ( typeof EnterParagraphs == 'undefined'  && !document.getElementById(ParaHandlerPlugin) )
+    if (  !Xinha.loadPlugins(["EnterParagraphs"], function() { editor.generate(); }, ParaHandlerPlugin ) )
     {
-      Xinha.loadPlugin("EnterParagraphs", function() { editor.generate(); }, ParaHandlerPlugin );
       return false;
     }
     editor.registerPlugin('EnterParagraphs');
@@ -2150,9 +2142,8 @@ Xinha.prototype.generate = function ()
     break;
   }
   
-  if (typeof GetHtmlImplementation == 'undefined'  && !document.getElementById(getHtmlMethodPlugin))
+  if ( !Xinha.loadPlugins(["GetHtmlImplementation"], function() { editor.generate(); } , getHtmlMethodPlugin))
   {
-    Xinha.loadPlugin("GetHtmlImplementation", function() { editor.generate(); } , getHtmlMethodPlugin);
     return false;        
   }
   else editor.registerPlugin('GetHtmlImplementation');
@@ -3325,9 +3316,10 @@ Xinha._pluginLoadStatus = {};
 /** Static function that loads the plugins (see xinha_plugins in NewbieGuide)
  * @param {Array} plugins
  * @param {Function} callbackIfNotReady function that is called repeatedly until all files are
+ * @param {String} optional url URL of the plugin file; obviously plugins should contain only one item if url is given
  * @returns {Boolean} true if all plugins are loaded, false otherwise
  */
-Xinha.loadPlugins = function(plugins, callbackIfNotReady)
+Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
 {
   if ( !Xinha.isSupportedBrowser ) return;
   Xinha.setLoadingMessage (Xinha._lc("Loading plugins"));
@@ -3345,8 +3337,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady)
       Xinha.loadPlugin(p,
         function(plugin)
         {
-          // @todo : try to avoid the use of eval()
-          if ( eval('typeof ' + plugin) != 'undefined' )
+          if ( typeof window[plugin] != 'undefined' )
           {
             Xinha._pluginLoadStatus[plugin] = 'ready';
           }
@@ -3359,7 +3350,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady)
             // by just skipping them.
             Xinha._pluginLoadStatus[plugin] = 'failed';
           }
-        }
+        },url
       );
       retVal = false;
     }
