@@ -10,9 +10,11 @@
 //   http://dynarch.com/mishoo
 //
 // $Id$
-Xinha = window.opener.Xinha;
+if(typeof Xinha == 'undefined')
+  Xinha = window.opener.Xinha;
+
 // Backward compatibility will be removed some time or not?
-HTMLArea = window.opener.Xinha;
+HTMLArea = Xinha;
 
 function getAbsolutePos(el) {
 	var r = { x: el.offsetLeft, y: el.offsetTop };
