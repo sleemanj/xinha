@@ -2012,7 +2012,7 @@ Xinha.prototype.generate = function ()
     }
     if ( !found )
     {
-      Xinha.loadStyle(_editor_css,null,"XinhaCoreDesign");
+      Xinha.loadStyle(_editor_css,null,"XinhaCoreDesign",true);
     }
   }
   
@@ -3481,7 +3481,7 @@ Xinha.prototype.firePluginEvent = function(methodName)
  * @param {String} id optional a unique id for identifiing the created link element, e.g. for avoiding double loading 
  *                 or later removing it again
  */
-Xinha.loadStyle = function(style, plugin, id)
+Xinha.loadStyle = function(style, plugin, id,prepend)
 {
   var url = _editor_url || '';
   if ( plugin )
@@ -3504,7 +3504,15 @@ Xinha.loadStyle = function(style, plugin, id)
   link.href = url;
   link.type = "text/css";
   if (id) link.id = id;
-  head.appendChild(link);
+  if (prepend)
+  {
+    head.insertBefore(link,head.getElementsByTagName('link')[0]);
+  }
+  else
+  {
+    head.appendChild(link);
+  }
+  
 };
 
 
@@ -5751,7 +5759,7 @@ Xinha.prototype._toggleBorders = function()
 Xinha.addCoreCSS = function(html)
 {
     var coreCSS = 
-    "<style title=\"Xinha Internal CSS\" type=\"text/css\">"
+    "<style id=\"XinhaInternalCSS\" type=\"text/css\">"
     + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;}\n"
     + "html, body { border: 0px; } \n"
     + "body { background-color: #ffffff; } \n" 
@@ -5779,7 +5787,7 @@ Xinha.addCoreCSS = function(html)
  */
 Xinha.stripCoreCSS = function(html)
 {
-  return html.replace(/<style[^>]+title="Xinha Internal CSS"(.|\n)*?<\/style>/i, ''); 
+  return html.replace(/<style[^>]+id="XinhaInternalCSS"(.|\n)*?<\/style>/i, ''); 
 }
 /** Removes one CSS class (that is one of possible more parts 
  *   separated by spaces) from a given element
