@@ -55,7 +55,7 @@ function Equation(editor) {
 					self.onModeChange( args );
 				}
 			);
-    	this.onBeforeSubmit = this.onBeforeUnload = function () {self.unParse();self.reParse = true};
+		this.onBeforeSubmit = this.onBeforeUnload = function () {self.unParse();};
 	}
 	
 	if (typeof  AMprocessNode != "function")
@@ -66,14 +66,14 @@ function Equation(editor) {
 
 Xinha.Config.prototype.Equation =
 {
-	"mathcolor" : "red",       // change it to "" (to inherit) or any other color
+	"mathcolor" : "black",       // change it to "" (to inherit) or any other color
 	"mathfontfamily" : "serif" // change to "" to inherit (works in IE) 
                                // or another family (e.g. "arial")
 }
 
 Equation._pluginInfo = {
 	name          : "ASCIIMathML Formula Editor",
-	version       : "2.1 (2007-08-06)",
+	version       : "2.2 (2007-08-17)",
 	developer     : "Raimund Meyer",
 	developer_url : "http://rheinaufCMS.de",
 	c_owner       : "",
@@ -92,9 +92,21 @@ Equation.prototype.onGenerate = function()
 };
 Equation.prototype.onUpdateToolbar = function() 
 {
-	if (!Xinha.is_ie && this.reParse) AMprocessNode(this.editor._doc.body, false);
+	var e = this.editor;
+	if (!Xinha.is_ie && this.reParse)
+	{
+		AMprocessNode(e._doc.body, false);
+		this.reParse = false;
+	}
+	if (!Xinha.is_ie)
+	{
+		var span = e._getFirstAncestor(e.getSelection(),['span']);
+		if ( span && span.className == "AM" )
+		{
+			e.selectNodeContents(span);
+		}
+	}
 };
-
 
 Equation.prototype.onModeChange = function( args )
 {
@@ -133,7 +145,7 @@ Equation.prototype.unParse = function ()
 	for (var i = 0;i<spans.length;i++)
 	{
 		var node = spans[i];
-		if (node.className.indexOf ("AM") == -1) continue;
+		if (node.className.indexOf ("AM") == -1 || node.getElementsByTagName("math").length == 0) continue;
 		var formula = node.getAttribute("title");
 		node.innerHTML = formula;
 		node.setAttribute("title", null);
@@ -171,7 +183,7 @@ Equation.prototype.insert = function (param)
 			if (formula != '')
 			{
 				span.innerHTML = formula;
-				span.title = formula;
+				if (!Xinha.is_ie) span.title = formula;
 			}
 			else
 			{
@@ -191,7 +203,7 @@ Equation.prototype.insert = function (param)
 			}
 			else
 			{
-				this.editor.insertHTML('<span class="AM" title="'+formula+'">'+formula+'</span>');
+				this.editor.insertHTML('<span class="AM">'+formula+'</span>');
 			}
 		}
 		if (!Xinha.is_ie) AMprocessNode(this.editor._doc.body, false);
