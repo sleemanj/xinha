@@ -6840,7 +6840,10 @@ Xinha.free = function(obj, prop)
   }
   else if ( obj )
   {
-    try { obj[prop] = null; } catch(x) {}
+    if (prop != 'src') // if src is set to null a file named "null" is requested from the server (see #1001)
+    {
+      try { obj[prop] = null; } catch(x) {}
+    }
   }
 };
 
