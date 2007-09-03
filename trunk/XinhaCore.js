@@ -670,9 +670,10 @@ Xinha.Config = function()
    */
   this.stripBaseHref = true;
 
-   /**  We can strip the url of the editor page from named links (eg &lt;a href="#top"&gt;...&lt;/a&gt;)
-   *  reason for this is that mozilla at least (and IE ?) prefixes location.href to any anchor
-   *  that don't have a url prefixing them<br />
+   /**  We can strip the url of the editor page from named links (eg &lt;a href="#top"&gt;...&lt;/a&gt;) and links 
+   *  that consist only of URL parameters (eg &lt;a href="?parameter=value"&gt;...&lt;/a&gt;)
+   *  reason for this is that browsers tend to prefixe location.href to any href that
+   *  that don't have a full url<br />
    *  Default: <code>true</code>
    *  @type Boolean
    */
@@ -5019,8 +5020,8 @@ Xinha.prototype.fixRelativeLinks = function(html)
   
   if ( typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors )
   {
-    var stripRe = new RegExp(Xinha.escapeStringForRegExp(document.location.href.replace(/&/g,'&amp;')) + '(#[^\'" ]*)', 'g');
-    html = html.replace(stripRe, '$1');
+    var stripRe = new RegExp("((href|src|background)=\")("+Xinha.escapeStringForRegExp(document.location.href.replace(/&/g,'&amp;')) + ')([#?][^\'" ]*)', 'g');
+    html = html.replace(stripRe, '$1$4');
   }
 
   if ( typeof this.config.stripBaseHref != 'undefined' && this.config.stripBaseHref )
