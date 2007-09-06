@@ -177,8 +177,18 @@ Xinha.prototype._insertImage = function(image) {
                 case "f_borderColor": img.style.borderColor =  value; break;
                 case "f_backgroundColor": img.style.backgroundColor = value; break;
                 case "f_align"  : img.align  = value; break;
-                case "f_width"  : img.width = parseInt(value || "0"); break;
-                case "f_height"  : img.height = parseInt(value || "0"); break;
+                case "f_width"  : 
+                    if ( parseInt( value ) > 0 )
+                    {
+                        img.width = parseInt(value);
+                    }
+                break;
+                case "f_height"  : 
+                    if ( parseInt( value ) > 0 )
+                    {
+                        img.height = parseInt(value);
+                    }
+                break;
                 case "f_padding": img.style.padding =
                                           /[^0-9]/.test(value) ? value : (value != '') ? (parseInt(value) + 'px') :''; break;
                 case "f_margin": img.style.margin =
