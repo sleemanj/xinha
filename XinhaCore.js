@@ -6841,7 +6841,7 @@ Xinha.free = function(obj, prop)
   }
   else if ( obj )
   {
-    if (prop != 'src') // if src is set to null a file named "null" is requested from the server (see #1001)
+    if ( prop.indexOf('src') == -1 ) // if src (also lowsrc, and maybe dynsrc ) is set to null, a file named "null" is requested from the server (see #1001)
     {
       try { obj[prop] = null; } catch(x) {}
     }
