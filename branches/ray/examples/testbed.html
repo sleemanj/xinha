@@ -29,7 +29,7 @@
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/.*/, '')
-    _editor_lang = "en";      // And the language we need to use in the editor.
+    _editor_lang = "de";      // And the language we need to use in the editor.
   </script>
 
   <!-- Load up the actual editor core -->
@@ -64,7 +64,8 @@
          'CharacterMap', 
          'Linker',
          'Stylist',
-         'SmartReplace'
+         'SmartReplace',
+		 'InsertSnippet'
        ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;

@@ -279,8 +279,8 @@ Xinha.Dialog.prototype.show = function(values)
     //this.onResizeWin = function () {dialog.sizeBackground()};
     //Xinha._addEvent(window, 'resize', this.onResizeWin );
 
-    rootElemStyle.display   = '';
-
+    //rootElemStyle.display   = '';
+Xinha.Dialog.fadeIn(this.rootElem);
     var dialogHeight = rootElem.offsetHeight;
     var dialogWidth = rootElem.offsetWidth;
 
@@ -366,8 +366,9 @@ Xinha.Dialog.prototype.hide = function()
   }
   else
   {
-    this.rootElem.style.display = 'none';
-    this.hideBackground();
+    //this.rootElem.style.display = 'none';
+    Xinha.Dialog.fadeOut(this.rootElem);
+	this.hideBackground();
     var dialog = this;
 
     if (Xinha.is_gecko && this.modal)
@@ -392,7 +393,7 @@ Xinha.Dialog.prototype.hide = function()
       this.editor.activateEditor();
     }
   }
-    // Restore the selection
+   // Restore the selection --> should this happen only with modals?
   this.editor.restoreSelection(this._lastRange);
   
   this.dialogShown = false;
@@ -653,11 +654,13 @@ Xinha.Dialog.prototype.detachFromPanel = function(ev)
 
 Xinha.Dialog.prototype.hideBackground = function()
 {
-  this.background.style.display = 'none';
+  //this.background.style.display = 'none';
+  Xinha.Dialog.fadeOut(this.background);
 }
 Xinha.Dialog.prototype.showBackground = function()
 {
-  this.background.style.display = '';
+  //this.background.style.display = '';
+  Xinha.Dialog.fadeIn(this.background,70);
 }
 Xinha.Dialog.prototype.posBackground = function(pos)
 {
@@ -944,3 +947,63 @@ Xinha.Dialog.activateModeless = function(dialog)
 
   Xinha.Dialog.activeModeless.rootElem.style.zIndex = parseInt(Xinha.Dialog.activeModeless.rootElem.style.zIndex) + 10;
 }
+Xinha.Dialog.setOpacity = function(el,value)
+{
+	if (typeof el.style.filter != 'undefined')
+	{
+		el.style.filter = (value < 100) ?  'alpha(opacity='+value+')' : '';
+	}
+	else
+	{
+		el.style.opacity = value/100;
+	}
+}
+Xinha.Dialog.fadeIn = function(el,endOpacity,delay,step)
+{
+	delay = delay || 1;
+	step = step || 25;
+	endOpacity = endOpacity || 100;
+	el.op = el.op || 0;
+	var op = el.op;
+	if (el.style.display == 'none')
+	{
+		Xinha.Dialog.setOpacity(el,0);
+		el.style.display = '';
+	}
+	if (op < endOpacity)
+	{
+		el.op += step;
+		Xinha.Dialog.setOpacity(el,op);
+		el.timeOut = setTimeout(function(){Xinha.Dialog.fadeIn(el,endOpacity,delay,step);},delay);
+	}
+	else
+	{
+		Xinha.Dialog.setOpacity(el,endOpacity);
+		el.op = endOpacity;
+		el.timeOut = null;
+	}
+}
+
+Xinha.Dialog.fadeOut = function(el,delay,step)
+{
+	delay = delay || 1;
+	step = step || 30;
+	if (typeof el.op == 'undefined') el.op = 100;
+	var op = el.op;
+
+	if (op >= 0)
+	{
+		el.op -= step;
+		Xinha.Dialog.setOpacity(el,op);
+		el.timeOut = setTimeout(function(){Xinha.Dialog.fadeOut(el,delay,step);},delay);
+	}
+	else
+	{
+		Xinha.Dialog.setOpacity(el,0);
+		el.style.display = 'none';
+		el.op = 0;
+		el.timeOut = null;
+	}
+}
+
+

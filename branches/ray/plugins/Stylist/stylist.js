@@ -595,6 +595,9 @@ Stylist.prototype.resize = function()
 {
   var editor = this.editor;
   var rootElem = this.dialog.rootElem;
+  
+  if (rootElem.style.display == 'none') return;
+  
   var panelContainer = rootElem.parentNode;
 
   var newSize = panelContainer.offsetHeight;

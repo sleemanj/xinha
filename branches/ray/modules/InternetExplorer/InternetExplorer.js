@@ -305,7 +305,7 @@ Xinha.prototype.saveSelection = function()
  */
 Xinha.prototype.restoreSelection = function(savedSelection)
 {
-  savedSelection.select();
+  try { savedSelection.select() } catch (e) {};
 }
 
 /**

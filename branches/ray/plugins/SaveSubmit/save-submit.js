@@ -33,17 +33,13 @@ SaveSubmit.prototype._lc = function(string) {
 
 SaveSubmit._pluginInfo = {
   name          : "SaveSubmit",
-  version       : "1.0",
+  version       : "1.05",
   developer     : "Raimund Meyer",
   developer_url : "http://rheinauf.de",
   c_owner       : "Raimund Meyer",
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
-}
-
-SaveSubmit.prototype.onGenerateOnce = function() {
-	this.initial_html = this.editor.getInnerHTML();
 }
 
 SaveSubmit.prototype.onKeyPress = function(ev) {
@@ -72,7 +68,7 @@ SaveSubmit.prototype.onUpdateToolbar = function () {
 	}	
 }
 SaveSubmit.prototype.getChanged = function() {
-	if (this.initial_html === null) this.initial_html = this.editor.getInnerHTML();
+	if (!this.initial_html) this.initial_html = this.editor.getInnerHTML();
 	if (this.initial_html != this.editor.getInnerHTML() && this.changed == false) {
 		this.changed = true;
 		return true;

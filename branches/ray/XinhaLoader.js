@@ -6,7 +6,7 @@ Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
 Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
 Xinha.is_safari  = (Xinha.agt.indexOf("safari") != -1);
 Xinha.opera_version = navigator.appVersion.substring(0, navigator.appVersion.indexOf(" "))*1;
-Xinha.is_mac	   = (Xinha.agt.indexOf("mac") != -1);
+Xinha.is_mac   = (Xinha.agt.indexOf("mac") != -1);
 Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
 Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
 Xinha.is_gecko  = (navigator.product == "Gecko" && !Xinha.is_safari); // Safari lies!
@@ -157,3 +157,15 @@ Xinha.loadStyle = function(style, id)
   head.appendChild(link);
 };
 Xinha._lc = function(string) {return string;}
+
+Xinha._addEvent = function(el, evname, func) 
+{
+  if ( document.addEventListener )
+  {
+    el.addEventListener(evname, func, true);
+  }
+  else
+  {
+    el.attachEvent("on" + evname, func);
+  }
+}
