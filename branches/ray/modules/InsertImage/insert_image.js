@@ -1,4 +1,3 @@
-
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
     --
@@ -10,10 +9,9 @@
     --      Copyright (c) 2002-2003 interactivetools.com, inc.
     --      This copyright notice MUST stay intact for use.
     --
-    --  This is the standard implementation of the Xinha.prototype._insertImage method,
-    --  which provides the functionality to insert an image in the editor.
+    --  This is the Xinha standard implementation of an image insertion plugin
     --
-    --  he file is loaded as a special plugin by the Xinha Core when no alternative method (plugin) is loaded.
+    --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
     --  $HeadURL$
@@ -21,6 +19,7 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
+  
 InsertImage._pluginInfo = {
   name          : "InsertImage",
   origin        : "Xinha Core",
@@ -33,146 +32,88 @@ InsertImage._pluginInfo = {
 };
 
 function InsertImage(editor) {
-}                                      
+	this.editor = editor;
+	var cfg = editor.config;
+	var self = this;
 
-// Called when the user clicks on "InsertImage" button.  If an image is already
-// there, it will just modify it's properties.
-Xinha.prototype._insertImage = function(image)
+   editor.config.btnList.insertimage[3] = function() { self.show(); }
+}
+
+InsertImage.prototype._lc = function(string) {
+	return Xinha._lc(string, 'Xinha');
+};
+
+InsertImage.prototype.onGenerateOnce = function()
 {
-  var editor = this;	// for nested functions
-  var outparam;
-  if ( typeof image == "undefined" )
-  {
-    image = this.getParentElement();
-    if ( image && image.tagName.toLowerCase() != 'img' )
-    {
-      image = null;
-    }
-  }
-  
-  var base;
-  if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null ) {
-    base = editor.config.baseHref;
-  }
-  else {
-    var bdir = window.location.toString().split("/");
-    bdir.pop();
-    base = bdir.join("/");
-  }
-  
-  if ( image )
-  {
-    outparam =
-    {
-      f_base   : base,
-      f_url    : Xinha.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
-      f_alt    : image.alt,
-      f_border : image.border,
-      f_align  : image.align,
-      f_vert   : (image.vspace!=-1 ? image.vspace : ""), //FireFox reports -1 when this attr has no value.
-      f_horiz  : (image.hspace!=-1 ? image.hspace : ""), //FireFox reports -1 when this attr has no value.
-      f_width  : image.width,
-      f_height : image.height
-    };
-  }
-  else{
-  	outparam =
-  	{
-      f_base   : base,
-      f_url    : ""      
-  	};
-  }
-  
-  Dialog(
-    editor.config.URIs.insert_image,
-    function(param)
-    {
-      // user must have pressed Cancel
-      if ( !param )
-      {
-        return false;
-      }
-      var img = image;
-      if ( !img )
-      {
-        if ( Xinha.is_ie )
-        {
-          var sel = editor.getSelection();
-          var range = editor.createRange(sel);
-          editor._doc.execCommand("insertimage", false, param.f_url);
-          img = range.parentElement();
-          // wonder if this works...
-          if ( img.tagName.toLowerCase() != "img" )
-          {
-            img = img.previousSibling;
-          }
-        }
-        else
-        {
-          img = document.createElement('img');
-          img.src = param.f_url;
-          editor.insertNodeAtSelection(img);
-          if ( !img.tagName )
-          {
-            // if the cursor is at the beginning of the document
-            img = range.startContainer.firstChild;
-          }
-        }
-      }
-      else
-      {
-        img.src = param.f_url;
-      }
+	this.prepareDialog();
+	this.loadScripts();
+};
 
-      for ( var field in param )
-      {
-        var value = param[field];
-        switch (field)
-        {
-          case "f_alt":
-            if (value)
-              img.alt = value;
-            else
-              img.removeAttribute("alt");
-            break;
-          case "f_border":
-            if (value)
-              img.border = parseInt(value || "0");
-            else
-              img.removeAttribute("border");
-            break;
-          case "f_align":
-            if (value)
-              img.align = value;
-            else
-              img.removeAttribute("align");
-            break;
-          case "f_vert":
-            if (value)
-              img.vspace = parseInt(value || "0");
-            else
-              img.removeAttribute("vspace");
-            break;
-          case "f_horiz":
-            if (value)
-              img.hspace = parseInt(value || "0");
-            else
-              img.removeAttribute("hspace");
-            break;
-          case "f_width":
-            if (value)
-              img.width = parseInt(value || "0");
-            else
-              img.removeAttribute("width");
-            break;
-          case "f_height":
-            if (value)
-              img.height = parseInt(value || "0");
-            else
-              img.removeAttribute("height");
-            break;
-        }
-      }
-    },
-    outparam);
+InsertImage.prototype.loadScripts = function()
+{
+  var self = this;
+  if(!this.methodsReady)
+	{
+		Xinha._getback(_editor_url + 'modules/InsertImage/pluginMethods.js', function(getback) { eval(getback); self.methodsReady = true; });
+		return;
+	}
+};
+
+InsertImage.prototype.onUpdateToolbar = function()
+{ 
+  if (!(this.dialogReady && this.methodsReady))
+	{
+	  this.editor._toolbarObjects.insertimage.state("enabled", false);
+	}
+};
+
+InsertImage.prototype.prepareDialog = function()
+{
+	var self = this;
+	var editor = this.editor;
+
+	if(!this.html) // retrieve the raw dialog contents
+	{
+		Xinha._getback(_editor_url + 'modules/InsertImage/dialog.html', function(getback) { self.html = getback; self.prepareDialog(); });
+		return;
+	}
+
+	// Now we have everything we need, so we can build the dialog.
+		
+	var dialog = this.dialog = new Xinha.Dialog(editor, this.html, 'Xinha',{width:410})
+	// Connect the OK and Cancel buttons
+	dialog.getElementById('ok').onclick = function() {self.apply();}
+
+	dialog.getElementById('cancel').onclick = function() { self.dialog.hide()};
+
+	dialog.getElementById('preview').onclick = function() { 
+	  var f_url = dialog.getElementById("f_url");
+	  var url = f_url.value;
+	  var base = dialog.getElementById("f_base").value;
+	  if (!url) {
+	    alert(dialog._lc("You must enter the URL"));
+	    f_url.focus();
+	    return false;
+	  }
+	  dialog.getElementById('ipreview').src = Xinha._resolveRelativeUrl(base, url);
+	  return false;
+	}
+	this.dialog.onresize = function ()
+	{
+		
+		
+		var newHeightForPreview = 
+		parseInt(this.height,10) 
+		- this.getElementById('h1').offsetHeight 
+		- this.getElementById('buttons').offsetHeight
+		- this.getElementById('inputs').offsetHeight 
+		- parseInt(this.rootElem.style.paddingBottom,10); // we have a padding at the bottom, gotta take this into acount
+		
+		
+		this.getElementById("ipreview").style.height = ((newHeightForPreview > 0) ? newHeightForPreview : 0) + "px"; // no-go beyond 0
+		
+		this.getElementById("ipreview").style.width = this.width - 2   + 'px'; // and the width
+
+	}
+	this.dialogReady = true;
 };

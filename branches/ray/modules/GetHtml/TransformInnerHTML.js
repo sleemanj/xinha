@@ -135,7 +135,7 @@ Xinha.indent = function(s, sindentChar) {
     //final cleanup
     s = s.replace(/^\s*/,'').//strip leading whitespace
         replace(/ +\n/g,'\n').//strip spaces at end of lines
-        replace(/[\r\n]+<\/script>/g,'\n</script>');//strip returns added into scripts
+        replace(/[\r\n]+(\s+)<\/script>/g,'\n$1</script>');//strip returns added into scripts
     return s;
 };
 

@@ -60,7 +60,7 @@
 
 
 //  Open the connection to the host
-    $socket = fsockopen($Host, 80, &$errno, &$errstr);
+    $socket = fsockopen($Host, 80, $errno, $errstr);
     if (!$socket) {
       $result = "($errno) $errstr";
       return $Result;

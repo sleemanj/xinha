@@ -80,7 +80,7 @@
 
       // Locate to the correct directory
       var dreg = new RegExp('^(.*/)([^/]+)$');
-      if(dreg.test(param['f_url']))
+      if(dreg.test(param['f_url']) && !(new RegExp('^https?://','i')).test(param['f_url']))
       {
         changeDir(RegExp.$1);
         var dirPath = document.getElementById('dirPath');
@@ -211,7 +211,9 @@
 	function changeDir(newDir) 
 	{
 		if(typeof imgManager != 'undefined')
-			imgManager.changeDir(newDir);
+    {      
+	    imgManager.changeDir(newDir);
+    }
 	}
 
 	function toggleConstrains(constrains) 
@@ -335,4 +337,5 @@
 			createFolder(folder);
 		}
 	}
+  
 	addEvent(window, 'load', init);

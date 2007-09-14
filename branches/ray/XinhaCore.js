@@ -670,9 +670,10 @@ Xinha.Config = function()
    */
   this.stripBaseHref = true;
 
-   /**  We can strip the url of the editor page from named links (eg &lt;a href="#top"&gt;...&lt;/a&gt;)
-   *  reason for this is that mozilla at least (and IE ?) prefixes location.href to any anchor
-   *  that don't have a url prefixing them<br />
+   /**  We can strip the url of the editor page from named links (eg &lt;a href="#top"&gt;...&lt;/a&gt;) and links 
+   *  that consist only of URL parameters (eg &lt;a href="?parameter=value"&gt;...&lt;/a&gt;)
+   *  reason for this is that browsers tend to prefixe location.href to any href that
+   *  that don't have a full url<br />
    *  Default: <code>true</code>
    *  @type Boolean
    */
@@ -969,13 +970,13 @@ Xinha.Config = function()
 
   this.URIs =
   {
-   "blank": "popups/blank.html",
+   "blank": _editor_url + "popups/blank.html",
    "link":  _editor_url + "modules/CreateLink/link.html",
    "insert_image": _editor_url + "modules/InsertImage/insert_image.html",
    "insert_table":  _editor_url + "modules/InsertTable/insert_table.html",
-   "select_color": "select_color.html",
-   "about": "about.html",
-   "help": "editor_help.html"
+   "select_color": _editor_url + "popups/select_color.html",
+   "about": _editor_url + "popups/about.html",
+   "help": _editor_url + "popups/editor_help.html"
   };
 
 
@@ -2012,7 +2013,7 @@ Xinha.prototype.generate = function ()
     }
     if ( !found )
     {
-      Xinha.loadStyle(_editor_css,null,"XinhaCoreDesign");
+      Xinha.loadStyle(_editor_css,null,"XinhaCoreDesign",true);
     }
   }
   
@@ -2036,9 +2037,8 @@ Xinha.prototype.generate = function ()
   if (Xinha.is_ie)
   {
     url = _editor_url + 'modules/InternetExplorer/InternetExplorer.js';
-    if ( typeof InternetExplorer == 'undefined' && !document.getElementById(url) )
+    if ( !Xinha.loadPlugins(["InternetExplorer"], function() { editor.generate(); }, url ) )
     {            
-      Xinha.loadPlugin("InternetExplorer", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
@@ -2046,9 +2046,8 @@ Xinha.prototype.generate = function ()
   else
   {
     url = _editor_url + 'modules/Gecko/Gecko.js';
-    if ( typeof Gecko == 'undefined' && !document.getElementById(url) )
+    if ( !Xinha.loadPlugins(["Gecko"], function() { editor.generate(); }, url ) )
     {            
-      Xinha.loadPlugin("Gecko", function() { editor.generate(); }, url );
       return false;
     }
     editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
@@ -2065,16 +2064,14 @@ Xinha.prototype.generate = function ()
   }
   
   url = _editor_url + 'modules/FullScreen/full-screen.js';
-  if ( typeof FullScreen == "undefined" && !document.getElementById(url) )
+  if ( !Xinha.loadPlugins(["FullScreen"], function() { editor.generate(); }, url ))
   {
-    Xinha.loadPlugin("FullScreen", function() { editor.generate(); }, url );
     return false;
   }
   
   url = _editor_url + 'modules/ColorPicker/ColorPicker.js';
-  if ( typeof ColorPicker == 'undefined' && !document.getElementById(url) )
+  if ( !Xinha.loadPlugins(["ColorPicker"], function() { editor.generate(); } , url ) )
   {
-    Xinha.loadPlugin("ColorPicker", function() { editor.generate(); } , url );
     return false;
   }
   else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
@@ -2090,28 +2087,25 @@ Xinha.prototype.generate = function ()
           editor.registerPlugin('FullScreen');
         break;
         case "insertimage":
-          url = _editor_url + 'modules/InsertImage/InsertImage.js';
-          if ( typeof InsertImage == 'undefined' && typeof Xinha.prototype._insertImage == 'undefined' && !document.getElementById(url) )
+          url = _editor_url + 'modules/InsertImage/insert_image.js';
+          if ( typeof Xinha.prototype._insertImage == 'undefined' && !Xinha.loadPlugins(["InsertImage"], function() { editor.generate(); } , url ) )
           {
-            Xinha.loadPlugin("InsertImage", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertImage != 'undefined') editor.registerPlugin('InsertImage');
         break;
         case "createlink":
-          url = _editor_url + 'modules/CreateLink/CreateLink.js';
-          if ( typeof CreateLink == 'undefined' && typeof Xinha.prototype._createLink == 'undefined' &&  typeof Linker == 'undefined' && !document.getElementById(url))
+          url = _editor_url + 'modules/CreateLink/link.js';
+          if ( typeof Linker == 'undefined' && !Xinha.loadPlugins(["CreateLink"], function() { editor.generate(); } , url ))
           {
-            Xinha.loadPlugin("CreateLink", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof CreateLink != 'undefined') editor.registerPlugin('CreateLink');
         break;
         case "inserttable":
-          url = _editor_url + 'modules/InsertTable/InsertTable.js';
-          if ( typeof InsertTable == 'undefined' && typeof Xinha.prototype._insertTable == 'undefined' && !document.getElementById(url) )
+          url = _editor_url + 'modules/InsertTable/insert_table.js';
+          if ( !Xinha.loadPlugins(["InsertTable"], function() { editor.generate(); } , url ) )
           {
-            Xinha.loadPlugin("InsertTable", function() { editor.generate(); } , url );
             return false;
           }
           else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
@@ -2132,9 +2126,8 @@ Xinha.prototype.generate = function ()
         var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerBest.js';
       break;
     }
-    if ( typeof EnterParagraphs == 'undefined'  && !document.getElementById(ParaHandlerPlugin) )
+    if (  !Xinha.loadPlugins(["EnterParagraphs"], function() { editor.generate(); }, ParaHandlerPlugin ) )
     {
-      Xinha.loadPlugin("EnterParagraphs", function() { editor.generate(); }, ParaHandlerPlugin );
       return false;
     }
     editor.registerPlugin('EnterParagraphs');
@@ -2150,9 +2143,8 @@ Xinha.prototype.generate = function ()
     break;
   }
   
-  if (typeof GetHtmlImplementation == 'undefined'  && !document.getElementById(getHtmlMethodPlugin))
+  if ( !Xinha.loadPlugins(["GetHtmlImplementation"], function() { editor.generate(); } , getHtmlMethodPlugin))
   {
-    Xinha.loadPlugin("GetHtmlImplementation", function() { editor.generate(); } , getHtmlMethodPlugin);
     return false;        
   }
   else editor.registerPlugin('GetHtmlImplementation');
@@ -2239,7 +2231,7 @@ Xinha.prototype.generate = function ()
 
     // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
-  iframe.src = _editor_url + editor.config.URIs.blank;
+  iframe.src = this.popupURL(editor.config.URIs.blank);
   iframe.id = "XinhaIFrame_" + this._textArea.id;
   this._framework.ed_cell.appendChild(iframe);
   this._iframe = iframe;
@@ -2281,6 +2273,7 @@ Xinha.prototype.generate = function ()
       'submit',
       function()
       {
+        editor.firePluginEvent('onBeforeSubmit');
         editor._textArea.value = editor.outwardHtml(editor.getHTML());
         return true;
       }
@@ -2324,6 +2317,7 @@ Xinha.prototype.generate = function ()
     'unload',
     function()
     {
+      editor.firePluginEvent('onBeforeUnload');
       textarea.value = editor.outwardHtml(editor.getHTML());
       if (!Xinha.is_ie)
       {
@@ -3323,9 +3317,10 @@ Xinha._pluginLoadStatus = {};
 /** Static function that loads the plugins (see xinha_plugins in NewbieGuide)
  * @param {Array} plugins
  * @param {Function} callbackIfNotReady function that is called repeatedly until all files are
+ * @param {String} optional url URL of the plugin file; obviously plugins should contain only one item if url is given
  * @returns {Boolean} true if all plugins are loaded, false otherwise
  */
-Xinha.loadPlugins = function(plugins, callbackIfNotReady)
+Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
 {
   if ( !Xinha.isSupportedBrowser ) return;
   Xinha.setLoadingMessage (Xinha._lc("Loading plugins"));
@@ -3343,8 +3338,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady)
       Xinha.loadPlugin(p,
         function(plugin)
         {
-          // @todo : try to avoid the use of eval()
-          if ( eval('typeof ' + plugin) != 'undefined' )
+          if ( typeof window[plugin] != 'undefined' )
           {
             Xinha._pluginLoadStatus[plugin] = 'ready';
           }
@@ -3357,7 +3351,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady)
             // by just skipping them.
             Xinha._pluginLoadStatus[plugin] = 'failed';
           }
-        }
+        },url
       );
       retVal = false;
     }
@@ -3488,7 +3482,7 @@ Xinha.prototype.firePluginEvent = function(methodName)
  * @param {String} id optional a unique id for identifiing the created link element, e.g. for avoiding double loading 
  *                 or later removing it again
  */
-Xinha.loadStyle = function(style, plugin, id)
+Xinha.loadStyle = function(style, plugin, id,prepend)
 {
   var url = _editor_url || '';
   if ( plugin )
@@ -3511,7 +3505,15 @@ Xinha.loadStyle = function(style, plugin, id)
   link.href = url;
   link.type = "text/css";
   if (id) link.id = id;
-  head.appendChild(link);
+  if (prepend)
+  {
+    head.insertBefore(link,head.getElementsByTagName('link')[0]);
+  }
+  else
+  {
+    head.appendChild(link);
+  }
+  
 };
 
 
@@ -4876,7 +4878,7 @@ Xinha.prototype.outwardHtml = function(html)
   }
   
   //prevent execution of JavaScript (Ticket #685)
-  html = html.replace(/(<script[^>]*)(freezescript)/gi,"$1javascript");
+  html = html.replace(/(<script[^>]*((type=[\"\']text\/)|(language=[\"\'])))(freezescript)/gi,"$1javascript");
 
   // If in fullPage mode, strip the coreCSS
   if(this.config.fullPage)
@@ -4919,7 +4921,7 @@ Xinha.prototype.inwardHtml = function(html)
   
   html = this.inwardSpecialReplacements(html);
 
-  html = html.replace(/(<script[^>]*)(javascript)/gi,"$1freezescript");
+  html = html.replace(/(<script[^>]*((type=[\"\']text\/)|(language=[\"\'])))(javascript)/gi,"$1freezescript");
 
   // For IE's sake, make any URLs that are semi-absolute (="/....") to be
   // truely absolute
@@ -5023,8 +5025,8 @@ Xinha.prototype.fixRelativeLinks = function(html)
   
   if ( typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors )
   {
-    var stripRe = new RegExp(Xinha.escapeStringForRegExp(document.location.href.replace(/&/g,'&amp;')) + '(#[^\'" ]*)', 'g');
-    html = html.replace(stripRe, '$1');
+    var stripRe = new RegExp("((href|src|background)=\")("+Xinha.escapeStringForRegExp(document.location.href.replace(/&/g,'&amp;')) + ')([#?][^\'" ]*)', 'g');
+    html = html.replace(stripRe, '$1$4');
   }
 
   if ( typeof this.config.stripBaseHref != 'undefined' && this.config.stripBaseHref )
@@ -5688,7 +5690,7 @@ Xinha.prototype.popupURL = function(file)
     }
     url = _editor_url + "plugins/" + plugin + "/popups/" + popup;
   }
-  else if ( file.match(/^\/.*?/) )
+  else if ( file.match(/^\/.*?/) || file.match(/^https?:\/\//))
   {
     url = file;
   }
@@ -5763,7 +5765,7 @@ Xinha.prototype._toggleBorders = function()
 Xinha.addCoreCSS = function(html)
 {
     var coreCSS = 
-    "<style title=\"Xinha Internal CSS\" type=\"text/css\">"
+    "<style id=\"XinhaInternalCSS\" type=\"text/css\">"
     + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;}\n"
     + "html, body { border: 0px; } \n"
     + "body { background-color: #ffffff; } \n" 
@@ -5791,7 +5793,7 @@ Xinha.addCoreCSS = function(html)
  */
 Xinha.stripCoreCSS = function(html)
 {
-  return html.replace(/<style[^>]+title="Xinha Internal CSS"(.|\n)*?<\/style>/i, ''); 
+  return html.replace(/<style[^>]+id="XinhaInternalCSS"(.|\n)*?<\/style>/i, ''); 
 }
 /** Removes one CSS class (that is one of possible more parts 
  *   separated by spaces) from a given element
@@ -5941,6 +5943,12 @@ Xinha._hasClass = function(el, className)
  *  @param {Function} handler A function that is called when an answer is received from the server with the responseText 
  *                             as argument                             
  */
+ 
+// mod_security (an apache module which scans incoming requests for potential hack attempts)
+// has a rule which triggers when it gets an incoming Content-Type with a charset
+// see ticket:1028 to try and work around this, if we get a failure in a postback
+// then Xinha._postback_send_charset will be set to false and the request tried again (once)
+Xinha._postback_send_charset = true;
 Xinha._postback = function(url, data, handler)
 {
   var req = null;
@@ -5970,6 +5978,11 @@ Xinha._postback = function(url, data, handler)
           handler(req.responseText, req);
         }
       }
+      else if(Xinha._postback_send_charset)
+      {        
+        Xinha._postback_send_charset = false;
+        Xinha._postback(url,data,handler);
+      }
       else
       {
         alert('An error has occurred: ' + req.statusText + '\nURL: ' + url);
@@ -5980,7 +5993,7 @@ Xinha._postback = function(url, data, handler)
   req.onreadystatechange = callBack;
 
   req.open('POST', url, true);
-  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'+(Xinha._postback_send_charset ? '; charset=UTF-8' : ''));
   //alert(content);
   req.send(content);
 };
@@ -6833,7 +6846,10 @@ Xinha.free = function(obj, prop)
   }
   else if ( obj )
   {
-    try { obj[prop] = null; } catch(x) {}
+    if ( prop.indexOf('src') == -1 ) // if src (also lowsrc, and maybe dynsrc ) is set to null, a file named "null" is requested from the server (see #1001)
+    {
+      try { obj[prop] = null; } catch(x) {}
+    }
   }
 };
 

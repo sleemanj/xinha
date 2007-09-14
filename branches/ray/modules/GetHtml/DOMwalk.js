@@ -298,7 +298,14 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
       }
       else if(root.data.trim() == '')
       {
-        html = '';
+        if(root.data)
+        {
+          html = ' ';
+        }
+        else
+        {
+          html = '';
+        }
       }
       else
       {
