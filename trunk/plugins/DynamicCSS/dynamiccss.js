@@ -35,7 +35,7 @@ DynamicCSS.parseStyleSheet=function(editor){
 
         for(i=0;i<iframe.styleSheets.length;i++)
         {
-            if(iframe.styleSheets[i].title == "table borders") continue;
+            if(iframe.styleSheets[i].title == "XinhaInternalCSS") continue;
             
             // Mozilla
             if(Xinha.is_gecko){

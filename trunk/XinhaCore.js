@@ -5750,7 +5750,7 @@ Xinha.prototype._toggleBorders = function()
   }
   return true;
 };
-/** Adds styles for internal use to the edited document
+/** Adds the styles for table borders to the iframe during generation
  *  
  *  @private
  *  @see Xinha#stripCoreCSS
@@ -5760,7 +5760,7 @@ Xinha.prototype._toggleBorders = function()
 Xinha.addCoreCSS = function(html)
 {
     var coreCSS = 
-    "<style id=\"XinhaInternalCSS\" type=\"text/css\">"
+    "<style title=\"XinhaInternalCSS\" type=\"text/css\">"
     + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;}\n"
     + "html, body { border: 0px; } \n"
     + "body { background-color: #ffffff; } \n" 
@@ -5779,6 +5779,20 @@ Xinha.addCoreCSS = function(html)
       return coreCSS;
     }
 }
+/** Allows plugins to add a stylesheet for internal use to the edited document that won't appear in the HTML output
+ *  
+ *  @see Xinha#stripCoreCSS
+ *  @param {String} stylesheet URL of the styleshett to be added
+ */
+Xinha.prototype.addEditorStylesheet = function (stylesheet)
+{
+    var style = this._doc.createElement("link");
+    style.rel = 'stylesheet';
+    style.type = 'text/css';
+    style.title = 'XinhaInternalCSS';
+	style.href = stylesheet;
+    this._doc.getElementsByTagName("HEAD")[0].appendChild(style);
+}
 /** Remove internal styles
  *  
  *  @private
@@ -5788,7 +5802,7 @@ Xinha.addCoreCSS = function(html)
  */
 Xinha.stripCoreCSS = function(html)
 {
-  return html.replace(/<style[^>]+id="XinhaInternalCSS"(.|\n)*?<\/style>/i, ''); 
+  return html.replace(/<style[^>]+title="XinhaInternalCSS"(.|\n)*?<\/style>/ig, '').replace(/<link[^>]+title="XinhaInternalCSS"(.|\n)*?>/ig, ''); 
 }
 /** Removes one CSS class (that is one of possible more parts 
  *   separated by spaces) from a given element
