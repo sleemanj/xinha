@@ -40,15 +40,7 @@ Abbreviation.prototype._lc = function(string) {
 };
 
 Abbreviation.prototype.onGenerate = function() {
-  var style_id = "Abbr-style"
-  var style = this.editor._doc.getElementById(style_id);
-  if (style == null) {
-    style = this.editor._doc.createElement("link");
-    style.id = style_id;
-    style.rel = 'stylesheet';
-    style.href = _editor_url + 'plugins/Abbreviation/abbreviation.css';
-    this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(style);
-  }
+  this.editor.addEditorStylesheet(_editor_url + 'plugins/Abbreviation/abbreviation.css');
 };
 
 Abbreviation.prototype.buttonPress = function(editor, context, updatecontextclass) {
