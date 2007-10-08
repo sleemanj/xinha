@@ -166,10 +166,11 @@ Gecko.prototype.onKeyPress = function(ev)
         {
           if (RE_date.test(matchData))
           {
-            if (!RE_ip.test(matchData)) 
+            break; //ray: disabling linking of IP numbers because of general bugginess (see Ticket #1085)
+			/*if (!RE_ip.test(matchData)) 
             {
               break;
-            }
+            }*/
           } 
           var leftTextUrl  = s.anchorNode;
           var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
@@ -254,12 +255,14 @@ Gecko.prototype.onKeyPress = function(ev)
             }
 
             var m = s.anchorNode.data.match(Xinha.RE_url);
-            if ( m && a.href.match(s.anchorNode.data.trim()) )
+			
+            if ( m && a.href.match(new RegExp( 'http(s)?://' + Xinha.escapeStringForRegExp( s.anchorNode.data.trim() ) ) ) )
             {
               var txtNode = s.anchorNode;
               var fnUrl = function()
               {
                 // Sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
+				// ray: shouldn't the link be un-linked then?
                 m = txtNode.data.match(Xinha.RE_url);
                 if(m)
                 {

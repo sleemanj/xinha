@@ -456,7 +456,7 @@ Xinha.escapeStringForRegExp = function (string)
 /** Identifies email addresses
 * @type RegExp
 */
-Xinha.RE_email    = /[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+/i;
+Xinha.RE_email    = /^[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+$/i;
 /** Identifies URLs
 * @type RegExp
 */
