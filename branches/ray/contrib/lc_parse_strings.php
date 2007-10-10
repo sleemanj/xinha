@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 die("this script is disabled for security");
 
 /**
