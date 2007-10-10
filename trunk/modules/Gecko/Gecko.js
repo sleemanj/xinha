@@ -691,26 +691,29 @@ Xinha.prototype.cc = String.fromCharCode(173);
 
 Xinha.prototype.setCC = function ( target )
 {
+  var cc = this.cc;
   try
   {
     if ( target == "textarea" )
     {
-      var ta = this._textArea;
+	  var ta = this._textArea;
       var index = ta.selectionStart;
       var before = ta.value.substring( 0, index )
       var after = ta.value.substring( index, ta.value.length );
 
-      if ( after.match(/^[^<]*>/) )
+      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
       {
         var tagEnd = after.indexOf(">") + 1;
-        ta.value = before + after.substring( 0, tagEnd ) + this.cc + after.substring( tagEnd, after.length );
+        ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
       }
-      else ta.value = before + this.cc + after;
+      else ta.value = before + cc + after;
+	  ta.value = ta.value.replace(new RegExp ('(<script[^>]*>[^'+cc+']*?)('+cc+')([^'+cc+']*?<\/script>)'), "$1$3$2");
+	  ta.value = ta.value.replace(new RegExp ('^([^'+cc+']*)('+cc+')([^'+cc+']*<body[^>]*>)(.*?)'), "$1$3$2$4");
     }
     else
     {
       var sel = this.getSelection();
-      sel.getRangeAt(0).insertNode( document.createTextNode( this.cc ) );
+      sel.getRangeAt(0).insertNode( document.createTextNode( cc ) );
     }
   } catch (e) {}
 };
