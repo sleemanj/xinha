@@ -1,4 +1,4 @@
-﻿// I18N constants
+// I18N constants
 // LANG: "fr", ENCODING: UTF-8
 {
   "language select": "Sélection de la langue",
