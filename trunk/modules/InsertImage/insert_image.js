@@ -39,7 +39,7 @@ function InsertImage(editor) {
 // there, it will just modify it's properties.
 Xinha.prototype._insertImage = function(image)
 {
-  var editor = this;	// for nested functions
+  var editor = this;  // for nested functions
   var outparam;
   if ( typeof image == "undefined" )
   {
@@ -62,23 +62,23 @@ Xinha.prototype._insertImage = function(image)
   
   if ( image )
   {
-  	function getSpecifiedAttribute(element,attribute)
+    function getSpecifiedAttribute(element,attribute)
     {
       var a = element.attributes;
-	  for (var i=0;i<a.length;i++)
+      for (var i=0;i<a.length;i++)
       {
         if (a[i].nodeName == attribute && a[i].specified)
-		{
-		  return a[i].value;
-		}
+        {
+          return a[i].value;
+        }
       }
-	  return '';
-	}
-	/* if you want to understand why the above function is required, uncomment the two lines below and launch InsertImage in both Mozilla & IE with an image selected that hath neither value set and compare the results
-	alert(image.vspace +' '+ image.getAttribute('vspace') + ' ' + image.getAttribute('vspace',2) + ' ' + getSpecifiedAttribute(image,'vspace') );
-  	alert(image.hspace +' '+ image.getAttribute('hspace') + ' ' + image.getAttribute('hspace',2) + ' ' + getSpecifiedAttribute(image,'hspace') );
-	*/
-	outparam =
+      return '';
+  }
+  /* if you want to understand why the above function is required, uncomment the two lines below and launch InsertImage in both Mozilla & IE with an image selected that hath neither value set and compare the results
+  alert(image.vspace +' '+ image.getAttribute('vspace') + ' ' + image.getAttribute('vspace',2) + ' ' + getSpecifiedAttribute(image,'vspace') );
+    alert(image.hspace +' '+ image.getAttribute('hspace') + ' ' + image.getAttribute('hspace',2) + ' ' + getSpecifiedAttribute(image,'hspace') );
+  */
+  outparam =
     {
       f_base   : base,
       f_url    : image.getAttribute('src',2), // the second parameter makes IE return the value as it is set, as opposed to an "interpolated" (as MSDN calls it) value
@@ -92,11 +92,11 @@ Xinha.prototype._insertImage = function(image)
     };
   }
   else{
-  	outparam =
-  	{
+    outparam =
+    {
       f_base   : base,
       f_url    : ""      
-  	};
+    };
   }
   
   Dialog(
