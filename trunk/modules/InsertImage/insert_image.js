@@ -62,15 +62,31 @@ Xinha.prototype._insertImage = function(image)
   
   if ( image )
   {
-    outparam =
+  	function getSpecifiedAttribute(element,attribute)
+    {
+      var a = element.attributes;
+	  for (var i=0;i<a.length;i++)
+      {
+        if (a[i].nodeName == attribute && a[i].specified)
+		{
+		  return a[i].value;
+		}
+      }
+	  return '';
+	}
+	/* if you want to understand why the above function is required, uncomment the two lines below and launch InsertImage in both Mozilla & IE with an image selected that hath neither value set and compare the results
+	alert(image.vspace +' '+ image.getAttribute('vspace') + ' ' + image.getAttribute('vspace',2) + ' ' + getSpecifiedAttribute(image,'vspace') );
+  	alert(image.hspace +' '+ image.getAttribute('hspace') + ' ' + image.getAttribute('hspace',2) + ' ' + getSpecifiedAttribute(image,'hspace') );
+	*/
+	outparam =
     {
       f_base   : base,
-      f_url    : Xinha.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
+      f_url    : image.getAttribute('src',2), // the second parameter makes IE return the value as it is set, as opposed to an "interpolated" (as MSDN calls it) value
       f_alt    : image.alt,
       f_border : image.border,
       f_align  : image.align,
-      f_vert   : (image.vspace!=-1 ? image.vspace : ""), //FireFox reports -1 when this attr has no value.
-      f_horiz  : (image.hspace!=-1 ? image.hspace : ""), //FireFox reports -1 when this attr has no value.
+      f_vert   : getSpecifiedAttribute(image,'vspace'),
+      f_horiz  : getSpecifiedAttribute(image,'hspace'),
       f_width  : image.width,
       f_height : image.height
     };
@@ -148,13 +164,13 @@ Xinha.prototype._insertImage = function(image)
               img.removeAttribute("align");
             break;
           case "f_vert":
-            if (value)
+            if (value != "")
               img.vspace = parseInt(value || "0");
             else
               img.removeAttribute("vspace");
             break;
           case "f_horiz":
-            if (value)
+            if (value != "")
               img.hspace = parseInt(value || "0");
             else
               img.removeAttribute("hspace");
