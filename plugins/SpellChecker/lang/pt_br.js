@@ -1,4 +1,4 @@
-// I18N constants
+﻿// I18N constants
 //
 // LANG: "pt_br", ENCODING: UTF-8
 // Portuguese Brazilian Translation
