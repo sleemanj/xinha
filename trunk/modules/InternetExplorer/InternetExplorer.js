@@ -446,7 +446,7 @@ Xinha.prototype.setCC = function ( target )
     var before = ta.value.substring( 0, index );
     var after  = ta.value.substring( index + cc.length , ta.value.length );
     
-	if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
+    if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
     {
       var tagEnd = after.indexOf(">") + 1;
       ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );

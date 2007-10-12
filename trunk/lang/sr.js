@@ -1,4 +1,4 @@
-// I18N constants
+﻿// I18N constants
 
 // LANG: "sh", ENCODING: UTF-8 | ISO-8859-5
 // Author: Ljuba Ranković, http://www.rankovic.net/ljubar
