@@ -98,10 +98,12 @@ SaveSubmit.prototype.save =  function(editor) {
 	var form = editor._textArea.form;
 	form.onsubmit();
 
-	var content ='';
-
+	var name, value, content ='';
+	
 	for (var i=0;i<form.elements.length;i++)
 	{
+		if (( form.elements[i].type == 'checkbox' || form.elements[i].type == 'radio' ) && !form.elements[i].checked ) continue;
+
 		content += ((i>0) ? '&' : '') + form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value);
 	}
 
