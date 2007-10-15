@@ -37,18 +37,16 @@ InsertSmiley._pluginInfo = {
 InsertSmiley.prototype._lc = function(string) {
   return Xinha._lc(string, 'InsertSmiley');
 };
+Xinha.Config.prototype.InsertSmiley=  {
+  smileyURL : "http://www.x-webservice.net/storage/xinha/plugins/InsertSmiley/"
+};
 
 InsertSmiley.prototype.buttonPress = function(editor) {
   var self = this;
   var sel = editor.getSelectedHTML().replace(/(<[^>]*>|&nbsp;|\n|\r)/g,"");
-  var param = new Object();
+  var param = {};
   param.editor = editor;
-  param.editor_url = _editor_url;
-  if(param.editor_url == "../") {
-    param.editor_url = document.URL;
-    param.editor_url = param.editor_url.replace(/^(.*\/).*\/.*$/g, "$1");
-  }
   editor._popupDialog("plugin://InsertSmiley/insertsmiley", function(param) {
-    editor.insertHTML("<img src=\"" + param.imgURL + "\" alt=\"Smiley\" />");
+    editor.insertHTML("<img src=\"" + editor.config.InsertSmiley.smileyURL + param.smileyfile + "\" alt=\"Smiley\" />");
   }, param);
 };
