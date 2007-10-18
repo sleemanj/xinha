@@ -4844,11 +4844,11 @@ Xinha.prototype.outwardHtml = function(html)
   html = html.replace(/<(\/?)strike(\s|>|\/)/ig, "<$1del$2");
   
   // remove disabling of inline event handle inside Xinha iframe
-  html = html.replace(/(<[^>]*onclick=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmouseover=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmouseout=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmousedown=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmouseup=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onclick=['"])if\(window\.top (&amp;&amp;|&&) window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmouseover=['"])if\(window\.top (&amp;&amp;|&&) window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmouseout=['"])if\(window\.top (&amp;&amp;|&&) window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmousedown=['"])if\(window\.top (&amp;&amp;|&&) window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*onmouseup=['"])if\(window\.top (&amp;&amp;|&&) window\.top\.Xinha\)\{return false\}/gi,'$1');
 
 
   // Figure out what our server name is, and how it's referenced
