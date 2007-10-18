@@ -34,14 +34,8 @@
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
-Xinha.version =
-{
-  'Release'   : 'Trunk',
-  'Head'      : '$HeadURL$'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'Date'      : '$LastChangedDate$'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision$'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'RevisionBy': '$LastChangedBy$'.replace(/^[^:]*: (.*) \$$/, '$1')
-};
+Xinha.version={"Release":"0.94","Head":"$HeadURL$".replace(/^[^:]*: (.*) \$$/,"$1"),"Date":"18 Oct 2007","Revision":"$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/,"$1"),"RevisionBy":"$LastChangedBy$".replace(/^[^:]*: (.*) \$$/,"$1")};
+
 
 //must be here. it is called while converting _editor_url to absolute
 Xinha._resolveRelativeUrl = function( base, url )
