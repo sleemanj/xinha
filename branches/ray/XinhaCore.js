@@ -1,10 +1,12 @@
  
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
-    --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
+    --  Xinha (is not htmlArea) - http://xinha.org
     --
     --  Use of Xinha is granted by the terms of the htmlArea License (based on
     --  BSD license)  please read license.txt in this package for details.
     --
+    --  Copyright (c) 2005-2007 Xinha Developer Team and contributors
+    --  
     --  Xinha was originally based on work by Mihai Bazon which is:
     --      Copyright (c) 2003-2004 dynarch.com.
     --      Copyright (c) 2002-2003 interactivetools.com, inc.
@@ -4847,12 +4849,7 @@ Xinha.prototype.outwardHtml = function(html)
   html = html.replace(/<(\/?)strike(\s|>|\/)/ig, "<$1del$2");
   
   // remove disabling of inline event handle inside Xinha iframe
-  html = html.replace(/(<[^>]*onclick=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmouseover=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmouseout=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmousedown=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-  html = html.replace(/(<[^>]*onmouseup=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
-
+  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
 
   // Figure out what our server name is, and how it's referenced
   var serverBase = location.href.replace(/(https?:\/\/[^\/]*)\/.*/, '$1') + '/';
@@ -4913,11 +4910,7 @@ Xinha.prototype.inwardHtml = function(html)
   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
 
   // disable inline event handle inside Xinha iframe
-  html = html.replace(/(<[^>]*onclick=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
-  html = html.replace(/(<[^>]*onmouseover=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
-  html = html.replace(/(<[^>]*onmouseout=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
-  html = html.replace(/(<[^>]*onmouseodown=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
-  html = html.replace(/(<[^>]*onmouseup=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
+  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
   
   html = this.inwardSpecialReplacements(html);
 

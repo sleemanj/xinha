@@ -166,10 +166,11 @@ Gecko.prototype.onKeyPress = function(ev)
         {
           if (RE_date.test(matchData))
           {
-            if (!RE_ip.test(matchData)) 
+            break; //ray: disabling linking of IP numbers because of general bugginess (see Ticket #1085)
+            /*if (!RE_ip.test(matchData)) 
             {
               break;
-            }
+            }*/
           } 
           var leftTextUrl  = s.anchorNode;
           var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
@@ -254,12 +255,14 @@ Gecko.prototype.onKeyPress = function(ev)
             }
 
             var m = s.anchorNode.data.match(Xinha.RE_url);
-            if ( m && a.href.match(s.anchorNode.data.trim()) )
+
+            if ( m && a.href.match(new RegExp( 'http(s)?://' + Xinha.escapeStringForRegExp( s.anchorNode.data.trim() ) ) ) )
             {
               var txtNode = s.anchorNode;
               var fnUrl = function()
               {
                 // Sometimes m is undefined becase the url is not an url anymore (was www.url.com and become for example www.url)
+                // ray: shouldn't the link be un-linked then?
                 m = txtNode.data.match(Xinha.RE_url);
                 if(m)
                 {
@@ -372,13 +375,13 @@ Gecko.prototype.onExecCommand = function(cmdID, UI, param)
 }
 Gecko.prototype.onMouseDown = function(ev)
 {   
-	// Gecko doesn't select hr's on single click
-	if (ev.target.tagName.toLowerCase() == "hr")
-	{
-	  var sel = this.editor.getSelection();
-	  var range = this.editor.createRange(sel);
-	  range.selectNode(ev.target);
-	}
+  // Gecko doesn't select hr's on single click
+  if (ev.target.tagName.toLowerCase() == "hr")
+  {
+    var sel = this.editor.getSelection();
+    var range = this.editor.createRange(sel);
+    range.selectNode(ev.target);
+  }
 }
 
 
@@ -692,6 +695,7 @@ Xinha.prototype.cc = String.fromCharCode(173);
 
 Xinha.prototype.setCC = function ( target )
 {
+  var cc = this.cc;
   try
   {
     if ( target == "textarea" )
@@ -701,17 +705,19 @@ Xinha.prototype.setCC = function ( target )
       var before = ta.value.substring( 0, index )
       var after = ta.value.substring( index, ta.value.length );
 
-      if ( after.match(/^[^<]*>/) )
+      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
       {
         var tagEnd = after.indexOf(">") + 1;
-        ta.value = before + after.substring( 0, tagEnd ) + this.cc + after.substring( tagEnd, after.length );
+        ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
       }
-      else ta.value = before + this.cc + after;
+      else ta.value = before + cc + after;
+      ta.value = ta.value.replace(new RegExp ('(<script[^>]*>[^'+cc+']*?)('+cc+')([^'+cc+']*?<\/script>)'), "$1$3$2");
+      ta.value = ta.value.replace(new RegExp ('^([^'+cc+']*)('+cc+')([^'+cc+']*<body[^>]*>)(.*?)'), "$1$3$2$4");
     }
     else
     {
       var sel = this.getSelection();
-      sel.getRangeAt(0).insertNode( document.createTextNode( this.cc ) );
+      sel.getRangeAt(0).insertNode( document.createTextNode( cc ) );
     }
   } catch (e) {}
 };
