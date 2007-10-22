@@ -40,7 +40,7 @@ Xinha.RegExpCache = [
 /*04*/  new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g),//terminate singlet tags
 /*05*/  new RegExp().compile(/(<\w+\s+(\w*="[^"]*"\s+)*)(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),//expand singlet attributes
 /*06*/  new RegExp().compile(/(="[^']*)'([^'"]*")/),//check quote nesting
-/*07*/  new RegExp().compile(/&(?=(?!(#[0-9]{2,4};|[a-zA-Z0-9]{2,6};|\\x[0-9a-fA-F]{2};))[^<]*>)/g),//expand query ampersands not in html entities
+/*07*/  new RegExp().compile(/&(?=(?!(#[0-9]{2,5};|[a-zA-Z0-9]{2,6};|#x[0-9a-fA-F]{2,4};))[^<]*>)/g),//expand query ampersands not in html entities
 /*08*/  new RegExp().compile(/<\s+/g),//strip tagstart whitespace
 /*09*/  new RegExp().compile(/\s+(\/)?>/g),//trim whitespace
 /*10*/  new RegExp().compile(/\s{2,}/g),//trim extra whitespace
