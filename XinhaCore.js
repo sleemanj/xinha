@@ -1427,7 +1427,8 @@ Xinha.prototype._createToolbar = function ()
   this._toolBar = this._toolbar = toolbar;
   toolbar.className = "toolbar";
   toolbar.unselectable = "1";
-
+  toolbar.align = this.config.toolbarAlign;
+  
   Xinha.freeLater(this, '_toolBar');
   Xinha.freeLater(this, '_toolbar');
   
