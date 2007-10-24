@@ -3508,7 +3508,7 @@ Xinha.loadStyle = function(style, plugin, id,prepend)
   link.href = url;
   link.type = "text/css";
   if (id) link.id = id;
-  if (prepend)
+  if (prepend && head.getElementsByTagName('link')[0])
   {
     head.insertBefore(link,head.getElementsByTagName('link')[0]);
   }
