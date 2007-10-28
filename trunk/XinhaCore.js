@@ -6436,7 +6436,11 @@ Xinha.makeEditors = function(editor_names, default_config, plugin_names)
     if ( typeof editor_names[x] != 'object' )
     {
       var textarea = Xinha.getElementById('textarea', editor_names[x] );
-      if ( !textarea ) continue;
+      if ( !textarea )
+	  {
+	  	editor_names[x] = null;
+	  	continue;
+	  } 
     }
     var editor = new Xinha(textarea, Xinha.cloneObject(default_config));
     editor.registerPlugins(plugin_names);
@@ -6731,7 +6735,8 @@ Xinha.createLoadingMessages = function(xinha_editors)
   
   for (var i=0;i<xinha_editors.length;i++)
   {
-     Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
+     if (!document.getElementById(xinha_editors[i])) continue;
+	 Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
   }
 };
 
@@ -6747,10 +6752,8 @@ Xinha.createLoadingMessage = function(textarea,text)
   loading_message.id = "loading_" + textarea.id;
   loading_message.className = "loading";
   
-  loading_message.style.left = Xinha.findPosX(textarea) +  'px';
+  loading_message.style.left = (Xinha.findPosX(textarea) + textarea.offsetWidth / 2) - 106 +  'px';
   loading_message.style.top = (Xinha.findPosY(textarea) + textarea.offsetHeight / 2) - 50 +  'px';
-  loading_message.style.width =  textarea.offsetWidth +  'px';
-  
   // main static message
   var loading_main = document.createElement("div");
   loading_main.className = "loading_main";
@@ -6760,7 +6763,7 @@ Xinha.createLoadingMessage = function(textarea,text)
   var loading_sub = document.createElement("div");
   loading_sub.className = "loading_sub";
   loading_sub.id = "loading_sub_" + textarea.id;
-  text = text ? text : Xinha._lc("Constructing object");
+  text = text ? text : Xinha._lc("Loading Core");
   loading_sub.appendChild(document.createTextNode(text));
   loading_message.appendChild(loading_main);
   loading_message.appendChild(loading_sub);
@@ -6804,6 +6807,7 @@ Xinha.removeLoadingMessages = function(xinha_editors)
 {
   for (var i=0;i< xinha_editors.length;i++)
   {
+     if (!document.getElementById(xinha_editors[i])) continue;
      var main = document.getElementById("loading_" + document.getElementById(xinha_editors[i]).id);
      main.parentNode.removeChild(main);
   }
