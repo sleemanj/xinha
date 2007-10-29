@@ -31,19 +31,19 @@ PreserveScripts.prototype.inwardHtml = function(html)
 	var c = s.editor.config.PreserveScripts;
 	this.storage = {}; //empty the cache
 	var i = 1;
-	html = html.replace(/\n?<\?php(\s|[^\s])*?\?>\n?/g,
+	html = html.replace(/\n?<\?php(\s|[^\s])*?\?>\n?/ig,
 		function(m)
 		{
 			if ( c.preservePHP ) // if config set to false wipe out php completely, otherwise ugly fragments may remain
-			{ 
-				return ''
-			}
-			else
 			{
 				s.storage['PreserveScripts_'+i] = m;
 				var r = '<img title="PHP" id="PreserveScripts_'+i+'" src="'+_editor_url+'plugins/PreserveScripts/php.png" />';
 				i++;
 				return r;
+			}
+			else
+			{
+				return '';
 			}
 		});
 	if ( c.preserveJS )
