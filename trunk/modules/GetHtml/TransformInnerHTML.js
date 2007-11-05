@@ -73,7 +73,7 @@ Xinha.prototype.cleanHTML = function(sHtml) {
 		replace(c[11], function(str, p1, p2) { return ' '+p1.toLowerCase()+p2; }).//lowercase attribute names
 		replace(c[3], '>').//strip singlet terminators
 		replace(c[9], '$1>').//trim whitespace
-		replace(c[5], '$1$3="$3"$4').//expand singlet attributes
+		replace(c[5], '$1$3="$3"$5').//expand singlet attributes
 		replace(c[4], '<$1$2 />').//terminate singlet tags
 		replace(c[6], '$1$2').//check quote nesting
 		replace(c[7], '&amp;').//expand query ampersands
