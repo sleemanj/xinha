@@ -2628,7 +2628,8 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   {
     edcellwidth -= parseInt(this.config.panel_dimensions.right, 10);    
   }
-  this._iframe.style.width = edcellwidth + 'px';
+  var iframeWidth = (this.config.iframeWidth)? parseInt(this.config.iframeWidth,10): null; 
+  this._iframe.style.width = (iframeWidth && iframeWidth < edcellwidth)? iframeWidth + "px": edcellwidth + "px"; 
 
   this._textArea.style.height = this._iframe.style.height;
   this._textArea.style.width  = this._iframe.style.width;
