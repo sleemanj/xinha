@@ -218,7 +218,7 @@ function Xinha(textarea, config)
   
   if ( !textarea )
   {
-    throw("Tried to create Xinha without textarea specified.");
+    throw new Error ("Tried to create Xinha without textarea specified.");
   }
 
   if ( typeof config == "undefined" )
@@ -6432,20 +6432,30 @@ Xinha.makeEditors = function(editor_names, default_config, plugin_names)
   }
 
   var editors = {};
+  var textarea;
   for ( var x = 0; x < editor_names.length; x++ )
   {
-    if ( typeof editor_names[x] != 'object' )
+    if ( typeof editor_names[x] == 'string' ) // the regular case, an id of a textarea
     {
-      var textarea = Xinha.getElementById('textarea', editor_names[x] );
-      if ( !textarea )
-	  {
-	  	editor_names[x] = null;
-	  	continue;
-	  } 
+      textarea = Xinha.getElementById('textarea', editor_names[x] );
+      if (!textarea) // the id may be specified for a textarea that is maybe on another page; we simply skip it and go on
+      {
+        editor_names[x] = null;
+        continue;
+      }
+    }
+	 // make it possible to pass a reference instead of an id, for example from  document.getElementsByTagName('textarea')
+    else if ( typeof editor_names[x] == 'object' && editor_names[x].tagName && editor_names[x].tagName.toLowerCase() == 'textarea' )
+    {
+      textarea =  editor_names[x];
+      if ( !textarea.id ) // we'd like to have the textarea have an id
+      {
+        textarea.id = 'xinha_id_' + x;
+      } 
     }
     var editor = new Xinha(textarea, Xinha.cloneObject(default_config));
     editor.registerPlugins(plugin_names);
-    editors[editor_names[x]] = editor;
+    editors[textarea.id] = editor;
   }
   return editors;
 };
