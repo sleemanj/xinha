@@ -145,3 +145,4 @@
 	}
 
 	addEvent(window, 'load', init);
+  Xinha = window.parent.Xinha;
