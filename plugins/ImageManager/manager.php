@@ -34,7 +34,7 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 	if(window.opener)
-		HTMLArea = window.opener.HTMLArea;
+		Xinha = HTMLArea = window.opener.Xinha;
 
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getImagesURL(); ?>";
