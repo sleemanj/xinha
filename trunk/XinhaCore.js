@@ -191,9 +191,10 @@ Xinha.checkSupportedBrowser = function()
   }
   if ( Xinha.is_opera )
   {
-    alert("Sorry, Opera is not yet supported by Xinha.");
+    // alert("Sorry, Opera is not yet supported by Xinha.");
+    return false;
   }
-  return Xinha.is_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5;
+  return Xinha.is_gecko || (Xinha.is_opera && 0 && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5;
 };
 /** Cache result of checking for browser support
  * @type Boolean
@@ -2950,11 +2951,6 @@ Xinha.prototype.initIframe = function()
     
     html += Xinha.addCoreCSS();
     
-    if ( editor.config.pageStyle )
-    {
-      html += "<style type=\"text/css\">\n" + editor.config.pageStyle + "\n</style>";
-    }
-
     if ( typeof editor.config.pageStyleSheets !== 'undefined' )
     {
       for ( var i = 0; i < editor.config.pageStyleSheets.length; i++ )
@@ -2966,8 +2962,14 @@ Xinha.prototype.initIframe = function()
         }
       }
     }
+    
+    if ( editor.config.pageStyle )
+    {
+      html += "<style type=\"text/css\">\n" + editor.config.pageStyle + "\n</style>";
+    }
+    
     html += "</head>\n";
-    html += "<body>\n";
+    html += "<body" + (editor.config.bodyID ? (" id=\"" + editor.config.bodyID + "\"") : '') + ">\n";
     html +=   editor.inwardHtml(editor._textArea.value);
     html += "</body>\n";
     html += "</html>";
@@ -5024,7 +5026,7 @@ Xinha.prototype.fixRelativeLinks = function(html)
     var baseRe = null;
     if ( typeof this.config.baseHref != 'undefined' && this.config.baseHref !== null )
     {
-      baseRe = new RegExp( "((href|src|background)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref) + ")", 'g' );
+      baseRe = new RegExp( "((href|src|background)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/\/[^\/]*$/, '/')) + ")", 'g' );
     }
     else
     {
@@ -5998,6 +6000,7 @@ Xinha._postback = function(url, data, handler)
 
   req.open('POST', url, true);
   req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'+(Xinha._postback_send_charset ? '; charset=UTF-8' : ''));
+
   //alert(content);
   req.send(content);
 };
