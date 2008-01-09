@@ -27,7 +27,17 @@ function Dialog(url, action, init) {
 	if (typeof init == "undefined") {
 		init = window;	// pass this window object by default
 	}
-	Dialog._geckoOpenModal(url, action, init);
+	if (typeof window.showModalDialog == 'function')
+	{
+		Dialog._return = function(retVal) {
+			if (typeof action == 'function') action (retVal);
+		}
+		var r = window.showModalDialog(url, init, "dialogheight=10;dialogwidth=10;resizable=yes");
+	}
+	else
+	{
+		Dialog._geckoOpenModal(url, action, init);
+	}
 }
 
 Dialog._parentEvent = function(ev) {

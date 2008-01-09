@@ -395,6 +395,13 @@ Gecko.prototype.onMouseDown = function(ev)
 
 Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
 {
+  if ( toBeInserted.ownerDocument != this._doc ) // as of FF3, Gecko is strict regarding the ownerDocument of an element
+  {
+    try 
+	{
+		toBeInserted = this._doc.adoptNode( toBeInserted );
+	} catch (e) {}
+  }
   var sel = this.getSelection();
   var range = this.createRange(sel);
   // remove the current selection
@@ -403,6 +410,7 @@ Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
   var node = range.startContainer;
   var pos = range.startOffset;
   var selnode = toBeInserted;
+  
   switch ( node.nodeType )
   {
     case 3: // Node.TEXT_NODE

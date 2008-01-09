@@ -110,10 +110,18 @@
   }
 
 function Dialog(url, action, init) {
-  if (typeof init == "undefined") {
-    init = window;	// pass this window object by default
-  }
-  Dialog._geckoOpenModal(url, action, init);
+	if (typeof init == "undefined") {
+		init = window;	// pass this window object by default
+	}
+	if (typeof window.showModalDialog == 'function')
+	{
+		Dialog._return = action;
+		var r = window.showModalDialog(url, init, "dialogheight=10;dialogheight=10;scroll=no;resizable=yes");
+	}
+	else
+	{
+		Dialog._geckoOpenModal(url, action, init);
+	}
 };
 
 Dialog._parentEvent = function(ev) {
