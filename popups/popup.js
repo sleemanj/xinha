@@ -54,7 +54,11 @@ function __xinha_dlg_init( win_dim ) {
     link.rel = "stylesheet";
     head.appendChild(link);
   }
-	window.dialogArguments = opener.Dialog._arguments;
+  if (!window.dialogArguments && opener.Dialog._arguments)
+  {
+    window.dialogArguments = opener.Dialog._arguments;
+  }
+  
 
   var page = Xinha.pageSize(window);
   if ( !win_dim )
