@@ -721,38 +721,48 @@ Xinha.prototype.setCC = function ( target )
     else
     {
       var sel = this.getSelection();
-      sel.getRangeAt(0).insertNode( document.createTextNode( cc ) );
+      sel.getRangeAt(0).insertNode( this._doc.createTextNode( cc ) );
     }
   } catch (e) {}
 };
 
 Xinha.prototype.findCC = function ( target )
 {
+  if ( target == 'textarea' )
+  {
+  var ta = this._textArea;
+  var pos = ta.value.indexOf( this.cc );
+  if ( !pos ) return;
+  var end = pos + this.cc.length;
+  var before =  ta.value.substring( 0, pos );
+  var after = ta.value.substring( end, ta.value.length );
+  ta.value = before ;
+
+  ta.scrollTop = ta.scrollHeight;
+  var scrollPos = ta.scrollTop;
+  
+  ta.value += after;
+  ta.setSelectionRange(pos,pos);
+
+  ta.focus();
+  
+  ta.scrollTop = scrollPos;
+
+  }
+  else
+  {
   try 
   {
-    var findIn = ( target == 'textarea' ) ? window : this._iframe.contentWindow;
-    if( findIn.find( this.cc ) )
-    {
-      if (target == "textarea")
-      {
-        var ta = this._textArea;
-        var start = pos = ta.selectionStart;
-        var end = ta.selectionEnd;
-        var scrollTop = ta.scrollTop;
-        ta.value = ta.value.substring( 0, start ) + ta.value.substring( end, ta.value.length );
-        ta.selectionStart = pos;
-        ta.selectionEnd = pos;
-        ta.scrollTop = scrollTop
-        ta.focus();
-      }
-      else
-      {
-        var sel = this.getSelection();
-        sel.getRangeAt(0).deleteContents();
-        this._iframe.contentWindow.focus();
-      }
-    }
+    var self = this;
+    var t = setTimeout(function(){ // Why do so many thing work only with a timeout??
+      self._iframe.contentWindow.find( self.cc );
+      var sel = self.getSelection();
+      sel.getRangeAt(0).deleteContents();
+      self._iframe.contentWindow.focus();
+    },50);
+    
   } catch (e) {}
+  }
 };
 /*--------------------------------------------------------------------------*/
 /*------------ EXTEND SOME STANDARD "Xinha.prototype" METHODS --------------*/
