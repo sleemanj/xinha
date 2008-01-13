@@ -3337,6 +3337,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
   while ( nuPlugins.length )
   {
     var p = nuPlugins.pop();
+	if (p == 'FullScreen' && !url ) continue; //prevent trying to load FullScreen plugin from the plugins folder
     if ( typeof Xinha._pluginLoadStatus[p] == 'undefined' )
     {
       // Load it
