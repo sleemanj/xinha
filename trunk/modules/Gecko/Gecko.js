@@ -732,7 +732,7 @@ Xinha.prototype.findCC = function ( target )
   {
   var ta = this._textArea;
   var pos = ta.value.indexOf( this.cc );
-  if ( !pos ) return;
+  if ( pos == -1 ) return;
   var end = pos + this.cc.length;
   var before =  ta.value.substring( 0, pos );
   var after = ta.value.substring( end, ta.value.length );
