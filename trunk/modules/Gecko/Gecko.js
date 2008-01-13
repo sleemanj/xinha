@@ -695,7 +695,7 @@ Xinha.getOuterHTML = function(element)
 };
 
 //Control character for retaining edit location when switching modes
-Xinha.prototype.cc = String.fromCharCode(173); 
+Xinha.prototype.cc = '|XinhaCaret|'; 
 
 Xinha.prototype.setCC = function ( target )
 {
@@ -751,17 +751,14 @@ Xinha.prototype.findCC = function ( target )
   }
   else
   {
-  try 
-  {
-    var self = this;
-    var t = setTimeout(function(){ // Why do so many thing work only with a timeout??
-      self._iframe.contentWindow.find( self.cc );
-      var sel = self.getSelection();
+    try
+    {
+      this._iframe.contentWindow.find( this.cc );
+      var sel = this.getSelection();
       sel.getRangeAt(0).deleteContents();
-      self._iframe.contentWindow.focus();
-    },50);
-    
-  } catch (e) {}
+      this.scrollToElement();
+      this._iframe.contentWindow.focus();
+    } catch (e) {}
   }
 };
 /*--------------------------------------------------------------------------*/
