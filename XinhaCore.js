@@ -5018,7 +5018,7 @@ Xinha.prototype.fixRelativeLinks = function(html)
   
   if ( typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors )
   {
-    var stripRe = new RegExp("((href|src|background)=\")("+Xinha.escapeStringForRegExp(document.location.href.replace(/&/g,'&amp;')) + ')([#?][^\'" ]*)', 'g');
+    var stripRe = new RegExp("((href|src|background)=\")("+Xinha.escapeStringForRegExp(unescape(document.location.href.replace(/&/g,'&amp;'))) + ')([#?][^\'" ]*)', 'g');
     html = html.replace(stripRe, '$1$4');
   }
 
