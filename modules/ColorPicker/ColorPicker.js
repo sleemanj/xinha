@@ -104,6 +104,8 @@
     {
       Xinha.colorPicker.loadColors();
     }
+	
+	this.is_ie_6 = (Xinha.is_ie && Xinha.ie_version < 7);
     var picker = this;
     var enablepick = false;
     var enablevalue = false;
@@ -405,11 +407,12 @@
       {
         this.table.style.left = left + 'px';
       }
-     // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
-      /*@cc_on
-      this.iframe.style.top = this.table.style.top;
-      this.iframe.style.left = this.table.style.left;
-      @*/
+     // IE6 ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+      if (this.is_ie_6)
+	  {
+        this.iframe.style.top = this.table.style.top;
+        this.iframe.style.left = this.table.style.left;
+      }
     };
 
     function pickCell(cell)
@@ -712,8 +715,8 @@
 
         function createSavedColors(color)
         {
-          var is_ie = false;
-          /*@cc_on is_ie = true; @*/
+          var is_ie = Xinha.is_ie;
+
           var div = document.createElement('div');
           div.style.width = picker.cellsize + 'px';//13px';
           div.style.height = picker.cellsize + 'px';//13px';
@@ -743,20 +746,21 @@
         document.body.appendChild(this.table);
         
         //put an iframe behind the table to mask select lists in ie
-        // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
-        /*@cc_on
-        if ( !this.iframe )
+        // IE6 ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+        if (this.is_ie_6)
         {
-        this.iframe = document.createElement('iframe');
-        this.iframe.frameBorder = 0;
-        this.iframe.src = "javascript:;";
-        this.iframe.style.position = "absolute";
-        this.iframe.style.width = this.table.offsetWidth;
-        this.iframe.style.height = this.table.offsetHeight;
-        document.body.insertBefore(this.iframe, this.table);
+          if ( !this.iframe )
+          {
+            this.iframe = document.createElement('iframe');
+            this.iframe.frameBorder = 0;
+            this.iframe.src = "javascript:;";
+            this.iframe.style.position = "absolute";
+            this.iframe.style.width = this.table.offsetWidth;
+            this.iframe.style.height = this.table.offsetHeight;
+            document.body.insertBefore(this.iframe, this.table);
+          }
+          this.iframe.style.display = '';
         }
-        this.iframe.style.display = '';
-        @*/
       }
       else
       {
@@ -798,10 +802,11 @@
     {
       Xinha._removeEvent(document.body,'mousedown',closeOnBodyClick);
       this.table.style.display = 'none';
-      // IE ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
-      /*@cc_on
-      if ( this.iframe ) { this.iframe.style.display = 'none'; }
-      @*/
+      // IE6 ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
+      if (this.is_ie_6)
+      {
+        if ( this.iframe ) { this.iframe.style.display = 'none'; }
+      }
     };
 } // end Xinha.colorPicker
 
