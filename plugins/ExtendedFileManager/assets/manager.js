@@ -4,7 +4,8 @@
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
  * Version: Updated on 17-11-2006 by Raimund Meyer
- * Package: ExtendedFileManager (EFM 1.1.3)
+ * Version: Updated on 20-01-2008 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -45,41 +46,41 @@ function onTargetChanged() {
   } else f.style.visibility = "hidden";
 }
 
-//initialise the form
-
-if (manager_mode == "link")
+function init ()
 {
-    var offsetForInputs = (Xinha.is_ie) ? 165 : 150;
-}
-else
-{
-    var offsetForInputs = (Xinha.is_ie) ? 230 : 210;
-}   
+	if (typeof imgManager == 'undefined' )
+	{
+		setTimeout(init,10); // sometimes we are too hasty
+		return;
+	}
+	
+   	var w = 650;
+	var h = 200;
+	
+	window.resizeTo(w,h);
+	var pageSize = Xinha.pageSize (window);
 
-var h =  100 // space above files 
-       + 250 // files iframe
-       + offsetForInputs; 
-
-var win_dim = {width:650,height:h};
-window.resizeTo(win_dim.width,win_dim.height);
-if (!Xinha.is_ie)
-{
-  var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
-  var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
-}
-else
-{//IE does not have window.outer... , so center it on the screen at least
-  var x =  (self.screen.availWidth - win_dim.width) / 2;
-  var y =  (self.screen.availHeight - win_dim.height) / 2;	
-}
-window.moveTo(x,y);
-
-init = function ()
-{
-    
-    
-    __dlg_init(null,  {width:650,height:h});
-
+	h = pageSize['y'] + 60;
+	
+	window.resizeTo(w,h);
+	if ( Xinha.ie_version == 7 )
+	{
+		window.resizeBy( 0, 40);
+		h += 40;
+	}
+	if (!Xinha.is_ie)
+	{
+	  var x = opener.screenX + (opener.outerWidth - w) / 2;
+	  var y = opener.screenY + (opener.outerHeight -h) / 2;
+	}
+	else
+	{//IE does not have window.outer... , so center it on the screen at least
+	  var x =  (self.screen.availWidth -w) / 2;
+	  var y =  (self.screen.availHeight - h) / 2;	
+	}
+	window.moveTo(x,y);
+	
+	__xinha_dlg_init();
     __dlg_translate('ExtendedFileManager');
 
     var uploadForm = document.getElementById('uploadForm');
@@ -220,21 +221,22 @@ init = function ()
     		startDir = startDir[1];
     	}
     }
+	iframeUrl = window.location.href.replace(_backend_url ,iframeUrl );
 	if ( startDir )
-    {
-         Xinha._addEvent(imgManager,'load', function () {
-                changeDir(startDir);
-                var dirPath = document.getElementById('dirPath');
-                for(var i = 0; i < dirPath.options.length; i++)
-                {
-                    if(dirPath.options[i].value == encodeURIComponent(startDir))
-                    {
-                        dirPath.options[i].selected = true;
-                        break;
-                    }
-                }
-            } );
-    }
+	{
+		iframeUrl += '&dir=' + startDir;
+		var dirPath = document.getElementById('dirPath');
+		for(var i = 0; i < dirPath.options.length; i++)
+		{
+			if(dirPath.options[i].value == encodeURIComponent(startDir))
+			{
+				dirPath.options[i].selected = true;
+				break;
+			}
+		}
+	};
+	imgManager.location.replace( iframeUrl );
+
     if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor') && document.getElementById('f_backgroundColor').type == 'text') {
       // Hookup color pickers
 
@@ -248,6 +250,7 @@ init = function ()
       new Xinha.colorPicker.InputBinding(document.getElementById('f_backgroundColor'),pickerConfig);
       new Xinha.colorPicker.InputBinding(document.getElementById('f_borderColor'),pickerConfig);
     }
+	setTimeout(function() { addEvent(window, 'resize', resize); }, 500);
 }
 
 function pasteButton(action)
@@ -547,16 +550,10 @@ function newFolder()
 function resize()
 {
 	var win = Xinha.viewportSize(window);
-	document.getElementById('imgManager').style.height = parseInt( win.y - 130 - offsetForInputs, 10 ) + 'px';
-	
+	var m = document.getElementById('messages');
+	var messagesHeight = (m && m.style.display != 'none' ) ?  parseInt( document.getElementById('messages').offsetHeight, 10 ) : 0;
+	document.getElementById('imgManager').style.height = parseInt( win.y - 130 - document.getElementById('controls').offsetHeight, 10 ) - messagesHeight  + 'px';
 	return true;
 }
-addEvent(window, 'resize', resize);
-if (Xinha.is_gecko)
-{// this runs the init function (translation) before all the images in the iframe have loaded
-	document.addEventListener("DOMContentLoaded", init, false);
-}
-else
-{
-	addEvent(window, 'load', init);
-}
+
+Xinha.addOnloadHandler( init, window );

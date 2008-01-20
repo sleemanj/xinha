@@ -173,3 +173,46 @@ Xinha._addEvent = function(el, evname, func)
     el.attachEvent("on" + evname, func);
   }
 }
+Xinha.addOnloadHandler = function (func)
+{
+  // Dean Edwards/Matthias Miller/John Resig 
+  // http://dean.edwards.name/weblog/2006/06/again/
+  
+  var init = function ()
+  {
+    // quit if this function has already been called
+    if (arguments.callee.done) return;
+    // flag this function so we don't do the same thing twice
+    arguments.callee.done = true;
+    // kill the timer
+    if (_timer) clearInterval(_timer);
+    
+    func.call();
+  }
+  if (Xinha.is_ie)
+  {
+    document.write("<sc"+"ript id=__ie_onload defer src=javascript:void(0)><\/script>");
+    var script = document.getElementById("__ie_onload");
+    script.onreadystatechange = function()
+    {
+      if (this.readyState == "complete")
+      {
+        init(); // call the onload handler
+      }
+    };
+  }
+  else if (/WebKit/i.test(navigator.userAgent))
+  {
+    var _timer = setInterval(function()
+    {
+      if (/loaded|complete/.test(document.readyState))
+      {
+        init(); // call the onload handler
+      }
+    }, 10);
+  }
+  else /* for Mozilla/Opera9 */
+  {
+    document.addEventListener("DOMContentLoaded", init, false);  
+  }
+}

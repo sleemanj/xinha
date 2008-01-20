@@ -5,7 +5,8 @@
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 04-07-2006 by Krzysztof Kotowicz
  * Version: Updated on 29-10-2006 by Raimund Meyer
- * Package: ExtendedFileManager (EFM 1.1.3)
+ * Version: Updated on 20-01-2008 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -104,13 +105,15 @@
 	}
 	?>
 	
+	var iframeUrl = '<?php print $IMConfig['backend_url']; ?>__function=images&mode=<?php echo $insertMode;?>&viewtype=<?php echo $IMConfig['view_type'] ?>';
+
 /* ]]> */
 </script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/manager.js"></script>
 </head>
 <body class="dialog" >
 <div class="title">Insert <?php echo ($insertMode == 'image' ? 'Image' : 'File Link') ?></div>
-<form action="<?php print $IMConfig['backend_url']; ?>" id="uploadForm" method="post" enctype="multipart/form-data">
+<form action="<?php print htmlspecialchars($IMConfig['backend_url']); ?>" id="uploadForm" method="post" enctype="multipart/form-data">
 <input type="hidden" name="__plugin" value="ExtendedFileManager" />
 <input type="hidden" name="__function" value="images" />
 <input type="hidden" name="mode" value="<?php echo $insertMode; ?>" />
@@ -118,7 +121,7 @@
 <fieldset><legend>File Manager</legend>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-<td nowrap style="padding:10px;">
+<td nowrap="nowrap" style="padding:10px;">
 
 	<label for="dirPath">Directory</label>
 	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)">
@@ -136,22 +139,23 @@
 <?php } ?>
 <span id="pasteBtn"></span>
 
-	<select name="viewtype" id="viewtype" onChange="updateView()">
-	<option value="thumbview" <?php if($IMConfig['view_type']=="thumbview") echo "selected";?> >Thumbnail View</option>
-	<option value="listview" <?php if($IMConfig['view_type']=="listview") echo "selected";?> >List View</option>
+	<select name="viewtype" id="viewtype" onchange="updateView()">
+	<option value="thumbview" <?php if($IMConfig['view_type']=="thumbview") echo 'selected="selected"';?> >Thumbnail View</option>
+	<option value="listview" <?php if($IMConfig['view_type']=="listview") echo 'selected="selected"';?> >List View</option>
 	</select>
 </td>
 </tr>
 <tr><td style="padding:10px; padding-top:0px;">
 	<div id="messages"><span id="message">Loading</span><img src="<?php print $IMConfig['base_url'];?>img/dots.gif" width="22" height="12" alt="..." /></div>
-	<iframe src="<?php print $IMConfig['backend_url']; ?>__function=images&amp;mode=<?php echo $insertMode;?>&amp;viewtype=<?php echo $IMConfig['view_type'] ?>" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
+	<iframe src="about:blank" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </td></tr>
 </table>
 </fieldset>
 <!-- image properties -->
+<div id="controls">
 	<table class="inputTable">
 		<tr>
-			<td align="right" nowrap><label for="f_url"><?php if($insertMode=='image') echo 'File Name'; else echo 'URL';?></label></td>
+			<td align="right" nowrap="nowrap"><label for="f_url"><?php if($insertMode=='image') echo 'File Name'; else echo 'URL';?></label></td>
 			<td colspan="5"><input type="text" id="<?php if($insertMode=='image') echo 'f_url'; else echo 'f_href';?>" class="largelWidth" value="" /></td>
             <td rowspan="<?php echo $num_rows ?>" colspan="2" valign="top" align="center"><?php if($insertMode=='image') { ?>
             <div style="padding:4px;background-color:#CCC;border:1px inset;width: 100px; height: 100px;">
@@ -273,6 +277,7 @@ else if($IMConfig['allow_upload']) { ?>
           <button type="button" class="buttons" onclick="return onOK();">OK</button>
           <button type="button" class="buttons" onclick="return onCancel();">Cancel</button>
     </div>
+</div>
 </form>
 </body>
 </html>

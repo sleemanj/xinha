@@ -15,7 +15,7 @@ xinha_init = xinha_init ? xinha_init : function()
    * textarea ids, you can add them all. The ones that are not found on the
    * current page will just be skipped.
    ************************************************************************/
-  
+
   xinha_editors = xinha_editors ? xinha_editors :
   [
     'myTextArea', 'anotherOne'
@@ -63,7 +63,6 @@ xinha_init = xinha_init ? xinha_init : function()
    *************************************************************************/
 
    xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
-   
         
    // To adjust the styling inside the editor, we can load an external stylesheet like this
    // NOTE : YOU MUST GIVE AN ABSOLUTE URL
@@ -108,5 +107,6 @@ xinha_init = xinha_init ? xinha_init : function()
   Xinha.startEditors(xinha_editors);
 }
 
-Xinha._addEvent(window,'load', xinha_init); // this executes the xinha_init function on page load 
-                                            // and does not interfere with window.onload properties set by other scripts
+Xinha.addOnloadHandler(xinha_init); // this executes the xinha_init function on page load
+                                     // and does not interfere with window.onload properties set by other scripts
+

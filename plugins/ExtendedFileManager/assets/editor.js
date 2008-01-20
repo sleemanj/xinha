@@ -3,8 +3,8 @@
  * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
- * http://www.afrusoft.com/htmlarea
+ * Version: Updated on 20-01-2008 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
  */
 
 var current_action = null;
@@ -39,19 +39,36 @@ function toggle(action)
         editor.setMode(current_action);
 
         //constraints on the scale,
-        //code by Frédéric Klee <fklee@isuisse.com>
+        //code by FrÃ©dÃ©ric Klee <fklee@isuisse.com>
         if(action == 'scale')
         {
             var theImage = editor.window.document.getElementById('theImage');
-            orginal_width = theImage.width ;
-            orginal_height = theImage.height;
+            orginal_width = theImage._width ;
+            orginal_height = theImage._height;
 
             var w = document.getElementById('sw');
             w.value = orginal_width ;
             var h = document.getElementById('sh') ;
             h.value = orginal_height ;
         }
-
+		if ( action == 'save' )
+		{
+			var formatSelect = document.getElementById('save_format');
+			var format = document.getElementById('save_filename').value.match(/\.(gif|png|jpe?g)/i)[1].toLowerCase();
+			switch ( format )
+			{
+				case 'png':
+					formatSelect.selectedIndex = '3';
+				break;
+				case 'gif':
+					formatSelect.selectedIndex = '4';
+				break;
+				default:
+					formatSelect.selectedIndex = '0';
+				break;
+			}
+			formatSelect.onchange();
+		}
     }
 }
 
@@ -69,7 +86,7 @@ function toggleMarker()
     }
 }
 
-//Togggle constraints, by Frédéric Klee <fklee@isuisse.com>
+//Togggle constraints, by FrÃ©dÃ©ric Klee <fklee@isuisse.com>
 function toggleConstraints()
 {
     var lock = document.getElementById("scaleConstImg");
@@ -91,7 +108,7 @@ function toggleConstraints()
     }
 }
 
-//check the constraints, by Frédéric Klee <fklee@isuisse.com>
+//check the constraints, by FrÃ©dÃ©ric Klee <fklee@isuisse.com>
 function checkConstrains(changed)
 {
     var constrained = document.getElementById('constProp');
@@ -132,6 +149,28 @@ function updateMarker(mode)
     }
 }
 
+function rotateSubActionSelect(selection)
+{
+	var value = selection.options[selection.selectedIndex].value;
+	
+	var rotate_preset_select = document.getElementById('rotate_preset_select');
+	var flip = document.getElementById('flip');
+	var angle = document.getElementById('ra').parentNode;
+	
+	switch (value)
+	{
+		case 'rotate':
+			rotate_preset_select.style.display = '';
+			flip.style.display = 'none';
+			angle.style.display = '';
+		break;
+		case 'flip':
+			rotate_preset_select.style.display = 'none';
+			flip.style.display = '';
+			angle.style.display = 'none';
+		break;
+	}
+}
 function rotatePreset(selection)
 {
     var value = selection.options[selection.selectedIndex].value;
@@ -147,10 +186,22 @@ function updateFormat(selection)
     var selected = selection.options[selection.selectedIndex].value;
 
     var values = selected.split(",");
+	if ( values[0] != 'jpeg' ) document.getElementById('slider').style.display = 'none';
+	else document.getElementById('slider').style.display = 'inline';
     if(values.length >1) {
         updateSlider(parseInt(values[1]));
     }
 
+}
+function zoom()
+{
+	var theImage = editor.window.document.getElementById('theImage');
+	var value = document.getElementById('zoom').value;
+	theImage.width = theImage._width * parseInt( value, 10 ) / 100;	
+	theImage.height = theImage._height * parseInt( value, 10 )/ 100;
+	editor.reset();
+	editor.pic_width = null;
+	editor.pic_height = null;
 }
 function addEvent(obj, evType, fn)
 {
@@ -159,14 +210,22 @@ function addEvent(obj, evType, fn)
     else {  return false; }
 }
 
-init = function()
+var init = function()
 {
-    var bottom = document.getElementById('bottom');
     if(window.opener)
     {
-        __dlg_init(null, {width: 673, height: 531});
+        __xinha_dlg_init();
         __dlg_translate('ExtendedFileManager');
     }
+	addEvent(window, 'resize', winOnResize);
+	try { window.moveTo(0,0); } catch (e) {}
+	window.resizeTo(window.screen.availWidth,window.screen.availHeight);
+	winOnResize();
 }
-
-addEvent(window, 'load', init);
+function winOnResize ()
+{
+	if ( typeof editor.reset == 'function' && typeof editor.ant != 'undefined'  ) editor.reset();
+	var win = Xinha.viewportSize(window);
+	document.getElementById("contents").style.height = win.y - parseInt(document.getElementById("indicator").offsetHeight,10) - 5 + 'px';
+}
+Xinha.addOnloadHandler( init, window );
