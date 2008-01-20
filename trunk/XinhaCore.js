@@ -5340,6 +5340,59 @@ Xinha._removeEvents = function(el, evs, func)
   }
 };
 
+/** Adds a function that is executed in the moment the DOM is ready, but as opposed to window.onload before images etc. have been loaded
+*   http://dean.edwards.name/weblog/2006/06/again/
+*  @public
+*  @author Dean Edwards/Matthias Miller/ John Resig / Raimund Meyer
+*  @param {Function}  func the function to be executed
+*  @param {Window}    scope the window that is listened to
+*/
+Xinha.addOnloadHandler = function (func, scope)
+{
+ scope = scope ? scope : window;
+
+ var init = function ()
+ {
+   // quit if this function has already been called
+   if (arguments.callee.done) return;
+   // flag this function so we don't do the same thing twice
+   arguments.callee.done = true;
+   // kill the timer
+   if (_timer) clearInterval(_timer);
+
+   func();
+ }
+ if (Xinha.is_ie)
+ {
+   scope.document.write("<sc"+"ript id=__ie_onload defer src=javascript:void(0)><\/script>");
+   var script = scope.document.getElementById("__ie_onload");
+      script.onreadystatechange = function()
+   {
+     if (this.readyState == "loaded") // We want this as early as possible, so I changed 'complete' to 'loaded', because otherwise it fired even after window.onload
+     {
+                this.parentNode.removeChild(script);
+       init(); // call the onload handler
+     }
+   };
+ }
+ else if (/applewebkit|KHTML/i.test(navigator.userAgent) ) /* Safari/WebKit/KHTML */
+ {
+   var _timer = scope.setInterval(function()
+   {
+     if (/loaded|complete/.test(scope.document.readyState))
+     {
+       init(); // call the onload handler
+     }
+   }, 10);
+ }
+ else /* for Mozilla/Opera9 */
+ {
+   scope.document.addEventListener("DOMContentLoaded", init, false);
+
+ }
+ Xinha._addEvent(scope, 'load', init); // incase anything went wrong
+};
+
 /**
  * Adds a standard "DOM-0" event listener to an element.
  * The DOM-0 events are those applied directly as attributes to

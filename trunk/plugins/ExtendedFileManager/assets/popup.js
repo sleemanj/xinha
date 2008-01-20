@@ -15,7 +15,26 @@ function __dlg_onclose() {
     if(opener.Dialog._return)
         opener.Dialog._return(null);
 }
+function __dlg_init( bottom, win_dim ) {
+  __xinha_dlg_init(win_dim);
+}
 
+function __xinha_dlg_init( win_dim ) {
+  if(window.__dlg_init_done) return true;
+  
+  if(window.opener._editor_skin) {
+    var head = document.getElementsByTagName("head")[0];
+    var link = document.createElement("link");
+    link.type = "text/css";
+    link.href = window.opener._editor_url + 'skins/' + window.opener._editor_skin + '/skin.css';
+    link.rel = "stylesheet";
+    head.appendChild(link);
+  }
+	window.dialogArguments = opener.Dialog._arguments;
+
+    Xinha.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
+  window.__dlg_init_done = true;
+}
 function __dlg_translate(context) {
     var types = ["span", "option", "td", "th", "button", "div", "label", "a","img", "legend"];
     for (var type = 0; type < types.length; type++) {
