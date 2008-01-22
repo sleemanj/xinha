@@ -4,7 +4,30 @@ For bug reports, forum, and updates go to
 http://xinha.org
 
 Release History
-
+Xinha 0.95 (due soon)
+ * fixed #1086 Repeated javascript insertion in onclick attributes
+ * fixed #1094 IE throws error in Xinha.loadStyle function
+ * added plugin PreserveScripts for enhanced editing of pages containing PHP and/or JavaScript ()
+ * Loading message facelift
+ * added XinhaLoader.js for enhanced user experience through early loading message
+ * fixed #1100 Extended File Manager - Error after opening window
+ * fixed #1103 [TransformInnerHTML] IE breaks singlet attributes starting with "no"
+ * made Xinha.makeEditors accept a DOM reference to the textarea instead of the id as part of xinha_editors array (#1105)
+ * #1109 (enhancement) Spanish language extended
+ * #1116 (enhancement) [ExtendedFileManager] added French translation
+ * fixed  #1117 IE returns javascript error -1072896658
+ * #1123 Allow return of PHP array from xinha_pass_to_php_backend
+ * [Linker] scan.php: Allow specification of base url to use (so that a subdirectory can be used as $dir and return appropriate urls to the files (prefixing the url
+ * fixed #993 PageStyle to override styles in PageStylesheets
+ * #1130 + #961 baseHref not correctly treated
+ * #1112 switching between modes leaves char 173 in source
+ * fixed #1128 loading fails when Fullscreen tried to load as plugin
+ * fixed #1126 Percent (%) in URL prevent stripSelfNamedAnchors from working
+ * #853 updated Translation for farsi
+ * fixed #1120 HTML select overlaps color picker in IE6
+ * #1132 (enhancement) [ExtendedFileManager] new Version
+ * #1115 + #1127 fixed compatibility issues with Firefox 3
+ 
 Xinha 0.94
  * Ticket #1093 [InsertSmiley] remove smiley gifs from trunk
  * fixed Ticket #1019 Cusor not jumping to editable part of window when clicked in IE
