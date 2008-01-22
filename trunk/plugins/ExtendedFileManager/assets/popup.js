@@ -30,9 +30,12 @@ function __xinha_dlg_init( win_dim ) {
     link.rel = "stylesheet";
     head.appendChild(link);
   }
-	window.dialogArguments = opener.Dialog._arguments;
+  if (!window.dialogArguments && opener.Dialog._arguments)
+  {
+    window.dialogArguments = opener.Dialog._arguments;
+  }
 
-    Xinha.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
+  Xinha.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
   window.__dlg_init_done = true;
 }
 function __dlg_translate(context) {
