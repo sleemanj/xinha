@@ -704,11 +704,11 @@ Xinha.Config = function()
    *  we use the "external" string  this is useful for say making special codes for
    *  your absolute links, your external string might be some special code, say "{server_url}"
    *  an you say that the internal represenattion of that should be http://your.server/<br />
-   *  Example:  <code>{'external_string' : 'internal_string'}</code><br />
+   *  Example:  <code>{ 'html_string' : 'wysiwyg_string' }</code><br />
    *  Default: <code>{}</code> (empty)
    *  @type Object
    */
-  this.specialReplacements = {}; // { 'external_string' : 'internal_string' }
+  this.specialReplacements = {}; //{ 'html_string' : 'wysiwyg_string' }
 
  /** Set to true if you want Word code to be cleaned upon Paste. This only works if 
    * you use the toolbr button to paste, not ^V. This means that due to the restrictions
@@ -5027,7 +5027,7 @@ Xinha.prototype.fixRelativeLinks = function(html)
     var baseRe = null;
     if ( typeof this.config.baseHref != 'undefined' && this.config.baseHref !== null )
     {
-      baseRe = new RegExp( "((href|src|background)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/\/[^\/]*$/, '/')) + ")", 'g' );
+      baseRe = new RegExp( "((href|src|background)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/([^\/]\/)(?=.+\.)[^\/]*$/, "$1")) + ")", 'g' );
     }
     else
     {
