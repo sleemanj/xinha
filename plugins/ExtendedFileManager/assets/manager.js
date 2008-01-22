@@ -54,20 +54,17 @@ function init ()
 		return;
 	}
 	
-   	var w = 650;
+	var w = 650;
 	var h = 200;
 	
 	window.resizeTo(w,h);
-	var pageSize = Xinha.pageSize (window);
-
-	h = pageSize['y'] + 60;
-	
+	var page = Xinha.pageSize(window);
 	window.resizeTo(w,h);
-	if ( Xinha.ie_version == 7 )
-	{
-		window.resizeBy( 0, 40);
-		h += 40;
-	}
+	
+	var dim = Xinha.viewportSize(window);
+
+	window.resizeBy(0, page.y - dim.y + 5);
+
 	if (!Xinha.is_ie)
 	{
 	  var x = opener.screenX + (opener.outerWidth - w) / 2;
