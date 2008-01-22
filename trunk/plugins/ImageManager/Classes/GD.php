@@ -513,7 +513,7 @@ Class Image_Transform_Driver_GD extends Image_Transform
 				}
 				else
 				{
-					$color_values = imagecolorsforindex($this->imageHandle,$transparent);
+					$color_values = imagecolorsforindex($this->imageHandle,$c);
 				}
 				if ($color_values['alpha'] >= 126)
 				{

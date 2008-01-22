@@ -124,7 +124,8 @@ class ImageEditor
 
 		$img = Image_Transform::factory(IMAGE_CLASS);
 		$img->load($fullpath);
-		if ( is_callable($img,'paletteToTrueColorWithTransparency') && !imageistruecolor( $img->imageHandle))
+		
+		if ( is_callable( array($img,'paletteToTrueColorWithTransparency')) && !imageistruecolor($img->imageHandle))
 		{
 			$img->paletteToTrueColorWithTransparency();
 		}
