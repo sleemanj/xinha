@@ -73,12 +73,12 @@ Xinha.Config.prototype.Equation =
 
 Equation._pluginInfo = {
 	name          : "ASCIIMathML Formula Editor",
-	version       : "2.2 (2007-08-17)",
+	version       : "2.3 (2008-01-26)",
 	developer     : "Raimund Meyer",
-	developer_url : "http://rheinaufCMS.de",
+	developer_url : "http://xinha.raimundmeyer.de",
 	c_owner       : "",
-	sponsor       : "Rheinauf",
-	sponsor_url   : "http://rheinaufCMS.de",
+	sponsor       : "",
+	sponsor_url   : "",
 	license       : "GNU/LGPL"
 };
 
@@ -98,16 +98,29 @@ Equation.prototype.onUpdateToolbar = function()
 		AMprocessNode(e._doc.body, false);
 		this.reParse = false;
 	}
+};
+// avoid changing the formula in the editor
+Equation.prototype.onKeyPress = function(ev)
+{
 	if (!Xinha.is_ie)
 	{
+		e = this.editor;
 		var span = e._getFirstAncestor(e.getSelection(),['span']);
 		if ( span && span.className == "AM" )
 		{
-			e.selectNodeContents(span);
+			if (
+				ev.keyCode == 8 || // delete
+				ev.keyCode == 46 ||// backspace
+				ev.charCode	       // all character keys
+			) 
+			{ // stop event
+				Xinha._stopEvent(ev);
+				return true; 
+			}
 		}
 	}
-};
-
+	return false;
+}
 Equation.prototype.onModeChange = function( args )
 {
 	var doc = this.editor._doc;
@@ -132,8 +145,23 @@ Equation.prototype.parse = function ()
 		{
 			var node = spans[i];
 			if (node.className != 'AM') continue;
+			if (node.innerHTML.indexOf(this.editor.cc) != -1) // avoid problems with source code position auxiliary character
+			{
+				node.innerHTML = node.innerHTML.replace(this.editor.cc,'');
+				node.parentNode.insertBefore(doc.createTextNode(this.editor.cc), node);
+			}
 			node.title = node.innerHTML;
-			AMprocessNode(node, false);
+			// FF3 strict source document policy: 
+			// the span is taken from the editor document, processed in the plugin document, and put back in the editor
+			var clone = node.cloneNode(true);
+			try {
+				document.adoptNode(clone);
+			} catch (e) {}
+			AMprocessNode(clone, false);
+			try {
+				doc.adoptNode(clone);
+			} catch (e) {}
+			node.parentNode.replaceChild(clone, node);
 		}
 	}
 }
@@ -166,7 +194,7 @@ Equation.prototype.buttonPress = function()
 	{
 		args["editedNode"] = parent;
 	}
-	editor._popupDialog("plugin://Equation/dialog", function(params) {
+	Dialog(_editor_url + "plugins/Equation/popups/dialog.html", function(params) {
 				self.insert(params);
 			}, args);
 };
@@ -206,6 +234,7 @@ Equation.prototype.insert = function (param)
 				this.editor.insertHTML('<span class="AM">'+formula+'</span>');
 			}
 		}
-		if (!Xinha.is_ie) AMprocessNode(this.editor._doc.body, false);
+
+		if (!Xinha.is_ie) this.parse();//AMprocessNode(this.editor._doc.body, false);
 	}
 }
