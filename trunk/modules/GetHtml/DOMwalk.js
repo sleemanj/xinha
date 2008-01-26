@@ -37,18 +37,10 @@ GetHtmlImplementation._pluginInfo = {
 
 // Retrieves the HTML code from the given node.	 This is a replacement for
 // getting innerHTML, using standard DOM calls.
-// Wrapper catch a Mozilla-Exception with non well formed html source code
+// Wrapper legacy see #442
 Xinha.getHTML = function(root, outputRoot, editor)
 {
-  try
-  {
-    return Xinha.getHTMLWrapper(root,outputRoot,editor);
-  }
-  catch(ex)
-  {   
-    alert(Xinha._lc('Your Document is not well formed. Check JavaScript console for details.'));
-    return editor._iframe.contentWindow.document.body.innerHTML;
-  }
+  return Xinha.getHTMLWrapper(root,outputRoot,editor);
 };
 
 Xinha.emptyAttributes = " checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade "

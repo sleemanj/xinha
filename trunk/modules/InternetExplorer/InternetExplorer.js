@@ -157,6 +157,101 @@ InternetExplorer.prototype.outwardHtml = function(html)
    return html;
 }
 
+InternetExplorer.prototype.onExecCommand = function(cmdID, UI, param)
+{   
+  switch(cmdID)
+  {
+    // #645 IE only saves the initial content of the iframe, so we create a temporary iframe with the current editor contents
+    case 'saveas':
+    {
+        var doc = null;
+        var editor = this.editor;
+        var iframe = document.createElement("iframe");
+        iframe.src = "about:blank";
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        try
+        {
+          if ( iframe.contentDocument )
+          {
+            doc = iframe.contentDocument;        
+          }
+          else
+          {
+            doc = iframe.contentWindow.document;
+          }
+        }
+        catch(ex)
+        { 
+          //hope there's no exception
+        }
+        
+        doc.open("text/html","replace");
+        var html = '';
+        if ( editor.config.browserQuirksMode === false )
+        {
+          var doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+        }
+        else if ( editor.config.browserQuirksMode === true )
+        {
+           var doctype = '';
+        }
+        else
+        {
+           var doctype = Xinha.getDoctype(document);
+        }
+        if ( !editor.config.fullPage )
+        {
+          html += doctype + "\n";
+          html += "<html>\n";
+          html += "<head>\n";
+          html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
+          if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null )
+          {
+            html += "<base href=\"" + editor.config.baseHref + "\"/>\n";
+          }
+          
+          if ( typeof editor.config.pageStyleSheets !== 'undefined' )
+          {
+            for ( var i = 0; i < editor.config.pageStyleSheets.length; i++ )
+            {
+              if ( editor.config.pageStyleSheets[i].length > 0 )
+              {
+                html += "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + editor.config.pageStyleSheets[i] + "\">";
+                //html += "<style> @import url('" + editor.config.pageStyleSheets[i] + "'); </style>\n";
+              }
+            }
+          }
+          
+          if ( editor.config.pageStyle )
+          {
+            html += "<style type=\"text/css\">\n" + editor.config.pageStyle + "\n</style>";
+          }
+          
+          html += "</head>\n";
+          html += "<body>\n";
+          html += editor.getEditorContent();
+          html += "</body>\n";
+          html += "</html>";
+        }
+        else
+        {
+          html = editor.getEditorContent();
+          if ( html.match(Xinha.RE_doctype) )
+          {
+            editor.setDoctype(RegExp.$1);
+          }
+        }
+        doc.write(html);
+        doc.close();
+        doc.execCommand(cmdID, UI, param);
+        document.body.removeChild(iframe);
+      return true;
+    }
+  }
+  
+  return false;
+};
 /*--------------------------------------------------------------------------*/
 /*------- IMPLEMENTATION OF THE ABSTRACT "Xinha.prototype" METHODS ---------*/
 /*--------------------------------------------------------------------------*/

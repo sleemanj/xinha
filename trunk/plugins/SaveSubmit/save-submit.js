@@ -20,8 +20,8 @@ function SaveSubmit(editor) {
 	tooltip  : self._lc("Save"),
 	image    : this.image_unchanged,
 	textMode : false,
-	action   :  function(editor) {
-			self.save(editor);
+	action   :  function() {
+			self.save();
 		}
 	});
 	cfg.addToolbarElement("savesubmit", "popupeditor", -1);
@@ -92,8 +92,9 @@ SaveSubmit.prototype.changedReset = function() {
 	this.setUnChanged();
 }
 
-SaveSubmit.prototype.save =  function(editor) {
-	this.buildMessage()
+SaveSubmit.prototype.save =  function() {
+	this.buildMessage();
+	var editor = this.editor;
 	var self =this;
 	var form = editor._textArea.form;
 	form.onsubmit();
