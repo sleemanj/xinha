@@ -2119,18 +2119,9 @@ Xinha.prototype.generate = function ()
   }
 
   // If this is gecko, set up the paragraph handling now
-  if ( Xinha.is_gecko && ( editor.config.mozParaHandler == 'best' || editor.config.mozParaHandler == 'dirty' ) )
+  if ( Xinha.is_gecko &&  editor.config.mozParaHandler != 'built-in' )
   {
-    switch (this.config.mozParaHandler)
-    {
-      case 'dirty':
-        var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerDirty.js';
-      break;
-      default:
-        var ParaHandlerPlugin = _editor_url + 'modules/Gecko/paraHandlerBest.js';
-      break;
-    }
-    if (  !Xinha.loadPlugins(["EnterParagraphs"], function() { editor.generate(); }, ParaHandlerPlugin ) )
+    if (  !Xinha.loadPlugins(["EnterParagraphs"], function() { editor.generate(); }, _editor_url + 'modules/Gecko/paraHandlerBest.js' ) )
     {
       return false;
     }
@@ -4887,7 +4878,7 @@ Xinha.prototype.outwardHtml = function(html)
   html = html.replace(/<(\/?)strike(\s|>|\/)/ig, "<$1del$2");
   
   // remove disabling of inline event handle inside Xinha iframe
-  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=['"])if\(window\.top &amp;&amp; window\.top\.Xinha\)\{return false\}/gi,'$1');
+  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=['"])if\(window\.parent &amp;&amp; window\.parent\.Xinha\)\{return false\}/gi,'$1');
 
   // Figure out what our server name is, and how it's referenced
   var serverBase = location.href.replace(/(https?:\/\/[^\/]*)\/.*/, '$1') + '/';
@@ -4948,7 +4939,7 @@ Xinha.prototype.inwardHtml = function(html)
   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
 
   // disable inline event handle inside Xinha iframe
-  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=["'])/gi,'$1if(window.top &amp;&amp; window.top.Xinha){return false}');
+  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=["'])/gi,'$1if(window.parent &amp;&amp; window.parent.Xinha){return false}');
   
   html = this.inwardSpecialReplacements(html);
 
