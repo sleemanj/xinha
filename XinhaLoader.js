@@ -195,7 +195,7 @@ Xinha.addOnloadHandler = function (func)
     var script = document.getElementById("__ie_onload");
     script.onreadystatechange = function()
     {
-      if (this.readyState == "complete")
+      if (this.readyState == "loaded")
       {
         init(); // call the onload handler
       }

@@ -4221,6 +4221,44 @@ Xinha.prototype.updateToolbar = function(noStatus)
 
 };
 
+/** Returns a editor object referenced by the id or name of the textarea or the textarea node itself
+ * For example to retrieve the HTML of an editor made out of the textarea with the id "myTextArea" you would do<br />
+ * <code>
+ *	 var editor = Xinha.getEditor("myTextArea");
+ *   var html = editor.getEditorContent(); 
+ * </code>
+ * @returns {Xinha|null} 
+ * @param {String|DomNode} ref id or name of the textarea or the textarea node itself
+ */
+Xinha.getEditor = function(ref)
+{
+  for ( var i = __xinhas.length; i--; )
+  {
+    var editor = __xinhas[i];
+    if ( editor && ( editor._textArea.id == ref || editor._textArea.name == ref || editor._textArea == ref ) )
+    {
+      return editor;
+    }
+  }
+  return null;
+};
+/** Sometimes one wants to call a plugin method directly, e.g. from outside the editor.
+ * This function returns the respective editor's instance of a plugin.
+ * For example you might want to have a button to trigger SaveSubmit's save() method:<br />
+ * <code>
+ *	 &lt;button type="button" onclick="Xinha.getEditor('myTextArea').getPluginInstance('SaveSubmit').save();return false;"&gt;Save&lt;/button&gt;
+ * </code>
+ * @returns {PluginObject|null} 
+ * @param {String} plugin name of the plugin
+ */
+Xinha.prototype.getPluginInstance = function (plugin)
+{
+  if (this.plugins[plugin])
+  {
+    return this.plugins[plugin].instance;
+  }
+  else return null;
+};
 /** Returns an array with all the ancestor nodes of the selection or current cursor position.
 * @returns {Array}
 */
