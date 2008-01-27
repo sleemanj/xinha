@@ -70,11 +70,9 @@
 .htmlarea .toolbar select,
 .htmlarea .toolbar select:hover,
 .htmlarea .toolbar select:active { 
- /* These settings don't work with Firefox 3 Linux
-  margin-top: 2px;
-  margin-bottom: 1px;
-  height: 17px;
-*/
+  position:relative;
+  top:-2px;
+  margin-bottom:-2px;
   color: ButtonText;
 }
 
