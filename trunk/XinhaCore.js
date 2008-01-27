@@ -177,18 +177,6 @@ Xinha.is_designMode = (typeof document.designMode != 'undefined' && !Xinha.is_ie
  */
 Xinha.checkSupportedBrowser = function()
 {
-  if ( Xinha.is_gecko )
-  {
-    if ( navigator.productSub < 20021201 )
-    {
-      alert("You need at least Mozilla-1.3 Alpha.\nSorry, your Gecko is not supported.");
-      return false;
-    }
-    if ( navigator.productSub < 20030210 )
-    {
-      alert("Mozilla < 1.3 Beta is not supported!\nI'll try, though, but it might not work.");
-    }
-  }
   if ( Xinha.is_opera )
   {
     // alert("Sorry, Opera is not yet supported by Xinha.");
@@ -475,7 +463,6 @@ Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a
  */
 Xinha.Config = function()
 {
-  var cfg = this;
   this.version = Xinha.version.Revision;
   
  /** This property controls the width of the editor.<br />
@@ -3211,9 +3198,8 @@ Xinha.prototype.registerPlugin = function()
   
   var plugin = arguments[0];
 
-  // @todo : try to avoid the use of eval()
   // We can only register plugins that have been succesfully loaded
-  if ( plugin === null || typeof plugin == 'undefined' || (typeof plugin == 'string' && eval('typeof ' + plugin) == 'undefined') )
+  if ( plugin === null || typeof plugin == 'undefined' || (typeof plugin == 'string' && typeof window[plugin] == 'undefined') )
   {
     return false;
   }
@@ -3233,10 +3219,9 @@ Xinha.prototype.registerPlugin = function()
  */
 Xinha.prototype.registerPlugin2 = function(plugin, args)
 {
-  // @todo : try to avoid the use of eval()
-  if ( typeof plugin == "string" )
+  if ( typeof plugin == "string" && typeof window[plugin] == 'function' )
   {
-    plugin = eval(plugin);
+    plugin = window[plugin];
   }
   if ( typeof plugin == "undefined" )
   {
@@ -3286,10 +3271,8 @@ Xinha.loadPlugin = function(pluginName, callback, plugin_file)
   if ( !Xinha.isSupportedBrowser ) return;
   
   Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin="+pluginName+"$"));
-  // @todo : try to avoid the use of eval()
+
   // Might already be loaded
-  //if ( eval('typeof ' + pluginName) != 'undefined' )
-  // @todo: try if this works to avoid the use of eval, I've been never getting here when testing
   if ( typeof window['pluginName'] != 'undefined' )
   {
     if ( callback )

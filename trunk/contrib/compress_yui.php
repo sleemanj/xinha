@@ -1,13 +1,13 @@
 <?
+// This is script that uses the YUI compressor (http://www.julienlecomte.net/blog/2007/08/11/)
+// It yields gradually better results than the dojo comressor, but it produces unreadable code
 die("Run this script to batch-compress the current Xinha snapshot. To run the script, open the file and comment out the die() command");
-$repository_url = 'http://svn.xinha.webfactional.com/trunk';
-$version ='';
-$date = date('r');
+
 error_reporting(E_ALL);
 ini_set('show_errors',1);
 
 $return = array();
-function scan($dir, $durl = '',$min_size="0")
+function scan($dir, $durl = '',$min_size="3000")
 {
 	static $seen = array();
 	global $return;
@@ -37,7 +37,7 @@ function scan($dir, $durl = '',$min_size="0")
 			}
 			elseif(is_file($path))
 			{
-				if(!preg_match("/\.js$/",$path) || filesize($path) < $min_size) continue;
+				if(!preg_match("/\.(js|css)$/",$path) || filesize($path) < $min_size) continue;
 				$return[] =  $path;
 			}
 
@@ -47,16 +47,11 @@ function scan($dir, $durl = '',$min_size="0")
 
 	return $files;
 }
-scan("../");
+scan("../",0);
 $cwd = getcwd();
-
-$root_dir = realpath($cwd.'/..');
-
 print "Processing ".count($return)." files<br />";
 
-$prefix = "/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */";
-if ($version) $prefix .= "\n/* This file is part of version $version released $date */";
-
+$prefix = "/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */";
 $core_prefix = '
   /*--------------------------------------------------------------------------
     --  Xinha (is not htmlArea) - http://xinha.org
@@ -72,26 +67,25 @@ $core_prefix = '
     --      This copyright notice MUST stay intact for use.
     -------------------------------------------------------------------------*/
 ';
+
 foreach ($return as $file)
 {
 	set_time_limit ( 60 ); 
-	print "Processed $file<br />";
+	print "Processing $file<br />";
 	flush();
-	$file_url = $repository_url.str_replace($root_dir,'',$file);
+	$ext = preg_replace('/.*?(\.js|\.css)$/','$1',$file);
+	
+	file_put_contents($file."_uncompr${ext}", preg_replace('/(\/\/[^\n]*)?(?![*])\\\[\n]/','',file_get_contents($file)));
 
-	copy($file,$file."_uncompr.js");
-	
-	$file_prefix = $prefix."\n/* The URL of the most recent version of this file is $file_url */";
-	
-	exec("echo \"".(preg_match('/XinhaCore.js$/',$file) ? $file_prefix.$core_prefix : $file_prefix)."\" > $file && java -jar ${cwd}/dojo_js_compressor.jar -c ${file}_uncompr.js >> $file 2>&1");
-	if (preg_match('/js: ".*?", line \d+:/',file_get_contents($file)))
+	exec("echo \"".(preg_match('/XinhaCore.js$/',$file) ? $prefix.$core_prefix : $prefix)."\" > $file && java -jar ${cwd}/yuicompressor-2.2.5.jar  --charset UTF-8 ${file}_uncompr${ext} >> $file 2>&1");
+	if (preg_match('/\d+:\d+:syntax error/',file_get_contents($file)))
 	{
 		unlink($file);
-		rename($file."_uncompr.js",$file);
+		rename($file."_uncompr${ext}",$file);
 	}
 	else
 	{
-		unlink($file."_uncompr.js");
+		unlink($file."_uncompr${ext}");
 	}
 
 }
