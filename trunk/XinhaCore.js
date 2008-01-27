@@ -745,7 +745,11 @@ Xinha.Config = function()
   this.imgURL = "images/";
   this.popupURL = "popups/";
 
-  /** Remove given tags when rendering the HTML (these have to be a regexp, or null if this functionality is not desired)<br />
+  /** RegExp allowing to remove certain HTML tags when rendering the HTML.<br />
+   *  Example: remove span and font tags
+   *  <code>
+   *    xinha_config.htmlRemoveTags = /span|font/;
+   *  </code>
    *  Default: <code>null</code>
    *  @type RegExp|null
    */
@@ -5160,8 +5164,8 @@ Xinha.cloneObject = function(obj)
 
   var newObj = {};
 
-  // check for array objects
-  if ( obj.constructor.toString().match( /\s*function Array\(/ ) )
+  // check for array and RegExp objects
+  if ( obj.constructor.toString().match( /\s*function Array\(/ ) || obj.constructor.toString().match( /\s*function RegExp\(/ ))
   {
     newObj = obj.constructor();
   }
@@ -6149,12 +6153,12 @@ if ( typeof dump == 'undefined' )
     var s = '';
     for ( var prop in o )
     {
-      s += prop + ' = ' + o[prop] + '\n';
-    }
+	  	 s += prop + ' = ' + o[prop] + '\n';
+	  }
     var x = window.open("", "debugger");
     x.document.write('<pre>' + s + '</pre>');
   }
-}
+    }
 if ( !Array.prototype.contains )
 {
   /** Walks through an array and checks if the specified item exists in it
