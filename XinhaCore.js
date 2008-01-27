@@ -214,7 +214,7 @@ if ( Xinha.isRunLocally && Xinha.isSupportedBrowser)
  * @param {Xinha.Config} config optional if no Xinha.Config object is passed, the default config is used
  */
 function Xinha(textarea, config)
-{
+{ 
   if ( !Xinha.isSupportedBrowser ) return;
   
   if ( !textarea )
@@ -5164,14 +5164,14 @@ Xinha.cloneObject = function(obj)
 
   var newObj = {};
 
-  // check for array and RegExp objects
-  if ( obj.constructor.toString().match( /\s*function Array\(/ ) || obj.constructor.toString().match( /\s*function RegExp\(/ ))
+  // check for array objects
+  if ( obj.constructor.toString().match( /\s*function Array\(/ ) )
   {
     newObj = obj.constructor();
   }
 
-  // check for function objects (as usual, IE is fucked up)
-  if ( obj.constructor.toString().match( /\s*function Function\(/ ) )
+  // check for function and RegExp objects (as usual, IE is fucked up)
+  if ( obj.constructor.toString().match( /\s*function Function\(/ ) || obj.constructor.toString().match( /\s*function RegExp\(/ ))
   {
     newObj = obj; // just copy reference to it
   }
