@@ -33,6 +33,7 @@ ContextMenu.prototype.onGenerate = function() {
 				    return self.popupMenu(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
 			    });
 	this.currentMenu = null;
+	this.editordoc.body.spellcheck = false; // Firefox spellchecking is quite confusing for the user when they don't get the browser context menu
 };
 
 ContextMenu.prototype.getContextMenu = function(target) {
