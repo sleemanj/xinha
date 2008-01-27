@@ -5,28 +5,43 @@ http://xinha.org
 
 Release History
 Xinha 0.95 (due soon)
+Bugs Fixed
+ * fixed #1100 Extended File Manager - Error after opening window
+ * fixed #1103 [TransformInnerHTML] IE breaks singlet attributes starting with "no"
  * fixed #1086 Repeated javascript insertion in onclick attributes
  * fixed #1094 IE throws error in Xinha.loadStyle function
+ * fixed  #1117 IE returns javascript error -1072896658
+ * fixed #993 PageStyle to override styles in PageStylesheets
+ * #1112 switching between modes leaves strange characters in source 
+ * fixed #1128 loading fails when Fullscreen tried to load as plugin
+ * fixed #1126 Percent (%) in URL prevent stripSelfNamedAnchors from working  
+ * fixed #1120 HTML select overlaps color picker in IE6
+ * #1115 + #1127 fixed compatibility issues with Firefox 3
+ * #961 +  #1130 changed behaviour of xinha_config.baseHref
+ * fixed #645 Save as function only saves the original html
+ * fixed #1040 htmlRemoveTags doesn't work in IE
+ * fixed #1015 Mozilla shows scrollbars on click in Stylist 
+ * #918 removed mozParaHandler dirty as it had been broken for a long time
+ 
+Enhancements
  * added plugin PreserveScripts for enhanced editing of pages containing PHP and/or JavaScript ()
  * Loading message facelift
  * added XinhaLoader.js for enhanced user experience through early loading message
- * fixed #1100 Extended File Manager - Error after opening window
- * fixed #1103 [TransformInnerHTML] IE breaks singlet attributes starting with "no"
  * made Xinha.makeEditors accept a DOM reference to the textarea instead of the id as part of xinha_editors array (#1105)
- * #1109 (enhancement) Spanish language extended
- * #1116 (enhancement) [ExtendedFileManager] added French translation
- * fixed  #1117 IE returns javascript error -1072896658
  * #1123 Allow return of PHP array from xinha_pass_to_php_backend
  * [Linker] scan.php: Allow specification of base url to use (so that a subdirectory can be used as $dir and return appropriate urls to the files (prefixing the url
- * fixed #993 PageStyle to override styles in PageStylesheets
- * #1130 + #961 baseHref not correctly treated
- * #1112 switching between modes leaves char 173 in source
- * fixed #1128 loading fails when Fullscreen tried to load as plugin
- * fixed #1126 Percent (%) in URL prevent stripSelfNamedAnchors from working
+ * [ExtendedFileManager] new Version
+ * #961 +  #1130 changed behaviour of xinha_config.baseHref
+ * #1137 [Equation] improved way of avoiding formula changes in editor
+ * #442 removed alert "Your Document is not well formed..."
+ * #1119 disabled Firefox 2 spell check when ContextMenu is enabled 
+
+I18n
+ * #1109 Spanish language extended
+ * #1116 [ExtendedFileManager] added French translation
  * #853 updated Translation for farsi
- * fixed #1120 HTML select overlaps color picker in IE6
- * #1132 (enhancement) [ExtendedFileManager] new Version
- * #1115 + #1127 fixed compatibility issues with Firefox 3
+ * fixed wrong encoding in Spanish language file 
+ * fixed no bold/italic/underline button images in Spanish
  
 Xinha 0.94
  * Ticket #1093 [InsertSmiley] remove smiley gifs from trunk
