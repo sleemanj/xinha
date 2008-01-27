@@ -5171,9 +5171,13 @@ Xinha.cloneObject = function(obj)
   }
 
   // check for function and RegExp objects (as usual, IE is fucked up)
-  if ( obj.constructor.toString().match( /\s*function Function\(/ ) || obj.constructor.toString().match( /\s*function RegExp\(/ ))
+  if ( obj.constructor.toString().match( /\s*function Function\(/ ) )
   {
     newObj = obj; // just copy reference to it
+  }
+  else if (  obj.constructor.toString().match( /\s*function RegExp\(/ ) )
+  {
+    newObj = eval( obj.toString() ); //see no way without eval
   }
   else
   {
