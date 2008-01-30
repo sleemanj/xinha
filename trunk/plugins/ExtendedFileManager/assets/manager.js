@@ -218,7 +218,6 @@ function init ()
     		startDir = startDir[1];
     	}
     }
-	iframeUrl = window.location.href.replace(_backend_url ,iframeUrl );
 	if ( startDir )
 	{
 		iframeUrl += '&dir=' + startDir;
