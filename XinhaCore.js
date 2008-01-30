@@ -5378,7 +5378,7 @@ Xinha.addOnloadHandler = function (func, scope)
    // flag this function so we don't do the same thing twice
    arguments.callee.done = true;
    // kill the timer
-   if (_timer) clearInterval(_timer);
+   if (Xinha.onloadTimer) clearInterval(Xinha.onloadTimer);
 
    func();
  }
@@ -5397,7 +5397,7 @@ Xinha.addOnloadHandler = function (func, scope)
  }
  else if (/applewebkit|KHTML/i.test(navigator.userAgent) ) /* Safari/WebKit/KHTML */
  {
-   var _timer = scope.setInterval(function()
+   Xinha.onloadTimer = scope.setInterval(function()
    {
      if (/loaded|complete/.test(scope.document.readyState))
      {

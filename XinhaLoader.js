@@ -185,7 +185,7 @@ Xinha.addOnloadHandler = function (func)
     // flag this function so we don't do the same thing twice
     arguments.callee.done = true;
     // kill the timer
-    if (_timer) clearInterval(_timer);
+    if (Xinha.onloadTimer) clearInterval(Xinha.onloadTimer);
     
     func.call();
   }
@@ -203,7 +203,7 @@ Xinha.addOnloadHandler = function (func)
   }
   else if (/WebKit/i.test(navigator.userAgent))
   {
-    var _timer = setInterval(function()
+    Xinha.onloadTimer = setInterval(function()
     {
       if (/loaded|complete/.test(document.readyState))
       {
