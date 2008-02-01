@@ -65,15 +65,17 @@ function init ()
 
 	window.resizeBy(0, page.y - dim.y + 5);
 
+	dim = Xinha.viewportSize(window);
+	
 	if (!Xinha.is_ie)
 	{
-	  var x = opener.screenX + (opener.outerWidth - w) / 2;
-	  var y = opener.screenY + (opener.outerHeight -h) / 2;
+	  var x = opener.screenX + (opener.outerWidth - dim.x) / 2;
+	  var y = opener.screenY + (opener.outerHeight - dim.x) / 2;
 	}
 	else
 	{//IE does not have window.outer... , so center it on the screen at least
-	  var x =  (self.screen.availWidth -w) / 2;
-	  var y =  (self.screen.availHeight - h) / 2;	
+	  var x =  (self.screen.availWidth - dim.x) / 2;
+	  var y =  (self.screen.availHeight - dim.y) / 2;	
 	}
 	window.moveTo(x,y);
 	
