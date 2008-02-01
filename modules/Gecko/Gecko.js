@@ -695,7 +695,7 @@ Xinha.getOuterHTML = function(element)
 };
 
 //Control character for retaining edit location when switching modes
-Xinha.prototype.cc = '|XinhaCaret|'; 
+Xinha.prototype.cc = String.fromCharCode(8286); 
 
 Xinha.prototype.setCC = function ( target )
 {

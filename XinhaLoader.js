@@ -1,4 +1,7 @@
 var Xinha = {};
+
+_editor_url = _editor_url.replace(/\x2f*$/, '/');
+
 Xinha.agt       = navigator.userAgent.toLowerCase();
 Xinha.is_ie    = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera") == -1));
 Xinha.ie_version= parseFloat(Xinha.agt.substring(Xinha.agt.indexOf("msie")+5));
