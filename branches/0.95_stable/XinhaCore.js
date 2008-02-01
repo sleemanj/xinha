@@ -21,10 +21,8 @@
     --      {
     --        bar();
     --      }
-    --   * Don't change brace styles unless you're working on the non BSD-Style
-    --     area (so we don't get spurious changes in line numbering).
-    --   * Don't change indentation unless you're working on the badly indented
-    --     area (so we don't get spurious changes of large blocks of code).
+    --   * Don't change brace styles.
+    --   * Don't change indentation.
     --   * Jedit is the recommended editor, a comment of this format should be
     --     included in the top 10 lines of the file (see the embedded edit mode)
     --
@@ -2430,6 +2428,7 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   this._risizing = true;
   
   this.notifyOf('before_resize', {width:width, height:height});
+  this.firePluginEvent('onBeforeResize', width, height);
   // We need to set the iframe & textarea to 100% height so that the htmlarea
   // isn't "pushed out" when we get it's height, so we can change them later.
   this._iframe.style.height   = '100%';
@@ -2618,6 +2617,7 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   this._textArea.style.width  = this._iframe.style.width;
      
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
+  this.firePluginEvent('onResize',this._htmlArea.offsetWidth, this._htmlArea.offsetWidth);
   this._risizing = false;
 };
 /** FIXME: Never used, what is this for? 
@@ -2656,7 +2656,7 @@ Xinha.prototype.addPanel = function(side)
   this._panels[side].div.appendChild(div);
 
   this.notifyOf('panel_change', {'action':'add','panel':div});
-
+  this.firePluginEvent('onPanelChange','add',div);
   return div;
 };
 /** Removes a panel
@@ -2675,6 +2675,7 @@ Xinha.prototype.removePanel = function(panel)
   }
   this._panels[panel.side].panels = clean;
   this.notifyOf('panel_change', {'action':'remove','panel':panel});
+  this.firePluginEvent('onPanelChange','remove',panel);
 };
 /** Hides a panel
 * @param {DomNode} panel object as returned by Xinha.prototype.addPanel()
@@ -2686,6 +2687,7 @@ Xinha.prototype.hidePanel = function(panel)
     try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) { }
     panel.style.display = 'none';
     this.notifyOf('panel_change', {'action':'hide','panel':panel});
+    this.firePluginEvent('onPanelChange','hide',panel);
     try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
   }
 };
@@ -2699,6 +2701,7 @@ Xinha.prototype.showPanel = function(panel)
     try { var pos = this.scrollPos(this._iframe.contentWindow); } catch(e) {}
     panel.style.display = '';
     this.notifyOf('panel_change', {'action':'show','panel':panel});
+    this.firePluginEvent('onPanelChange','show',panel);
     try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
   }
 };
@@ -2722,6 +2725,7 @@ Xinha.prototype.hidePanels = function(sides)
     }
   }
   this.notifyOf('panel_change', {'action':'multi_hide','sides':sides});
+  this.firePluginEvent('onPanelChange','multi_hide',sides);
 };
 /** Shows the panel(s) on one or more sides
 * @param {Array} sides the sides on which the panels shall be hidden
@@ -2743,6 +2747,7 @@ Xinha.prototype.showPanels = function(sides)
     }
   }
   this.notifyOf('panel_change', {'action':'multi_show','sides':sides});
+  this.firePluginEvent('onPanelChange','multi_show',sides);
 };
 /** Returns an array containig all properties that are set in an object
 * @param {Object} obj
@@ -3012,6 +3017,7 @@ Xinha.prototype.setMode = function(mode)
   switch ( mode )
   {
     case "textmode":
+      this.firePluginEvent('onBeforeMode', 'textmode');
       this.setCC("iframe");
       html = this.outwardHtml(this.getHTML());
       this.setHTML(html);
@@ -3026,11 +3032,13 @@ Xinha.prototype.setMode = function(mode)
         this._statusBarTree.style.display = "none";
         this._statusBarTextMode.style.display = "";
       }
+      this.findCC("textarea");
       this.notifyOf('modechange', {'mode':'text'});
-      this.findCC("textarea"); 
+      this.firePluginEvent('onMode', 'textmode');
     break;
 
     case "wysiwyg":
+      this.firePluginEvent('onBeforeMode', 'wysiwyg');
       this.setCC("textarea");
       html = this.inwardHtml(this.getHTML());
       this.deactivateEditor();
@@ -3043,8 +3051,10 @@ Xinha.prototype.setMode = function(mode)
         this._statusBarTree.style.display = "";
         this._statusBarTextMode.style.display = "none";
       }
-      this.notifyOf('modechange', {'mode':'wysiwyg'});
       this.findCC("iframe");
+      this.notifyOf('modechange', {'mode':'wysiwyg'});
+      this.firePluginEvent('onMode', 'wysiwyg');
+
     break;
 
     default:
@@ -3052,15 +3062,6 @@ Xinha.prototype.setMode = function(mode)
       return false;
   }
   this._editMode = mode;
-
-  for ( var i in this.plugins )
-  {
-    var plugin = this.plugins[i].instance;
-    if ( plugin && typeof plugin.onMode == "function" )
-    {
-      plugin.onMode(mode);
-    }
-  }
 };
 /** Sets the HTML in fullpage mode. Actually the whole iframe document is rewritten.
  * @private
@@ -4151,52 +4152,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
     var editor = this;
     this._timerUndo = setTimeout(function() { editor._timerUndo = null; }, this.config.undoTimeout);
   }
-
-  // Insert a space in certain locations, this is just to make editing a little
-  // easier (to "get out of" tags), it's not essential.
-  // TODO: Make this work for IE?
-  // TODO: Perhaps should use a plain space character, I'm not sure.
-  //  OK, I've disabled this temporarily, to be honest, I can't rightly remember what the
-  //  original problem was I was trying to solve with it.  I think perhaps that EnterParagraphs
-  //  might solve the problem, whatever the hell it was.  I'm going senile, I'm sure.
-  // @todo : since this part is disabled since a long time, does it still need to be in the source ?
-  if( 0 && Xinha.is_gecko )
-  {
-    var s = this.getSelection();
-    // If the last character in the last text node of the parent tag
-    // and the parent tag is not a block tag
-    if ( s && s.isCollapsed && s.anchorNode &&
-         s.anchorNode.parentNode.tagName.toLowerCase() != 'body' &&
-         s.anchorNode.nodeType == 3 && s.anchorOffset == s.anchorNode.length &&
-         !( s.anchorNode.parentNode.nextSibling && s.anchorNode.parentNode.nextSibling.nodeType == 3 ) &&
-         !Xinha.isBlockElement(s.anchorNode.parentNode) )
-    {
-      // Insert hair-width-space after the close tag if there isn't another text node on the other side
-      // It could also work with zero-width-space (\u200B) but I don't like it so much.
-      // Perhaps this won't work well in various character sets and we should use plain space (20)?
-      try
-      {
-        s.anchorNode.parentNode.parentNode.insertBefore(this._doc.createTextNode('\t'), s.anchorNode.parentNode.nextSibling);
-      }
-      catch(ex) {} // Disregard
-    }
-  }
-
-  // FIXME: this should be using this.firePluginEvent('onUpdateToolbar')
-  //   but we have to make sure that the plugins using that event return false
-  //   if they should let the event fire on other plugins, currently the below
-  //   code doesn't take the return value into account
-  
-  // check if any plugins have registered refresh handlers
-  for ( var indexPlugin in this.plugins )
-  {
-    var plugin = this.plugins[indexPlugin].instance;
-    if ( plugin && typeof plugin.onUpdateToolbar == "function" )
-    {
-      plugin.onUpdateToolbar();
-    }
-  }
-
+  this.firePluginEvent('onUpdateToolbar');
 };
 
 /** Returns a editor object referenced by the id or name of the textarea or the textarea node itself

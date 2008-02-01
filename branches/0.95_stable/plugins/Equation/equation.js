@@ -46,15 +46,10 @@ function Equation(editor) {
 	mathcolor = cfg.Equation.mathcolor;       // change it to "" (to inherit) or any other color
 	mathfontfamily = cfg.Equation.mathfontfamily;
 	
-	//if (Xinha.is_ie) return;
-	if (!Xinha.is_ie)
+	this.enabled = !Xinha.is_ie;
+	
+	if (this.enabled)
 	{	
-		editor.notifyOn( 'modechange',
-			function( e, args )
-				{
-					self.onModeChange( args );
-				}
-			);
 		this.onBeforeSubmit = this.onBeforeUnload = function () {self.unParse();};
 	}
 	
@@ -90,19 +85,11 @@ Equation.prototype.onGenerate = function()
 {
 	this.parse();
 };
-Equation.prototype.onUpdateToolbar = function() 
-{
-	var e = this.editor;
-	if (!Xinha.is_ie && this.reParse)
-	{
-		AMprocessNode(e._doc.body, false);
-		this.reParse = false;
-	}
-};
+
 // avoid changing the formula in the editor
 Equation.prototype.onKeyPress = function(ev)
 {
-	if (!Xinha.is_ie)
+	if (this.enabled)
 	{
 		e = this.editor;
 		var span = e._getFirstAncestor(e.getSelection(),['span']);
@@ -121,23 +108,24 @@ Equation.prototype.onKeyPress = function(ev)
 	}
 	return false;
 }
-Equation.prototype.onModeChange = function( args )
+Equation.prototype.onBeforeMode = function( mode )
 {
-	var doc = this.editor._doc;
-	switch (args.mode)
+	if (this.enabled && mode == 'textmode')
 	{
-		case 'text':
-			this.unParse();
-		break;
-		case 'wysiwyg':
-			this.parse();
-		break;
+		this.unParse();
 	}
-};
+}
+Equation.prototype.onMode = function( mode )
+{
+	if (this.enabled && mode == 'wysiwyg')
+	{
+		this.parse();
+	}
+}
 
 Equation.prototype.parse = function ()
 {
-	if (!Xinha.is_ie)
+	if (this.enabled)
 	{
 		var doc = this.editor._doc;
 		var spans = doc.getElementsByTagName("span");
@@ -162,6 +150,9 @@ Equation.prototype.parse = function ()
 				doc.adoptNode(clone);
 			} catch (e) {}
 			node.parentNode.replaceChild(clone, node);
+			// insert space before and after the protected node, otherwide one could get stuck
+			clone.parentNode.insertBefore(doc.createTextNode(String.fromCharCode(32)),clone);
+			clone.parentNode.insertBefore(doc.createTextNode(String.fromCharCode(32)),clone.nextSibling);
 		}
 	}
 }
@@ -177,7 +168,6 @@ Equation.prototype.unParse = function ()
 		var formula = node.getAttribute("title");
 		node.innerHTML = formula;
 		node.setAttribute("title", null);
-		this.editor.setHTML(this.editor.getHTML());
 	}
 }
 
@@ -211,7 +201,7 @@ Equation.prototype.insert = function (param)
 			if (formula != '')
 			{
 				span.innerHTML = formula;
-				if (!Xinha.is_ie) span.title = formula;
+				if (this.enabled) span.title = formula;
 			}
 			else
 			{
@@ -221,7 +211,7 @@ Equation.prototype.insert = function (param)
 		}
 		else if (!param["editedNode"] && formula != '')
 		{
-			if (!Xinha.is_ie)
+			if (this.enabled)
 			{			
 				var span = document.createElement('span');
 				span.className = 'AM';
@@ -235,6 +225,6 @@ Equation.prototype.insert = function (param)
 			}
 		}
 
-		if (!Xinha.is_ie) this.parse();//AMprocessNode(this.editor._doc.body, false);
+		if (this.enabled) this.parse();//AMprocessNode(this.editor._doc.body, false);
 	}
 }
