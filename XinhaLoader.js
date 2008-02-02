@@ -7,6 +7,7 @@ Xinha.is_ie    = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera
 Xinha.ie_version= parseFloat(Xinha.agt.substring(Xinha.agt.indexOf("msie")+5));
 Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
 Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
+Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
 Xinha.is_safari  = (Xinha.agt.indexOf("safari") != -1);
 Xinha.opera_version = navigator.appVersion.substring(0, navigator.appVersion.indexOf(" "))*1;
 Xinha.is_mac   = (Xinha.agt.indexOf("mac") != -1);
@@ -15,7 +16,7 @@ Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
 Xinha.is_gecko  = (navigator.product == "Gecko" && !Xinha.is_safari); // Safari lies!
 Xinha.isRunLocally = document.URL.toLowerCase().search(/^file:/) != -1;
 Xinha.is_designMode = (typeof document.designMode != 'undefined' && !Xinha.is_ie); // IE has designMode, but we're not using it
-Xinha.isSupportedBrowser = Xinha.is_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5;
+Xinha.isSupportedBrowser = Xinha.is_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5 || Xinha.is_safari;
 
 Xinha.loadPlugins = function(plugins, callbackIfNotReady)
 {
@@ -188,6 +189,7 @@ Xinha.addOnloadHandler = function (func)
     // flag this function so we don't do the same thing twice
     arguments.callee.done = true;
     // kill the timer
+	
     if (Xinha.onloadTimer) clearInterval(Xinha.onloadTimer);
     
     func.call();
