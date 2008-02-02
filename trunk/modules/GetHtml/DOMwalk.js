@@ -146,7 +146,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
             continue;
           }
           var name = a.nodeName.toLowerCase();
-          if ( /_moz_editor_bogus_node/.test(name) )
+          if ( /_moz_editor_bogus_node/.test(name) || ( name == 'class' && a.nodeValue == 'webkit-block-placeholder') )
           {
             html = "";
             break;
@@ -180,6 +180,11 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
             else
             {
               value = a.nodeValue;
+			  if (name == 'class')
+			  {
+			  	value = value.replace(/Apple-style-span/,'');
+				if (!value) continue;
+			  }
               // IE seems not willing to return the original values - it converts to absolute
               // links using a.nodeValue, a.value, a.stringValue, root.getAttribute("href")
               // So we have to strip the baseurl manually :-/

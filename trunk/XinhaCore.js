@@ -138,6 +138,10 @@ Xinha.opera_version = navigator.appVersion.substring(0, navigator.appVersion.ind
 @type string 
 */
 Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
+/** Browser is WebKit
+@type string 
+*/
+Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
 /** Browser is Safari
 @type string 
 */
@@ -154,10 +158,11 @@ Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
 @type string 
 */
 Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
-/** Browserengine is Gecko (Mozilla)
+/** Browserengine is Gecko (Mozilla), applies also to Safari
 @type string 
 */
-Xinha.is_gecko  = (navigator.product == "Gecko" && !Xinha.is_safari); // Safari lies!
+Xinha.is_gecko  = (navigator.product == "Gecko");
+Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
 /** File is opened locally opened ("file://" protocol)
  * @type string
  * @private
@@ -2036,7 +2041,17 @@ Xinha.prototype.generate = function ()
     }
     editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
   }
-  else
+  else if (Xinha.is_webkit)
+  {
+    url = _editor_url + 'modules/WebKit/WebKit.js';
+    if ( !Xinha.loadPlugins(["WebKit"], function() { editor.generate(); }, url ) )
+    {            
+  
+      return false;
+    }
+    editor._browserSpecificPlugin = editor.registerPlugin('WebKit');
+  }
+  else if (Xinha.is_gecko)
   {
     url = _editor_url + 'modules/Gecko/Gecko.js';
     if ( !Xinha.loadPlugins(["Gecko"], function() { editor.generate(); }, url ) )
@@ -2855,7 +2870,7 @@ Xinha.prototype.deactivateEditor = function()
       this._doc.designMode = 'off';
     } catch (ex) {}
   }
-  else if ( !Xinha.is_gecko && this._doc.body.contentEditable !== false )
+  else if ( !Xinha.is_designMode && this._doc.body.contentEditable !== false )
   {
     this._doc.body.contentEditable = false;
   }
@@ -4426,9 +4441,9 @@ Xinha.prototype._colorSelector = function(cmdID)
     {
      editor._doc.execCommand('useCSS', false, false); // useCSS deprecated & replaced by styleWithCSS 
      editor._doc.execCommand('styleWithCSS', false, true); 
-     
+
     } catch (ex) {}
-  }
+    }
   
   var btn = editor._toolbarObjects[cmdID].element;
   var initcolor;
@@ -4579,7 +4594,6 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
     
     case 'justifyleft'  :
     case 'justifyright' :
-    {
       cmdID.match(/^justify(.*)$/);
       var ae = this.activeElement(this.getSelection());      
       if(ae && ae.tagName.toLowerCase() == 'img')
@@ -4590,7 +4604,6 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
       {
         this._doc.execCommand(cmdID, UI, param);
       }
-    }    
     break;
     
     default:
@@ -5088,6 +5101,12 @@ Xinha.prototype.setDoctype = function(doctype)
  */
 Xinha._object = null;
 
+/** Arrays are identified as "object" in typeof calls. Adding this tag to the Array prototype allows to distinguish between the two
+ */
+Array.prototype.isArray = true;
+/** RegExps are identified as "object" in typeof calls. Adding this tag to the RegExp prototype allows to distinguish between the two
+ */
+RegExp.prototype.isRegExp = true;
 /** function that returns a clone of the given object
  *  
  *  @private
@@ -5100,21 +5119,14 @@ Xinha.cloneObject = function(obj)
   {
     return null;
   }
-
-  var newObj = {};
-
-  // check for array objects
-  if ( obj.constructor.toString().match( /\s*function Array\(/ ) )
-  {
-    newObj = obj.constructor();
-  }
+  var newObj = (obj.isArray ) ? [] : {};
 
   // check for function and RegExp objects (as usual, IE is fucked up)
-  if ( obj.constructor.toString().match( /\s*function Function\(/ ) )
+  if ( obj.constructor.toString().match( /\s*function Function\(/ ) || typeof obj == 'function' )
   {
     newObj = obj; // just copy reference to it
   }
-  else if (  obj.constructor.toString().match( /\s*function RegExp\(/ ) )
+  else if (  obj.isRegExp )
   {
     newObj = eval( obj.toString() ); //see no way without eval
   }
@@ -5790,7 +5802,8 @@ Xinha.addCoreCSS = function(html)
     "<style title=\"XinhaInternalCSS\" type=\"text/css\">"
     + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;}\n"
     + "html, body { border: 0px; } \n"
-    + "body { background-color: #ffffff; } \n" 
+    + "body { background-color: #ffffff; } \n"
+	+ "img, hr { cursor: default } \n"  
     +"</style>\n";
     
     if( html && /<head>/i.test(html))
@@ -6089,19 +6102,30 @@ Xinha._geturlcontent = function(url)
 
 // Unless somebody already has, make a little function to debug things
 
-if ( typeof dump == 'undefined' )
+if (typeof dumpValues == 'undefined') 
 {
-  function dump(o)
+  function dumpValues(o)
   {
     var s = '';
-    for ( var prop in o )
+    for (var prop in o) 
     {
-	  	 s += prop + ' = ' + o[prop] + '\n';
-	  }
-    var x = window.open("", "debugger");
-    x.document.write('<pre>' + s + '</pre>');
-  }
+      if (window.console && typeof window.console.log == 'function') 
+      {
+        if (typeof console.firebug != 'undefined') 
+          console.log(o);
+        else 
+          console.log(prop + ' = ' + o[prop] + '\n');
+      }
+      else 
+        s += prop + ' = ' + o[prop] + '\n';
     }
+    if (s) 
+    {
+      var x = window.open("", "debugger");
+      x.document.write('<pre>' + s + '</pre>');
+    }
+  }
+}
 if ( !Array.prototype.contains )
 {
   /** Walks through an array and checks if the specified item exists in it
@@ -7056,7 +7080,7 @@ Xinha.getXMLHTTPRequestObject = function()
 {
   try
   {    
-    if (typeof XMLHttpRequest == "function")
+    if (typeof XMLHttpRequest != "undefined" && typeof XMLHttpRequest.constructor == 'function' ) // Safari's XMLHttpRequest is typeof object
     {
   	  return new XMLHttpRequest();
     }
