@@ -163,7 +163,6 @@ InternetExplorer.prototype.onExecCommand = function(cmdID, UI, param)
   {
     // #645 IE only saves the initial content of the iframe, so we create a temporary iframe with the current editor contents
     case 'saveas':
-    {
         var doc = null;
         var editor = this.editor;
         var iframe = document.createElement("iframe");
@@ -247,7 +246,48 @@ InternetExplorer.prototype.onExecCommand = function(cmdID, UI, param)
         doc.execCommand(cmdID, UI, param);
         document.body.removeChild(iframe);
       return true;
-    }
+    break;
+    case 'removeformat':
+      var editor = this.editor;
+      var sel = editor.getSelection();
+      var selSave = editor.saveSelection(sel);
+
+      var i, el, els;
+
+      function clean (el)
+      {
+        if (el.nodeType != 1) return;
+        el.removeAttribute('style');
+        for (var j=0; j<el.childNodes.length;j++)
+        {
+          clean(el.childNodes[j]);
+        }
+        if ( (el.tagName.toLowerCase() == 'span' && !el.attributes.length ) || el.tagName.toLowerCase() == 'font')
+        {
+          el.outerHTML = el.innerHTML;
+        }
+      }
+      if ( editor.selectionEmpty(sel) )
+      {
+        els = editor._doc.body.childNodes;
+        for (i = 0; i < els.length; i++) 
+        {
+          el = els[i];
+          if (el.nodeType != 1) continue;
+          if (el.tagName.toLowerCase() == 'span')
+          {
+            newNode = editor.convertNode(el, 'div');
+            el.parentNode.replaceChild(newNode, el);
+            el = newNode;
+          }
+          clean(el);
+        }
+      } 
+      editor._doc.execCommand(cmdID, UI, param);
+
+      editor.restoreSelection(selSave);
+      return true;
+    break;
   }
   
   return false;
@@ -392,7 +432,7 @@ Xinha.prototype.selectionEmpty = function(sel)
  */
 Xinha.prototype.saveSelection = function()
 {
-  return this.createRange(this._getSelection())
+  return this.createRange(this.getSelection())
 }
 /** 
  * Restores a selection previously stored
@@ -488,6 +528,7 @@ Xinha.prototype.getSelection = function()
  
 Xinha.prototype.createRange = function(sel)
 {
+  if (!sel) sel = this.getSelection();
   return sel.createRange();
 };
 

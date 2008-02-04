@@ -42,40 +42,7 @@ GenericPlugin.prototype.onUpdateToolbar = function ()
 
 GenericPlugin.prototype.onExecCommand = function ( cmdID, UI, param )
 {
-	if (cmdID != 'removeformat') return false;
-
-	var editor = this.editor;
-	var sel = editor.getSelection();
-	var range = editor.createRange(sel);
-
-	var els = editor._doc.getElementsByTagName('*');
-	
-	var start = ( range.startContainer.nodeType == 1 ) ? range.startContainer : range.startContainer.parentNode;
-	var end = ( range.endContainer.nodeType == 1 ) ? range.endContainer : range.endContainer.parentNode;
-	
-	function clean(node)
-	{
-		node.removeAttribute('style');
-	}
-	
-	for (var i=0; i<els.length;i++)
-	{
-		if (els[i] == start)
-		{
-			console.log({el : els[i], 'cmp' : 'start'});
-		} 
-		else if (els[i] == end)
-		{
-			console.log({el : els[i], 'cmp' : 'end'});
-		}
-		else
-		{
-			clean(els[i]);
-			console.log({el : els[i], 'cmp' : range.isPointInRange( els[i], 0 )});
-		}
-		
-	}
-	return true;
+	return false;
 }
 
 GenericPlugin.prototype.onKeyPress = function ( event )

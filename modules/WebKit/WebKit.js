@@ -326,6 +326,69 @@ WebKit.prototype.onExecCommand = function(cmdID, UI, param)
       alert(Xinha._lc("The Paste button does not work in the Safari browser for security reasons. Press CTRL-V on your keyboard to paste directly."));
       return true; // Indicate paste is done, stop command being issued to browser by Xinha.prototype.execCommand
     break;
+    case 'removeformat':
+      var editor = this.editor;
+      var sel = editor.getSelection();
+      var selSave = editor.saveSelection(sel);
+      var range = editor.createRange(sel);
+
+      var els = editor._doc.getElementsByTagName('*');
+      els = Xinha.collectionToArray(els);
+      var start = ( range.startContainer.nodeType == 1 ) ? range.startContainer : range.startContainer.parentNode;
+      var i,el,newNode, fragment, child,r2 = editor._doc.createRange();
+
+      function clean (el)
+      {
+        if (el.nodeType != 1) return;
+        el.removeAttribute('style');
+        for (var j=0; j<el.childNodes.length;j++)
+        {
+          clean(el.childNodes[j]);
+        }
+        if ( (el.tagName.toLowerCase() == 'span' && !el.attributes.length ) || el.tagName.toLowerCase() == 'font')
+        {
+          r2.selectNodeContents(el);
+          fragment = r2.extractContents();
+          while (fragment.firstChild)
+          {
+            child = fragment.removeChild(fragment.firstChild);
+            el.parentNode.insertBefore(child, el);
+          }
+          el.parentNode.removeChild(el);
+        }
+      }
+      if (sel.isCollapsed)
+      {
+        els = editor._doc.body.childNodes;
+        for (i = 0; i < els.length; i++) 
+        {
+          el = els[i];
+          if (el.nodeType != 1) continue;
+          if (el.tagName.toLowerCase() == 'span')
+          {
+            newNode = editor.convertNode(el, 'div');
+            el.parentNode.replaceChild(newNode, el);
+            el = newNode;
+          }
+          clean(el);
+        }
+      } 
+      else
+      {
+        for (i=0; i<els.length;i++)
+        {
+          el = els[i];
+          if ( range.isPointInRange(el, 0) || (els[i] == start && range.startOffset == 0))
+          {
+            clean(el);
+          }
+        }
+      }
+
+      r2.detach();
+      editor.restoreSelection(selSave);
+      return true;
+    break;
   }
 
   return false;
