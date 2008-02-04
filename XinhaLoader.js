@@ -189,7 +189,6 @@ Xinha.addOnloadHandler = function (func)
     // flag this function so we don't do the same thing twice
     arguments.callee.done = true;
     // kill the timer
-	
     if (Xinha.onloadTimer) clearInterval(Xinha.onloadTimer);
     
     func.call();

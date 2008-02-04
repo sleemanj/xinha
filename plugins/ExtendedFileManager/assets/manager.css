@@ -9,7 +9,7 @@ a img	{ border: 0; }
 a:hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; }
 .dirs {	padding: 1em; 	}
 
-.imageFrame { overflow-x:hidden; width: 100%; height: 145px; margin:0px; background-color: #fff;}
+.imageFrame { overflow-x:hidden; width: 100%; height: 155px; margin:0px; background-color: #fff;}
 .smallWidth{ width: 4em; }
 .largelWidth{ width: 30em; }
 .extralargelWidth{ width: 100%; }

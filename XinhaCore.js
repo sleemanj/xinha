@@ -4443,7 +4443,7 @@ Xinha.prototype._colorSelector = function(cmdID)
      editor._doc.execCommand('styleWithCSS', false, true); 
 
     } catch (ex) {}
-    }
+  }
   
   var btn = editor._toolbarObjects[cmdID].element;
   var initcolor;
@@ -4594,6 +4594,7 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
     
     case 'justifyleft'  :
     case 'justifyright' :
+    {
       cmdID.match(/^justify(.*)$/);
       var ae = this.activeElement(this.getSelection());      
       if(ae && ae.tagName.toLowerCase() == 'img')
@@ -4604,6 +4605,7 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
       {
         this._doc.execCommand(cmdID, UI, param);
       }
+    }    
     break;
     
     default:

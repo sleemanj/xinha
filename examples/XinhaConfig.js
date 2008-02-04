@@ -38,7 +38,7 @@ xinha_init = xinha_init ? xinha_init : function()
   [
    'CharacterMap',
    'ContextMenu',
-   'ListType',
+   'SmartReplace',
    'Stylist',
    'Linker',
    'SuperClean',
