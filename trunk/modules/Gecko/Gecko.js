@@ -365,6 +365,31 @@ Gecko.prototype.onExecCommand = function(cmdID, UI, param)
       alert(Xinha._lc("The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly."));
       return true; // Indicate paste is done, stop command being issued to browser by Xinha.prototype.execCommand
     }
+    break;
+    case 'removeformat':
+      var editor = this.editor;
+      var sel = editor.getSelection();
+      var selSave = editor.saveSelection(sel);
+      var range = editor.createRange(sel);
+
+      var els = editor._doc.body.getElementsByTagName('*');
+
+      var start = ( range.startContainer.nodeType == 1 ) ? range.startContainer : range.startContainer.parentNode;
+      var i, el;
+      if (sel.isCollapsed) range.selectNodeContents(editor._doc.body);
+      
+      for (i=0; i<els.length;i++)
+      {
+        el = els[i];
+        if ( range.isPointInRange(el, 0) || (els[i] == start && range.startOffset == 0))
+        {
+          el.removeAttribute('style');
+        }
+      }
+      this.editor._doc.execCommand(cmdID, UI, param);
+      editor.restoreSelection(selSave);
+      return true;
+    break;
   }
   
   return false;
