@@ -143,7 +143,7 @@ Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
 */
 Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
 Xinha.webkit_version = parseInt(navigator.appVersion.replace(/.*?AppleWebKit\/([\d]).*?/,'$1'));
-alert(Xinha.webkit_version);
+
 /** Browser is Safari
 @type string 
 */
