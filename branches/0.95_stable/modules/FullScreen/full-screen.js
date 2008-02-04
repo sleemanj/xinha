@@ -185,7 +185,7 @@ Xinha.prototype._fullScreen = function()
     this._htmlArea.style.zIndex   = 999;
     this._htmlArea.style.left     = e.config.fullScreenMargins[3] + 'px';
     this._htmlArea.style.top      = e.config.fullScreenMargins[0] + 'px';
-    if ( !Xinha.is_ie ) this._htmlArea.style.border   = 'none';
+    if ( !Xinha.is_ie && !Xinha.is_webkit ) this._htmlArea.style.border   = 'none';
     this._isFullScreen = true;
     resetScroll();
 
