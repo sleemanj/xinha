@@ -176,8 +176,7 @@ SmartReplace.prototype.smartQuotes = function(kind)
 		}
 		else
 		{
-			r.deleteContents();
-			editor.insertNodeAtSelection(document.createTextNode(' '+opening));				
+			editor.insertNodeAtSelection(document.createTextNode(opening));				
 		}
 		editor.getSelection().collapseToEnd();
 	}
@@ -204,8 +203,7 @@ SmartReplace.prototype.smartDash = function()
 
 		if(r.toString().match(/^ -/))
 		{
-			r.deleteContents();
-			this.editor.insertNodeAtSelection(document.createTextNode(' '+String.fromCharCode(8211)));
+			this.editor.insertNodeAtSelection(document.createTextNode(String.fromCharCode(8211)));
 		}
 		editor.getSelection().collapseToEnd();
 	}
