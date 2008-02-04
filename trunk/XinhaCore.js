@@ -142,6 +142,8 @@ Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
 @type string 
 */
 Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
+Xinha.webkit_version = parseInt(navigator.appVersion.replace(/.*?AppleWebKit\/([\d]).*?/,'$1'));
+alert(Xinha.webkit_version);
 /** Browser is Safari
 @type string 
 */
@@ -163,6 +165,9 @@ Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
 */
 Xinha.is_gecko  = (navigator.product == "Gecko");
 Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
+Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub) >= 2007121016;
+Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub) < 2007121016;
+
 /** File is opened locally opened ("file://" protocol)
  * @type string
  * @private
@@ -185,7 +190,7 @@ Xinha.checkSupportedBrowser = function()
     // alert("Sorry, Opera is not yet supported by Xinha.");
     return false;
   }
-  return Xinha.is_gecko || (Xinha.is_opera && 0 && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5;
+  return Xinha.is_real_gecko || (Xinha.is_opera && 0 && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5 || Xinha.webkit_version >= 522;
 };
 /** Cache result of checking for browser support
  * @type Boolean
