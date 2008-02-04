@@ -13,8 +13,7 @@
     -- This is the WebKit (Safari) compatability plugin, part of the Xinha core.
     --
     --  The file is loaded as a special plugin by the Xinha Core when
-    --  Xinha is being run under a Webkit based browser with the Midas
-    --  editing API.
+    --  Xinha is being run under a Webkit based browser such as Safari
     --
     --  It provides implementation and specialisation for various methods
     --  in the core where different approaches per browser are required.
@@ -25,18 +24,18 @@
     --   be a part of the WebKit.prototype, we won't trample on namespace
     --   that way.
     --
-    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/modules/Gecko/Gecko.js $
-    --  $LastChangedDate: 2007-10-12 12:00:47 +0200 (Fr, 12 Okt 2007) $
-    --  $LastChangedRevision: 901 $
-    --  $LastChangedBy: ray $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------*/
                                                     
 WebKit._pluginInfo = {
   name          : "WebKit",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision: 901 $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/Gecko/Gecko.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
@@ -47,7 +46,7 @@ function WebKit(editor) {
   editor.WebKit = this;
 }
 
-/** Allow Gecko to handle some key events in a special way.
+/** Allow Webkit to handle some key events in a special way.
  */
   
 WebKit.prototype.onKeyPress = function(ev)
@@ -567,6 +566,7 @@ Xinha.prototype.insertHTML = function(html)
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this.getSelection();
+  if (sel.isCollapsed) return '';
   var range = this.createRange(sel);
 
   if ( range )
@@ -650,8 +650,7 @@ Xinha.getOuterHTML = function(element)
   return (new XMLSerializer()).serializeToString(element);
 };
 
-//Control character for retaining edit location when switching modes
-Xinha.prototype.cc = String.fromCharCode(173); 
+Xinha.prototype.cc = String.fromCharCode(8286); 
 
 Xinha.prototype.setCC = function ( target )
 {
@@ -665,12 +664,13 @@ Xinha.prototype.setCC = function ( target )
       var before = ta.value.substring( 0, index )
       var after = ta.value.substring( index, ta.value.length );
 
-      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
+      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, enities and inside the body)
       {
         var tagEnd = after.indexOf(">") + 1;
         ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
       }
       else ta.value = before + cc + after;
+      ta.value = ta.value.replace(new RegExp ('(&[^'+cc+']*?)('+cc+')([^'+cc+']*?;)'), "$1$3$2");
       ta.value = ta.value.replace(new RegExp ('(<script[^>]*>[^'+cc+']*?)('+cc+')([^'+cc+']*?<\/script>)'), "$1$3$2");
       ta.value = ta.value.replace(new RegExp ('^([^'+cc+']*)('+cc+')([^'+cc+']*<body[^>]*>)(.*?)'), "$1$3$2$4");
     }
@@ -684,27 +684,26 @@ Xinha.prototype.setCC = function ( target )
 
 Xinha.prototype.findCC = function ( target )
 {
-  if (target == "textarea")
-  { // window.find() doesn't find text in textarea, neither does Safari's normal find feature
-  	// hope they will fix this some time
-	// this mechanism to scroll into
-    var ta = this._textArea;
-    var val = ta.value;
-	ta.value ='';
-	var initialTaHeight = ta.scrollHeight;
-	var start = val.indexOf(this.cc);
-    var end = start + this.cc.length;
-    ta.value = val.substring( 0, start );
-	var scrollTo = 0;
-	if ( ta.scrollHeight > initialTaHeight)
-	{
-		scrollTo = ta.scrollHeight;
-	}
-	ta.value += val.substring( end, val.length );
-    ta.selectionStart = start;
-    ta.selectionEnd = start;
-    ta.scrollTop = scrollTo;
-    ta.focus();
+  if ( target == 'textarea' )
+  {
+  var ta = this._textArea;
+  var pos = ta.value.indexOf( this.cc );
+  if ( pos == -1 ) return;
+  var end = pos + this.cc.length;
+  var before =  ta.value.substring( 0, pos );
+  var after = ta.value.substring( end, ta.value.length );
+  ta.value = before ;
+
+  ta.scrollTop = ta.scrollHeight;
+  var scrollPos = ta.scrollTop;
+  
+  ta.value += after;
+  ta.setSelectionRange(pos,pos);
+
+  ta.focus();
+  
+  ta.scrollTop = scrollPos;
+
   }
   else
   {

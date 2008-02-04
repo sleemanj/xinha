@@ -454,6 +454,7 @@ Xinha.prototype.insertHTML = function(html)
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this.getSelection();
+  if (this.selectionEmpty) return '';
   var range = this.createRange(sel);
   
   // Need to be careful of control ranges which won't have htmlText
@@ -541,12 +542,13 @@ Xinha.prototype.setCC = function ( target )
     var before = ta.value.substring( 0, index );
     var after  = ta.value.substring( index + cc.length , ta.value.length );
     
-    if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
+    if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, entities, and inside the body)
     {
       var tagEnd = after.indexOf(">") + 1;
       ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
     }
     else ta.value = before + cc + after;
+    ta.value = ta.value.replace(new RegExp ('(&[^'+cc+']*?)('+cc+')([^'+cc+']*?;)'), "$1$3$2");
     ta.value = ta.value.replace(new RegExp ('(<script[^>]*>[^'+cc+']*?)('+cc+')([^'+cc+']*?<\/script>)'), "$1$3$2");
     ta.value = ta.value.replace(new RegExp ('^([^'+cc+']*)('+cc+')([^'+cc+']*<body[^>]*>)(.*?)'), "$1$3$2$4");
   }

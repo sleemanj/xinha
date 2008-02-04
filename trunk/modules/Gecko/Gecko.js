@@ -188,11 +188,7 @@ Gecko.prototype.onKeyPress = function(ev)
   {    
 /*  This is now handled by a plugin  
     case 13: // ENTER
-      if( !ev.shiftKey && editor.config.mozParaHandler == 'dirty' )
-      {
-        this.dom_checkInsertP();
-        Xinha._stopEvent(ev);
-      }
+
     break;*/
 
     case 27: // ESCAPE
@@ -619,6 +615,7 @@ Xinha.prototype.insertHTML = function(html)
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this.getSelection();
+  if (sel.isCollapsed) return '';
   var range = this.createRange(sel);
   return Xinha.getHTML(range.cloneContents(), false, this);
 };
@@ -709,12 +706,13 @@ Xinha.prototype.setCC = function ( target )
       var before = ta.value.substring( 0, index )
       var after = ta.value.substring( index, ta.value.length );
 
-      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
+      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, entities, and inside the body)
       {
         var tagEnd = after.indexOf(">") + 1;
         ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
       }
       else ta.value = before + cc + after;
+      ta.value = ta.value.replace(new RegExp ('(&[^'+cc+']*?)('+cc+')([^'+cc+']*?;)'), "$1$3$2");
       ta.value = ta.value.replace(new RegExp ('(<script[^>]*>[^'+cc+']*?)('+cc+')([^'+cc+']*?<\/script>)'), "$1$3$2");
       ta.value = ta.value.replace(new RegExp ('^([^'+cc+']*)('+cc+')([^'+cc+']*<body[^>]*>)(.*?)'), "$1$3$2$4");
     }

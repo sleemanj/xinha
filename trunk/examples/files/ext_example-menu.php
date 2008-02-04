@@ -1,6 +1,6 @@
 ﻿<?php
-  $LocalPluginPath = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'plugins';
-  $LocalSkinPath = dirname(dirname(__File__)).DIRECTORY_SEPARATOR.'skins';
+  $LocalPluginPath = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'plugins';
+  $LocalSkinPath = dirname(dirname(dirname(__File__))).DIRECTORY_SEPARATOR.'skins';
 ?>
 <html>
 <head>

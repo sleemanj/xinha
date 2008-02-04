@@ -103,9 +103,11 @@
 	{
 		echo 'var manager_mode="image";';
 	}
+	//IE doesn't like a relative URL when changing a window's location
+	$iframe_url = str_replace( array("backend.php","manager.php"), "", $_SERVER["PHP_SELF"] ) . $IMConfig['backend_url'];
 	?>
 	
-	var iframeUrl = '<?php print $IMConfig['backend_url']; ?>__function=images&mode=<?php echo $insertMode;?>&viewtype=<?php echo $IMConfig['view_type'] ?>';
+	var iframeUrl = '<?php print $iframe_url ?>__function=images&mode=<?php echo $insertMode;?>&viewtype=<?php echo $IMConfig['view_type'] ?>';
 
 /* ]]> */
 </script>

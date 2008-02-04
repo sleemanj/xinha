@@ -55,7 +55,7 @@ function init ()
 	}
 	
 	var w = 650;
-	var h = 200;
+	var h = 600;
 	
 	window.resizeTo(w,h);
 	var page = Xinha.pageSize(window);
@@ -233,7 +233,7 @@ function init ()
 			}
 		}
 	};
-	imgManager.location.replace( iframeUrl );
+	imgManager.location.replace(iframeUrl);
 
     if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor') && document.getElementById('f_backgroundColor').type == 'text') {
       // Hookup color pickers
@@ -248,7 +248,7 @@ function init ()
       new Xinha.colorPicker.InputBinding(document.getElementById('f_backgroundColor'),pickerConfig);
       new Xinha.colorPicker.InputBinding(document.getElementById('f_borderColor'),pickerConfig);
     }
-	setTimeout(function() { addEvent(window, 'resize', resize); }, 500);
+	setTimeout(function() { resize();addEvent(window, 'resize', resize); }, 500);
 }
 
 function pasteButton(action)
