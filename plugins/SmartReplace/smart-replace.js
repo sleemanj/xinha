@@ -67,9 +67,9 @@ SmartReplace.prototype.onGenerate = function() {
 	this.editor._toolbarObjects.smartreplace.state("active", this.active);
 	
 	var self = this;
-	Xinha._addEvents(
+	Xinha._addEvent(
         self.editor._doc,
-        [ "keypress"],
+         "keypress",
         function (event)
         {
           return self.keyEvent(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
@@ -102,16 +102,16 @@ SmartReplace.prototype.onGenerate = function() {
 };
 
 SmartReplace.prototype.keyEvent = function(ev)
-{
+{ 
 	if ( !this.active) return true;
 	var editor = this.editor;
-	var charCode =  Xinha.is_ie ? ev.keyCode : ev.charCode;
+	var charCode =  Xinha.is_ie ? ev.keyCode : ev.which;
 
 	var key = String.fromCharCode(charCode);
 
 	if (charCode == 32) //space bar
 	{
-		return this.smartDash()
+		return this.smartDash(ev)
 	}
 	if ( key == '"' || key == "'")
 	{
@@ -151,6 +151,7 @@ SmartReplace.prototype.smartQuotes = function(kind)
 		{
 			r.moveStart('character', +1);
 			r.text = closing;
+			
 		}
 		else
 		{
@@ -180,9 +181,10 @@ SmartReplace.prototype.smartQuotes = function(kind)
 		}
 		editor.getSelection().collapseToEnd();
 	}
+	return false;
 }
 
-SmartReplace.prototype.smartDash = function()
+SmartReplace.prototype.smartDash = function(ev)
 {
 	var editor = this.editor;
 	var sel = this.editor.getSelection();
@@ -203,10 +205,12 @@ SmartReplace.prototype.smartDash = function()
 
 		if(r.toString().match(/^ -/))
 		{
-			this.editor.insertNodeAtSelection(document.createTextNode(String.fromCharCode(8211)));
+			r.deleteContents();
+			this.editor.insertNodeAtSelection(document.createTextNode(' ' + String.fromCharCode(8211)));
 		}
 		editor.getSelection().collapseToEnd();
 	}
+	return true;
 }
 
 SmartReplace.prototype.replaceAll = function()
