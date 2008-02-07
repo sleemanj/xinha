@@ -133,7 +133,14 @@ Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
 /** Version Number, if browser is Opera 
 @type string 
 */
-Xinha.opera_version = navigator.appVersion.substring(0, navigator.appVersion.indexOf(" "))*1;
+if(Xinha.is_opera && Xinha.agt.match(/opera[\/ ]([0-9.]+)/))
+{
+  Xinha.opera_version = parseFloat(RegExp.$1);
+}
+else
+{
+  Xinha.opera_version = 0;
+}
 /** Browserengine is KHTML (Konqueror, Safari)
 @type string 
 */
@@ -160,10 +167,11 @@ Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
 @type string 
 */
 Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
-/** Browserengine is Gecko (Mozilla), applies also to Safari
+/** Browser engine is Gecko (Mozilla), applies also to Safari and Opera which work
+ *  largely similar.
 @type string 
 */
-Xinha.is_gecko  = (navigator.product == "Gecko");
+Xinha.is_gecko  = (navigator.product == "Gecko") || Xinha.is_opera;
 Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
 Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub) >= 2007121016;
 Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub) < 2007121016;
@@ -185,12 +193,7 @@ Xinha.is_designMode = (typeof document.designMode != 'undefined' && !Xinha.is_ie
  */
 Xinha.checkSupportedBrowser = function()
 {
-  if ( Xinha.is_opera )
-  {
-    // alert("Sorry, Opera is not yet supported by Xinha.");
-    return false;
-  }
-  return Xinha.is_real_gecko || (Xinha.is_opera && 0 && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5 || Xinha.webkit_version >= 522;
+  return Xinha.is_real_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.2) || Xinha.ie_version >= 5.5 || Xinha.webkit_version >= 522;
 };
 /** Cache result of checking for browser support
  * @type Boolean
@@ -2056,6 +2059,15 @@ Xinha.prototype.generate = function ()
     }
     editor._browserSpecificPlugin = editor.registerPlugin('WebKit');
   }
+  else if (Xinha.is_opera)
+  {
+    url = _editor_url + 'modules/Opera/Opera.js';
+    if ( !Xinha.loadPlugins(["Opera"], function() { editor.generate(); }, url ) )
+    {            
+      return false;
+    }
+    editor._browserSpecificPlugin = editor.registerPlugin('Opera');
+  }
   else if (Xinha.is_gecko)
   {
     url = _editor_url + 'modules/Gecko/Gecko.js';
@@ -2340,20 +2352,8 @@ Xinha.prototype.generate = function ()
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
   if (Xinha.is_opera)
-    {
-      Xinha._addEvent(
-        this._iframe.contentWindow,
-        'load',
-        function(e)
-        {
-          if ( !editor._iframeLoadDone )
-          {
-             editor._iframeLoadDone = true;
-             editor.initIframe();
-          }
-          return true;
-        }
-      )
+    {       
+      editor.initIframe();      
     }
   else
     Xinha._addEvent(
