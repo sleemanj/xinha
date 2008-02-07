@@ -5019,11 +5019,11 @@ Xinha.prototype.fixRelativeLinks = function(html)
     var baseRe = null;
     if ( typeof this.config.baseHref != 'undefined' && this.config.baseHref !== null )
     {
-      baseRe = new RegExp( "((href|src|background)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/([^\/]\/)(?=.+\.)[^\/]*$/, "$1")) + ")", 'g' );
+      baseRe = new RegExp( "((href|src|background|action)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/([^\/]\/)(?=.+\.)[^\/]*$/, "$1")) + ")", 'g' );
     }
     else
     {
-      baseRe = new RegExp( "((href|src|background)=\")(" +  Xinha.escapeStringForRegExp(document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' )) + ")", 'g' );
+      baseRe = new RegExp( "((href|src|background|action)=\")(" +  Xinha.escapeStringForRegExp(document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' )) + ")", 'g' );
     }
 
     html = html.replace(baseRe, '$1');
