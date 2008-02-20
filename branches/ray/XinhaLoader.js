@@ -1,9 +1,13 @@
 var Xinha = {};
+
+_editor_url = _editor_url.replace(/\x2f*$/, '/');
+
 Xinha.agt       = navigator.userAgent.toLowerCase();
 Xinha.is_ie    = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera") == -1));
 Xinha.ie_version= parseFloat(Xinha.agt.substring(Xinha.agt.indexOf("msie")+5));
 Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
 Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
+Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
 Xinha.is_safari  = (Xinha.agt.indexOf("safari") != -1);
 Xinha.opera_version = navigator.appVersion.substring(0, navigator.appVersion.indexOf(" "))*1;
 Xinha.is_mac   = (Xinha.agt.indexOf("mac") != -1);
@@ -12,7 +16,7 @@ Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
 Xinha.is_gecko  = (navigator.product == "Gecko" && !Xinha.is_safari); // Safari lies!
 Xinha.isRunLocally = document.URL.toLowerCase().search(/^file:/) != -1;
 Xinha.is_designMode = (typeof document.designMode != 'undefined' && !Xinha.is_ie); // IE has designMode, but we're not using it
-Xinha.isSupportedBrowser = Xinha.is_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5;
+Xinha.isSupportedBrowser = Xinha.is_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5 || Xinha.is_safari;
 
 Xinha.loadPlugins = function(plugins, callbackIfNotReady)
 {
@@ -107,7 +111,11 @@ Xinha.createLoadingMessages = function(xinha_editors)
   
   for (var i=0;i<xinha_editors.length;i++)
   {
-     Xinha.loadingMessages.push(Xinha.createLoadingMessage(document.getElementById(xinha_editors[i])));
+    if (!document.getElementById(xinha_editors[i]))
+    {
+	  continue;
+    }
+    Xinha.loadingMessages.push(Xinha.createLoadingMessage(document.getElementById(xinha_editors[i])));
   }
 }
 
@@ -167,5 +175,48 @@ Xinha._addEvent = function(el, evname, func)
   else
   {
     el.attachEvent("on" + evname, func);
+  }
+}
+Xinha.addOnloadHandler = function (func)
+{
+  // Dean Edwards/Matthias Miller/John Resig 
+  // http://dean.edwards.name/weblog/2006/06/again/
+  
+  var init = function ()
+  {
+    // quit if this function has already been called
+    if (arguments.callee.done) return;
+    // flag this function so we don't do the same thing twice
+    arguments.callee.done = true;
+    // kill the timer
+    if (Xinha.onloadTimer) clearInterval(Xinha.onloadTimer);
+    
+    func.call();
+  }
+  if (Xinha.is_ie)
+  {
+    document.write("<sc"+"ript id=__ie_onload defer src=javascript:void(0)><\/script>");
+    var script = document.getElementById("__ie_onload");
+    script.onreadystatechange = function()
+    {
+      if (this.readyState == "loaded")
+      {
+        init(); // call the onload handler
+      }
+    };
+  }
+  else if (/WebKit/i.test(navigator.userAgent))
+  {
+    Xinha.onloadTimer = setInterval(function()
+    {
+      if (/loaded|complete/.test(document.readyState))
+      {
+        init(); // call the onload handler
+      }
+    }, 10);
+  }
+  else /* for Mozilla/Opera9 */
+  {
+    document.addEventListener("DOMContentLoaded", init, false);  
   }
 }

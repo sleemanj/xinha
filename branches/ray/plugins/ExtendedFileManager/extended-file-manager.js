@@ -1,11 +1,12 @@
 /**
  * ExtendedFileManager extended-file-manager.js file.
- * Authors: Wei Zhuo, Afru
+ * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz, Raimund Meyer
  * Modified by: Krzysztof Kotowicz <koto@webworkers.pl>
  * Version: Updated on 08-01-2005 by Afru
  * Version: Modified on 20-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
- * http://www.afrusoft.com/htmlarea
+ * Version: Updated on 29-10-2006 by Raimund Meyer
+ * Version: Updated on 20-01-2008 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
  */
 
 /**
@@ -34,13 +35,33 @@ function ExtendedFileManager(editor)
             });
         cfg.addToolbarElement("linkfile", "createlink", 1);
         };
+
+    var manager = editor.config.ExtendedFileManager.backend + '__function=manager';
+    if(cfg.ExtendedFileManager.backend_config != null)
+    {
+      manager += '&backend_config='
+        + encodeURIComponent(cfg.ExtendedFileManager.backend_config);
+      manager += '&backend_config_hash='
+        + encodeURIComponent(cfg.ExtendedFileManager.backend_config_hash);
+      manager += '&backend_config_secret_key_location='
+        + encodeURIComponent(cfg.ExtendedFileManager.backend_config_secret_key_location);
     }
+
+    if(cfg.ExtendedFileManager.backend_data != null)
+    {
+        for ( var i in cfg.ExtendedFileManager.backend_data )
+        {
+            manager += '&' + i + '=' + encodeURIComponent(cfg.ExtendedFileManager.backend_data[i]);
+        }
+    }
+    cfg.ExtendedFileManager.manager = manager;
+}
 
 ExtendedFileManager._pluginInfo = {
     name          : "ExtendedFileManager",
-    version       : "1.1.1",
-    developer     : "Afru, Krzysztof Kotowicz",
-    developer_url : "http://www.afrusoft.com/htmlarea/",
+    version       : "1.4",
+    developer     : "Afru, Krzysztof Kotowicz, Raimund Meyer",
+    developer_url : "http://xinha.org",
     license       : "htmlArea"
 };
 
@@ -96,27 +117,7 @@ Xinha.prototype._insertImage = function(image) {
         outparam.param.f_borderColor = convertToHex(outparam.param.f_borderColor);
 
     }
-
-    var manager = editor.config.ExtendedFileManager.backend + '__function=manager';
-    if(editor.config.ExtendedFileManager.backend_config != null)
-    {
-      manager += '&backend_config='
-        + encodeURIComponent(editor.config.ExtendedFileManager.backend_config);
-      manager += '&backend_config_hash='
-        + encodeURIComponent(editor.config.ExtendedFileManager.backend_config_hash);
-      manager += '&backend_config_secret_key_location='
-        + encodeURIComponent(editor.config.ExtendedFileManager.backend_config_secret_key_location);
-    }
-
-    if(editor.config.ExtendedFileManager.backend_data != null)
-    {
-        for ( var i in editor.config.ExtendedFileManager.backend_data )
-        {
-            manager += '&' + i + '=' + encodeURIComponent(editor.config.ExtendedFileManager.backend_data[i]);
-        }
-    }
-
-    Dialog(manager, function(param){
+    Dialog(this.config.ExtendedFileManager.manager, function(param){
         if (!param)
         {   // user must have pressed Cancel
             return false;
@@ -246,27 +247,7 @@ Xinha.prototype._linkFile = function(link) {
             baseHref: editor.config.baseHref
         };
 
-    var manager = _editor_url + 'plugins/ExtendedFileManager/manager.php?mode=link';
-    if(editor.config.ExtendedFileManager.backend_config != null)
-    {
-       manager += '&backend_config='
-               + encodeURIComponent(editor.config.ExtendedFileManager.backend_config);
-       manager += '&backend_config_hash='
-               + encodeURIComponent(editor.config.ExtendedFileManager.backend_config_hash);
-       manager += '&backend_config_secret_key_location='
-               + encodeURIComponent(editor.config.ExtendedFileManager.backend_config_secret_key_location);
-    }
-
-    if(editor.config.ExtendedFileManager.backend_data != null)
-    {
-        for ( var i in editor.config.ExtendedFileManager.backend_data )
-        {
-            manager += '&' + i + '=' + encodeURIComponent(editor.config.ExtendedFileManager.backend_data[i]);
-        }
-    }
-
-
-    Dialog(manager, function(param){
+    Dialog(this.config.ExtendedFileManager.manager+'&mode=link', function(param){
         if (!param)
             return false;
         var a = link;
@@ -303,7 +284,6 @@ Xinha.prototype._linkFile = function(link) {
         editor.selectNodeContents(a);
         editor.updateToolbar();
     }, outparam);
-
 };
 
 function shortSize(cssSize)

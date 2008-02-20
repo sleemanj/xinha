@@ -106,7 +106,7 @@ SmartReplace.prototype.keyEvent = function(ev)
 	if ( !this.active) return true;
 	var editor = this.editor;
 	var charCode =  Xinha.is_ie ? ev.keyCode : ev.charCode;
-	
+
 	var key = String.fromCharCode(charCode);
 
 	if (charCode == 32) //space bar
@@ -137,7 +137,7 @@ SmartReplace.prototype.smartQuotes = function(kind)
 	var editor = this.editor;
 		
 	var sel = editor.getSelection();
-	
+
 	if (Xinha.is_ie)
 	{
 		var r = editor.createRange(sel);
@@ -160,22 +160,26 @@ SmartReplace.prototype.smartQuotes = function(kind)
 	}
 	else
 	{
-		if (!sel.isCollapsed)
+		var r = editor.createRange(sel);
+
+		if (!r.collapsed)
 		{
 			editor.insertNodeAtSelection(document.createTextNode(''));
 		}
-		if (sel.anchorOffset > 0) sel.extend(sel.anchorNode,sel.anchorOffset-1);
+		if (r.startOffset > 0) r.setStart(r.startContainer, r.startOffset -1);
+
 		
-		if(sel.toString().match(/\S/))
+		if(r.toString().match(/[^\s\xA0]/))
 		{
-			sel.collapse(sel.anchorNode,sel.anchorOffset);
+			r.collapse(false);
 			editor.insertNodeAtSelection(document.createTextNode(closing));
 		}
 		else
 		{
-			sel.collapse(sel.anchorNode,sel.anchorOffset);
-			editor.insertNodeAtSelection(document.createTextNode(opening));
+			r.deleteContents();
+			editor.insertNodeAtSelection(document.createTextNode(' '+opening));				
 		}
+		editor.getSelection().collapseToEnd();
 	}
 }
 
@@ -183,9 +187,10 @@ SmartReplace.prototype.smartDash = function()
 {
 	var editor = this.editor;
 	var sel = this.editor.getSelection();
+	var r = this.editor.createRange(sel);
+	
 	if (Xinha.is_ie)
 	{
-		var r = this.editor.createRange(sel);
 		r.moveStart('character', -2);
 		
 		if(r.text.match(/\s-/))
@@ -195,12 +200,14 @@ SmartReplace.prototype.smartDash = function()
 	}
 	else
 	{
-		sel.extend(sel.anchorNode,sel.anchorOffset-2);
-		if(sel.toString().match(/^-/))
+		if (r.startOffset > 1) r.setStart(r.startContainer, r.startOffset -2);
+
+		if(r.toString().match(/^ -/))
 		{
+			r.deleteContents();
 			this.editor.insertNodeAtSelection(document.createTextNode(' '+String.fromCharCode(8211)));
 		}
-		sel.collapse(sel.anchorNode,sel.anchorOffset);
+		editor.getSelection().collapseToEnd();
 	}
 }
 

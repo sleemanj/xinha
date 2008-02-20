@@ -70,10 +70,10 @@
 .htmlarea .toolbar select,
 .htmlarea .toolbar select:hover,
 .htmlarea .toolbar select:active { 
-  margin-top: 2px;
-  margin-bottom: 1px;
+  position:relative;
+  top:-2px;
+  margin-bottom:-2px;
   color: ButtonText;
-  height: 17px;
 }
 
 .htmlarea iframe.xinha_iframe, .htmlarea textarea.xinha_textarea

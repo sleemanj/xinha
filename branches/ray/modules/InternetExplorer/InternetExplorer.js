@@ -157,6 +157,141 @@ InternetExplorer.prototype.outwardHtml = function(html)
    return html;
 }
 
+InternetExplorer.prototype.onExecCommand = function(cmdID, UI, param)
+{   
+  switch(cmdID)
+  {
+    // #645 IE only saves the initial content of the iframe, so we create a temporary iframe with the current editor contents
+    case 'saveas':
+        var doc = null;
+        var editor = this.editor;
+        var iframe = document.createElement("iframe");
+        iframe.src = "about:blank";
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        try
+        {
+          if ( iframe.contentDocument )
+          {
+            doc = iframe.contentDocument;        
+          }
+          else
+          {
+            doc = iframe.contentWindow.document;
+          }
+        }
+        catch(ex)
+        { 
+          //hope there's no exception
+        }
+        
+        doc.open("text/html","replace");
+        var html = '';
+        if ( editor.config.browserQuirksMode === false )
+        {
+          var doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+        }
+        else if ( editor.config.browserQuirksMode === true )
+        {
+           var doctype = '';
+        }
+        else
+        {
+           var doctype = Xinha.getDoctype(document);
+        }
+        if ( !editor.config.fullPage )
+        {
+          html += doctype + "\n";
+          html += "<html>\n";
+          html += "<head>\n";
+          html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
+          if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null )
+          {
+            html += "<base href=\"" + editor.config.baseHref + "\"/>\n";
+          }
+          
+          if ( typeof editor.config.pageStyleSheets !== 'undefined' )
+          {
+            for ( var i = 0; i < editor.config.pageStyleSheets.length; i++ )
+            {
+              if ( editor.config.pageStyleSheets[i].length > 0 )
+              {
+                html += "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + editor.config.pageStyleSheets[i] + "\">";
+                //html += "<style> @import url('" + editor.config.pageStyleSheets[i] + "'); </style>\n";
+              }
+            }
+          }
+          
+          if ( editor.config.pageStyle )
+          {
+            html += "<style type=\"text/css\">\n" + editor.config.pageStyle + "\n</style>";
+          }
+          
+          html += "</head>\n";
+          html += "<body>\n";
+          html += editor.getEditorContent();
+          html += "</body>\n";
+          html += "</html>";
+        }
+        else
+        {
+          html = editor.getEditorContent();
+          if ( html.match(Xinha.RE_doctype) )
+          {
+            editor.setDoctype(RegExp.$1);
+          }
+        }
+        doc.write(html);
+        doc.close();
+        doc.execCommand(cmdID, UI, param);
+        document.body.removeChild(iframe);
+      return true;
+    break;
+    case 'removeformat':
+      var editor = this.editor;
+      var sel = editor.getSelection();
+      var selSave = editor.saveSelection(sel);
+
+      var i, el, els;
+
+      function clean (el)
+      {
+        if (el.nodeType != 1) return;
+        el.removeAttribute('style');
+        for (var j=0; j<el.childNodes.length;j++)
+        {
+          clean(el.childNodes[j]);
+        }
+        if ( (el.tagName.toLowerCase() == 'span' && !el.attributes.length ) || el.tagName.toLowerCase() == 'font')
+        {
+          el.outerHTML = el.innerHTML;
+        }
+      }
+      if ( editor.selectionEmpty(sel) )
+      {
+        els = editor._doc.body.childNodes;
+        for (i = 0; i < els.length; i++) 
+        {
+          el = els[i];
+          if (el.nodeType != 1) continue;
+          if (el.tagName.toLowerCase() == 'span')
+          {
+            newNode = editor.convertNode(el, 'div');
+            el.parentNode.replaceChild(newNode, el);
+            el = newNode;
+          }
+          clean(el);
+        }
+      } 
+      editor._doc.execCommand(cmdID, UI, param);
+
+      editor.restoreSelection(selSave);
+      return true;
+    break;
+  }
+  
+  return false;
+};
 /*--------------------------------------------------------------------------*/
 /*------- IMPLEMENTATION OF THE ABSTRACT "Xinha.prototype" METHODS ---------*/
 /*--------------------------------------------------------------------------*/
@@ -297,7 +432,7 @@ Xinha.prototype.selectionEmpty = function(sel)
  */
 Xinha.prototype.saveSelection = function()
 {
-  return this.createRange(this._getSelection())
+  return this.createRange(this.getSelection())
 }
 /** 
  * Restores a selection previously stored
@@ -359,6 +494,7 @@ Xinha.prototype.insertHTML = function(html)
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this.getSelection();
+  if (this.selectionEmpty) return '';
   var range = this.createRange(sel);
   
   // Need to be careful of control ranges which won't have htmlText
@@ -392,6 +528,7 @@ Xinha.prototype.getSelection = function()
  
 Xinha.prototype.createRange = function(sel)
 {
+  if (!sel) sel = this.getSelection();
   return sel.createRange();
 };
 
@@ -446,12 +583,13 @@ Xinha.prototype.setCC = function ( target )
     var before = ta.value.substring( 0, index );
     var after  = ta.value.substring( index + cc.length , ta.value.length );
     
-    if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, and inside the body)
+    if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, entities, and inside the body)
     {
       var tagEnd = after.indexOf(">") + 1;
       ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
     }
     else ta.value = before + cc + after;
+    ta.value = ta.value.replace(new RegExp ('(&[^'+cc+']*?)('+cc+')([^'+cc+']*?;)'), "$1$3$2");
     ta.value = ta.value.replace(new RegExp ('(<script[^>]*>[^'+cc+']*?)('+cc+')([^'+cc+']*?<\/script>)'), "$1$3$2");
     ta.value = ta.value.replace(new RegExp ('^([^'+cc+']*)('+cc+')([^'+cc+']*<body[^>]*>)(.*?)'), "$1$3$2$4");
   }

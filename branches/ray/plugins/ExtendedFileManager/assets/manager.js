@@ -4,7 +4,8 @@
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
  * Version: Updated on 17-11-2006 by Raimund Meyer
- * Package: ExtendedFileManager (EFM 1.1.3)
+ * Version: Updated on 20-01-2008 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -45,41 +46,40 @@ function onTargetChanged() {
   } else f.style.visibility = "hidden";
 }
 
-//initialise the form
-
-if (manager_mode == "link")
+function init ()
 {
-    var offsetForInputs = (Xinha.is_ie) ? 165 : 150;
-}
-else
-{
-    var offsetForInputs = (Xinha.is_ie) ? 230 : 210;
-}   
+	if (typeof imgManager == 'undefined' )
+	{
+		setTimeout(init,10); // sometimes we are too hasty
+		return;
+	}
+	
+	var w = 650;
+	var h = 600;
+	
+	window.resizeTo(w,h);
+	var page = Xinha.pageSize(window);
+	window.resizeTo(w,h);
+	
+	var dim = Xinha.viewportSize(window);
 
-var h =  100 // space above files 
-       + 250 // files iframe
-       + offsetForInputs; 
+	window.resizeBy(0, page.y - dim.y + 5);
 
-var win_dim = {width:650,height:h};
-window.resizeTo(win_dim.width,win_dim.height);
-if (!Xinha.is_ie)
-{
-  var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
-  var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
-}
-else
-{//IE does not have window.outer... , so center it on the screen at least
-  var x =  (self.screen.availWidth - win_dim.width) / 2;
-  var y =  (self.screen.availHeight - win_dim.height) / 2;	
-}
-window.moveTo(x,y);
-
-init = function ()
-{
-    
-    
-    __dlg_init(null,  {width:650,height:h});
-
+	dim = Xinha.viewportSize(window);
+	
+	if (!Xinha.is_ie)
+	{
+	  var x = opener.screenX + (opener.outerWidth - dim.x) / 2;
+	  var y = opener.screenY + (opener.outerHeight - dim.x) / 2;
+	}
+	else
+	{//IE does not have window.outer... , so center it on the screen at least
+	  var x =  (self.screen.availWidth - dim.x) / 2;
+	  var y =  (self.screen.availHeight - dim.y) / 2;	
+	}
+	window.moveTo(x,y);
+	
+	__xinha_dlg_init();
     __dlg_translate('ExtendedFileManager');
 
     var uploadForm = document.getElementById('uploadForm');
@@ -88,7 +88,8 @@ init = function ()
     var editor = window.dialogArguments.editor;
 
     var param = window.dialogArguments.param;
-
+    var startDir = null;
+	
     if(manager_mode=="image" && param)
     {
         var absoluteURL = new RegExp('^https?://');
@@ -140,16 +141,7 @@ init = function ()
         var dreg = new RegExp('^(.*/)([^/]+)$');
         if (dreg.test(param['f_url']))
         {
-          changeDir(RegExp.$1);
-          var dirPath = document.getElementById('dirPath');
-          for(var i = 0; i < dirPath.options.length; i++)
-          {
-            if(dirPath.options[i].value == encodeURIComponent(RegExp.$1))
-            {
-              dirPath.options[i].selected = true;
-              break;
-            }
-          }
+		  startDir = RegExp.$1;
         }
 
         document.getElementById('f_preview').src = _backend_url + '__function=thumbs&img=' + param.f_url;
@@ -173,7 +165,6 @@ init = function ()
         param.f_href = param.f_href.replace( href_regex, "" );
 
         // Locate to the correct directory
-        var startDir;
         var dreg = new RegExp('^(.*/)([^/]+)$');
         if (dreg.test(param['f_href']))
         {
@@ -185,20 +176,6 @@ init = function ()
         	if (startDir) startDir = startDir[1];
         }
         
-        if (startDir)
-        {
-          changeDir(startDir);
-          var dirPath = document.getElementById('dirPath');
-          for(var i = 0; i < dirPath.options.length; i++)
-          {
-            if(dirPath.options[i].value == encodeURIComponent(RegExp.$1))
-            {
-              dirPath.options[i].selected = true;
-              break;
-            }
-          }
-        }
-
         if (param)
         {
             if ( typeof param["f_usetarget"] != "undefined" )
@@ -237,22 +214,27 @@ init = function ()
     }
     else if (!param)
     {
-    	var startDir = document.cookie.match(new RegExp ("EFMStartDir" + manager_mode + "=(.*?)(;|$)"));
+    	startDir = document.cookie.match(new RegExp ("EFMStartDir" + manager_mode + "=(.*?)(;|$)"));
     	if (startDir)
     	{
     		startDir = startDir[1];
-    		changeDir(startDir);
-	        var dirPath = document.getElementById('dirPath');
-	        for(var i = 0; i < dirPath.options.length; i++)
-	        {
-	          if(dirPath.options[i].value == encodeURIComponent(startDir))
-	          {
-	            dirPath.options[i].selected = true;
-	            break;
-	          }
-	        }
     	}
     }
+	if ( startDir )
+	{
+		iframeUrl += '&dir=' + startDir;
+		var dirPath = document.getElementById('dirPath');
+		for(var i = 0; i < dirPath.options.length; i++)
+		{
+			if(dirPath.options[i].value == encodeURIComponent(startDir))
+			{
+				dirPath.options[i].selected = true;
+				break;
+			}
+		}
+	};
+	imgManager.location.replace(iframeUrl);
+
     if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor') && document.getElementById('f_backgroundColor').type == 'text') {
       // Hookup color pickers
 
@@ -266,6 +248,7 @@ init = function ()
       new Xinha.colorPicker.InputBinding(document.getElementById('f_backgroundColor'),pickerConfig);
       new Xinha.colorPicker.InputBinding(document.getElementById('f_borderColor'),pickerConfig);
     }
+	setTimeout(function() { resize();addEvent(window, 'resize', resize); }, 500);
 }
 
 function pasteButton(action)
@@ -565,16 +548,10 @@ function newFolder()
 function resize()
 {
 	var win = Xinha.viewportSize(window);
-	document.getElementById('imgManager').style.height = parseInt( win.y - 130 - offsetForInputs, 10 ) + 'px';
-	
+	var m = document.getElementById('messages');
+	var messagesHeight = (m && m.style.display != 'none' ) ?  parseInt( document.getElementById('messages').offsetHeight, 10 ) : 0;
+	document.getElementById('imgManager').style.height = parseInt( win.y - 130 - document.getElementById('controls').offsetHeight, 10 ) - messagesHeight  + 'px';
 	return true;
 }
-addEvent(window, 'resize', resize);
-if (Xinha.is_gecko)
-{// this runs the init function (translation) before all the images in the iframe have loaded
-	document.addEventListener("DOMContentLoaded", init, false);
-}
-else
-{
-	addEvent(window, 'load', init);
-}
+
+Xinha.addOnloadHandler( init, window );

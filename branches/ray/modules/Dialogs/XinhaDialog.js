@@ -42,7 +42,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   this.layer = (options && options.layer) ? options.layer : 0;
   
   
-  if (Xinha.is_ie)
+  if (Xinha.is_ie && Xinha.ie_version < 7)
   { // IE6 needs the iframe to hide select boxes
     var backG = document.createElement("iframe");
     backG.src = "about:blank";
@@ -258,7 +258,7 @@ Xinha.Dialog.prototype.show = function(values)
   if ( modal ) this.editor.deactivateEditor();
 
   // unfortunately we have to hide the editor (iframe/caret bug)
-  if (Xinha.is_gecko && modal)
+  if (Xinha.is_ff2 && modal)
   {
     this._restoreTo = [this.editor._textArea.style.display, this.editor._iframe.style.visibility, this.editor.hidePanels()];
     this.editor._textArea.style.display = 'none';
@@ -280,7 +280,7 @@ Xinha.Dialog.prototype.show = function(values)
     //Xinha._addEvent(window, 'resize', this.onResizeWin );
 
     //rootElemStyle.display   = '';
-Xinha.Dialog.fadeIn(this.rootElem);
+	Xinha.Dialog.fadeIn(this.rootElem);
     var dialogHeight = rootElem.offsetHeight;
     var dialogWidth = rootElem.offsetWidth;
 
@@ -371,7 +371,7 @@ Xinha.Dialog.prototype.hide = function()
 	this.hideBackground();
     var dialog = this;
 
-    if (Xinha.is_gecko && this.modal)
+    if (Xinha.is_ff2 && this.modal)
     {
       this.editor._textArea.style.display = this._restoreTo[0];
       this.editor._iframe.style.visibility   = this._restoreTo[1];

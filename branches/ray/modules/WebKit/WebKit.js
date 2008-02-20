@@ -10,19 +10,18 @@
     --      Copyright (c) 2002-2003 interactivetools.com, inc.
     --      This copyright notice MUST stay intact for use.
     --
-    -- This is the Gecko compatability plugin, part of the Xinha core.
+    -- This is the WebKit (Safari) compatability plugin, part of the Xinha core.
     --
     --  The file is loaded as a special plugin by the Xinha Core when
-    --  Xinha is being run under a Gecko based browser with the Midas
-    --  editing API.
+    --  Xinha is being run under a Webkit based browser such as Safari
     --
     --  It provides implementation and specialisation for various methods
     --  in the core where different approaches per browser are required.
     --
     --  Design Notes::
     --   Most methods here will simply be overriding Xinha.prototype.<method>
-    --   and should be called that, but methods specific to Gecko should 
-    --   be a part of the Gecko.prototype, we won't trample on namespace
+    --   and should be called that, but methods specific to Webkit should 
+    --   be a part of the WebKit.prototype, we won't trample on namespace
     --   that way.
     --
     --  $HeadURL$
@@ -31,8 +30,8 @@
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
                                                     
-Gecko._pluginInfo = {
-  name          : "Gecko",
+WebKit._pluginInfo = {
+  name          : "WebKit",
   origin        : "Xinha Core",
   version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
@@ -42,15 +41,15 @@ Gecko._pluginInfo = {
   license       : "htmlArea"
 };
 
-function Gecko(editor) {
+function WebKit(editor) {
   this.editor = editor;  
-  editor.Gecko = this;
+  editor.WebKit = this;
 }
 
-/** Allow Gecko to handle some key events in a special way.
+/** Allow Webkit to handle some key events in a special way.
  */
   
-Gecko.prototype.onKeyPress = function(ev)
+WebKit.prototype.onKeyPress = function(ev)
 {
   var editor = this.editor;
   var s = editor.getSelection();
@@ -61,7 +60,6 @@ Gecko.prototype.onKeyPress = function(ev)
     switch(editor.getKey(ev).toLowerCase())
     {
       case 'z':
-      {
         if(editor._unLink && editor._unlinkOnUndo)
         {
           Xinha._stopEvent(ev);
@@ -69,31 +67,19 @@ Gecko.prototype.onKeyPress = function(ev)
           editor.updateToolbar();
           return true;
         }
-      }
       break;
-      
-      case 'a':
-      {
-        // KEY select all
-        sel = editor.getSelection();
-        sel.removeAllRanges();
-        range = editor.createRange();
-        range.selectNodeContents(editor._doc.body);
-        sel.addRange(range);
-        Xinha._stopEvent(ev);
-        return true;
-      }
+	  
+	  case 'a':
+        // ctrl-a selects all, but 
       break;
-      
+	  
       case 'v':
-      {
         // If we are not using htmlareaPaste, don't let Xinha try and be fancy but let the 
         // event be handled normally by the browser (don't stopEvent it)
         if(!editor.config.htmlareaPaste)
         {          
           return true;
         }
-      }
       break;
     }
   }
@@ -103,8 +89,7 @@ Gecko.prototype.onKeyPress = function(ev)
   {
     // Space, see if the text just typed looks like a URL, or email address
     // and link it appropriatly
-    case ' ':
-    {      
+    case ' ': 
       var autoWrap = function (textNode, tag)
       {
         var rightText = textNode.nextSibling;
@@ -179,41 +164,37 @@ Gecko.prototype.onKeyPress = function(ev)
           break;
         }
       }
-    }
-    break;    
+    break;
   }
   
   // Handle special keys
   switch ( ev.keyCode )
   {    
-/*  This is now handled by a plugin  
     case 13: // ENTER
-
-    break;*/
+      if( ev.shiftKey  )
+      {
+        //TODO: here we need to add insert new line
+      }
+    break;
 
     case 27: // ESCAPE
-    {
       if ( editor._unLink )
       {
         editor._unLink();
         Xinha._stopEvent(ev);
       }
-      break;
-    }
+ 
     break;
     
     case 8: // KEY backspace
     case 46: // KEY delete
-    {
       // We handle the mozilla backspace directly??
       if ( !ev.shiftKey && this.handleBackspace() )
       {
         Xinha._stopEvent(ev);
       }
-    }
-    
+    break;
     default:
-    {
         editor._unlinkOnUndo = false;
 
         // Handle the "auto-linking", specifically this bit of code sets up a handler on
@@ -277,7 +258,6 @@ Gecko.prototype.onKeyPress = function(ev)
             }
           }        
         }                
-    }
     break;
   }
 
@@ -286,9 +266,10 @@ Gecko.prototype.onKeyPress = function(ev)
 
 /** When backspace is hit, the Gecko onKeyPress will execute this method.
  *  I don't remember what the exact purpose of this is though :-(
+ *  
  */
  
-Gecko.prototype.handleBackspace = function()
+WebKit.prototype.handleBackspace = function()
 {
   var editor = this.editor;
   setTimeout(
@@ -325,46 +306,25 @@ Gecko.prototype.handleBackspace = function()
     10);
 };
 
-Gecko.prototype.inwardHtml = function(html)
+WebKit.prototype.inwardHtml = function(html)
 {
-   // Midas uses b and i internally instead of strong and em
-   // Xinha will use strong and em externally (see Xinha.prototype.outwardHtml)   
-   html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
-   html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");    
-   
-   // Both IE and Gecko use strike internally instead of del (#523)
-   // Xinha will present del externally (see Xinha.prototype.outwardHtml
-   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
-   
    return html;
 }
 
-Gecko.prototype.outwardHtml = function(html)
+WebKit.prototype.outwardHtml = function(html)
 {
-  // ticket:56, the "greesemonkey" plugin for Firefox adds this junk,
-  // so we strip it out.  Original submitter gave a plugin, but that's
-  // a bit much just for this IMHO - james
-  html = html.replace(/<script[\s]*src[\s]*=[\s]*['"]chrome:\/\/.*?["']>[\s]*<\/script>/ig, '');
-
   return html;
 }
 
-Gecko.prototype.onExecCommand = function(cmdID, UI, param)
+WebKit.prototype.onExecCommand = function(cmdID, UI, param)
 {   
-  try
-  {
-    // useCSS deprecated & replaced by styleWithCSS
-    this.editor._doc.execCommand('useCSS', false, true); //switch useCSS off (true=off)
-    this.editor._doc.execCommand('styleWithCSS', false, false); //switch styleWithCSS off     
-  } catch (ex) {}
-    
+  this.editor._doc.execCommand('styleWithCSS', false, false); //switch styleWithCSS off; seems to make no difference though 
+   
   switch(cmdID)
   {
     case 'paste':
-    {
-      alert(Xinha._lc("The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly."));
+      alert(Xinha._lc("The Paste button does not work in the Safari browser for security reasons. Press CTRL-V on your keyboard to paste directly."));
       return true; // Indicate paste is done, stop command being issued to browser by Xinha.prototype.execCommand
-    }
     break;
     case 'removeformat':
       var editor = this.editor;
@@ -372,36 +332,73 @@ Gecko.prototype.onExecCommand = function(cmdID, UI, param)
       var selSave = editor.saveSelection(sel);
       var range = editor.createRange(sel);
 
-      var els = editor._doc.body.getElementsByTagName('*');
-
+      var els = editor._doc.getElementsByTagName('*');
+      els = Xinha.collectionToArray(els);
       var start = ( range.startContainer.nodeType == 1 ) ? range.startContainer : range.startContainer.parentNode;
-      var i, el;
-      if (sel.isCollapsed) range.selectNodeContents(editor._doc.body);
-      
-      for (i=0; i<els.length;i++)
+      var i,el,newNode, fragment, child,r2 = editor._doc.createRange();
+
+      function clean (el)
       {
-        el = els[i];
-        if ( range.isPointInRange(el, 0) || (els[i] == start && range.startOffset == 0))
+        if (el.nodeType != 1) return;
+        el.removeAttribute('style');
+        for (var j=0; j<el.childNodes.length;j++)
         {
-          el.removeAttribute('style');
+          clean(el.childNodes[j]);
+        }
+        if ( (el.tagName.toLowerCase() == 'span' && !el.attributes.length ) || el.tagName.toLowerCase() == 'font')
+        {
+          r2.selectNodeContents(el);
+          fragment = r2.extractContents();
+          while (fragment.firstChild)
+          {
+            child = fragment.removeChild(fragment.firstChild);
+            el.parentNode.insertBefore(child, el);
+          }
+          el.parentNode.removeChild(el);
         }
       }
-      this.editor._doc.execCommand(cmdID, UI, param);
+      if (sel.isCollapsed)
+      {
+        els = editor._doc.body.childNodes;
+        for (i = 0; i < els.length; i++) 
+        {
+          el = els[i];
+          if (el.nodeType != 1) continue;
+          if (el.tagName.toLowerCase() == 'span')
+          {
+            newNode = editor.convertNode(el, 'div');
+            el.parentNode.replaceChild(newNode, el);
+            el = newNode;
+          }
+          clean(el);
+        }
+      } 
+      else
+      {
+        for (i=0; i<els.length;i++)
+        {
+          el = els[i];
+          if ( range.isPointInRange(el, 0) || (els[i] == start && range.startOffset == 0))
+          {
+            clean(el);
+          }
+        }
+      }
+
+      r2.detach();
       editor.restoreSelection(selSave);
       return true;
     break;
   }
-  
+
   return false;
 }
-Gecko.prototype.onMouseDown = function(ev)
-{   
-  // Gecko doesn't select hr's on single click
-  if (ev.target.tagName.toLowerCase() == "hr")
+WebKit.prototype.onMouseDown = function(ev)
+{ 
+  // selection of hr in Safari seems utterly impossible :(
+  if (ev.target.tagName.toLowerCase() == "hr" || ev.target.tagName.toLowerCase() == "img")
   {
-    var sel = this.editor.getSelection();
-    var range = this.editor.createRange(sel);
-    range.selectNode(ev.target);
+    this.editor.selectNodeContents(ev.target);
   }
 }
 
@@ -416,13 +413,6 @@ Gecko.prototype.onMouseDown = function(ev)
 
 Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
 {
-  if ( toBeInserted.ownerDocument != this._doc ) // as of FF3, Gecko is strict regarding the ownerDocument of an element
-  {
-    try 
-	{
-		toBeInserted = this._doc.adoptNode( toBeInserted );
-	} catch (e) {}
-  }
   var sel = this.getSelection();
   var range = this.createRange(sel);
   // remove the current selection
@@ -431,7 +421,6 @@ Xinha.prototype.insertNodeAtSelection = function(toBeInserted)
   var node = range.startContainer;
   var pos = range.startOffset;
   var selnode = toBeInserted;
-  
   switch ( node.nodeType )
   {
     case 3: // Node.TEXT_NODE
@@ -575,13 +564,9 @@ Xinha.prototype.saveSelection = function()
  */
 Xinha.prototype.restoreSelection = function(savedSelection)
 {
-  try 
-  {
-    var sel = this.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(savedSelection);
-  }
-  catch (e) {}
+  var sel = this.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedSelection);
 }
 /**
  * Selects the contents of the given node.  If the node is a "control" type element, (image, form input, table)
@@ -646,7 +631,12 @@ Xinha.prototype.getSelectedHTML = function()
   var sel = this.getSelection();
   if (sel.isCollapsed) return '';
   var range = this.createRange(sel);
-  return Xinha.getHTML(range.cloneContents(), false, this);
+
+  if ( range )
+  {
+    return Xinha.getHTML(range.cloneContents(), false, this);
+  }
+  else return '';
 };
   
 
@@ -705,8 +695,11 @@ Xinha.prototype.isKeyEvent = function(event)
  */
                                    
 Xinha.prototype.getKey = function(keyEvent)
-{
-  return String.fromCharCode(keyEvent.charCode);
+{ 
+ // with ctrl pressed Safari does not give the charCode, unfortunately this (shortcuts) is about the only thing this function is for
+  var key = String.fromCharCode(parseInt(keyEvent.keyIdentifier.replace(/^U\+/,''),16));
+  if (keyEvent.shiftKey) return key;
+  else return key.toLowerCase();
 }
 
 /** Return the HTML string of the given Element, including the Element.
@@ -720,7 +713,6 @@ Xinha.getOuterHTML = function(element)
   return (new XMLSerializer()).serializeToString(element);
 };
 
-//Control character for retaining edit location when switching modes
 Xinha.prototype.cc = String.fromCharCode(8286); 
 
 Xinha.prototype.setCC = function ( target )
@@ -735,7 +727,7 @@ Xinha.prototype.setCC = function ( target )
       var before = ta.value.substring( 0, index )
       var after = ta.value.substring( index, ta.value.length );
 
-      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, entities, and inside the body)
+      if ( after.match(/^[^<]*>/) ) // make sure cursor is in an editable area (outside tags, script blocks, enities and inside the body)
       {
         var tagEnd = after.indexOf(">") + 1;
         ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
@@ -778,14 +770,21 @@ Xinha.prototype.findCC = function ( target )
   }
   else
   {
-    try
-    {
-      this._iframe.contentWindow.find( this.cc );
-      var sel = this.getSelection();
-      sel.getRangeAt(0).deleteContents();
-      this.scrollToElement();
-      this._iframe.contentWindow.focus();
-    } catch (e) {}
+    var self = this;
+    window.setTimeout(function  () // something's not working? try a timeout ;)
+    { 
+      try 
+      {
+        if( self._iframe.contentWindow.find( self.cc ) )
+        {
+            var sel = self.getSelection();
+            sel.getRangeAt(0).deleteContents();
+			sel.collapseToStart();
+            self._iframe.contentWindow.focus();
+         }
+      } catch (e) {alert(e)}
+    }
+    ,200);
   }
 };
 /*--------------------------------------------------------------------------*/

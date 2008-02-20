@@ -3,7 +3,8 @@
  * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
+ * Version: Updated on 04-11-2007 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
  * http://www.afrusoft.com/htmlarea
  */
 
@@ -46,13 +47,11 @@ function P7_Snap() { //v2.62 by PVII
      if(eval(dd+'.document.'+args[k])) {x+=eval(dd+'.left');y+=eval(dd+'.top');break;}}}
    if(el) {e=(document.layers)?el:el.style;
    var xx=parseInt(x+ox+a),yy=parseInt(y+oy+b);
-   //alert(xx+":"+yy);
    if(navigator.appName=="Netscape" && parseInt(navigator.appVersion)>4){xx+="px";yy+="px";}
    if(navigator.appVersion.indexOf("MSIE 5")>-1 && navigator.appVersion.indexOf("Mac")>-1){
     xx+=parseInt(document.body.leftMargin);yy+=parseInt(document.body.topMargin);
     xx+="px";yy+="px";}e.left=xx;e.top=yy;}
     pic_x = parseInt(xx); pic_y = parseInt(yy);
-    //alert(xx+":"+yy);
     }
 }
 
@@ -64,8 +63,8 @@ var z,x,y,status, ant, canvas, content, pic_width, pic_height, image, resizeHand
 
 function init_resize()
 {
-    if(mode == "scale")
-    {
+    //if(mode == "scale")
+    //{
         P7_Snap('theImage','ant',0,0);
 
         if (canvas == null)
@@ -87,7 +86,7 @@ function init_resize()
 
         drawBoundHandle();
         jg_doc.paint();
-    }
+    //}
 }
 
 initEditor = function ()
@@ -98,6 +97,9 @@ initEditor = function ()
 
     if (markerImg.src.indexOf("img/t_white.gif")>0)
         toggleMarker() ;
+	var theImage = document.getElementById('theImage');
+	theImage._width = theImage.width;
+	theImage._height = theImage.height;
 }
 
 function init_crop()
@@ -140,7 +142,6 @@ function reset()
 
 function toggleMarker()
 {
-    //alert("Toggle");
     if (ant == null)
         ant = MM_findObj("ant");
 
@@ -162,23 +163,9 @@ function move(e)
 {
     if (dragapproved)
     {
-        //z.style.left=ns6? temp1+e.clientX-x: temp1+event.clientX-x
-        //z.style.top=ns6? temp2+e.clientY-y : temp2+event.clientY-y
-        var w = ns6? temp1+e.clientX - x : temp1+event.clientX - x;
-        var h = ns6? temp2+e.clientY - y : temp2+event.clientY - y;
+        var w = ns6? temp1+e.pageX - x : temp1+event.clientX + document.body.scrollLeft- x;
+        var h = ns6? temp2+e.pageY - y : temp2+event.clientY  + document.body.scrollTop - y;
 
-        //alert(canvas.style.left);
-        /*if (status !=null)
-        {
-            status.innerHTML  = "x:"+x+" y:"+y+" w:"+w+" h:"+h+" can_h:"+pic_height;
-            status.innerHTML += " can_w:"+pic_width+" px:"+pic_x+" py:"+pic_y;
-            status.innerHTML += " pix:"+image.style.left+" piy:"+image.style.top+" obj:"+obj.id;
-        }*/
-
-        /*jg_doc.clear();
-        jg_doc.fillRectPattern(0,0,Math.abs(w),Math.abs(h),pattern);
-        jg_doc.paint();
-*/
         if (ant != null)
         {
             if (w >= 0)
@@ -217,11 +204,6 @@ function moveContent(e)
         var dx =ns6? oa_x + e.clientX-x: oa_x + event.clientX-x
         var dy =ns6? oa_y + e.clientY-y : oa_y + event.clientY-y
 
-        /*if (status !=null)
-        {
-            status.innerHTML  = "x:"+x+" y:"+y+" dx:"+dx+" dy:"+dy;
-        }*/
-
         ant.style.left = dx;
         ant.style.top = dy;
 
@@ -231,7 +213,7 @@ function moveContent(e)
     }
 }
 
-//Code add for constraints by Frédéric Klee <fklee@isuisse.com>
+//Code add for constraints by FrÃ©dÃ©ric Klee <fklee@isuisse.com>
 function moveHandle(e)
 {
     if (dragapproved)
@@ -369,13 +351,8 @@ function drags(e)
                 content.width = 0;
                 content.height = 0;
             }
-            //alert(content.width+":"+content.height);
         }
         resizeHandle = firedobj.id;
-
-        /*if(status!=null) {
-            status.innerHTML  = " obj:"+firedobj.id;
-        }*/
 
         x=ns6? e.clientX: event.clientX
         y=ns6? e.clientY: event.clientY
@@ -410,7 +387,6 @@ function drags(e)
                 content.width = 0;
                 content.height = 0;
             }
-            //alert(content.width+":"+content.height);
         }
 
         if (status == null)
@@ -439,8 +415,9 @@ function drags(e)
         z=firedobj
         temp1=parseInt(z.style.left+0)
         temp2=parseInt(z.style.top+0)
-        x=ns6? e.clientX: event.clientX
-        y=ns6? e.clientY: event.clientY
+          
+        x=ns6? e.pageX: event.clientX + document.body.scrollLeft
+        y=ns6? e.pageY: event.clientY + document.body.scrollTop
         document.onmousemove=move
         return false
     }
@@ -452,10 +429,9 @@ function drags(e)
             if (canvas == null)
                 canvas = MM_findObj("imgCanvas");
 
-            x=ns6? e.clientX: event.clientX
-            y=ns6? e.clientY: event.clientY
+            x=ns6? e.pageX: event.clientX + document.body.scrollLeft
+            y=ns6? e.pageY: event.clientY + document.body.scrollTop
 
-                //jg_doc.draw
             dragapproved=true
             document.onmousemove=measure
 
@@ -467,8 +443,8 @@ function measure(e)
 {
     if (dragapproved)
     {
-        mx2 = ns6? e.clientX : event.clientX;
-        my2 = ns6? e.clientY : event.clientY;
+        mx2 = ns6? e.pageX : event.clientX + document.body.scrollLeft;
+        my2 = ns6? e.pageY : event.clientY + document.body.scrollTop;
 
         jg_doc.clear();
         jg_doc.setStroke(Stroke.DOTTED);
@@ -568,8 +544,6 @@ function drawBoundHandle()
     jg_doc.drawHandleBox(ax+aw/2-4,ay+ah-4,8,8,"s-resize"); //bottom middle
     jg_doc.drawHandleBox(ax-4, ay+ah/2-4,8,8,"w-resize"); //left middle
     jg_doc.drawHandleBox(ax+aw-4, ay+ah/2-4,8,8,"e-resize"); //right middle
-
-    //jg_doc.paint();
 }
 
 function showStatus()
@@ -577,9 +551,9 @@ function showStatus()
     if(ant == null || ant.style == null) {
         return false;
     }
-
+    var zoom = 100 / parseInt( window.parent.document.getElementById('zoom').value, 10 );
     if(mode == "measure") {
-        //alert(pic_x);
+
         mx1 = x - pic_x;
         my1 = y - pic_y;
 
@@ -598,23 +572,22 @@ function showStatus()
         ma = parseInt(ma*100)/100;
 
         if (m_sx != null && !isNaN(mx1))
-            m_sx.value = mx1+"px";
+            m_sx.value = mx1 * zoom +"px";
         if (m_sy != null && !isNaN(my1))
-            m_sy.value = my1+"px";
+            m_sy.value = my1 * zoom+"px";
         if(m_w != null && !isNaN(mw))
-            m_w.value = mw + "px";
+            m_w.value = mw * zoom + "px";
         if(m_h != null && !isNaN(mh))
-            m_h.value = mh + "px";
+            m_h.value = mh * zoom + "px";
 
         if(m_d != null && !isNaN(md))
-            m_d.value = md + "px";
+            m_d.value = md * zoom + "px";
         if(m_a != null && !isNaN(ma))
             m_a.value = ma + "";
 
         if(r_ra != null &&!isNaN(ma))
             r_ra.value = ma;
 
-        //alert("mx1:"+mx1+" my1"+my1);
         return false;
     }
 
@@ -643,13 +616,13 @@ function showStatus()
 
     if(mode == 'crop') {
         if(t_cx != null)
-            t_cx.value = cx;
+            t_cx.value = cx * zoom ;
         if (t_cy != null)
-            t_cy.value = cy;
+            t_cy.value = cy * zoom ;
         if(t_cw != null)
-            t_cw.value = cw;
+            t_cw.value = cw * zoom ;
         if (t_ch != null)
-            t_ch.value = ch;
+            t_ch.value = ch * zoom ;
     }
     else if(mode == 'scale') {
 
@@ -661,11 +634,10 @@ function showStatus()
             sh = ch/pic_height;
         }
         if (s_sw != null)
-            s_sw.value = sw;
+            s_sw.value = sw * zoom ;
         if (s_sh != null)
-            s_sh.value = sh;
+            s_sh.value = sh * zoom ;
     }
-
 }
 
 function dragStopped()
@@ -697,7 +669,6 @@ function dragStopped()
                 content.width = aw-1;
                 content.height = ah-1;
             }
-            //alert(content.width+":"+content.height);
         }
         if(mode == "crop") {
             //alert(pic_y);
@@ -717,15 +688,12 @@ function dragStopped()
             jg_doc.fillRectPattern(pic_x,ay+ah,pic_width,pic_height+pic_y-ay-ah,pattern);
         }
         else if(mode == "scale") {
-            //alert("Resizing: iw:"+image.width+" nw:"+aw);
             document.theImage.height = ah;
             document.theImage.width = aw;
             document.theImage.style.height = ah+" px";
             document.theImage.style.width = aw+" px";
 
             P7_Snap('theImage','ant',0,0);
-
-            //alert("After Resizing: iw:"+image.width+" nw:"+aw);
         }
 
         drawBoundHandle();

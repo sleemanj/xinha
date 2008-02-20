@@ -37,18 +37,10 @@ GetHtmlImplementation._pluginInfo = {
 
 // Retrieves the HTML code from the given node.	 This is a replacement for
 // getting innerHTML, using standard DOM calls.
-// Wrapper catch a Mozilla-Exception with non well formed html source code
+// Wrapper legacy see #442
 Xinha.getHTML = function(root, outputRoot, editor)
 {
-  try
-  {
-    return Xinha.getHTMLWrapper(root,outputRoot,editor);
-  }
-  catch(ex)
-  {   
-    alert(Xinha._lc('Your Document is not well formed. Check JavaScript console for details.'));
-    return editor._iframe.contentWindow.document.body.innerHTML;
-  }
+  return Xinha.getHTMLWrapper(root,outputRoot,editor);
 };
 
 Xinha.emptyAttributes = " checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade "
@@ -154,7 +146,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
             continue;
           }
           var name = a.nodeName.toLowerCase();
-          if ( /_moz_editor_bogus_node/.test(name) )
+          if ( /_moz_editor_bogus_node/.test(name) || ( name == 'class' && a.nodeValue == 'webkit-block-placeholder') )
           {
             html = "";
             break;
@@ -188,6 +180,11 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
             else
             {
               value = a.nodeValue;
+			  if (name == 'class')
+			  {
+			  	value = value.replace(/Apple-style-span/,'');
+				if (!value) continue;
+			  }
               // IE seems not willing to return the original values - it converts to absolute
               // links using a.nodeValue, a.value, a.stringValue, root.getAttribute("href")
               // So we have to strip the baseurl manually :-/

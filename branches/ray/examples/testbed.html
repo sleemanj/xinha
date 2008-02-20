@@ -1,4 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -29,11 +31,11 @@
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/.*/, '')
-    _editor_lang = "de";      // And the language we need to use in the editor.
+    _editor_lang = "en";      // And the language we need to use in the editor.
   </script>
 
   <!-- Load up the actual editor core -->
-  <script type="text/javascript" src="../XinhaLoader.js"></script>
+  <script type="text/javascript" src="../XinhaCore.js"></script>
 
   <script type="text/javascript">
     xinha_editors = null;
@@ -45,30 +47,27 @@
     xinha_init = xinha_init ? xinha_init : function()
     {
       /** STEP 1 ***************************************************************
-       * First, specify the textareas that shall be turned into Xinhas. 
-       * For each one add the respective id to the xinha_editors array.
-       ************************************************************************/
-      
-      xinha_editors = xinha_editors ? xinha_editors :
-      [
-        'myTextArea'
-      ];
-    
-      /** STEP 2 ***************************************************************
-       * Now, what are the plugins you will be using in the editors on this
-       * page. List all the plugins you will need, even if not all the editors
+       * First, what are the plugins you will be using in the editors on this
+       * page.  List all the plugins you will need, even if not all the editors
        * will use all the plugins.
        ************************************************************************/
-       xinha_plugins = xinha_plugins ? xinha_plugins :
-       [
-         'CharacterMap', 
-         'Linker',
-         'Stylist',
-         'SmartReplace',
-		 'InsertSnippet'
-       ];
+      
+      xinha_plugins = xinha_plugins ? xinha_plugins :
+      [
+        'CharacterMap', 'SpellChecker', 'Linker', 'SmartReplace'
+      ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
+    
+      /** STEP 2 ***************************************************************
+       * Now, what are the names of the textareas you will be turning into
+       * editors?
+       ************************************************************************/
+
+      xinha_editors = xinha_editors ? xinha_editors :
+       [
+        'myTextArea'
+       ];
              
       /** STEP 3 ***************************************************************
        * We create a default configuration to be used by all the editors.
@@ -84,12 +83,8 @@
        *************************************************************************/
 
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
-   
-        xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
-         
-      //xinha_config.CharacterMap.mode = 'panel';
-//xinha_config.stylistLoadStylesheet(document.location.href.replace(/[^\/]*\.html/, 'stylist.css'));
-
+       xinha_config.fullPage = true;
+       xinha_config.CharacterMap.mode = 'panel';
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
       //  otherwise it won't work!
@@ -112,7 +107,7 @@
        * if you want all the editor objects to use the same set of plugins, OR;
        *
        *   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
-       *   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
+       *   xinha_editors['myTextArea'].registerPlugins(['Stylist']);
        *   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
        *
        * if you want to use a different set of plugins for one or more of the
@@ -142,23 +137,59 @@
     }
 
     window.onload   = xinha_init;
-    // window.onunload = Xinha.collectGarbageForIE;
   </script>
 </head>
 
 <body>
 
-  <form action="" id="editors_here" onsubmit="alert(this.myTextArea.value);">
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-  <textarea id="myTextArea" name="myTextArea" style="width:100%;height:300px;">
-    <table cellspacing="1" cellpadding="1" border="1" style="width: 100%;"><tbody><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr><tr><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td><td style="width: 25%;">&nbsp;</td></tr></tbody></table><br /></textarea>
+  <form action="javascript:void(0);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
+ <div>
+     <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;title&gt;Hello&lt;/title&gt;
+        &lt;style type="text/css"&gt;
+          li { color:red; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;&lt;span style="color:purple"&gt;
+      &lt;img src="../images/xinha_logo.gif" usemap="#m1"&gt;
+      &lt;map name="m1"&gt;
+      &lt;area shape="rect" coords="137,101,255,124" href="http://www.mydomain.com"&gt;
+      &lt;/map&gt;
 
-<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      &lt;p&gt;
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
+        velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
+        ante elementum turpis.  &lt;span style="color:green">Aliquam &lt;/span> nisl. Nulla posuere neque non
+        tellus. Morbi vel nibh. &lt;font face="Arial">&lt;font color="#009933">Cum  sociis natoque&lt;/font>&lt;/font&gt; penatibus et magnis dis
+        parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
+        Curabitur pharetra bibendum lectus.
+      &lt;/p&gt;
+
+      &lt;ul&gt;
+        &lt;li style="color:green"&gt; Phasellus et massa sed diam viverra semper.  &lt;/li&gt;
+        &lt;li&gt; Mauris tincidunt felis in odio.              &lt;/li&gt;
+        &lt;li&gt; Nulla placerat nunc ut pede.                 &lt;/li&gt;
+        &lt;li&gt; Vivamus ultrices mi sit amet urna.           &lt;/li&gt;
+        &lt;li&gt; Quisque sed augue quis nunc laoreet volutpat.&lt;/li&gt;
+        &lt;li&gt; Nunc sit amet metus in tortor semper mattis. &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;/span&gt;&lt;/body&gt;
+      &lt;/html&gt;
+    </textarea>
+
+    <input type="submit" /> <input type="reset" />
+</div>
   </form>
-  <script language="javascript">
+  <script type="text/javascript">
     document.write(document.compatMode);
   </script>
+<div>
   <a href="#" onclick="xinha_editors.myTextArea.hidePanels();">Hide</a>
   <a href="#" onclick="xinha_editors.myTextArea.showPanels();">Show</a>
+</div>
+
 </body>
 </html>

@@ -137,6 +137,10 @@ Xinha.prototype._fillStylist = function()
               {
                 applicable = true;
               }
+              else
+              {
+                applicable = false;
+              }
             }
           }
           else
@@ -176,6 +180,7 @@ Xinha.prototype._fillStylist = function()
     if(applicable)
     {
       var anch = document.createElement('a');
+      anch.onfocus = function () { this.blur() } // prevent dotted line around link that causes horizontal scrollbar
       anch._stylist_className = className.trim();
       anch._stylist_applied   = applied;
       anch._stylist_appliedTo = applied_to;
@@ -494,7 +499,7 @@ Stylist._pluginInfo =
   developer: "James Sleeman",
   developer_url: "http://www.gogo.co.nz/",
   c_owner      : "Gogo Internet Services",
-  license      : "htmlArea",
+  license      : "HTMLArea",
   sponsor      : "Gogo Internet Services",
   sponsor_url  : "http://www.gogo.co.nz/"
 };
