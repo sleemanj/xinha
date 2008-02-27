@@ -494,7 +494,7 @@ Xinha.prototype.insertHTML = function(html)
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this.getSelection();
-  if (this.selectionEmpty) return '';
+  if (this.selectionEmpty(sel)) return '';
   var range = this.createRange(sel);
   
   // Need to be careful of control ranges which won't have htmlText
