@@ -2,7 +2,9 @@ function InsertAnchor(editor) {
   this.editor = editor;
   var cfg = editor.config;
   var self = this;
-
+  
+  this.placeholderImg = '<img class="IA_placeholder" src="'+_editor_url+'plugins/InsertAnchor/img/placeholder.gif" />';
+  
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
   id       : "insert-anchor", 
@@ -34,13 +36,26 @@ InsertAnchor.prototype._lc = function(string) {
 
 InsertAnchor.prototype.onGenerate = function() {
   this.editor.addEditorStylesheet(_editor_url + 'plugins/InsertAnchor/insert-anchor.css');
+  
 };
+
+InsertAnchor.prototype.inwardHtml = function(html)
+{
+	html= html.replace(/(<a[^>]*class="anchor"[^>]*>)/g,"$1"+this.placeholderImg);
+	return html;
+}
+InsertAnchor.prototype.outwardHtml = function(html)
+{
+	html= html.replace(/(<img[^>]*class="IA_placeholder"[^>]*>)/g,"");
+	return html;
+}
 
 InsertAnchor.prototype.buttonPress = function(editor) {
   var outparam = null;
   var html = editor.getSelectedHTML();
   var sel  = editor._getSelection();
   var range  = editor._createRange(sel);
+  var self = this;
   var  a = editor._activeElement(sel);
   if(!(a != null && a.tagName.toLowerCase() == 'a')) {
     a = editor._getFirstAncestor(sel, 'a'); 
@@ -70,7 +85,8 @@ InsertAnchor.prototype.buttonPress = function(editor) {
           a.name = anchor;
           a.title = anchor;
           a.className = "anchor";
-          a.innerHTML = html;
+          a.innerHTML = self.placeholderImg;
+		  if (html) a.innerHTML += html;
           if (Xinha.is_ie) {
             range.pasteHTML(a.outerHTML);
           } else {
