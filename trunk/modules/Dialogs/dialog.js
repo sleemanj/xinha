@@ -27,12 +27,12 @@ function Dialog(url, action, init) {
 	if (typeof init == "undefined") {
 		init = window;	// pass this window object by default
 	}
-	if (typeof window.showModalDialog == 'function')
+	if (typeof window.showModalDialog == 'function' && !Xinha.is_webkit) // webkit easily looses the selection with window.showModalDialog
 	{
 		Dialog._return = function(retVal) {
 			if (typeof action == 'function') action (retVal);
 		}
-		var r = window.showModalDialog(url, init, "dialogheight=10;dialogwidth=10;resizable=yes");
+		var r = window.showModalDialog(url, init, "dialogheight=300;dialogwidth=400;resizable=yes");
 	}
 	else
 	{
@@ -60,6 +60,8 @@ Dialog._modal = null;
 
 // the dialog will read it's args from this variable
 Dialog._arguments = null;
+
+Dialog._selection = null;
 
 Dialog._geckoOpenModal = function(url, action, init) {
 	var dlg = window.open(url, "hadialog",
