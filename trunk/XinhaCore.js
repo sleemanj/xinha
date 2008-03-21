@@ -2148,6 +2148,11 @@ Xinha.prototype.generate = function ()
     }
     editor.registerPlugin('EnterParagraphs');
   }
+  //TEMPORARY FIX FOR IE8 see #1175
+  if (Xinha.ie_version == 8)
+  {
+    this.config.getHtmlMethod = 'TransformInnerHTML';
+  }
 
   switch (this.config.getHtmlMethod)
   {
@@ -6123,13 +6128,24 @@ if (typeof dumpValues == 'undefined')
         else 
           console.log(prop + ' = ' + o[prop] + '\n');
       }
-      else 
+      else
+      {
         s += prop + ' = ' + o[prop] + '\n';
+      }
+
     }
     if (s) 
     {
-      var x = window.open("", "debugger");
-      x.document.write('<pre>' + s + '</pre>');
+      if (document.getElementById('errors'))
+      {
+        document.getElementById('errors').value += s;
+      }
+      else
+      {
+        var x = window.open("", "debugger");
+        x.document.write('<pre>' + s + '</pre>');
+      }
+
     }
   }
 }
@@ -7133,7 +7149,7 @@ HTMLArea = Xinha;
 
 Xinha.init();
 
-if (Xinha.is_ie)
+if ( Xinha.ie_version < 8 )
 {
   Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
 }

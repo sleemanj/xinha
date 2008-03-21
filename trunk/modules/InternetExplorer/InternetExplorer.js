@@ -637,5 +637,5 @@ Xinha.prototype.findCC = function ( target )
  */
 Xinha.getDoctype = function (doc)
 {
-  return (doc.compatMode == "CSS1Compat") ? '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' : '';
+  return (doc.compatMode == "CSS1Compat" && Xinha.ie_version < 8 ) ? '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' : '';
 };
