@@ -46,7 +46,7 @@ InsertAnchor.prototype.inwardHtml = function(html)
 }
 InsertAnchor.prototype.outwardHtml = function(html)
 {
-	html= html.replace(/(<img[^>]*class="IA_placeholder"[^>]*>)/g,"");
+	html= html.replace(/(<img[^>]*class="?IA_placeholder"?[^>]*>)/ig,"");
 	return html;
 }
 
@@ -70,7 +70,7 @@ InsertAnchor.prototype.buttonPress = function(editor) {
       var anchor = param["name"];
       if (anchor == "" || anchor == null) {
         if (a) {
-          var child = a.innerHTML;
+          var child = self.outwardHtml(a.innerHTML);
           a.parentNode.removeChild(a);
           editor.insertHTML(child);
         }

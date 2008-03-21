@@ -595,6 +595,11 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   var collapsed = typeof pos == "undefined" ? true : false;
   var sel = this.getSelection();
   range = this._doc.createRange();
+  if ( !node )
+  {
+     sel.removeAllRanges();
+     return;
+  }
   // Tables and Images get selected as "objects" rather than the text contents
   if ( collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|textarea|select/) )
   {
