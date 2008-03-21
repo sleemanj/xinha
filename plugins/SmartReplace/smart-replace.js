@@ -1,7 +1,7 @@
 /*------------------------------------------*\
  SmartReplace for Xinha
  _______________________
-     
+	 
 \*------------------------------------------*/
 
 function SmartReplace(editor) {
@@ -37,7 +37,7 @@ SmartReplace._pluginInfo = {
 };
 
 SmartReplace.prototype._lc = function(string) {
-    return Xinha._lc(string, 'SmartReplace');
+	return Xinha._lc(string, 'SmartReplace');
 };
 
 Xinha.Config.prototype.SmartReplace =
@@ -68,30 +68,30 @@ SmartReplace.prototype.onGenerate = function() {
 	
 	var self = this;
 	Xinha._addEvent(
-        self.editor._doc,
-         "keypress",
-        function (event)
-        {
-          return self.keyEvent(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
-        });
-    
-    var quotes = this.editor.config.SmartReplace.quotes;
+		self.editor._doc,
+		 "keypress",
+		function (event)
+		{
+		  return self.keyEvent(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
+		});
+	
+	var quotes = this.editor.config.SmartReplace.quotes;
    
-    if (quotes && typeof quotes == 'object')
-    {
-	    this.openingQuotes = quotes[0];
+	if (quotes && typeof quotes == 'object')
+	{
+		this.openingQuotes = quotes[0];
 		this.closingQuotes = quotes[1];
 		this.openingQuote  = quotes[2];
 		this.closingQuote  = quotes[3];
-    }
-    else
-    {
-    	this.openingQuotes = this._lc("OpeningDoubleQuotes");
+	}
+	else
+	{
+		this.openingQuotes = this._lc("OpeningDoubleQuotes");
 		this.closingQuote  = this._lc("ClosingSingleQuote");
 		this.closingQuotes = this._lc("ClosingDoubleQuotes");
 		this.openingQuote  = this._lc("OpeningSingleQuote");
-    }
- 	
+	}
+	
 	if (this.openingQuotes == 'OpeningDoubleQuotes') //If nothing else is defined, English style as default
 	{
 		this.openingQuotes = String.fromCharCode(8220);
@@ -109,14 +109,18 @@ SmartReplace.prototype.keyEvent = function(ev)
 
 	var key = String.fromCharCode(charCode);
 
-	if (charCode == 32) //space bar
-	{
-		return this.smartDash(ev)
-	}
 	if ( key == '"' || key == "'")
 	{
 		Xinha._stopEvent(ev);
 		return this.smartQuotes(key);
+	}
+	if (charCode == 32) //space bar
+	{
+		return this.smartReplace(ev, 2, /^\s-/, ' –', false); // space-space -> dash 
+	}
+	if ( key == '.' ) // ... -> ellipsis
+	{
+		return this.smartReplace(ev, 2, /\.\./, '…', true);
 	}
 	return true;
 }
@@ -184,7 +188,7 @@ SmartReplace.prototype.smartQuotes = function(kind)
 	return false;
 }
 
-SmartReplace.prototype.smartDash = function(ev)
+SmartReplace.prototype.smartReplace = function(ev, lookback, re, replace, stopEvent)
 {
 	var editor = this.editor;
 	var sel = this.editor.getSelection();
@@ -192,26 +196,38 @@ SmartReplace.prototype.smartDash = function(ev)
 	
 	if (Xinha.is_ie)
 	{
-		r.moveStart('character', -2);
+		r.moveStart('character', -lookback);
 		
-		if(r.text.match(/\s-/))
+		if(r.text.match(re))
 		{
-			r.text = ' '+ String.fromCharCode(8211);
+			r.text = replace;
+			if (stopEvent) 
+			{
+				Xinha._stopEvent(ev);
+				return false
+			}
 		}
 	}
 	else
 	{
-		if (r.startOffset > 1) r.setStart(r.startContainer, r.startOffset -2);
+		if (r.startOffset > 1) r.setStart(r.startContainer, r.startOffset -lookback);
 
-		if(r.toString().match(/^ -/))
+		if(r.toString().match(re))
 		{
+			this.editor.insertNodeAtSelection(document.createTextNode(replace));
 			r.deleteContents();
-			this.editor.insertNodeAtSelection(document.createTextNode(' ' + String.fromCharCode(8211)));
+			r.collapse(true);
+		  if (stopEvent) 
+		  {
+				Xinha._stopEvent(ev);
+				return false
+		  }
 		}
 		editor.getSelection().collapseToEnd();
 	}
 	return true;
 }
+
 
 SmartReplace.prototype.replaceAll = function()
 {
@@ -297,7 +313,7 @@ SmartReplace.prototype.onGenerateOnce = function()
 {
   if( !this._dialog)
   {
-    this._dialog = new SmartReplace.Dialog(this);
+	this._dialog = new SmartReplace.Dialog(this);
   }
 };
 
@@ -323,8 +339,8 @@ SmartReplace.Dialog.prototype._prepareDialog = function()
 
   if(this.html == false)
   {
-    Xinha._getback(_editor_url + 'plugins/SmartReplace/dialog.html', function(getback) { pluginDialogObject.html = getback; pluginDialogObject._prepareDialog(); });
-    return;
+	Xinha._getback(_editor_url + 'plugins/SmartReplace/dialog.html', function(getback) { pluginDialogObject.html = getback; pluginDialogObject._prepareDialog(); });
+	return;
   }
   
   // Now we have everything we need, so we can build the dialog.
@@ -339,9 +355,9 @@ SmartReplace.Dialog.prototype.show = function(inputs, ok, cancel)
 {
   if(!this.ready)
   {
-    var pluginDialogObject = this;
-    window.setTimeout(function() {pluginDialogObject.show(inputs,ok,cancel);},100);
-    return;
+	var pluginDialogObject = this;
+	window.setTimeout(function() {pluginDialogObject.show(inputs,ok,cancel);},100);
+	return;
   }
 
   // Connect the OK and Cancel buttons
@@ -349,20 +365,20 @@ SmartReplace.Dialog.prototype.show = function(inputs, ok, cancel)
   var pluginDialogObject = this;
   if(ok)
   {
-    this.dialog.getElementById('ok').onclick = ok;
+	this.dialog.getElementById('ok').onclick = ok;
   }
   else
   {
-    this.dialog.getElementById('ok').onclick = function() {pluginDialogObject.hide();};
+	this.dialog.getElementById('ok').onclick = function() {pluginDialogObject.hide();};
   }
 
   if(cancel)
   {
-    this.dialog.getElementById('cancel').onclick = cancel;
+	this.dialog.getElementById('cancel').onclick = cancel;
   }
   else
   {
-    this.dialog.getElementById('cancel').onclick = function() { pluginDialogObject.hide()};
+	this.dialog.getElementById('cancel').onclick = function() { pluginDialogObject.hide()};
   }
 
   // Show the dialog
