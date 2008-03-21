@@ -41,7 +41,8 @@ xinha_init = xinha_init ? xinha_init : function()
    'Stylist',
    'Linker',
    'SuperClean',
-   'TableOperations'
+   'TableOperations',
+	 'PasteText'
   ];
   
          // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)

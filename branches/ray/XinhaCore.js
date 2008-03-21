@@ -1761,7 +1761,7 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         function(ev)
         {
           ev = Xinha.is_ie ? window.event : ev;
-          editor.btnClickEvent = ev;
+          editor.btnClickEvent = {clientX : ev.clientX, clientY : ev.clientY};
           if ( obj.enabled )
           {
             Xinha._removeClass(el, "buttonActive");
