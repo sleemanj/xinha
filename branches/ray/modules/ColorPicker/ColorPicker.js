@@ -89,13 +89,15 @@
   };
   function ColorPicker() 
   {
-	// dummy function for Xinha plugin api, note the different names
+  // dummy function for Xinha plugin api, note the different names
   }
-  if (window.opener && window.opener.Xinha)
-  { // this prevents that the Xinha.colorPicker object of the opening window is replaced by the one loaded in the popup
-  	var openerColorPicker = window.opener.Xinha.colorPicker;
-  	Xinha._addEvent(window,'unload', function() {Xinha.colorPicker = openerColorPicker;});
-  }
+  try {
+    if (window.opener && window.opener.Xinha)
+    { // this prevents that the Xinha.colorPicker object of the opening window is replaced by the one loaded in the popup
+      var openerColorPicker = window.opener.Xinha.colorPicker;
+      Xinha._addEvent(window,'unload', function() {Xinha.colorPicker = openerColorPicker;});
+    }
+  } catch(e) {}
   //the actual function is below
   Xinha.colorPicker = function (params)
   {
@@ -104,8 +106,8 @@
     {
       Xinha.colorPicker.loadColors();
     }
-	
-	this.is_ie_6 = (Xinha.is_ie && Xinha.ie_version < 7);
+
+    this.is_ie_6 = (Xinha.is_ie && Xinha.ie_version < 7);
     var picker = this;
     var enablepick = false;
     var enablevalue = false;
@@ -127,8 +129,8 @@
     this.table.cellSpacing = this.table.cellPadding = 0;
     this.table.onmouseup = function()
     {
-    	 enablepick = false;
-    	 enablevalue = false;
+      enablepick = false;
+      enablevalue = false;
     };
     this.tbody = document.createElement('tbody');
     this.table.appendChild(this.tbody);
@@ -196,11 +198,11 @@
     
     this.chosenColor.onchange = function()
       {
-      	if(/#[0-9a-f]{6,6}/i.test(this.value))
-      	{
-    	      picker.backSample.style.backgroundColor = this.value;
+        if(/#[0-9a-f]{6,6}/i.test(this.value))
+        {
+          picker.backSample.style.backgroundColor = this.value;
           picker.foreSample.style.color = this.value;
-      	}
+        }
       };
 
     this.backSample = document.createElement('div');
@@ -352,7 +354,7 @@
       if(initcolor && /#[0-9a-f]{6,6}/i.test(initcolor))
       {
         this.chosenColor.value = initcolor;
-    	    this.backSample.style.backgroundColor = initcolor;
+        this.backSample.style.backgroundColor = initcolor;
         this.foreSample.style.color = initcolor;
       }
 
@@ -384,7 +386,7 @@
         } 
         else
         {
-        	  this.table.style.top = 0;
+          this.table.style.top = 0;
         }
       }
       else
@@ -400,7 +402,7 @@
         }
         else
         {
-        	  this.table.style.left = 0;
+          this.table.style.left = 0;
         }
       }
       else
@@ -409,7 +411,7 @@
       }
      // IE6 ONLY - prevent windowed elements (<SELECT>) to render above the colorpicker
       if (this.is_ie_6)
-	  {
+      {
         this.iframe.style.top = this.table.style.top;
         this.iframe.style.left = this.table.style.left;
       }
@@ -421,8 +423,8 @@
         picker.backSample.style.backgroundColor = cell.colorCode;
         picker.foreSample.style.color = cell.colorCode;
         if((cell.hue >= 195  && cell.saturation > 0.5) || 
-        		(cell.hue === 0 && cell.saturation === 0 && cell.value < 0.5) || 
-        		(cell.hue !== 0 && picker.value < 0.75))
+           (cell.hue === 0 && cell.saturation === 0 && cell.value < 0.5) || 
+           (cell.hue !== 0 && picker.value < 0.75))
         {
           cell.style.borderColor = '#fff';
         }
@@ -444,7 +446,7 @@
         }
         else
         {
-        	  cell.style.borderColor = '#000';
+          cell.style.borderColor = '#000';
         }
         valuerow = cell.thisrow;
         valuecol = cell.thiscol;
@@ -455,7 +457,7 @@
     
     function unpickCell(row,col)
     {
-    	  picker.saved_cells[row][col].style.borderColor = picker.saved_cells[row][col].colorCode;
+      picker.saved_cells[row][col].style.borderColor = picker.saved_cells[row][col].colorCode;
     }
     
     /** Draw the color picker. */
@@ -509,24 +511,24 @@
             td.onmousedown = function()
             {
               enablepick = true;
-//            	 unpickCell(pickrow,pickcol);
+//            unpickCell(pickrow,pickcol);
               picker.saved_cells[pickrow][pickcol].style.borderColor = picker.saved_cells[pickrow][pickcol].colorCode;
               pickCell(this);
             };
             td.onmouseover = function()
             {
-            	 if(enablepick)
-            	 {
-            	 	pickCell(this);
-            	 }
+              if(enablepick)
+              {
+                pickCell(this);
+              }
             };
             td.onmouseout = function()
             {
-            	 if(enablepick)
-            	 {
-    //            this.style.borderColor = picker.saved_cells[this.thisrow][this.thiscol].colorCode;
+              if(enablepick)
+              {
+    //          this.style.borderColor = picker.saved_cells[this.thisrow][this.thiscol].colorCode;
                 this.style.borderColor = this.colorCode;
-            	 }
+              }
             };
             td.ondblclick = function() { Xinha.colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
             td.appendChild(document.createTextNode(' '));
@@ -565,7 +567,7 @@
           td.onmousedown = function()
           {
             enablevalue = true;
-//            unpickCell(valuerow,valuecol);
+//          unpickCell(valuerow,valuecol);
             picker.saved_cells[valuerow][valuecol].style.borderColor = picker.saved_cells[valuerow][valuecol].colorCode;
             picker.value = this.hsv_value; 
             picker.pick_color();
@@ -642,7 +644,7 @@
             {
    //           this.style.borderColor = picker.saved_cells[this.thisrow][this.thiscol].colorCode;
               this.style.borderColor = this.colorCode;
-        	   }
+            }
           };
           td.ondblclick = function() { Xinha.colorPicker.remember(this.colorCode, picker.savecolors); picker.callback(this.colorCode); picker.close(); };
           td.appendChild(document.createTextNode(' '));
@@ -785,14 +787,14 @@
         this.backSample.style.backgroundColor = pickcell.colorCode;
         this.foreSample.style.color = pickcell.colorCode;
         if((pickcell.hue >= 195  && pickcell.saturation > 0.5) || 
-        		(pickcell.hue === 0 && pickcell.saturation === 0 && pickcell.value < 0.5) || 
-        		(pickcell.hue !== 0 && picker.value < 0.75))
+           (pickcell.hue === 0 && pickcell.saturation === 0 && pickcell.value < 0.5) || 
+           (pickcell.hue !== 0 && picker.value < 0.75))
         {
            pickcell.style.borderColor = '#fff';
         }
         else
         {
-        	  pickcell.style.borderColor = '#000';
+          pickcell.style.borderColor = '#000';
         }
       }
     };
@@ -891,7 +893,7 @@ Xinha.colorPicker.InputBinding = function(input,pickerConfig)
   chooser.onclick = function() 
   { 
     var colPicker = new Xinha.colorPicker(pickerConfig);
-	  colPicker.open("",chooser, input.value ); 
+    colPicker.open("",chooser, input.value ); 
   }
   Xinha.freeLater(this,"chooser");
 }

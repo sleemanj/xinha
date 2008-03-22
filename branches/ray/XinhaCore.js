@@ -133,7 +133,14 @@ Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
 /** Version Number, if browser is Opera 
 @type string 
 */
-Xinha.opera_version = navigator.appVersion.substring(0, navigator.appVersion.indexOf(" "))*1;
+if(Xinha.is_opera && Xinha.agt.match(/opera[\/ ]([0-9.]+)/))
+{
+  Xinha.opera_version = parseFloat(RegExp.$1);
+}
+else
+{
+  Xinha.opera_version = 0;
+}
 /** Browserengine is KHTML (Konqueror, Safari)
 @type string 
 */
@@ -142,6 +149,8 @@ Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
 @type string 
 */
 Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
+Xinha.webkit_version = parseInt(navigator.appVersion.replace(/.*?AppleWebKit\/([\d]).*?/,'$1'));
+
 /** Browser is Safari
 @type string 
 */
@@ -158,13 +167,14 @@ Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
 @type string 
 */
 Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
-/** Browserengine is Gecko (Mozilla), applies also to Safari
+/** Browser engine is Gecko (Mozilla), applies also to Safari and Opera which work
+ *  largely similar.
 @type string 
 */
-Xinha.is_gecko  = (navigator.product == "Gecko");
+Xinha.is_gecko  = (navigator.product == "Gecko") || Xinha.is_opera;
 Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
-Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub) >= "2007121016";
-Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub) < "2007121016";
+Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub) >= 2007121016;
+Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub) < 2007121016;
 
 /** File is opened locally opened ("file://" protocol)
  * @type string
@@ -183,12 +193,7 @@ Xinha.is_designMode = (typeof document.designMode != 'undefined' && !Xinha.is_ie
  */
 Xinha.checkSupportedBrowser = function()
 {
-  if ( Xinha.is_opera )
-  {
-    // alert("Sorry, Opera is not yet supported by Xinha.");
-      return false;
-    }
-  return Xinha.is_gecko || (Xinha.is_opera && 0 && Xinha.opera_version >= 9.1) || Xinha.ie_version >= 5.5;
+  return Xinha.is_real_gecko || (Xinha.is_opera && Xinha.opera_version >= 9.2) || Xinha.ie_version >= 5.5 || Xinha.webkit_version >= 522;
 };
 /** Cache result of checking for browser support
  * @type Boolean
@@ -453,7 +458,7 @@ Xinha.escapeStringForRegExp = function (string)
 /** Identifies email addresses
 * @type RegExp
 */
-Xinha.RE_email    = /[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+/i;
+Xinha.RE_email    = /^[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+$/i;
 /** Identifies URLs
 * @type RegExp
 */
@@ -2054,6 +2059,15 @@ Xinha.prototype.generate = function ()
     }
     editor._browserSpecificPlugin = editor.registerPlugin('WebKit');
   }
+  else if (Xinha.is_opera)
+  {
+    url = _editor_url + 'modules/Opera/Opera.js';
+    if ( !Xinha.loadPlugins(["Opera"], function() { editor.generate(); }, url ) )
+    {            
+      return false;
+    }
+    editor._browserSpecificPlugin = editor.registerPlugin('Opera');
+  }
   else if (Xinha.is_gecko)
   {
     url = _editor_url + 'modules/Gecko/Gecko.js';
@@ -2133,6 +2147,11 @@ Xinha.prototype.generate = function ()
       return false;
     }
     editor.registerPlugin('EnterParagraphs');
+  }
+  //TEMPORARY FIX FOR IE8 see #1175
+  if (Xinha.ie_version == 8)
+  {
+    this.config.getHtmlMethod = 'TransformInnerHTML';
   }
 
   switch (this.config.getHtmlMethod)
@@ -2339,20 +2358,8 @@ Xinha.prototype.generate = function ()
   editor._iframeLoadDone = false;
   if (Xinha.is_opera)
     {
-      Xinha._addEvent(
-        this._iframe.contentWindow,
-        'load',
-        function(e)
-        {
-          if ( !editor._iframeLoadDone )
-          {
-             editor._iframeLoadDone = true;
              editor.initIframe();
           }
-          return true;
-        }
-      )
-    }
   else
     Xinha._addEvent(
       this._iframe,
@@ -5023,11 +5030,11 @@ Xinha.prototype.fixRelativeLinks = function(html)
     var baseRe = null;
     if ( typeof this.config.baseHref != 'undefined' && this.config.baseHref !== null )
     {
-      baseRe = new RegExp( "((href|src|background)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/([^\/]\/)(?=.+\.)[^\/]*$/, "$1")) + ")", 'g' );
+      baseRe = new RegExp( "((href|src|background|action)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/([^\/]\/)(?=.+\.)[^\/]*$/, "$1")) + ")", 'g' );
     }
     else
     {
-      baseRe = new RegExp( "((href|src|background)=\")(" +  Xinha.escapeStringForRegExp(document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' )) + ")", 'g' );
+      baseRe = new RegExp( "((href|src|background|action)=\")(" +  Xinha.escapeStringForRegExp(document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' )) + ")", 'g' );
     }
 
     html = html.replace(baseRe, '$1');
@@ -6127,13 +6134,23 @@ if (typeof dumpValues == 'undefined')
           console.log(prop + ' = ' + o[prop] + '\n');
       }
       else 
+      {
       s += prop + ' = ' + o[prop] + '\n';
+    }
+
     }
     if (s) 
     {
+      if (document.getElementById('errors'))
+      {
+        document.getElementById('errors').value += s;
+      }
+      else
+      {
     var x = window.open("", "debugger");
     x.document.write('<pre>' + s + '</pre>');
   }
+}
 }
 }
 if ( !Array.prototype.contains )
@@ -7136,7 +7153,7 @@ HTMLArea = Xinha;
 
 Xinha.init();
 
-if (Xinha.is_ie)
+if ( Xinha.ie_version < 8 )
 {
   Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
 }

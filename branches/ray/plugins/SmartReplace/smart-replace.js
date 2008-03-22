@@ -67,9 +67,9 @@ SmartReplace.prototype.onGenerate = function() {
 	this.editor._toolbarObjects.smartreplace.state("active", this.active);
 	
 	var self = this;
-	Xinha._addEvents(
+	Xinha._addEvent(
         self.editor._doc,
-        [ "keypress"],
+		 "keypress",
         function (event)
         {
           return self.keyEvent(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
@@ -105,18 +105,22 @@ SmartReplace.prototype.keyEvent = function(ev)
 {
 	if ( !this.active) return true;
 	var editor = this.editor;
-	var charCode =  Xinha.is_ie ? ev.keyCode : ev.charCode;
+	var charCode =  Xinha.is_ie ? ev.keyCode : ev.which;
 
 	var key = String.fromCharCode(charCode);
 
-	if (charCode == 32) //space bar
-	{
-		return this.smartDash()
-	}
 	if ( key == '"' || key == "'")
 	{
 		Xinha._stopEvent(ev);
 		return this.smartQuotes(key);
+	}
+	if (charCode == 32) //space bar
+	{
+		return this.smartReplace(ev, 2, /^\s-/, ' –', false); // space-space -> dash 
+	}
+	if ( key == '.' ) // ... -> ellipsis
+	{
+		return this.smartReplace(ev, 2, /\.\./, '…', true);
 	}
 	return true;
 }
@@ -176,14 +180,14 @@ SmartReplace.prototype.smartQuotes = function(kind)
 		}
 		else
 		{
-			r.deleteContents();
-			editor.insertNodeAtSelection(document.createTextNode(' '+opening));				
+			editor.insertNodeAtSelection(document.createTextNode(opening));				
 		}
 		editor.getSelection().collapseToEnd();
 	}
+	return false;
 }
 
-SmartReplace.prototype.smartDash = function()
+SmartReplace.prototype.smartReplace = function(ev, lookback, re, replace, stopEvent)
 {
 	var editor = this.editor;
 	var sel = this.editor.getSelection();
@@ -191,24 +195,36 @@ SmartReplace.prototype.smartDash = function()
 	
 	if (Xinha.is_ie)
 	{
-		r.moveStart('character', -2);
+		r.moveStart('character', -lookback);
 		
-		if(r.text.match(/\s-/))
+		if(r.text.match(re))
 		{
-			r.text = ' '+ String.fromCharCode(8211);
+			r.text = replace;
+			if (stopEvent) 
+			{
+				Xinha._stopEvent(ev);
+				return false
+			}
 		}
 	}
 	else
 	{
-		if (r.startOffset > 1) r.setStart(r.startContainer, r.startOffset -2);
+		if (r.startOffset > 1) r.setStart(r.startContainer, r.startOffset -lookback);
 
-		if(r.toString().match(/^ -/))
+		if(r.toString().match(re))
 		{
+			this.editor.insertNodeAtSelection(document.createTextNode(replace));
 			r.deleteContents();
-			this.editor.insertNodeAtSelection(document.createTextNode(' '+String.fromCharCode(8211)));
+			r.collapse(true);
+		  	if (stopEvent) 
+		  	{
+				Xinha._stopEvent(ev);
+				return false
+			}
 		}
 		editor.getSelection().collapseToEnd();
 	}
+	return true;
 }
 
 SmartReplace.prototype.replaceAll = function()

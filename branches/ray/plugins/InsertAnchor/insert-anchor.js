@@ -3,6 +3,8 @@ function InsertAnchor(editor) {
   var cfg = editor.config;
   var self = this;
 
+  this.placeholderImg = '<img class="IA_placeholder" src="'+_editor_url+'plugins/InsertAnchor/img/placeholder.gif" />';
+  
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
   id       : "insert-anchor", 
@@ -36,6 +38,16 @@ InsertAnchor.prototype.onGenerate = function() {
   this.editor.addEditorStylesheet(_editor_url + 'plugins/InsertAnchor/insert-anchor.css');
 };
 
+InsertAnchor.prototype.inwardHtml = function(html)
+{
+	html= html.replace(/(<a[^>]*class="anchor"[^>]*>)/g,"$1"+this.placeholderImg);
+	return html;
+}
+InsertAnchor.prototype.outwardHtml = function(html)
+{
+	html= html.replace(/(<img[^>]*class="?IA_placeholder"?[^>]*>)/ig,"");
+	return html;
+}
 InsertAnchor.prototype.onGenerateOnce = function()
 {
 	this._prepareDialog();
@@ -100,11 +112,12 @@ InsertAnchor.prototype.apply = function ()
 	var param = this.dialog.hide();
 	var anchor = param['name'];
 	var a = this.a;
+	var self = this;
 	if (anchor == "" || anchor == null)
 	{
 		if (a) 
 		{
-			var child = a.innerHTML;
+			var child = self.outwardHtml(a.innerHTML);
 			a.parentNode.removeChild(a);
 			editor.insertHTML(child);
 		}
@@ -118,14 +131,25 @@ InsertAnchor.prototype.apply = function ()
 			a = doc.createElement("a");
 			a.id = anchor;
 			a.name = anchor;
+			a.title = anchor;
 			a.className = "anchor";
-			a.innerHTML = this.selectedHTML;
-			editor.insertNodeAtSelection(a);
+			a.innerHTML = self.placeholderImg;
+			var html = editor.getSelectedHTML();
+			if (html) a.innerHTML += html;
+			if (Xinha.is_ie) 
+			{
+            	range.pasteHTML(a.outerHTML);
+          	}
+			else 
+			{
+				editor.insertNodeAtSelection(a);
+			}
 		}
 		else 
 		{
 			a.id = anchor;
 			a.name = anchor;
+			a.title = anchor;
 			a.className = "anchor";
 		}
 	}

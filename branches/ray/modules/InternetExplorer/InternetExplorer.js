@@ -494,7 +494,7 @@ Xinha.prototype.insertHTML = function(html)
 Xinha.prototype.getSelectedHTML = function()
 {
   var sel = this.getSelection();
-  if (this.selectionEmpty) return '';
+  if (this.selectionEmpty(sel)) return '';
   var range = this.createRange(sel);
   
   // Need to be careful of control ranges which won't have htmlText
@@ -637,5 +637,5 @@ Xinha.prototype.findCC = function ( target )
  */
 Xinha.getDoctype = function (doc)
 {
-  return (doc.compatMode == "CSS1Compat") ? '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' : '';
+  return (doc.compatMode == "CSS1Compat" && Xinha.ie_version < 8 ) ? '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' : '';
 };
