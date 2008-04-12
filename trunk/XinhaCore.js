@@ -44,7 +44,7 @@ Xinha.version =
 //must be here. it is called while converting _editor_url to absolute
 Xinha._resolveRelativeUrl = function( base, url )
 {
-  if(url.match(/^([^:]+\:)?\//))
+  if(url.match(/^([^:]+\:)?\/\//))
   {
     return url;
   }
@@ -5026,10 +5026,7 @@ Xinha.prototype.fixRelativeLinks = function(html)
     {
       baseRe = new RegExp( "((href|src|background|action)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/([^\/]\/)(?=.+\.)[^\/]*$/, "$1")) + ")", 'g' );
     }
-    else
-    {
-      baseRe = new RegExp( "((href|src|background|action)=\")(" +  Xinha.escapeStringForRegExp(document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' )) + ")", 'g' );
-    }
+    baseRe = new RegExp( "((href|src|background|action)=\")(" +  Xinha.escapeStringForRegExp(document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' )) + ")", 'g' );
 
     html = html.replace(baseRe, '$1');
   }

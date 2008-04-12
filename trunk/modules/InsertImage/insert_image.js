@@ -78,7 +78,7 @@ Xinha.prototype._insertImage = function(image)
   outparam =
     {
       f_base   : base,
-      f_url    : image.getAttribute('src',2), // the second parameter makes IE return the value as it is set, as opposed to an "interpolated" (as MSDN calls it) value
+      f_url    : this.stripBaseURL(image.getAttribute('src',2)), // the second parameter makes IE return the value as it is set, as opposed to an "interpolated" (as MSDN calls it) value
       f_alt    : image.alt,
       f_border : image.border,
       f_align  : image.align,
