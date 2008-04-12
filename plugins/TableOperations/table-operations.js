@@ -835,8 +835,13 @@ TableOperations.processStyle = function(params, element) {
 			    style.verticalAlign = val;
 			}
 			break;
-		    case "f_st_float":
-			style.cssFloat = val;
+			case "f_st_float":
+			if (Xinha.is_ie) {
+				style.styleFloat = val;
+			}
+			else {
+				style.cssFloat = val;
+			}
 			break;
 // 		    case "f_st_margin":
 // 			style.margin = val + "px";
@@ -934,7 +939,12 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 			option = doc.createElement("option");
 			option.innerHTML = Xinha._lc(Val, "TableOperations");
 			option.value = val;
-			option.selected = (("" + el.style.cssFloat).toLowerCase() == val);
+			if (Xinha.is_ie) {
+				option.selected = (("" + el.style.styleFloat).toLowerCase() == val);
+			}
+			else {
+				option.selected = (("" + el.style.cssFloat).toLowerCase() == val);
+			}
 			select.appendChild(option);
 		}
 	}
@@ -1128,14 +1138,13 @@ TableOperations.createStyleFieldset = function(doc, editor, el) {
 	// Gecko reports "solid solid solid solid" for "border-style: solid".
 	// That is, "top right bottom left" -- we only consider the first
 	// value.
-	(currentBorderStyle.match(/([^\s]*)\s/)) && (currentBorderStyle = RegExp.$1);
-	for (var i in options) {
-    if(typeof options[i] == 'function') continue;
+	if (currentBorderStyle.match(/([^\s]*)\s/)) currentBorderStyle = RegExp.$1;
+	for (var i=0;i<options.length;i++) {
 		var val = options[i];
 		option = doc.createElement("option");
 		option.value = val;
 		option.innerHTML = val;
-		(val == currentBorderStyle) && (option.selected = true);
+		if (val == currentBorderStyle) option.selected = true;
 		select.appendChild(option);
 	}
 	select.style.marginRight = "0.5em";
