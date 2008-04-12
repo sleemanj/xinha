@@ -865,22 +865,23 @@ Xinha.colorPicker.loadColors = function()
  */
 Xinha.colorPicker.InputBinding = function(input,pickerConfig)
 {
-  var main = document.createElement('span');
+  var doc = input.ownerDocument;
+  var main = doc.createElement('span');
   main.className = "buttonColor";
   
-  var chooser = this.chooser = document.createElement('span');
+  var chooser = this.chooser = doc.createElement('span');
   chooser.className = "chooser";
   if (input.value) chooser.style.backgroundColor = input.value;
   chooser.onmouseover = function() {chooser.className = "chooser buttonColor-hilite";};
   chooser.onmouseout = function() {chooser.className = "chooser";};
-  chooser.appendChild(document.createTextNode('\u00a0'));
+  chooser.appendChild(doc.createTextNode('\u00a0'));
   main.appendChild(chooser);
-  var clearColor = document.createElement('span');
+  var clearColor = doc.createElement('span');
   clearColor.className = "nocolor";
   clearColor.onmouseover = function() {clearColor.className = "nocolor buttonColor-hilite"; clearColor.style.color='#f00'};
   clearColor.onmouseout = function() {clearColor.className = "nocolor"; clearColor.style.color='#000'};
   clearColor.onclick = function() {input.value ='';chooser.style.backgroundColor = ''};
-  clearColor.appendChild(document.createTextNode('\u00d7'));
+  clearColor.appendChild(doc.createTextNode('\u00d7'));
   main.appendChild(clearColor);
   
   input.parentNode.insertBefore(main,input.nextSibling);

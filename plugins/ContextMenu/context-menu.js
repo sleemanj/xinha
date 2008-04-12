@@ -409,7 +409,6 @@ ContextMenu.prototype.popupMenu = function(ev) {
       {
         var t = Xinha.makeBtnImg(item.__msh.icon, doc);
         td1.appendChild(t);
-        // td1.innerHTML = "<img align='middle' src='" + item.__msh.icon + "' />";
       }
       var td2 = doc.createElement("td");
 			if (Xinha.is_ie)
