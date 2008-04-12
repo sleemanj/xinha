@@ -5,7 +5,7 @@
     --  Use of Xinha is granted by the terms of the htmlArea License (based on
     --  BSD license)  please read license.txt in this package for details.
     --
-    --  Copyright (c) 2005-2007 Xinha Developer Team and contributors
+    --  Copyright (c) 2005-2008 Xinha Developer Team and contributors
     --  
     --  Xinha was originally based on work by Mihai Bazon which is:
     --      Copyright (c) 2003-2004 dynarch.com.

@@ -16,10 +16,6 @@ function SmartReplace(editor) {
 		tooltip  : this._lc("SmartReplace"),
 		image    : _editor_url+"plugins/SmartReplace/img/smartquotes.gif",
 		textMode : false,
-	/*	action   : function(editor) {
-				self.dialog(editor);
-			}
-		});	*/
 		action   : function(e, objname, obj) { self.buttonPress(null, obj); }
 	});
 	cfg.addToolbarElement("smartreplace", "htmlmode", 1);
@@ -29,11 +25,11 @@ SmartReplace._pluginInfo = {
   name          : "SmartReplace",
   version       : "1.0",
   developer     : "Raimund Meyer",
-  developer_url : "http://rheinauf.de",
+  developer_url : "http://x-webservice.net",
   c_owner       : "Raimund Meyer",
   sponsor       : "",
   sponsor_url   : "",
-  license       : "htmlArea"
+  license       : "LGPL"
 };
 
 SmartReplace.prototype._lc = function(string) {
