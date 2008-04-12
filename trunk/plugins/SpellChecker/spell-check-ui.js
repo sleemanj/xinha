@@ -378,7 +378,7 @@ function finishedSpellChecking() {
   fixedWords = [];
   suggested_words = frame.contentWindow.suggested_words;
 
-  document.getElementById("status").innerHTML = "Xinha Spell Checker (<a href='readme-tech.html' target='_blank' title='Technical information'>info</a>)";
+  document.getElementById("status").innerHTML = "Xinha Spell Checker (<a href=\"readme-tech.html\" onclick=\"window.open(this.href,'_blank');return false;\" title=\"Technical information\">info</a>)";
   var doc = frame.contentWindow.document;
         var spans = doc.getElementsByTagName("span");
         var sps = [];
