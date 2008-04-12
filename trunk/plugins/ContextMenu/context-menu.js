@@ -25,6 +25,10 @@ ContextMenu._pluginInfo = {
 	license       : "htmlArea"
 };
 
+Xinha.Config.prototype.ContextMenu = {
+	disableMozillaSpellCheck : false
+}
+
 ContextMenu.prototype.onGenerate = function() {
 	var self = this;
 	var doc = this.editordoc = this.editor._iframe.contentWindow.document;
@@ -33,7 +37,10 @@ ContextMenu.prototype.onGenerate = function() {
 				    return self.popupMenu(Xinha.is_ie ? self.editor._iframe.contentWindow.event : event);
 			    });
 	this.currentMenu = null;
-	this.editordoc.body.spellcheck = false; // Firefox spellchecking is quite confusing for the user when they don't get the browser context menu
+	
+	if (this.editor.config.ContextMenu.disableMozillaSpellCheck) {
+		this.editordoc.body.spellcheck = false; // Firefox spellchecking is quite confusing for the user when they don't get the browser context menu
+	}
 };
 
 ContextMenu.prototype.getContextMenu = function(target) {
