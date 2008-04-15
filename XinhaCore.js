@@ -5025,9 +5025,9 @@ Xinha.prototype.fixRelativeLinks = function(html)
     if ( typeof this.config.baseHref != 'undefined' && this.config.baseHref !== null )
     {
       baseRe = new RegExp( "((href|src|background|action)=\")(" + Xinha.escapeStringForRegExp(this.config.baseHref.replace(/([^\/]\/)(?=.+\.)[^\/]*$/, "$1")) + ")", 'g' );
+	  html = html.replace(baseRe, '$1');
     }
     baseRe = new RegExp( "((href|src|background|action)=\")(" +  Xinha.escapeStringForRegExp(document.location.href.replace( /^(https?:\/\/[^\/]*)(.*)/, '$1' )) + ")", 'g' );
-
     html = html.replace(baseRe, '$1');
   }
 
