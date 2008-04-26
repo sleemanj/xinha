@@ -332,7 +332,7 @@ Linker.Dialog.prototype._prepareDialog = function()
     return;
   }
 
-  if(this.files == false)
+  if(this.files === false)
   {
     if(linker.lConfig.backend)
     {
@@ -420,7 +420,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
                      'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
                      files[i]);
     }
-    else if(files[i].length)
+    else if(typeof files[i].length != 'undefined')
     {
       var id = this.Dialog_nxtid++;
       this.dTree.add(id, parent, files[i][0].replace(/^.*\//, ''), null, files[i][0]);
