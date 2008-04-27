@@ -420,7 +420,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
                      'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
                      files[i]);
     }
-    else if(typeof files[i].length != 'undefined')
+    else if(typeof files[i]=="object" && files[i] && typeof files[i].length==="number") // there seems to be a strange bug in IE that requires this complicated check, see #1197
     {
       var id = this.Dialog_nxtid++;
       this.dTree.add(id, parent, files[i][0].replace(/^.*\//, ''), null, files[i][0]);
