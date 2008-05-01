@@ -28,8 +28,8 @@
     --
     --  $HeadURL:http://svn.xinha.webfactional.com/trunk/XinhaCore.js $
     --  $LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $
-    --  $LastChangedRevision:998M $
-    --  $LastChangedBy:(local) $
+    --  $LastChangedRevision:999 $
+    --  $LastChangedBy:ray $
     --------------------------------------------------------------------------*/
 
 Xinha.version =
@@ -37,8 +37,8 @@ Xinha.version =
   'Release'   : 'Trunk',
   'Head'      : '$HeadURL:http://svn.xinha.webfactional.com/trunk/XinhaCore.js $'.replace(/^[^:]*: (.*) \$$/, '$1'),
   'Date'      : '$LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision:998M $'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'RevisionBy': '$LastChangedBy:(local) $'.replace(/^[^:]*: (.*) \$$/, '$1')
+  'Revision'  : '$LastChangedRevision:999 $'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'RevisionBy': '$LastChangedBy:ray $'.replace(/^[^:]*: (.*) \$$/, '$1')
 };
 
 //must be here. it is called while converting _editor_url to absolute
