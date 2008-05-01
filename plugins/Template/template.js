@@ -34,7 +34,7 @@ Template._pluginInfo = {
 };
 
 Template.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(_editor_url + 'plugins/Template/template.css');
+  this.editor.addEditorStylesheet(Xinha.getPluginDir("Template") + '/template.css');
 };
 
 Template.prototype.buttonPress = function(editor) {

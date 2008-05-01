@@ -26,19 +26,19 @@
     --   * Jedit is the recommended editor, a comment of this format should be
     --     included in the top 10 lines of the file (see the embedded edit mode)
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/XinhaCore.js $
+    --  $LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $
+    --  $LastChangedRevision:998M $
+    --  $LastChangedBy:(local) $
     --------------------------------------------------------------------------*/
 
 Xinha.version =
 {
   'Release'   : 'Trunk',
-  'Head'      : '$HeadURL$'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'Date'      : '$LastChangedDate$'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision$'.replace(/^[^:]*: (.*) \$$/, '$1'),
-  'RevisionBy': '$LastChangedBy$'.replace(/^[^:]*: (.*) \$$/, '$1')
+  'Head'      : '$HeadURL:http://svn.xinha.webfactional.com/trunk/XinhaCore.js $'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'Date'      : '$LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $'.replace(/^[^:]*: ([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\) \$/, '$4 $2 $3'),
+  'Revision'  : '$LastChangedRevision:998M $'.replace(/^[^:]*: (.*) \$$/, '$1'),
+  'RevisionBy': '$LastChangedBy:(local) $'.replace(/^[^:]*: (.*) \$$/, '$1')
 };
 
 //must be here. it is called while converting _editor_url to absolute
@@ -207,7 +207,7 @@ if ( Xinha.isRunLocally && Xinha.isSupportedBrowser)
 }
 
 /** Creates a new Xinha object
- * @version $Rev$ $LastChangedDate$
+ * @version $Rev:998M $ $LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $
  * @constructor
  * @param {String|DomNode}   textarea the textarea to replace; can be either only the id or the DOM object as returned by document.getElementById()
  * @param {Xinha.Config} config optional if no Xinha.Config object is passed, the default config is used
@@ -469,7 +469,7 @@ Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a
 /**
  * This class creates an object that can be passed to the Xinha constructor as a parameter.
  * Set the object's properties as you need to configure the editor (toolbar etc.)
- * @version $Rev$ $LastChangedDate$
+ * @version $Rev:998M $ $LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $
  * @constructor
  */
 Xinha.Config = function()
@@ -2059,7 +2059,7 @@ Xinha.prototype.generate = function ()
   if (Xinha.is_ie)
   {
     url = _editor_url + 'modules/InternetExplorer/InternetExplorer.js';
-    if ( !Xinha.loadPlugins(["InternetExplorer"], function() { editor.generate(); }, url ) )
+    if ( !Xinha.loadPlugins([{plugin:"InternetExplorer",url:url}], function() { editor.generate(); } ) )
     {            
       return false;
     }
@@ -2068,7 +2068,7 @@ Xinha.prototype.generate = function ()
   else if (Xinha.is_webkit)
   {
     url = _editor_url + 'modules/WebKit/WebKit.js';
-    if ( !Xinha.loadPlugins(["WebKit"], function() { editor.generate(); }, url ) )
+    if ( !Xinha.loadPlugins([{plugin:"WebKit",url:url}], function() { editor.generate(); } ) )
     {            
   
       return false;
@@ -2078,7 +2078,7 @@ Xinha.prototype.generate = function ()
   else if (Xinha.is_opera)
   {
     url = _editor_url + 'modules/Opera/Opera.js';
-    if ( !Xinha.loadPlugins(["Opera"], function() { editor.generate(); }, url ) )
+    if ( !Xinha.loadPlugins([{plugin:"Opera",url:url}], function() { editor.generate(); } ) )
     {            
       return false;
     }
@@ -2087,7 +2087,7 @@ Xinha.prototype.generate = function ()
   else if (Xinha.is_gecko)
   {
     url = _editor_url + 'modules/Gecko/Gecko.js';
-    if ( !Xinha.loadPlugins(["Gecko"], function() { editor.generate(); }, url ) )
+    if ( !Xinha.loadPlugins([{plugin:"Gecko",url:url}], function() { editor.generate(); } ) )
     {            
       return false;
     }
@@ -2105,13 +2105,13 @@ Xinha.prototype.generate = function ()
   }
   
   url = _editor_url + 'modules/FullScreen/full-screen.js';
-  if ( !Xinha.loadPlugins(["FullScreen"], function() { editor.generate(); }, url ))
+  if ( !Xinha.loadPlugins([{plugin:"FullScreen",url:url}], function() { editor.generate(); } ))
   {
     return false;
   }
   
   url = _editor_url + 'modules/ColorPicker/ColorPicker.js';
-  if ( !Xinha.loadPlugins(["ColorPicker"], function() { editor.generate(); } , url ) )
+  if ( !Xinha.loadPlugins([{plugin:"ColorPicker",url:url}], function() { editor.generate(); } ) )
   {
     return false;
   }
@@ -2129,7 +2129,7 @@ Xinha.prototype.generate = function ()
         break;
         case "insertimage":
           url = _editor_url + 'modules/InsertImage/insert_image.js';
-          if ( typeof Xinha.prototype._insertImage == 'undefined' && !Xinha.loadPlugins(["InsertImage"], function() { editor.generate(); } , url ) )
+          if ( typeof Xinha.prototype._insertImage == 'undefined' && !Xinha.loadPlugins([{plugin:"InsertImage",url:url}], function() { editor.generate(); } ) )
           {
             return false;
           }
@@ -2137,7 +2137,7 @@ Xinha.prototype.generate = function ()
         break;
         case "createlink":
           url = _editor_url + 'modules/CreateLink/link.js';
-          if ( typeof Linker == 'undefined' && !Xinha.loadPlugins(["CreateLink"], function() { editor.generate(); } , url ))
+          if ( typeof Linker == 'undefined' && !Xinha.loadPlugins([{plugin:"CreateLink",url:url}], function() { editor.generate(); } ))
           {
             return false;
           }
@@ -2145,7 +2145,7 @@ Xinha.prototype.generate = function ()
         break;
         case "inserttable":
           url = _editor_url + 'modules/InsertTable/insert_table.js';
-          if ( !Xinha.loadPlugins(["InsertTable"], function() { editor.generate(); } , url ) )
+          if ( !Xinha.loadPlugins([{plugin:"InsertTable",url:url}], function() { editor.generate(); } ) )
           {
             return false;
           }
@@ -2158,7 +2158,7 @@ Xinha.prototype.generate = function ()
   // If this is gecko, set up the paragraph handling now
   if ( Xinha.is_gecko &&  editor.config.mozParaHandler != 'built-in' )
   {
-    if (  !Xinha.loadPlugins(["EnterParagraphs"], function() { editor.generate(); }, _editor_url + 'modules/Gecko/paraHandlerBest.js' ) )
+    if (  !Xinha.loadPlugins([{plugin:"EnterParagraphs",url: _editor_url + 'modules/Gecko/paraHandlerBest.js'}], function() { editor.generate(); } ) )
     {
       return false;
     }
@@ -2180,7 +2180,7 @@ Xinha.prototype.generate = function ()
     break;
   }
   
-  if ( !Xinha.loadPlugins(["GetHtmlImplementation"], function() { editor.generate(); } , getHtmlMethodPlugin))
+  if ( !Xinha.loadPlugins([{plugin:"GetHtmlImplementation",url:getHtmlMethodPlugin}], function() { editor.generate(); }))
   {
     return false;        
   }
@@ -3298,10 +3298,17 @@ Xinha.prototype.registerPlugin2 = function(plugin, args)
  * @param {String} pluginName
  * @returns {String} path to plugin
  */
-Xinha.getPluginDir = function(pluginName)
+Xinha.getPluginDir = function(plugin)
 {
-  return _editor_url + "plugins/" + pluginName;
-};
+  if (Xinha.externalPlugins[plugin])
+  {
+    return Xinha.externalPlugins[plugin][0];
+  }
+  else
+  {
+    return _editor_url + "plugins/" + plugin ;
+  }
+}
 /** Static function that loads the given plugin
  * @param {String} pluginName
  * @param {Function} callback function to be called when file is loaded
@@ -3340,6 +3347,8 @@ Xinha.loadPlugin = function(pluginName, callback, plugin_file)
  */
 Xinha._pluginLoadStatus = {};
 
+Xinha.externalPlugins = {};
+
 /** Static function that loads the plugins (see xinha_plugins in NewbieGuide)
  * @param {Array} plugins
  * @param {Function} callbackIfNotReady function that is called repeatedly until all files are
@@ -3350,6 +3359,17 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
 {
   if ( !Xinha.isSupportedBrowser ) return;
   Xinha.setLoadingMessage (Xinha._lc("Loading plugins"));
+  var m;
+  for (var i=0;i<plugins.length;i++)
+  {
+    if (typeof plugins[i] == 'object')
+    {
+      m = plugins[i].url.match(/(.*)(\/[^\/]*)$/);
+      Xinha.externalPlugins[plugins[i].plugin] = [m[1],m[2]];
+      plugins[i] = plugins[i].plugin;
+    }
+  }
+  
   // Rip the ones that are loaded and look for ones that have failed
   var retVal = true;
   var nuPlugins = Xinha.cloneObject(plugins);
@@ -3357,7 +3377,8 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
   while ( nuPlugins.length )
   {
     var p = nuPlugins.pop();
-	if (p == 'FullScreen' && !url ) continue; //prevent trying to load FullScreen plugin from the plugins folder
+    if (p == 'FullScreen' && !Xinha.externalPlugins['FullScreen'] ) continue; //prevent trying to load FullScreen plugin from the plugins folder
+   
     if ( typeof Xinha._pluginLoadStatus[p] == 'undefined' )
     {
       // Load it
@@ -3378,7 +3399,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
             // by just skipping them.
             Xinha._pluginLoadStatus[plugin] = 'failed';
           }
-        },url
+        },(Xinha.externalPlugins[p] ? Xinha.externalPlugins[p][0]+Xinha.externalPlugins[p][1] : url)
       );
       retVal = false;
     }
@@ -5753,11 +5774,11 @@ Xinha.prototype.popupURL = function(file)
   {
     var plugin = RegExp.$1;
     var popup = RegExp.$2;
-    if ( ! ( /\.html$/.test(popup) ) )
+    if ( ! ( /\.(html?|php)$/.test(popup) ) )
     {
       popup += ".html";
     }
-    url = _editor_url + "plugins/" + plugin + "/popups/" + popup;
+    url = Xinha.getPluginDir(plugin) + "/popups/" + popup;
   }
   else if ( file.match(/^\/.*?/) || file.match(/^https?:\/\//))
   {
@@ -5769,6 +5790,8 @@ Xinha.prototype.popupURL = function(file)
   }
   return url;
 };
+
+
 
 /** FIX: Internet Explorer returns an item having the _name_ equal to the given
  * id, even if it's not having any id.  This way it can return a different form
@@ -6321,7 +6344,7 @@ Xinha._loadlang = function(context,url)
     //use internal files
     if ( context != 'Xinha')
     {
-      url = _editor_url+"plugins/"+context+"/lang/"+_editor_lang+".js";
+      url = Xinha.getPluginDir(context)+"/lang/"+_editor_lang+".js";
     }
     else
     {

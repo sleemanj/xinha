@@ -24,18 +24,18 @@
     --   be a part of the WebKit.prototype, we won't trample on namespace
     --   that way.
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/modules/WebKit/WebKit.js $
+    --  $LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $
+    --  $LastChangedRevision:998 $
+    --  $LastChangedBy:ray $
     --------------------------------------------------------------------------*/
                                                     
 WebKit._pluginInfo = {
   name          : "WebKit",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  version       : "$LastChangedRevision:998 $".replace(/^[^:]*: (.*) \$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL$".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/WebKit/WebKit.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"

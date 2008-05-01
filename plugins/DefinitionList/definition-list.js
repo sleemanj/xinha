@@ -49,7 +49,7 @@ DefinitionList.prototype._lc = function(string) {
 };
 
 DefinitionList.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(_editor_url + 'plugins/DefinitionList/definition-list.css');
+  this.editor.addEditorStylesheet(Xinha.getPluginDir('DefinitionList') + '/definition-list.css');
 };
 
 DefinitionList.prototype.buttonPress = function(editor,button_id) {

@@ -2,10 +2,10 @@
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  FormOperations Plugin
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/plugins/FormOperations/form-operations.js $
+    --  $LastChangedDate:2007-02-07 20:12:42 +0100 (Mi, 07 Feb 2007) $
+    --  $LastChangedRevision:715M $
+    --  $LastChangedBy:(local) $
     --------------------------------------------------------------------------*/
 
 Xinha.Config.prototype.FormOperations =
@@ -15,8 +15,8 @@ Xinha.Config.prototype.FormOperations =
   //    'unmodified'   => FieldName
   'multiple_field_format': 'php',
   'allow_edit_form'      : false,
-  'default_form_action'  : _editor_url + 'plugins/FormOperations/formmail.php',
-  'default_form_html'    : Xinha._geturlcontent(_editor_url + 'plugins/FormOperations/default_form.html')
+  'default_form_action'  : Xinha.getPluginDir('FormOperations') + '/formmail.php',
+  'default_form_html'    : Xinha._geturlcontent(Xinha.getPluginDir('FormOperations') + '/default_form.html')
 };
 
 FormOperations._pluginInfo =
@@ -41,7 +41,7 @@ function FormOperations(editor)
   this._preparePanel();
 
 
-  editor.config.pageStyleSheets.push(_editor_url + 'plugins/FormOperations/iframe.css');
+  editor.config.pageStyleSheets.push(Xinha.getPluginDir('FormOperations') + '/iframe.css');
 
   var toolbar =
   [
@@ -187,7 +187,7 @@ FormOperations.prototype._preparePanel = function ()
   if(this.html == false)
   {
 
-    Xinha._getback(_editor_url + 'plugins/FormOperations/panel.html',
+    Xinha._getback(Xinha.getPluginDir('FormOperations') + '/panel.html',
       function(txt)
       {
         fo.html = txt;

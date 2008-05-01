@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id$
+// $Id:spell-checker.js 856M 2007-06-13 18:34:34Z (local) $
 
 Xinha.Config.prototype.SpellChecker = { 'backend': 'php', 'personalFilesDir' : '', 'defaultDictionary' : 'en_GB', 'utf8_to_entities' : true };
 
@@ -53,7 +53,7 @@ SpellChecker.prototype.buttonPress = function(editor, id) {
       case "SC-spell-check":
     SpellChecker.editor = editor;
     SpellChecker.init = true;
-    var uiurl = _editor_url + "plugins/SpellChecker/spell-check-ui.html";
+    var uiurl = Xinha.getPluginDir("SpellChecker") + "/spell-check-ui.html";
     var win;
     if (Xinha.is_ie) {
       win = window.open(uiurl, "SC_spell_checker",

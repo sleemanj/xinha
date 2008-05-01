@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id$
+// $Id:spell-check-ui.js 987M 2008-04-12 12:39:04Z (local) $
 
 // internationalization file was already loaded in parent ;-)
 var SpellChecker = window.opener.SpellChecker;
@@ -75,7 +75,7 @@ function saveClicked() {
       data['to_r_list[' + i + '][1]'] = to_r_list[i][1];
     }
     // var win = window;
-    window.opener.Xinha._postback(_editor_url + '/plugins/SpellChecker/spell-check-savedicts.php', data);
+    window.opener.Xinha._postback(Xinha.getPluginDir("SpellChecker") + '/spell-check-savedicts.php', data);
     window.close();
   }
   else
@@ -215,7 +215,7 @@ function initDocument() {
   }
   if(editor.config.SpellChecker.backend == 'php')
   {
-    field.form.action = _editor_url + '/plugins/SpellChecker/spell-check-logic.php';
+    field.form.action = Xinha.getPluginDir("SpellChecker") + '/spell-check-logic.php';
   }
   if(editor.config.SpellChecker.utf8_to_entities)
   {

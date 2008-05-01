@@ -1,7 +1,7 @@
 /**
  * Functions for the image listing, used by images.php only	
- * @author $Author$
- * @version $Id$
+ * @author $Author:gogo $
+ * @version $Id:images.js 927 2008-01-08 03:40:02Z gogo $
  * @package ImageManager
  */
 

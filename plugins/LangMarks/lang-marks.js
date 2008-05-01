@@ -50,7 +50,7 @@ LangMarks.prototype._lc = function(string) {
 };
 
 LangMarks.prototype.onGenerate = function() {
-	 this.editor.addEditorStylesheet(_editor_url + 'plugins/LangMarks/lang-marks.css');
+	 this.editor.addEditorStylesheet(Xinha.getPluginDir("LangMarks") + '/lang-marks.css');
 };
 
 LangMarks.prototype.onSelect = function(editor, obj, context, updatecontextclass) {

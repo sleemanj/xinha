@@ -110,7 +110,7 @@ Xinha.Config.prototype.SuperClean =
   //  "content" which contains the HTML to tidy, and return javascript like
   //  editor.setHTML('<strong>Tidied Html</strong>')
   // it's called through XMLHTTPRequest
-  'tidy_handler': _editor_url + 'plugins/SuperClean/tidy.php',
+  'tidy_handler': Xinha.getPluginDir("SuperClean") + '/tidy.php',
 
   //avaliable filters (these are built-in filters)
   // You can either use
@@ -218,7 +218,7 @@ SuperClean.prototype.onGenerate = function()
       }
       else
       {
-        Xinha._getback(_editor_url + 'plugins/SuperClean/filters/'+filter+'.js',
+        Xinha._getback(Xinha.getPluginDir("SuperClean") + '/filters/'+filter+'.js',
                       function(func) {
                         eval('SuperClean.filterFunctions.'+filter+'='+func+';');
                         sc.onGenerate();
@@ -255,7 +255,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
 
   if(this.html == false)
   {
-    Xinha._getback(_editor_url + 'plugins/SuperClean/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
+    Xinha._getback(Xinha.getPluginDir("SuperClean") + '/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
     return;
   }
 

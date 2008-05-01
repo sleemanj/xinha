@@ -9,7 +9,7 @@
 // Version 3.0 developed by Mihai Bazon.
 //   http://dynarch.com/mishoo
 //
-// $Id$
+// $Id:popup.js 856 2007-06-13 18:34:34Z wymsy $
 
 // Override the ordinary popup.js translation to add translation for a few other HTML elements.
 

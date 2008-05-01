@@ -27,7 +27,7 @@ function ExtendedFileManager(editor)
         cfg.registerButton({
             id        : "linkfile",
             tooltip   : Xinha._lc("Insert File Link",'ExtendedFileManager'),
-            image     : _editor_url + 'plugins/ExtendedFileManager/img/ed_linkfile.gif',
+            image     : Xinha.getPluginDir('ExtendedFileManager') + '/img/ed_linkfile.gif',
             textMode  : false,
             action    : function(editor) {
                     editor._linkFile();
@@ -68,7 +68,7 @@ ExtendedFileManager._pluginInfo = {
 Xinha.Config.prototype.ExtendedFileManager =
 {
   'use_linker': true,
-  'backend'    : _editor_url + 'plugins/ExtendedFileManager/backend.php?__plugin=ExtendedFileManager&',
+  'backend'    : Xinha.getPluginDir('ExtendedFileManager') + '/backend.php?__plugin=ExtendedFileManager&',
   'backend_data' : null,
   // deprecated keys, use passing data through e.g. xinha_pass_to_php_backend()
   'backend_config'     : null,
