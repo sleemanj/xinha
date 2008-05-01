@@ -260,7 +260,7 @@ function pasteButton(action)
 			a.href = "javascript:void(0);";
 			
 		var img = document.createElement('img');
-			img.src = window.opener._editor_url+'plugins/ExtendedFileManager/img/edit_paste.gif';
+			img.src = window.opener.Xinha.getPluginDir('ExtendedFileManager')+'/img/edit_paste.gif';
 			img.alt = i18n('Paste');
 			a.appendChild(img);
 			buttonHolder.appendChild(a);
@@ -325,7 +325,7 @@ function onOK()
           || (origsize.h != param.f_height) )
         {
           // Yup, need to resize
-          var resized = Xinha._geturlcontent(window.opener._editor_url + 'plugins/ExtendedFileManager/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
+          var resized = Xinha._geturlcontent(window.opener.Xinha.getPluginDir('ExtendedFileManager') + '/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
 
           // alert(resized);
           resized = eval(resized);

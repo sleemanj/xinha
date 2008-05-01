@@ -75,7 +75,7 @@ Forms.prototype._lc = function(string) {
 };
 
 Forms.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(_editor_url + 'plugins/Forms/forms.css');
+  this.editor.addEditorStylesheet(Xinha.getPluginDir("Forms") + '/forms.css');
 };
 
 Forms.prototype.buttonPress = function(editor,button_id, node) {

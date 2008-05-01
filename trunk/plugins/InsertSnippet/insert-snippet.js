@@ -59,12 +59,12 @@ InsertSnippet.prototype._lc = function(string) {
 };
 
 InsertSnippet.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(_editor_url + 'plugins/InsertSnippet/InsertSnippet.css');
+  this.editor.addEditorStylesheet(Xinha.getPluginDir("InsertSnippet") + '/InsertSnippet.css');
 };
 
 Xinha.Config.prototype.InsertSnippet =
 {
-  'snippets' : _editor_url+"plugins/InsertSnippet/demosnippets.js", // purely demo purposes, you should change this
+  'snippets' : Xinha.getPluginDir("InsertSnippet")+"/demosnippets.js", // purely demo purposes, you should change this
   'css' : ['../InsertSnippet.css'], //deprecated, CSS is now pulled from xinha_config
   'showInsertVariable': false,
   'backend_data' : null

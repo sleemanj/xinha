@@ -55,7 +55,7 @@ function Equation(editor) {
 	
 	if (typeof  AMprocessNode != "function")
 	{
-		Xinha._loadback(_editor_url + "plugins/Equation/ASCIIMathML.js", function () { translate(); });
+		Xinha._loadback(Xinha.getPluginDir('Equation') + "/ASCIIMathML.js", function () { translate(); });
 	}
 }
 
@@ -184,7 +184,7 @@ Equation.prototype.buttonPress = function()
 	{
 		args["editedNode"] = parent;
 	}
-	Dialog(_editor_url + "plugins/Equation/popups/dialog.html", function(params) {
+	Dialog(Xinha.getPluginDir('Equation') + "/popups/dialog.html", function(params) {
 				self.insert(params);
 			}, args);
 };

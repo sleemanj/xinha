@@ -1,7 +1,7 @@
 /**
  * Functions for the ImageManager, used by manager.php only	
- * @author $Author$
- * @version $Id$
+ * @author $Author:gogo $
+ * @version $Id:manager.js 877 2007-08-12 15:50:03Z gogo $
  * @package ImageManager
  */
 	

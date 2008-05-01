@@ -17,10 +17,10 @@
     --  
     --
     --
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/modules/Dialogs/inline-dialog.js $
+    --  $LastChangedDate:2008-04-12 19:10:04 +0200 (Sa, 12 Apr 2008) $
+    --  $LastChangedRevision:990 $
+    --  $LastChangedBy:ray $
     --------------------------------------------------------------------------*/
 Xinha.Dialog = function(editor, html, localizer)
 {

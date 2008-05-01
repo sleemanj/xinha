@@ -16,7 +16,7 @@ Xinha.loadStyle('dTree/dtree.css', 'Linker');
 Xinha.Config.prototype.Linker =
 {
   'treeCaption' : document.location.host,
-  'backend' : _editor_url + 'plugins/Linker/scan.php',
+  'backend' : Xinha.getPluginDir("Linker") + '/scan.php',
   'backend_data' : null,
   'files' : null
 };
@@ -326,7 +326,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   // we prepare the dialog.
   if(typeof dTree == 'undefined')
   {
-    Xinha._loadback(_editor_url + 'plugins/Linker/dTree/dtree.js',
+    Xinha._loadback(Xinha.getPluginDir("Linker") + '/dTree/dtree.js',
                        function() {lDialog._prepareDialog(); }
                       );
     return;
@@ -359,7 +359,7 @@ Linker.Dialog.prototype._prepareDialog = function()
 
   if(this.html == false)
   {
-    Xinha._getback(_editor_url + 'plugins/Linker/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
+    Xinha._getback(Xinha.getPluginDir("Linker") + '/dialog.html', function(txt) { lDialog.html = txt; lDialog._prepareDialog(); });
     return;
   }
   var html = this.html;
@@ -368,7 +368,7 @@ Linker.Dialog.prototype._prepareDialog = function()
   var dialog = this.dialog = new Xinha.Dialog(linker.editor, this.html, 'Linker');
   var dTreeName = Xinha.uniq('dTree_');
 
-  this.dTree = new dTree(dTreeName, _editor_url + 'plugins/Linker/dTree/');
+  this.dTree = new dTree(dTreeName, Xinha.getPluginDir("Linker") + '/dTree/');
   eval(dTreeName + ' = this.dTree');
 
   this.dTree.add(this.Dialog_nxtid++, -1, linker.lConfig.treeCaption , null, linker.lConfig.treeCaption);

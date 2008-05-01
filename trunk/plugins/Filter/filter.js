@@ -41,7 +41,7 @@ Filter._pluginInfo =
 
 Filter.prototype.add = function(filterName) {
   if(eval('typeof ' + filterName) == 'undefined') {
-    var filter = _editor_url + "plugins/filter/filters/" + filterName + ".js";
+    var filter = Xinha.getPluginDir('Filter') + "/filters/" + filterName + ".js";
     var head = document.getElementsByTagName("head")[0];
     var evt = Xinha.is_ie ? "onreadystatechange" : "onload";
     var script = document.createElement("script");

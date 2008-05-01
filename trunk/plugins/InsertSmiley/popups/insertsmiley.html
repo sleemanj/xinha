@@ -15,7 +15,7 @@ function Init() {
   __dlg_init();
   param = window.dialogArguments;
   editor = param['editor'];
-  var smileyList = Xinha._geturlcontent(_editor_url + 'plugins/InsertSmiley/smileys.txt');
+  var smileyList = Xinha._geturlcontent(Xinha.getPluginDir("InsertSmiley") + '/smileys.txt');
   smileyList = smileyList.match(/^.+$/mg);
   var smileyURL = editor.config.InsertSmiley.smileyURL;
   var tbody = document.getElementById("smileytable");

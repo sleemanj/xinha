@@ -40,7 +40,7 @@ Abbreviation.prototype._lc = function(string) {
 };
 
 Abbreviation.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(_editor_url + 'plugins/Abbreviation/abbreviation.css');
+  this.editor.addEditorStylesheet(Xinha.getPluginDir('Abbreviation') + '/abbreviation.css');
 };
 
 Abbreviation.prototype.buttonPress = function(editor, context, updatecontextclass) {

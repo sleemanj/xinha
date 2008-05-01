@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id$
+// $Id:context-menu.js 988M 2008-04-12 13:46:09Z (local) $
 
 Xinha.loadStyle("menu.css", "ContextMenu");
 
@@ -344,7 +344,7 @@ ContextMenu.prototype.popupMenu = function(ev) {
 		var popup = this.iePopup = window.createPopup();
 		doc = popup.document;
 		doc.open();
-		doc.write("<html><head><style type='text/css'>@import url(" + _editor_url + "plugins/ContextMenu/menu.css); html, body { padding: 0px; margin: 0px; overflow: hidden; border: 0px; }</style></head><body unselectable='yes'></body></html>");
+		doc.write("<html><head><style type='text/css'>@import url(" + Xinha.getPluginDir('ContextMenu') + "/menu.css); html, body { padding: 0px; margin: 0px; overflow: hidden; border: 0px; }</style></head><body unselectable='yes'></body></html>");
 		doc.close();
 	}
 	div = doc.createElement("div");

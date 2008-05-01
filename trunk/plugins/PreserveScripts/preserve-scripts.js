@@ -37,7 +37,7 @@ PreserveScripts.prototype.inwardHtml = function(html)
 			if ( c.preservePHP ) // if config set to false wipe out php completely, otherwise ugly fragments may remain
 			{
 				s.storage['PreserveScripts_'+i] = m;
-				var r = '<img title="PHP" id="PreserveScripts_'+i+'" src="'+_editor_url+'plugins/PreserveScripts/php.png" />';
+				var r = '<img title="PHP" id="PreserveScripts_'+i+'" src="'+Xinha.getPluginDir("PreserveScripts")+'/php.png" />';
 				i++;
 				return r;
 			}
@@ -52,7 +52,7 @@ PreserveScripts.prototype.inwardHtml = function(html)
 			function(m)
 			{
 				s.storage['PreserveScripts_'+i] = m;
-				var r = '<img title="JavaScript" id="PreserveScripts_'+i+'" src="' + _editor_url + 'plugins/PreserveScripts/js.png" />';
+				var r = '<img title="JavaScript" id="PreserveScripts_'+i+'" src="' + Xinha.getPluginDir("PreserveScripts") + '/js.png" />';
 				i++;
 				return r;
 			});	

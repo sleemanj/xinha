@@ -3,7 +3,7 @@ function InsertAnchor(editor) {
   var cfg = editor.config;
   var self = this;
   
-  this.placeholderImg = '<img class="IA_placeholder" src="'+_editor_url+'plugins/InsertAnchor/img/placeholder.gif" />';
+  this.placeholderImg = '<img class="IA_placeholder" src="'+Xinha.getPluginDir("InsertAnchor")+'/img/placeholder.gif" />';
   
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
@@ -35,7 +35,7 @@ InsertAnchor.prototype._lc = function(string) {
 };
 
 InsertAnchor.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(_editor_url + 'plugins/InsertAnchor/insert-anchor.css');
+  this.editor.addEditorStylesheet(Xinha.getPluginDir("InsertAnchor") + '/insert-anchor.css');
   
 };
 

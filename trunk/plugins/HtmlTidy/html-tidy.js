@@ -92,7 +92,7 @@ HtmlTidy.prototype.buttonPress = function(editor, id) {
       var oldhtml = editor.getHTML();
       if(oldhtml=="") break; //don't clean empty text
       // Ask the server for some nice new html, based on the old...
-      Xinha._postback(_editor_url + 'plugins/HtmlTidy/html-tidy-logic.php', {'htisource_name' : oldhtml},
+      Xinha._postback(Xinha.getPluginDir("HtmlTidy") + '/html-tidy-logic.php', {'htisource_name' : oldhtml},
                             function(javascriptResponse) { eval(javascriptResponse) });
     }
 		break;

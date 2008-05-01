@@ -13,8 +13,8 @@ function SaveSubmit(editor) {
 	var cfg = editor.config;
 	this.textarea = this.editor._textArea;
 
-	this.image_changed = _editor_url+"plugins/SaveSubmit/img/ed_save_red.gif";
-	this.image_unchanged = _editor_url+"plugins/SaveSubmit/img/ed_save_green.gif";
+	this.image_changed = Xinha.getPluginDir("SaveSubmit")+"/img/ed_save_red.gif";
+	this.image_unchanged = Xinha.getPluginDir("SaveSubmit")+"/img/ed_save_green.gif";
 	cfg.registerButton({
 	id       : "savesubmit",
 	tooltip  : self._lc("Save"),

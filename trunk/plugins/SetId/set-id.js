@@ -33,7 +33,7 @@ SetId.prototype._lc = function(string) {
 
 
 SetId.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(_editor_url + 'plugins/SetId/set-id.css');
+  this.editor.addEditorStylesheet(Xinha.getPluginDir("SetId") + '/set-id.css');
 };
 
 SetId.prototype.buttonPress = function(editor) {

@@ -14,7 +14,7 @@ function SmartReplace(editor) {
 	({
 		id       : "smartreplace",
 		tooltip  : this._lc("SmartReplace"),
-		image    : _editor_url+"plugins/SmartReplace/img/smartquotes.gif",
+		image    : Xinha.getPluginDir('SmartReplace')+"/img/smartquotes.gif",
 		textMode : false,
 		action   : function(e, objname, obj) { self.buttonPress(null, obj); }
 	});
@@ -275,7 +275,7 @@ SmartReplace.prototype.dialog = function()
 		}
 	}
 	var init = this;
-	Dialog(_editor_url+'plugins/SmartReplace/popups/dialog.html', action, init);
+	Dialog(Xinha.getPluginDir('SmartReplace')+'/popups/dialog.html', action, init);
 }
 
 
@@ -335,7 +335,7 @@ SmartReplace.Dialog.prototype._prepareDialog = function()
 
   if(this.html == false)
   {
-	Xinha._getback(_editor_url + 'plugins/SmartReplace/dialog.html', function(getback) { pluginDialogObject.html = getback; pluginDialogObject._prepareDialog(); });
+	Xinha._getback(Xinha.getPluginDir('SmartReplace') + '/dialog.html', function(getback) { pluginDialogObject.html = getback; pluginDialogObject._prepareDialog(); });
 	return;
   }
   

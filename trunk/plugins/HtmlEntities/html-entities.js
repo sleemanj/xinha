@@ -34,11 +34,11 @@ HtmlEntities._pluginInfo = {
 Xinha.Config.prototype.HtmlEntities =
 {
 	Encoding     : 'iso-8859-1',
-	EntitiesFile : _editor_url + "plugins/HtmlEntities/Entities.js"
+	EntitiesFile : Xinha.getPluginDir("HtmlEntities") + "/Entities.js"
 }
 HtmlEntities.prototype.onGenerate = function() {
     var e = this.editor;
-    var url = (e.config.HtmlEntities.Encoding) ?  _editor_url + "plugins/HtmlEntities/"+e.config.HtmlEntities.Encoding+".js" : e.config.HtmlEntities.EntitiesFile;
+    var url = (e.config.HtmlEntities.Encoding) ?  Xinha.getPluginDir("HtmlEntities") + "/"+e.config.HtmlEntities.Encoding+".js" : e.config.HtmlEntities.EntitiesFile;
     var callback = function (getback) {
     	var specialReplacements = e.config.specialReplacements;
     	eval("var replacements =" + getback);

@@ -7,7 +7,7 @@
 
 function InsertPicture(editor) {
   if ( typeof _editor_picturePath !== "string" )
-    _editor_picturePath = _editor_url + "plugins/InsertPicture/demo_pictures/";
+    _editor_picturePath = Xinha.getPluginDir("InsertPicture") + "/demo_pictures/";
   InsertPicture.Scripting = "php"; //else "asp"
   editor.config.URIs.insert_image =  '../plugins/InsertPicture/InsertPicture.' + InsertPicture.Scripting + '?picturepath=' + _editor_picturePath;
 }

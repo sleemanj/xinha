@@ -71,5 +71,5 @@ PasteText.prototype.buttonPress = function(editor) {
 			editor.insertHTML(html);
 		}
 	}
-	Dialog( _editor_url+ "plugins/PasteText/popups/paste_text.html", action, outparam);
+	Dialog( Xinha.getPluginDir("PasteText")+ "/popups/paste_text.html", action, outparam);
 };

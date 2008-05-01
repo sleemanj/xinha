@@ -10,7 +10,6 @@ function Init() {
 	
   __dlg_translate("BackgroundImage");
   __dlg_init();
-
 }
 
 function onCancel() {
@@ -19,7 +18,7 @@ function onCancel() {
 }
 
 function insertbg(image) {
-	__dlg_close(window.opener._editor_url + "/plugins/BackgroundImage/backgrounds/" + image);
+	__dlg_close(window.opener.Xinha.getPluginDir('BackgroundImage') + "/backgrounds/" + image);
 	return false;
 }
 

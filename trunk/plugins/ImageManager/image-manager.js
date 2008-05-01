@@ -1,7 +1,7 @@
 /**
  * The ImageManager plugin javascript.
- * @author $Author$
- * @version $Id$
+ * @author $Author:(local) $
+ * @version $Id:image-manager.js 856M 2007-06-13 18:34:34Z (local) $
  * @package ImageManager
  */
 
@@ -65,7 +65,7 @@ ImageManager._pluginInfo = {
 
 Xinha.Config.prototype.ImageManager =
 {
-  'backend'    : _editor_url + 'plugins/ImageManager/backend.php?__plugin=ImageManager&',
+  'backend'    : Xinha.getPluginDir("ImageManager") + '/backend.php?__plugin=ImageManager&',
   'backend_data' : null,
   
   // Deprecated method for passing config, use above instead!

@@ -307,7 +307,7 @@ function confirmDeleteDir(dir, count)
 function showPreview(f_url)
 {
     window.parent.document.getElementById('f_preview').src =
-    f_url ? window.parent._backend_url + '__function=thumbs&img=' + f_url :window.parent.opener._editor_url+'plugins/ExtendedFileManager/img/1x1_transparent.gif';
+    f_url ? window.parent._backend_url + '__function=thumbs&img=' + f_url :window.parent.opener.Xinha.getPluginDir('ExtendedFileManager')+'/img/1x1_transparent.gif';
 }
 
 addEvent(window, 'load', init);
