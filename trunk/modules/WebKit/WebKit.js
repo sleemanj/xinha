@@ -771,20 +771,17 @@ Xinha.prototype.findCC = function ( target )
   else
   {
     var self = this;
-    window.setTimeout(function  () // something's not working? try a timeout ;)
-    { 
-      try 
-      {
-        if( self._iframe.contentWindow.find( self.cc ) )
-        {
-            var sel = self.getSelection();
-            sel.getRangeAt(0).deleteContents();
-			sel.collapseToStart();
-            self._iframe.contentWindow.focus();
-         }
-      } catch (e) {alert(e)}
-    }
-    ,200);
+    try
+    {
+      var doc = this._doc; 
+      doc.body.innerHTML = doc.body.innerHTML.replace(new RegExp(this.cc),'<span id="XinhaEditingPostion"></span>');
+      var posEl = doc.getElementById('XinhaEditingPostion');
+      this.selectNodeContents(posEl);
+      this.scrollToElement(posEl);
+      posEl.parentNode.removeChild(posEl);
+
+      this._iframe.contentWindow.focus();
+    } catch (e) {}
   }
 };
 /*--------------------------------------------------------------------------*/
