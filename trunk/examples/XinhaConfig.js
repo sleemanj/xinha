@@ -38,14 +38,11 @@ xinha_init = xinha_init ? xinha_init : function()
   [
    'CharacterMap',
    'ContextMenu',
-   { plugin: 'SmartReplace',url: '/xff3/xSmartReplace/smart-replace.js' },
-   //'SmartReplace',
+   'SmartReplace',
    'Stylist',
    'Linker',
    'SuperClean',
-   'TableOperations',
-   'SetId',
-   'FullScreen'
+   'TableOperations'
   ];
   
          // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)

@@ -179,7 +179,7 @@ Xinha.prototype._fillStylist = function()
     if(applicable)
     {
       var anch = document.createElement('a');
-      anch.onfocus = function () { this.blur() } // prevent dotted line around link that causes horizontal scrollbar
+      if ( Xinha.is_real_gecko ) anch.onfocus = function () { this.blur() } // prevent dotted line around link that causes horizontal scrollbar in Mozilla
       anch._stylist_className = className.trim();
       anch._stylist_applied   = applied;
       anch._stylist_appliedTo = applied_to;
