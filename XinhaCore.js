@@ -697,7 +697,7 @@ Xinha.Config = function()
   this.sevenBitClean = false;
 
 
-  /** Sometimes we want to be able to replace some string in the html comng in and going out
+  /** Sometimes we want to be able to replace some string in the html coming in and going out
    *  so that in the editor we use the "internal" string, and outside and in the source view
    *  we use the "external" string  this is useful for say making special codes for
    *  your absolute links, your external string might be some special code, say "{server_url}"
@@ -707,6 +707,22 @@ Xinha.Config = function()
    *  @type Object
    */
   this.specialReplacements = {}; //{ 'html_string' : 'wysiwyg_string' }
+  
+  /** A filter function for the HTML used inside the editor<br />
+   * Default: function (html) { return html }
+   * 
+   * @param {String} html The whole document's HTML content
+   * @return {String} The processed HTML 
+   */
+  this.inwardHtml = function (html) { return html }
+  
+  /** A filter function for the generated HTML<br />
+   * Default: function (html) { return html }
+   * 
+   * @param {String} html The whole document's HTML content
+   * @return {String} The processed HTML 
+   */
+  this.outwardHtml = function (html) { return html }
 
  /** Set to true if you want Word code to be cleaned upon Paste. This only works if 
    * you use the toolbr button to paste, not ^V. This means that due to the restrictions
@@ -4879,7 +4895,12 @@ Xinha.prototype.outwardHtml = function(html)
   {
     html = Xinha.stripCoreCSS(html);
   }
-    
+
+  if (typeof this.config.outwardHtml == 'function' )
+  {
+    html = this.config.outwardHtml(html);
+  }
+
   return html;
 };
 
@@ -4925,7 +4946,12 @@ Xinha.prototype.inwardHtml = function(html)
   {
     html = Xinha.addCoreCSS(html);
   }
-  
+
+  if (typeof this.config.inwardHtml == 'function' )
+  {
+    html = this.config.inwardHtml(html);
+  }
+
   return html;
 };
 /** Apply the replacements defined in Xinha.Config.specialReplacements

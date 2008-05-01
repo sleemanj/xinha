@@ -781,10 +781,13 @@ Xinha.prototype.findCC = function ( target )
   {
     try
     {
-      this._iframe.contentWindow.find( this.cc );
-      var sel = this.getSelection();
-      sel.getRangeAt(0).deleteContents();
-      this.scrollToElement();
+      var doc = this._doc; 
+      doc.body.innerHTML = doc.body.innerHTML.replace(new RegExp(this.cc),'<span id="XinhaEditingPostion"></span>');
+      var posEl = doc.getElementById('XinhaEditingPostion');
+      this.selectNodeContents(posEl);
+      posEl.scrollIntoView(true);
+      posEl.parentNode.removeChild(posEl);
+
       this._iframe.contentWindow.focus();
     } catch (e) {}
   }
