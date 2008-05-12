@@ -27,9 +27,9 @@ function GetHtmlImplementation(editor) {
 GetHtmlImplementation._pluginInfo = {
   name          : "GetHtmlImplementation DOMwalk",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision:961 $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  version       : "$LastChangedRevision:961 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"

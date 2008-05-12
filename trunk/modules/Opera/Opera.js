@@ -34,9 +34,9 @@
 Opera._pluginInfo = {
   name          : "Opera",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision:970 $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  version       : "$LastChangedRevision:970 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/Opera/Opera.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/Opera/Opera.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "Gogo Internet Services Limited",
   sponsor_url   : "http://www.gogo.co.nz/",
   license       : "htmlArea"

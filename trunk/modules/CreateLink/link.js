@@ -26,9 +26,9 @@
 CreateLink._pluginInfo = {
   name          : "CreateLink",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision:990 $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  version       : "$LastChangedRevision:990 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/CreateLink/link.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/CreateLink/link.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
