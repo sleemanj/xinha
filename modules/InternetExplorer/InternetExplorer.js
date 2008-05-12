@@ -34,9 +34,9 @@
 InternetExplorer._pluginInfo = {
   name          : "Internet Explorer",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision:980 $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  version       : "$LastChangedRevision:980 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*: (.*) \$$/, '$1'),
+  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
