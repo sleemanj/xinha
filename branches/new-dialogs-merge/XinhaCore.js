@@ -1782,7 +1782,7 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         function(ev)
         {
           ev = Xinha.is_ie ? window.event : ev;
-          editor.btnClickEvent = ev;
+          editor.btnClickEvent = {clientX : ev.clientX, clientY : ev.clientY};
           if ( obj.enabled )
           {
             Xinha._removeClass(el, "buttonActive");
@@ -2099,7 +2099,7 @@ Xinha.prototype.generate = function ()
     return false;
   }
 
-  if ( typeof Xinha.Dialog == 'undefined' &&  !Xinha._loadback( _editor_url + 'modules/Dialogs/inline-dialog.js' , this.generate, this ) )
+  if ( typeof Xinha.Dialog == 'undefined' &&  !Xinha._loadback( _editor_url + 'modules/Dialogs/XinhaDialog.js' , this.generate, this ) )
   {    
     return false;
   }
@@ -3943,6 +3943,8 @@ Xinha.prototype.enableToolbar = function()
 // It is actually to heavy to be understable and very scary to manipulate
 Xinha.prototype.updateToolbar = function(noStatus)
 {
+  if (this.suspendUpdateToolbar) return;
+  
   var doc = this._doc;
   var text = (this._editMode == "textmode");
   var ancestors = null;
@@ -4718,13 +4720,16 @@ Xinha.prototype._editorEvent = function(ev)
   {
     clearTimeout(editor._timerToolbar);
   }
-  editor._timerToolbar = setTimeout(
-    function()
-    {
-      editor.updateToolbar();
-      editor._timerToolbar = null;
-    },
-    250);
+  if (!this.suspendUpdateToolbar)
+  {
+    editor._timerToolbar = setTimeout(
+      function()
+      {
+        editor.updateToolbar();
+        editor._timerToolbar = null;
+      },
+      250);
+  }
 };
 
 /** Handles ctrl + key shortcuts 
@@ -6178,7 +6183,6 @@ if (typeof dumpValues == 'undefined')
       {
         s += prop + ' = ' + o[prop] + '\n';
       }
-
     }
     if (s) 
     {
@@ -6873,7 +6877,7 @@ Xinha.createLoadingMessages = function(xinha_editors)
   for (var i=0;i<xinha_editors.length;i++)
   {
      if (!document.getElementById(xinha_editors[i])) continue;
-	 Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
+     Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
   }
 };
 
