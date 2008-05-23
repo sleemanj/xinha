@@ -121,7 +121,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   //make the first h1 to drag&drop the rootElem
   var captionBar = main.removeChild( main.getElementsByTagName("h1")[0]);
   rootElem.insertBefore(captionBar,main);
-  captionBar.onmousedown = function(ev) { dialog._dragStart(ev); };
+  Xinha._addEvent(captionBar, 'mousedown',function(ev) { dialog.dragStart(ev); });
   
   captionBar.style.MozUserSelect = "none";
   
@@ -177,7 +177,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
 
   for (var i=0; i<all.length;i++)
   {
-  	var el = all[i]; 
+    var el = all[i]; 
     if (el.tagName.toLowerCase() == 'textarea' || el.tagName.toLowerCase() == 'input')
     {
       // FIXME: this doesn't work
@@ -197,7 +197,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     bottom = "0px";
     right= "0px";
   }
-  this.resizer.onmousedown = function(ev) { dialog._resizeStart(ev); };
+  Xinha._addEvent(this.resizer, 'mousedown', function(ev) { dialog.resizeStart(ev); });
   rootElem.appendChild(this.resizer);
   
   this.rootElem = rootElem;
@@ -247,14 +247,18 @@ Xinha.Dialog.prototype.show = function(values)
   }
  
   // We need to preserve the selection
-  this._lastRange = this.editor.saveSelection();
-  
-  if (Xinha.is_ie && !modal)
+  // if this is called before some editor has been activated, it activates the editor
+  if (Xinha._someEditorHasBeenActivated)
   {
-    dialog.saveSelection = function() { dialog._lastRange = dialog.editor.saveSelection();};
-    Xinha._addEvent(this.editor._doc,'mouseup', dialog.saveSelection);
+     this._lastRange = this.editor.saveSelection();
+     
+    if (Xinha.is_ie && !modal)
+    {
+      dialog.saveSelection = function() { dialog._lastRange = dialog.editor.saveSelection();};
+      Xinha._addEvent(this.editor._doc,'mouseup', dialog.saveSelection);
+    }
   }
-
+ 
   if ( modal ) this.editor.deactivateEditor();
 
   // unfortunately we have to hide the editor (iframe/caret bug)
@@ -280,7 +284,7 @@ Xinha.Dialog.prototype.show = function(values)
     //Xinha._addEvent(window, 'resize', this.onResizeWin );
 
     //rootElemStyle.display   = '';
-	Xinha.Dialog.fadeIn(this.rootElem);
+    Xinha.Dialog.fadeIn(this.rootElem);
     var dialogHeight = rootElem.offsetHeight;
     var dialogWidth = rootElem.offsetWidth;
 
@@ -368,7 +372,7 @@ Xinha.Dialog.prototype.hide = function()
   {
     //this.rootElem.style.display = 'none';
     Xinha.Dialog.fadeOut(this.rootElem);
-	this.hideBackground();
+    this.hideBackground();
     var dialog = this;
 
     if (Xinha.is_ff2 && this.modal)
@@ -436,12 +440,18 @@ Xinha.Dialog.prototype.getElementsByName = function(name)
   return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
 };
 
-Xinha.Dialog.prototype._dragStart = function (ev) 
+Xinha.Dialog.prototype.dragStart = function (ev) 
 {
   if ( this.attached || this.dragging) 
   {
     return;
   }
+  if (!this.modal)
+  {
+    Xinha.Dialog.coverIframes();
+  }
+  ev = ev || window.event;
+  
   this.editor.suspendUpdateToolbar = true;
   var dialog = this;
 
@@ -451,13 +461,14 @@ Xinha.Dialog.prototype._dragStart = function (ev)
    
   var st = dialog.rootElem.style;
 
-  dialog.xOffs = ((Xinha.is_ie) ? window.event.offsetX : ev.layerX);
-  dialog.yOffs = ((Xinha.is_ie) ? window.event.offsetY : ev.layerY);
+  dialog.xOffs =  ev.offsetX || ev.layerX; //first value for IE/Opera/Safari, second value for Gecko (or should I say "netscape";))
+  dialog.yOffs =  ev.offsetY || ev.layerY;
 
   dialog.mouseMove = function(ev) { dialog.dragIt(ev); };
-  Xinha._addEvent(document, "mousemove", dialog.mouseMove );
+  Xinha._addEvent(document,"mousemove", dialog.mouseMove );
+
   dialog.mouseUp = function (ev) { dialog.dragEnd(ev); };
-  Xinha._addEvent(document, "mouseup",  dialog.mouseUp);
+  Xinha._addEvent(document,"mouseup",  dialog.mouseUp);
 
 };
 
@@ -469,7 +480,6 @@ Xinha.Dialog.prototype.dragIt = function(ev)
   {
     return false;
   }
-  ev = (Xinha.is_ie) ? window.event : ev;
 
   if (dialog.rootElem.style.position == 'absolute')
   {
@@ -498,6 +508,12 @@ Xinha.Dialog.prototype.dragEnd = function(ev)
 {
   var dialog = this;
   this.editor.suspendUpdateToolbar = false;
+  
+  if (!this.modal)
+  {
+    Xinha.Dialog.unCoverIframes();
+  }
+  
   if (!dialog.dragging) 
   {
     return false;
@@ -505,14 +521,15 @@ Xinha.Dialog.prototype.dragEnd = function(ev)
   dialog.dragging = false;
 
   Xinha._removeEvent(document, "mousemove", dialog.mouseMove );
-  Xinha._removeEvent(document, "mouseup", dialog.mouseUp );
+  Xinha._removeEvent(document, "mousemove", dialog.mouseMove );
+  Xinha._removeEvent(document, "mouseup",  dialog.mouseUp);
 
   dialog.size.top  = dialog.rootElem.style.top;
   dialog.size.left = dialog.rootElem.style.left;
 };
 
 
-Xinha.Dialog.prototype._resizeStart = function (ev) {
+Xinha.Dialog.prototype.resizeStart = function (ev) {
   var dialog = this;
   this.editor.suspendUpdateToolbar = true;
   if (dialog.resizing)
@@ -520,6 +537,10 @@ Xinha.Dialog.prototype._resizeStart = function (ev) {
     return;
   }
   dialog.resizing = true;
+  if (!this.modal)
+  {
+    Xinha.Dialog.coverIframes();
+  }
   dialog.scrollPos = dialog.editor.scrollPos();
   
   var st = dialog.rootElem.style;
@@ -529,10 +550,9 @@ Xinha.Dialog.prototype._resizeStart = function (ev) {
   dialog.yOffs = parseInt(st.top,10);
 
   dialog.mouseMove = function(ev) { dialog.resizeIt(ev); };
-  Xinha._addEvent(document, "mousemove", dialog.mouseMove );
+  Xinha._addEvent(document,"mousemove", dialog.mouseMove );
   dialog.mouseUp = function (ev) { dialog.resizeEnd(ev); };
-  Xinha._addEvent(document, "mouseup",  dialog.mouseUp);
-    
+  Xinha._addEvent(document,"mouseup",  dialog.mouseUp); 
 };
 
 Xinha.Dialog.prototype.resizeIt = function(ev)
@@ -553,7 +573,7 @@ Xinha.Dialog.prototype.resizeIt = function(ev)
     var posY = ev.clientY;
     var posX = ev.clientX;
   }
- 
+
   posX -=  dialog.xOffs;
   posY -=  dialog.yOffs;
 
@@ -579,9 +599,12 @@ Xinha.Dialog.prototype.resizeEnd = function(ev)
   var dialog = this;
   dialog.resizing = false;
   this.editor.suspendUpdateToolbar = false;
-  
+  if (!this.modal)
+  {
+    Xinha.Dialog.unCoverIframes();
+  }
   Xinha._removeEvent(document, "mousemove", dialog.mouseMove );
-  Xinha._removeEvent(document, "mouseup", dialog.mouseUp );
+  Xinha._removeEvent(document, "mouseup",  dialog.mouseUp);
   
   dialog.size.width  = dialog.rootElem.offsetWidth;
   dialog.size.height = dialog.rootElem.offsetHeight;
@@ -627,8 +650,10 @@ Xinha.Dialog.prototype.detachFromPanel = function(ev)
   var editor = dialog.editor;
   
   dialog.attached = false;
-  
+  var pos = Xinha.getElementTopLeft(rootElem);
   rootElem.style.position = "absolute";
+  rootElem.style.top = pos.top + "px";
+  rootElem.style.left = pos.left + "px";
   
   dialog.captionBar.style.paddingLeft = "22px";
   dialog.resizer.style.display = '';
@@ -642,12 +667,6 @@ Xinha.Dialog.prototype.detachFromPanel = function(ev)
   editor.removePanel(rootElem);
   document.body.appendChild(rootElem);
   
-  if (ev)
-  {
-    var scrollPos = dialog.editor.scrollPos(); 
-    rootElem.style.top = (ev.clientY + scrollPos.y) - ((Xinha.is_ie) ? window.event.offsetY : ev.layerY) + "px";
-    rootElem.style.left =(ev.clientX + scrollPos.x) - ((Xinha.is_ie) ? window.event.offsetX : ev.layerX) + "px";
-  }
   dialog.captionBar.ondblclick = function() { dialog.attachToPanel(rootElem.side); };
   
 };
@@ -689,9 +708,10 @@ Xinha.Dialog.prototype.sizeDialog = function(size)
   var st = this.rootElem.style;
   st.height = size.height;
   st.width  = size.width;
-  this.main.style.height = parseInt(size.height,10) - this.captionBar.offsetHeight + "px";
-  this.main.style.width = size.width;
-  
+  var width = parseInt(size.width, 10);
+  var height = parseInt(size.height,10) - this.captionBar.offsetHeight;
+  this.main.style.height = (height > 20) ? height : 20 + "px";
+  this.main.style.width = (width > 10) ? width : 10 + 'px';
 }
 Xinha.Dialog.prototype.setValues = function(values)
 {
@@ -930,10 +950,13 @@ Xinha.Dialog.prototype.translateHtml = function(html,localizer)
   return html;
 }
 
+/** When several modeless dialogs are shown, one can be brought to front with this function (as happens on mouseclick) 
+ * 
+ * @param {XinhaDialog} dialog The dialog to activate
+ */
 
 Xinha.Dialog.activateModeless = function(dialog)
 {
-  var zIndex;
   if (Xinha.Dialog.activeModeless == dialog || dialog.attached ) 
   {
     return;
@@ -947,61 +970,92 @@ Xinha.Dialog.activateModeless = function(dialog)
 
   Xinha.Dialog.activeModeless.rootElem.style.zIndex = parseInt(Xinha.Dialog.activeModeless.rootElem.style.zIndex) + 10;
 }
+/** Set opacity cross browser 
+ * 
+ * @param {DomNode} el The element to set the opacity
+ * @param {Object} value opacity value (percent)
+ */
 Xinha.Dialog.setOpacity = function(el,value)
 {
-	if (typeof el.style.filter != 'undefined')
-	{
-		el.style.filter = (value < 100) ?  'alpha(opacity='+value+')' : '';
-	}
-	else
-	{
-		el.style.opacity = value/100;
-	}
+    if (typeof el.style.filter != 'undefined')
+    {
+        el.style.filter = (value < 100) ?  'alpha(opacity='+value+')' : '';
+    }
+    else
+    {
+        el.style.opacity = value/100;
+    }
 }
+/** Fade in an element
+ * 
+ * @param {DomNode} el The element to fade
+ * @param {Number} delay Time for one step in ms
+ * @param {Number} endOpacity stop when this value is reached (percent)
+ * @param {Number} step Fade this much per step (percent)
+ */
 Xinha.Dialog.fadeIn = function(el,endOpacity,delay,step)
 {
-	delay = delay || 1;
-	step = step || 25;
-	endOpacity = endOpacity || 100;
-	el.op = el.op || 0;
-	var op = el.op;
-	if (el.style.display == 'none')
-	{
-		Xinha.Dialog.setOpacity(el,0);
-		el.style.display = '';
-	}
-	if (op < endOpacity)
-	{
-		el.op += step;
-		Xinha.Dialog.setOpacity(el,op);
-		el.timeOut = setTimeout(function(){Xinha.Dialog.fadeIn(el,endOpacity,delay,step);},delay);
-	}
-	else
-	{
-		Xinha.Dialog.setOpacity(el,endOpacity);
-		el.op = endOpacity;
-		el.timeOut = null;
-	}
+    delay = delay || 1;
+    step = step || 25;
+    endOpacity = endOpacity || 100;
+    el.op = el.op || 0;
+    var op = el.op;
+    if (el.style.display == 'none')
+    {
+        Xinha.Dialog.setOpacity(el,0);
+        el.style.display = '';
+    }
+    if (op < endOpacity)
+    {
+        el.op += step;
+        Xinha.Dialog.setOpacity(el,op);
+        el.timeOut = setTimeout(function(){Xinha.Dialog.fadeIn(el,endOpacity,delay,step);},delay);
+    }
+    else
+    {
+        Xinha.Dialog.setOpacity(el,endOpacity);
+        el.op = endOpacity;
+        el.timeOut = null;
+    }
 }
-
+/** Fade out an element
+ * 
+ * @param {DomNode} el The element to fade
+ * @param {Number} delay Time for one step in ms
+ * @param {Number} step Fade this much per step (percent)
+ */
 Xinha.Dialog.fadeOut = function(el,delay,step)
 {
-	delay = delay || 1;
-	step = step || 30;
-	if (typeof el.op == 'undefined') el.op = 100;
-	var op = el.op;
+    delay = delay || 1;
+    step = step || 30;
+    if (typeof el.op == 'undefined') el.op = 100;
+    var op = el.op;
 
-	if (op >= 0)
-	{
-		el.op -= step;
-		Xinha.Dialog.setOpacity(el,op);
-		el.timeOut = setTimeout(function(){Xinha.Dialog.fadeOut(el,delay,step);},delay);
-	}
-	else
-	{
-		Xinha.Dialog.setOpacity(el,0);
-		el.style.display = 'none';
-		el.op = 0;
-		el.timeOut = null;
-	}
+    if (op >= 0)
+    {
+        el.op -= step;
+        Xinha.Dialog.setOpacity(el,op);
+        el.timeOut = setTimeout(function(){Xinha.Dialog.fadeOut(el,delay,step);},delay);
+    }
+    else
+    {
+        Xinha.Dialog.setOpacity(el,0);
+        el.style.display = 'none';
+        el.op = 0;
+        el.timeOut = null;
+    }
+}
+Xinha.Dialog.coverIframes = function()
+{
+    for (var i=0;i<__xinhas.length;i++)
+    {
+      __xinhas[i]._framework.iframe_cover.style.display = '';
+    }
+}
+Xinha.Dialog.unCoverIframes = function()
+{
+    for (var i=0;i<__xinhas.length;i++)
+    {
+      __xinhas[i]._framework.iframe_cover.style.display = 'none';
+    }
 }

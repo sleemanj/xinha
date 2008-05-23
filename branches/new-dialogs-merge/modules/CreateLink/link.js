@@ -1,7 +1,27 @@
-// Paste Plain Text plugin for Xinha
-
-// Distributed under the same terms as Xinha itself.
-// This notice MUST stay intact for use (see license.txt).
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.org
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Copyright (c) 2005-2008 Xinha Developer Team and contributors
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    --  This is the standard implementation of the Xinha.prototype._createLink method,
+    --  which provides the functionality to insert a hyperlink in the editor.
+    --
+    --  The file is loaded as a special plugin by the Xinha Core when no alternative method (plugin) is loaded.
+    --
+    --
+    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/modules/CreateLink/link.js $
+    --  $LastChangedDate:2008-04-12 19:10:04 +0200 (Sa, 12 Apr 2008) $
+    --  $LastChangedRevision:990 $
+    --  $LastChangedBy:ray $
+    --------------------------------------------------------------------------*/
 
 function CreateLink(editor) {
 	this.editor = editor;
