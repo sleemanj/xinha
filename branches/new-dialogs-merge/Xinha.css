@@ -121,11 +121,20 @@ div.dialog {
   padding-bottom:10px;
 }
 .xinha_dialog_background {
+  filter: alpha(opacity = 0);
+  -moz-opacity: 0;
+  opacity: 0;
+  border:none;
+}
+.xinha_dialog_background.modal {
   background-color:#666;
   filter: alpha(opacity = 70);
   -moz-opacity: 0.7;
   opacity: 0.7;
   border:none;
+}
+body.xinha_dialog_background.modal {
+  filter: alpha(opacity = 100);
 }
 .dialog .content { padding: 2px; }
 

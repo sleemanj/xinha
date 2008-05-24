@@ -2204,7 +2204,6 @@ Xinha.prototype.generate = function ()
     'ler_row': document.createElement('tr'),
     'lp_cell': this._panels.left.container,  // left panel
     'ed_cell': document.createElement('td'), // editor
-    'iframe_cover' : document.createElement('div'), //the editor iframe has to be covered when draging a dialog over it
     'rp_cell': this._panels.right.container, // right panel
 
     'bp_row':  document.createElement('tr'),
@@ -2275,11 +2274,6 @@ Xinha.prototype.generate = function ()
   this._iframe = iframe;
   this._iframe.className = 'xinha_iframe';
   Xinha.freeLater(this, '_iframe');
-  
-  fw.iframe_cover.style.display = 'none';
-  fw.iframe_cover.style.position = 'absolute';
-  
-  fw.ed_cell.appendChild(fw.iframe_cover);
   
     // creates & appends the status bar
   var statusbar = this._createStatusBar();
@@ -2664,13 +2658,7 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
 
   this._textArea.style.height = this._iframe.style.height;
   this._textArea.style.width  = this._iframe.style.width;
-  
-  var iframePos = Xinha.getElementTopLeft(this._iframe);
-  framework.iframe_cover.style.top = iframePos.top;
-  framework.iframe_cover.style.left = iframePos.left;
-  framework.iframe_cover.style.height = this._iframe.style.height;
-  framework.iframe_cover.style.width = this._iframe.style.width;
-  
+
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
   this.firePluginEvent('onResize',this._htmlArea.offsetWidth, this._htmlArea.offsetWidth);
   this._risizing = false;
@@ -5503,6 +5491,10 @@ Xinha.prependDom0Event = function(el, ev, fn)
   el._xinha_dom0Events[ev].push(fn);
 };
 
+Xinha.getEvent = function(ev)
+{
+  return ev || window.event;
+}
 /**
  * Prepares an element to receive more than one DOM-0 event handler
  * when handlers are added via addDom0Event and prependDom0Event.
