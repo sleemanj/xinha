@@ -13,46 +13,11 @@ function CharacterMap( editor )
       tooltip  : Xinha._lc( 'Insert special character', 'CharacterMap' ),
       image    : editor.imgURL( 'ed_charmap.gif', 'CharacterMap' ),
       textMode : false,
-      action   : function( editor ) { self.buttonPress( editor ); }
+      action   : function() { self.show(); }
     }
   );
   cfg.addToolbarElement('insertcharacter', 'createlink', -1);
 
-  if ( cfg.CharacterMap.mode == 'panel' )
-  {
-    editor._CharacterMap = editor.addPanel( 'right' );
-    Xinha._addClass( editor._CharacterMap, 'CharacterMap' );
-
-    editor.notifyOn( 'modechange',
-      function( e, args )
-      {
-        if ( args.mode == 'text' ) editor.hidePanel( editor._CharacterMap );
-      }
-    );
-
-    var entites =
-    [
-      '&Yuml;', '&scaron;', '&#064;', '&quot;', '&iexcl;', '&cent;', '&pound;', '&curren;', '&yen;', '&brvbar;',
-      '&sect;', '&uml;', '&copy;', '&ordf;', '&laquo;', '&not;', '&macr;', '&deg;', '&plusmn;', '&sup2;',
-      '&sup3;', '&acute;', '&micro;', '&para;', '&middot;', '&cedil;', '&sup1;', '&ordm;', '&raquo;', '&frac14;',
-      '&frac12;', '&frac34;', '&iquest;', '&times;', '&Oslash;', '&divide;', '&oslash;', '&fnof;', '&circ;',
-      '&tilde;', '&ndash;', '&mdash;', '&lsquo;', '&rsquo;', '&sbquo;', '&ldquo;', '&rdquo;', '&bdquo;',
-      '&dagger;', '&Dagger;', '&bull;', '&hellip;', '&permil;', '&lsaquo;', '&rsaquo;', '&euro;', '&trade;',
-      '&Agrave;', '&Aacute;', '&Acirc;', '&Atilde;', '&Auml;', '&Aring;', '&AElig;', '&Ccedil;', '&Egrave;',
-      '&Eacute;', '&Ecirc;', '&Euml;', '&Igrave;', '&Iacute;', '&Icirc;', '&Iuml;', '&ETH;', '&Ntilde;',
-      '&Ograve;', '&Oacute;', '&Ocirc;', '&Otilde;', '&Ouml;', '&reg;', '&times;', '&Ugrave;', '&Uacute;',
-      '&Ucirc;', '&Uuml;', '&Yacute;', '&THORN;', '&szlig;', '&agrave;', '&aacute;', '&acirc;', '&atilde;',
-      '&auml;', '&aring;', '&aelig;', '&ccedil;', '&egrave;', '&eacute;', '&ecirc;', '&euml;', '&igrave;',
-      '&iacute;', '&icirc;', '&iuml;', '&eth;', '&ntilde;', '&ograve;', '&oacute;', '&ocirc;', '&otilde;',
-      '&ouml;', '&divide;', '&oslash;', '&ugrave;', '&uacute;', '&ucirc;', '&uuml;', '&yacute;', '&thorn;',
-      '&yuml;', '&OElig;', '&oelig;', '&Scaron;'
-    ];
-
-    for ( var i=0; i<entites.length; i++ )
-      this.addEntity( entites[i], i );
-
-    editor.hidePanel( editor._CharacterMap );
-  }
 }
 
 // configuration mode : panel or popup
@@ -75,32 +40,6 @@ CharacterMap._pluginInfo =
 
 CharacterMap._isActive = false;
 
-CharacterMap.prototype.buttonPress = function( editor )
-{
-  var cfg = editor.config;
-  if ( cfg.CharacterMap.mode == 'panel' )
-  {
-    if ( this._isActive )
-    {
-      this._isActive = false;
-      editor.hidePanel( editor._CharacterMap );
-    }
-    else
-    {
-      this._isActive = true;
-      editor.showPanel( editor._CharacterMap );
-    }
-  }
-  else
-  {
-    editor._popupDialog( "plugin://CharacterMap/select_character", function( entity )
-    {
-      if ( !entity ) return false;
-      if ( Xinha.is_ie ) editor.focusEditor();
-      editor.insertHTML( entity );
-    }, null);
-  }
-};
 
 CharacterMap.prototype.addEntity = function ( entite, pos )
 {
@@ -119,6 +58,67 @@ CharacterMap.prototype.addEntity = function ( entite, pos )
     //editor.hidePanel( editor._CharacterMap );
     return false;
   };
-  editor._CharacterMap.appendChild( a );
+  this.dialog.main.appendChild( a );
   a = null;
 };
+
+CharacterMap.prototype.onGenerateOnce = function()
+{
+	this._prepareDialog();
+};
+
+CharacterMap.prototype._prepareDialog = function()
+{
+	var self = this;
+	var editor = this.editor;
+
+	var html = '<h1><l10n>Insert special character</l10n></h1>';
+
+	// Now we have everything we need, so we can build the dialog.
+	this.dialog = new Xinha.Dialog(editor, html, 'CharacterMap',{width:300},{modal:false});
+	Xinha._addClass( this.dialog.rootElem, 'CharacterMap' );
+
+	if (editor.config.CharacterMap.mode == 'panel') this.dialog.attachToPanel('right');
+	
+	var entites =
+	[
+	'&Yuml;', '&scaron;', '&#064;', '&quot;', '&iexcl;', '&cent;', '&pound;', '&curren;', '&yen;', '&brvbar;',
+	'&sect;', '&uml;', '&copy;', '&ordf;', '&laquo;', '&not;', '&macr;', '&deg;', '&plusmn;', '&sup2;',
+	'&sup3;', '&acute;', '&micro;', '&para;', '&middot;', '&cedil;', '&sup1;', '&ordm;', '&raquo;', '&frac14;',
+	'&frac12;', '&frac34;', '&iquest;', '&times;', '&Oslash;', '&divide;', '&oslash;', '&fnof;', '&circ;',
+	'&tilde;', '&ndash;', '&mdash;', '&lsquo;', '&rsquo;', '&sbquo;', '&ldquo;', '&rdquo;', '&bdquo;',
+	'&dagger;', '&Dagger;', '&bull;', '&hellip;', '&permil;', '&lsaquo;', '&rsaquo;', '&euro;', '&trade;',
+	'&Agrave;', '&Aacute;', '&Acirc;', '&Atilde;', '&Auml;', '&Aring;', '&AElig;', '&Ccedil;', '&Egrave;',
+	'&Eacute;', '&Ecirc;', '&Euml;', '&Igrave;', '&Iacute;', '&Icirc;', '&Iuml;', '&ETH;', '&Ntilde;',
+	'&Ograve;', '&Oacute;', '&Ocirc;', '&Otilde;', '&Ouml;', '&reg;', '&times;', '&Ugrave;', '&Uacute;',
+	'&Ucirc;', '&Uuml;', '&Yacute;', '&THORN;', '&szlig;', '&agrave;', '&aacute;', '&acirc;', '&atilde;',
+	'&auml;', '&aring;', '&aelig;', '&ccedil;', '&egrave;', '&eacute;', '&ecirc;', '&euml;', '&igrave;',
+	'&iacute;', '&icirc;', '&iuml;', '&eth;', '&ntilde;', '&ograve;', '&oacute;', '&ocirc;', '&otilde;',
+	'&ouml;', '&divide;', '&oslash;', '&ugrave;', '&uacute;', '&ucirc;', '&uuml;', '&yacute;', '&thorn;',
+	'&yuml;', '&OElig;', '&oelig;', '&Scaron;'
+	];
+
+	for ( var i=0; i<entites.length; i++ )
+	{
+	  this.addEntity( entites[i], i );
+	}
+	
+	this.ready = true;
+	//this.hide();
+};
+
+CharacterMap.prototype.show = function()
+{
+  if(!this.ready) // if the user is too fast clicking the, we have to make them wait
+	{
+		var self = this;
+		window.setTimeout(function() {self.show();},100);
+		return;
+	}
+	this.dialog.toggle();
+};
+CharacterMap.prototype.hide = function()
+{
+	this.dialog.hide();
+};
+
