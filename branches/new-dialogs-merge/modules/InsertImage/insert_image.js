@@ -45,26 +45,24 @@ InsertImage.prototype._lc = function(string) {
 
 InsertImage.prototype.onGenerateOnce = function()
 {
-	this.prepareDialog();
-	this.loadScripts();
+	InsertImage.loadAssets();
 };
 
-InsertImage.prototype.loadScripts = function()
+InsertImage.loadAssets = function()
 {
-  var self = this;
-  if(!this.methodsReady)
-	{
-		Xinha._getback(_editor_url + 'modules/InsertImage/pluginMethods.js', function(getback) { eval(getback); self.methodsReady = true; });
-		return;
-	}
+	var self = InsertImage;
+	if (self.loading) return;
+	self.loading = true;
+	Xinha._getback(_editor_url + 'modules/InsertImage/dialog.html', function(getback) { self.html = getback; self.dialogReady = true; });
+	Xinha._getback(_editor_url + 'modules/InsertImage/pluginMethods.js', function(getback) { eval(getback); self.methodsReady = true; });
 };
-
 InsertImage.prototype.onUpdateToolbar = function()
 { 
-  if (!(this.dialogReady && this.methodsReady))
+  if (!(InsertImage.dialogReady && InsertImage.methodsReady))
 	{
 	  this.editor._toolbarObjects.insertimage.state("enabled", false);
 	}
+  else this.onUpdateToolbar = null;
 };
 
 InsertImage.prototype.prepareDialog = function()
@@ -72,15 +70,7 @@ InsertImage.prototype.prepareDialog = function()
 	var self = this;
 	var editor = this.editor;
 
-	if(!this.html) // retrieve the raw dialog contents
-	{
-		Xinha._getback(_editor_url + 'modules/InsertImage/dialog.html', function(getback) { self.html = getback; self.prepareDialog(); });
-		return;
-	}
-
-	// Now we have everything we need, so we can build the dialog.
-		
-	var dialog = this.dialog = new Xinha.Dialog(editor, this.html, 'Xinha',{width:410})
+	var dialog = this.dialog = new Xinha.Dialog(editor, InsertImage.html, 'Xinha',{width:410})
 	// Connect the OK and Cancel buttons
 	dialog.getElementById('ok').onclick = function() {self.apply();}
 

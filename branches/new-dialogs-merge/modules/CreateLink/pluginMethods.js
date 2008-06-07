@@ -1,6 +1,10 @@
 
 CreateLink.prototype.show = function(a)
 {
+  if (!this.dialog)
+  {
+    this.prepareDialog();
+  } 
 	var editor = this.editor;
 	this.a = a;
 	if(!a && this.editor.selectionEmpty(this.editor.getSelection()))

@@ -1,6 +1,8 @@
 InsertImage.prototype.show = function(image)
 {
-	var editor = this.editor;
+	if (!this.dialog) this.prepareDialog();
+  
+  var editor = this.editor;
 	if ( typeof image == "undefined" )
   {
     image = editor.getParentElement();
@@ -59,7 +61,6 @@ InsertImage.prototype.show = function(image)
 // and finally ... take some action
 InsertImage.prototype.apply = function()
 {
-
   var param = this.dialog.hide();
   if (!param.f_url)
   {

@@ -6798,12 +6798,12 @@ Xinha.prototype.scrollPos = function(scope)
 {
   scope = (scope) ? scope : window;
   var x,y;
-  if (scope.pageYOffset) // all except Explorer
+  if (typeof scope.pageYOffset != 'undefined') // all except Explorer
   {
     x = scope.pageXOffset;
     y = scope.pageYOffset;
   }
-  else if (scope.document.documentElement && document.documentElement.scrollTop)
+  else if (scope.document.documentElement && typeof document.documentElement.scrollTop != 'undefined')
     // Explorer 6 Strict
   {
     x = scope.document.documentElement.scrollLeft;

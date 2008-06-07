@@ -49,26 +49,25 @@ CreateLink.prototype._lc = function(string) {
 
 CreateLink.prototype.onGenerateOnce = function()
 {
-	this.prepareDialog();
-	this.loadScripts();
+  CreateLink.loadAssets();
 };
 
-CreateLink.prototype.loadScripts = function()
+CreateLink.loadAssets = function()
 {
-  var self = this;
-  if(!this.methodsReady)
-	{
-		Xinha._getback(_editor_url + 'modules/CreateLink/pluginMethods.js', function(getback) { eval(getback); self.methodsReady = true; });
-		return;
-	}
-};
+	var self = CreateLink;
+	if (self.loading) return;
+	self.loading = true;
+	Xinha._getback(_editor_url + 'modules/CreateLink/dialog.html', function(getback) { self.html = getback; self.dialogReady = true; });
+	Xinha._getback(_editor_url + 'modules/CreateLink/pluginMethods.js', function(getback) { eval(getback); self.methodsReady = true; });
+}
 
 CreateLink.prototype.onUpdateToolbar = function()
 { 
-  if (!(this.dialogReady && this.methodsReady))
+	if (!(CreateLink.dialogReady && CreateLink.methodsReady))
 	{
-	  this.editor._toolbarObjects.createlink.state("enabled", false);
+		this.editor._toolbarObjects.createlink.state("enabled", false);
 	}
+	else this.onUpdateToolbar = null;
 };
 
 CreateLink.prototype.prepareDialog = function()
@@ -76,15 +75,7 @@ CreateLink.prototype.prepareDialog = function()
 	var self = this;
 	var editor = this.editor;
 
-	if(!this.html) // retrieve the raw dialog contents
-	{
-		Xinha._getback(_editor_url + 'modules/CreateLink/dialog.html', function(getback) { self.html = getback; self.prepareDialog(); });
-		return;
-	}
-
-	// Now we have everything we need, so we can build the dialog.
-		
-	var dialog = this.dialog = new Xinha.Dialog(editor, this.html, 'Xinha',{width:400})
+	var dialog = this.dialog = new Xinha.Dialog(editor, CreateLink.html, 'Xinha',{width:400})
 	// Connect the OK and Cancel buttons
 	dialog.getElementById('ok').onclick = function() {self.apply();}
 

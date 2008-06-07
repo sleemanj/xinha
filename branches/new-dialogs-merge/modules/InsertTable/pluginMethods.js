@@ -1,6 +1,8 @@
 InsertTable.prototype.show = function(image)
 {
-	var editor = this.editor;
+  if (!this.dialog) this.prepareDialog();
+
+  var editor = this.editor;
 
   var values = 
   {

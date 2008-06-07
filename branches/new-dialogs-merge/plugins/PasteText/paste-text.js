@@ -42,7 +42,10 @@ Xinha.Config.prototype.PasteText =
 
 PasteText.prototype.onGenerateOnce = function()
 {
-	this._prepareDialog();
+	var self = PasteText;
+	if (self.loading) return;
+	self.loading = true;
+	Xinha._getback(Xinha.getPluginDir("PasteText") + '/popups/paste_text.html', function(getback) { self.html = getback;});
 };
 
 PasteText.prototype._prepareDialog = function()
@@ -50,14 +53,10 @@ PasteText.prototype._prepareDialog = function()
 	var self = this;
 	var editor = this.editor;
 
-	if(!this.html) // retrieve the raw dialog contents
-	{
-		Xinha._getback(Xinha.getPluginDir("PasteText") + '/popups/paste_text.html', function(getback) { self.html = getback; self._prepareDialog(); });
-		return;
-	}
+	var self = this;
 
-	// Now we have everything we need, so we can build the dialog.
-	this.dialog = new Xinha.Dialog(editor, this.html, 'PasteText',{width:350})
+/// Now we have everything we need, so we can build the dialog.
+	this.dialog = new Xinha.Dialog(editor, PasteText.html, 'PasteText',{width:350})
 
 	// Connect the OK and Cancel buttons
 	this.dialog.getElementById('ok').onclick = function() {self.apply();}
@@ -87,17 +86,12 @@ PasteText.prototype._prepareDialog = function()
 		this.getElementById("inputArea").style.width =(this.width - 2) + 'px'; // and the width
 
 	}
-	this.ready = true;
 };
 
 PasteText.prototype.show = function()
 {
-	if(!this.ready) // if the user is too fast clicking the, we have to make them wait
-	{
-		var self = this;
-		window.setTimeout(function() {self.show();},100);
-		return;
-	}
+	if (!this.dialog) this._prepareDialog();
+
 	// here we can pass values to the dialog
 	// each property pair consists of the "name" of the input we want to populate, and the value to be set
 	var inputs =
