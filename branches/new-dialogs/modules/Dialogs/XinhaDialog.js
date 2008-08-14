@@ -27,6 +27,7 @@
  * @param html string 
  * @param localizer string the "context" parameter for Xinha._lc(), typically the name of the plugin
  * @param size object with two possible properties of the size: width & height as int, where height is optional
+ * @param options dictionary with optional boolean attributes 'modal', 'closable', 'resizable', and 'centered', as well as integer attribute 'layer'
  */
 Xinha.Dialog = function(editor, html, localizer, size, options)
 {
@@ -38,9 +39,31 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   this.size = size;
   this.modal = (options && options.modal === false) ? false : true;
   this.closable = (options && options.closable === false) ? false : true;
+  this.resizable = (options && options.resizable === false) ? false : true;
   this.layer = (options && options.layer) ? options.layer : 0;
+  this.centered = (options && options.centered === true) ? true : false;
   
-  
+  /* Check global config to see if we should override any of the above options
+    If a global option is set, it will apply to all dialogs, regardless of their
+    individual settings (i.e., it will override them). If the global option is
+    undefined, the options passed in above will be used.
+  */
+  globalOptions = editor.config.dialogOptions
+  if (globalOptions) {
+    if (typeof(globalOptions.centered) != 'undefined') {
+      this.centered = globalOptions.centered;
+    }
+    if (typeof(globalOptions.resizable) != 'undefined') {
+      this.resizable = globalOptions.resizable;
+    }
+    if (typeof(globalOptions.closable) != 'undefined') {
+      this.closable = globalOptions.closable;
+    }
+    if (typeof(globalOptions.modal) != 'undefined') {
+      this.modal = globalOptions.modal;
+    }
+  }
+
   if (Xinha.is_ie)
   { // IE6 needs the iframe to hide select boxes
     var backG = document.createElement("iframe");
@@ -204,17 +227,21 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     }
   }
 
-  this.resizer = document.createElement('div');
-  this.resizer.className = "resizeHandle";
-  with (this.resizer.style)
+  this.resizer = null;
+  if (this.resizable)
   {
-    position = "absolute";
-    bottom = "0px";
-    right= "0px";
+    this.resizer = document.createElement('div');
+    this.resizer.className = "resizeHandle";
+    with (this.resizer.style)
+    {
+      position = "absolute";
+      bottom = "0px";
+      right= "0px";
+    }
+    Xinha._addEvent(this.resizer, 'mousedown', function(ev) { dialog.resizeStart(ev); });
+    rootElem.appendChild(this.resizer);
   }
-  Xinha._addEvent(this.resizer, 'mousedown', function(ev) { dialog.resizeStart(ev); });
-  rootElem.appendChild(this.resizer);
-  
+
   this.rootElem = rootElem;
   this.captionBar = captionBar;
   this.main = main;
@@ -314,7 +341,7 @@ Xinha.Dialog.prototype.show = function(values)
       rootElemStyle.top =  parseInt(this.size.top,10) + 'px';
       rootElemStyle.left = parseInt(this.size.left,10) + 'px';
     }
-    else if (this.editor.btnClickEvent)
+    else if (this.editor.btnClickEvent && !this.centered)
     {
       var btnClickEvent = this.editor.btnClickEvent;
       if (rootElemStyle.position == 'absolute')
