@@ -4717,6 +4717,17 @@ Xinha.prototype._editorEvent = function(ev)
       return false;
     }
   }
+
+  /* If this.currentModal is not null, then there's a modal dialog 
+  /* on screen, and we kill the event. This eliminates the possibility
+  /* of a user 'tabbing' out of a modal dialog and re-activating the editor.
+  /* This fixes the bug reported in ticket #1259
+  /* http://xinha.webfactional.com/ticket/1259 */
+  if (this.currentModal)
+  {
+    return false;
+  }
+
   // update the toolbar state after some time
   if ( editor._timerToolbar )
   {
