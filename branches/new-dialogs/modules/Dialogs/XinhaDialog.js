@@ -296,7 +296,11 @@ Xinha.Dialog.prototype.show = function(values)
     }
   }
  
-  if ( modal ) this.editor.deactivateEditor();
+  if ( modal )
+  {
+    this.editor.deactivateEditor();
+    this.editor.currentModal = dialog;
+  }
 
   // unfortunately we have to hide the editor (iframe/caret bug)
   if (Xinha.is_ff2 && modal)
@@ -434,6 +438,7 @@ Xinha.Dialog.prototype.hide = function()
     if (this.modal)
     {
       this.editor.activateEditor();
+      this.editor.currentModal = null;
     }
   }
    // Restore the selection --> should this happen only with modals?
