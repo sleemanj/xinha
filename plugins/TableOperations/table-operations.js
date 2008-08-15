@@ -399,18 +399,12 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 				alert(Xinha._lc("Please click into some cell", "TableOperations"));
 				break;
 			}
-			editor._popupDialog("plugin://TableOperations/merge_cells.html", function(param) {
-				if (!param) {	// user pressed Cancel
-					return false;
-				}
-				no_cols = parseInt(param['f_cols'],10) + 1;
-				no_rows = parseInt(param['f_rows'],10) + 1;
-				var tr = td.parentNode;
-				var cell_index = td.cellIndex;
-				var row_index = tr.rowIndex;
-				var table = tr.parentNode;
-				cellMerge(table, cell_index, row_index, no_cols, no_rows);
-			}, null);	
+		        var tr = td.parentNode;
+		        var cell_index = td.cellIndex;
+		        var row_index = tr.rowIndex;
+		        // pass cellMerge and the indices so apply() can call cellMerge and know 
+       		        // what cell was selected when the dialog was opened
+		        this.dialogMerge(cellMerge, cell_index, row_index);
 		}
 		break;
 
@@ -462,6 +456,35 @@ TableOperations.btnList = [
 	["cell-merge",         "tr", "Merge cells"],
 	["cell-split",         "td[colSpan!=1,rowSpan!=1]", "Split cell"]
 	];
+
+TableOperations.prototype.dialogMerge = function(merge_func, cell_index, row_index) {
+  var table = this.getClosest("table");
+  var self = this;
+  var editor = this.editor;
+
+  if (!this.dialogMergeCellsHtml) {
+    Xinha._getback(Xinha.getPluginDir("TableOperations") + '/popups/dialogMergeCells.html', function(getback) { self.dialogMergeCellsHtml = getback; self.dialogMerge(merge_func, cell_index, row_index); });
+    return;
+  }
+
+  if (!this.dialogMergeCells) {
+    this.dialogMergeCells = new Xinha.Dialog(editor, this.dialogMergeCellsHtml, 'TableOperations', {width:400});
+    this.dialogMergeCells.getElementById('cancel').onclick = function() { self.dialogMergeCells.hide(); };
+  }
+
+  var dialog = this.dialogMergeCells;
+  function apply() {
+    dialog.hide();
+    no_cols = parseInt(dialog.getElementById('f_cols').value,10) + 1;
+    no_rows = parseInt(dialog.getElementById('f_rows').value,10) + 1;
+    merge_func(table, cell_index, row_index, no_cols, no_rows);    
+    return
+  }
+
+  this.dialogMergeCells.getElementById('ok').onclick = apply;
+  this.dialogMergeCells.show();
+  this.dialogMergeCells.getElementById('f_cols').focus();
+}
 
 TableOperations.prototype.dialogTableProperties = function() {
 
