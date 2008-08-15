@@ -78,7 +78,11 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   /*   - you can type in a form field of a dialog even when it's not frontmost (and doing so doesn't activate it)
   /* See discussion on ticket #1264: http://xinha.webfactional.com/ticket/1264
   */
-  this.modal = true;
+  if (this.modal == false) {
+    this.modal = true;
+    alert("Support for modeless dialogs is currently incomplete and has been turned off. "
+	  + "See comments at: http://xinha.webfactional.com/ticket/1264");
+  }
 
   if (Xinha.is_ie)
   { // IE6 needs the iframe to hide select boxes
