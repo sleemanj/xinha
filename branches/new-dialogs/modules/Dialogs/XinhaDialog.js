@@ -42,7 +42,8 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   this.resizable = (options && options.resizable === false) ? false : true;
   this.layer = (options && options.layer) ? options.layer : 0;
   this.centered = (options && options.centered === true) ? true : false;
-  
+  this.closeOnEscape = (options && options.closeOnEscape === true) ? true : false;
+
   /* Check global config to see if we should override any of the above options
     If a global option is set, it will apply to all dialogs, regardless of their
     individual settings (i.e., it will override them). If the global option is
@@ -62,7 +63,22 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     if (typeof(globalOptions.modal) != 'undefined') {
       this.modal = globalOptions.modal;
     }
+    if (typeof(globalOptions.closeOnEscape) != 'undefined') {
+      this.closeOnEscape = globalOptions.closeOnEscape;
+    }
   }
+
+  /* NOTE: Support for modeless dialogs is incomplete and all current plugins
+  /* use modal dialogs, so I'm deactivating modeless dialogs until these issues are fixed
+  /* Outstanding issues with modeless dialogs:
+  /*   - it's possible new modeless dialogs will be opened behind other dialogs
+  /*   - there's no visual indication as to which modeless dialog is frontmost and has focus
+  /*   - closing one dialog does not cause the dialog behind it to gain focus
+  /*   - no active modeless dialog is set until one is clicked, i.e., none is set by just calling show()
+  /*   - you can type in a form field of a dialog even when it's not frontmost (and doing so doesn't activate it)
+  /* See discussion on ticket #1264: http://xinha.webfactional.com/ticket/1264
+  */
+  this.modal = true;
 
   if (Xinha.is_ie)
   { // IE6 needs the iframe to hide select boxes
@@ -170,7 +186,21 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     right = "2px";
   }
   rootElem.appendChild(this.buttons);
-  
+
+  if (this.closeOnEscape)
+  {
+    Xinha._addEvent(document, 'keypress', function(ev) {
+      if (ev.keyCode == 27) // ESC key
+      {
+	if (Xinha.Dialog.activeModeless == dialog || dialog.modal)
+	{
+	  dialog.hide();
+	  return true;
+	}
+      }
+    });
+  }
+
   this.closer = null;
   if ( this.closable )
   {
