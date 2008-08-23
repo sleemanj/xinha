@@ -452,8 +452,28 @@ Xinha.prototype._ancestorsWithClasses = function(sel, tag, classes)
 
 Xinha.ripStylesFromCSSFile = function(URL)
 {
-  Xinha.setLoadingMessage('Loading Styles');
   var css = Xinha._geturlcontent(URL);
+  var RE_atimport = '@import\\s*(url\\()?["\'](.*)["\'].*';
+  var imports = css.match(new RegExp(RE_atimport,'ig'));
+  var m, file, re = new RegExp(RE_atimport,'i');
+
+  if (imports)
+  {
+    var path = URL.replace(/\?.*$/,'').split("/");
+    path.pop();
+    path = path.join('/');
+    for (var i=0;i<imports.length;i++)
+    {
+      m = imports[i].match(re);
+      file = m[2];
+      if (!file.match(/^([^:]+\:)?\//))
+      {
+        file = Xinha._resolveRelativeUrl(path,file);
+      }
+      css += Xinha._geturlcontent(file);
+    }
+  }
+
   return Xinha.ripStylesFromCSSString(css);
 };
 
