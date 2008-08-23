@@ -976,6 +976,14 @@ Xinha.Config = function()
     "Address"  : "address",
     "Formatted": "pre"
   };
+  
+  this.dialogOptions =
+  { 
+    'centered' : true, //true: dialog is shown in the center the screen, false dialog is shown near the clicked toolbar button
+    'greyout':true, //true: when showing modal dialogs, the page behind the dialoge is greyed-out
+    'closeOnEscape':true
+  };
+
   /** ??
    * Default: <code>{}</code>
    * @type Object
