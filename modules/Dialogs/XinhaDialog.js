@@ -60,6 +60,9 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     if (typeof(globalOptions.closable) != 'undefined') {
       this.closable = globalOptions.closable;
     }
+    if (typeof(globalOptions.greyout) != 'undefined') {
+      this.greyout = globalOptions.greyout;
+    }
     if (typeof(globalOptions.closeOnEscape) != 'undefined') {
       this.closeOnEscape = globalOptions.closeOnEscape;
     }
@@ -77,6 +80,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
         var div = doc.createElement('div');
         //insert styles to make background color skinable
         var styles, stylesheets = document.styleSheets;
+        
         for (var i=0;i<stylesheets.length;i++)
         {
           if (stylesheets[i].id.indexOf('Xinha') != -1 && stylesheets[i].cssText) 
@@ -86,6 +90,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
         doc.getElementsByTagName('body')[0].appendChild(div);
         doc.body.className = 'xinha_dialog_background';
         if (dialog.modal) doc.body.className += ' modal';
+        if (dialog.greyout) doc.body.className += ' greyout';
       }
     }
   }
@@ -96,6 +101,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   }
   backG.className = "xinha_dialog_background";
   if (this.modal) backG.className += ' modal';
+  if (this.greyout) backG.className += ' greyout';
   with (backG.style)
   {
     position = "absolute";

@@ -121,20 +121,28 @@ div.dialog {
   padding-bottom:10px;
 }
 .xinha_dialog_background {
-  filter: alpha(opacity = 0);
+  filter: alpha(opacity=0);
   -moz-opacity: 0;
   opacity: 0;
   border:none;
 }
-.xinha_dialog_background.modal {
+.xinha_dialog_background.modal.greyout {
   background-color:#666;
-  filter: alpha(opacity = 70);
+  filter: alpha(opacity=70) !IMPORTANT;
   -moz-opacity: 0.7;
   opacity: 0.7;
+}
+.xinha_dialog_background.modal {
+  filter: alpha(opacity=0) !IMPORTANT;
+  -moz-opacity: 0;
+  opacity: 0;
   border:none;
 }
+body.xinha_dialog_background.modal.greyout {
+  filter: alpha(opacity=100) !IMPORTANT;
+}
 body.xinha_dialog_background.modal {
-  filter: alpha(opacity = 100);
+  filter: alpha(opacity=0);
 }
 .dialog .content { padding: 2px; }
 
