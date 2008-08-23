@@ -47,10 +47,10 @@ Xinha.RegExpCache = [
 /*11*/  /\s+([^=\s]+)((="[^"]+")|([\s>]))/g,// lowercase attribute names
 /*12*/  /\s+contenteditable(=[^>\s\/]*)?/gi,//strip contenteditable
 /*13*/  /((href|src)=")([^\s]*)"/g, //find href and src for stripBaseHref()
-/*14*/  /<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g,
-/*15*/  /<\/(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,//blocklevel closing tag
-/*16*/  /<(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,//blocklevel opening tag
-/*17*/  /<(td|th|li|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g,//singlet tag or output on 1 line
+/*14*/  /<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|dl|dt|dd|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g,
+/*15*/  /<\/(div|p|h[1-6]|table|tr|ul|ol|dl|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,//blocklevel closing tag
+/*16*/  /<(div|p|h[1-6]|table|tr|ul|ol|dl|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,//blocklevel opening tag
+/*17*/  /<(td|th|li|dt|dd|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g,//singlet tag or output on 1 line
 /*18*/  /(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g,//find content NOT inside pre and script tags
 /*19*/  /(<pre[^>]*>)([\s\S])*?(<\/pre>)/g,//find content inside pre tags
 /*20*/  /(^|<!--[\s\S]*?-->)([\s\S]*?)(?=<!--[\s\S]*?-->|$)/g,//find content NOT inside comments
@@ -195,14 +195,17 @@ Xinha.getHTML = function(root, outputRoot, editor) {
 				else return ''});
 			return strn;
 		});
-		//IE drops  all </li> tags in a list except the last one
+		//IE drops  all </li>,</dt>,</dd> tags in a list except the last one
 		if(Xinha.is_ie) {
-			html = html.replace(/<li( [^>]*)?>/g,'</li><li$1>').
-				replace(/(<(ul|ol)[^>]*>)[\s\n]*<\/li>/g, '$1').
-				replace(/<\/li>([\s\n]*<\/li>)+/g, '<\/li>');
+			html = html.replace(/<(li|dd|dt)( [^>]*)?>/g,'</$1><$1$2>').
+				replace(/(<[uod]l[^>]*>[\s\S]*?)<\/(li|dd|dt)>/g, '$1').
+				replace(/\s*<\/(li|dd|dt)>(\s*<\/(li|dd|dt)>)+/g, '</$1>').
+				replace(/(<dt[\s>][^<]*)(<\/d[dt]>)+/g, '$1</dt>');
 		}
 		if(Xinha.is_gecko)
 			html = html.replace(/<br \/>\n$/, ''); //strip trailing <br> added by moz
+		//Cleanup redundant whitespace before </li></dd></dt> in IE and Mozilla
+		html = html.replace(/\s*(<\/(li|dd|dt)>)/g, '$1');
 		if (outputRoot) {
 			html += "</" + root_tag + ">";
 		}
