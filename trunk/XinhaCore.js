@@ -76,7 +76,7 @@ if ( typeof _editor_url == "string" )
   
   // convert _editor_url to absolute
   if(!_editor_url.match(/^([^:]+\:)?\//)){
-    var path = window.location.toString().split("/");
+    var path = window.location.toString().replace(/\?.*$/,'').split("/");
     path.pop();
     _editor_url = Xinha._resolveRelativeUrl(path.join("/"), _editor_url);
   }
