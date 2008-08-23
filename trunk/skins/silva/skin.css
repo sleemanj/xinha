@@ -96,9 +96,7 @@ html > body .htmlarea .toolbar .button {
   display:block;
   margin: 3px;
 }
-.htmlarea .statusBar span {
- display:none;
-}
+
 .htmlarea .statusBar .statusBarTree a
 {
   padding: 0 5px;
