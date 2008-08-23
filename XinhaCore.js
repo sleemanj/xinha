@@ -4688,7 +4688,7 @@ Xinha.prototype._editorEvent = function(ev)
   //call events of textarea
   if ( typeof editor._textArea['on'+ev.type] == "function" )
   {
-    editor._textArea['on'+ev.type]();
+    editor._textArea['on'+ev.type](ev);
   }
   
   if ( this.isKeyEvent(ev) )
