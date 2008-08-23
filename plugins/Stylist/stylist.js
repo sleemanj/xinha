@@ -452,6 +452,27 @@ Xinha.prototype._ancestorsWithClasses = function(sel, tag, classes)
 Xinha.ripStylesFromCSSFile = function(URL)
 {
   var css = Xinha._geturlcontent(URL);
+  var RE_atimport = '@import\\s*(url\\()?["\'](.*)["\'].*';
+  var imports = css.match(new RegExp(RE_atimport,'ig'));
+  var m, file, re = new RegExp(RE_atimport,'i');
+
+  if (imports)
+  {
+    var path = URL.replace(/\?.*$/,'').split("/");
+    path.pop();
+    path = path.join('/');
+    for (var i=0;i<imports.length;i++)
+    {
+      m = imports[i].match(re);
+      file = m[2];
+      if (!file.match(/^([^:]+\:)?\//))
+      {
+        file = Xinha._resolveRelativeUrl(path,file);
+      }
+      css += Xinha._geturlcontent(file);
+    }
+  }
+
   return Xinha.ripStylesFromCSSString(css);
 };
 
@@ -461,6 +482,7 @@ Xinha.ripStylesFromCSSString = function(css)
   //  so we'll drop out all coments and rules
   RE_comment = /\/\*(.|\r|\n)*?\*\//g;
   RE_rule    = /\{(.|\r|\n)*?\}/g;
+  css = css.replace(RE_comment, '');
   css = css.replace(RE_comment, '');
   css = css.replace(RE_rule, ',');
 
