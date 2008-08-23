@@ -67,7 +67,9 @@ xinha_init = xinha_init ? xinha_init : function()
    // To adjust the styling inside the editor, we can load an external stylesheet like this
    // NOTE : YOU MUST GIVE AN ABSOLUTE URL
   
-   xinha_config.pageStyleSheets = [ _editor_url + "examples/full_example.css" ];
+   xinha_config.pageStyleSheets = [ _editor_url + "examples/files/full_example.css" ];
+   //if you're using Stylist, import a stylesheet like this
+   xinha_config.stylistLoadStylesheet(_editor_url + "examples/files/stylist.css");
 
   /** STEP 4 ***************************************************************
    * We first create editors for the textareas.
