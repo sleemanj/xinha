@@ -984,10 +984,10 @@ Xinha.Config = function()
 
   /** Switches on some debugging (only in execCommand() as far as I see at the moment)<br />
    *
-   * Default: <code>true</code>
+   * Default: <code>false</code>
    * @type Boolean
    */
-  this.debug = true;
+  this.debug = false;
 
   this.URIs =
   {
