@@ -60,28 +60,9 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     if (typeof(globalOptions.closable) != 'undefined') {
       this.closable = globalOptions.closable;
     }
-    if (typeof(globalOptions.modal) != 'undefined') {
-      this.modal = globalOptions.modal;
-    }
     if (typeof(globalOptions.closeOnEscape) != 'undefined') {
       this.closeOnEscape = globalOptions.closeOnEscape;
     }
-  }
-
-  /* NOTE: Support for modeless dialogs is incomplete and all current plugins
-  /* use modal dialogs, so I'm deactivating modeless dialogs until these issues are fixed
-  /* Outstanding issues with modeless dialogs:
-  /*   - it's possible new modeless dialogs will be opened behind other dialogs
-  /*   - there's no visual indication as to which modeless dialog is frontmost and has focus
-  /*   - closing one dialog does not cause the dialog behind it to gain focus
-  /*   - no active modeless dialog is set until one is clicked, i.e., none is set by just calling show()
-  /*   - you can type in a form field of a dialog even when it's not frontmost (and doing so doesn't activate it)
-  /* See discussion on ticket #1264: http://xinha.webfactional.com/ticket/1264
-  */
-  if (this.modal == false) {
-    this.modal = true;
-    alert("Support for modeless dialogs is currently incomplete and has been turned off. "
-	  + "See comments at: http://xinha.webfactional.com/ticket/1264");
   }
 
   if (Xinha.is_ie)
@@ -191,16 +172,16 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   }
   rootElem.appendChild(this.buttons);
 
-  if (this.closeOnEscape)
+  if (this.closable && this.closeOnEscape)
   {
     Xinha._addEvent(document, 'keypress', function(ev) {
       if (ev.keyCode == 27) // ESC key
       {
-	if (Xinha.Dialog.activeModeless == dialog || dialog.modal)
-	{
-	  dialog.hide();
-	  return true;
-	}
+        if (Xinha.Dialog.activeModeless == dialog || dialog.modal)
+        {
+          dialog.hide();
+          return true;
+        }
       }
     });
   }
@@ -358,7 +339,22 @@ Xinha.Dialog.prototype.show = function(values)
     //Xinha._addEvent(window, 'resize', this.onResizeWin );
 
     //rootElemStyle.display   = '';
-    Xinha.Dialog.fadeIn(this.rootElem);
+    Xinha.Dialog.fadeIn(this.rootElem, 100,function() {
+      //this is primarily to work around a bug in IE where absolutely positioned elements have a frame that renders above all #1268
+      //but could also be seen as a feature ;)
+      if (modal)
+      {
+        var input = dialog.rootElem.getElementsByTagName('input');
+        for (var i=0;i<input.length;i++)
+        {
+          if (input[i].type == 'text')
+          {
+            input[i].focus();
+            break;
+          }
+        }
+      }
+    });
     var dialogHeight = rootElem.offsetHeight;
     var dialogWidth = rootElem.offsetWidth;
     var viewport = Xinha.viewportSize();
@@ -1096,7 +1092,7 @@ Xinha.Dialog.setOpacity = function(el,value)
  * @param {Number} endOpacity stop when this value is reached (percent)
  * @param {Number} step Fade this much per step (percent)
  */
-Xinha.Dialog.fadeIn = function(el,endOpacity,delay,step)
+Xinha.Dialog.fadeIn = function(el,endOpacity,callback, delay,step)
 {
     delay = delay || 1;
     step = step || 25;
@@ -1112,13 +1108,14 @@ Xinha.Dialog.fadeIn = function(el,endOpacity,delay,step)
     {
         el.op += step;
         Xinha.Dialog.setOpacity(el,op);
-        el.timeOut = setTimeout(function(){Xinha.Dialog.fadeIn(el,endOpacity,delay,step);},delay);
+        el.timeOut = setTimeout(function(){Xinha.Dialog.fadeIn(el, endOpacity, callback, delay, step);},delay);
     }
     else
     {
         Xinha.Dialog.setOpacity(el,endOpacity);
         el.op = endOpacity;
         el.timeOut = null;
+        if (typeof callback == 'function') callback.call();
     }
 }
 /** Fade out an element
