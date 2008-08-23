@@ -202,6 +202,8 @@ Linker.prototype._createLink = function(a)
       }
     }
 
+    if (atr.href) atr.href = atr.href.trim();
+
     if(a && a.tagName.toLowerCase() == 'a')
     {
       if(!atr.href)
