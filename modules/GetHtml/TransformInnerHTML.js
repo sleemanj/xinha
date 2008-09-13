@@ -200,7 +200,7 @@ Xinha.getHTML = function(root, outputRoot, editor) {
 			html = html.replace(/<(li|dd|dt)( [^>]*)?>/g,'</$1><$1$2>').
 				replace(/(<[uod]l[^>]*>[\s\S]*?)<\/(li|dd|dt)>/g, '$1').
 				replace(/\s*<\/(li|dd|dt)>(\s*<\/(li|dd|dt)>)+/g, '</$1>').
-				replace(/(<dt[\s>][^<]*)(<\/d[dt]>)+/g, '$1</dt>');
+				replace(/(<dt[\s>][\s\S]*?)(<\/d[dt]>)+/g, '$1</dt>');
 		}
 		if(Xinha.is_gecko)
 			html = html.replace(/<br \/>\n$/, ''); //strip trailing <br> added by moz
