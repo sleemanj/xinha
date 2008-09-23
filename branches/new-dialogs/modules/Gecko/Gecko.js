@@ -612,10 +612,19 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   else
   {
     range.selectNodeContents(node);
-    //(collapsed) && range.collapse(pos);
   }
   sel.removeAllRanges();
   sel.addRange(range);
+  if (typeof pos != "undefined")
+  {
+    if (pos)
+    {
+      sel.collapse(range.startContainer, range.startOffset);
+    } else
+    {
+      sel.collapse(range.endContainer, range.endOffset);
+    }
+  }
 };
   
 /** Insert HTML at the current position, deleting the selection if any. 
