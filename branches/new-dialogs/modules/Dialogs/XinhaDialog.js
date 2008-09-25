@@ -482,6 +482,7 @@ Xinha.Dialog.prototype.hide = function()
   
   this.dialogShown = false;
   this.editor.updateToolbar();
+  this.editor.focusEditor();
   return this.getValues();
 };
 
