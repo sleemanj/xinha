@@ -352,8 +352,10 @@ ContextMenu.prototype.popupMenu = function(ev) {
 		div.unselectable = "on";
 	div.oncontextmenu = function() { return false; };
 	div.className = "htmlarea-context-menu";
-	if (!Xinha.is_ie)
-		div.style.left = div.style.top = "0px";
+	if (!Xinha.is_ie) {
+	    div.style.visibility = "hidden";
+	    div.style.left = div.style.top = "-200px";
+	}
 	doc.body.appendChild(div);
 
 	var table = doc.createElement("table");
@@ -448,15 +450,23 @@ ContextMenu.prototype.popupMenu = function(ev) {
 	}
 
 	if (!Xinha.is_ie) {
-    /* FIXME: I think this is to stop the popup from running off the bottom of the screen?
-		var dx = x + div.offsetWidth - window.innerWidth + 4;
-		var dy = y + div.offsetHeight - window.innerHeight + 4;
-    // alert('dy= (' + y + '+' + div.offsetHeight + '-' + window.innerHeight + ' + 4 ) = ' + dy);
-		if (dx > 0) x -= dx;
-		if (dy > 0) y -= dy;
-    */
-		div.style.left = x + "px";
-		div.style.top = y + "px";
+	    /* keep then menu from overflowing the client window boundaries */ 
+	
+	    /*	provide a virtual margin to leave a swoosh of air between the
+		meny and the window edge. This should probably go into the menu
+		container css as margin 10px instead...
+	     */
+	    var margin = 10;
+	    
+	    if (y + div.offsetHeight + margin > window.innerHeight)
+		y = window.innerHeight - div.offsetHeight - margin;
+	    if (x + div.offsetWidth + margin > window.innerWidth)
+		x = window.innerWidth - div.offsetWidth - margin;
+	    
+	    div.style.left = x + "px";
+	    div.style.top = y + "px";
+	    div.style.visibility = "visible";
+
 	} else {
     // To get the size we need to display the popup with some width/height
     // then we can get the actual size of the div and redisplay the popup at the
