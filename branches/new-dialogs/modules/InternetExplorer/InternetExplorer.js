@@ -593,8 +593,92 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   else
   {
     range = this._doc.body.createTextRange();
-    range.moveToElementText(node);
-    //(collapsed) && range.collapse(pos);
+    if (3 == node.nodeType)
+    {
+      // Special handling for text nodes, since moveToElementText fails when
+      // attempting to select a text node
+
+      // Since the TextRange has a quite limited API, our strategy here is to
+      // select (where possible) neighboring nodes, and then move our ranges
+      // endpoints to be just inside of neighboring selections.
+      if (node.parentNode)
+      {
+        range.moveToElementText(node.parentNode);
+      } else
+      {
+        range.moveToElementText(this._doc.body);
+      }
+      var trimmingRange = this._doc.body.createTextRange();
+
+      // In rare situations (mostly html that's been monkeyed about with by
+      // javascript, but that's what we're doing) there can be two adjacent
+      // text nodes.  Since we won't be able to handle these, we'll have to
+      // hack an offset by 'move'ing the number of characters they contain.
+      var texthackOffset = 0;
+      var borderElement=node.previousSibling;
+      for (; borderElement && (1 != borderElement.nodeType); borderElement = borderElement.previousSibling)
+      {
+        if (3 == borderElement.nodeType)
+        {
+          // IE doesn't count '\r' as a character, so we have to adjust the offset.
+          texthackOffset += borderElement.nodeValue.length-borderElement.nodeValue.split('\r').length-1;
+        }
+      }
+      if (borderElement && (1 == borderElement.nodeType))
+      {
+        trimmingRange.moveToElementText(borderElement);
+        range.setEndPoint('StartToEnd', trimmingRange);
+      }
+      if (texthackOffset)
+      {
+        // We now need to move the selection forward the number of characters
+        // in all text nodes in between our text node and our ranges starting
+        // border.
+        range.moveStart('character',texthackOffset);
+      }
+
+      // Youpi!  Now we get to repeat this trimming on the right side.
+      texthackOffset = 0;
+      borderElement=node.nextSibling;
+      for (; borderElement && (1 != borderElement.nodeType); borderElement = borderElement.nextSibling)
+      {
+        if (3 == borderElement.nodeType)
+        {
+          // IE doesn't count '\r' as a character, so we have to adjust the offset.
+          texthackOffset += borderElement.nodeValue.length-borderElement.nodeValue.split('\r').length-1;
+          if (!borderElement.nextSibling)
+          {
+            // When a text node is the last child, IE adds an extra selection
+            // "placeholder" for the newline character.  We need to adjust for
+            // this character as well.
+            texthackOffset += 1;
+          }
+        }
+      }
+      if (borderElement && (1 == borderElement.nodeType))
+      {
+        trimmingRange.moveToElementText(borderElement);
+        range.setEndPoint('EndToStart', trimmingRange);
+      }
+      if (texthackOffset)
+      {
+        // We now need to move the selection backward the number of characters
+        // in all text nodes in between our text node and our ranges ending
+        // border.
+        range.moveEnd('character',-texthackOffset);
+      }
+      if (!node.nextSibling)
+      {
+        // Above we performed a slight adjustment to the offset if the text
+        // node contains a selectable "newline".  We need to do the same if the
+        // node we are trying to select contains a newline.
+        range.moveEnd('character',-1);
+      }
+    }
+    else
+    {
+      range.moveToElementText(node);
+    }
   }
   range.select();
 };
