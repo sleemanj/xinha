@@ -693,7 +693,7 @@ Xinha.prototype.createRange = function(sel)
  
 Xinha.prototype.isKeyEvent = function(event)
 {
-  return event.type == "keypress";
+  return event.type == "keydown";
 }
 
 /** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
