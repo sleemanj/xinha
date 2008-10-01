@@ -575,15 +575,15 @@ Xinha.prototype.restoreSelection = function(savedSelection)
  * the node itself is selected for manipulation.
  *
  * @param node DomNode 
- * @param pos  Set to a numeric position inside the node to collapse the cursor here if possible. 
+ * @param collapseToStart A boolean that, when supplied, says to collapse the selection. True collapses to the start, and false to the end.
  */
  
-Xinha.prototype.selectNodeContents = function(node, pos)
+Xinha.prototype.selectNodeContents = function(node, collapseToStart)
 {
   this.focusEditor();
   this.forceRedraw();
   var range;
-  var collapsed = typeof pos == "undefined" ? true : false;
+  var collapsed = typeof collapseToStart == "undefined" ? true : false;
   // Tables and Images get selected as "objects" rather than the text contents
   if ( collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|select|textarea/) )
   {
@@ -678,6 +678,15 @@ Xinha.prototype.selectNodeContents = function(node, pos)
     else
     {
       range.moveToElementText(node);
+    }
+  }
+  if (typeof collapseToStart != "undefined")
+  {
+    range.collapse(collapseToStart);
+    if (!collapseToStart)
+    {
+      range.moveStart('character',-1);
+      range.moveEnd('character',-1);
     }
   }
   range.select();
