@@ -4285,7 +4285,7 @@ Xinha.prototype.getAllAncestors = function()
 
 /** Traverses the DOM upwards and returns the first element that is of one of the specified types
  *  @param {Selection} sel  Selection object as returned by getSelection
- *  @param {Array} types Array of HTML tag names (lower case)
+ *  @param {Array} types Array of matching criteria.  Each criteria is either a string containing the tag name, or a callback used to select the element.
  *  @returns {DomNode|null} 
  */
 Xinha.prototype._getFirstAncestor = function(sel, types)
@@ -4317,10 +4317,17 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
       {
         return prnt;
       }
-      if ( types.contains(prnt.tagName.toLowerCase()) )
-      {
+      for (var index=0; index<types.length; ++index) {
+        if (typeof types[index] == 'string' && types[index] == prnt.tagName.toLowerCase()){
+          // Criteria is a tag name.  It matches
         return prnt;
       }
+        else if (typeof types[index] == 'function' && types[index](this, prnt)) {
+          // Criteria is a callback.  It matches
+          return prnt;
+        }
+      }
+
       if ( prnt.tagName.toLowerCase() == 'body' )
       {
         break;
