@@ -149,7 +149,7 @@ InternetExplorer.prototype.inwardHtml = function(html)
    // We've got a workaround for certain issues with saving and restoring
    // selections that may cause us to fill in junk span tags.  We'll clean
    // those here
-   html = html.replace(/<span[^>]+id="__InsertSpan_Workaround_[a-z]+".*?><\/span>/i,"");
+   html = html.replace(/<span[^>]+id="__InsertSpan_Workaround_[a-z]+".*?>([\s\S]*?)<\/span>/i,"$1");
    
    return html;
 }
@@ -162,7 +162,7 @@ InternetExplorer.prototype.outwardHtml = function(html)
    // We've got a workaround for certain issues with saving and restoring
    // selections that may cause us to fill in junk span tags.  We'll clean
    // those here
-   html = html.replace(/<span[^>]+id="__InsertSpan_Workaround_[a-z]+".*?><\/span>/i,"");
+   html = html.replace(/<span[^>]+id="__InsertSpan_Workaround_[a-z]+".*?>([\s\S]*?)<\/span>/i,"$1");
    
    return html;
 }
@@ -516,7 +516,7 @@ Xinha.prototype.restoreSelection = function(savedSelection)
           var result = '';
           for (var index=0; index<count; ++index)
           {
-            result += Letters.substr(Math.floor(Math.random()*26 + 1), 1);
+            result += Letters.substr(Math.floor(Math.random()*Letters.length + 1), 1);
           }
           return result;
         }
