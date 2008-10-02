@@ -52,7 +52,7 @@ function ImagePicker(field)
   field.style.textAlign = 'right';
 };
 
-ImagePicker.prototype.backend             = _editor_url + 'plugins/ImageManager/backend.php?__plugin=ImageManager&';
+ImagePicker.prototype.backend             = Xinha.getPluginDir('ImageManager') + '/backend.php?__plugin=ImageManager&';
 ImagePicker.prototype.backend_data        = null;
 
 ImagePicker.prototype.popup_picker = function()
