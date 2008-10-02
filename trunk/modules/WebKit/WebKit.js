@@ -573,15 +573,15 @@ Xinha.prototype.restoreSelection = function(savedSelection)
  * the node itself is selected for manipulation.
  *
  * @param node DomNode 
- * @param pos  Set to a numeric position inside the node to collapse the cursor here if possible. 
+ * @param collapseToStart A boolean that, when supplied, says to collapse the selection. True collapses to the start, and false to the end.
  */
  
-Xinha.prototype.selectNodeContents = function(node, pos)
+Xinha.prototype.selectNodeContents = function(node, collapseToStart)
 {
   this.focusEditor();
   this.forceRedraw();
   var range;
-  var collapsed = typeof pos == "undefined" ? true : false;
+  var collapsed = typeof collapseToStart == "undefined" ? true : false;
   var sel = this.getSelection();
   range = this._doc.createRange();
   // Tables and Images get selected as "objects" rather than the text contents
@@ -592,10 +592,19 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   else
   {
     range.selectNodeContents(node);
-    //(collapsed) && range.collapse(pos);
   }
   sel.removeAllRanges();
   sel.addRange(range);
+  if (typeof collapseToStart != "undefined")
+  {
+    if (collapseToStart)
+    {
+      sel.collapse(range.startContainer, range.startOffset);
+    } else
+    {
+      sel.collapse(range.endContainer, range.endOffset);
+    }
+  }
 };
   
 /** Insert HTML at the current position, deleting the selection if any. 
@@ -684,7 +693,7 @@ Xinha.prototype.createRange = function(sel)
  
 Xinha.prototype.isKeyEvent = function(event)
 {
-  return event.type == "keypress";
+  return event.type == "keydown";
 }
 
 /** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and

@@ -25,11 +25,11 @@ SmartReplace._pluginInfo = {
   name          : "SmartReplace",
   version       : "1.0",
   developer     : "Raimund Meyer",
-  developer_url : "http://x-webservice.net",
+  developer_url : "http://rheinauf.de",
   c_owner       : "Raimund Meyer",
   sponsor       : "",
   sponsor_url   : "",
-  license       : "LGPL"
+  license       : "htmlArea"
 };
 
 SmartReplace.prototype._lc = function(string) {
@@ -98,7 +98,7 @@ SmartReplace.prototype.onGenerate = function() {
 };
 
 SmartReplace.prototype.keyEvent = function(ev)
-{ 
+{
 	if ( !this.active) return true;
 	var editor = this.editor;
 	var charCode =  Xinha.is_ie ? ev.keyCode : ev.which;
@@ -151,7 +151,6 @@ SmartReplace.prototype.smartQuotes = function(kind)
 		{
 			r.moveStart('character', +1);
 			r.text = closing;
-			
 		}
 		else
 		{
@@ -224,7 +223,6 @@ SmartReplace.prototype.smartReplace = function(ev, lookback, re, replace, stopEv
 	return true;
 }
 
-
 SmartReplace.prototype.replaceAll = function()
 {
 	var doubleQuotes = [
@@ -263,38 +261,23 @@ SmartReplace.prototype.replaceAll = function()
 	
 	this.editor.setHTML(html);
 }
-SmartReplace.prototype.dialog = function()
-{
-	var self = this;
-	var action = function (param)
-	{
-		self.toggleActivity(param.enable); 
-		if (param.convert)
-		{
-			self.replaceAll();
-		}
-	}
-	var init = this;
-	Dialog(Xinha.getPluginDir('SmartReplace')+'/popups/dialog.html', action, init);
-}
-
 
 SmartReplace.prototype.buttonPress = function(opts, obj)
 {
 	var self = this;
 
-	if ( this._dialog.dialog.rootElem.style.display != 'none')
+	if ( this.dialog.rootElem.style.display != 'none')
 	{
-		return this._dialog.hide();
+		return this.dialog.hide();
 	}
 	var doOK = function()
 	{
-		var opts = self._dialog.hide();
+		var opts = self.dialog.hide();
 		self.toggleActivity((opts.enable) ? true : false); 
 		if (opts.convert)
 		{
 			self.replaceAll();
-			self._dialog.dialog.getElementById("convert").checked = false;
+			self.dialog.getElementById("convert").checked = false;
 		}
 	}
 	var inputs = 
@@ -302,92 +285,60 @@ SmartReplace.prototype.buttonPress = function(opts, obj)
 		enable : self.active ? "on" : '',
 		convert: ''
 	};
-	this._dialog.show(inputs, doOK);
+	this.show(inputs, doOK);
 };
 
 SmartReplace.prototype.onGenerateOnce = function()
 {
-  if( !this._dialog)
-  {
-	this._dialog = new SmartReplace.Dialog(this);
-  }
-};
-
-SmartReplace.Dialog = function (mainPluginObject)
-{
-  this.Dialog_nxtid = 0;
-  this.mainPluginObject = mainPluginObject;
-  this.id = { }; // This will be filled below with a replace, nifty
-
-  this.ready = false;
-  this.files  = false;
-  this.html   = false;
-  this.dialog = false;
-
   this._prepareDialog();
-
 };
 
-SmartReplace.Dialog.prototype._prepareDialog = function()
+SmartReplace.prototype._prepareDialog = function()
 {
-  var pluginDialogObject = this;
-  var editor = this.mainPluginObject.editor;
+  var self = this;
+  var editor = this.editor;
 
-  if(this.html == false)
+  if(!this.html)
   {
-	Xinha._getback(Xinha.getPluginDir('SmartReplace') + '/dialog.html', function(getback) { pluginDialogObject.html = getback; pluginDialogObject._prepareDialog(); });
+    Xinha._getback( Xinha.getPluginDir("SmartReplace") + '/dialog.html', function(getback) { self.html = getback; self._prepareDialog(); });
 	return;
   }
   
   // Now we have everything we need, so we can build the dialog.
-  this.dialog = new Xinha.Dialog(editor, this.html, 'SmartReplace');
+  this.dialog = new Xinha.Dialog(editor, this.html, 'SmartReplace',{},{modal:false});
+  this.dialog.attachToPanel('top');
 
+  this.dialog.getElementById('enable').onchange = function ()
+  {
+  	self.toggleActivity(this.checked); 
+  }
+  this.dialog.getElementById('convert').onchange = function ()
+  {
+  	self.dialog.getElementById('ok').style.display = ( this.checked ) ? '' : 'none'; 
+  }
+  this.dialog.getElementById('ok').onclick = function ()
+  {
+  	self.replaceAll();
+  	self.dialog.getElementById('convert').checked = false; 
+  	this.style.display =  'none'; 
+  }
   this.ready = true;
 };
 
-SmartReplace.Dialog.prototype._lc = SmartReplace.prototype._lc;
-
-SmartReplace.Dialog.prototype.show = function(inputs, ok, cancel)
+SmartReplace.prototype.show = function(inputs)
 {
   if(!this.ready)
   {
-	var pluginDialogObject = this;
-	window.setTimeout(function() {pluginDialogObject.show(inputs,ok,cancel);},100);
+    var self = this;
+    window.setTimeout(function() {self.show(inputs,ok,cancel);},100);
 	return;
   }
 
   // Connect the OK and Cancel buttons
-  var dialog = this.dialog;
-  var pluginDialogObject = this;
-  if(ok)
-  {
-	this.dialog.getElementById('ok').onclick = ok;
-  }
-  else
-  {
-	this.dialog.getElementById('ok').onclick = function() {pluginDialogObject.hide();};
-  }
-
-  if(cancel)
-  {
-	this.dialog.getElementById('cancel').onclick = cancel;
-  }
-  else
-  {
-	this.dialog.getElementById('cancel').onclick = function() { pluginDialogObject.hide()};
-  }
-
-  // Show the dialog
-  this.mainPluginObject.editor.disableToolbar(['fullscreen','smartreplace']);
+  var self = this;
 
   this.dialog.show(inputs);
 
   // Init the sizes
   this.dialog.onresize();
-};
-
-SmartReplace.Dialog.prototype.hide = function()
-{
-  this.mainPluginObject.editor.enableToolbar();
-  return this.dialog.hide();
 };

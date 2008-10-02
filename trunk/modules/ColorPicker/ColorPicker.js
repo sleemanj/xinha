@@ -371,8 +371,8 @@
         {
           this.table.style.position = 'fixed';
         }
-        top+=e.offsetTop - e.scrollTop;
-        left+=e.offsetLeft - e.scrollLeft;
+        top += e.offsetTop - e.scrollTop;
+        left += e.offsetLeft - e.scrollLeft;
 
         e = e.offsetParent;
       }

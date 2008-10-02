@@ -10,15 +10,15 @@
 // Version 3.0 developed by Mihai Bazon for InteractiveTools.
 //   http://dynarch.com/mishoo
 //
-// $Id:table-operations.js 988 2008-04-12 13:46:09Z ray $
+// $Id$
 
 // Object that will encapsulate all the table operations provided by
 // HTMLArea-3.0 (except "insert table" which is included in the main file)
 Xinha.Config.prototype.TableOperations = 
 {
   'showButtons' : true // Set to false to hide all but inserttable and toggleborders buttons on the toolbar
-                       // this is useful if you have the ContextMenu plugin and want to save toolbar space
-                       // (the context menu can perform all the button operations)
+					   // this is useful if you have the ContextMenu plugin and want to save toolbar space
+					   // (the context menu can perform all the button operations)
 }
 
 function TableOperations(editor) {
@@ -34,7 +34,7 @@ function TableOperations(editor) {
   cfg.removeToolbarElement(' inserttable toggleborders '); 
   
 	var toolbar = ["linebreak", "inserttable", "toggleborders"];
-    
+	
   
 	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
@@ -55,10 +55,15 @@ function TableOperations(editor) {
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
 	
-  if ( typeof PopupWin == 'undefined' )
+	if ( typeof PopupWin == 'undefined' )
   {
-    Xinha._loadback(_editor_url + 'modules/Dialogs/popupwin.js');
+	Xinha._loadback(_editor_url + 'modules/Dialogs/popupwin.js');
   }
+	if ( typeof Xinha.InlineStyler == 'undefined' )
+  {
+	Xinha._loadback(_editor_url + 'modules/InlineStyler/InlineStyler.js');
+  }
+	
 }
 
 TableOperations._pluginInfo = {
@@ -73,7 +78,7 @@ TableOperations._pluginInfo = {
 };
 
 TableOperations.prototype._lc = function(string) {
-    return Xinha._lc(string, 'TableOperations');
+	return Xinha._lc(string, 'TableOperations');
 };
 
 /************************
@@ -95,301 +100,6 @@ TableOperations.prototype.getClosest = function(tagName) {
 		}
 	}
 	return ret;
-};
-
-// this function requires the file PopupDiv/PopupWin to be loaded from browser
-TableOperations.prototype.dialogTableProperties = function() {
-	// retrieve existing values
-	var table = this.getClosest("table");
-	// this.editor.selectNodeContents(table);
-	// this.editor.updateToolbar();
-
-	var dialog = new PopupWin(this.editor, Xinha._lc("Table Properties", "TableOperations"), function(dialog, params) {
-		TableOperations.processStyle(params, table);
-		for (var i in params) {
-      if(typeof params[i] == 'function') continue;
-			var val = params[i];
-			switch (i) {
-			    case "f_caption":
-				if (/\S/.test(val)) {
-					// contains non white-space characters
-					var caption = table.getElementsByTagName("caption")[0];
-					if (!caption) {
-						caption = dialog.editor._doc.createElement("caption");
-						table.insertBefore(caption, table.firstChild);
-					}
-					caption.innerHTML = val;
-				} else {
-					// search for caption and delete it if found
-					var caption = table.getElementsByTagName("caption")[0];
-					if (caption) {
-						caption.parentNode.removeChild(caption);
-					}
-				}
-				break;
-			    case "f_summary":
-				table.summary = val;
-				break;
-			    case "f_width":
-				table.style.width = ("" + val) + params.f_unit;
-				break;
-			    case "f_align":
-				table.align = val;
-				break;
-			    case "f_spacing":
-				table.cellSpacing = val;
-				break;
-			    case "f_padding":
-				table.cellPadding = val;
-				break;
-			    case "f_borders":
-				table.border = val;
-				break;
-			    case "f_frames":
-				table.frame = val;
-				break;
-			    case "f_rules":
-				table.rules = val;
-				break;
-			}
-		}
-		// various workarounds to refresh the table display (Gecko,
-		// what's going on?! do not disappoint me!)
-		dialog.editor.forceRedraw();
-		dialog.editor.focusEditor();
-		dialog.editor.updateToolbar();
-		var save_collapse = table.style.borderCollapse;
-		table.style.borderCollapse = "collapse";
-		table.style.borderCollapse = "separate";
-		table.style.borderCollapse = save_collapse;
-	},
-
-	// this function gets called when the dialog needs to be initialized
-	function (dialog) {
-
-		var f_caption = "";
-		var capel = table.getElementsByTagName("caption")[0];
-		if (capel) {
-			f_caption = capel.innerHTML;
-		}
-		var f_summary = table.summary;
-		var f_width = parseInt(table.style.width);
-		isNaN(f_width) && (f_width = "");
-		var f_unit = /%/.test(table.style.width) ? 'percent' : 'pixels';
-		var f_align = table.align;
-		var f_spacing = table.cellSpacing;
-		var f_padding = table.cellPadding;
-		var f_borders = table.border;
-		var f_frames = table.frame;
-		var f_rules = table.rules;
-
-		function selected(val) {
-			return val ? " selected" : "";
-		}
-
-		// dialog contents
-		dialog.content.style.width = "400px";
-		dialog.content.innerHTML = " \
-<div class='title'>" + Xinha._lc("Table Properties", "TableOperations") + "\
-</div> \
-<table style='width:100%'> \
-  <tr> \
-    <td> \
-      <fieldset><legend>" + Xinha._lc("Description", "TableOperations") + "</legend> \
-       <table style='width:100%'> \
-        <tr> \
-          <td class='label'>" + Xinha._lc("Caption", "TableOperations") + ":</td> \
-          <td class='value'><input type='text' name='f_caption' value='" + f_caption + "'/></td> \
-        </tr><tr> \
-          <td class='label'>" + Xinha._lc("Summary", "TableOperations") + ":</td> \
-          <td class='value'><input type='text' name='f_summary' value='" + f_summary + "'/></td> \
-        </tr> \
-       </table> \
-      </fieldset> \
-    </td> \
-  </tr> \
-  <tr><td id='--HA-layout'></td></tr> \
-  <tr> \
-    <td> \
-      <fieldset><legend>" + Xinha._lc("Spacing and padding", "TableOperations") + "</legend> \
-       <table style='width:100%'> \
-"+//        <tr> \
-//           <td class='label'>" + Xinha._lc("Width", "TableOperations") + ":</td> \
-//           <td><input type='text' name='f_width' value='" + f_width + "' size='5' /> \
-//             <select name='f_unit'> \
-//               <option value='%'" + selected(f_unit == "percent") + ">" + Xinha._lc("percent", "TableOperations") + "</option> \
-//               <option value='px'" + selected(f_unit == "pixels") + ">" + Xinha._lc("pixels", "TableOperations") + "</option> \
-//             </select> &nbsp;&nbsp;" + Xinha._lc("Align", "TableOperations") + ": \
-//             <select name='f_align'> \
-//               <option value='left'" + selected(f_align == "left") + ">" + Xinha._lc("Left", "TableOperations") + "</option> \
-//               <option value='center'" + selected(f_align == "center") + ">" + Xinha._lc("Center", "TableOperations") + "</option> \
-//               <option value='right'" + selected(f_align == "right") + ">" + Xinha._lc("Right", "TableOperations") + "</option> \
-//             </select> \
-//           </td> \
-//         </tr> \
-"        <tr> \
-          <td class='label'>" + Xinha._lc("Spacing", "TableOperations") + ":</td> \
-          <td><input type='text' name='f_spacing' size='5' value='" + f_spacing + "' /> &nbsp;" + Xinha._lc("Padding", "TableOperations") + ":\
-            <input type='text' name='f_padding' size='5' value='" + f_padding + "' /> &nbsp;&nbsp;" + Xinha._lc("pixels", "TableOperations") + "\
-          </td> \
-        </tr> \
-       </table> \
-      </fieldset> \
-    </td> \
-  </tr> \
-  <tr> \
-    <td> \
-      <fieldset><legend>" + Xinha._lc("Frame and borders", "TableOperations") + "</legend> \
-        <table width='100%'> \
-          <tr> \
-            <td class='label'>" + Xinha._lc("Borders", "TableOperations") + ":</td> \
-            <td><input name='f_borders' type='text' size='5' value='" + f_borders + "' /> &nbsp;&nbsp;" + Xinha._lc("pixels", "TableOperations") + "</td> \
-          </tr> \
-          <tr> \
-            <td class='label'>" + Xinha._lc("Frames", "TableOperations") + ":</td> \
-            <td> \
-              <select name='f_frames'> \
-                <option value='void'" + selected(f_frames == "void") + ">" + Xinha._lc("No sides", "TableOperations") + "</option> \
-                <option value='above'" + selected(f_frames == "above") + ">" + Xinha._lc("The top side only", "TableOperations") + "</option> \
-                <option value='below'" + selected(f_frames == "below") + ">" + Xinha._lc("The bottom side only", "TableOperations") + "</option> \
-                <option value='hsides'" + selected(f_frames == "hsides") + ">" + Xinha._lc("The top and bottom sides only", "TableOperations") + "</option> \
-                <option value='vsides'" + selected(f_frames == "vsides") + ">" + Xinha._lc("The right and left sides only", "TableOperations") + "</option> \
-                <option value='lhs'" + selected(f_frames == "lhs") + ">" + Xinha._lc("The left-hand side only", "TableOperations") + "</option> \
-                <option value='rhs'" + selected(f_frames == "rhs") + ">" + Xinha._lc("The right-hand side only", "TableOperations") + "</option> \
-                <option value='box'" + selected(f_frames == "box") + ">" + Xinha._lc("All four sides", "TableOperations") + "</option> \
-              </select> \
-            </td> \
-          </tr> \
-          <tr> \
-            <td class='label'>" + Xinha._lc("Rules", "TableOperations") + ":</td> \
-            <td> \
-              <select name='f_rules'> \
-                <option value='none'" + selected(f_rules == "none") + ">" + Xinha._lc("No rules", "TableOperations") + "</option> \
-                <option value='rows'" + selected(f_rules == "rows") + ">" + Xinha._lc("Rules will appear between rows only", "TableOperations") + "</option> \
-                <option value='cols'" + selected(f_rules == "cols") + ">" + Xinha._lc("Rules will appear between columns only", "TableOperations") + "</option> \
-                <option value='all'" + selected(f_rules == "all") + ">" + Xinha._lc("Rules will appear between all rows and columns", "TableOperations") + "</option> \
-              </select> \
-            </td> \
-          </tr> \
-        </table> \
-      </fieldset> \
-    </td> \
-  </tr> \
-  <tr> \
-    <td id='--HA-style'></td> \
-  </tr> \
-</table> \
-";
-		var st_prop = TableOperations.createStyleFieldset(dialog.doc, dialog.editor, table);
-		var p = dialog.doc.getElementById("--HA-style");
-		p.appendChild(st_prop);
-		var st_layout = TableOperations.createStyleLayoutFieldset(dialog.doc, dialog.editor, table);
-		p = dialog.doc.getElementById("--HA-layout");
-		p.appendChild(st_layout);
-		dialog.modal = true;
-		dialog.addButtons("OK", "Cancel");
-		dialog.showAtElement(dialog.editor._iframe, "c");
-	});
-};
-
-// this function requires the file PopupDiv/PopupWin to be loaded from browser
-TableOperations.prototype.dialogRowCellProperties = function(cell) {
-	// retrieve existing values
-	var element = this.getClosest(cell ? "td" : "tr");
-	var table = this.getClosest("table");
-	// this.editor.selectNodeContents(element);
-	// this.editor.updateToolbar();
-
-	var dialog = new PopupWin(this.editor, cell ? Xinha._lc("Cell Properties", "TableOperations") : Xinha._lc("Row Properties", "TableOperations"), function(dialog, params) {
-		TableOperations.processStyle(params, element);
-		for (var i in params) {
-      if(typeof params[i] == 'function') continue;
-			var val = params[i];
-			switch (i) {
-			    case "f_align":
-				element.align = val;
-				break;
-			    case "f_char":
-				element.ch = val;
-				break;
-			    case "f_valign":
-				element.vAlign = val;
-				break;
-			}
-		}
-		// various workarounds to refresh the table display (Gecko,
-		// what's going on?! do not disappoint me!)
-		dialog.editor.forceRedraw();
-		dialog.editor.focusEditor();
-		dialog.editor.updateToolbar();
-		var save_collapse = table.style.borderCollapse;
-		table.style.borderCollapse = "collapse";
-		table.style.borderCollapse = "separate";
-		table.style.borderCollapse = save_collapse;
-	},
-
-	// this function gets called when the dialog needs to be initialized
-	function (dialog) {
-
-		var f_align = element.align;
-		var f_valign = element.vAlign;
-		var f_char = element.ch;
-
-		function selected(val) {
-			return val ? " selected" : "";
-		}
-
-		// dialog contents
-		dialog.content.style.width = "400px";
-		dialog.content.innerHTML = " \
-<div class='title'>" + Xinha._lc(cell ? "Cell Properties" : "Row Properties", "TableOperations") + "</div> \
-<table style='width:100%'> \
-  <tr> \
-    <td id='--HA-layout'> \
-"+//      <fieldset><legend>" + Xinha._lc("Layout", "TableOperations") + "</legend> \
-//        <table style='width:100%'> \
-//         <tr> \
-//           <td class='label'>" + Xinha._lc("Align", "TableOperations") + ":</td> \
-//           <td> \
-//             <select name='f_align'> \
-//               <option value='left'" + selected(f_align == "left") + ">" + Xinha._lc("Left", "TableOperations") + "</option> \
-//               <option value='center'" + selected(f_align == "center") + ">" + Xinha._lc("Center", "TableOperations") + "</option> \
-//               <option value='right'" + selected(f_align == "right") + ">" + Xinha._lc("Right", "TableOperations") + "</option> \
-//               <option value='char'" + selected(f_align == "char") + ">" + Xinha._lc("Char", "TableOperations") + "</option> \
-//             </select> \
-//             &nbsp;&nbsp;" + Xinha._lc("Char", "TableOperations") + ": \
-//             <input type='text' style='font-family: monospace; text-align: center' name='f_char' size='1' value='" + f_char + "' /> \
-//           </td> \
-//         </tr><tr> \
-//           <td class='label'>" + Xinha._lc("Vertical align", "TableOperations") + ":</td> \
-//           <td> \
-//             <select name='f_valign'> \
-//               <option value='top'" + selected(f_valign == "top") + ">" + Xinha._lc("Top", "TableOperations") + "</option> \
-//               <option value='middle'" + selected(f_valign == "middle") + ">" + Xinha._lc("Middle", "TableOperations") + "</option> \
-//               <option value='bottom'" + selected(f_valign == "bottom") + ">" + Xinha._lc("Bottom", "TableOperations") + "</option> \
-//               <option value='baseline'" + selected(f_valign == "baseline") + ">" + Xinha._lc("Baseline", "TableOperations") + "</option> \
-//             </select> \
-//           </td> \
-//         </tr> \
-//        </table> \
-//       </fieldset> \
-"    </td> \
-  </tr> \
-  <tr> \
-    <td id='--HA-style'></td> \
-  </tr> \
-</table> \
-";
-		var st_prop = TableOperations.createStyleFieldset(dialog.doc, dialog.editor, element);
-		var p = dialog.doc.getElementById("--HA-style");
-		p.appendChild(st_prop);
-		var st_layout = TableOperations.createStyleLayoutFieldset(dialog.doc, dialog.editor, element);
-		p = dialog.doc.getElementById("--HA-layout");
-		p.appendChild(st_layout);
-		dialog.modal = true;
-		dialog.addButtons("OK", "Cancel");
-		dialog.showAtElement(dialog.editor._iframe, "c");
-	});
 };
 
 // this function gets called when some button from the TableOperations toolbar
@@ -518,8 +228,8 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 	switch (button_id) {
 		// ROWS
 
-	    case "TO-row-insert-above":
-	    case "TO-row-insert-under":
+		case "TO-row-insert-above":
+		case "TO-row-insert-under":
 		var tr = this.getClosest("tr");
 		if (!tr) {
 			break;
@@ -530,7 +240,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		editor.forceRedraw();
 		editor.focusEditor();
 		break;
-	    case "TO-row-delete":
+		case "TO-row-delete":
 		var tr = this.getClosest("tr");
 		if (!tr) {
 			break;
@@ -548,7 +258,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		editor.focusEditor();
 		editor.updateToolbar();
 		break;
-	    case "TO-row-split":
+		case "TO-row-split":
 		var td = this.getClosest("td");
 		if (!td) {
 			break;
@@ -558,39 +268,39 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 
 		// COLUMNS
 
-	    case "TO-col-insert-before":
-	    case "TO-col-insert-after":
+		case "TO-col-insert-before":
+		case "TO-col-insert-after":
 		var td = this.getClosest("td");
 		if (!td) {
 			break;
 		}
 		var rows = td.parentNode.parentNode.rows;
 		var index = td.cellIndex;
-    var lastColumn = (td.parentNode.cells.length == index + 1);
+	var lastColumn = (td.parentNode.cells.length == index + 1);
 		for (var i = rows.length; --i >= 0;) {
 			var tr = rows[i];			
 			var otd = editor._doc.createElement("td");
 			otd.innerHTML = mozbr;
-      if (lastColumn && Xinha.is_ie) 
-      {
-        tr.insertBefore(otd);
-      } 
-      else 
-      {
-        var ref = tr.cells[index + (/after/.test(button_id) ? 1 : 0)];
-        tr.insertBefore(otd, ref);
-      }
+	  if (lastColumn && Xinha.is_ie) 
+	  {
+		tr.insertBefore(otd);
+	  } 
+	  else 
+	  {
+		var ref = tr.cells[index + (/after/.test(button_id) ? 1 : 0)];
+		tr.insertBefore(otd, ref);
+	  }
 		}
 		editor.focusEditor();
 		break;
-	    case "TO-col-split":
+		case "TO-col-split":
 		var td = this.getClosest("td");
 		if (!td) {
 			break;
 		}
 		splitCol(td);
 		break;
-	    case "TO-col-delete":
+		case "TO-col-delete":
 		var td = this.getClosest("td");
 		if (!td) {
 			break;
@@ -614,15 +324,15 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 
 		// CELLS
 
-	    case "TO-cell-split":
+		case "TO-cell-split":
 		var td = this.getClosest("td");
 		if (!td) {
 			break;
 		}
 		splitCell(td);
 		break;
-	    case "TO-cell-insert-before":
-	    case "TO-cell-insert-after":
+		case "TO-cell-insert-before":
+		case "TO-cell-insert-after":
 		var td = this.getClosest("td");
 		if (!td) {
 			break;
@@ -634,7 +344,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		editor.forceRedraw();
 		editor.focusEditor();
 		break;
-	    case "TO-cell-delete":
+		case "TO-cell-delete":
 		var td = this.getClosest("td");
 		if (!td) {
 			break;
@@ -649,7 +359,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		editor.forceRedraw();
 		editor.updateToolbar();
 		break;
-	    case "TO-cell-merge":
+		case "TO-cell-merge":
 		//Mozilla, as opposed to IE, allows the selection of several cells, which is fine :)
 		var sel = editor._getSelection();
 		if (!Xinha.is_ie && sel.rangeCount > 1) {
@@ -689,36 +399,30 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 				alert(Xinha._lc("Please click into some cell", "TableOperations"));
 				break;
 			}
-			editor._popupDialog("plugin://TableOperations/merge_cells.html", function(param) {
-				if (!param) {	// user pressed Cancel
-					return false;
-				}
-				no_cols = parseInt(param['f_cols'],10) + 1;
-				no_rows = parseInt(param['f_rows'],10) + 1;
-				var tr = td.parentNode;
-				var cell_index = td.cellIndex;
-				var row_index = tr.rowIndex;
-				var table = tr.parentNode;
-				cellMerge(table, cell_index, row_index, no_cols, no_rows);
-			}, null);	
+		        var tr = td.parentNode;
+		        var cell_index = td.cellIndex;
+		        var row_index = tr.rowIndex;
+		        // pass cellMerge and the indices so apply() can call cellMerge and know 
+       		        // what cell was selected when the dialog was opened
+		        this.dialogMerge(cellMerge, cell_index, row_index);
 		}
 		break;
 
 		// PROPERTIES
 
-	    case "TO-table-prop":
+		case "TO-table-prop":
 		this.dialogTableProperties();
 		break;
 
-	    case "TO-row-prop":
+		case "TO-row-prop":
 		this.dialogRowCellProperties(false);
 		break;
 
-	    case "TO-cell-prop":
+		case "TO-cell-prop":
 		this.dialogRowCellProperties(true);
 		break;
 
-	    default:
+		default:
 		alert("Button [" + button_id + "] not yet implemented");
 	}
 };
@@ -726,7 +430,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 // the list of buttons added by this plugin
 TableOperations.btnList = [
 	// table properties button
-    ["table-prop",       "table", "Table properties"],
+	["table-prop",       "table", "Table properties"],
 	null,			// separator
 
 	// ROWS
@@ -753,477 +457,194 @@ TableOperations.btnList = [
 	["cell-split",         "td[colSpan!=1,rowSpan!=1]", "Split cell"]
 	];
 
+TableOperations.prototype.dialogMerge = function(merge_func, cell_index, row_index) {
+  var table = this.getClosest("table");
+  var self = this;
+  var editor = this.editor;
 
+  if (!this.dialogMergeCellsHtml) {
+    Xinha._getback(Xinha.getPluginDir("TableOperations") + '/popups/dialogMergeCells.html', function(getback) { self.dialogMergeCellsHtml = getback; self.dialogMerge(merge_func, cell_index, row_index); });
+    return;
+  }
 
-//// GENERIC CODE [style of any element; this should be moved into a separate
-//// file as it'll be very useful]
-//// BEGIN GENERIC CODE -----------------------------------------------------
+  if (!this.dialogMergeCells) {
+    this.dialogMergeCells = new Xinha.Dialog(editor, this.dialogMergeCellsHtml, 'TableOperations', {width:400});
+    this.dialogMergeCells.getElementById('cancel').onclick = function() { self.dialogMergeCells.hide(); };
+  }
 
-TableOperations.getLength = function(value) {
-	var len = parseInt(value);
-	if (isNaN(len)) {
-		len = "";
+  var dialog = this.dialogMergeCells;
+  function apply() {
+    dialog.hide();
+    no_cols = parseInt(dialog.getElementById('f_cols').value,10) + 1;
+    no_rows = parseInt(dialog.getElementById('f_rows').value,10) + 1;
+    merge_func(table, cell_index, row_index, no_cols, no_rows);    
+    return
+  }
+
+  this.dialogMergeCells.getElementById('ok').onclick = apply;
+  this.dialogMergeCells.show();
+  this.dialogMergeCells.getElementById('f_cols').focus();
+}
+
+TableOperations.prototype.dialogTableProperties = function() {
+
+	var table = this.getClosest("table");
+	var self = this;
+	var editor = this.editor;
+
+	if(!this.dialogTablePropertiesHtml){ // retrieve the raw dialog contents
+		Xinha._getback( Xinha.getPluginDir("TableOperations") + '/popups/dialogTable.html', function(getback) { self.dialogTablePropertiesHtml = getback; self.dialogTableProperties(); });
+		return;
 	}
-	return len;
-};
-
-// Applies the style found in "params" to the given element.
-TableOperations.processStyle = function(params, element) {
-	var style = element.style;
-	for (var i in params) {
-    if(typeof params[i] == 'function') continue;
-		var val = params[i];
-		switch (i) {
-		    case "f_st_backgroundColor":
-			style.backgroundColor = val;
-			break;
-		    case "f_st_color":
-			style.color = val;
-			break;
-		    case "f_st_backgroundImage":
-			if (/\S/.test(val)) {
-				style.backgroundImage = "url(" + val + ")";
-			} else {
-				style.backgroundImage = "none";
-			}
-			break;
-		    case "f_st_borderWidth":
-			style.borderWidth = val;
-			break;
-		    case "f_st_borderStyle":
-			style.borderStyle = val;
-			break;
-		    case "f_st_borderColor":
-			style.borderColor = val;
-			break;
-		    case "f_st_borderCollapse":
-			style.borderCollapse = val ? "collapse" : "";
-			break;
-		    case "f_st_width":
-			if (/\S/.test(val)) {
-				style.width = val + params["f_st_widthUnit"];
-			} else {
-				style.width = "";
-			}
-			break;
-		    case "f_st_height":
-			if (/\S/.test(val)) {
-				style.height = val + params["f_st_heightUnit"];
-			} else {
-				style.height = "";
-			}
-			break;
-		    case "f_st_textAlign":
-			if (val == "char") {
-				var ch = params["f_st_textAlignChar"];
-				if (ch == '"') {
-					ch = '\\"';
+	if (!this.dialogTable) {
+		// Now we have everything we need, so we can build the dialog.
+		this.dialogTable = new Xinha.Dialog(editor, this.dialogTablePropertiesHtml, 'TableOperations',{width:440})
+		this.dialogTable.getElementById('cancel').onclick = function() { self.dialogTable.hide()};
+	}
+	var dialog = this.dialogTable;
+	
+	var Styler = new Xinha.InlineStyler(table, this.editor);
+	
+	function apply() {
+		var params = dialog.hide();
+		Styler.applyStyle(params);
+		
+		for (var i in params) {
+	  if(typeof params[i] == 'function') continue;
+			var val = params[i];
+			if (typeof val == 'object' && val.tagName) val = val.value;
+			switch (i) {
+				case "caption":
+				if (/\S/.test(val)) {
+					// contains non white-space characters
+					var caption = table.getElementsByTagName("caption")[0];
+					if (!caption) {
+						caption = dialog.editor._doc.createElement("caption");
+						table.insertBefore(caption, table.firstChild);
+					}
+					caption.innerHTML = val;
+				} else {
+					// search for caption and delete it if found
+					var caption = table.getElementsByTagName("caption")[0];
+					if (caption) {
+						caption.parentNode.removeChild(caption);
+					}
 				}
-				style.textAlign = '"' + ch + '"';
-			} else if (val == "-") {
-			    style.textAlign = "";
-			} else {
-				style.textAlign = val;
+				break;
+				case "summary":
+				table.summary = val;
+				break;
+				case "width":
+				table.style.width = ("" + val) + params.f_unit;
+				break;
+				case "align":
+				table.align = val;
+				break;
+				case "spacing":
+				table.cellSpacing = val;
+				break;
+				case "padding":
+				table.cellPadding = val;
+				break;
+				case "borders":
+				table.border = val;
+				break;
+				case "frames":
+				table.frame = val;
+				break;
+				case "rules":
+				table.rules = val;
+				break;
 			}
-			break;
-		    case "f_st_verticalAlign":
-		    element.vAlign = "";
-			if (val == "-") {
-			    style.verticalAlign = "";
-			    
-		    } else {
-			    style.verticalAlign = val;
-			}
-			break;
-			case "f_st_float":
-			if (Xinha.is_ie) {
-				style.styleFloat = val;
-			}
-			else {
-				style.cssFloat = val;
-			}
-			break;
-// 		    case "f_st_margin":
-// 			style.margin = val + "px";
-// 			break;
-// 		    case "f_st_padding":
-// 			style.padding = val + "px";
-// 			break;
 		}
+
+		// various workarounds to refresh the table display (Gecko,
+		// what's going on?! do not disappoint me!)
+		self.editor.forceRedraw();
+		self.editor.focusEditor();
+		self.editor.updateToolbar();
+		var save_collapse = table.style.borderCollapse;
+		table.style.borderCollapse = "collapse";
+		table.style.borderCollapse = "separate";
+		table.style.borderCollapse = save_collapse;
 	}
+	
+	var st_layout = Styler.createStyleLayoutFieldset();
+	var p = dialog.getElementById("TO_layout");
+	p.replaceChild(st_layout,p.firstChild);
+	
+	var st_prop = Styler.createStyleFieldset();
+	p = dialog.getElementById("TO_style");
+	p.replaceChild(st_prop,p.firstChild);
+
+	this.dialogTable.getElementById('ok').onclick = apply;
+
+	// gather element's values
+	var values = {};
+	var capel = table.getElementsByTagName("caption")[0];
+	if (capel) {
+		values['caption'] = capel.innerHTML;
+	}
+	else values['caption'] = "";
+	values['summary'] = table.summary;
+	
+	values['spacing'] = table.cellSpacing;
+	values['padding'] = table.cellPadding;
+	var f_borders = table.border;
+	
+	values['frames'] = table.frame;
+	values['rules'] = table.rules;
+	
+	this.dialogTable.show(values);
 };
 
-// Returns an HTML element for a widget that allows color selection.  That is,
-// a button that contains the given color, if any, and when pressed will popup
-// the sooner-or-later-to-be-rewritten select_color.html dialog allowing user
-// to select some color.  If a color is selected, an input field with the name
-// "f_st_"+name will be updated with the color value in #123456 format.
-TableOperations.createColorButton = function(doc, editor, color, name) {
-	if (!color) {
-		color = "";
-	} else if (!/#/.test(color)) {
-		color = Xinha._colorToRgb(color);
-	}
+TableOperations.prototype.dialogRowCellProperties = function(cell) {
+	// retrieve existing values
+	var element = this.getClosest(cell ? "td" : "tr");
+	var table = this.getClosest("table");
 
-	var df = doc.createElement("span");
- 	var field = doc.createElement("input");
-	field.type = "hidden";
-	df.appendChild(field);
- 	field.name = "f_st_" + name;
-	field.value = color;
-	var button = doc.createElement("span");
-	button.className = "buttonColor";
-	df.appendChild(button);
-	var span = doc.createElement("span");
-	span.className = "chooser";
-	// span.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	span.style.backgroundColor = color;
-	button.appendChild(span);
-	button.onmouseover = function() { if (!this.disabled) { this.className += " buttonColor-hilite"; }};
-	button.onmouseout = function() { if (!this.disabled) { this.className = "buttonColor"; }};
-	span.onclick = function() {
-		if (this.parentNode.disabled) {
-			return false;
-		}
-		editor._popupDialog("select_color.html", function(color) {
-			if (color) {
-				span.style.backgroundColor = "#" + color;
-				field.value = "#" + color;
-			}
-		}, color);
-	};
-	var span2 = doc.createElement("span");
-	span2.innerHTML = "&#x00d7;";
-	span2.className = "nocolor";
-	span2.title = Xinha._lc("Unset color", "TableOperations");
-	button.appendChild(span2);
-	span2.onmouseover = function() { if (!this.parentNode.disabled) { this.className += " nocolor-hilite"; }};
-	span2.onmouseout = function() { if (!this.parentNode.disabled) { this.className = "nocolor"; }};
-	span2.onclick = function() {
-		span.style.backgroundColor = "";
-		field.value = "";
-	};
-	return df;
+	var self = this;
+	var editor = this.editor;
+
+	if(!self.dialogRowCellPropertiesHtml) // retrieve the raw dialog contents
+	{
+		Xinha._getback( Xinha.getPluginDir("TableOperations") + '/popups/dialogRowCell.html', function(getback) { self.dialogRowCellPropertiesHtml = getback; self.dialogRowCellProperties(cell); });
+		return;
+	}
+	if (!this.dialogRowCell) {
+		// Now we have everything we need, so we can build the dialog.
+		this.dialogRowCell = new Xinha.Dialog(editor, self.dialogRowCellPropertiesHtml, 'TableOperations',{width:440})
+		this.dialogRowCell.getElementById('cancel').onclick = function() { self.dialogRowCell.hide()};
+	}
+	
+	var dialog = this.dialogRowCell;
+	dialog.getElementById('title').innerHTML = cell ? Xinha._lc("Cell Properties", "TableOperations") : Xinha._lc("Row Properties", "TableOperations");
+  var Styler = new Xinha.InlineStyler(element, self.editor);
+	
+	function apply() {
+		var params = dialog.hide();
+		Styler.applyStyle();
+		
+		// various workarounds to refresh the table display (Gecko,
+		// what's going on?! do not disappoint me!)
+		self.editor.forceRedraw();
+		self.editor.focusEditor();
+		self.editor.updateToolbar();
+		var save_collapse = table.style.borderCollapse;
+		table.style.borderCollapse = "collapse";
+		table.style.borderCollapse = "separate";
+		table.style.borderCollapse = save_collapse;
+	}
+	
+	var st_layout = Styler.createStyleLayoutFieldset();
+	var p = dialog.getElementById("TO_layout");
+
+	p.replaceChild(st_layout,p.firstChild);
+	
+	var st_prop = Styler.createStyleFieldset();
+	p = dialog.getElementById("TO_style");
+	p.replaceChild(st_prop,p.firstChild);
+
+	this.dialogRowCell.getElementById('ok').onclick = apply;
+	this.dialogRowCell.show();
 };
-
-TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
-	var fieldset = doc.createElement("fieldset");
-	var legend = doc.createElement("legend");
-	fieldset.appendChild(legend);
-	legend.innerHTML = Xinha._lc("Layout", "TableOperations");
-	var table = doc.createElement("table");
-	fieldset.appendChild(table);
-	table.style.width = "100%";
-	var tbody = doc.createElement("tbody");
-	table.appendChild(tbody);
-
-	var tagname = el.tagName.toLowerCase();
-	var tr, td, input, select, option, options, i;
-
-	if (tagname != "td" && tagname != "tr" && tagname != "th") {
-		tr = doc.createElement("tr");
-		tbody.appendChild(tr);
-		td = doc.createElement("td");
-		td.className = "label";
-		tr.appendChild(td);
-		td.innerHTML = Xinha._lc("Float", "TableOperations") + ":";
-		td = doc.createElement("td");
-		tr.appendChild(td);
-		select = doc.createElement("select");
-		td.appendChild(select);
-		select.name = "f_st_float";
-		options = ["None", "Left", "Right"];
-		for (var i = 0; i < options.length; ++i) {
-			var Val = options[i];
-			var val = options[i].toLowerCase();
-			option = doc.createElement("option");
-			option.innerHTML = Xinha._lc(Val, "TableOperations");
-			option.value = val;
-			if (Xinha.is_ie) {
-				option.selected = (("" + el.style.styleFloat).toLowerCase() == val);
-			}
-			else {
-				option.selected = (("" + el.style.cssFloat).toLowerCase() == val);
-			}
-			select.appendChild(option);
-		}
-	}
-
-	tr = doc.createElement("tr");
-	tbody.appendChild(tr);
-	td = doc.createElement("td");
-	td.className = "label";
-	tr.appendChild(td);
-	td.innerHTML = Xinha._lc("Width", "TableOperations") + ":";
-	td = doc.createElement("td");
-	tr.appendChild(td);
-	input = doc.createElement("input");
-	input.type = "text";
-	input.value = TableOperations.getLength(el.style.width);
-	input.size = "5";
-	input.name = "f_st_width";
-	input.style.marginRight = "0.5em";
-	td.appendChild(input);
-	select = doc.createElement("select");
-	select.name = "f_st_widthUnit";
-	option = doc.createElement("option");
-	option.innerHTML = Xinha._lc("percent", "TableOperations");
-	option.value = "%";
-	option.selected = /%/.test(el.style.width);
-	select.appendChild(option);
-	option = doc.createElement("option");
-	option.innerHTML = Xinha._lc("pixels", "TableOperations");
-	option.value = "px";
-	option.selected = /px/.test(el.style.width);
-	select.appendChild(option);
-	td.appendChild(select);
-
-	select.style.marginRight = "0.5em";
-	td.appendChild(doc.createTextNode(Xinha._lc("Text align", "TableOperations") + ":"));
-	select = doc.createElement("select");
-	select.style.marginLeft = select.style.marginRight = "0.5em";
-	td.appendChild(select);
-	select.name = "f_st_textAlign";
-	options = ["Left", "Center", "Right", "Justify", "-"];
-	if (tagname == "td") {
-		options.push("Char");
-	}
-	input = doc.createElement("input");
-	input.name = "f_st_textAlignChar";
-	input.size = "1";
-	input.style.fontFamily = "monospace";
-	td.appendChild(input);
-	for (var i = 0; i < options.length; ++i) {
-		var Val = options[i];
-		var val = Val.toLowerCase();
-		option = doc.createElement("option");
-		option.value = val;
-		option.innerHTML = Xinha._lc(Val, "TableOperations");
-		option.selected = ((el.style.textAlign.toLowerCase() == val) || (el.style.textAlign == "" && Val == "-"));
-		select.appendChild(option);
-	}
-	function setCharVisibility(value) {
-		input.style.visibility = value ? "visible" : "hidden";
-		if (value) {
-			input.focus();
-			input.select();
-		}
-	}
-	select.onchange = function() { setCharVisibility(this.value == "char"); };
-	setCharVisibility(select.value == "char");
-
-	tr = doc.createElement("tr");
-	tbody.appendChild(tr);
-	td = doc.createElement("td");
-	td.className = "label";
-	tr.appendChild(td);
-	td.innerHTML = Xinha._lc("Height", "TableOperations") + ":";
-	td = doc.createElement("td");
-	tr.appendChild(td);
-	input = doc.createElement("input");
-	input.type = "text";
-	input.value = TableOperations.getLength(el.style.height);
-	input.size = "5";
-	input.name = "f_st_height";
-	input.style.marginRight = "0.5em";
-	td.appendChild(input);
-	select = doc.createElement("select");
-	select.name = "f_st_heightUnit";
-	option = doc.createElement("option");
-	option.innerHTML = Xinha._lc("percent", "TableOperations");
-	option.value = "%";
-	option.selected = /%/.test(el.style.height);
-	select.appendChild(option);
-	option = doc.createElement("option");
-	option.innerHTML = Xinha._lc("pixels", "TableOperations");
-	option.value = "px";
-	option.selected = /px/.test(el.style.height);
-	select.appendChild(option);
-	td.appendChild(select);
-
-	select.style.marginRight = "0.5em";
-	td.appendChild(doc.createTextNode(Xinha._lc("Vertical align", "TableOperations") + ":"));
-	select = doc.createElement("select");
-	select.name = "f_st_verticalAlign";
-	select.style.marginLeft = "0.5em";
-	td.appendChild(select);
-	options = ["Top", "Middle", "Bottom", "Baseline", "-"];
-	for (var i = 0; i < options.length; ++i) {
-		var Val = options[i];
-		var val = Val.toLowerCase();
-		option = doc.createElement("option");
-		option.value = val;
-		option.innerHTML = Xinha._lc(Val, "TableOperations");
-		option.selected = ((el.style.verticalAlign.toLowerCase() == val) || (el.style.verticalAlign == "" && Val == "-"));
-		select.appendChild(option);
-	}
-
-	return fieldset;
-};
-
-// Returns an HTML element containing the style attributes for the given
-// element.  This can be easily embedded into any dialog; the functionality is
-// also provided.
-TableOperations.createStyleFieldset = function(doc, editor, el) {
-	var fieldset = doc.createElement("fieldset");
-	var legend = doc.createElement("legend");
-	fieldset.appendChild(legend);
-	legend.innerHTML = Xinha._lc("CSS Style", "TableOperations");
-	var table = doc.createElement("table");
-	fieldset.appendChild(table);
-	table.style.width = "100%";
-	var tbody = doc.createElement("tbody");
-	table.appendChild(tbody);
-
-	var tr, td, input, select, option, options, i;
-
-	tr = doc.createElement("tr");
-	tbody.appendChild(tr);
-	td = doc.createElement("td");
-	tr.appendChild(td);
-	td.className = "label";
-	td.innerHTML = Xinha._lc("Background", "TableOperations") + ":";
-	td = doc.createElement("td");
-	tr.appendChild(td);
-	var df = TableOperations.createColorButton(doc, editor, el.style.backgroundColor, "backgroundColor");
-	df.firstChild.nextSibling.style.marginRight = "0.5em";
-	td.appendChild(df);
-	td.appendChild(doc.createTextNode(Xinha._lc("Image URL", "TableOperations") + ": "));
-	input = doc.createElement("input");
-	input.type = "text";
-	input.name = "f_st_backgroundImage";
-	if (el.style.backgroundImage.match(/url\(\s*(.*?)\s*\)/)) {
-		input.value = RegExp.$1;
-	}
-	// input.style.width = "100%";
-	td.appendChild(input);
-
-	tr = doc.createElement("tr");
-	tbody.appendChild(tr);
-	td = doc.createElement("td");
-	tr.appendChild(td);
-	td.className = "label";
-	td.innerHTML = Xinha._lc("FG Color", "TableOperations") + ":";
-	td = doc.createElement("td");
-	tr.appendChild(td);
-	td.appendChild(TableOperations.createColorButton(doc, editor, el.style.color, "color"));
-
-	// for better alignment we include an invisible field.
-	input = doc.createElement("input");
-	input.style.visibility = "hidden";
-	input.type = "text";
-	td.appendChild(input);
-
-	tr = doc.createElement("tr");
-	tbody.appendChild(tr);
-	td = doc.createElement("td");
-	tr.appendChild(td);
-	td.className = "label";
-	td.innerHTML = Xinha._lc("Border", "TableOperations") + ":";
-	td = doc.createElement("td");
-	tr.appendChild(td);
-
-	var colorButton = TableOperations.createColorButton(doc, editor, el.style.borderColor, "borderColor");
-	var btn = colorButton.firstChild.nextSibling;
-	td.appendChild(colorButton);
-	// borderFields.push(btn);
-	btn.style.marginRight = "0.5em";
-
-	select = doc.createElement("select");
-	var borderFields = [];
-	td.appendChild(select);
-	select.name = "f_st_borderStyle";
-	options = ["none", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset"];
-	var currentBorderStyle = el.style.borderStyle;
-	// Gecko reports "solid solid solid solid" for "border-style: solid".
-	// That is, "top right bottom left" -- we only consider the first
-	// value.
-	if (currentBorderStyle.match(/([^\s]*)\s/)) currentBorderStyle = RegExp.$1;
-	for (var i=0;i<options.length;i++) {
-		var val = options[i];
-		option = doc.createElement("option");
-		option.value = val;
-		option.innerHTML = val;
-		if (val == currentBorderStyle) option.selected = true;
-		select.appendChild(option);
-	}
-	select.style.marginRight = "0.5em";
-	function setBorderFieldsStatus(value) {
-		for (var i = 0; i < borderFields.length; ++i) {
-			var el = borderFields[i];
-			el.style.visibility = value ? "hidden" : "visible";
-			if (!value && (el.tagName.toLowerCase() == "input")) {
-				el.focus();
-				el.select();
-			}
-		}
-	}
-	select.onchange = function() { setBorderFieldsStatus(this.value == "none"); };
-
-	input = doc.createElement("input");
-	borderFields.push(input);
-	input.type = "text";
-	input.name = "f_st_borderWidth";
-	input.value = TableOperations.getLength(el.style.borderWidth);
-	input.size = "5";
-	td.appendChild(input);
-	input.style.marginRight = "0.5em";
-	var span = doc.createElement("span");
-	span.innerHTML = Xinha._lc("pixels", "TableOperations");
-	td.appendChild(span);
-	borderFields.push(span);
-
-	setBorderFieldsStatus(select.value == "none");
-
-	if (el.tagName.toLowerCase() == "table") {
-		// the border-collapse style is only for tables
-		tr = doc.createElement("tr");
-		tbody.appendChild(tr);
-		td = doc.createElement("td");
-		td.className = "label";
-		tr.appendChild(td);
-		input = doc.createElement("input");
-		input.type = "checkbox";
-		input.name = "f_st_borderCollapse";
-		input.id = "f_st_borderCollapse";
-		var val = (/collapse/i.test(el.style.borderCollapse));
-		input.checked = val ? 1 : 0;
-		td.appendChild(input);
-
-		td = doc.createElement("td");
-		tr.appendChild(td);
-		var label = doc.createElement("label");
-		label.htmlFor = "f_st_borderCollapse";
-		label.innerHTML = Xinha._lc("Collapsed borders", "TableOperations");
-		td.appendChild(label);
-	}
-
-// 	tr = doc.createElement("tr");
-// 	tbody.appendChild(tr);
-// 	td = doc.createElement("td");
-// 	td.className = "label";
-// 	tr.appendChild(td);
-// 	td.innerHTML = Xinha._lc("Margin", "TableOperations") + ":";
-// 	td = doc.createElement("td");
-// 	tr.appendChild(td);
-// 	input = doc.createElement("input");
-// 	input.type = "text";
-// 	input.size = "5";
-// 	input.name = "f_st_margin";
-// 	td.appendChild(input);
-// 	input.style.marginRight = "0.5em";
-// 	td.appendChild(doc.createTextNode(Xinha._lc("Padding", "TableOperations") + ":"));
-
-// 	input = doc.createElement("input");
-// 	input.type = "text";
-// 	input.size = "5";
-// 	input.name = "f_st_padding";
-// 	td.appendChild(input);
-// 	input.style.marginLeft = "0.5em";
-// 	input.style.marginRight = "0.5em";
-// 	td.appendChild(doc.createTextNode(Xinha._lc("pixels", "TableOperations")));
-
-	return fieldset;
-};
-
-//// END GENERIC CODE -------------------------------------------------------
