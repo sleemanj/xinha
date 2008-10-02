@@ -45,7 +45,7 @@ BackgroundImage.prototype.onGenerateOnce = function(editor){
   self.methodsReady = true;
 
   // When we get back from loading the dialog, we'll process our image template to handle as many images as specified.
-  Xinha._getback(_editor_url + 'plugins/BackgroundImage/dialog.html', function(getback) {
+  Xinha._getback(Xinha.getPluginDir('BackgroundImage') + '/dialog.html', function(getback) {
 
     // Replace the template line with one line per image.
     self.html = getback.replace(/<template>(.*?)<\/template>/ig, function(fullString, template) {
@@ -53,8 +53,8 @@ BackgroundImage.prototype.onGenerateOnce = function(editor){
 
       for (bg in backgrounds)
       {
-        var thumbURL = _editor_url + 'plugins/BackgroundImage/backgrounds/thumbnails/' + bg + '.jpg';
-        var imageURL = _editor_url + 'plugins/BackgroundImage/backgrounds/' + bg + '.jpg';
+        var thumbURL = Xinha.getPluginDir('BackgroundImage') + '/backgrounds/thumbnails/' + bg + '.jpg';
+        var imageURL = Xinha.getPluginDir('BackgroundImage') + '/backgrounds/' + bg + '.jpg';
         replacement += template.replace(/%thumbnail%/,thumbURL).replace(/%image%/,imageURL);
       }
       return replacement;

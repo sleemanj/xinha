@@ -32,7 +32,7 @@ UnFormat.prototype.onGenerateOnce = function(editor){
   if (self.loading) return;
   self.loading = true;
   self.methodsReady = true;
-  Xinha._getback(_editor_url + 'plugins/UnFormat/dialog.html', function(getback) { self.html = getback; self.dialogReady = true; });
+  Xinha._getback(Xinha.getPluginDir('UnFormat') + '/dialog.html', function(getback) { self.html = getback; self.dialogReady = true; });
 }
 UnFormat.prototype.onUpdateToolbar = function(editor){
   if (!(UnFormat.dialogReady && UnFormat.methodsReady))
