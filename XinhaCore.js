@@ -3007,7 +3007,7 @@ Xinha.prototype.initIframe = function()
     }
     
     html += "</head>\n";
-    html += "<body" + (editor.config.bodyID ? (" id=\"" + editor.config.bodyID + "\"") : '') + ">\n";
+    html += "<body" + (editor.config.bodyID ? (" id=\"" + editor.config.bodyID + "\"") : '') + (editor.config.bodyClass ? (" class=\"" + editor.config.bodyClass + "\"") : '') + ">\n";
     html +=   editor.inwardHtml(editor._textArea.value);
     html += "</body>\n";
     html += "</html>";
