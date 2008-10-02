@@ -113,9 +113,37 @@
 
 .dialog {
   color: ButtonText;
-  background: ButtonFace;
+  background: ButtonFace; 
+  border: 1px outset; 
+  border-color: WindowFrame;
 }
-
+div.dialog {
+  padding-bottom:10px;
+}
+.xinha_dialog_background {
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  opacity: 0;
+  border:none;
+}
+.xinha_dialog_background.modal.greyout {
+  background-color:#666;
+  filter: alpha(opacity=70) !IMPORTANT;
+  -moz-opacity: 0.7;
+  opacity: 0.7;
+}
+.xinha_dialog_background.modal {
+  filter: alpha(opacity=0) !IMPORTANT;
+  -moz-opacity: 0;
+  opacity: 0;
+  border:none;
+}
+body.xinha_dialog_background.modal.greyout {
+  filter: alpha(opacity=100) !IMPORTANT;
+}
+body.xinha_dialog_background.modal {
+  filter: alpha(opacity=0);
+}
 .dialog .content { padding: 2px; }
 
 .dialog, .dialog button, .dialog input, .dialog select, .dialog textarea, .dialog table {
@@ -126,15 +154,16 @@
 
 .dialog .title, .dialog h1
 {
-  background: #008;
-  color: #ff8;
+  background: ActiveCaption;
+  color: CaptionText;
   border-bottom: 1px solid #000;
   padding: 1px 0px 2px 5px;
   font-size: 12px;
   font-weight: bold;
   cursor: default;
+  letter-spacing: 0.01em;
 }
-.dialog h1 { margin:0px;}
+.dialog h1 { margin:0;}
 .dialog .title .button {
   float: right;
   border: 1px solid #66a;
@@ -147,10 +176,28 @@
 .dialog .title .button-hilite { border-color: #88f; background: #44c; }
 
 .dialog button {
-  width: 5em;
+  width: 5.5em;
   padding: 0px;
 }
-
+.dialog .closeButton {
+  padding: 0px;
+  cursor: default;
+  border: 1px solid;
+  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+  height : 11px;
+  width : 11px;
+  vertical-align : top;
+  position : absolute;
+  top : 3px;
+  right : 2px;
+  background-color: ButtonFace;
+  color: ButtonText;
+  font-size: 13px;
+  font-family: Tahoma,Verdana,sans-serif;
+  text-align:center;
+  letter-spacing:0;
+  overflow:hidden;
+}
 .dialog .buttonColor {
   width :1em;
   padding: 1px;
@@ -178,11 +225,23 @@
 
 .dialog .label { text-align: right; width: 6em; }
 .dialog .value input { width: 100%; }
-.dialog .buttons { text-align: right; padding: 2px 4px 0px 4px; }
 
 .dialog legend { font-weight: bold; }
 .dialog fieldset table { margin: 2px 0px; }
+ 
+.dialog  .buttons {
 
+      padding: 1em; 
+      text-align: center;
+}
+.dialog .resizeHandle {
+    -moz-appearance : resizer;
+    width: 12px;
+    height: 12px;
+    border-bottom: 2px solid #000;
+    border-right: 2px solid #000;
+    cursor : nw-resize;
+}
 .popupwin {
   padding: 0px;
   margin: 0px;
@@ -228,19 +287,16 @@ form { margin: 0px; border: none; }
 }
 
 .htmlarea .panel h1 {
-  background: ButtonFace;
-  border: 1px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-  margin:   0px;
-  padding:  0px;
-  font-size:100%;
-  font-weight:bold;
-  padding: 2px;
   clear:left;
-  
+  font-size:0.9em;
 }
 
-.htmlarea .panel { overflow:hidden; }
+.htmlarea .panel { 
+  overflow:hidden; 
+  background-color:white;
+  padding-bottom:0 !IMPORTANT;
+  border: none !IMPORTANT;
+}
 .htmlarea .panels.left  .panel { border-right:none; border-left:none; }
 .htmlarea .panels.left  h1     { border-right:none;  }
 .htmlarea .panels.right .panel { border-right:none; border-left:none; }

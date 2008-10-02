@@ -65,8 +65,9 @@ Xinha.Config.prototype.stylistLoadStyles = function(styles, altnames)
  */
 Xinha.prototype._fillStylist = function()
 {
-  if(!this._stylist) return false;
-  this.plugins.Stylist.instance.main.innerHTML = '';
+  if(!this.plugins.Stylist.instance.dialog) return false;
+  var main = this.plugins.Stylist.instance.dialog.main;
+  main.innerHTML = '';
 
   var may_apply = true;
   var sel       = this._getSelection();
@@ -179,7 +180,7 @@ Xinha.prototype._fillStylist = function()
     if(applicable)
     {
       var anch = document.createElement('a');
-      if ( Xinha.is_real_gecko ) anch.onfocus = function () { this.blur() } // prevent dotted line around link that causes horizontal scrollbar in Mozilla
+      anch.onfocus = function () { this.blur() } // prevent dotted line around link that causes horizontal scrollbar
       anch._stylist_className = className.trim();
       anch._stylist_applied   = applied;
       anch._stylist_appliedTo = applied_to;
@@ -214,7 +215,7 @@ Xinha.prototype._fillStylist = function()
         anch.style.color = 'HighlightText';
       }
 
-      this.plugins.Stylist.instance.main.appendChild(anch);
+      main.appendChild(anch);
     }
   }
 };
@@ -483,7 +484,6 @@ Xinha.ripStylesFromCSSString = function(css)
   RE_comment = /\/\*(.|\r|\n)*?\*\//g;
   RE_rule    = /\{(.|\r|\n)*?\}/g;
   css = css.replace(RE_comment, '');
-  css = css.replace(RE_comment, '');
   css = css.replace(RE_rule, ',');
 
   // And split on commas
@@ -526,97 +526,121 @@ Stylist._pluginInfo =
 
 Stylist.prototype.onGenerateOnce = function()
 {
-  var editor = this.editor;
-  var stylist = this;
-  if(typeof editor.config.css_style != 'undefined' && Xinha.objectProperties(editor.config.css_style).length != 0)
+  var cfg = this.editor.config;
+  if(typeof cfg.css_style != 'undefined' && Xinha.objectProperties(cfg.css_style).length != 0)
   {
-    editor._stylist = null; // This needs to be changes to be Stylist::_stylist sometime
-    editor._stylist = editor.addPanel('right');
-    Xinha.addClass(editor._stylist, 'stylist');
-
-    this.caption = document.createElement("h1");
-    this.caption.innerHTML = Xinha._lc('Styles', 'Stylist');
-    editor._stylist.appendChild(this.caption);
-    this.main = document.createElement("div");
-    this.main.style.overflow = "auto";
-    this.main.style.height = this.editor._framework.ed_cell.offsetHeight - this.caption.offsetHeight + 'px';
-
-    editor._stylist.appendChild(this.main);
-
-    Xinha.freeLater(this,"caption");
-    Xinha.freeLater(this,"main");
-
-    editor.notifyOn('modechange',
-      function(e,args)
-      {
-        switch(args.mode)
-        {
-          case 'text':
-          {
-            editor.hidePanel(editor._stylist);
-            break;
-          }
-          case 'wysiwyg':
-          {
-            editor.showPanel(editor._stylist);
-            break;
-          }
-        }
-      }
-    );
-    editor.notifyOn('panel_change',
-      function(e,args)
-      {
-        switch (args.action)
-        {
-          case 'show':
-          var newHeight = stylist.main.offsetHeight - args.panel.offsetHeight;
-          stylist.main.style.height = ((newHeight > 0) ?  stylist.main.offsetHeight - args.panel.offsetHeight : 0) + 'px';
-          editor._stylist.style.height = stylist.caption.offsetHeight + "px";
-          editor.sizeEditor();
-          break;
-          case 'hide':
-            stylist.resize();
-          break;
-        }
-      }
-    );
-    editor.notifyOn('before_resize',
-    function()
-      {
-        editor._stylist.style.height = stylist.caption.offsetHeight + "px";
-      }
-    );
-    editor.notifyOn('resize',
-      function()
-      {
-        stylist.resize();
-      }
-    );
+    this._prepareDialog();
   }
 
 };
+Stylist.prototype._prepareDialog = function()
+{
+  var editor = this.editor;
+  var stylist = this;
+
+  var html = '<h1><l10n>Styles</l10n></h1>';
+  
+  this.dialog = new Xinha.Dialog(editor, html, 'Stylist',{width:200},{modal:false,closable:false});
+	Xinha._addClass( this.dialog.rootElem, 'Stylist' );
+	this.dialog.attachToPanel('right');
+  this.dialog.show();
+  
+	var dialog = this.dialog;
+	var main = this.dialog.main;
+	var caption = this.dialog.captionBar;
+	
+  main.style.overflow = "auto";
+  main.style.height = this.editor._framework.ed_cell.offsetHeight - caption.offsetHeight + 'px';
+
+  editor.notifyOn('modechange',
+  function(e,args)
+  {
+    if (!dialog.attached)
+    {
+      return;
+    }
+    switch(args.mode)
+    {
+      case 'text':
+      {
+        dialog.hide();
+        break;
+      }
+      case 'wysiwyg':
+      {
+        dialog.show();
+        break;
+      }
+    }
+  }
+  );
+  editor.notifyOn('panel_change',
+  function(e,args)
+  {
+    if (!dialog.attached)
+    {
+      return;
+    }
+    switch (args.action)
+    {
+      case 'show':
+      var newHeight = main.offsetHeight - args.panel.offsetHeight;
+      main.style.height = ((newHeight > 0) ?  main.offsetHeight - args.panel.offsetHeight : 0) + 'px';
+      dialog.rootElem.style.height = caption.offsetHeight + "px";
+      editor.sizeEditor();
+      break;
+      case 'hide':
+      stylist.resize();
+      break;
+    }
+  }
+  );
+  editor.notifyOn('before_resize',
+  function()
+  {
+    if (!dialog.attached)
+    {
+      return;
+    }
+    dialog.rootElem.style.height = caption.offsetHeight + "px";
+  }
+  );
+  editor.notifyOn('resize',
+  function()
+  {
+    if (!dialog.attached)
+    {
+      return;
+    }
+    stylist.resize();
+  }
+  );
+}
 Stylist.prototype.resize = function()
 {
   var editor = this.editor;
-  var panelContainer = editor._stylist.parentNode;
+  var rootElem = this.dialog.rootElem;
+  
+  if (rootElem.style.display == 'none') return;
+  
+  var panelContainer = rootElem.parentNode;
 
   var newSize = panelContainer.offsetHeight;
   for (var i=0; i < panelContainer.childNodes.length;++i)
   {
-    if (panelContainer.childNodes[i]==editor._stylist || !panelContainer.childNodes[i].offsetHeight)
+    if (panelContainer.childNodes[i] == rootElem || !panelContainer.childNodes[i].offsetHeight)
     {
       continue;
     }
     newSize -= panelContainer.childNodes[i].offsetHeight;
   }
-  editor._stylist.style.height = newSize + 'px';
-  this.main.style.height = newSize - this.caption.offsetHeight + 'px';
+  rootElem.style.height = newSize-5 + 'px';
+  this.dialog.main.style.height = newSize - this.dialog.captionBar.offsetHeight -5 + 'px';
 }
 
 Stylist.prototype.onUpdateToolbar = function()
 {
-  if(this.editor._stylist)
+  if(this.dialog)
   {
     if(this._timeoutID)
     {

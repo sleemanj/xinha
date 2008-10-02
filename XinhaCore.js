@@ -976,6 +976,14 @@ Xinha.Config = function()
     "Address"  : "address",
     "Formatted": "pre"
   };
+  
+  this.dialogOptions =
+  { 
+    'centered' : true, //true: dialog is shown in the center the screen, false dialog is shown near the clicked toolbar button
+    'greyout':true, //true: when showing modal dialogs, the page behind the dialoge is greyed-out
+    'closeOnEscape':true
+  };
+
   /** ??
    * Default: <code>{}</code>
    * @type Object
@@ -1781,8 +1789,8 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         "click",
         function(ev)
         {
-          ev = Xinha.is_ie ? window.event : ev;
-          editor.btnClickEvent = ev;
+          ev = ev || window.event;
+          editor.btnClickEvent = {clientX : ev.clientX, clientY : ev.clientY};
           if ( obj.enabled )
           {
             Xinha._removeClass(el, "buttonActive");
@@ -2099,7 +2107,7 @@ Xinha.prototype.generate = function ()
     return false;
   }
 
-  if ( typeof Xinha.Dialog == 'undefined' &&  !Xinha._loadback( _editor_url + 'modules/Dialogs/inline-dialog.js' , this.generate, this ) )
+  if ( typeof Xinha.Dialog == 'undefined' &&  !Xinha._loadback( _editor_url + 'modules/Dialogs/XinhaDialog.js' , this.generate, this ) )
   {    
     return false;
   }
@@ -2258,26 +2266,26 @@ Xinha.prototype.generate = function ()
   // and body in the table
   fw.table.appendChild(fw.tbody);
 
-  var xinha = this._framework.table;
+  var xinha = fw.table;
   this._htmlArea = xinha;
   Xinha.freeLater(this, '_htmlArea');
   xinha.className = "htmlarea";
 
     // create the toolbar and put in the area
-  this._framework.tb_cell.appendChild( this._createToolbar() );
+  fw.tb_cell.appendChild( this._createToolbar() );
 
     // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
   iframe.src = this.popupURL(editor.config.URIs.blank);
   iframe.id = "XinhaIFrame_" + this._textArea.id;
-  this._framework.ed_cell.appendChild(iframe);
+  fw.ed_cell.appendChild(iframe);
   this._iframe = iframe;
   this._iframe.className = 'xinha_iframe';
   Xinha.freeLater(this, '_iframe');
   
     // creates & appends the status bar
   var statusbar = this._createStatusBar();
-  this._framework.sb_cell.appendChild(statusbar);
+  fw.sb_cell.appendChild(statusbar);
 
   // insert Xinha before the textarea.
   var textarea = this._textArea;
@@ -2286,7 +2294,7 @@ Xinha.prototype.generate = function ()
 
   // extract the textarea and insert it into the xinha framework
   Xinha.removeFromParent(textarea);
-  this._framework.ed_cell.appendChild(textarea);
+  fw.ed_cell.appendChild(textarea);
 
   // if another editor is activated while this one is in text mode, toolbar is disabled   
   Xinha.addDom0Event(
@@ -2468,6 +2476,8 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   if (this._risizing) return;
   this._risizing = true;
   
+  var framework = this._framework;
+  
   this.notifyOf('before_resize', {width:width, height:height});
   this.firePluginEvent('onBeforeResize', width, height);
   // We need to set the iframe & textarea to 100% height so that the htmlarea
@@ -2579,57 +2589,57 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
     // NOP
 //  }
 
-  this._framework.tb_cell.colSpan = col_span;
-  this._framework.tp_cell.colSpan = col_span;
-  this._framework.bp_cell.colSpan = col_span;
-  this._framework.sb_cell.colSpan = col_span;
+  framework.tb_cell.colSpan = col_span;
+  framework.tp_cell.colSpan = col_span;
+  framework.bp_cell.colSpan = col_span;
+  framework.sb_cell.colSpan = col_span;
 
   // Put in the panel rows, top panel goes above editor row
-  if ( !this._framework.tp_row.childNodes.length )
+  if ( !framework.tp_row.childNodes.length )
   {
-    Xinha.removeFromParent(this._framework.tp_row);
+    Xinha.removeFromParent(framework.tp_row);
   }
   else
   {
-    if ( !Xinha.hasParentNode(this._framework.tp_row) )
+    if ( !Xinha.hasParentNode(framework.tp_row) )
     {
-      this._framework.tbody.insertBefore(this._framework.tp_row, this._framework.ler_row);
+      framework.tbody.insertBefore(framework.tp_row, framework.ler_row);
     }
   }
 
   // bp goes after the editor
-  if ( !this._framework.bp_row.childNodes.length )
+  if ( !framework.bp_row.childNodes.length )
   {
-    Xinha.removeFromParent(this._framework.bp_row);
+    Xinha.removeFromParent(framework.bp_row);
   }
   else
   {
-    if ( !Xinha.hasParentNode(this._framework.bp_row) )
+    if ( !Xinha.hasParentNode(framework.bp_row) )
     {
-      this._framework.tbody.insertBefore(this._framework.bp_row, this._framework.ler_row.nextSibling);
+      framework.tbody.insertBefore(framework.bp_row, framework.ler_row.nextSibling);
     }
   }
 
   // finally if the statusbar is on, insert it
   if ( !this.config.statusBar )
   {
-    Xinha.removeFromParent(this._framework.sb_row);
+    Xinha.removeFromParent(framework.sb_row);
   }
   else
   {
-    if ( !Xinha.hasParentNode(this._framework.sb_row) )
+    if ( !Xinha.hasParentNode(framework.sb_row) )
     {
-      this._framework.table.appendChild(this._framework.sb_row);
+      framework.table.appendChild(framework.sb_row);
     }
   }
 
   // Size and set colspans, link up the framework
-  this._framework.lp_cell.style.width  = this.config.panel_dimensions.left;
-  this._framework.rp_cell.style.width  = this.config.panel_dimensions.right;
-  this._framework.tp_cell.style.height = this.config.panel_dimensions.top;
-  this._framework.bp_cell.style.height = this.config.panel_dimensions.bottom;
-  this._framework.tb_cell.style.height = this._toolBar.offsetHeight + 'px';
-  this._framework.sb_cell.style.height = this._statusBar.offsetHeight + 'px';
+  framework.lp_cell.style.width  = this.config.panel_dimensions.left;
+  framework.rp_cell.style.width  = this.config.panel_dimensions.right;
+  framework.tp_cell.style.height = this.config.panel_dimensions.top;
+  framework.bp_cell.style.height = this.config.panel_dimensions.bottom;
+  framework.tb_cell.style.height = this._toolBar.offsetHeight + 'px';
+  framework.sb_cell.style.height = this._statusBar.offsetHeight + 'px';
 
   var edcellheight = height - this._toolBar.offsetHeight - this._statusBar.offsetHeight;
   if ( panel_is_alive('top') )
@@ -3943,6 +3953,8 @@ Xinha.prototype.enableToolbar = function()
 // It is actually to heavy to be understable and very scary to manipulate
 Xinha.prototype.updateToolbar = function(noStatus)
 {
+  if (this.suspendUpdateToolbar) return;
+  
   var doc = this._doc;
   var text = (this._editMode == "textmode");
   var ancestors = null;
@@ -4713,11 +4725,24 @@ Xinha.prototype._editorEvent = function(ev)
       return false;
     }
   }
+
+  /* If this.currentModal is not null, then there's a modal dialog 
+  /* on screen, and we kill the event. This eliminates the possibility
+  /* of a user 'tabbing' out of a modal dialog and re-activating the editor.
+  /* This fixes the bug reported in ticket #1259
+  /* http://xinha.webfactional.com/ticket/1259 */
+  if (this.currentModal)
+  {
+    return false;
+  }
+
   // update the toolbar state after some time
   if ( editor._timerToolbar )
   {
     clearTimeout(editor._timerToolbar);
   }
+  if (!this.suspendUpdateToolbar)
+  {
   editor._timerToolbar = setTimeout(
     function()
     {
@@ -4725,6 +4750,7 @@ Xinha.prototype._editorEvent = function(ev)
       editor._timerToolbar = null;
     },
     250);
+  }
 };
 
 /** Handles ctrl + key shortcuts 
@@ -5484,6 +5510,10 @@ Xinha.prependDom0Event = function(el, ev, fn)
   el._xinha_dom0Events[ev].push(fn);
 };
 
+Xinha.getEvent = function(ev)
+{
+  return ev || window.event;
+}
 /**
  * Prepares an element to receive more than one DOM-0 event handler
  * when handlers are added via addDom0Event and prependDom0Event.
@@ -6178,7 +6208,6 @@ if (typeof dumpValues == 'undefined')
       {
         s += prop + ' = ' + o[prop] + '\n';
       }
-
     }
     if (s) 
     {
@@ -6788,12 +6817,12 @@ Xinha.prototype.scrollPos = function(scope)
 {
   scope = (scope) ? scope : window;
   var x,y;
-  if (scope.pageYOffset) // all except Explorer
+  if (typeof scope.pageYOffset != 'undefined') // all except Explorer
   {
     x = scope.pageXOffset;
     y = scope.pageYOffset;
   }
-  else if (scope.document.documentElement && document.documentElement.scrollTop)
+  else if (scope.document.documentElement && typeof document.documentElement.scrollTop != 'undefined')
     // Explorer 6 Strict
   {
     x = scope.document.documentElement.scrollLeft;

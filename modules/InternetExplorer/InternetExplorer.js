@@ -146,6 +146,11 @@ InternetExplorer.prototype.inwardHtml = function(html)
    // make sure there is something before the first script on the page
    html = html.replace(/(<script|<!--)/i,"&nbsp;$1");
    
+   // We've got a workaround for certain issues with saving and restoring
+   // selections that may cause us to fill in junk span tags.  We'll clean
+   // those here
+   html = html.replace(/<span[^>]+id="__InsertSpan_Workaround_[a-z]+".*?>([\s\S]*?)<\/span>/i,"$1");
+   
    return html;
 }
 
@@ -153,6 +158,11 @@ InternetExplorer.prototype.outwardHtml = function(html)
 {
    // remove space added before first script on the page
    html = html.replace(/&nbsp;(\s*)(<script|<!--)/i,"$1$2");
+
+   // We've got a workaround for certain issues with saving and restoring
+   // selections that may cause us to fill in junk span tags.  We'll clean
+   // those here
+   html = html.replace(/<span[^>]+id="__InsertSpan_Workaround_[a-z]+".*?>([\s\S]*?)<\/span>/i,"$1");
    
    return html;
 }
@@ -440,7 +450,124 @@ Xinha.prototype.saveSelection = function()
  */
 Xinha.prototype.restoreSelection = function(savedSelection)
 {
+  // In order to prevent triggering the IE bug mentioned below, we will try to
+  // optimize by not restoring the selection if it happens to match the current
+  // selection.
+  var range = this.createRange(this.getSelection());
+
+  // We can't compare two selections that come from different documents, so we
+  // must make sure they're from the same document.
+  var findDoc = function(el)
+  {
+    for (var root=el; root; root=root.parentNode)
+    {
+      if (root.tagName.toLowerCase() == 'html')
+      {
+        return root.parentNode;
+      }
+    }
+    return null;
+  }
+
+  if (findDoc(savedSelection.parentElement()) == findDoc(range.parentElement()))
+  {
+    if ((0 == range.compareEndPoints('StartToStart',savedSelection)) &&
+        (0 == range.compareEndPoints('EndToEnd',savedSelection)))
+    {
+      // The selection hasn't moved, no need to restore.
+      return;
+    }
+  }
+
   try { savedSelection.select() } catch (e) {};
+  range = this.createRange(this.getSelection());
+  if (range.parentElement() != savedSelection.parentElement())
+  {
+    // IE has a problem with selections at the end of text nodes that
+    // immediately precede block nodes. Example markup:
+    // <div>Text Node<p>Text in Block</p></div>
+    //               ^
+    // The problem occurs when the cursor is after the 'e' in Node.
+
+    var solution = editor.config.selectWorkaround || 'InsertSpan';
+    switch (solution)
+    {
+      case 'SimulateClick':
+        // Try to get the bounding box of the selection and then simulate a
+        // mouse click in the upper right corner to return the cursor to the
+        // correct location.
+
+        // No code yet, fall through to InsertSpan
+      case 'InsertSpan':
+        // This workaround inserts an empty span element so that we are no
+        // longer trying to select a text node,
+        var parentDoc = findDoc(savedSelection.parentElement());
+
+        // A function used to generate a unique ID for our temporary span.
+        var randLetters = function(count)
+        {
+          // Build a list of 26 letters.
+          var Letters = '';
+          for (var index = 0; index<26; ++index)
+          {
+            Letters += String.fromCharCode('a'.charCodeAt(0) + index);
+          }
+
+          var result = '';
+          for (var index=0; index<count; ++index)
+          {
+            result += Letters.substr(Math.floor(Math.random()*Letters.length + 1), 1);
+          }
+          return result;
+        }
+
+        // We'll try to find a unique ID to use for finding our element.
+        var keyLength = 1;
+        var tempId = '__InsertSpan_Workaround_' + randLetters(keyLength);
+        while (parentDoc.getElementById(tempId))
+        {
+          // Each time there's a collision, we'll increase our key length by
+          // one, making the chances of a collision exponentially more rare.
+          keyLength += 1;
+          tempId = '__InsertSpan_Workaround_' + randLetters(keyLength);
+        }
+
+        // Now that we have a uniquely identifiable element, we'll stick it and
+        // and use it to orient our selection.
+        savedSelection.pasteHTML('<span id="' + tempId + '"></span>');
+        var tempSpan = parentDoc.getElementById(tempId);
+        savedSelection.moveToElementText(tempSpan);
+        savedSelection.select();
+        break;
+      case 'JustificationHack':
+        // Setting the justification on an element causes IE to alter the
+        // markup so that the selection we want to make is possible.
+        // Unfortunately, this can force block elements to be kicked out of
+        // their containing element, so it is not recommended.
+
+        // Set a non-valid character and use it to anchor our selection.
+        var magicString = String.fromCharCode(1);
+        savedSelection.pasteHTML(magicString);
+        savedSelection.findText(magicString,-1);
+        savedSelection.select();
+
+        // I don't know how to find out if there's an existing justification on
+        // this element.  Hopefully, you're doing all of your styling outside,
+        // so I'll just clear.  I already told you this was a hack.
+        savedSelection.execCommand('JustifyNone');
+        savedSelection.pasteHTML('');
+        break;
+      case 'VisiblePrompt':
+      default:
+        // This method will insert a little box character to hold our selection
+        // in the desired spot.  We're depending on the user to see this ugly
+        // box and delete it themselves.
+        var magicString = String.fromCharCode(1);
+        savedSelection.pasteHTML(magicString);
+        savedSelection.findText(magicString,-1);
+        savedSelection.select();
+    }
+  }
 }
 
 /**
@@ -448,15 +575,15 @@ Xinha.prototype.restoreSelection = function(savedSelection)
  * the node itself is selected for manipulation.
  *
  * @param node DomNode 
- * @param pos  Set to a numeric position inside the node to collapse the cursor here if possible. 
+ * @param collapseToStart A boolean that, when supplied, says to collapse the selection. True collapses to the start, and false to the end.
  */
  
-Xinha.prototype.selectNodeContents = function(node, pos)
+Xinha.prototype.selectNodeContents = function(node, collapseToStart)
 {
   this.focusEditor();
   this.forceRedraw();
   var range;
-  var collapsed = typeof pos == "undefined" ? true : false;
+  var collapsed = typeof collapseToStart == "undefined" ? true : false;
   // Tables and Images get selected as "objects" rather than the text contents
   if ( collapsed && node.tagName && node.tagName.toLowerCase().match(/table|img|input|select|textarea/) )
   {
@@ -466,8 +593,101 @@ Xinha.prototype.selectNodeContents = function(node, pos)
   else
   {
     range = this._doc.body.createTextRange();
+    if (3 == node.nodeType)
+    {
+      // Special handling for text nodes, since moveToElementText fails when
+      // attempting to select a text node
+
+      // Since the TextRange has a quite limited API, our strategy here is to
+      // select (where possible) neighboring nodes, and then move our ranges
+      // endpoints to be just inside of neighboring selections.
+      if (node.parentNode)
+      {
+        range.moveToElementText(node.parentNode);
+      } else
+      {
+        range.moveToElementText(this._doc.body);
+      }
+      var trimmingRange = this._doc.body.createTextRange();
+
+      // In rare situations (mostly html that's been monkeyed about with by
+      // javascript, but that's what we're doing) there can be two adjacent
+      // text nodes.  Since we won't be able to handle these, we'll have to
+      // hack an offset by 'move'ing the number of characters they contain.
+      var texthackOffset = 0;
+      var borderElement=node.previousSibling;
+      for (; borderElement && (1 != borderElement.nodeType); borderElement = borderElement.previousSibling)
+      {
+        if (3 == borderElement.nodeType)
+        {
+          // IE doesn't count '\r' as a character, so we have to adjust the offset.
+          texthackOffset += borderElement.nodeValue.length-borderElement.nodeValue.split('\r').length-1;
+        }
+      }
+      if (borderElement && (1 == borderElement.nodeType))
+      {
+        trimmingRange.moveToElementText(borderElement);
+        range.setEndPoint('StartToEnd', trimmingRange);
+      }
+      if (texthackOffset)
+      {
+        // We now need to move the selection forward the number of characters
+        // in all text nodes in between our text node and our ranges starting
+        // border.
+        range.moveStart('character',texthackOffset);
+      }
+
+      // Youpi!  Now we get to repeat this trimming on the right side.
+      texthackOffset = 0;
+      borderElement=node.nextSibling;
+      for (; borderElement && (1 != borderElement.nodeType); borderElement = borderElement.nextSibling)
+      {
+        if (3 == borderElement.nodeType)
+        {
+          // IE doesn't count '\r' as a character, so we have to adjust the offset.
+          texthackOffset += borderElement.nodeValue.length-borderElement.nodeValue.split('\r').length-1;
+          if (!borderElement.nextSibling)
+          {
+            // When a text node is the last child, IE adds an extra selection
+            // "placeholder" for the newline character.  We need to adjust for
+            // this character as well.
+            texthackOffset += 1;
+          }
+        }
+      }
+      if (borderElement && (1 == borderElement.nodeType))
+      {
+        trimmingRange.moveToElementText(borderElement);
+        range.setEndPoint('EndToStart', trimmingRange);
+      }
+      if (texthackOffset)
+      {
+        // We now need to move the selection backward the number of characters
+        // in all text nodes in between our text node and our ranges ending
+        // border.
+        range.moveEnd('character',-texthackOffset);
+      }
+      if (!node.nextSibling)
+      {
+        // Above we performed a slight adjustment to the offset if the text
+        // node contains a selectable "newline".  We need to do the same if the
+        // node we are trying to select contains a newline.
+        range.moveEnd('character',-1);
+      }
+    }
+    else
+    {
     range.moveToElementText(node);
-    //(collapsed) && range.collapse(pos);
+    }
+  }
+  if (typeof collapseToStart != "undefined")
+  {
+    range.collapse(collapseToStart);
+    if (!collapseToStart)
+    {
+      range.moveStart('character',-1);
+      range.moveEnd('character',-1);
+    }
   }
   range.select();
 };
