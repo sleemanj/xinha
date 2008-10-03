@@ -788,11 +788,11 @@ Xinha.getOuterHTML = function(element)
 };
 
 // Control character for retaining edit location when switching modes
-Xinha.prototype.cc = String.fromCharCode(0x2009);
+Xinha.cc = String.fromCharCode(0x2009);
 
 Xinha.prototype.setCC = function ( target )
 {
-  var cc = this.cc;
+  var cc = Xinha.cc;
   if ( target == "textarea" )
   {
     var ta = this._textArea;
@@ -836,12 +836,12 @@ Xinha.prototype.findCC = function ( target )
   range = findIn.createTextRange();
   // in case the cursor is inside a link automatically created from a url
   // the cc also appears in the url and we have to strip it out additionally 
-  if( range.findText( escape(this.cc) ) )
+  if( range.findText( escape(Xinha.cc) ) )
   {
     range.select();
     range.text = '';
   }
-  if( range.findText( this.cc ) )
+  if( range.findText( Xinha.cc ) )
   {
     range.select();
     range.text = '';
