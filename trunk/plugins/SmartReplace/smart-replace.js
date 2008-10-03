@@ -25,7 +25,7 @@ SmartReplace._pluginInfo = {
   name          : "SmartReplace",
   version       : "1.0",
   developer     : "Raimund Meyer",
-  developer_url : "http://rheinauf.de",
+  developer_url : "http://x-webservice.net",
   c_owner       : "Raimund Meyer",
   sponsor       : "",
   sponsor_url   : "",

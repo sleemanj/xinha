@@ -25,7 +25,7 @@ HtmlEntities._pluginInfo = {
   name          : "HtmlEntities",
   version       : "1.0",
   developer     : "Raimund Meyer",
-  developer_url : "http://rheinauf.de",
+  developer_url : "http://x-webservice.net",
   c_owner       : "Xinha community",
   sponsor       : "",
   sponsor_url   : "",
