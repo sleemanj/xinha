@@ -151,8 +151,6 @@ function init ()
     else if(manager_mode=="link" && param)
     {
         var target_select = document.getElementById("f_target");
-        var use_target = true;
-
         var absoluteURL = new RegExp('^https?://');
 
         if (param.f_href.length > 0 && !absoluteURL.test(param.f_href) && typeof param.baseHref == "string") {
@@ -178,10 +176,6 @@ function init ()
         
         if (param)
         {
-            if ( typeof param["f_usetarget"] != "undefined" )
-            {
-                use_target = param["f_usetarget"];
-            }
             if ( typeof param["f_href"] != "undefined" )
             {
                 document.getElementById("f_href").value = param["f_href"];
@@ -197,18 +191,21 @@ function init ()
                 }
             }
         }
-        if (! use_target)
+        
+        if ( param["f_usetarget"] == false || manager_show_target != false)
         {
             document.getElementById("f_target_label").style.visibility = "hidden";
             document.getElementById("f_target").style.visibility = "hidden";
             document.getElementById("f_other_target").style.visibility = "hidden";
         }
-
-        var opt = document.createElement("option");
-        opt.value = "_other";
-        opt.innerHTML = i18n("Other");
-        target_select.appendChild(opt);
-        target_select.onchange = onTargetChanged;
+        if (target_select && param["f_usetarget"] && manager_show_target != false)
+        {
+            var opt = document.createElement("option");
+            opt.value = "_other";
+            opt.innerHTML = i18n("Other");
+            target_select.appendChild(opt);
+            target_select.onchange = onTargetChanged;
+        }
         
         document.getElementById("f_href").focus();
     }
