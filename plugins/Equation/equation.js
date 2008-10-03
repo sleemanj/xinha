@@ -70,7 +70,7 @@ Equation._pluginInfo = {
 	name          : "ASCIIMathML Formula Editor",
 	version       : "2.3 (2008-01-26)",
 	developer     : "Raimund Meyer",
-	developer_url : "http://xinha.raimundmeyer.de",
+	developer_url : "http://x-webservice.net",
 	c_owner       : "",
 	sponsor       : "",
 	sponsor_url   : "",

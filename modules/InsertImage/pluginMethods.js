@@ -11,22 +11,23 @@ InsertImage.prototype.show = function(image)
       image = null;
     }
   }
-  
-  var base;
-  if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null ) {
-    base = editor.config.baseHref;
-  }
-  else {
-    var bdir = window.location.toString().split("/");
-    bdir.pop();
-    base = bdir.join("/");
-  }
 
   if ( image )
   {
+    function getSpecifiedAttribute(element,attribute)
+    {
+      var a = element.attributes;
+      for (var i=0;i<a.length;i++)
+      {
+        if (a[i].nodeName == attribute && a[i].specified)
+        {
+          return a[i].value;
+        }
+      }
+      return '';
+    }
     outparam =
     {
-      f_base   : base,
       f_url    : this.stripBaseURL(image.getAttribute('src',2)), // the second parameter makes IE return the value as it is set, as opposed to an "interpolated" (as MSDN calls it) value
       f_alt    : image.alt,
       f_border : image.border,
@@ -41,7 +42,6 @@ InsertImage.prototype.show = function(image)
   {
     outparam =
     {
-      f_base   : base,
       f_url    : '',
       f_alt    : '',
       f_border : '',

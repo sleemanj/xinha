@@ -63,7 +63,7 @@ InsertImage.prototype.onUpdateToolbar = function()
 };
   
 InsertImage.prototype.prepareDialog = function()
-  {
+{
 	var self = this;
 	var editor = this.editor;
   
@@ -76,19 +76,17 @@ InsertImage.prototype.prepareDialog = function()
 	dialog.getElementById('preview').onclick = function() { 
 	  var f_url = dialog.getElementById("f_url");
 	  var url = f_url.value;
-	  var base = dialog.getElementById("f_base").value;
+
 	  if (!url) {
 	    alert(dialog._lc("You must enter the URL"));
 	    f_url.focus();
         return false;
       }
-	  dialog.getElementById('ipreview').src = Xinha._resolveRelativeUrl(base, url);
+	  dialog.getElementById('ipreview').src = url;
 	  return false;
 	}
 	this.dialog.onresize = function ()
-      {
-		
-		
+  {
 		var newHeightForPreview = 
 		parseInt(this.height,10) 
 		- this.getElementById('h1').offsetHeight 
@@ -101,6 +99,6 @@ InsertImage.prototype.prepareDialog = function()
 		
 		this.getElementById("ipreview").style.width = this.width - 2   + 'px'; // and the width
 
-          }
+  }
 	this.dialogReady = true;
 };

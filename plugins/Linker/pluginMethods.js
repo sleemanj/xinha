@@ -25,8 +25,6 @@ Linker.prototype._createLink = function(a)
     anchor:   ''
   };
 
-  if (atr.href) atr.href = atr.href.trim();
-
   if(a && a.tagName.toLowerCase() == 'a')
   {
     var href =this.editor.fixRelativeLinks(a.getAttribute('href'));
@@ -121,7 +119,7 @@ Linker.prototype._createLink = function(a)
     {
      if(values.href)
      {
-       atr.href = values.href;
+       atr.href = values.href.trim();
        atr.target = values.target;
        if(values.target == 'popup')
        {

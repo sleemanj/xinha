@@ -5456,7 +5456,7 @@ Xinha._removeEvents = function(el, evs, func)
 /** Adds a function that is executed in the moment the DOM is ready, but as opposed to window.onload before images etc. have been loaded
 *   http://dean.edwards.name/weblog/2006/06/again/
 *  @public
-*  @author Dean Edwards/Matthias Miller/ John Resig / Raimund Meyer
+*  @author Dean Edwards/Matthias Miller/ John Resig
 *  @param {Function}  func the function to be executed
 *  @param {Window}    scope the window that is listened to
 */
