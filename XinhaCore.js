@@ -3639,6 +3639,8 @@ Xinha.prototype._wordClean = function()
   var stats =
   {
     empty_tags : 0,
+    cond_comm  : 0,
+    mso_elmts  : 0,
     mso_class  : 0,
     mso_style  : 0,
     mso_xmlel  : 0,
@@ -3648,6 +3650,8 @@ Xinha.prototype._wordClean = function()
   var stats_txt =
   {
     empty_tags : "Empty tags removed: ",
+    cond_comm  : "Conditional comments removed",
+    mso_elmts  : "MSO invalid elements removed",
     mso_class  : "MSO class names removed: ",
     mso_style  : "MSO inline style removed: ",
     mso_xmlel  : "MSO XML elements stripped: "
@@ -3717,6 +3721,19 @@ Xinha.prototype._wordClean = function()
     };
   }
 
+  function removeElements(el)
+  {
+    if ((('link' == el.tagName.toLowerCase()) &&
+        (el.attributes && /File-List|Edit-Time-Data|themeData|colorSchemeMapping/.test(el.attributes['rel'].nodeValue))) ||
+        (/^(style|meta)$/i.test(el.tagName)))
+    {
+      Xinha.removeFromParent(el);
+      ++stats.mso_elmts;
+      return true;
+    }
+    return false;
+  }
+
   function checkEmpty(el)
   {
     // @todo : check if this is quicker
@@ -3725,7 +3742,9 @@ Xinha.prototype._wordClean = function()
     {
       Xinha.removeFromParent(el);
       ++stats.empty_tags;
+      return true;
     }
+    return false;
   }
 
   function parseTree(root)
@@ -3747,7 +3766,24 @@ Xinha.prototype._wordClean = function()
         next = i.nextSibling;
         if ( i.nodeType == 1 && parseTree(i) )
         {
-          checkEmpty(i);
+          if (checkEmpty(i))
+          {
+            continue;
+          }
+          if (removeElements(i))
+          {
+            continue;
+          }
+        }
+        else if (i.nodeType == 8)
+        {
+          // 8 is a comment node, and can contain conditional comments.
+          if (/(\s*\[\s*if\s*(([gl]te?|!)\s*)?(IE|mso)\s*(\d+(\.\d+)?\s*)?\]>)/.test(i.nodeValue))
+          {
+            // We strip all conditional comments directly from the tree.
+            Xinha.removeFromParent(i);
+            ++stats.cond_comm;
+          }
         }
       }
     }
