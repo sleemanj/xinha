@@ -6743,8 +6743,7 @@ Xinha.removeFromParent = function(el)
     return;
   }
   var pN = el.parentNode;
-  pN.removeChild(el);
-  return el;
+  return pN.removeChild(el);
 };
 /** Checks if some element has a parent node
  *  @param {DomNode} el 
