@@ -742,12 +742,12 @@ Xinha.getOuterHTML = function(element)
  * Very annoying.
  *
  */ 
- 
+Xinha.cc = String.fromCharCode(8286);
 Xinha.prototype.setCC = function ( target )
 {
   // Do a two step caret insertion, first a single char, then we'll replace that with the 
   // id'd span.
-  var cc = String.fromCharCode(8286);
+  var cc = Xinha.cc;
   
   try
   {

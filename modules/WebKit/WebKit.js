@@ -722,11 +722,11 @@ Xinha.getOuterHTML = function(element)
   return (new XMLSerializer()).serializeToString(element);
 };
 
-Xinha.prototype.cc = String.fromCharCode(8286); 
+Xinha.cc = String.fromCharCode(8286); 
 
 Xinha.prototype.setCC = function ( target )
 {
-  var cc = this.cc;
+  var cc = Xinha.cc;
   try
   {
     if ( target == "textarea" )
@@ -756,12 +756,14 @@ Xinha.prototype.setCC = function ( target )
 
 Xinha.prototype.findCC = function ( target )
 {
+  var cc = Xinha.cc;
+  
   if ( target == 'textarea' )
   {
   var ta = this._textArea;
-  var pos = ta.value.indexOf( this.cc );
+  var pos = ta.value.indexOf( cc );
   if ( pos == -1 ) return;
-  var end = pos + this.cc.length;
+  var end = pos + cc.length;
   var before =  ta.value.substring( 0, pos );
   var after = ta.value.substring( end, ta.value.length );
   ta.value = before ;
@@ -783,7 +785,7 @@ Xinha.prototype.findCC = function ( target )
     try
     {
       var doc = this._doc; 
-      doc.body.innerHTML = doc.body.innerHTML.replace(new RegExp(this.cc),'<span id="XinhaEditingPostion"></span>');
+      doc.body.innerHTML = doc.body.innerHTML.replace(new RegExp(cc),'<span id="XinhaEditingPostion"></span>');
       var posEl = doc.getElementById('XinhaEditingPostion');
       this.selectNodeContents(posEl);
       this.scrollToElement(posEl);

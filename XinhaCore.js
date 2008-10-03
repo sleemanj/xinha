@@ -4938,9 +4938,9 @@ Xinha.prototype.outwardHtml = function(html)
 
   if ( this.config.sevenBitClean )
   {
-    html = html.replace(/[^ -~\r\n\t]/g, function(c) { return '&#'+c.charCodeAt(0)+';'; });
+    html = html.replace(/[^ -~\r\n\t]/g, function(c) { return (c != Xinha.cc) ? '&#'+c.charCodeAt(0)+';' : c; });
   }
-  
+
   //prevent execution of JavaScript (Ticket #685)
   html = html.replace(/(<script[^>]*((type=[\"\']text\/)|(language=[\"\'])))(freezescript)/gi,"$1javascript");
 
