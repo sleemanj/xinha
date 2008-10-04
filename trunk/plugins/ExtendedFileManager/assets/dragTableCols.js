@@ -101,7 +101,8 @@ dragTableCols.removeEvent = function (obj, evType, fn)
 }
 dragTableCols.getElementTopLeft = function(element) 
 {
-  var curleft = curtop = 0;
+  var curleft = 0;
+  var curtop = 0;
   if (element.offsetParent) 
   {
     curleft = element.offsetLeft

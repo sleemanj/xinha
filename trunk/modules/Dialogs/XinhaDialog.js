@@ -49,7 +49,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     individual settings (i.e., it will override them). If the global option is
     undefined, the options passed in above will be used.
   */
-  globalOptions = editor.config.dialogOptions
+  var globalOptions = editor.config.dialogOptions
   if (globalOptions) {
     if (typeof(globalOptions.centered) != 'undefined') {
       this.centered = globalOptions.centered;
@@ -270,7 +270,6 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   captionBar = null;
   rootElem = null;
   main = null;
-  resizeHandle = null;
   
   Xinha.freeLater(this,"rootElem");
   Xinha.freeLater(this,"captionBar");

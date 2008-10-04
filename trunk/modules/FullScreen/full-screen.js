@@ -2,7 +2,7 @@ function FullScreen(editor, args)
 {
   this.editor = editor;
   editor._superclean_on = false;
-  cfg = editor.config;
+  var cfg = editor.config;
 
   cfg.registerButton
   ( 'fullscreen',
@@ -43,6 +43,7 @@ FullScreen.prototype._lc = function(string) {
 Xinha.prototype._fullScreen = function()
 {
   var e = this;
+  var cfg = e.config;
   function sizeItUp()
   {
     if(!e._isFullScreen || e._sizing) return false;
