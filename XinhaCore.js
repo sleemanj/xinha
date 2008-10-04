@@ -76,9 +76,10 @@ if ( typeof _editor_url == "string" )
   
   // convert _editor_url to absolute
   if(!_editor_url.match(/^([^:]+\:)?\//)){
-    var path = window.location.toString().replace(/\?.*$/,'').split("/");
-    path.pop();
-    _editor_url = Xinha._resolveRelativeUrl(path.join("/"), _editor_url);
+    Xinha.tmpPath = window.location.toString().replace(/\?.*$/,'').split("/");
+    Xinha.tmpPath.pop();
+    _editor_url = Xinha._resolveRelativeUrl(Xinha.tmpPath.join("/"), _editor_url);
+    delete(Xinha.tmpPath);  
   }
 }
 else
@@ -1900,9 +1901,6 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
   return toolbar;
 };
 
-// @todo : is this some kind of test not finished ?
-//         Why the hell this is not in the config object ?
-var use_clone_img = false;
 /** creates a button (i.e. container element + image)
  * @private
  * @return {DomNode} conteainer element
@@ -1949,10 +1947,6 @@ Xinha.makeBtnImg = function(imgDef, doc)
       img.src = imgDef;
       img.style.width = "18px";
       img.style.height = "18px";
-      if ( use_clone_img )
-      {
-        doc._xinhaImgCache[imgDef] = img.cloneNode();
-      }
     }
   }
   else
@@ -1966,10 +1960,6 @@ Xinha.makeBtnImg = function(imgDef, doc)
       img = doc.createElement("img");
       img.src = imgDef[0];
       img.style.position = 'relative';
-      if ( use_clone_img )
-      {
-        doc._xinhaImgCache[imgDef[0]] = img.cloneNode();
-      }
     }
     // @todo: Using 18 dont let us use a theme with its own icon toolbar height
     //        and width. Probably better to calculate this value 18
@@ -6885,7 +6875,8 @@ Xinha.prototype.scrollPos = function(scope)
  
 Xinha.getElementTopLeft = function(element) 
 {
-  var curleft = curtop = 0;
+  var curleft = 0;
+  var curtop =  0;
   if (element.offsetParent) 
   {
     curleft = element.offsetLeft

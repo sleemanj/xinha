@@ -481,8 +481,8 @@ Xinha.ripStylesFromCSSString = function(css)
 {
   // We are only interested in the selectors, the rules are not important
   //  so we'll drop out all coments and rules
-  RE_comment = /\/\*(.|\r|\n)*?\*\//g;
-  RE_rule    = /\{(.|\r|\n)*?\}/g;
+  var RE_comment = /\/\*(.|\r|\n)*?\*\//g;
+  var RE_rule    = /\{(.|\r|\n)*?\}/g;
   css = css.replace(RE_comment, '');
   css = css.replace(RE_rule, ',');
 
