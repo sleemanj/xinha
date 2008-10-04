@@ -450,6 +450,7 @@ Xinha.prototype.saveSelection = function()
  */
 Xinha.prototype.restoreSelection = function(savedSelection)
 {
+  if (!savedSelection) return;
   // In order to prevent triggering the IE bug mentioned below, we will try to
   // optimize by not restoring the selection if it happens to match the current
   // selection.
