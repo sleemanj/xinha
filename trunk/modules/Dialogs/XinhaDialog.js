@@ -477,8 +477,11 @@ Xinha.Dialog.prototype.hide = function()
       this.editor.currentModal = null;
     }
   }
-   // Restore the selection --> should this happen only with modals?
-  this.editor.restoreSelection(this._lastRange);
+
+  if (this.modal)
+  {
+    this.editor.restoreSelection(this._lastRange);
+  }
   
   this.dialogShown = false;
   this.editor.updateToolbar();
