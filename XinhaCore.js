@@ -3330,13 +3330,14 @@ Xinha.loadPlugin = function(pluginName, callback, plugin_file)
     }
     return true;
   }
-
+/*
   if(!plugin_file)
   {
     var dir = this.getPluginDir(pluginName);
     var plugin = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
     plugin_file = dir + "/" + plugin;
   }
+*/
   
   Xinha._loadback(plugin_file, callback ? function() { callback(pluginName); } : null);
   return false;
@@ -3373,19 +3374,51 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
   // Rip the ones that are loaded and look for ones that have failed
   var retVal = true;
   var nuPlugins = Xinha.cloneObject(plugins);
-
-  while ( nuPlugins.length )
+  for ( var i=0;i<nuPlugins.length;i++ )
   {
-    var p = nuPlugins.pop();
+    var p = nuPlugins[i];
+
+    if (Xinha.externalPlugins[p])
+    {
+      url = Xinha.externalPlugins[p][0]+Xinha.externalPlugins[p][1];
+    }
+    else
+    {
+      var dir = this.getPluginDir(p);
+      var file = p + ".js";
+      url = dir + "/" + file;
+
+      if (typeof Xinha._pluginLoadStatus[p] == 'undefined')
+      {
+        if (!Xinha.ping(dir + "/" + file))
+        {
+          file = p.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+          if (Xinha.ping(dir + "/" + file))
+          {
+            url = dir + "/" + file;
+            Xinha.externalPlugins[p] = [dir,'/'+ file];
+            Xinha.debugMsg('You use an obsolete naming scheme for the Xinha plugin '+p+'. Please rename '+file+' to '+p+'.js' );
+          }
+          else
+          {
+            Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.')
+            Xinha._pluginLoadStatus[p] = 'failed';
+            continue;
+          }
+        }
+      }
+    }
+
     if (p == 'FullScreen' && !Xinha.externalPlugins['FullScreen'] ) continue; //prevent trying to load FullScreen plugin from the plugins folder
    
-    if ( typeof Xinha._pluginLoadStatus[p] == 'undefined' )
+    if ( typeof Xinha._pluginLoadStatus[p] == 'undefined' && typeof window[p] == 'undefined')
     {
       // Load it
       Xinha._pluginLoadStatus[p] = 'loading';
       Xinha.loadPlugin(p,
         function(plugin)
         {
+          Xinha.setLoadingMessage (Xinha._lc("Finishing"));
           if ( typeof window[plugin] != 'undefined' )
           {
             Xinha._pluginLoadStatus[plugin] = 'ready';
@@ -3399,7 +3432,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
             // by just skipping them.
             Xinha._pluginLoadStatus[plugin] = 'failed';
           }
-        },(Xinha.externalPlugins[p] ? Xinha.externalPlugins[p][0]+Xinha.externalPlugins[p][1] : url)
+        }, url
       );
       retVal = false;
     }
@@ -3434,7 +3467,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
   // if we have to callback
   if ( callbackIfNotReady )
   {
-    setTimeout(function() { if ( Xinha.loadPlugins(plugins, callbackIfNotReady) ) { callbackIfNotReady(); } }, 150);
+    setTimeout(function() { if ( Xinha.loadPlugins(plugins, callbackIfNotReady) ) { callbackIfNotReady(); } }, 50);
   }
   return retVal;
 };
@@ -6218,7 +6251,23 @@ Xinha._geturlcontent = function(url)
   {
     return '';
   }
+};
+Xinha.ping = function(url)
+{
+  var req = null;
+  req = Xinha.getXMLHTTPRequestObject();
 
+  // Synchronous!
+  req.open('HEAD', url, false);
+  req.send(null);
+  if ( req.status >= 400  )
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
 };
 
 // Unless somebody already has, make a little function to debug things
@@ -7260,6 +7309,10 @@ Xinha.init();
 if ( Xinha.ie_version < 8 )
 {
   Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
+}
+Xinha.debugMsg = function(text)
+{
+  if (typeof console != 'undefined' && typeof console.log == 'function') console.log(text);
 }
 Xinha.notImplemented = function(methodName) 
 {
