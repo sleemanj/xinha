@@ -2473,7 +2473,9 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   // We need to set the iframe & textarea to 100% height so that the htmlarea
   // isn't "pushed out" when we get it's height, so we can change them later.
   this._iframe.style.height   = '100%';
-  this._textArea.style.height = '100%';
+  //here 100% can lead to an effect that the editor is considerably higher in text mode
+  this._textArea.style.height = '1px';
+  
   this._iframe.style.width    = '';
   this._textArea.style.width  = '';
 
