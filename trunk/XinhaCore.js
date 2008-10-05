@@ -3317,7 +3317,7 @@ Xinha.getPluginDir = function(plugin)
  * @param {String} plugin_file URL of the file to load
  * @returns {Boolean} true if plugin loaded, false otherwise
  */
-Xinha.loadPlugin = function(pluginName, callback, plugin_file)
+Xinha.loadPlugin = function(pluginName, callback, url)
 {
   if ( !Xinha.isSupportedBrowser ) return;
   
@@ -3332,16 +3332,51 @@ Xinha.loadPlugin = function(pluginName, callback, plugin_file)
     }
     return true;
   }
-/*
-  if(!plugin_file)
-  {
-    var dir = this.getPluginDir(pluginName);
-    var plugin = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-    plugin_file = dir + "/" + plugin;
-  }
-*/
+  Xinha._pluginLoadStatus[pluginName] = 'loading';
   
-  Xinha._loadback(plugin_file, callback ? function() { callback(pluginName); } : null);
+  var loadUrl = function(url){
+    Xinha._loadback(url, callback ? function() { callback(pluginName); } : null);
+  }
+  
+  if(!url)
+  {
+    if (Xinha.externalPlugins[pluginName])
+    {
+      loadUrl(Xinha.externalPlugins[pluginName][0]+Xinha.externalPlugins[pluginName][1]);
+    }
+    else
+    {
+      var dir = this.getPluginDir(pluginName);
+      var file = pluginName + ".js";
+      url = dir + "/" + file;
+      Xinha.ping(url, function(){loadUrl(url)});
+      
+      file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+      url = dir + "/" + file;
+      Xinha.ping(url, function(){loadUrl(url)});
+      
+    /* synchronous:
+  if (!Xinha.ping(dir + "/" + file))
+      {
+        file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+        if (Xinha.ping(dir + "/" + file))
+        {
+          url = dir + "/" + file;
+          Xinha.externalPlugins[pluginName] = [dir,'/'+ file];
+          Xinha.debugMsg('You use an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js' );
+        }
+        else
+        {
+          Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.')
+          Xinha._pluginLoadStatus[pluginName] = 'failed';
+          return true
+        }
+      }
+*/
+    }
+  }
+  
+  
   return false;
 };
 /** Stores a status for each loading plugin that may be one of "loading","ready", or "failed"
@@ -3379,97 +3414,52 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
   for ( var i=0;i<nuPlugins.length;i++ )
   {
     var p = nuPlugins[i];
-
-    if (Xinha.externalPlugins[p])
-    {
-      url = Xinha.externalPlugins[p][0]+Xinha.externalPlugins[p][1];
-    }
-    else
-    {
-      var dir = this.getPluginDir(p);
-      var file = p + ".js";
-      url = dir + "/" + file;
-
-      if (typeof Xinha._pluginLoadStatus[p] == 'undefined')
-      {
-        if (!Xinha.ping(dir + "/" + file))
-        {
-          file = p.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-          if (Xinha.ping(dir + "/" + file))
-          {
-            url = dir + "/" + file;
-            Xinha.externalPlugins[p] = [dir,'/'+ file];
-            Xinha.debugMsg('You use an obsolete naming scheme for the Xinha plugin '+p+'. Please rename '+file+' to '+p+'.js' );
-          }
-          else
-          {
-            Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.')
-            Xinha._pluginLoadStatus[p] = 'failed';
-            continue;
-          }
-        }
-      }
-    }
-
+    
     if (p == 'FullScreen' && !Xinha.externalPlugins['FullScreen'] ) continue; //prevent trying to load FullScreen plugin from the plugins folder
    
-    if ( typeof Xinha._pluginLoadStatus[p] == 'undefined' && typeof window[p] == 'undefined')
+    if ( typeof Xinha._pluginLoadStatus[p] == 'undefined')
     {
       // Load it
-      Xinha._pluginLoadStatus[p] = 'loading';
       Xinha.loadPlugin(p,
         function(plugin)
         {
           Xinha.setLoadingMessage (Xinha._lc("Finishing"));
+
           if ( typeof window[plugin] != 'undefined' )
           {
             Xinha._pluginLoadStatus[plugin] = 'ready';
           }
           else
           {
-            // Actually, this won't happen, because if the script fails
-            // it will throw an exception preventing the callback from
-            // running.  This will leave it always in the "loading" state
-            // unfortunatly that means we can't fail plugins gracefully
-            // by just skipping them.
             Xinha._pluginLoadStatus[plugin] = 'failed';
           }
         }, url
       );
       retVal = false;
     }
-    else
+    else if ( Xinha._pluginLoadStatus[p] == 'loading')
     {
-      // @todo: a simple (if) would not be better than this tortuous (switch) structure ?
-      // if ( Xinha._pluginLoadStatus[p] !== 'failed' && Xinha._pluginLoadStatus[p] !== 'ready' )
-      // {
-      //   retVal = false;
-      // }
-      switch ( Xinha._pluginLoadStatus[p] )
-      {
-        case 'failed':
-        case 'ready' :
-        break;
-
-        //case 'loading':
-        default       :
-         retVal = false;
-       break;
-      }
+      retVal = false;
     }
   }
-
+  
   // All done, just return
   if ( retVal )
   {
     return true;
-  } 
+  }
 
   // Waiting on plugins to load, return false now and come back a bit later
   // if we have to callback
   if ( callbackIfNotReady )
   {
-    setTimeout(function() { if ( Xinha.loadPlugins(plugins, callbackIfNotReady) ) { callbackIfNotReady(); } }, 50);
+    setTimeout(function() 
+    { 
+      if ( Xinha.loadPlugins(plugins, callbackIfNotReady) ) 
+      { 
+        callbackIfNotReady(); 
+      } 
+    }, 50);
   }
   return retVal;
 };
@@ -6234,6 +6224,32 @@ Xinha._getback = function(url, handler)
   req.open('GET', url, true);
   req.send(null);
 };
+
+Xinha.ping = function(url, successHandler, failHandler)
+{
+  var req = null;
+  req = Xinha.getXMLHTTPRequestObject();
+
+  function callBack()
+  {
+    if ( req.readyState == 4 )
+    {
+      if ( req.status == 200 || Xinha.isRunLocally && req.status == 0 )
+      {
+        if (successHandler) successHandler(req);
+      }
+      else
+      {
+        if (failHandler) failHandler(req)
+      }
+    }
+  }
+
+  req.onreadystatechange = callBack;
+  req.open('HEAD', url, true);
+  req.send(null);
+};
+
 /** Use XMLHTTPRequest to receive some data from the server syncronously
  *  @param {String} url The address for the HTTPRequest
  */
@@ -6252,23 +6268,6 @@ Xinha._geturlcontent = function(url)
   else
   {
     return '';
-  }
-};
-Xinha.ping = function(url)
-{
-  var req = null;
-  req = Xinha.getXMLHTTPRequestObject();
-
-  // Synchronous!
-  req.open('HEAD', url, false);
-  req.send(null);
-  if ( req.status >= 400  )
-  {
-    return false;
-  }
-  else
-  {
-    return true;
   }
 };
 
@@ -7315,6 +7314,8 @@ if ( Xinha.ie_version < 8 )
 Xinha.debugMsg = function(text)
 {
   if (typeof console != 'undefined' && typeof console.log == 'function') console.log(text);
+  if (typeof opera != 'undefined' && typeof opera.postError == 'function') opera.postError(text);
+  
 }
 Xinha.notImplemented = function(methodName) 
 {
