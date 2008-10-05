@@ -798,7 +798,7 @@ Xinha.prototype.findCC = function ( target )
       doc.body.innerHTML = doc.body.innerHTML.replace(new RegExp(Xinha.cc),'<span id="XinhaEditingPostion"></span>');
       var posEl = doc.getElementById('XinhaEditingPostion');
       this.selectNodeContents(posEl);
-      posEl.scrollIntoView(true);
+      this.scrollToElement(posEl);
       posEl.parentNode.removeChild(posEl);
 
       this._iframe.contentWindow.focus();
