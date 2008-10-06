@@ -3349,20 +3349,31 @@ Xinha.loadPlugin = function(pluginName, callback, url)
       var dir = this.getPluginDir(pluginName);
       var file = pluginName + ".js";
       url = dir + "/" + file;
-	  loadUrl(url);
-      Xinha.ping(url, null, function(){
-		  	Xinha.removeFromParent(document.getElementById(url));
-			file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-	        url = dir + "/" + file;
-		  	loadUrl(url);
-			Xinha.ping(url, 
-				function(){Xinha.debugMsg('You are using an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js' );}, 
-				function(){
-					Xinha._pluginLoadStatus[pluginName] = 'failed';
-					Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.')
-					Xinha.removeFromParent(document.getElementById(url));
-			});
-		});
+      //try loading using new naming scheme unconditionally
+      loadUrl(url); 
+      //check for file existance
+      Xinha.ping(url,
+        // on success do nothing, all OK
+        null, 
+        //on fail try old naming scheme
+        function(){ 
+          //clean script tag for failed url
+          Xinha.removeFromParent(document.getElementById(url));
+          file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+          url = dir + "/" + file;
+          //load
+          loadUrl(url); 
+          //check for file existance
+          Xinha.ping(url, 
+            //on success issue informational message to console
+            function(){Xinha.debugMsg('You are using an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js', 'warn' );}, 
+            //on fail inform loadPlugins() of fail and issue warning to console
+            function(){
+            Xinha._pluginLoadStatus[pluginName] = 'failed';
+            Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.', 'warn')
+            Xinha.removeFromParent(document.getElementById(url));
+          });
+      });
     }
   }
   
@@ -7301,10 +7312,26 @@ if ( Xinha.ie_version < 8 )
 {
   Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
 }
-Xinha.debugMsg = function(text)
+/** Print some message to Firebug, Webkit, or Opera console
+ * 
+ * @param {String} text
+ * @param {String} level one of 'warn', 'info', or empty 
+ */
+Xinha.debugMsg = function(text, level)
 {
-  if (typeof console != 'undefined' && typeof console.log == 'function') console.log(text);
-  if (typeof opera != 'undefined' && typeof opera.postError == 'function') opera.postError(text);
+  if (typeof console != 'undefined' && typeof console.log == 'function')
+  {
+    if (level && level == 'warn' && typeof console.warn == 'function')
+    {
+      console.warn(text)
+    }
+    else if (level && level == 'info' && typeof console.info == 'function')
+    {
+      console.info(text)
+    }
+    else console.log(text);
+  }
+  else if (typeof opera != 'undefined' && typeof opera.postError == 'function') opera.postError(text);
   
 }
 Xinha.notImplemented = function(methodName) 
