@@ -731,7 +731,7 @@ Xinha.Config = function()
    *  Default: <code>true</code>
    *  @type Boolean
    */
-  this.killWordOnPaste = false;
+  this.killWordOnPaste = true;
 
   /** Enable the 'Target' field in the Make Link dialog. Note that the target attribute is invalid in (X)HTML strict<br />
    *  Default: <code>true</code>
