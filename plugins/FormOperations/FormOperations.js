@@ -200,7 +200,7 @@ FormOperations.prototype._preparePanel = function ()
   if(typeof Xinha.Dialog == 'undefined')
   {
     Xinha._loadback
-      (_editor_url + 'modules/Dialogs/inline-dialog.js', function() { fo._preparePanel(); } );
+      (_editor_url + 'modules/Dialogs/XinhaDialog.js', function() { fo._preparePanel(); } );
       return false;
   }
 
