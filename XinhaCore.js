@@ -3766,40 +3766,55 @@ Xinha.prototype._wordClean = function()
   function parseTree(root)
   {
     var tag = root.tagName.toLowerCase(), i, next;
-    // @todo : probably better to use String.indexOf() instead of this ugly regex
-    // if ((Xinha.is_ie && root.scopeName != 'HTML') || (!Xinha.is_ie && tag.indexOf(':') !== -1)) {
-    if ( ( Xinha.is_ie && root.scopeName != 'HTML' ) || ( !Xinha.is_ie && ( /:/.test(tag) ) ) )
+
+    clearClass(root);
+    clearStyle(root);
+
+    for (var i = root.firstChild; i; i = next )
     {
-      stripTag(root);
-      return false;
-    }
-    else
-    {
-      clearClass(root);
-      clearStyle(root);
-      for ( i = root.firstChild; i; i = next )
+      next = i.nextSibling;
+      if ( i.nodeType == 1 && parseTree(i) )
       {
-        next = i.nextSibling;
-        if ( i.nodeType == 1 && parseTree(i) )
+        if ((Xinha.is_ie && root.scopeName != 'HTML') || (!Xinha.is_ie && /:/.test(tag)))
         {
-          if (checkEmpty(i))
+          // Nowadays, Word spits out tags like '<o:something />'.  Since the
+          // document being cleaned might be HTML4 and not XHTML, this tag is
+          // interpreted as '<o:something /="/">'.  For HTML tags without
+          // closing elements (e.g. IMG) these two forms are equivalent.  Since
+          // HTML does not recognize these tags, however, they end up as
+          // parents of elements that should be their siblings.  We reparent
+          // the children and remove them from the document.
+          for (var index=i.children && ichildren.length-1; i.children && i.children.length && i.children[index]; ++index)
           {
-            continue;
-          }
-          if (removeElements(i))
-          {
-            continue;
+            if (i.nextSibling)
+            {
+              i.parentNode.insertBefore(i.children[index],i.nextSibling);
+            }
+            else
+            {
+              i.parentNode.appendChild(i.children[index]);
+            }
+            Xinha.removeFromParent(i);
           }
         }
-        else if (i.nodeType == 8)
+        if (checkEmpty(i))
         {
-          // 8 is a comment node, and can contain conditional comments.
-          if (/(\s*\[\s*if\s*(([gl]te?|!)\s*)?(IE|mso)\s*(\d+(\.\d+)?\s*)?\]>)/.test(i.nodeValue))
-          {
-            // We strip all conditional comments directly from the tree.
-            Xinha.removeFromParent(i);
-            ++stats.cond_comm;
-          }
+          continue;
+        }
+        if (removeElements(i))
+        {
+          continue;
+        }
+      }
+      else if (i.nodeType == 8)
+      {
+        // 8 is a comment node, and can contain conditional comments, which
+        // will be interpreted by IE as if they were not comments.
+        if (/(\s*\[\s*if\s*(([gl]te?|!)\s*)?(IE|mso)\s*(\d+(\.\d+)?\s*)?\]>)/.test(i.nodeValue))
+        {
+          // We strip all conditional comments directly from the tree.
+          Xinha.removeFromParent(i);
+          ++stats.cond_comm;
         }
       }
     }
