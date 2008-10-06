@@ -731,7 +731,7 @@ Xinha.Config = function()
    *  Default: <code>true</code>
    *  @type Boolean
    */
-  this.killWordOnPaste = true;
+  this.killWordOnPaste = false;
 
   /** Enable the 'Target' field in the Make Link dialog. Note that the target attribute is invalid in (X)HTML strict<br />
    *  Default: <code>true</code>
@@ -3717,26 +3717,6 @@ Xinha.prototype._wordClean = function()
     node.style.cssText = declarations.join("; ");
   }
 
-  var stripTag = null;
-  if ( Xinha.is_ie )
-  {
-    stripTag = function(el)
-    {
-      el.outerHTML = Xinha.htmlEncode(el.innerText);
-      ++stats.mso_xmlel;
-    };
-  }
-  else
-  {
-    stripTag = function(el)
-    {
-      var txt = document.createTextNode(Xinha.getInnerText(el));
-      el.parentNode.insertBefore(txt, el);
-      Xinha.removeFromParent(el);
-      ++stats.mso_xmlel;
-    };
-  }
-
   function removeElements(el)
   {
     if ((('link' == el.tagName.toLowerCase()) &&
@@ -3765,17 +3745,15 @@ Xinha.prototype._wordClean = function()
 
   function parseTree(root)
   {
-    var tag = root.tagName.toLowerCase(), i, next;
-
     clearClass(root);
     clearStyle(root);
 
     for (var i = root.firstChild; i; i = next )
     {
-      next = i.nextSibling;
+      var next = i.nextSibling;
       if ( i.nodeType == 1 && parseTree(i) )
       {
-        if ((Xinha.is_ie && root.scopeName != 'HTML') || (!Xinha.is_ie && /:/.test(tag)))
+        if ((Xinha.is_ie && root.scopeName != 'HTML') || (!Xinha.is_ie && /:/.test(i.tagName)))
         {
           // Nowadays, Word spits out tags like '<o:something />'.  Since the
           // document being cleaned might be HTML4 and not XHTML, this tag is
@@ -3784,18 +3762,19 @@ Xinha.prototype._wordClean = function()
           // HTML does not recognize these tags, however, they end up as
           // parents of elements that should be their siblings.  We reparent
           // the children and remove them from the document.
-          for (var index=i.children && ichildren.length-1; i.children && i.children.length && i.children[index]; ++index)
+          for (var index=i.childNodes && i.childNodes.length-1; i.childNodes && i.childNodes.length && i.childNodes[index]; --index)
           {
             if (i.nextSibling)
             {
-              i.parentNode.insertBefore(i.children[index],i.nextSibling);
+              i.parentNode.insertBefore(i.childNodes[index],i.nextSibling);
             }
             else
             {
-              i.parentNode.appendChild(i.children[index]);
+              i.parentNode.appendChild(i.childNodes[index]);
             }
-            Xinha.removeFromParent(i);
           }
+          Xinha.removeFromParent(i);
+          continue;
         }
         if (checkEmpty(i))
         {
