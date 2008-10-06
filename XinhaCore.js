@@ -3349,30 +3349,20 @@ Xinha.loadPlugin = function(pluginName, callback, url)
       var dir = this.getPluginDir(pluginName);
       var file = pluginName + ".js";
       url = dir + "/" + file;
-      Xinha.ping(url, function(){loadUrl(url)});
-      
-      file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-      url = dir + "/" + file;
-      Xinha.ping(url, function(){loadUrl(url)});
-      
-    /* synchronous:
-  if (!Xinha.ping(dir + "/" + file))
-      {
-        file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-        if (Xinha.ping(dir + "/" + file))
-        {
-          url = dir + "/" + file;
-          Xinha.externalPlugins[pluginName] = [dir,'/'+ file];
-          Xinha.debugMsg('You use an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js' );
-        }
-        else
-        {
-          Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.')
-          Xinha._pluginLoadStatus[pluginName] = 'failed';
-          return true
-        }
-      }
-*/
+	  loadUrl(url);
+      Xinha.ping(url, null, function(){
+		  	Xinha.removeFromParent(document.getElementById(url));
+			file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+	        url = dir + "/" + file;
+		  	loadUrl(url);
+			Xinha.ping(url, 
+				function(){Xinha.debugMsg('You are using an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js' );}, 
+				function(){
+					Xinha._pluginLoadStatus[pluginName] = 'failed';
+					Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.')
+					Xinha.removeFromParent(document.getElementById(url));
+			});
+		});
     }
   }
   
