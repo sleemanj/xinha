@@ -2061,7 +2061,7 @@ Xinha.prototype.generate = function ()
     {            
       return false;
     }
-    editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
+    if (!this.plugins['InternetExplorer']) editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
   }
   else if (Xinha.is_webkit)
   {
@@ -2071,7 +2071,7 @@ Xinha.prototype.generate = function ()
   
       return false;
     }
-    editor._browserSpecificPlugin = editor.registerPlugin('WebKit');
+    if (!this.plugins['Webkit']) editor._browserSpecificPlugin = editor.registerPlugin('WebKit');
   }
   else if (Xinha.is_opera)
   {
@@ -2080,7 +2080,7 @@ Xinha.prototype.generate = function ()
     {            
       return false;
     }
-    editor._browserSpecificPlugin = editor.registerPlugin('Opera');
+    if (!this.plugins['Opera']) editor._browserSpecificPlugin = editor.registerPlugin('Opera');
   }
   else if (Xinha.is_gecko)
   {
@@ -2089,7 +2089,7 @@ Xinha.prototype.generate = function ()
     {            
       return false;
     }
-    editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
+    if (!this.plugins['Gecko']) editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
   }
 
   if ( typeof Dialog == 'undefined' && !Xinha._loadback( _editor_url + 'modules/Dialogs/dialog.js', this.generate, this ) )
@@ -2113,7 +2113,7 @@ Xinha.prototype.generate = function ()
   {
     return false;
   }
-  else if ( typeof ColorPicker != 'undefined') editor.registerPlugin('ColorPicker');
+  else if ( typeof ColorPicker != 'undefined' && !this.plugins['colorPicker']) editor.registerPlugin('ColorPicker');
 
   var toolbar = editor.config.toolbar;
   for ( i = toolbar.length; --i >= 0; )
@@ -2123,7 +2123,7 @@ Xinha.prototype.generate = function ()
       switch (toolbar[i][j])
       {
         case "popupeditor":
-          editor.registerPlugin('FullScreen');
+          if (!this.plugins['FullScreen']) editor.registerPlugin('FullScreen');
         break;
         case "insertimage":
           url = _editor_url + 'modules/InsertImage/insert_image.js';
@@ -2131,7 +2131,7 @@ Xinha.prototype.generate = function ()
           {
             return false;
           }
-          else if ( typeof InsertImage != 'undefined') editor.registerPlugin('InsertImage');
+          else if ( typeof InsertImage != 'undefined' && !this.plugins['InsertImage']) editor.registerPlugin('InsertImage');
         break;
         case "createlink":
           url = _editor_url + 'modules/CreateLink/link.js';
@@ -2139,7 +2139,7 @@ Xinha.prototype.generate = function ()
           {
             return false;
           }
-          else if ( typeof CreateLink != 'undefined') editor.registerPlugin('CreateLink');
+          else if ( typeof CreateLink != 'undefined' && !this.plugins['CreateLink']) editor.registerPlugin('CreateLink');
         break;
         case "inserttable":
           url = _editor_url + 'modules/InsertTable/insert_table.js';
@@ -2147,7 +2147,7 @@ Xinha.prototype.generate = function ()
           {
             return false;
           }
-          else if ( typeof InsertTable != 'undefined') editor.registerPlugin('InsertTable');
+          else if ( typeof InsertTable != 'undefined' && !this.plugins['InsertTable']) editor.registerPlugin('InsertTable');
         break;
       }
     }
@@ -2160,12 +2160,7 @@ Xinha.prototype.generate = function ()
     {
       return false;
     }
-    editor.registerPlugin('EnterParagraphs');
-  }
-  //TEMPORARY FIX FOR IE8 see #1175
-  if (Xinha.ie_version == 8)
-  {
-    this.config.getHtmlMethod = 'TransformInnerHTML';
+    if (!this.plugins['EnterParagraphs']) editor.registerPlugin('EnterParagraphs');
   }
 
   switch (this.config.getHtmlMethod)
@@ -2182,7 +2177,7 @@ Xinha.prototype.generate = function ()
   {
     return false;        
   }
-  else editor.registerPlugin('GetHtmlImplementation');
+  else if (!this.plugins['GetHtmlImplementation']) editor.registerPlugin('GetHtmlImplementation');
   
   // create the editor framework, yah, table layout I know, but much easier
   // to get it working correctly this way, sorry about that, patches welcome.
@@ -3247,7 +3242,6 @@ Xinha.prototype.registerPlugin = function()
   {
     return false;
   }
-
   var args = [];
   for ( var i = 1; i < arguments.length; ++i )
   {
@@ -3272,6 +3266,7 @@ Xinha.prototype.registerPlugin2 = function(plugin, args)
     /* FIXME: This should never happen. But why does it do? */
     return false;
   }
+
   var obj = new plugin(this, args);
   if ( obj )
   {
@@ -3288,7 +3283,7 @@ Xinha.prototype.registerPlugin2 = function(plugin, args)
   }
   else
   {
-    alert("Can't register plugin " + plugin.toString() + ".");
+    Xinha.debugMsg("Can't register plugin " + plugin.toString() + ".", 'warn');
   }
 };
 
@@ -5702,6 +5697,7 @@ Xinha.needsClosingTag = function(el)
  */
 Xinha.htmlEncode = function(str)
 {
+  if (!str) return '';
   if ( typeof str.replace == 'undefined' )
   {
     str = str.toString();
