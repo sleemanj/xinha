@@ -3293,18 +3293,22 @@ Xinha.prototype.registerPlugin2 = function(plugin, args)
  *  @TODO: Wouldn't this be better as a config option?
  * @private
  * @param {String} pluginName
+ * @param {Boolean} return the directory for an unsupported plugin
  * @returns {String} path to plugin
  */
-Xinha.getPluginDir = function(plugin)
+Xinha.getPluginDir = function(plugin, forceUnsupported)
 {
   if (Xinha.externalPlugins[plugin])
   {
     return Xinha.externalPlugins[plugin][0];
   }
-  else
+  if (forceUnsupported ||
+      // If the plugin is fully loaded, it's supported status is already set.
+      (window[plugin] && (typeof window[plugin].supported != 'undefined') && !window[plugin].supported))
   {
-    return _editor_url + "plugins/" + plugin ;
+    return _editor_url + "unsupported/" + plugin ;
   }
+  return _editor_url + "plugins/" + plugin ;
 }
 /** Static function that loads the given plugin
  * @param {String} pluginName
@@ -3319,7 +3323,7 @@ Xinha.loadPlugin = function(pluginName, callback, url)
   Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin="+pluginName+"$"));
 
   // Might already be loaded
-  if ( typeof window['pluginName'] != 'undefined' )
+  if ( typeof window[pluginName] != 'undefined' )
   {
     if ( callback )
     {
@@ -3329,51 +3333,88 @@ Xinha.loadPlugin = function(pluginName, callback, url)
   }
   Xinha._pluginLoadStatus[pluginName] = 'loading';
   
-  var loadUrl = function(url){
-    Xinha._loadback(url, callback ? function() { callback(pluginName); } : null);
-  }
-  
   if(!url)
   {
     if (Xinha.externalPlugins[pluginName])
     {
-      loadUrl(Xinha.externalPlugins[pluginName][0]+Xinha.externalPlugins[pluginName][1]);
+      Xinha._loadback(Xinha.externalPlugins[pluginName][0]+Xinha.externalPlugins[pluginName][1], callback, this, pluginName);
     }
     else
     {
-      var dir = this.getPluginDir(pluginName);
-      var file = pluginName + ".js";
-      url = dir + "/" + file;
-      //try loading using new naming scheme unconditionally
-      loadUrl(url); 
-      //check for file existance
-      Xinha.ping(url,
-        // on success do nothing, all OK
-        null, 
-        //on fail try old naming scheme
-        function(){ 
-          //clean script tag for failed url
-          Xinha.removeFromParent(document.getElementById(url));
-          file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-          url = dir + "/" + file;
-          //load
-          loadUrl(url); 
-          //check for file existance
-          Xinha.ping(url, 
-            //on success issue informational message to console
-            function(){Xinha.debugMsg('You are using an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js', 'warn' );}, 
-            //on fail inform loadPlugins() of fail and issue warning to console
-            function(){
-            Xinha._pluginLoadStatus[pluginName] = 'failed';
-            Xinha.debugMsg('Xinha was not able to find the plugin file '+url+'. Please make sure the plugin exist.', 'warn')
-            Xinha.removeFromParent(document.getElementById(url));
-          });
-      });
+      var editor = this;
+      multiStageLoader('start',pluginName);
     }
   }
   
-  
   return false;
+
+  // This function will try to load a plugin in multiple passes.  It tries to
+  // load the plugin from either the plugin or unsupported directory, using
+  // both naming schemes in this order:
+  // 1. /plugins -> CurrentNamingScheme
+  // 2. /plugins -> old-naming-scheme
+  // 3. /unsupported -> CurrentNamingScheme
+  // 4. /unsupported -> old-naming-scheme
+
+  function multiStageLoader(stage,pluginName)
+  {
+    switch (stage)
+    {
+      case 'start':
+        var nextstage = 'old_naming';
+        var dir = editor.getPluginDir(pluginName);
+        var file = pluginName + ".js";
+        break;
+      case 'old_naming':
+        var nextstage = 'unsupported';
+        var dir = editor.getPluginDir(pluginName);
+        var file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+        var success_message = 'You are using an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js';
+        break;
+      case 'unsupported':
+        var nextstage = 'unsupported_old_name';
+        var dir = editor.getPluginDir(pluginName, true);
+        var file = pluginName + ".js";
+        var success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        break;
+      case 'unsupported_old_name':
+        var nextstage = '';
+        var dir = editor.getPluginDir(pluginName, true);
+        var file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+        var success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        break;
+      default:
+        Xinha._pluginLoadStatus[pluginName] = 'failed';
+        Xinha.debugMsg('Xinha was not able to find the plugin '+pluginName+'. Please make sure the plugin exists.', 'warn')
+        return;
+    }
+    var url = dir + "/" + file;
+
+    // This is a callback wrapper that allows us to set the plugin's status
+    // once it loads.
+    function statusCallback(pluginName)
+    {
+      window[pluginName].supported = stage.indexOf('unsupported') != 0;
+      callback(pluginName);
+    }
+
+    // To speed things up, we start loading the script file before pinging it.
+    // If the load fails, we'll just clean up afterwards.
+    Xinha._loadback(url, statusCallback, this, pluginName); 
+
+    Xinha.ping(url,
+               // On success, we'll display a success message if there is one.
+               function()
+               {
+                 if (success_message) Xinha.debugMsg(success_message);
+               },
+               // On failure, we'll clean up the failed load and try the next stage
+               function()
+               {
+                 Xinha.removeFromParent(document.getElementById(url));
+                 multiStageLoader(nextstage, pluginName);
+               });
+  }
 };
 /** Stores a status for each loading plugin that may be one of "loading","ready", or "failed"
  * @private
@@ -5837,7 +5878,8 @@ Xinha.prototype.imgURL = function(file, plugin)
   }
   else
   {
-    return _editor_url + "plugins/" + plugin + "/img/" + file;
+    var pluginDir = window[plugin].supported ? 'plugins/' : 'unsupported/';
+    return _editor_url + pluginDir + plugin + "/img/" + file;
   }
 };
 /** Creates a path
