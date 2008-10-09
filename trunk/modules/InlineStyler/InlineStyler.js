@@ -1,7 +1,8 @@
-Xinha.InlineStyler = function(element, editor, doc)
+Xinha.InlineStyler = function(element, editor, dialog, doc)
 {
   this.element = element;
   this.editor = editor;
+  this.dialog = dialog;
   this.doc = doc ? doc : document;
   this.inputs = {
     styles : {},
@@ -31,7 +32,9 @@ Xinha.InlineStyler.prototype.applyStyle = function(params)
   {
     if (typeof params[i] == 'function') 
       continue;
-    var val = params[i].value;
+    if (params[i] != null)
+      var val = params[i].value || params[i];
+
     switch (i)
     {
     case "backgroundImage":
@@ -45,7 +48,7 @@ Xinha.InlineStyler.prototype.applyStyle = function(params)
       }
       break;
     case "borderCollapse":
-      style.borderCollapse =  params[i].checked ? "collapse" : "";
+      style.borderCollapse = params[i] == "on" ? "collapse" : "separate";
       break;
     case "width":
       if (/\S/.test(val)) 
@@ -108,10 +111,9 @@ Xinha.InlineStyler.prototype.applyStyle = function(params)
       }
       break;
     case "borderWidth":
-      var borderWidthUnit = this.inputs.aux["heightUnit"].value;
-      style[i] = val + (borderWidthUnit) ? borderWidthUnit : 'px';
+      style[i] = val + "px";
       break;
-    default:
+    default:      
       style[i] = val;
       break;
       // 		    case "f_st_margin":
@@ -154,6 +156,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
     td = doc.createElement("td");
     tr.appendChild(td);
     select = doc.createElement("select");
+    select.name = this.dialog.createId("float");
     td.appendChild(select);
     this.inputs.styles['float'] = select;
     
@@ -184,6 +187,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
+  input.name = this.dialog.createId("width");
   input.type = "text";
   input.value = Xinha.InlineStyler.getLength(el.style.width);
   input.size = "5";
@@ -191,6 +195,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   input.style.marginRight = "0.5em";
   td.appendChild(input);
   select = doc.createElement("select");
+  select.name = this.dialog.createId("widthUnit");
   this.inputs.aux['widthUnit'] = select;
   option = doc.createElement("option");
   option.innerHTML = Xinha._lc("percent", "TableOperations");
@@ -207,6 +212,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   select.style.marginRight = "0.5em";
   td.appendChild(doc.createTextNode(Xinha._lc("Text align", "TableOperations") + ":"));
   select = doc.createElement("select");
+  select.name = this.dialog.createId("textAlign");
   select.style.marginLeft = select.style.marginRight = "0.5em";
   td.appendChild(select);
   this.inputs.styles['textAlign'] = select;
@@ -217,7 +223,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   }
   input = doc.createElement("input");
   this.inputs.aux['textAlignChar'] = input;
-  input.name= 'fuck';
+  input.name= this.dialog.createId("textAlignChar");
   input.size = "1";
   input.style.fontFamily = "monospace";
   td.appendChild(input);
@@ -257,6 +263,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
+  input.name = this.dialog.createId("height");
   input.type = "text";
   input.value = Xinha.InlineStyler.getLength(el.style.height);
   input.size = "5";
@@ -264,6 +271,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   input.style.marginRight = "0.5em";
   td.appendChild(input);
   select = doc.createElement("select");
+  select.name = this.dialog.createId("heightUnit");
   this.inputs.aux['heightUnit'] = select;
   option = doc.createElement("option");
   option.innerHTML = Xinha._lc("percent", "TableOperations");
@@ -280,6 +288,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   select.style.marginRight = "0.5em";
   td.appendChild(doc.createTextNode(Xinha._lc("Vertical align", "TableOperations") + ":"));
   select = doc.createElement("select");
+  select.name = this.dialog.createId("verticalAlign");
   this.inputs.styles['verticalAlign'] = select;
   select.style.marginLeft = "0.5em";
   td.appendChild(select);
@@ -329,6 +338,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   tr.appendChild(td);
 
   input = doc.createElement("input");
+  input.name = this.dialog.createId("backgroundColor");
   input.value = Xinha._colorToRgb( el.style.backgroundColor );
   input.type = "hidden";
   this.inputs.styles['backgroundColor'] = input;
@@ -336,14 +346,13 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td.appendChild(input);
   new Xinha.colorPicker.InputBinding(input)
   
-  td.appendChild(doc.createTextNode(Xinha._lc("Image URL", "TableOperations") + ": "));
+  td.appendChild(doc.createTextNode(" " + Xinha._lc("Image URL", "TableOperations") + ": "));
   input = doc.createElement("input");
+  input.name = this.dialog.createId("backgroundImage");
   input.type = "text";
   this.inputs.styles['backgroundImage'] = input;
-  if (el.style.backgroundImage.match(/url\(\s*(.*?)\s*\)/)) 
-  {
+  if (el.style.backgroundImage.match(/url\(\s*(.*?)\s*\)/))
     input.value = RegExp.$1;
-  }
   // input.style.width = "100%";
   td.appendChild(input);
   
@@ -356,6 +365,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
+  input.name = this.dialog.createId("color");
   input.value = Xinha._colorToRgb( el.style.color );
   input.type = "hidden";
   this.inputs.styles['color'] = input;
@@ -378,6 +388,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
+  input.name = this.dialog.createId("borderColor");
   input.value = Xinha._colorToRgb( el.style.borderColor );
   input.type = "hidden";
   this.inputs.styles['borderColor'] = input;
@@ -386,6 +397,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   new Xinha.colorPicker.InputBinding(input)
   
   select = doc.createElement("select");
+  select.name = this.dialog.createId("borderStyle");
   var borderFields = [];
   td.appendChild(select);
   this.inputs.styles['borderStyle'] = select;
@@ -423,6 +435,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   };
   
   input = doc.createElement("input");
+  input.name = this.dialog.createId("borderWidth");
   borderFields.push(input);
   input.type = "text";
   this.inputs.styles['borderWidth'] = input;
@@ -446,6 +459,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
     td.className = "label";
     tr.appendChild(td);
     input = doc.createElement("input");
+    input.name = this.dialog.createId("borderCollapse");
     input.type = "checkbox";
     this.inputs.styles['borderCollapse'] = input;
     input.id = "f_st_borderCollapse";

@@ -1037,12 +1037,7 @@ Xinha.Dialog.prototype.translateHtml = function(html,localizer)
   html = html.replace(/\[([a-z0-9_]+)\]/ig,
     function(fullString, id)
     {
-      if(typeof dialog.id[id] == 'undefined')
-      {
-        dialog.id[id] = Xinha.uniq('Dialog');
-        dialog.r_id[dialog.id[id]] = id;
-      }
-      return dialog.id[id];
+      return dialog.createId(id);
     }
     ).replace(/<l10n>(.*?)<\/l10n>/ig,
     function(fullString,translate)
@@ -1057,6 +1052,29 @@ Xinha.Dialog.prototype.translateHtml = function(html,localizer)
   );
   return html;
 }
+
+/** Use this function when adding an element with a new ID/name to a 
+ *  dialog after it has already been created. This function ensures
+ *  that the dialog has the id/name stored in its reverse-lookup table
+ *  (which is required for form values to be properly returned by
+ *  Xinha.Dialog.hide).
+ * 
+ * @param {id} the id (or name) to add 
+ *
+ * Returns the internal ID to which the passed in ID maps
+ *
+ * TODO: createId is a really awful name, but I can't think of anything better...
+ */
+Xinha.Dialog.prototype.createId = function(id)
+{
+  var dialog = this;
+  if (typeof dialog.id[id] == 'undefined')
+  {
+    dialog.id[id] = Xinha.uniq('Dialog');
+    dialog.r_id[dialog.id[id]] = id;
+  }
+  return dialog.id[id];
+};
 
 /** When several modeless dialogs are shown, one can be brought to front with this function (as happens on mouseclick) 
  * 
