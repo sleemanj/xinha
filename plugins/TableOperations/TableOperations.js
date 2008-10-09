@@ -502,7 +502,7 @@ TableOperations.prototype.dialogTableProperties = function() {
   }
   var dialog = this.dialogTable;
   
-  var Styler = new Xinha.InlineStyler(table, this.editor);
+  var Styler = new Xinha.InlineStyler(table, this.editor, dialog);
   
   function apply() {
     var params = dialog.hide();
@@ -511,7 +511,8 @@ TableOperations.prototype.dialogTableProperties = function() {
     for (var i in params) {
       if(typeof params[i] == 'function') continue;
       var val = params[i];
-      if (typeof val == 'object' && val.tagName) val = val.value;
+      //if (val == null) continue;
+      if (typeof val == 'object' && val != null && val.tagName) val = val.value;
       switch (i) {
       case "caption":
         if (/\S/.test(val)) {
@@ -618,11 +619,11 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
   
   var dialog = this.dialogRowCell;
   dialog.getElementById('title').innerHTML = cell ? Xinha._lc("Cell Properties", "TableOperations") : Xinha._lc("Row Properties", "TableOperations");
-  var Styler = new Xinha.InlineStyler(element, self.editor);
+  var Styler = new Xinha.InlineStyler(element, self.editor, dialog);
   
   function apply() {
     var params = dialog.hide();
-    Styler.applyStyle();
+    Styler.applyStyle(params);
     
     // various workarounds to refresh the table display (Gecko,
     // what's going on?! do not disappoint me!)
