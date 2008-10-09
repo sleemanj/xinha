@@ -490,7 +490,7 @@ Xinha.prototype.restoreSelection = function(savedSelection)
     //               ^
     // The problem occurs when the cursor is after the 'e' in Node.
 
-    var solution = editor.config.selectWorkaround || 'InsertSpan';
+    var solution = this.config.selectWorkaround || 'VisibleCue';
     switch (solution)
     {
       case 'SimulateClick':
@@ -558,7 +558,7 @@ Xinha.prototype.restoreSelection = function(savedSelection)
         savedSelection.execCommand('JustifyNone');
         savedSelection.pasteHTML('');
         break;
-      case 'VisiblePrompt':
+      case 'VisibleCue':
       default:
         // This method will insert a little box character to hold our selection
         // in the desired spot.  We're depending on the user to see this ugly
