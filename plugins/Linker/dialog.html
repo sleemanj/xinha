@@ -3,7 +3,7 @@
 <div id="[dTree]">(the dTree goes in here)</div>
 <div id="[options]" >
   <fieldset>
-    <legend><label><input type="radio" name="[type]" value="url" checked="checked" onclick="
+    <legend><label><input type="radio" name="[type]" id="[type]" value="url" checked="checked" onclick="
       document.getElementById('[urltable]').style.display=this.checked?'':'none';
       document.getElementById('[mailtable]').style.display=this.checked?'none':'';
       document.getElementById('[anchortable]').style.display=this.checked?'none':'';
@@ -59,7 +59,7 @@
       </tr>
     </table>
   </fieldset>
-  <fieldset>
+  <fieldset id="[mailtofieldset]">
     <legend><label><input type="radio" name="[type]" value="mailto" onclick="
       document.getElementById('[mailtable]').style.display=this.checked?'':'none';
       document.getElementById('[urltable]').style.display=this.checked?'none':'';
