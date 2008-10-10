@@ -3306,7 +3306,7 @@ Xinha.getPluginDir = function(plugin, forceUnsupported)
       // If the plugin is fully loaded, it's supported status is already set.
       (window[plugin] && (typeof window[plugin].supported != 'undefined') && !window[plugin].supported))
   {
-    return _editor_url + "unsupported/" + plugin ;
+    return _editor_url + "unsupported_plugins/" + plugin ;
   }
   return _editor_url + "plugins/" + plugin ;
 }
@@ -5878,8 +5878,7 @@ Xinha.prototype.imgURL = function(file, plugin)
   }
   else
   {
-    var pluginDir = window[plugin].supported ? 'plugins/' : 'unsupported/';
-    return _editor_url + pluginDir + plugin + "/img/" + file;
+    return Xinha.getPluginDir(plugin) + "/img/" + file;
   }
 };
 /** Creates a path
