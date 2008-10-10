@@ -446,10 +446,26 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
     anchor[anchor.length] = opt;
   }
 
-  //if no anchors found completely hide Anchor-Link
-  if(anchor.length==0) {
-    this.dialog.getElementById('anchorfieldset').style.display = "none";
+  // Configuration for disabling the mail link functionality.
+  if(this.linker.lConfig.disableMailto)
+  {
+    this.dialog.getElementById('mailtofieldset').style.display = "none";
   }
+
+  // Configuration for hiding the anchor functionality.  Also, no need to show
+  // the UI if there are no anchors present in the document.
+  if(anchor.length==0 || this.linker.lConfig.disableAnchors)
+  {
+    this.dialog.getElementById('anchorfieldset').style.display = "none";
+
+    // If we disable the other two fieldsets, we'll hide the (now) unnecessary
+    // radio button.
+    if (this.linker.lConfig.disableMailto)
+    {
+      this.dialog.getElementById('type').style.display = "none";
+    }
+  }
+
   
   // if we're not editing an existing link, hide the remove link button
   if (inputs.href == 'http://www.example.com/' && inputs.to == 'alice@example.com') { 
