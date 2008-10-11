@@ -2113,7 +2113,7 @@ Xinha.prototype.generate = function ()
   {
     return false;
   }
-  else if ( typeof ColorPicker != 'undefined' && !this.plugins['colorPicker']) editor.registerPlugin('ColorPicker');
+  else if ( typeof Xinha.getPluginConstructor('ColorPicker') != 'undefined' && !this.plugins['colorPicker']) editor.registerPlugin('ColorPicker');
 
   var toolbar = editor.config.toolbar;
   for ( i = toolbar.length; --i >= 0; )
@@ -2131,15 +2131,15 @@ Xinha.prototype.generate = function ()
           {
             return false;
           }
-          else if ( typeof InsertImage != 'undefined' && !this.plugins['InsertImage']) editor.registerPlugin('InsertImage');
+          else if ( typeof Xinha.getPluginConstructor('InsertImage') != 'undefined' && !this.plugins['InsertImage']) editor.registerPlugin('InsertImage');
         break;
         case "createlink":
           url = _editor_url + 'modules/CreateLink/link.js';
-          if ( typeof Linker == 'undefined' && !Xinha.loadPlugins([{plugin:"CreateLink",url:url}], function() { editor.generate(); } ))
+          if ( typeof Xinha.getPluginConstructor('Linker') == 'undefined' && !Xinha.loadPlugins([{plugin:"CreateLink",url:url}], function() { editor.generate(); } ))
           {
             return false;
           }
-          else if ( typeof CreateLink != 'undefined' && !this.plugins['CreateLink']) editor.registerPlugin('CreateLink');
+          else if ( typeof Xinha.getPluginConstructor('CreateLink') != 'undefined' && !this.plugins['CreateLink']) editor.registerPlugin('CreateLink');
         break;
         case "inserttable":
           url = _editor_url + 'modules/InsertTable/insert_table.js';
@@ -2147,7 +2147,7 @@ Xinha.prototype.generate = function ()
           {
             return false;
           }
-          else if ( typeof InsertTable != 'undefined' && !this.plugins['InsertTable']) editor.registerPlugin('InsertTable');
+          else if ( typeof Xinha.getPluginConstructor('InsertTable') != 'undefined' && !this.plugins['InsertTable']) editor.registerPlugin('InsertTable');
         break;
       }
     }
@@ -3234,7 +3234,16 @@ Xinha.prototype.setEditorEvents = function()
 /***************************************************
  *  Category: PLUGINS
  ***************************************************/
-
+/** Plugins may either reside in the golbal scope (not recommended) or in Xinha.plugins. 
+ *  This function looks in both locations and is used to check the loading status and finally retrieve the plugin's constructor
+ * @private
+ * @type {Function|undefined}
+ * @param {String} pluginName
+ */
+Xinha.getPluginConstructor = function(pluginName)
+{
+  return Xinha.plugins[pluginName] || window[pluginName];
+}
 
 /** Create the specified plugin and register it with this Xinha
  *  return the plugin created to allow refresh when necessary.<br />
@@ -3247,7 +3256,7 @@ Xinha.prototype.registerPlugin = function()
   var plugin = arguments[0];
 
   // We can only register plugins that have been succesfully loaded
-  if ( plugin === null || typeof plugin == 'undefined' || (typeof plugin == 'string' && typeof window[plugin] == 'undefined') )
+  if ( plugin === null || typeof plugin == 'undefined' || (typeof plugin == 'string' && Xinha.getPluginConstructor(plugin) == 'undefined') )
   {
     return false;
   }
@@ -3266,16 +3275,17 @@ Xinha.prototype.registerPlugin = function()
  */
 Xinha.prototype.registerPlugin2 = function(plugin, args)
 {
-  if ( typeof plugin == "string" && typeof window[plugin] == 'function' )
+  if ( typeof plugin == "string" && typeof Xinha.getPluginConstructor(plugin) == 'function' )
   {
-    plugin = window[plugin];
+    var pluginName = plugin;
+    plugin = Xinha.getPluginConstructor(plugin);
   }
   if ( typeof plugin == "undefined" )
   {
     /* FIXME: This should never happen. But why does it do? */
     return false;
   }
-
+  if (!plugin._pluginInfo) plugin._pluginInfo =  {name:pluginName};
   var obj = new plugin(this, args);
   if ( obj )
   {
@@ -3313,7 +3323,7 @@ Xinha.getPluginDir = function(plugin, forceUnsupported)
   }
   if (forceUnsupported ||
       // If the plugin is fully loaded, it's supported status is already set.
-      (window[plugin] && (typeof window[plugin].supported != 'undefined') && !window[plugin].supported))
+      (Xinha.getPluginConstructor(plugin) && (typeof Xinha.getPluginConstructor(plugin).supported != 'undefined') && !Xinha.getPluginConstructor(plugin).supported))
   {
     return _editor_url + "unsupported_plugins/" + plugin ;
   }
@@ -3332,7 +3342,7 @@ Xinha.loadPlugin = function(pluginName, callback, url)
   Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin="+pluginName+"$"));
 
   // Might already be loaded
-  if ( typeof window[pluginName] != 'undefined' )
+  if ( typeof Xinha.getPluginConstructor(pluginName) != 'undefined' )
   {
     if ( callback )
     {
@@ -3403,7 +3413,7 @@ Xinha.loadPlugin = function(pluginName, callback, url)
     // once it loads.
     function statusCallback(pluginName)
     {
-      window[pluginName].supported = stage.indexOf('unsupported') != 0;
+      Xinha.getPluginConstructor(pluginName).supported = stage.indexOf('unsupported') != 0;
       callback(pluginName);
     }
 
@@ -3430,8 +3440,16 @@ Xinha.loadPlugin = function(pluginName, callback, url)
  * @type {Object} 
  */
 Xinha._pluginLoadStatus = {};
-
+/** Stores the paths to plugins that are not in the default location
+ * @private
+ * @type {Object}
+ */
 Xinha.externalPlugins = {};
+/** The namespace for plugins
+ * @private
+ * @type {Object}
+ */
+Xinha.plugins = {};
 
 /** Static function that loads the plugins (see xinha_plugins in NewbieGuide)
  * @param {Array} plugins
@@ -3471,7 +3489,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
         {
           Xinha.setLoadingMessage (Xinha._lc("Finishing"));
 
-          if ( typeof window[plugin] != 'undefined' )
+          if ( typeof Xinha.getPluginConstructor(plugin) != 'undefined' )
           {
             Xinha._pluginLoadStatus[plugin] = 'ready';
           }
