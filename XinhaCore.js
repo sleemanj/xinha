@@ -26,7 +26,7 @@
     --   * Jedit is the recommended editor, a comment of this format should be
     --     included in the top 10 lines of the file (see the embedded edit mode)
     --
-    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/XinhaCore.js $
+    --  $HeadURL$
     --  $LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $
     --  $LastChangedRevision:999 $
     --  $LastChangedBy:ray $
