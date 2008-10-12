@@ -122,9 +122,9 @@ AboutBox.prototype.fillVersion = function()
 {
   var ver = Xinha.version;
   this.dialog.getElementById('version').innerHTML = '<pre>'
-                      + '\nRelease: ' + ver.Release + ' (' + ver.Date + ')'
-                      + '\nHead: ' + ver.Head
-                      + '\nRevision: ' + ver.Revision
+                      + '\nRelease:         ' + ver.Release + ' (' + ver.Date + ')'
+                      + '\nHead:            ' + ver.Head
+                      + '\nRevision:        ' + ver.Revision
                       + '\nLast Changed By: ' + ver.RevisionBy
                       + '\n' +
                       '</pre>';

@@ -84,7 +84,7 @@ if ( typeof _editor_url == "string" )
 }
 else
 {
-  alert("WARNING: _editor_url is not set!  You should set this variable to the editor files path; it should preferably be an absolute path, like in '/htmlarea/', but it can be relative if you prefer.  Further we will try to load the editor files correctly but we'll probably fail.");
+  alert("WARNING: _editor_url is not set!  You should set this variable to the editor files path; it should preferably be an absolute path, like in '/xinha/', but it can be relative if you prefer.  Further we will try to load the editor files correctly but we'll probably fail.");
   _editor_url = '';
 }
 
