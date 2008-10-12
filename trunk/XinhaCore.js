@@ -35,10 +35,10 @@
 Xinha.version =
 {
   'Release'   : 'Trunk',
-  'Head'      : '$HeadURL:http://svn.xinha.webfactional.com/trunk/XinhaCore.js $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
-  'Date'      : '$LastChangedDate:2008-05-01 14:33:36 +0200 (Do, 01 Mai 2008) $'.replace(/^[^:]*:\s*([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\)\s*\$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision:999 $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
-  'RevisionBy': '$LastChangedBy:ray $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1')
+  'Head'      : '$HeadURL$'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  'Date'      : '$LastChangedDate$'.replace(/^[^:]*:\s*([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\)\s*\$/, '$4 $2 $3'),
+  'Revision'  : '$LastChangedRevision$'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  'RevisionBy': '$LastChangedBy$'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1')
 };
 
 //must be here. it is called while converting _editor_url to absolute
