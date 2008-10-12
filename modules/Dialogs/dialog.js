@@ -16,10 +16,10 @@
     --   it's just namespace for protecting global symbols.
     --
     --
-    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/modules/Dialogs/dialog.js $
-    --  $LastChangedDate:2008-03-20 13:09:09 +0100 (Do, 20 Mrz 2008) $
-    --  $LastChangedRevision:978 $
-    --  $LastChangedBy:ray $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
 

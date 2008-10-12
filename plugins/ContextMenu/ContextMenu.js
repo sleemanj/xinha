@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id:context-menu.js 988M 2008-04-12 13:46:09Z (local) $
+// $Id$
 
 Xinha.loadStyle("menu.css", "ContextMenu");
 

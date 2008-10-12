@@ -79,7 +79,7 @@
   ColorPicker._pluginInfo =
   {
     name     : "colorPicker",
-    version  : "$LastChangedRevision:998 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+    version  : "$LastChangedRevision$".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
     developer: "James Sleeman",
     developer_url: "http://www.gogo.co.nz/",
     c_owner      : "Gogo Internet Services",

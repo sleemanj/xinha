@@ -2,10 +2,10 @@
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
     --  FormOperations Plugin
     --
-    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/plugins/FormOperations/form-operations.js $
-    --  $LastChangedDate:2007-02-07 20:12:42 +0100 (Mi, 07 Feb 2007) $
-    --  $LastChangedRevision:715M $
-    --  $LastChangedBy:(local) $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
 Xinha.Config.prototype.FormOperations =

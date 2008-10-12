@@ -15,10 +15,10 @@
     --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
-    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js $
-    --  $LastChangedDate:2008-02-02 19:30:42 +0100 (Sa, 02 Feb 2008) $
-    --  $LastChangedRevision:961 $
-    --  $LastChangedBy:ray $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 function GetHtmlImplementation(editor) {
     this.editor = editor;
@@ -27,9 +27,9 @@ function GetHtmlImplementation(editor) {
 GetHtmlImplementation._pluginInfo = {
   name          : "GetHtmlImplementation DOMwalk",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision:961 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  version       : "$LastChangedRevision$".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  developer_url : "$HeadURL$".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
