@@ -1005,7 +1005,6 @@ Xinha.Config = function()
    "insert_image": _editor_url + "modules/InsertImage/insert_image.html",
    "insert_table":  _editor_url + "modules/InsertTable/insert_table.html",
    "select_color": _editor_url + "popups/select_color.html",
-   "about": _editor_url + "popups/about.html",
    "help": _editor_url + "popups/editor_help.html"
   };
 
@@ -1072,7 +1071,7 @@ Xinha.Config = function()
     toggleborders: [ "Toggle Borders", ["ed_buttons_main.gif",7,2], false, function(e) { e._toggleBorders(); } ],
     print: [ "Print document", ["ed_buttons_main.gif",8,1], false, function(e) { if(Xinha.is_gecko) {e._iframe.contentWindow.print(); } else { e.focusEditor(); print(); } } ],
     saveas: [ "Save as", "ed_saveas.gif", false, function(e) { e.execCommand("saveas",false,"noname.htm"); } ],
-    about: [ "About this editor", ["ed_buttons_main.gif",8,2], true, function(e) { e.execCommand("about"); } ],
+    about: [ "About this editor", ["ed_buttons_main.gif",8,2], true, function(e) { e.getPluginInstance("AboutBox").show(); } ],
     showhelp: [ "Help using editor", ["ed_buttons_main.gif",9,2], true, function(e) { e.execCommand("showhelp"); } ],
 
     splitblock: [ "Split Block", "ed_splitblock.gif", false, function(e) { e._splitBlock(); } ],
@@ -2148,6 +2147,14 @@ Xinha.prototype.generate = function ()
             return false;
           }
           else if ( typeof Xinha.getPluginConstructor('InsertTable') != 'undefined' && !this.plugins['InsertTable']) editor.registerPlugin('InsertTable');
+        break;
+        case "about":
+          url = _editor_url + 'modules/AboutBox/AboutBox.js';
+          if ( !Xinha.loadPlugins([{plugin:"AboutBox",url:url}], function() { editor.generate(); } ) )
+          {
+            return false;
+          }
+          else if ( typeof Xinha.getPluginConstructor('AboutBox') != 'undefined' && !this.plugins['AboutBox']) editor.registerPlugin('AboutBox');
         break;
       }
     }
@@ -3460,7 +3467,7 @@ Xinha.plugins = {};
 Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
 {
   if ( !Xinha.isSupportedBrowser ) return;
-  Xinha.setLoadingMessage (Xinha._lc("Loading plugins"));
+  //Xinha.setLoadingMessage (Xinha._lc("Loading plugins"));
   var m;
   for (var i=0;i<plugins.length;i++)
   {
@@ -4719,10 +4726,6 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
 
     case "insertimage":
       this._insertImage();
-    break;
-
-    case "about":
-      this._popupDialog(editor.config.URIs.about, null, this);
     break;
 
     case "showhelp":
@@ -6420,6 +6423,47 @@ if ( !Array.prototype.append )
     return this;
   };
 }
+/** Executes a provided function once per array element
+ * @source http://developer.mozilla.org/En/Core_JavaScript_1.5_Reference/Global_Objects/Array/ForEach
+ * @param {Function} fn Function to execute for each element
+ * @param {Object} thisObject Object to use as this when executing callback. 
+ */
+if (!Array.prototype.forEach)
+{
+  Array.prototype.forEach = function(fn /*, thisObject*/)
+  {
+    var len = this.length;
+    if (typeof fn != "function")
+      throw new TypeError();
+
+    var thisObject = arguments[1];
+    for (var i = 0; i < len; i++)
+    {
+      if (i in this)
+        fn.call(thisObject, this[i], i, this);
+    }
+  };
+}
+Xinha.getElementsByClassName = function(el,className)
+{
+  if (el.getElementsByClassName)
+  {
+    return Array.prototype.slice.call(el.getElementsByClassName(className));
+  }
+  else
+  {
+    var els = el.getElementsByTagName('*');
+    var result = [];
+    var classNames;
+    for (var i=0;i<els.length;i++)
+    {
+      classNames = els[i].className.split(' ');
+      if (classNames.contains(className)) result.push(els[i]);
+    }
+    return result;
+  }
+}
+
 /** Returns true if all elements of <em>a2</em> are also contained in <em>a1</em> (at least I think this is what it does)
 * @param {Array} a1
 * @param {Array} a2
@@ -7370,7 +7414,7 @@ if ( Xinha.ie_version < 8 )
 {
   Xinha.addDom0Event(window,'unload',Xinha.collectGarbageForIE);
 }
-/** Print some message to Firebug, Webkit, or Opera console
+/** Print some message to Firebug, Webkit, Opera, or IE8 console
  * 
  * @param {String} text
  * @param {String} level one of 'warn', 'info', or empty 
