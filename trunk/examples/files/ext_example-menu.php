@@ -10,10 +10,10 @@
     --  frame to provide a menu for generating example editors using
     --  full_example-body.html, and full_example.js.
     --
-    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/examples/files/ext_example-menu.php $
-    --  $LastChangedDate:2008-04-12 23:23:17 +0200 (Sa, 12 Apr 2008) $
-    --  $LastChangedRevision:993 $
-    --  $LastChangedBy:ray $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

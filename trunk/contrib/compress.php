@@ -1,6 +1,6 @@
 <?
 die("Run this script to batch-compress the current Xinha snapshot. To run the script, open the file and comment out the die() command");
-$repository_url = 'http://svn.xinha.webfactional.com/trunk';
+$repository_url = 'http://svn.xinha.org/trunk';
 $version ='';
 $date = date('r');
 error_reporting(E_ALL);

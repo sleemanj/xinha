@@ -9,7 +9,7 @@
 // Version 3.0 developed by Mihai Bazon.
 //   http://dynarch.com/mishoo
 //
-// $Id:popup.js 939 2008-01-22 21:11:43Z ray $
+// $Id$
 
 function __dlg_onclose() {
     if(opener.Dialog._return)

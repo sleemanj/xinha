@@ -14,10 +14,10 @@
     --  This is the new all-in-one implementation of dialogs for Xinha
     --
     --
-    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/modules/Dialogs/inline-dialog.js $
-    --  $LastChangedDate:2008-04-12 19:10:04 +0200 (Sa, 12 Apr 2008) $
-    --  $LastChangedRevision:990 $
-    --  $LastChangedBy:ray $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
 /** Xinha Dialog

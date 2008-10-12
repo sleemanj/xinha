@@ -17,10 +17,10 @@
     --  The file is loaded as a special plugin by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
-    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/modules/CreateLink/link.js $
-    --  $LastChangedDate:2008-04-12 19:10:04 +0200 (Sa, 12 Apr 2008) $
-    --  $LastChangedRevision:990 $
-    --  $LastChangedBy:ray $
+    --  $HeadURL$
+    --  $LastChangedDate$
+    --  $LastChangedRevision$
+    --  $LastChangedBy$
     --------------------------------------------------------------------------*/
 
 function CreateLink(editor) {
