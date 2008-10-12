@@ -158,7 +158,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   var main = document.createElement('div');
   rootElem.appendChild(main);
   main.innerHTML = html;
-
+  
   //make the first h1 to drag&drop the rootElem
   var captionBar = main.removeChild( main.getElementsByTagName("h1")[0]);
   rootElem.insertBefore(captionBar,main);
@@ -258,6 +258,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
       position = "absolute";
       bottom = "0px";
       right= "0px";
+      MozUserSelect = 'none';
     }
     Xinha._addEvent(this.resizer, 'mousedown', function(ev) { dialog.resizeStart(ev); });
     rootElem.appendChild(this.resizer);
@@ -512,15 +513,30 @@ Xinha.Dialog.prototype.collapse = function()
     this.collapsed = true;
   }
 };
-
+/** Equivalent to document.getElementById. You can't use document.getElementById because id's are dynamic to avoid id clashes between plugins
+ * @type {Element}
+ * @param {String} id
+ */
 Xinha.Dialog.prototype.getElementById = function(id)
 {
   return this.document.getElementById(this.id[id] ? this.id[id] : id);
 };
-
+/** Equivalent to document.getElementByName. You can't use document.getElementByName because names are dynamic to avoid name clashes between plugins
+ * @type {Array}
+ * @param {String} name
+ */
 Xinha.Dialog.prototype.getElementsByName = function(name)
 {
-  return this.document.getElementsByName(this.id[name] ? this.id[name] : name);
+  var els = this.document.getElementsByName(this.id[name] ? this.id[name] : name); 
+  return els.length ? Array.prototype.slice.call(els) : []; //Collection to Array
+};
+/** Return all elements in the dialog that have the given class
+ * @type {Array} 
+ * @param {String} className
+ */
+Xinha.Dialog.prototype.getElementsByClassName = function(className)
+{
+  return Xinha.getElementsByClassName(this.rootElem,className);
 };
 
 Xinha.Dialog.prototype.dragStart = function (ev) 
