@@ -505,8 +505,7 @@ InsertNote.prototype._getNumFromNoteId = function(noteId)
 InsertNote.prototype._getMarkers = function(noteId)
 {
   var doc = this.editor._doc;
-  // XXX TODO getElementByClassName shoud be implemented outside of InsertNote
-  var markers = this.getElementsByClassName(this.MARKER_CLASS);
+  var markers = Xinha.getElementsByClassName(doc, this.MARKER_CLASS);
   
   if (!noteId)
     return markers;
@@ -520,25 +519,6 @@ InsertNote.prototype._getMarkers = function(noteId)
     }
   }
   return els;
-};
-
-// ******* TEMPORARY FIX! This does not belong here and should probably be in Xinha core
-// This is only here so that I can do other testing in the mean time.
-InsertNote.prototype.getElementsByClassName = function(searchClass, node, tag)
-{
-  if (node == null)
-    node = this.editor._doc;
-  if (tag == null)
-    tag = "*";
-  var els = node.getElementsByTagName(tag);
-  var regex = new RegExp("(^|\\\\s)" + searchClass + "(\\\\s|$)");
-  var classEls = new Array();
-  for (var i=0; i<els.length; i++)
-  {
-    if (regex.test(els[i].className))
-      classEls.push(els[i]);
-  }
-  return classEls;
 };
 
 InsertNote.prototype._getNextMarkerId = function(noteId)
