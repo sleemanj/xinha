@@ -528,7 +528,7 @@ Xinha.Dialog.prototype.getElementById = function(id)
 Xinha.Dialog.prototype.getElementsByName = function(name)
 {
   var els = this.document.getElementsByName(this.id[name] ? this.id[name] : name); 
-  return els.length ? Array.prototype.slice.call(els) : []; //Collection to Array
+  return Xinha.collectionToArray(els);
 };
 /** Return all elements in the dialog that have the given class
  * @type {Array} 
