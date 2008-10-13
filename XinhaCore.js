@@ -2846,6 +2846,8 @@ Xinha._currentlyActiveEditor      = null;
  */
 Xinha.prototype.activateEditor = function()
 {
+  if (this.currentModal) return;
+
   // We only want ONE editor at a time to be active
   if ( Xinha._currentlyActiveEditor )
   {
@@ -4069,7 +4071,7 @@ Xinha.prototype.enableToolbar = function()
 // It is actually to heavy to be understable and very scary to manipulate
 Xinha.prototype.updateToolbar = function(noStatus)
 {
-  if (this.suspendUpdateToolbar) return;
+  if (this.suspendUpdateToolbar || Xinha._currentlyActiveEditor != this) return;
   
   var doc = this._doc;
   var text = (this._editMode == "textmode");
@@ -4843,16 +4845,6 @@ Xinha.prototype._editorEvent = function(ev)
     {
       return false;
     }
-  }
-
-  /* If this.currentModal is not null, then there's a modal dialog 
-  /* on screen, and we kill the event. This eliminates the possibility
-  /* of a user 'tabbing' out of a modal dialog and re-activating the editor.
-  /* This fixes the bug reported in ticket #1259
-  /* http://xinha.webfactional.com/ticket/1259 */
-  if (this.currentModal)
-  {
-    return false;
   }
 
   // update the toolbar state after some time
