@@ -1049,11 +1049,12 @@ Xinha.Dialog.prototype.translateHtml = function(html,localizer)
       return string;
     };
   }
-  
-  html = html.replace(/\[([a-z0-9_]+)\]/ig,
-    function(fullString, id)
+
+  // looking for strings of the form name='[foo]' or id="[bar]"
+  html = html.replace(/((?:name)|(?:id))=(['"])\[([a-z0-9_]+)\]\2/ig,
+    function(fullString, type, quote, id)
     {
-      return dialog.createId(id);
+      return type + "=" + quote + dialog.createId(id) + quote;
     }
     ).replace(/<l10n>(.*?)<\/l10n>/ig,
     function(fullString,translate)
