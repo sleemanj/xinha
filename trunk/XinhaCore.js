@@ -6514,6 +6514,17 @@ Xinha.arrayFilter = function(a1, filterfn)
 */
 Xinha.collectionToArray = function(collection)
 {
+  try
+  {
+    return collection.length ? Array.prototype.slice.call(collection) : []; //Collection to Array
+  }
+  catch(e)
+  {
+    // In certain implementations (*cough* IE), you can't call slice on a
+    // collection.  We'll fallback to using the simple, non-native iterative
+    // approach.
+  }
+
   var array = [ ];
   for ( var i = 0; i < collection.length; i++ )
   {
