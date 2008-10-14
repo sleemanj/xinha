@@ -1799,7 +1799,9 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
             {
               editor.activateEditor();
             }
-            obj.cmd(editor, obj.name, obj);
+            // We pass the event to the action so they can can use it to
+            // enhance the UI (e.g. respond to shift or ctrl-click)
+            obj.cmd(editor, obj.name, obj, ev);
             Xinha._stopEvent(ev);
           }
         }
