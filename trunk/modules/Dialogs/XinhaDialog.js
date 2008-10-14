@@ -473,8 +473,8 @@ Xinha.Dialog.prototype.hide = function()
 
     if (this.modal)
     {
-      this.editor.activateEditor();
       this.editor.currentModal = null;
+      this.editor.activateEditor();
     }
   }
 
