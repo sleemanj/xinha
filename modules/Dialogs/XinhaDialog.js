@@ -320,6 +320,7 @@ Xinha.Dialog.prototype.show = function(values)
   if ( modal )
   {
     this.editor.deactivateEditor();
+    this.editor.suspendUpdateToolbar = true;
     this.editor.currentModal = dialog;
   }
 
@@ -473,6 +474,7 @@ Xinha.Dialog.prototype.hide = function()
 
     if (this.modal)
     {
+      this.editor.suspendUpdateToolbar = false;
       this.editor.currentModal = null;
       this.editor.activateEditor();
     }
@@ -549,10 +551,10 @@ Xinha.Dialog.prototype.dragStart = function (ev)
   {
     this.posBackground({top:0, left:0}); 
     this.resizeBackground(Xinha.Dialog.calcFullBgSize());
+    this.editor.suspendUpdateToolbar = true;
   }
   ev = Xinha.getEvent(ev);
   
-  this.editor.suspendUpdateToolbar = true;
   var dialog = this;
 
   dialog.dragging = true;
@@ -603,7 +605,11 @@ Xinha.Dialog.prototype.dragIt = function(ev)
 Xinha.Dialog.prototype.dragEnd = function(ev)
 {
   var dialog = this;
-  this.editor.suspendUpdateToolbar = false;
+  
+  if (!this.modal)
+  {
+     this.editor.suspendUpdateToolbar = false; 
+  }
 
   if (!dialog.dragging) 
   {
@@ -630,7 +636,6 @@ Xinha.Dialog.prototype.dragEnd = function(ev)
 
 Xinha.Dialog.prototype.resizeStart = function (ev) {
   var dialog = this;
-  this.editor.suspendUpdateToolbar = true;
   if (dialog.resizing)
   {
     return;
@@ -638,6 +643,7 @@ Xinha.Dialog.prototype.resizeStart = function (ev) {
   dialog.resizing = true;
   if (!this.modal)
   {
+    this.editor.suspendUpdateToolbar = true;
     this.posBackground({top:0, left:0}); 
     this.resizeBackground(Xinha.Dialog.calcFullBgSize());
   }
@@ -696,7 +702,11 @@ Xinha.Dialog.prototype.resizeEnd = function(ev)
 {
   var dialog = this;
   dialog.resizing = false;
-  this.editor.suspendUpdateToolbar = false;
+
+  if (!this.modal)
+  {
+    this.editor.suspendUpdateToolbar = false;
+  }
 
   Xinha._removeEvent(document, "mousemove", dialog.mouseMove );
   if (Xinha.is_ie) Xinha._removeEvent(this.background.contentWindow.document, "mouseup",  dialog.mouseUp);
