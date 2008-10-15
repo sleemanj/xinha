@@ -4073,7 +4073,7 @@ Xinha.prototype.enableToolbar = function()
 // It is actually to heavy to be understable and very scary to manipulate
 Xinha.prototype.updateToolbar = function(noStatus)
 {
-  if (this.suspendUpdateToolbar || this.currentModal) return;
+  if (this.suspendUpdateToolbar) return;
   
   var doc = this._doc;
   var text = (this._editMode == "textmode");
