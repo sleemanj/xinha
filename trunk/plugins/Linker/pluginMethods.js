@@ -268,8 +268,6 @@ Linker.Dialog.prototype._prepareDialog = function()
 
   var files = this.linker.files;
 
-  var html = Linker.html;
-
   // Now we have everything we need, so we can build the dialog.
   var dialog = this.dialog = new Xinha.Dialog(linker.editor, Linker.html, 'Linker',{width:600,height:400});
   var dTreeName = Xinha.uniq('dTree_');
@@ -324,6 +322,29 @@ Linker.Dialog.prototype._prepareDialog = function()
       lDialog.ddTree.style.height = h + 'px';
       lDialog.ddTree.style.width  = w + 'px';
     }
+
+  // Set the onclick handlers for the link type radio buttons
+  self = this;
+  this.dialog.getElementById('type_url').onclick = function() {
+    self.showOptionsForType('url');
+  };
+  this.dialog.getElementById('type_mailto').onclick = function() {
+    self.showOptionsForType('mailto');
+  };
+  this.dialog.getElementById('type_anchor').onclick = function() {
+    self.showOptionsForType('anchor');
+  };
+
+  var hidePopupOptions = function() {
+    self.showOptionsForTarget('none')
+  };
+  this.dialog.getElementById('noTargetRadio').onclick = hidePopupOptions;
+  this.dialog.getElementById('sameWindowRadio').onclick = hidePopupOptions;
+  this.dialog.getElementById('newWindowRadio').onclick = hidePopupOptions;
+  this.dialog.getElementById('popupWindowRadio').onclick = function() {
+    self.showOptionsForTarget('popup');
+  };
+
   this.ready = true;
   ddTree = null;
   Xinha.freeLater(lDialog, 'ddTree');
@@ -385,33 +406,8 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
     this.ddTree.innerHTML = this.dTree._linker_premade;
   }
 
-  if(inputs.type=='url')
-  {
-    this.dialog.getElementById('urltable').style.display = '';
-    this.dialog.getElementById('mailtable').style.display = 'none';
-    this.dialog.getElementById('anchortable').style.display = 'none';
-  }
-  else if(inputs.type=='anchor')
-  {
-    this.dialog.getElementById('urltable').style.display = 'none';
-    this.dialog.getElementById('mailtable').style.display = 'none';
-    this.dialog.getElementById('anchortable').style.display = '';
-  }
-  else
-  {
-    this.dialog.getElementById('urltable').style.display = 'none';
-    this.dialog.getElementById('mailtable').style.display = '';
-    this.dialog.getElementById('anchortable').style.display = 'none';
-  }
-
-  if(inputs.target=='popup')
-  {
-    this.dialog.getElementById('popuptable').style.display = '';
-  }
-  else
-  {
-    this.dialog.getElementById('popuptable').style.display = 'none';
-  }
+  this.showOptionsForType(inputs.type);
+  this.showOptionsForTarget(inputs.target);
   
   var anchor = this.dialog.getElementById('anchor');
   for(var i=anchor.length;i>=0;i--) {
@@ -466,13 +462,64 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
     }
   }
 
-  
+  // Disable link targets (all targets available by default)
+  var disabledTargets = this.linker.lConfig.disableTargetTypes; 
+  if (typeof disabledTargets == 'undefined')
+  {
+    disabledTargets = [];
+  } 
+  else if (typeof disabledTargets == 'string')
+  {
+    disabledTargets = [disabledTargets];
+  }
+  for (var i=0; i<disabledTargets.length; i++)
+  {
+    this.dialog.getElementById(disabledTargets[i]).style.display = "none";
+  }
+  if (disabledTargets.length == 3) // only one target option is visible
+  {
+    if (disabledTargets.contains('popupWindow'))
+    {
+      // There's no need to show anything, so hide the entire div
+      this.dialog.getElementById('target_options').style.display = "none";
+    }
+    else
+    {
+      // Only popups are allowed, hide the radio button
+      this.dialog.getElementById('popupWindowRadio').style.display = "none";
+      this.showOptionsForTarget('popup');
+    }
+  }
+
+  var enabledTargets = new Array();
+  if (!disabledTargets.contains('noTarget'))
+  {
+    enabledTargets.push('noTargetRadio');
+  }
+  if (!disabledTargets.contains('sameWindow'))
+  {
+    enabledTargets.push('sameWindowRadio');
+  }
+  if (!disabledTargets.contains('newWindow'))
+  {
+    enabledTargets.push('newWindowRadio');
+  }
+  if (!disabledTargets.contains('popupWindow'))
+  {
+    enabledTargets.push('popupWindowRadio');
+  }
+
   // if we're not editing an existing link, hide the remove link button
   if (inputs.href == 'http://www.example.com/' && inputs.to == 'alice@example.com') { 
     this.dialog.getElementById('clear').style.display = "none";
   }
-  else {
-    this.dialog.getElementById('clear').style.display = "";
+  else { // 
+    var clearBtn = this.dialog.getElementById('clear');
+    clearBtn.style.display = "";
+    if (ok)
+    {
+      clearBtn.onclick = function() { lDialog.removeLink(ok); };
+    }
   }
   // Connect the OK and Cancel buttons
   var dialog = this.dialog;
@@ -500,6 +547,25 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
 
   this.dialog.show(inputs);
 
+  // If we set the default radio button *before* we call dialog.show()
+  // it doesn' work...
+  var targetSelected = false;
+  for (var i=0; i<enabledTargets.length; i++)
+  {
+    console.log(this.dialog.getElementById(enabledTargets[i]));
+    console.log("is checked: " + this.dialog.getElementById(enabledTargets[i]).checked);
+    if (this.dialog.getElementById(enabledTargets[i]).checked == true)
+    {
+      targetSelected = true;
+      break;
+    }
+  }
+  // If no target is selected, select the first one by default
+  if (!targetSelected && enabledTargets.length > 0)
+  {
+    this.dialog.getElementById(enabledTargets[0]).checked = true;
+  }
+
   // Init the sizes
   this.dialog.onresize();
 };
@@ -508,4 +574,44 @@ Linker.Dialog.prototype.hide = function()
 {
   this.linker.editor.enableToolbar();
   return this.dialog.hide();
+};
+
+Linker.Dialog.prototype.removeLink = function(applyFunc)
+{
+  this.dialog.getElementById('href').value = "";
+  this.dialog.getElementById('to').value = "";
+
+  return applyFunc();
+};
+
+Linker.Dialog.prototype.showOptionsForType = function(type)
+{
+  var urlOptions = this.dialog.getElementById('urltable');
+  var mailtoOptions = this.dialog.getElementById('mailtable');
+  var anchorOptions = this.dialog.getElementById('anchortable');
+
+  if (type == 'anchor')
+  {
+    anchorOptions.style.display = '';
+    urlOptions.style.display = 'none';
+    mailtoOptions.style.display = 'none';
+  }
+  else if (type == 'mailto')
+  {
+    mailtoOptions.style.display = '';
+    urlOptions.style.display = 'none';
+    anchorOptions.style.display = 'none';
+  }
+  else 
+  {
+    urlOptions.style.display = '';
+    mailtoOptions.style.display = 'none';
+    anchorOptions.style.display = 'none';
+  }
+};
+
+Linker.Dialog.prototype.showOptionsForTarget = function(target)
+{
+  var popupOptions = this.dialog.getElementById('popuptable');
+  popupOptions.style.display = target == 'popup' ? '' : 'none';
 };
