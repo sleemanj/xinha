@@ -86,7 +86,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
           if (stylesheets[i].id.indexOf('Xinha') != -1 && stylesheets[i].cssText) 
             styles += stylesheets[i].cssText;
         }
-        div.innerHTML = '<br><style type="text/css">\ņ'+styles+'\n</style>'; // strange way, but didn't work otherwise
+        div.innerHTML = '<br><style type="text/css">\n'+styles+'\n</style>'; // strange way, but didn't work otherwise
         doc.getElementsByTagName('body')[0].appendChild(div);
         doc.body.className = 'xinha_dialog_background';
         if (dialog.modal) doc.body.className += ' modal';
@@ -102,6 +102,18 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   backG.className = "xinha_dialog_background";
   if (this.modal) backG.className += ' modal';
   if (this.greyout) backG.className += ' greyout';
+  var z = 1000;
+  if (!Xinha.Dialog.initialZ)
+  {
+    var p = editor._htmlArea;
+    while (p)
+    {
+      if (p.style && parseInt(p.style.zIndex, 10) > z) z = parseInt(p.style.zIndex, 10);
+      p = p.parentNode;
+    }
+    Xinha.Dialog.initialZ = z;
+  }
+  z = Xinha.Dialog.initialZ;
   with (backG.style)
   {
     position = "absolute";
@@ -110,7 +122,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     border = 'none';
     overflow = "hidden";
     display = "none";
-    zIndex = (this.modal ? 1025 : 1001 ) + this.layer;
+    zIndex = (this.modal ? z + 25 : z +1 ) + this.layer;
   }
   document.body.appendChild(backG);
   this.background = backG;
@@ -122,7 +134,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   //I've got the feeling dragging is much slower in IE7 w/ pos:fixed, besides the strange fact that it only works in Strict mode 
   //rootElem.style.position = (Xinha.ie_version < 7 ||(Xinha.is_ie && document.compatMode == "BackCompat") || !this.modal) ? "absolute" : "fixed";
   rootElem.style.position = (Xinha.is_ie || !this.modal) ? "absolute" : "fixed";
-  rootElem.style.zIndex = (this.modal ? 1027 : 1003 ) + this.layer;
+  rootElem.style.zIndex = (this.modal ? z + 27 : z + 3 ) + this.layer;
   rootElem.style.display  = 'none';
   
   if (!this.modal)
