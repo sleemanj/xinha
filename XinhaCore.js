@@ -5420,7 +5420,7 @@ if ( document.addEventListener )
  */
   Xinha._addEvent = function(el, evname, func)
   {
-    el.addEventListener(evname, func, true);
+    el.addEventListener(evname, func, false);
     Xinha._eventFlushers.push([el, evname, func]);
   };
  
