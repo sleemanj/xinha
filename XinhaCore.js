@@ -6187,12 +6187,16 @@ Xinha._hasClass = function(el, className)
   return false;
 };
 
-/** Use XMLHTTPRequest to post some data back to the server and do something
- *  with the response (asyncronously!), this is used by such things as the tidy functions
- *  @param {String} url The address for the HTTPRequest
- *  @param {Object} data The data to be passed to the server like {name:"value"}
- *  @param {Function} handler A function that is called when an answer is received from the server with the responseText 
- *                             as argument                             
+/**
+ * Use XMLHTTPRequest to post some data back to the server and do something
+ * with the response (asyncronously!), this is used by such things as the tidy
+ * functions
+ * @param {String} url The address for the HTTPRequest
+ * @param {Object} data The data to be passed to the server like {name:"value"}
+ * @param {Function} success A function that is called when an answer is
+ *                           received from the server with the responseText as argument.
+ * @param {Function} failure A function that is called when we fail to receive
+ *                           an answer from the server. We pass it the request object.
  */
  
 // mod_security (an apache module which scans incoming requests for potential hack attempts)
@@ -6200,7 +6204,7 @@ Xinha._hasClass = function(el, className)
 // see ticket:1028 to try and work around this, if we get a failure in a postback
 // then Xinha._postback_send_charset will be set to false and the request tried again (once)
 Xinha._postback_send_charset = true;
-Xinha._postback = function(url, data, handler)
+Xinha._postback = function(url, data, success, failure)
 {
   var req = null;
   req = Xinha.getXMLHTTPRequestObject();
@@ -6222,17 +6226,21 @@ Xinha._postback = function(url, data, handler)
   {
     if ( req.readyState == 4 )
     {
-      if ( req.status == 200 || Xinha.isRunLocally && req.status == 0 )
+      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
       {
-        if ( typeof handler == 'function' )
+        if ( typeof success == 'function' )
         {
-          handler(req.responseText, req);
+          success(req.responseText, req);
         }
       }
       else if(Xinha._postback_send_charset)
       {        
         Xinha._postback_send_charset = false;
-        Xinha._postback(url,data,handler);
+        Xinha._postback(url,data,success, failure);
+      }
+      else if (typeof failure == 'function')
+      {
+        failure(req);
       }
       else
       {
@@ -6246,17 +6254,19 @@ Xinha._postback = function(url, data, handler)
   req.open('POST', url, true);
   req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'+(Xinha._postback_send_charset ? '; charset=UTF-8' : ''));
 
-  //alert(content);
   req.send(content);
 };
 
-/** Use XMLHTTPRequest to receive some data from the server and do something
- *  with the it (asyncronously!)
- *  @param {String} url The address for the HTTPRequest
- *  @param {Function} handler A function that is called when an answer is received from the server with the responseText 
- *                             as argument                             
+/** 
+ * Use XMLHTTPRequest to receive some data from the server and do something
+ * with the it (asyncronously!)
+ * @param {String} url The address for the HTTPRequest
+ * @param {Function} success A function that is called when an answer is
+ *                           received from the server with the responseText as argument.
+ * @param {Function} failure A function that is called when we fail to receive
+ *                           an answer from the server. We pass it the request object.
  */
-Xinha._getback = function(url, handler)
+Xinha._getback = function(url, success, failure)
 {
   var req = null;
   req = Xinha.getXMLHTTPRequestObject();
@@ -6265,9 +6275,13 @@ Xinha._getback = function(url, handler)
   {
     if ( req.readyState == 4 )
     {
-      if ( req.status == 200 || Xinha.isRunLocally && req.status == 0 )
+      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
       {
-        handler(req.responseText, req);
+        success(req.responseText, req);
+      }
+      else if (typeof failure == 'function')
+      {
+        failure(req);
       }
       else
       {
@@ -6290,7 +6304,7 @@ Xinha.ping = function(url, successHandler, failHandler)
   {
     if ( req.readyState == 4 )
     {
-      if ( req.status == 200 || Xinha.isRunLocally && req.status == 0 )
+      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
       {
         if (successHandler) successHandler(req);
       }
@@ -6321,7 +6335,7 @@ Xinha._geturlcontent = function(url)
   // Synchronous!
   req.open('GET', url, false);
   req.send(null);
-  if ( req.status == 200 || Xinha.isRunLocally && req.status == 0 )
+  if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
   {
     return req.responseText;
   }
