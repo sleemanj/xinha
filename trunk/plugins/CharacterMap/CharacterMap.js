@@ -11,7 +11,7 @@ function CharacterMap( editor )
     {
       id       : 'insertcharacter',
       tooltip  : Xinha._lc( 'Insert special character', 'CharacterMap' ),
-      image    : editor.imgURL( 'ed_charmap.gif', 'CharacterMap' ),
+      image    : editor.imgURL('images/tango/16x16/apps/accessories-character-map.png'),
       textMode : false,
       action   : function() { self.show(); }
     }
@@ -78,7 +78,7 @@ CharacterMap.prototype._prepareDialog = function()
 	this.dialog = new Xinha.Dialog(editor, html, 'CharacterMap',{width:300},{modal:false});
 	Xinha._addClass( this.dialog.rootElem, 'CharacterMap' );
 
-	if (editor.config.CharacterMap.mode == 'panel') this.dialog.attachToPanel('right');
+	if (editor.config.CharacterMap && editor.config.CharacterMap.mode == 'panel') this.dialog.attachToPanel('right');
 	
 	var entites =
 	[
