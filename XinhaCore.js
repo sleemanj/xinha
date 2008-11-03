@@ -5434,7 +5434,7 @@ if ( document.addEventListener )
  */
   Xinha._removeEvent = function(el, evname, func)
   {
-    el.removeEventListener(evname, func, true);
+    el.removeEventListener(evname, func, false);
   };
  
  /** stops bubbling of the event, if no further listeners should be triggered
