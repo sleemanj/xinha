@@ -1946,8 +1946,8 @@ Xinha.makeBtnImg = function(imgDef, doc)
     {
       img = doc.createElement("img");
       img.src = imgDef;
-      img.style.width = "18px";
-      img.style.height = "18px";
+      //img.style.width = "18px";
+      //img.style.height = "18px";
     }
   }
   else
