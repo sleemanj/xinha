@@ -1037,8 +1037,8 @@ Xinha.Config = function()
     italic: [ "Italic", Xinha._lc({key: 'button_italic', string: 'tango/16x16/actions/format-text-italic.png'}, 'Xinha'), false, function(e) { e.execCommand("italic"); } ],
     underline: [ "Underline", Xinha._lc({key: 'button_underline', string: 'tango/16x16/actions/format-text-underline.png'}, 'Xinha'), false, function(e) { e.execCommand("underline"); } ],
     strikethrough: [ "Strikethrough", Xinha._lc({key: 'button_strikethrough', string: 'tango/16x16/actions/format-text-strikethrough.png'}, 'Xinha'), false, function(e) { e.execCommand("strikethrough"); } ],
-    subscript: [ "Subscript", Xinha._lc({key: 'button_subscript', string: ["ed_buttons_main.gif",3,1]}, 'Xinha'), false, function(e) { e.execCommand("subscript"); } ],
-    superscript: [ "Superscript", Xinha._lc({key: 'button_superscript', string: ["ed_buttons_main.gif",2,1]}, 'Xinha'), false, function(e) { e.execCommand("superscript"); } ],
+    subscript: [ "Subscript", Xinha._lc({key: 'button_subscript', string:  'tango/16x16/actions/format-text-subscript.png'}, 'Xinha'), false, function(e) { e.execCommand("subscript"); } ],
+    superscript: [ "Superscript", Xinha._lc({key: 'button_superscript', string:  'tango/16x16/actions/format-text-superscript.png'}, 'Xinha'), false, function(e) { e.execCommand("superscript"); } ],
 
     justifyleft: [ "Justify Left", 'tango/16x16/actions/format-justify-left.png', false, function(e) { e.execCommand("justifyleft"); } ],
     justifycenter: [ "Justify Center", 'tango/16x16/actions/format-justify-center.png', false, function(e){ e.execCommand("justifycenter"); } ],
@@ -1052,8 +1052,8 @@ Xinha.Config = function()
 
     outdent: [ "Decrease Indent", 'tango/16x16/actions/format-indent-less.png', false, function(e) { e.execCommand("outdent"); } ],
     indent: [ "Increase Indent",'tango/16x16/actions/format-indent-more.png', false, function(e) { e.execCommand("indent"); } ],
-    forecolor: [ "Font Color", ["ed_buttons_main.gif",3,3], false, function(e) { e.execCommand("forecolor"); } ],
-    hilitecolor: [ "Background Color", ["ed_buttons_main.gif",2,3], false, function(e) { e.execCommand("hilitecolor"); } ],
+    forecolor: [ "Font Color", 'tango/16x16/actions/format-text-color.png', false, function(e) { e.execCommand("forecolor"); } ],
+    hilitecolor: [ "Background Color",  'tango/16x16/actions/format-text-background-color.png', false, function(e) { e.execCommand("hilitecolor"); } ],
 
     undo: [ "Undoes your last action", 'tango/16x16/actions/edit-undo.png', false, function(e) { e.execCommand("undo"); } ],
     redo: [ "Redoes your last action", 'tango/16x16/actions/edit-redo.png', false, function(e) { e.execCommand("redo"); } ],
