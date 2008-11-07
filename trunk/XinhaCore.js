@@ -420,6 +420,13 @@ function Xinha(textarea, config)
    */
   this._toolbarObjects = {};
   
+  //hook in config.Events as as a "plugin"
+  this.plugins['Events'] = 
+  {
+    name: 'Events',
+    developer : 'The Xinha Core Developer Team',
+    instance: config.Events
+  };
 }
 
 Xinha.onload = function() { };
@@ -984,7 +991,20 @@ Xinha.Config = function()
     'greyout':true, //true: when showing modal dialogs, the page behind the dialoge is greyed-out
     'closeOnEscape':true
   };
-
+  /** You can add functions to this object to be executed on specific events
+   * Example:
+   * <pre>
+   * xinha_config.Events.onKeyPress = function (event)
+   * {
+   *    //do something 
+   *    return false;
+   * }
+   * </pre>
+   * Note that <em>this</em> inside the function refers to the respective Xinha object
+   * The possible function names are documented at <a href="http://trac.xinha.org/wiki/Documentation/EventHooks">http://trac.xinha.org/wiki/Documentation/EventHooks</a>
+   */
+  this.Events = {};
+  
   /** ??
    * Default: <code>{}</code>
    * @type Object
@@ -2376,7 +2396,7 @@ Xinha.prototype.generate = function ()
   editor._iframeLoadDone = false;
   if (Xinha.is_opera)
     {       
-      editor.initIframe();      
+      editor.initIframe();
     }
   else
     Xinha._addEvent(
@@ -3599,13 +3619,14 @@ Xinha.prototype.firePluginEvent = function(methodName)
   for ( var i in this.plugins )
   {
     var plugin = this.plugins[i].instance;
-    
+
     // Skip the browser specific plugin
     if ( plugin == this._browserSpecificPlugin) continue;
     
     if ( plugin && typeof plugin[methodName] == "function" )
     {
-      if ( plugin[methodName].apply(plugin, argsArray) )
+      var thisArg = (i == 'Events') ? this : plugin;
+      if ( plugin[methodName].apply(thisArg, argsArray) )
       {
         return true;
       }
@@ -3621,7 +3642,6 @@ Xinha.prototype.firePluginEvent = function(methodName)
       return true;
     }
   }
-    
   return false;
 }
 /** Adds a stylesheet to the document
