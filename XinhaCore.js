@@ -1964,10 +1964,22 @@ Xinha.makeBtnImg = function(imgDef, doc)
     }
     else
     {
-      img = doc.createElement("img");
-      img.src = imgDef;
-      //img.style.width = "18px";
-      //img.style.height = "18px";
+      if (Xinha.ie_version < 7 && /\.png$/.test(imgDef[0]))
+      {
+        img = doc.createElement("span");
+        with (img.style)
+        {
+          display = 'block';
+          width = '18px';
+          height = '18px';
+          filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef+'")';
+        }
+      }
+      else
+      {
+        img = doc.createElement("img");
+        img.src = imgDef;
+      }
     }
   }
   else
@@ -1978,8 +1990,22 @@ Xinha.makeBtnImg = function(imgDef, doc)
     }
     else
     {
-      img = doc.createElement("img");
-      img.src = imgDef[0];
+      if (Xinha.ie_version < 7 && /\.png$/.test(imgDef[0]))
+      {
+        img = doc.createElement("span");
+        with (img.style)
+        {
+          display='block';
+          width = '18px';
+          height = '18px';
+          filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef[0]+'")';
+        }
+      }
+      else
+      {
+        img = doc.createElement("img");
+        img.src = imgDef[0];
+      }
       img.style.position = 'relative';
     }
     // @todo: Using 18 dont let us use a theme with its own icon toolbar height
