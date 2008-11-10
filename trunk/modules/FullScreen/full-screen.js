@@ -7,7 +7,7 @@ function FullScreen(editor, args)
   cfg.registerButton
   ( 'fullscreen',
     this._lc("Maximize/Minimize Editor"),
-    _editor_url + 'images/tango/16x16/actions/view-fullscreen.png', true,
+    [_editor_url + cfg.imgURL + 'ed_buttons_main.png',8,0], true,
       function(e, objname, obj)
       {
         e._fullScreen();
@@ -56,7 +56,7 @@ Xinha.prototype._fullScreen = function()
 
     e.sizeEditor(w + 'px', h + 'px',true,true);
     e._sizing = false;
-    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage(_editor_url + 'images/tango/16x16/actions/view-restore.png'); 
+    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.png',9,0]); 
   }
 
   function sizeItDown()
@@ -65,7 +65,7 @@ Xinha.prototype._fullScreen = function()
     e._sizing = true;
     e.initSize();
     e._sizing = false;
-    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage(_editor_url + 'images/tango/16x16/actions/view-fullscreen.png'); 
+    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.png',8,0]); 
   }
 
   /** It's not possible to reliably get scroll events, particularly when we are hiding the scrollbars
