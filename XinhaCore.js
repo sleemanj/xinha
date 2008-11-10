@@ -3122,6 +3122,7 @@ Xinha.prototype.setMode = function(mode)
   {
     case "textmode":
       this.firePluginEvent('onBeforeMode', 'textmode');
+      this._toolbarObjects.htmlmode.swapImage([this.imgURL('images/ed_buttons_main.png'),7,1]); 
       this.setCC("iframe");
       html = this.outwardHtml(this.getHTML());
       this.setHTML(html);
@@ -3143,6 +3144,7 @@ Xinha.prototype.setMode = function(mode)
 
     case "wysiwyg":
       this.firePluginEvent('onBeforeMode', 'wysiwyg');
+      this._toolbarObjects.htmlmode.swapImage([this.imgURL('images/ed_buttons_main.png'),7,0]); 
       this.setCC("textarea");
       html = this.inwardHtml(this.getHTML());
       this.deactivateEditor();
