@@ -4,10 +4,13 @@ function FullScreen(editor, args)
   editor._superclean_on = false;
   var cfg = editor.config;
 
+  cfg.registerIcon('fullscreen', [_editor_url + cfg.imgURL + 'ed_buttons_main.png',8,0]);
+  cfg.registerIcon('fullscreenrestore', [_editor_url + cfg.imgURL + 'ed_buttons_main.png',9,0]);
+  
   cfg.registerButton
   ( 'fullscreen',
     this._lc("Maximize/Minimize Editor"),
-    [_editor_url + cfg.imgURL + 'ed_buttons_main.png',8,0], true,
+    cfg.iconList.fullscreen, true,
       function(e, objname, obj)
       {
         e._fullScreen();
@@ -56,7 +59,7 @@ Xinha.prototype._fullScreen = function()
 
     e.sizeEditor(w + 'px', h + 'px',true,true);
     e._sizing = false;
-    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.png',9,0]); 
+    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage(cfg.iconList.fullscreenrestore); 
   }
 
   function sizeItDown()
@@ -65,7 +68,7 @@ Xinha.prototype._fullScreen = function()
     e._sizing = true;
     e.initSize();
     e._sizing = false;
-    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage([_editor_url + cfg.imgURL + 'ed_buttons_main.png',8,0]); 
+    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage(cfg.iconList.fullscreen); 
   }
 
   /** It's not possible to reliably get scroll events, particularly when we are hiding the scrollbars

@@ -13,12 +13,13 @@ function SaveSubmit(editor) {
 	var cfg = editor.config;
 	this.textarea = this.editor._textArea;
 
-	this.image_changed = Xinha.getPluginDir("SaveSubmit")+"/img/ed_save_red.gif";
-	this.image_unchanged = Xinha.getPluginDir("SaveSubmit")+"/img/ed_save_green.gif";
+	cfg.registerIcon('savesubmitchanged', Xinha.getPluginDir("SaveSubmit")+"/img/ed_save_red.gif");
+	cfg.registerIcon('savesubmitunchanged', Xinha.getPluginDir("SaveSubmit")+"/img/ed_save_green.gif");
+
 	cfg.registerButton({
 	id       : "savesubmit",
 	tooltip  : self._lc("Save"),
-	image    : this.image_unchanged,
+	image    : cfg.iconList.savesubmitunchanged,
 	textMode : false,
 	action   :  function() {
 			self.save();
@@ -42,10 +43,6 @@ SaveSubmit._pluginInfo = {
   license       : "htmlArea"
 }
 
-SaveSubmit.prototype.onGenerateOnce = function() {
-	this.initial_html = this.editor.getInnerHTML();
-}
-
 SaveSubmit.prototype.onKeyPress = function(ev) {
 	if ( ev.ctrlKey && this.editor.getKey(ev) == 's') {
 			this.save(this.editor);
@@ -66,6 +63,7 @@ SaveSubmit.prototype.onExecCommand = function (cmd) {
 	}
 }
 SaveSubmit.prototype.onUpdateToolbar = function () {
+  if (!this.initial_html) this.initial_html = this.editor.getInnerHTML();
 	if (!this.changed) {
 		if (this.getChanged()) this.setChanged();
 		return false;
@@ -80,12 +78,12 @@ SaveSubmit.prototype.getChanged = function() {
 	else return false;
 }
 SaveSubmit.prototype.setChanged = function() {
-	this.editor._toolbarObjects.savesubmit.swapImage(this.image_changed);
+	this.editor._toolbarObjects.savesubmit.swapImage(this.editor.config.iconList.savesubmitchanged);
 	this.editor.updateToolbar();
 }
 SaveSubmit.prototype.setUnChanged = function() {
 	this.changed = false;
-	this.editor._toolbarObjects.savesubmit.swapImage(this.image_unchanged);
+	this.editor._toolbarObjects.savesubmit.swapImage(this.editor.config.iconList.savesubmitunchanged);
 }
 SaveSubmit.prototype.changedReset = function() {
 	this.initial_html = null;
@@ -107,8 +105,8 @@ SaveSubmit.prototype.save =  function() {
 
 		content += ((i>0) ? '&' : '') + form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value);
 	}
-
-	Xinha._postback(editor._textArea.form.action, content, function(getback) {
+	var url = editor._textArea.form.action || window.location.href;
+	Xinha._postback(url, content, function(getback) {
 
 		if (getback) {
 			self.setMessage(getback);
