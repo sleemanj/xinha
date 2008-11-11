@@ -103,6 +103,11 @@ if ( typeof _editor_skin !== "string" )
 {
   _editor_skin = "";
 }
+
+if ( typeof _editor_icons !== "string" )
+{
+  _editor_icons = "";
+}
 /**
 * The list of Xinha editors on the page. May be multiple editors.
 * You can access each editor object through this global variable.
@@ -1028,7 +1033,6 @@ Xinha.Config = function()
    "help": _editor_url + "popups/editor_help.html"
   };
 
-
    /** The button list conains the definitions of the toolbar button. Normally, there's nothing to change here :) 
    * <div style="white-space:pre">ADDING CUSTOM BUTTONS: please read below!
    * format of the btnList elements is "ID: [ ToolTip, Icon, Enabled in text mode?, ACTION ]"
@@ -1104,8 +1108,10 @@ Xinha.Config = function()
     removeformat: [ "Remove formatting", ["ed_buttons_main.png",4,4], false, function(e) { e.execCommand("removeformat"); } ],
     killword: [ "Clear MSOffice tags", ["ed_buttons_main.png",4,3], false, function(e) { e.execCommand("killword"); } ]
   };
-
-
+  /** A container for additional icons that may be swapped within one button (like fullscreen)
+   * @private
+   */
+  this.iconList = {}
   // initialize tooltips from the I18N module and generate correct image path
   for ( var i in this.btnList )
   {
@@ -1127,6 +1133,15 @@ Xinha.Config = function()
   }
 
 };
+/** A plugin may require more than one icon for one button, this has to be registered in order to work with the iconsets (see FullScreen)
+ * 
+ * @param {String} id
+ * @param {String|Array} icon definition like in registerButton
+ */
+Xinha.Config.prototype.registerIcon = function (id, icon)
+{
+  this.iconList[id] = icon;
+}
 /** ADDING CUSTOM BUTTONS
 *   ---------------------
 *
@@ -1170,33 +1185,16 @@ Xinha.Config.prototype.registerButton = function(id, tooltip, image, textMode, a
   var the_id;
   if ( typeof id == "string" )
   {
-    the_id = id;
+    this.btnList[id] = [ tooltip, image, textMode, action, context ];
   }
   else if ( typeof id == "object" )
   {
-    the_id = id.id;
+    this.btnList[id.id] = [ id.tooltip, id.image, id.textMode, id.action, id.context ];
   }
   else
   {
     alert("ERROR [Xinha.Config::registerButton]:\ninvalid arguments");
     return false;
-  }
-  // check for existing id
-//  if(typeof this.customSelects[the_id] != "undefined")
-//  {
-    // alert("WARNING [Xinha.Config::registerDropdown]:\nA dropdown with the same ID already exists.");
-//  }
-//  if(typeof this.btnList[the_id] != "undefined") {
-    // alert("WARNING [Xinha.Config::registerDropdown]:\nA button with the same ID already exists.");
-//  }
-  switch ( typeof id )
-  {
-    case "string":
-      this.btnList[id] = [ tooltip, image, textMode, action, context ];
-    break;
-    case "object":
-      this.btnList[id.id] = [ id.tooltip, id.image, id.textMode, id.action, id.context ];
-    break;
   }
 };
 
@@ -2233,6 +2231,67 @@ Xinha.prototype.generate = function ()
     return false;        
   }
   else if (!this.plugins['GetHtmlImplementation']) editor.registerPlugin('GetHtmlImplementation');
+  
+  if (_editor_skin)
+  {
+    this.skinInfo = {};
+    var skinXML = Xinha._geturlcontent(_editor_url + 'skins/' + _editor_skin + '/skin.xml', true);
+    if (skinXML)
+    {
+      var meta = skinXML.getElementsByTagName('meta');
+      for (var i=0;i<meta.length;i++)
+      {
+        this.skinInfo[meta[i].getAttribute('name')] = meta[i].getAttribute('value');
+      }
+      var recommendedIcons = skinXML.getElementsByTagName('recommendedIcons');
+      if (!_editor_icons && recommendedIcons.length && recommendedIcons[0].textContent)
+      {
+        _editor_icons = recommendedIcons[0].textContent;
+      }
+    }
+  }
+  if (_editor_icons) 
+  {
+    var iconsXML = Xinha._geturlcontent(_editor_url + 'iconsets/' + _editor_icons + '/iconset.xml', true);
+    if (iconsXML)
+    {
+      var icons = iconsXML.getElementsByTagName('icon');
+      var icon, id, path, type, x, y;
+      function getTextContent(node)
+      {
+        return node.textContent || node.text;
+      }
+      for (var i=0;i<icons.length;i++)
+      {
+        icon = icons[i];
+        id = icon.getAttribute('id');
+        
+        if (icon.getElementsByTagName(_editor_lang).length)
+        {
+          icon = icon.getElementsByTagName(_editor_lang)[0];
+        }
+        else
+        {
+          icon = icon.getElementsByTagName('default')[0];
+        }
+        path = _editor_url + getTextContent(icon.getElementsByTagName('path')[0]);
+        type = icon.getAttribute('type');
+        if (type == 'map')
+        {
+          x = parseInt(getTextContent(icon.getElementsByTagName('x')[0]), 10);
+          y = parseInt(getTextContent(icon.getElementsByTagName('y')[0]), 10);
+          if (this.config.btnList[id]) this.config.btnList[id][1] = [path, x, y];
+          if (this.config.iconList[id]) this.config.iconList[id] = [path, x, y];
+          
+        }
+        else
+        {
+          if (this.config.btnList[id]) this.config.btnList[id][1] = path;
+          if (this.config.iconList[id]) this.config.iconList[id] = path;
+        }
+      }
+    }
+  }
   
   // create the editor framework, yah, table layout I know, but much easier
   // to get it working correctly this way, sorry about that, patches welcome.
@@ -6375,7 +6434,7 @@ Xinha.ping = function(url, successHandler, failHandler)
 /** Use XMLHTTPRequest to receive some data from the server syncronously
  *  @param {String} url The address for the HTTPRequest
  */
-Xinha._geturlcontent = function(url)
+Xinha._geturlcontent = function(url, returnXML)
 {
   var req = null;
   req = Xinha.getXMLHTTPRequestObject();
@@ -6385,7 +6444,7 @@ Xinha._geturlcontent = function(url)
   req.send(null);
   if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
   {
-    return req.responseText;
+    return (returnXML) ? req.responseXML : req.responseText;
   }
   else
   {

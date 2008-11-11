@@ -14,7 +14,7 @@ function SmartReplace(editor) {
 	({
 		id       : "smartreplace",
 		tooltip  : this._lc("SmartReplace"),
-		image    : Xinha.getPluginDir('SmartReplace')+"/img/smartquotes.gif",
+		image    : Xinha.getPluginDir('SmartReplace')+"/img/smartquotes.png",
 		textMode : false,
 		action   : function(e, objname, obj) { self.buttonPress(null, obj); }
 	});
