@@ -229,6 +229,13 @@
         <y>0</y>
       </default>
     </icon>
+    <icon id="smartreplace">
+      <default type="map">
+        <path>iconsets/Tango/ed_buttons_main.png</path>
+        <x>3</x>
+        <y>8</y>
+      </default>
+    </icon>
 
   </icons>
 </iconset>
