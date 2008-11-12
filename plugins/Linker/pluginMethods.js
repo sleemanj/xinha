@@ -324,7 +324,7 @@ Linker.Dialog.prototype._prepareDialog = function()
     }
 
   // Set the onclick handlers for the link type radio buttons
-  self = this;
+  var self = this;
   this.dialog.getElementById('type_url').onclick = function() {
     self.showOptionsForType('url');
   };
