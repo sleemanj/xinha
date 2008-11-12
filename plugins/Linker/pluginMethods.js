@@ -552,8 +552,6 @@ Linker.Dialog.prototype.show = function(inputs, ok, cancel)
   var targetSelected = false;
   for (var i=0; i<enabledTargets.length; i++)
   {
-    console.log(this.dialog.getElementById(enabledTargets[i]));
-    console.log("is checked: " + this.dialog.getElementById(enabledTargets[i]).checked);
     if (this.dialog.getElementById(enabledTargets[i]).checked == true)
     {
       targetSelected = true;
