@@ -235,7 +235,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   with (this.icon)
   {
     className = 'icon';
-    src = _editor_url + 'images/xinha-small-icon.gif';
+    src = editor.config.iconList.dialogCaption;
     style.position = 'absolute';
     style.top = '3px';
     style.left = '2px';

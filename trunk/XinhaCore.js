@@ -1111,7 +1111,11 @@ Xinha.Config = function()
   /** A container for additional icons that may be swapped within one button (like fullscreen)
    * @private
    */
-  this.iconList = {}
+  this.iconList = 
+  {
+    dialogCaption : _editor_url + 'images/xinha-small-icon.gif',
+    wysiwygmode : [_editor_url + 'images/ed_buttons_main.png',7,1]
+  }
   // initialize tooltips from the I18N module and generate correct image path
   for ( var i in this.btnList )
   {
@@ -2274,7 +2278,8 @@ Xinha.prototype.generate = function ()
         {
           icon = icon.getElementsByTagName('default')[0];
         }
-        path = _editor_url + getTextContent(icon.getElementsByTagName('path')[0]);
+        path = getTextContent(icon.getElementsByTagName('path')[0]);
+        path = (!/^\//.test(path) ? _editor_url : '') + path;
         type = icon.getAttribute('type');
         if (type == 'map')
         {
@@ -3181,7 +3186,7 @@ Xinha.prototype.setMode = function(mode)
   {
     case "textmode":
       this.firePluginEvent('onBeforeMode', 'textmode');
-      this._toolbarObjects.htmlmode.swapImage([this.imgURL('images/ed_buttons_main.png'),7,1]); 
+      this._toolbarObjects.htmlmode.swapImage(this.config.iconList.wysiwygmode); 
       this.setCC("iframe");
       html = this.outwardHtml(this.getHTML());
       this.setHTML(html);
