@@ -19,6 +19,10 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
+/*jslint regexp: false, rhino: false, browser: true, bitwise: false, forin: false, adsafe: false, evil: true, nomen: false, 
+glovar: false, debug: false, eqeqeq: false, passfail: false, sidebar: false, laxbreak: false, on: false, cap: true, 
+white: false, widget: false, undef: true, plusplus: false*/
+/*global  Xinha */
 
 /** Xinha Dialog
  *
@@ -49,28 +53,34 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     individual settings (i.e., it will override them). If the global option is
     undefined, the options passed in above will be used.
   */
-  var globalOptions = editor.config.dialogOptions
-  if (globalOptions) {
-    if (typeof(globalOptions.centered) != 'undefined') {
+  var globalOptions = editor.config.dialogOptions;
+  if (globalOptions) 
+  {
+    if (typeof globalOptions.centered != 'undefined') 
+    {
       this.centered = globalOptions.centered;
     }
-    if (typeof(globalOptions.resizable) != 'undefined') {
+    if (typeof globalOptions.resizable != 'undefined') 
+    {
       this.resizable = globalOptions.resizable;
     }
-    if (typeof(globalOptions.closable) != 'undefined') {
+    if (typeof globalOptions.closable != 'undefined') 
+    {
       this.closable = globalOptions.closable;
     }
-    if (typeof(globalOptions.greyout) != 'undefined') {
+    if (typeof globalOptions.greyout != 'undefined') 
+    {
       this.greyout = globalOptions.greyout;
     }
-    if (typeof(globalOptions.closeOnEscape) != 'undefined') {
+    if (typeof globalOptions.closeOnEscape != 'undefined') 
+    {
       this.closeOnEscape = globalOptions.closeOnEscape;
     }
   }
-
+  var backG;
   if (Xinha.is_ie)
   { // IE6 needs the iframe to hide select boxes
-    var backG = document.createElement("iframe");
+    backG = document.createElement("iframe");
     backG.src = "about:blank";
     backG.onreadystatechange = function () 
     {
@@ -83,47 +93,63 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
         
         for (var i=0;i<stylesheets.length;i++)
         {
-          if (stylesheets[i].id.indexOf('Xinha') != -1 && stylesheets[i].cssText) 
+          if (stylesheets[i].id.indexOf('Xinha') != -1 && stylesheets[i].cssText)
+          {
             styles += stylesheets[i].cssText;
+          }
         }
         div.innerHTML = '<br><style type="text/css">\n'+styles+'\n</style>'; // strange way, but didn't work otherwise
         doc.getElementsByTagName('body')[0].appendChild(div);
         doc.body.className = 'xinha_dialog_background';
-        if (dialog.modal) doc.body.className += ' modal';
-        if (dialog.greyout) doc.body.className += ' greyout';
+        if (dialog.modal) 
+        {
+          doc.body.className += ' modal';
+        }
+        if (dialog.greyout) 
+        {
+          doc.body.className += ' greyout';
+        }
       }
-    }
+    };
   }
   else
   { // Mozilla (<FF3) can't have the iframe, because it hides the caret in text fields
     // see https://bugzilla.mozilla.org/show_bug.cgi?id=226933
-    var backG = document.createElement("div");
+    backG = document.createElement("div");
   }
   backG.className = "xinha_dialog_background";
-  if (this.modal) backG.className += ' modal';
-  if (this.greyout) backG.className += ' greyout';
+  if (this.modal) 
+  {
+    backG.className += ' modal';
+  }
+  if (this.greyout) 
+  {
+    backG.className += ' greyout';
+  }
   var z = 1000;
   if (!Xinha.Dialog.initialZ)
   {
     var p = editor._htmlArea;
     while (p)
     {
-      if (p.style && parseInt(p.style.zIndex, 10) > z) z = parseInt(p.style.zIndex, 10);
+      if (p.style && parseInt(p.style.zIndex, 10) > z) 
+      {
+        z = parseInt(p.style.zIndex, 10);
+      }
       p = p.parentNode;
     }
     Xinha.Dialog.initialZ = z;
   }
   z = Xinha.Dialog.initialZ;
-  with (backG.style)
-  {
-    position = "absolute";
-    top = 0;
-    left = 0;
-    border = 'none';
-    overflow = "hidden";
-    display = "none";
-    zIndex = (this.modal ? z + 25 : z +1 ) + this.layer;
-  }
+  var s = backG.style;
+  s.position = "absolute";
+  s.top = 0;
+  s.left = 0;
+  s.border = 'none';
+  s.overflow = "hidden";
+  s.display = "none";
+  s.zIndex = (this.modal ? z + 25 : z +1 ) + this.layer;
+
   document.body.appendChild(backG);
   this.background = backG;
 
@@ -165,7 +191,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
     }
   }
 
-  html = this.translateHtml(html,localizer)
+  html = this.translateHtml(html,localizer);
 
   var main = document.createElement('div');
   rootElem.appendChild(main);
@@ -182,12 +208,11 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   captionBar.onselectstart = function() {return false;};
 
   this.buttons = document.createElement('div');
-  with (this.buttons.style)
-  {
-    position = "absolute";
-    top = "0";
-    right = "2px";
-  }
+  s = this.buttons.style;
+  s.position = "absolute";
+  s.top = "0";
+  s.right = "2px";
+
   rootElem.appendChild(this.buttons);
 
   if (this.closable && this.closeOnEscape)
@@ -232,15 +257,14 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   }
   
   this.icon = document.createElement('img');
-  with (this.icon)
-  {
-    className = 'icon';
-    src = editor.config.iconList.dialogCaption;
-    style.position = 'absolute';
-    style.top = '3px';
-    style.left = '2px';
-    ondrag = function () {return false;};
-  }
+  var icon = this.icon;
+  icon.className = 'icon';
+  icon.src = editor.config.iconList.dialogCaption;
+  icon.style.position = 'absolute';
+  icon.style.top = '3px';
+  icon.style.left = '2px';
+  icon.ondrag = function () {return false;};
+
   captionBar.style.paddingLeft = '22px';
   rootElem.appendChild(this.icon);
   
@@ -265,13 +289,12 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   {
     this.resizer = document.createElement('div');
     this.resizer.className = "resizeHandle";
-    with (this.resizer.style)
-    {
-      position = "absolute";
-      bottom = "0px";
-      right= "0px";
-      MozUserSelect = 'none';
-    }
+    s = this.resizer.style;
+    s.position = "absolute";
+    s.bottom = "0px";
+    s.right= "0px";
+    s.MozUserSelect = 'none';
+
     Xinha._addEvent(this.resizer, 'mousedown', function(ev) { dialog.resizeStart(ev); });
     rootElem.appendChild(this.resizer);
   }
@@ -308,7 +331,8 @@ Xinha.Dialog.prototype.show = function(values)
   var rootElem = this.rootElem;
   var rootElemStyle = rootElem.style;
   var modal = this.modal;
-  var scrollPos = this.scrollPos = this.editor.scrollPos();
+  var scrollPos = this.editor.scrollPos();
+  this.scrollPos = scrollPos;
   var dialog = this;
   //dialog.main.style.height = '';
   if ( this.attached ) 
@@ -346,13 +370,19 @@ Xinha.Dialog.prototype.show = function(values)
   
   if ( !this.attached )
   {
-    if ( modal )
+    if (modal) 
     {
-      this.showBackground()
-      this.posBackground({top:0, left:0}); 
+      this.showBackground();
+      this.posBackground({
+        top: 0,
+        left: 0
+      });
       this.resizeBackground(Xinha.Dialog.calcFullBgSize());
     }
-    else this.background.style.display = '';
+    else 
+    {
+      this.background.style.display = '';
+    }
 
     //this.onResizeWin = function () {dialog.sizeBackground()};
     //Xinha._addEvent(window, 'resize', this.onResizeWin );
@@ -580,11 +610,17 @@ Xinha.Dialog.prototype.dragStart = function (ev)
 
   dialog.mouseMove = function(ev) { dialog.dragIt(ev); };
   Xinha._addEvent(document,"mousemove", dialog.mouseMove );
-  if (Xinha.is_ie) Xinha._addEvent(this.background.contentWindow.document,"mousemove", dialog.mouseMove );
+  if (Xinha.is_ie) 
+  {
+    Xinha._addEvent(this.background.contentWindow.document, "mousemove", dialog.mouseMove);
+  }
   
   dialog.mouseUp = function (ev) { dialog.dragEnd(ev); };
   Xinha._addEvent(document,"mouseup",  dialog.mouseUp);
-  if (Xinha.is_ie) Xinha._addEvent(this.background.contentWindow.document,"mouseup",  dialog.mouseUp);
+  if (Xinha.is_ie) 
+  {
+    Xinha._addEvent(this.background.contentWindow.document, "mouseup", dialog.mouseUp);
+  }
 };
 
 Xinha.Dialog.prototype.dragIt = function(ev)
@@ -595,20 +631,20 @@ Xinha.Dialog.prototype.dragIt = function(ev)
   {
     return false;
   }
-
+  var posY, posX, newPos;
   if (dialog.rootElem.style.position == 'absolute')
   {
-    var posY = (ev.clientY + this.scrollPos.y) - dialog.yOffs + "px";
-    var posX = (ev.clientX + this.scrollPos.x) - dialog.xOffs + "px";
+    posY = (ev.clientY + this.scrollPos.y) - dialog.yOffs + "px";
+    posX = (ev.clientX + this.scrollPos.x) - dialog.xOffs + "px";
 
-    var newPos = {top: posY,left: posX};
+    newPos = {top: posY,left: posX};
   }
   else if (dialog.rootElem.style.position == 'fixed')
   {
-    var posY = ev.clientY  - dialog.yOffs + "px";
-    var posX = ev.clientX - dialog.xOffs + "px";
+    posY = ev.clientY  - dialog.yOffs + "px";
+    posX = ev.clientX - dialog.xOffs + "px";
 
-    var newPos = {top: posY,left: posX};
+    newPos = {top: posY,left: posX};
   }
   
   dialog.posDialog(newPos);
@@ -630,9 +666,15 @@ Xinha.Dialog.prototype.dragEnd = function(ev)
   dialog.dragging = false;
 
   Xinha._removeEvent(document, "mousemove", dialog.mouseMove );
-  if (Xinha.is_ie) Xinha._removeEvent(this.background.contentWindow.document, "mousemove", dialog.mouseMove );
+  if (Xinha.is_ie) 
+  {
+    Xinha._removeEvent(this.background.contentWindow.document, "mousemove", dialog.mouseMove);
+  }
   Xinha._removeEvent(document, "mouseup", dialog.mouseUp);
-  if (Xinha.is_ie) Xinha._removeEvent(this.background.contentWindow.document, "mouseup",  dialog.mouseUp);
+  if (Xinha.is_ie) 
+  {
+    Xinha._removeEvent(this.background.contentWindow.document, "mouseup", dialog.mouseUp);
+  }
 
   var rootElemStyle = dialog.rootElem.style;
   
@@ -669,10 +711,16 @@ Xinha.Dialog.prototype.resizeStart = function (ev) {
 
   dialog.mouseMove = function(ev) { dialog.resizeIt(ev); };
   Xinha._addEvent(document,"mousemove", dialog.mouseMove );
-  if (Xinha.is_ie) Xinha._addEvent(this.background.contentWindow.document,"mousemove", dialog.mouseMove );
+  if (Xinha.is_ie) 
+  {
+    Xinha._addEvent(this.background.contentWindow.document, "mousemove", dialog.mouseMove);
+  }
   dialog.mouseUp = function (ev) { dialog.resizeEnd(ev); };
   Xinha._addEvent(document,"mouseup",  dialog.mouseUp); 
-  if (Xinha.is_ie) Xinha._addEvent(this.background.contentWindow.document,"mouseup", dialog.mouseUp );
+  if (Xinha.is_ie) 
+  {
+    Xinha._addEvent(this.background.contentWindow.document, "mouseup", dialog.mouseUp);
+  }
 };
 
 Xinha.Dialog.prototype.resizeIt = function(ev)
@@ -682,16 +730,16 @@ Xinha.Dialog.prototype.resizeIt = function(ev)
   if (!dialog.resizing) {
     return false;
   }
-
+  var posY, posX;
   if (dialog.rootElem.style.position == 'absolute')
   {
-    var posY = ev.clientY + dialog.scrollPos.y;
-    var posX = ev.clientX + dialog.scrollPos.x;
+    posY = ev.clientY + dialog.scrollPos.y;
+    posX = ev.clientX + dialog.scrollPos.x;
   }
   else
   {
-    var posY = ev.clientY;
-    var posX = ev.clientX;
+    posY = ev.clientY;
+    posX = ev.clientX;
   }
 
   posX -=  dialog.xOffs;
@@ -721,9 +769,15 @@ Xinha.Dialog.prototype.resizeEnd = function(ev)
   }
 
   Xinha._removeEvent(document, "mousemove", dialog.mouseMove );
-  if (Xinha.is_ie) Xinha._removeEvent(this.background.contentWindow.document, "mouseup",  dialog.mouseUp);
+  if (Xinha.is_ie) 
+  {
+    Xinha._removeEvent(this.background.contentWindow.document, "mouseup", dialog.mouseUp);
+  }
   Xinha._removeEvent(document, "mouseup",  dialog.mouseUp);
-  if (Xinha.is_ie) Xinha._removeEvent(this.background.contentWindow.document, "mouseup",  dialog.mouseUp);
+  if (Xinha.is_ie) 
+  {
+    Xinha._removeEvent(this.background.contentWindow.document, "mouseup", dialog.mouseUp);
+  }
   
   dialog.size.width  = dialog.rootElem.offsetWidth;
   dialog.size.height = dialog.rootElem.offsetHeight;
@@ -751,7 +805,10 @@ Xinha.Dialog.prototype.attachToPanel = function(side)
   
   this.captionBar.style.paddingLeft = "3px";
   this.resizer.style.display = 'none';
-  if ( this.closable ) this.closer.style.display = 'none';
+  if (this.closable) 
+  {
+    this.closer.style.display = 'none';
+  }
   this.icon.style.display = 'none';
   
   if ( side == 'left' || side == 'right' )
@@ -788,10 +845,16 @@ Xinha.Dialog.prototype.detachFromPanel = function(ev)
   
   dialog.captionBar.style.paddingLeft = "22px";
   dialog.resizer.style.display = '';
-  if ( dialog.closable ) dialog.closer.style.display = '';
+  if (dialog.closable) 
+  {
+    dialog.closer.style.display = '';
+  }
   dialog.icon.style.display = '';
   
-  if ( dialog.size.width ) rootElem.style.width  = dialog.size.width + 'px';
+  if (dialog.size.width) 
+  {
+    rootElem.style.width = dialog.size.width + 'px';
+  }
 
   Xinha.removeClasses(rootElem, 'panel');
   editor.removePanel(rootElem);
@@ -806,7 +869,7 @@ Xinha.Dialog.calcFullBgSize = function()
   var page = Xinha.pageSize();
   var viewport = Xinha.viewportSize();
   return {width:(page.x > viewport.x  ? page.x : viewport.x )  + "px",height:(page.x > viewport.y ? page.y : viewport.y ) + "px"};
-}
+};
 
 Xinha.Dialog.prototype.sizeBgToDialog = function()
 {
@@ -816,17 +879,17 @@ Xinha.Dialog.prototype.sizeBgToDialog = function()
   bgStyle.left = rootElemStyle.left;
   bgStyle.width = rootElemStyle.width;
   bgStyle.height = rootElemStyle.height;
-}
+};
 Xinha.Dialog.prototype.hideBackground = function()
 {
   //this.background.style.display = 'none';
   Xinha.Dialog.fadeOut(this.background);
-}
+};
 Xinha.Dialog.prototype.showBackground = function()
 {
   //this.background.style.display = '';
   Xinha.Dialog.fadeIn(this.background,70);
-}
+};
 Xinha.Dialog.prototype.posBackground = function(pos)
 {
   if (this.background.style.display != 'none')
@@ -834,7 +897,7 @@ Xinha.Dialog.prototype.posBackground = function(pos)
     this.background.style.top  = pos.top;
     this.background.style.left = pos.left;
   }
-}
+};
 Xinha.Dialog.prototype.resizeBackground = function(size)
 {
   if (this.background.style.display != 'none')
@@ -842,13 +905,13 @@ Xinha.Dialog.prototype.resizeBackground = function(size)
     this.background.style.width  = size.width;
     this.background.style.height = size.height;
   }
-}
+};
 Xinha.Dialog.prototype.posDialog = function(pos)
 {
   var st = this.rootElem.style;
   st.left = pos.left;
   st.top  = pos.top;
-}
+};
 Xinha.Dialog.prototype.sizeDialog = function(size)
 {
   var st = this.rootElem.style;
@@ -858,86 +921,76 @@ Xinha.Dialog.prototype.sizeDialog = function(size)
   var height = parseInt(size.height,10) - this.captionBar.offsetHeight;
   this.main.style.height = (height > 20) ? height : 20 + "px";
   this.main.style.width = (width > 10) ? width : 10 + 'px';
-}
+};
 Xinha.Dialog.prototype.setValues = function(values)
 {
   for(var i in values)
   {
-    var elems = this.getElementsByName(i);
-    if(!elems) continue;
-    for(var x = 0; x < elems.length; x++)
+    if (typeof i == 'string') 
     {
-      var e = elems[x];
-      switch(e.tagName.toLowerCase())
+      var elems = this.getElementsByName(i);
+      if (!elems) 
       {
-        case 'select'  :
+        continue;
+      }
+      for(var x = 0; x < elems.length; x++)
+      {
+        var e = elems[x];
+        switch(e.tagName.toLowerCase())
         {
-          for(var j = 0; j < e.options.length; j++)
-          {
-            if(typeof values[i] == 'object')
-            {
-              for(var k = 0; k < values[i].length; k++)
-              {
-                if(values[i][k] == e.options[j].value)
-                {
-                  e.options[j].selected = true;
-                }
-              }
-            }
-            else if(values[i] == e.options[j].value)
-            {
-              e.options[j].selected = true;
-            }
-          }
-          break;
-        }
-
-        case 'textarea':
-        case 'input'   :
-        {
-          switch(e.getAttribute('type'))
-          {
-            case 'radio'   :
-            {
-              if(e.value == values[i])
-              {
-                e.checked = true;
-              }
-              break;
-            }
-
-            case 'checkbox':
+          case 'select'  :
+            for(var j = 0; j < e.options.length; j++)
             {
               if(typeof values[i] == 'object')
               {
-                for(var j in values[i])
+                for(var k = 0; k < values[i].length; k++)
                 {
-                  if(values[i][j] == e.value)
+                  if(values[i][k] == e.options[j].value)
+                  {
+                    e.options[j].selected = true;
+                  }
+                }
+              }
+              else if(values[i] == e.options[j].value)
+              {
+                e.options[j].selected = true;
+              }
+            }
+          break;
+          case 'textarea':
+          case 'input'   :
+            switch(e.getAttribute('type'))
+            {
+              case 'radio'   :
+                if(e.value == values[i])
+                {
+                  e.checked = true;
+                }
+              break;
+              case 'checkbox':
+                if(typeof values[i] == 'object')
+                {
+                  for(j in values[i])
+                  {
+                    if(values[i][j] == e.value)
+                    {
+                      e.checked = true;
+                    }
+                  }
+                }
+                else
+                {
+                  if(values[i] == e.value)
                   {
                     e.checked = true;
                   }
                 }
-              }
-              else
-              {
-                if(values[i] == e.value)
-                {
-                  e.checked = true;
-                }
-              }
+              break;
+              default:
+                e.value = values[i];
               break;
             }
-
-            default    :
-            {
-              e.value = values[i];
-            }
-          }
-          break;
         }
-
-        default        :
-        break;
       }
     }
   }
@@ -953,7 +1006,10 @@ Xinha.Dialog.prototype.getValues = function()
   for(var x = 0; x < inputs.length; x++)
   {
     var i = inputs[x];
-    if(!(i.name && this.r_id[i.name])) continue;
+    if (!(i.name && this.r_id[i.name])) 
+    {
+      continue;
+    }
 
     if(typeof values[this.r_id[i.name]] == 'undefined')
     {
@@ -964,18 +1020,17 @@ Xinha.Dialog.prototype.getValues = function()
     switch(i.tagName.toLowerCase())
     {
       case 'select':
-      {
         if(i.multiple)
         {
           if(!v.push)
           {
-            if(v != null)
+            if(v !== null)
             {
               v = [v];
             }
             else
             {
-              v = new Array();
+              v = [];
             }
           }
           for(var j = 0; j < i.options.length; j++)
@@ -994,36 +1049,30 @@ Xinha.Dialog.prototype.getValues = function()
           }
         }
         break;
-      }
-
+/*
       case 'textarea':
       case 'input'   :
-      default        :
-      {
+*/
+      default:
         switch(i.type.toLowerCase())
         {
           case  'radio':
-          {
             if(i.checked)
             {
               v = i.value;
-              break;
             }
-          }
-
+          break;
           case 'checkbox':
-          {
-            if(v == null)
+            if(v === null)
             {
               if(this.getElementsByName(this.r_id[i.name]).length > 1)
               {
-                v = new Array();
+                v = [];
               }
             }
-
             if(i.checked)
             {
-              if(v != null && typeof v == 'object' && v.push)
+              if(v !== null && typeof v == 'object' && v.push)
               {
                 v.push(i.value);
               }
@@ -1032,19 +1081,12 @@ Xinha.Dialog.prototype.getValues = function()
                 v = i.value;
               }
             }
-            break;
-          }
-
-          default   :
-          {
+          break;
+          default:
             v = i.value;
-            break;
-          }
+          break;
         }
-      }
-
     }
-
     values[this.r_id[i.name]] = v;
   }
   return values;
@@ -1083,14 +1125,14 @@ Xinha.Dialog.prototype.translateHtml = function(html,localizer)
     {
       return dialog._lc(translate) ;
     }
-    ).replace(/="_\((.*?)\)"/g,
+    ).replace(/\="_\((.*?)\)"/g,
     function(fullString, translate)
     {
       return '="' + dialog._lc(translate) + '"';
     }
   );
   return html;
-}
+};
 
 /** Use this function when adding an element with a new ID/name to a 
  *  dialog after it has already been created. This function ensures
@@ -1129,12 +1171,12 @@ Xinha.Dialog.activateModeless = function(dialog)
   
   if (Xinha.Dialog.activeModeless )
   {
-    Xinha.Dialog.activeModeless.rootElem.style.zIndex = parseInt(Xinha.Dialog.activeModeless.rootElem.style.zIndex) -10;
+    Xinha.Dialog.activeModeless.rootElem.style.zIndex = parseInt(Xinha.Dialog.activeModeless.rootElem.style.zIndex, 10) -10;
   }
   Xinha.Dialog.activeModeless = dialog;
 
-  Xinha.Dialog.activeModeless.rootElem.style.zIndex = parseInt(Xinha.Dialog.activeModeless.rootElem.style.zIndex) + 10;
-}
+  Xinha.Dialog.activeModeless.rootElem.style.zIndex = parseInt(Xinha.Dialog.activeModeless.rootElem.style.zIndex, 10) + 10;
+};
 /** Set opacity cross browser 
  * 
  * @param {DomNode} el The element to set the opacity
@@ -1150,7 +1192,7 @@ Xinha.Dialog.setOpacity = function(el,value)
     {
         el.style.opacity = value/100;
     }
-}
+};
 /** Fade in an element
  * 
  * @param {DomNode} el The element to fade
@@ -1181,9 +1223,12 @@ Xinha.Dialog.fadeIn = function(el,endOpacity,callback, delay,step)
         Xinha.Dialog.setOpacity(el,endOpacity);
         el.op = endOpacity;
         el.timeOut = null;
-        if (typeof callback == 'function') callback.call();
+        if (typeof callback == 'function') 
+        {
+          callback.call();
+        }
     }
-}
+};
 /** Fade out an element
  * 
  * @param {DomNode} el The element to fade
@@ -1194,7 +1239,10 @@ Xinha.Dialog.fadeOut = function(el,delay,step)
 {
     delay = delay || 1;
     step = step || 30;
-    if (typeof el.op == 'undefined') el.op = 100;
+    if (typeof el.op == 'undefined') 
+    {
+      el.op = 100;
+    }
     var op = el.op;
 
     if (op >= 0)
@@ -1210,4 +1258,4 @@ Xinha.Dialog.fadeOut = function(el,delay,step)
         el.op = 0;
         el.timeOut = null;
     }
-}
+};

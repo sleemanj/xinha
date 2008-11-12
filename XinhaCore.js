@@ -31,12 +31,16 @@
     --  $LastChangedRevision$
     --  $LastChangedBy$
     --------------------------------------------------------------------------*/
+/*jslint regexp: false, rhino: false, browser: true, bitwise: false, forin: true, adsafe: false, evil: true, nomen: false, 
+glovar: false, debug: false, eqeqeq: false, passfail: false, sidebar: false, laxbreak: false, on: false, cap: true, 
+white: false, widget: false, undef: true, plusplus: false*/
+/*global  Dialog , _editor_css , _editor_icons, _editor_lang , _editor_skin , _editor_url, dumpValues, ActiveXObject, HTMLArea, _editor_lcbackend*/
 
 Xinha.version =
 {
   'Release'   : 'Trunk',
   'Head'      : '$HeadURL$'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
-  'Date'      : '$LastChangedDate$'.replace(/^[^:]*:\s*([0-9-]*) ([0-9:]*) ([+0-9]*) \((.*)\)\s*\$/, '$4 $2 $3'),
+  'Date'      : '$LastChangedDate$'.replace(/^[^:]*:\s*([0-9\-]*) ([0-9:]*) ([+0-9]*) \((.*)\)\s*\$/, '$4 $2 $3'),
   'Revision'  : '$LastChangedRevision$'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   'RevisionBy': '$LastChangedBy$'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1')
 };
@@ -51,7 +55,7 @@ Xinha._resolveRelativeUrl = function( base, url )
   else
   {
     var b = base.split("/");
-    if(b[b.length - 1] == "")
+    if(b[b.length - 1] === "")
     {
       b.pop();
     }
@@ -67,7 +71,7 @@ Xinha._resolveRelativeUrl = function( base, url )
     }
     return b.join("/") + "/" + p.join("/");
   }
-}
+};
 
 if ( typeof _editor_url == "string" )
 {
@@ -79,7 +83,7 @@ if ( typeof _editor_url == "string" )
     Xinha.tmpPath = window.location.toString().replace(/\?.*$/,'').split("/");
     Xinha.tmpPath.pop();
     _editor_url = Xinha._resolveRelativeUrl(Xinha.tmpPath.join("/"), _editor_url);
-    delete(Xinha.tmpPath);  
+    delete Xinha.tmpPath;  
   }
 }
 else
@@ -155,7 +159,7 @@ Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
 @type string 
 */
 Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
-Xinha.webkit_version = parseInt(navigator.appVersion.replace(/.*?AppleWebKit\/([\d]).*?/,'$1'));
+Xinha.webkit_version = parseInt(navigator.appVersion.replace(/.*?AppleWebKit\/([\d]).*?/,'$1'), 10);
 
 /** Browser is Safari
 @type string 
@@ -179,8 +183,8 @@ Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
 */
 Xinha.is_gecko  = (navigator.product == "Gecko") || Xinha.is_opera;
 Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
-Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub) >= 2007121016;
-Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub) < 2007121016;
+Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub, 10) >= 2007121016;
+Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub, 10) < 2007121016;
 
 /** File is opened locally opened ("file://" protocol)
  * @type string
@@ -220,7 +224,10 @@ if ( Xinha.isRunLocally && Xinha.isSupportedBrowser)
  */
 function Xinha(textarea, config)
 { 
-  if ( !Xinha.isSupportedBrowser ) return;
+  if ( !Xinha.isSupportedBrowser )
+  {
+    return;
+  }
   
   if ( !textarea )
   {
@@ -426,14 +433,14 @@ function Xinha(textarea, config)
   this._toolbarObjects = {};
   
   //hook in config.Events as as a "plugin"
-  this.plugins['Events'] = 
+  this.plugins.Events = 
   {
     name: 'Events',
     developer : 'The Xinha Core Developer Team',
     instance: config.Events
   };
-}
-
+};
+// ray: What is this for? Do we need it?
 Xinha.onload = function() { };
 Xinha.init = function() { Xinha.onload(); };
 
@@ -458,7 +465,7 @@ Xinha.RE_body     = /<body[^>]*>((.|\n|\r|\t)*?)<\/body>/i;
 * @private
 * @type RegExp
 */
-Xinha.RE_Specials = /([\/\^$*+?.()|{}[\]])/g;
+Xinha.RE_Specials = /([\/\^$*+?.()|{}\[\]])/g;
 /** When dynamically creating a RegExp from an arbtrary string, some charactes that have special meanings in regular expressions have to be escaped.
 *   Run any string through this function to escape reserved characters.
 * @param {string} string the string to be escaped
@@ -467,7 +474,7 @@ Xinha.RE_Specials = /([\/\^$*+?.()|{}[\]])/g;
 Xinha.escapeStringForRegExp = function (string)
 {
   return string.replace(Xinha.RE_Specials, '\\$1');
-}
+};
 /** Identifies email addresses
 * @type RegExp
 */
@@ -475,7 +482,7 @@ Xinha.RE_email    = /^[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+$/i;
 /** Identifies URLs
 * @type RegExp
 */
-Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_-]{2,}(\.[a-z0-9_-]{2,}){2,}(:[0-9]+)?(\/\S+)*)/i;
+Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_\-]{2,}(\.[a-z0-9_\-]{2,}){2,}(:[0-9]+)?(\/\S+)*)/i;
 
 
 
@@ -727,7 +734,7 @@ Xinha.Config = function()
    * @param {String} html The whole document's HTML content
    * @return {String} The processed HTML 
    */
-  this.inwardHtml = function (html) { return html }
+  this.inwardHtml = function (html) { return html; };
   
   /** A filter function for the generated HTML<br />
    * Default: function (html) { return html }
@@ -735,7 +742,7 @@ Xinha.Config = function()
    * @param {String} html The whole document's HTML content
    * @return {String} The processed HTML 
    */
-  this.outwardHtml = function (html) { return html }
+  this.outwardHtml = function (html) { return html; };
 
  /** Set to true if you want Word code to be cleaned upon Paste. This only works if 
    * you use the toolbr button to paste, not ^V. This means that due to the restrictions
@@ -1115,7 +1122,7 @@ Xinha.Config = function()
   {
     dialogCaption : _editor_url + 'images/xinha-small-icon.gif',
     wysiwygmode : [_editor_url + 'images/ed_buttons_main.png',7,1]
-  }
+  };
   // initialize tooltips from the I18N module and generate correct image path
   for ( var i in this.btnList )
   {
@@ -1135,7 +1142,6 @@ Xinha.Config = function()
     }
     btn[0] = Xinha._lc(btn[0]); //initialize tooltip
   }
-
 };
 /** A plugin may require more than one icon for one button, this has to be registered in order to work with the iconsets (see FullScreen)
  * 
@@ -1145,7 +1151,7 @@ Xinha.Config = function()
 Xinha.Config.prototype.registerIcon = function (id, icon)
 {
   this.iconList[id] = icon;
-}
+};
 /** ADDING CUSTOM BUTTONS
 *   ---------------------
 *
@@ -1186,7 +1192,6 @@ Xinha.Config.prototype.registerIcon = function (id, icon)
  */
 Xinha.Config.prototype.registerButton = function(id, tooltip, image, textMode, action, context)
 {
-  var the_id;
   if ( typeof id == "string" )
   {
     this.btnList[id] = [ tooltip, image, textMode, action, context ];
@@ -1446,7 +1451,7 @@ Xinha.replaceAll = function(config)
 {
   var tas = document.getElementsByTagName("textarea");
   // @todo: weird syntax, doesnt help to read the code, doesnt obfuscate it and doesnt make it quicker, better rewrite this part
-  for ( var i = tas.length; i > 0; (new Xinha(tas[--i], config)).generate() )
+  for ( var i = tas.length; i > 0; new Xinha(tas[--i], config).generate() )
   {
     // NOP
   }
@@ -1459,7 +1464,7 @@ Xinha.replaceAll = function(config)
 Xinha.replace = function(id, config)
 {
   var ta = Xinha.getElementById("textarea", id);
-  return ta ? (new Xinha(ta, config)).generate() : null;
+  return ta ? new Xinha(ta, config).generate() : null;
 };
  
 /** Creates the toolbar and appends it to the _htmlarea
@@ -1684,7 +1689,7 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
       for ( var i in options )
       {
         // prevent iterating over wrong type
-        if ( typeof(options[i]) != 'string' )
+        if ( typeof options[i] != 'string' )
         {
           continue;
         }
@@ -1969,13 +1974,19 @@ Xinha.makeBtnImg = function(imgDef, doc)
       if (Xinha.ie_version < 7 && /\.png$/.test(imgDef[0]))
       {
         img = doc.createElement("span");
-        with (img.style)
+        /*with (img.style)
         {
           display = 'block';
           width = '18px';
           height = '18px';
           filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef+'")';
-        }
+        }*/
+      
+        img.style.display = 'block';
+        img.style.width = '18px';
+        img.style.height = '18px';
+        img.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef+'")';
+
       }
       else
       {
@@ -1995,13 +2006,10 @@ Xinha.makeBtnImg = function(imgDef, doc)
       if (Xinha.ie_version < 7 && /\.png$/.test(imgDef[0]))
       {
         img = doc.createElement("span");
-        with (img.style)
-        {
-          display='block';
-          width = '18px';
-          height = '18px';
-          filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef[0]+'")';
-        }
+        img.style.display = 'block';
+        img.style.width = '18px';
+        img.style.height = '18px';
+        img.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef+'")';
       }
       else
       {
@@ -2062,7 +2070,10 @@ Xinha.prototype._createStatusBar = function()
  */
 Xinha.prototype.generate = function ()
 {
-  if ( !Xinha.isSupportedBrowser ) return;
+  if ( !Xinha.isSupportedBrowser )
+  {
+    return;
+  }
   
   var i;
   var editor = this;  // we'll need "this" in some nested functions
@@ -2098,71 +2109,85 @@ Xinha.prototype.generate = function ()
     }
     if ( !found )
     {
-      Xinha.loadStyle('skins/' + _editor_skin + '/skin.css',null,"XinhaSkin")
+      Xinha.loadStyle('skins/' + _editor_skin + '/skin.css',null,"XinhaSkin");
     }
   }
-  
+  var callback = function() { editor.generate(); };
   // Now load a specific browser plugin which will implement the above for us.
   if (Xinha.is_ie)
   {
     url = _editor_url + 'modules/InternetExplorer/InternetExplorer.js';
-    if ( !Xinha.loadPlugins([{plugin:"InternetExplorer",url:url}], function() { editor.generate(); } ) )
+    if ( !Xinha.loadPlugins([{plugin:"InternetExplorer",url:url}], callback ) )
     {            
       return false;
     }
-    if (!this.plugins['InternetExplorer']) editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
+    if (!this.plugins.InternetExplorer)
+    {
+      editor._browserSpecificPlugin = editor.registerPlugin('InternetExplorer');
+    }
   }
   else if (Xinha.is_webkit)
   {
     url = _editor_url + 'modules/WebKit/WebKit.js';
-    if ( !Xinha.loadPlugins([{plugin:"WebKit",url:url}], function() { editor.generate(); } ) )
-    {            
-  
+    if ( !Xinha.loadPlugins([{plugin:"WebKit",url:url}], callback ) )
+    {
       return false;
     }
-    if (!this.plugins['Webkit']) editor._browserSpecificPlugin = editor.registerPlugin('WebKit');
+    if (!this.plugins.Webkit)
+    {
+      editor._browserSpecificPlugin = editor.registerPlugin('WebKit');
+    }
   }
   else if (Xinha.is_opera)
   {
     url = _editor_url + 'modules/Opera/Opera.js';
-    if ( !Xinha.loadPlugins([{plugin:"Opera",url:url}], function() { editor.generate(); } ) )
+    if ( !Xinha.loadPlugins([{plugin:"Opera",url:url}], callback ) )
     {            
       return false;
     }
-    if (!this.plugins['Opera']) editor._browserSpecificPlugin = editor.registerPlugin('Opera');
+    if (!this.plugins.Opera)
+    {
+      editor._browserSpecificPlugin = editor.registerPlugin('Opera');
+    }
   }
   else if (Xinha.is_gecko)
   {
     url = _editor_url + 'modules/Gecko/Gecko.js';
-    if ( !Xinha.loadPlugins([{plugin:"Gecko",url:url}], function() { editor.generate(); } ) )
+    if ( !Xinha.loadPlugins([{plugin:"Gecko",url:url}], callback ) )
     {            
       return false;
     }
-    if (!this.plugins['Gecko']) editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
+    if (!this.plugins.Gecko) 
+    {
+      editor._browserSpecificPlugin = editor.registerPlugin('Gecko');
+    }
   }
 
-  if ( typeof Dialog == 'undefined' && !Xinha._loadback( _editor_url + 'modules/Dialogs/dialog.js', this.generate, this ) )
+  if ( typeof Dialog == 'undefined' && !Xinha._loadback( _editor_url + 'modules/Dialogs/dialog.js', callback, this ) )
   {    
     return false;
   }
 
-  if ( typeof Xinha.Dialog == 'undefined' &&  !Xinha._loadback( _editor_url + 'modules/Dialogs/XinhaDialog.js' , this.generate, this ) )
+  if ( typeof Xinha.Dialog == 'undefined' &&  !Xinha._loadback( _editor_url + 'modules/Dialogs/XinhaDialog.js' , callback, this ) )
   {    
     return false;
   }
   
   url = _editor_url + 'modules/FullScreen/full-screen.js';
-  if ( !Xinha.loadPlugins([{plugin:"FullScreen",url:url}], function() { editor.generate(); } ))
+  if ( !Xinha.loadPlugins([{plugin:"FullScreen",url:url}], callback ))
   {
     return false;
   }
   
   url = _editor_url + 'modules/ColorPicker/ColorPicker.js';
-  if ( !Xinha.loadPlugins([{plugin:"ColorPicker",url:url}], function() { editor.generate(); } ) )
+  if ( !Xinha.loadPlugins([{plugin:"ColorPicker",url:url}], callback ) )
   {
     return false;
   }
-  else if ( typeof Xinha.getPluginConstructor('ColorPicker') != 'undefined' && !this.plugins['colorPicker']) editor.registerPlugin('ColorPicker');
+  else if ( typeof Xinha.getPluginConstructor('ColorPicker') != 'undefined' && !this.plugins.colorPicker)
+  {
+    editor.registerPlugin('ColorPicker');
+  }
 
   var toolbar = editor.config.toolbar;
   for ( i = toolbar.length; --i >= 0; )
@@ -2172,39 +2197,54 @@ Xinha.prototype.generate = function ()
       switch (toolbar[i][j])
       {
         case "popupeditor":
-          if (!this.plugins['FullScreen']) editor.registerPlugin('FullScreen');
+          if (!this.plugins.FullScreen) 
+          {
+            editor.registerPlugin('FullScreen');
+          }
         break;
         case "insertimage":
           url = _editor_url + 'modules/InsertImage/insert_image.js';
-          if ( typeof Xinha.prototype._insertImage == 'undefined' && !Xinha.loadPlugins([{plugin:"InsertImage",url:url}], function() { editor.generate(); } ) )
+          if ( typeof Xinha.prototype._insertImage == 'undefined' && !Xinha.loadPlugins([{plugin:"InsertImage",url:url}], callback ) )
           {
             return false;
           }
-          else if ( typeof Xinha.getPluginConstructor('InsertImage') != 'undefined' && !this.plugins['InsertImage']) editor.registerPlugin('InsertImage');
+          else if ( typeof Xinha.getPluginConstructor('InsertImage') != 'undefined' && !this.plugins.InsertImage)
+          {
+            editor.registerPlugin('InsertImage');
+          }
         break;
         case "createlink":
           url = _editor_url + 'modules/CreateLink/link.js';
-          if ( typeof Xinha.getPluginConstructor('Linker') == 'undefined' && !Xinha.loadPlugins([{plugin:"CreateLink",url:url}], function() { editor.generate(); } ))
+          if ( typeof Xinha.getPluginConstructor('Linker') == 'undefined' && !Xinha.loadPlugins([{plugin:"CreateLink",url:url}], callback ))
           {
             return false;
           }
-          else if ( typeof Xinha.getPluginConstructor('CreateLink') != 'undefined' && !this.plugins['CreateLink']) editor.registerPlugin('CreateLink');
+          else if ( typeof Xinha.getPluginConstructor('CreateLink') != 'undefined' && !this.plugins.CreateLink) 
+          {
+            editor.registerPlugin('CreateLink');
+          }
         break;
         case "inserttable":
           url = _editor_url + 'modules/InsertTable/insert_table.js';
-          if ( !Xinha.loadPlugins([{plugin:"InsertTable",url:url}], function() { editor.generate(); } ) )
+          if ( !Xinha.loadPlugins([{plugin:"InsertTable",url:url}], callback ) )
           {
             return false;
           }
-          else if ( typeof Xinha.getPluginConstructor('InsertTable') != 'undefined' && !this.plugins['InsertTable']) editor.registerPlugin('InsertTable');
+          else if ( typeof Xinha.getPluginConstructor('InsertTable') != 'undefined' && !this.plugins.InsertTable)
+          {
+            editor.registerPlugin('InsertTable');
+          }
         break;
         case "about":
           url = _editor_url + 'modules/AboutBox/AboutBox.js';
-          if ( !Xinha.loadPlugins([{plugin:"AboutBox",url:url}], function() { editor.generate(); } ) )
+          if ( !Xinha.loadPlugins([{plugin:"AboutBox",url:url}], callback ) )
           {
             return false;
           }
-          else if ( typeof Xinha.getPluginConstructor('AboutBox') != 'undefined' && !this.plugins['AboutBox']) editor.registerPlugin('AboutBox');
+          else if ( typeof Xinha.getPluginConstructor('AboutBox') != 'undefined' && !this.plugins.AboutBox)
+          {
+            editor.registerPlugin('AboutBox');
+          }
         break;
       }
     }
@@ -2213,29 +2253,29 @@ Xinha.prototype.generate = function ()
   // If this is gecko, set up the paragraph handling now
   if ( Xinha.is_gecko &&  editor.config.mozParaHandler != 'built-in' )
   {
-    if (  !Xinha.loadPlugins([{plugin:"EnterParagraphs",url: _editor_url + 'modules/Gecko/paraHandlerBest.js'}], function() { editor.generate(); } ) )
+    if (  !Xinha.loadPlugins([{plugin:"EnterParagraphs",url: _editor_url + 'modules/Gecko/paraHandlerBest.js'}], callback ) )
     {
       return false;
     }
-    if (!this.plugins['EnterParagraphs']) editor.registerPlugin('EnterParagraphs');
+    if (!this.plugins.EnterParagraphs) 
+    {
+      editor.registerPlugin('EnterParagraphs');
+    }
   }
+  var getHtmlMethodPlugin = this.config.getHtmlMethod == 'TransformInnerHTML' ? _editor_url + 'modules/GetHtml/TransformInnerHTML.js' :  _editor_url + 'modules/GetHtml/DOMwalk.js';
 
-  switch (this.config.getHtmlMethod)
+  if ( !Xinha.loadPlugins([{plugin:"GetHtmlImplementation",url:getHtmlMethodPlugin}], callback))
   {
-    case 'TransformInnerHTML':
-      var getHtmlMethodPlugin = _editor_url + 'modules/GetHtml/TransformInnerHTML.js';
-    break;
-    default:
-      var getHtmlMethodPlugin = _editor_url + 'modules/GetHtml/DOMwalk.js';
-    break;
+    return false;
   }
-  
-  if ( !Xinha.loadPlugins([{plugin:"GetHtmlImplementation",url:getHtmlMethodPlugin}], function() { editor.generate(); }))
+  else if (!this.plugins.GetHtmlImplementation)
   {
-    return false;        
+    editor.registerPlugin('GetHtmlImplementation');
   }
-  else if (!this.plugins['GetHtmlImplementation']) editor.registerPlugin('GetHtmlImplementation');
-  
+  function getTextContent(node)
+  {
+    return node.textContent || node.text;
+  }
   if (_editor_skin)
   {
     this.skinInfo = {};
@@ -2243,29 +2283,27 @@ Xinha.prototype.generate = function ()
     if (skinXML)
     {
       var meta = skinXML.getElementsByTagName('meta');
-      for (var i=0;i<meta.length;i++)
+      for (i=0;i<meta.length;i++)
       {
         this.skinInfo[meta[i].getAttribute('name')] = meta[i].getAttribute('value');
       }
       var recommendedIcons = skinXML.getElementsByTagName('recommendedIcons');
-      if (!_editor_icons && recommendedIcons.length && recommendedIcons[0].textContent)
+      if (!_editor_icons && recommendedIcons.length && getTextContent(recommendedIcons[0]))
       {
-        _editor_icons = recommendedIcons[0].textContent;
+        _editor_icons = getTextContent(recommendedIcons[0]);
       }
     }
   }
   if (_editor_icons) 
   {
     var iconsXML = Xinha._geturlcontent(_editor_url + 'iconsets/' + _editor_icons + '/iconset.xml', true);
+
     if (iconsXML)
     {
       var icons = iconsXML.getElementsByTagName('icon');
       var icon, id, path, type, x, y;
-      function getTextContent(node)
-      {
-        return node.textContent || node.text;
-      }
-      for (var i=0;i<icons.length;i++)
+
+      for (i=0;i<icons.length;i++)
       {
         icon = icons[i];
         id = icon.getAttribute('id');
@@ -2285,14 +2323,26 @@ Xinha.prototype.generate = function ()
         {
           x = parseInt(getTextContent(icon.getElementsByTagName('x')[0]), 10);
           y = parseInt(getTextContent(icon.getElementsByTagName('y')[0]), 10);
-          if (this.config.btnList[id]) this.config.btnList[id][1] = [path, x, y];
-          if (this.config.iconList[id]) this.config.iconList[id] = [path, x, y];
+          if (this.config.btnList[id]) 
+          {
+            this.config.btnList[id][1] = [path, x, y];
+          }
+          if (this.config.iconList[id]) 
+          {
+            this.config.iconList[id] = [path, x, y];
+          }
           
         }
         else
         {
-          if (this.config.btnList[id]) this.config.btnList[id][1] = path;
-          if (this.config.iconList[id]) this.config.iconList[id] = path;
+          if (this.config.btnList[id]) 
+          {
+            this.config.btnList[id][1] = path;
+          }
+          if (this.config.iconList[id]) 
+          {
+            this.config.iconList[id] = path;
+          }
         }
       }
     }
@@ -2453,7 +2503,7 @@ Xinha.prototype.generate = function ()
         {
           this.onsubmit();
           this.xinha_submit();
-        }
+        };
       } catch(ex) {}
     }
   }
@@ -2484,11 +2534,12 @@ Xinha.prototype.generate = function ()
   this.setLoadingMessage(Xinha._lc('Finishing'));
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
-  if (Xinha.is_opera)
-    {       
-      editor.initIframe();
-    }
-  else
+  if (Xinha.is_opera) 
+  {
+    editor.initIframe();
+  }
+  else 
+  {
     Xinha._addEvent(
       this._iframe,
       'load',
@@ -2502,6 +2553,7 @@ Xinha.prototype.generate = function ()
         return true;
       }
     );
+  }
 };
 
 /**
@@ -2546,20 +2598,10 @@ Xinha.prototype.initSize = function()
       width = /[^0-9]/.test(this.config.width) ? this.config.width : this.config.width + 'px';
     break;
   }
-
-  switch ( this.config.height )
-  {
-    case 'auto':
-      height = this._initial_ta_size.h;
-    break;
-
-    default :
       // @todo: check if this is better :
       // height = (parseInt(this.config.height, 10) == this.config.height)? this.config.height + 'px' : this.config.height;
-      height = /[^0-9]/.test(this.config.height) ? this.config.height : this.config.height + 'px';
-    break;
-  }
-
+  height = this.config.height == 'auto' ? this._initial_ta_size.h : /[^0-9]/.test(this.config.height) ? this.config.height : this.config.height + 'px';
+  
   this.sizeEditor(width, height, this.config.sizeIncludesBars, this.config.sizeIncludesPanels);
 
   // why can't we use the following line instead ?
@@ -2576,7 +2618,10 @@ Xinha.prototype.initSize = function()
  */
 Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPanels)
 {
-  if (this._risizing) return;
+  if (this._risizing) 
+  {
+    return;
+  }
   this._risizing = true;
   
   var framework = this._framework;
@@ -2766,8 +2811,8 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   {
     edcellwidth -= parseInt(this.config.panel_dimensions.right, 10);    
   }
-  var iframeWidth = (this.config.iframeWidth)? parseInt(this.config.iframeWidth,10): null; 
-  this._iframe.style.width = (iframeWidth && iframeWidth < edcellwidth)? iframeWidth + "px": edcellwidth + "px"; 
+  var iframeWidth = this.config.iframeWidth ? parseInt(this.config.iframeWidth,10) : null; 
+  this._iframe.style.width = (iframeWidth && iframeWidth < edcellwidth) ? iframeWidth + "px": edcellwidth + "px"; 
 
   this._textArea.style.height = this._iframe.style.height;
   this._textArea.style.width  = this._iframe.style.width;
@@ -2805,7 +2850,10 @@ Xinha.prototype.addPanel = function(side)
   if ( side == 'left' || side == 'right' )
   {
     div.style.width  = this.config.panel_dimensions[side];
-    if(this._iframe) div.style.height = this._iframe.style.height;     
+    if (this._iframe) 
+    {
+      div.style.height = this._iframe.style.height;
+    }
   }
   Xinha.addClasses(div, 'panel');
   this._panels[side].panels.push(div);
@@ -2844,7 +2892,7 @@ Xinha.prototype.hidePanel = function(panel)
     panel.style.display = 'none';
     this.notifyOf('panel_change', {'action':'hide','panel':panel});
     this.firePluginEvent('onPanelChange','hide',panel);
-    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y); } catch(e) { }
   }
 };
 /** Shows a panel
@@ -2858,7 +2906,7 @@ Xinha.prototype.showPanel = function(panel)
     panel.style.display = '';
     this.notifyOf('panel_change', {'action':'show','panel':panel});
     this.firePluginEvent('onPanelChange','show',panel);
-    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y)} catch(e) { }
+    try { this._iframe.contentWindow.scrollTo(pos.x,pos.y); } catch(e) { }
   }
 };
 /** Hides the panel(s) on one or more sides
@@ -2958,8 +3006,10 @@ Xinha._currentlyActiveEditor      = null;
  */
 Xinha.prototype.activateEditor = function()
 {
-  if (this.currentModal) return;
-
+  if (this.currentModal) 
+  {
+    return;
+  }
   // We only want ONE editor at a time to be active
   if ( Xinha._currentlyActiveEditor )
   {
@@ -3070,19 +3120,20 @@ Xinha.prototype.initIframe = function()
   Xinha.freeLater(this, '_doc');
 
   doc.open("text/html","replace");
-  var html = '';
+  var html = '', doctype;
   if ( editor.config.browserQuirksMode === false )
   {
-    var doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+    doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
   }
   else if ( editor.config.browserQuirksMode === true )
   {
-     var doctype = '';
+    doctype = '';
   }
   else
   {
-     var doctype = Xinha.getDoctype(document);
+    doctype = Xinha.getDoctype(document);
   }
+  
   if ( !editor.config.fullPage )
   {
     html += doctype + "\n";
@@ -3131,7 +3182,10 @@ Xinha.prototype.initIframe = function()
     //Fix Firefox problem with link elements not in right place (just before head)
     var match = html.match(/<link\s+[\s\S]*?["']\s*\/?>/gi);
     html = html.replace(/<link\s+[\s\S]*?["']\s*\/?>\s*/gi, '');
-    match ? html = html.replace(/<\/head>/i, match.join('\n') + "\n</head>") : null;    
+    if (match)
+    {
+      html = html.replace(/<\/head>/i, match.join('\n') + "\n</head>");
+    }
   }
   doc.write(html);
   doc.close();
@@ -3312,8 +3366,8 @@ Xinha.prototype.setEditorEvents = function()
             if (editor._iframe.contentWindow.event.srcElement.tagName.toLowerCase() == 'html') // if  clicked below the text (=body), the text cursor does not appear, see #1019
             {
                var r = editor._doc.body.createTextRange();
-               r.collapse();  
-               r.select()
+               r.collapse();
+               r.select();
                //setTimeout (function () { r.collapse();  r.select();},100); // won't do without timeout, dunno why
              }
              return true;
@@ -3366,7 +3420,7 @@ Xinha.prototype.setEditorEvents = function()
 Xinha.getPluginConstructor = function(pluginName)
 {
   return Xinha.plugins[pluginName] || window[pluginName];
-}
+};
 
 /** Create the specified plugin and register it with this Xinha
  *  return the plugin created to allow refresh when necessary.<br />
@@ -3374,8 +3428,10 @@ Xinha.getPluginConstructor = function(pluginName)
  */
 Xinha.prototype.registerPlugin = function()
 {
-  if ( !Xinha.isSupportedBrowser ) return; 
-  
+  if (!Xinha.isSupportedBrowser)
+  {
+    return;
+  }
   var plugin = arguments[0];
 
   // We can only register plugins that have been succesfully loaded
@@ -3408,7 +3464,13 @@ Xinha.prototype.registerPlugin2 = function(plugin, args)
     /* FIXME: This should never happen. But why does it do? */
     return false;
   }
-  if (!plugin._pluginInfo) plugin._pluginInfo =  {name:pluginName};
+  if (!plugin._pluginInfo) 
+  {
+    plugin._pluginInfo = 
+    {
+      name: pluginName
+    };
+  }
   var obj = new plugin(this, args);
   if ( obj )
   {
@@ -3451,7 +3513,7 @@ Xinha.getPluginDir = function(plugin, forceUnsupported)
     return _editor_url + "unsupported_plugins/" + plugin ;
   }
   return _editor_url + "plugins/" + plugin ;
-}
+};
 /** Static function that loads the given plugin
  * @param {String} pluginName
  * @param {Function} callback function to be called when file is loaded
@@ -3460,8 +3522,10 @@ Xinha.getPluginDir = function(plugin, forceUnsupported)
  */
 Xinha.loadPlugin = function(pluginName, callback, url)
 {
-  if ( !Xinha.isSupportedBrowser ) return;
-  
+  if (!Xinha.isSupportedBrowser) 
+  {
+    return;
+  }
   Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin="+pluginName+"$"));
 
   // Might already be loaded
@@ -3474,6 +3538,78 @@ Xinha.loadPlugin = function(pluginName, callback, url)
     return true;
   }
   Xinha._pluginLoadStatus[pluginName] = 'loading';
+  
+  // This function will try to load a plugin in multiple passes.  It tries to
+  // load the plugin from either the plugin or unsupported directory, using
+  // both naming schemes in this order:
+  // 1. /plugins -> CurrentNamingScheme
+  // 2. /plugins -> old-naming-scheme
+  // 3. /unsupported -> CurrentNamingScheme
+  // 4. /unsupported -> old-naming-scheme
+
+  function multiStageLoader(stage,pluginName)
+  {
+    var nextstage, dir, file, success_message;
+    switch (stage)
+    {
+      case 'start':
+        nextstage = 'old_naming';
+        dir = Xinha.getPluginDir(pluginName);
+        file = pluginName + ".js";
+        break;
+      case 'old_naming':
+        nextstage = 'unsupported';
+        dir = Xinha.getPluginDir(pluginName);
+        file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+        success_message = 'You are using an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js';
+        break;
+      case 'unsupported':
+        nextstage = 'unsupported_old_name';
+        dir = Xinha.getPluginDir(pluginName, true);
+        file = pluginName + ".js";
+        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        break;
+      case 'unsupported_old_name':
+        nextstage = '';
+        dir = Xinha.getPluginDir(pluginName, true);
+        file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
+        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        break;
+      default:
+        Xinha._pluginLoadStatus[pluginName] = 'failed';
+        Xinha.debugMsg('Xinha was not able to find the plugin '+pluginName+'. Please make sure the plugin exists.', 'warn');
+        return;
+    }
+    var url = dir + "/" + file;
+
+    // This is a callback wrapper that allows us to set the plugin's status
+    // once it loads.
+    function statusCallback(pluginName)
+    {
+      Xinha.getPluginConstructor(pluginName).supported = stage.indexOf('unsupported') !== 0;
+      callback(pluginName);
+    }
+
+    // To speed things up, we start loading the script file before pinging it.
+    // If the load fails, we'll just clean up afterwards.
+    Xinha._loadback(url, statusCallback, this, pluginName); 
+
+    Xinha.ping(url,
+               // On success, we'll display a success message if there is one.
+               function()
+               {
+                 if (success_message) 
+                 {
+                   Xinha.debugMsg(success_message);
+                 }
+               },
+               // On failure, we'll clean up the failed load and try the next stage
+               function()
+               {
+                 Xinha.removeFromParent(document.getElementById(url));
+                 multiStageLoader(nextstage, pluginName);
+               });
+  }
   
   if(!url)
   {
@@ -3489,74 +3625,6 @@ Xinha.loadPlugin = function(pluginName, callback, url)
   }
   
   return false;
-
-  // This function will try to load a plugin in multiple passes.  It tries to
-  // load the plugin from either the plugin or unsupported directory, using
-  // both naming schemes in this order:
-  // 1. /plugins -> CurrentNamingScheme
-  // 2. /plugins -> old-naming-scheme
-  // 3. /unsupported -> CurrentNamingScheme
-  // 4. /unsupported -> old-naming-scheme
-
-  function multiStageLoader(stage,pluginName)
-  {
-    switch (stage)
-    {
-      case 'start':
-        var nextstage = 'old_naming';
-        var dir = editor.getPluginDir(pluginName);
-        var file = pluginName + ".js";
-        break;
-      case 'old_naming':
-        var nextstage = 'unsupported';
-        var dir = editor.getPluginDir(pluginName);
-        var file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-        var success_message = 'You are using an obsolete naming scheme for the Xinha plugin '+pluginName+'. Please rename '+file+' to '+pluginName+'.js';
-        break;
-      case 'unsupported':
-        var nextstage = 'unsupported_old_name';
-        var dir = editor.getPluginDir(pluginName, true);
-        var file = pluginName + ".js";
-        var success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
-        break;
-      case 'unsupported_old_name':
-        var nextstage = '';
-        var dir = editor.getPluginDir(pluginName, true);
-        var file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-        var success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
-        break;
-      default:
-        Xinha._pluginLoadStatus[pluginName] = 'failed';
-        Xinha.debugMsg('Xinha was not able to find the plugin '+pluginName+'. Please make sure the plugin exists.', 'warn')
-        return;
-    }
-    var url = dir + "/" + file;
-
-    // This is a callback wrapper that allows us to set the plugin's status
-    // once it loads.
-    function statusCallback(pluginName)
-    {
-      Xinha.getPluginConstructor(pluginName).supported = stage.indexOf('unsupported') != 0;
-      callback(pluginName);
-    }
-
-    // To speed things up, we start loading the script file before pinging it.
-    // If the load fails, we'll just clean up afterwards.
-    Xinha._loadback(url, statusCallback, this, pluginName); 
-
-    Xinha.ping(url,
-               // On success, we'll display a success message if there is one.
-               function()
-               {
-                 if (success_message) Xinha.debugMsg(success_message);
-               },
-               // On failure, we'll clean up the failed load and try the next stage
-               function()
-               {
-                 Xinha.removeFromParent(document.getElementById(url));
-                 multiStageLoader(nextstage, pluginName);
-               });
-  }
 };
 /** Stores a status for each loading plugin that may be one of "loading","ready", or "failed"
  * @private
@@ -3582,10 +3650,13 @@ Xinha.plugins = {};
  */
 Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
 {
-  if ( !Xinha.isSupportedBrowser ) return;
+  if (!Xinha.isSupportedBrowser) 
+  {
+    return;
+  }
   //Xinha.setLoadingMessage (Xinha._lc("Loading plugins"));
-  var m;
-  for (var i=0;i<plugins.length;i++)
+  var m,i;
+  for (i=0;i<plugins.length;i++)
   {
     if (typeof plugins[i] == 'object')
     {
@@ -3598,11 +3669,14 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
   // Rip the ones that are loaded and look for ones that have failed
   var retVal = true;
   var nuPlugins = Xinha.cloneObject(plugins);
-  for ( var i=0;i<nuPlugins.length;i++ )
+  for (i=0;i<nuPlugins.length;i++ )
   {
     var p = nuPlugins[i];
     
-    if (p == 'FullScreen' && !Xinha.externalPlugins['FullScreen'] ) continue; //prevent trying to load FullScreen plugin from the plugins folder
+    if (p == 'FullScreen' && !Xinha.externalPlugins.FullScreen)
+    {
+      continue; //prevent trying to load FullScreen plugin from the plugins folder
+    } 
    
     if ( typeof Xinha._pluginLoadStatus[p] == 'undefined')
     {
@@ -3620,8 +3694,7 @@ Xinha.loadPlugins = function(plugins, callbackIfNotReady,url)
           {
             Xinha._pluginLoadStatus[plugin] = 'failed';
           }
-        }, url
-      );
+        }, url);
       retVal = false;
     }
     else if ( Xinha._pluginLoadStatus[p] == 'loading')
@@ -3708,13 +3781,15 @@ Xinha.prototype.firePluginEvent = function(methodName)
     argsArray[i-1] = arguments[i];
   }
   
-  for ( var i in this.plugins )
+  for ( i in this.plugins )
   {
     var plugin = this.plugins[i].instance;
 
     // Skip the browser specific plugin
-    if ( plugin == this._browserSpecificPlugin) continue;
-    
+    if (plugin == this._browserSpecificPlugin) 
+    {
+      continue;
+    }
     if ( plugin && typeof plugin[methodName] == "function" )
     {
       var thisArg = (i == 'Events') ? this : plugin;
@@ -3726,7 +3801,7 @@ Xinha.prototype.firePluginEvent = function(methodName)
   }
   
   // Now the browser speific
-  var plugin = this._browserSpecificPlugin;
+  plugin = this._browserSpecificPlugin;
   if ( plugin && typeof plugin[methodName] == "function" )
   {
     if ( plugin[methodName].apply(plugin, argsArray) )
@@ -3735,7 +3810,7 @@ Xinha.prototype.firePluginEvent = function(methodName)
     }
   }
   return false;
-}
+};
 /** Adds a stylesheet to the document
  * @param {String} style name of the stylesheet file
  * @param {String} plugin optional name of a plugin; if passed this function looks for the stylesheet file in the plugin directory 
@@ -3764,7 +3839,10 @@ Xinha.loadStyle = function(style, plugin, id,prepend)
   link.rel = "stylesheet";
   link.href = url;
   link.type = "text/css";
-  if (id) link.id = id;
+  if (id)
+  {
+    link.id = id;
+  }
   if (prepend && head.getElementsByTagName('link')[0])
   {
     head.insertBefore(link,head.getElementsByTagName('link')[0]);
@@ -3847,7 +3925,7 @@ Xinha.prototype._wordClean = function()
     mso_style  : 0,
     mso_xmlel  : 0,
     orig_len   : this._doc.body.innerHTML.length,
-    T          : (new Date()).getTime()
+    T          : new Date().getTime()
   };
   var stats_txt =
   {
@@ -3871,7 +3949,7 @@ Xinha.prototype._wordClean = function()
     }
     txt += "\nInitial document length: " + stats.orig_len + "\n";
     txt += "Final document length: " + editor._doc.body.innerHTML.length + "\n";
-    txt += "Clean-up took " + (((new Date()).getTime() - stats.T) / 1000) + " seconds";
+    txt += "Clean-up took " + ((new Date().getTime() - stats.T) / 1000) + " seconds";
     alert(txt);
   }
 
@@ -3881,7 +3959,7 @@ Xinha.prototype._wordClean = function()
     if ( newc != node.className )
     {
       node.className = newc;
-      if ( ! ( /\S/.test(node.className) ) )
+      if ( !/\S/.test(node.className))
       {
         node.removeAttribute("className");
         ++stats.mso_class;
@@ -3894,7 +3972,7 @@ Xinha.prototype._wordClean = function()
     var declarations = node.style.cssText.split(/\s*;\s*/);
     for ( var i = declarations.length; --i >= 0; )
     {
-      if ( ( /^mso|^tab-stops/i.test(declarations[i]) ) || ( /^margin\s*:\s*0..\s+0..\s+0../i.test(declarations[i]) ) )
+      if ( /^mso|^tab-stops/i.test(declarations[i]) || /^margin\s*:\s*0..\s+0..\s+0../i.test(declarations[i]) )
       {
         ++stats.mso_style;
         declarations.splice(i, 1);
@@ -3905,9 +3983,9 @@ Xinha.prototype._wordClean = function()
 
   function removeElements(el)
   {
-    if ((('link' == el.tagName.toLowerCase()) &&
-        (el.attributes && /File-List|Edit-Time-Data|themeData|colorSchemeMapping/.test(el.attributes['rel'].nodeValue))) ||
-        (/^(style|meta)$/i.test(el.tagName)))
+    if (('link' == el.tagName.toLowerCase() &&
+        (el.attributes && /File-List|Edit-Time-Data|themeData|colorSchemeMapping/.test(el.attributes.rel.nodeValue))) ||
+        /^(style|meta)$/i.test(el.tagName))
     {
       Xinha.removeFromParent(el);
       ++stats.mso_elmts;
@@ -3933,10 +4011,10 @@ Xinha.prototype._wordClean = function()
   {
     clearClass(root);
     clearStyle(root);
-
+    var next;
     for (var i = root.firstChild; i; i = next )
     {
-      var next = i.nextSibling;
+      next = i.nextSibling;
       if ( i.nodeType == 1 && parseTree(i) )
       {
         if ((Xinha.is_ie && root.scopeName != 'HTML') || (!Xinha.is_ie && /:/.test(i.tagName)))
@@ -4017,7 +4095,7 @@ Xinha.prototype._clearFonts = function()
   if ( confirm(Xinha._lc("Would you like to clear font colours?")) )
   {
     D = D.replace(/color="[^"]*"/gi, '');
-    D = D.replace(/([^-])color:[^;}"']+;?/gi, '$1');
+    D = D.replace(/([^\-])color:[^;}"']+;?/gi, '$1');
   }
 
   D = D.replace(/(style|class)="\s*"/gi, '');
@@ -4162,7 +4240,7 @@ Xinha.prototype.disableToolbar = function(except)
       continue;
     }
     // prevent iterating over wrong type
-    if ( typeof(btn.state) != 'function' )
+    if ( typeof btn.state != 'function' )
     {
       continue;
     }
@@ -4185,8 +4263,10 @@ Xinha.prototype.enableToolbar = function()
 // It is actually to heavy to be understable and very scary to manipulate
 Xinha.prototype.updateToolbar = function(noStatus)
 {
-  if (this.suspendUpdateToolbar) return;
-  
+  if (this.suspendUpdateToolbar)
+  {
+    return;
+  }
   var doc = this._doc;
   var text = (this._editMode == "textmode");
   var ancestors = null;
@@ -4202,8 +4282,8 @@ Xinha.prototype.updateToolbar = function(noStatus)
         item.editor = null;
         item.onclick = null;
         item.oncontextmenu = null;
-        item._xinha_dom0Events['click'] = null;
-        item._xinha_dom0Events['contextmenu'] = null;
+        item._xinha_dom0Events.click = null;
+        item._xinha_dom0Events.contextmenu = null;
         item = null;
       }
 
@@ -4220,7 +4300,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
           continue;
         }
         var a = document.createElement("a");
-        a.href = "javascript:void(0)";
+        a.href = "javascript:void(0);";
         a.el = el;
         a.editor = this;
         this._statusBarItems.push(a);
@@ -4248,7 +4328,10 @@ Xinha.prototype.updateToolbar = function(noStatus)
           }
         );
         var txt = el.tagName.toLowerCase();
-        if (typeof el.style != 'undefined') a.title = el.style.cssText;
+        if (typeof el.style != 'undefined')
+        {
+          a.title = el.style.cssText;
+        }
         if ( el.id )
         {
           txt += "#" + el.id;
@@ -4273,7 +4356,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
     var btn = this._toolbarObjects[cmd];
     var inContext = true;
     // prevent iterating over wrong type
-    if ( typeof(btn.state) != 'function' )
+    if ( typeof btn.state != 'function' )
     {
       continue;
     }
@@ -4497,7 +4580,10 @@ Xinha.prototype.getPluginInstance = function (plugin)
   {
     return this.plugins[plugin].instance;
   }
-  else return null;
+  else
+  {
+    return null;
+  }
 };
 /** Returns an array with all the ancestor nodes of the selection or current cursor position.
 * @returns {Array}
@@ -4888,7 +4974,6 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
     
     case 'justifyleft'  :
     case 'justifyright' :
-    {
       cmdID.match(/^justify(.*)$/);
       var ae = this.activeElement(this.getSelection());      
       if(ae && ae.tagName.toLowerCase() == 'img')
@@ -4899,7 +4984,6 @@ Xinha.prototype.execCommand = function(cmdID, UI, param)
       {
         this._doc.execCommand(cmdID, UI, param);
       }
-    }    
     break;
     
     default:
@@ -5051,7 +5135,10 @@ Xinha.prototype.scrollToElement = function(e)
   if(!e)
   {
     e = this.getParentElement();
-    if(!e) return;
+    if(!e)
+    {
+      return;
+    }
   }
   
   // This was at one time limited to Gecko only, but I see no reason for it to be. - James
@@ -5067,7 +5154,7 @@ Xinha.prototype.scrollToElement = function(e)
 Xinha.prototype.getEditorContent = function()
 {
   return this.outwardHtml(this.getHTML());
-}
+};
 
 /** Completely change the HTML inside the editor
  *
@@ -5077,7 +5164,7 @@ Xinha.prototype.getEditorContent = function()
 Xinha.prototype.setEditorContent = function(html)
 {
   this.setHTML(this.inwardHtml(html));
-}
+};
 
 /** Get the raw edited HTML, should not be used without Xinha.prototype.outwardHtml()
  *  
@@ -5292,28 +5379,30 @@ Xinha.prototype.inwardSpecialReplacements = function(html)
 Xinha.prototype.fixRelativeLinks = function(html)
 {
   if ( typeof this.config.expandRelativeUrl != 'undefined' && this.config.expandRelativeUrl ) 
-  var src = html.match(/(src|href)="([^"]*)"/gi);
-  var b = document.location.href;
-  if ( src )
   {
-    var url,url_m,relPath,base_m,absPath
-    for ( var i=0;i<src.length;++i )
+    var src = html.match(/(src|href)="([^"]*)"/gi);
+    var b = document.location.href;
+    if ( src )
     {
-      url = src[i].match(/(src|href)="([^"]*)"/i);
-      url_m = url[2].match( /\.\.\//g );
-      if ( url_m )
+      var url,url_m,relPath,base_m,absPath;
+      for ( var i=0;i<src.length;++i )
       {
-        relPath = new RegExp( "(.*?)(([^\/]*\/){"+ url_m.length+"})[^\/]*$" );
-        base_m = b.match( relPath );
-        absPath = url[2].replace(/(\.\.\/)*/,base_m[1]);
-        html = html.replace( new RegExp(Xinha.escapeStringForRegExp(url[2])),absPath );
+        url = src[i].match(/(src|href)="([^"]*)"/i);
+        url_m = url[2].match( /\.\.\//g );
+        if ( url_m )
+        {
+          relPath = new RegExp( "(.*?)(([^\/]*\/){"+ url_m.length+"})[^\/]*$" );
+          base_m = b.match( relPath );
+          absPath = url[2].replace(/(\.\.\/)*/,base_m[1]);
+          html = html.replace( new RegExp(Xinha.escapeStringForRegExp(url[2])),absPath );
+        }
       }
     }
   }
   
   if ( typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors )
   {
-    var stripRe = new RegExp("((href|src|background)=\")("+Xinha.escapeStringForRegExp(unescape(document.location.href.replace(/&/g,'&amp;'))) + ')([#?][^\'" ]*)', 'g');
+    var stripRe = new RegExp("((href|src|background)=\")("+Xinha.escapeStringForRegExp(window.unescape(document.location.href.replace(/&/g,'&amp;'))) + ')([#?][^\'" ]*)', 'g');
     html = html.replace(stripRe, '$1$4');
   }
 
@@ -5426,7 +5515,7 @@ Xinha.cloneObject = function(obj)
   {
     return null;
   }
-  var newObj = (obj.isArray ) ? [] : {};
+  var newObj = obj.isArray ? [] : {};
 
   // check for function and RegExp objects (as usual, IE is fucked up)
   if ( obj.constructor.toString().match( /\s*function Function\(/ ) || typeof obj == 'function' )
@@ -5649,14 +5738,20 @@ Xinha.addOnloadHandler = function (func, scope)
  var init = function ()
  {
    // quit if this function has already been called
-   if (arguments.callee.done) return;
+   if (arguments.callee.done) 
+   {
+     return;
+   }
    // flag this function so we don't do the same thing twice
    arguments.callee.done = true;
    // kill the timer
-   if (Xinha.onloadTimer) clearInterval(Xinha.onloadTimer);
+   if (Xinha.onloadTimer)
+   {
+     clearInterval(Xinha.onloadTimer);
+   }
 
    func();
- }
+ };
  if (Xinha.is_ie)
  {
    scope.document.write("<sc"+"ript id=__ie_onload defer src=javascript:void(0)><\/script>");
@@ -5738,7 +5833,7 @@ Xinha.prependDom0Event = function(el, ev, fn)
 Xinha.getEvent = function(ev)
 {
   return ev || window.event;
-}
+};
 /**
  * Prepares an element to receive more than one DOM-0 event handler
  * when handlers are added via addDom0Event and prependDom0Event.
@@ -5874,8 +5969,10 @@ Xinha.needsClosingTag = function(el)
  */
 Xinha.htmlEncode = function(str)
 {
-  if (!str) return '';
-  if ( typeof str.replace == 'undefined' )
+  if (!str)
+  {
+    return '';
+  }  if ( typeof str.replace == 'undefined' )
   {
     str = str.toString();
   }
@@ -6030,7 +6127,7 @@ Xinha.prototype.popupURL = function(file)
   {
     var plugin = RegExp.$1;
     var popup = RegExp.$2;
-    if ( ! ( /\.(html?|php)$/.test(popup) ) )
+    if ( !/\.(html?|php)$/.test(popup) )
     {
       popup += ".html";
     }
@@ -6112,13 +6209,12 @@ Xinha.prototype._toggleBorders = function()
  */
 Xinha.addCoreCSS = function(html)
 {
-    var coreCSS = 
-    "<style title=\"XinhaInternalCSS\" type=\"text/css\">"
-    + ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;}\n"
-    + "html, body { border: 0px; } \n"
-    + "body { background-color: #ffffff; } \n"
-	+ "img, hr { cursor: default } \n"  
-    +"</style>\n";
+    var coreCSS = "<style title=\"XinhaInternalCSS\" type=\"text/css\">" +
+    ".htmtableborders, .htmtableborders td, .htmtableborders th {border : 1px dashed lightgrey ! important;}\n" +
+    "html, body { border: 0px; } \n" +
+    "body { background-color: #ffffff; } \n" +
+    "img, hr { cursor: default } \n" +
+    "</style>\n";
     
     if( html && /<head>/i.test(html))
     {
@@ -6132,7 +6228,7 @@ Xinha.addCoreCSS = function(html)
     {
       return coreCSS;
     }
-}
+};
 /** Allows plugins to add a stylesheet for internal use to the edited document that won't appear in the HTML output
  *  
  *  @see Xinha#stripCoreCSS
@@ -6144,9 +6240,9 @@ Xinha.prototype.addEditorStylesheet = function (stylesheet)
     style.rel = 'stylesheet';
     style.type = 'text/css';
     style.title = 'XinhaInternalCSS';
-	style.href = stylesheet;
+    style.href = stylesheet;
     this._doc.getElementsByTagName("HEAD")[0].appendChild(style);
-}
+};
 /** Remove internal styles
  *  
  *  @private
@@ -6157,7 +6253,7 @@ Xinha.prototype.addEditorStylesheet = function (stylesheet)
 Xinha.stripCoreCSS = function(html)
 {
   return html.replace(/<style[^>]+title="XinhaInternalCSS"(.|\n)*?<\/style>/ig, '').replace(/<link[^>]+title="XinhaInternalCSS"(.|\n)*?>/ig, ''); 
-}
+};
 /** Removes one CSS class (that is one of possible more parts 
  *   separated by spaces) from a given element
  *  
@@ -6338,7 +6434,7 @@ Xinha._postback = function(url, data, success, failure)
   {
     if ( req.readyState == 4 )
     {
-      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
+      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status === 0 )
       {
         if ( typeof success == 'function' )
         {
@@ -6387,7 +6483,7 @@ Xinha._getback = function(url, success, failure)
   {
     if ( req.readyState == 4 )
     {
-      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
+      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status === 0 )
       {
         success(req.responseText, req);
       }
@@ -6416,13 +6512,19 @@ Xinha.ping = function(url, successHandler, failHandler)
   {
     if ( req.readyState == 4 )
     {
-      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
+      if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status === 0 )
       {
-        if (successHandler) successHandler(req);
+        if (successHandler) 
+        {
+          successHandler(req);
+        }
       }
       else
       {
-        if (failHandler) failHandler(req)
+        if (failHandler) 
+        {
+          failHandler(req);
+        }
       }
     }
   }
@@ -6447,7 +6549,7 @@ Xinha._geturlcontent = function(url, returnXML)
   // Synchronous!
   req.open('GET', url, false);
   req.send(null);
-  if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status == 0 )
+  if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status === 0 )
   {
     return (returnXML) ? req.responseXML : req.responseText;
   }
@@ -6461,7 +6563,7 @@ Xinha._geturlcontent = function(url, returnXML)
 
 if (typeof dumpValues == 'undefined') 
 {
-  function dumpValues(o)
+  dumpValues = function(o)
   {
     var s = '';
     for (var prop in o) 
@@ -6469,9 +6571,13 @@ if (typeof dumpValues == 'undefined')
       if (window.console && typeof window.console.log == 'function') 
       {
         if (typeof console.firebug != 'undefined') 
+        {
           console.log(o);
+        }
         else 
+        {
           console.log(prop + ' = ' + o[prop] + '\n');
+        }
       }
       else
       {
@@ -6491,7 +6597,7 @@ if (typeof dumpValues == 'undefined')
       }
 
     }
-  }
+  };
 }
 if ( !Array.prototype.contains )
 {
@@ -6558,13 +6664,17 @@ if (!Array.prototype.forEach)
   {
     var len = this.length;
     if (typeof fn != "function")
+    {
       throw new TypeError();
+    }
 
     var thisObject = arguments[1];
     for (var i = 0; i < len; i++)
     {
       if (i in this)
+      {
         fn.call(thisObject, this[i], i, this);
+      }
     }
   };
 }
@@ -6582,11 +6692,14 @@ Xinha.getElementsByClassName = function(el,className)
     for (var i=0;i<els.length;i++)
     {
       classNames = els[i].className.split(' ');
-      if (classNames.contains(className)) result.push(els[i]);
+      if (classNames.contains(className)) 
+      {
+        result.push(els[i]);
+      }
     }
     return result;
   }
-}
+};
 
 /** Returns true if all elements of <em>a2</em> are also contained in <em>a1</em> (at least I think this is what it does)
 * @param {Array} a1
@@ -6740,10 +6853,16 @@ Xinha._lc = function(string, context, replace)
   }
 
   var m = null;
-  if (typeof string == 'string') m = string.match(/\$(.*?)=(.*?)\$/g);
+  if (typeof string == 'string') 
+  {
+    m = string.match(/\$(.*?)=(.*?)\$/g);
+  }
   if (m) 
   {
-    if (!replace) replace = {};
+    if (!replace) 
+    {
+      replace = {};
+    }
     for (var i = 0;i<m.length;i++)
     {
       var n = m[i].match(/\$(.*?)=(.*?)\$/);
@@ -6825,7 +6944,7 @@ Xinha._lc = function(string, context, replace)
   }
   if ( typeof replace != "undefined" )
   {
-    for ( var i in replace )
+    for ( i in replace )
     {
       ret = ret.replace('$'+i, replace[i]);
     }
@@ -6879,7 +6998,7 @@ Xinha._loadback = function(url, callback, scope, bonus)
   {
     s[t] = function()
     {      
-      if ( Xinha.is_ie && ( ! ( /loaded|complete/.test(window.event.srcElement.readyState) ) ) )
+      if (Xinha.is_ie && (!/loaded|complete/.test(window.event.srcElement.readyState)))
       {
         return;
       }
@@ -6900,7 +7019,10 @@ Xinha._loadback = function(url, callback, scope, bonus)
  */
 Xinha.makeEditors = function(editor_names, default_config, plugin_names)
 {
-  if ( !Xinha.isSupportedBrowser ) return;
+  if (!Xinha.isSupportedBrowser) 
+  {
+    return;
+  }
   
   if ( typeof default_config == 'function' )
   {
@@ -6940,7 +7062,10 @@ Xinha.makeEditors = function(editor_names, default_config, plugin_names)
  */
 Xinha.startEditors = function(editors)
 {
-  if ( !Xinha.isSupportedBrowser ) return;
+  if (!Xinha.isSupportedBrowser) 
+  {
+    return;
+  }
   
   for ( var i in editors )
   {
@@ -6956,7 +7081,10 @@ Xinha.startEditors = function(editors)
  */
 Xinha.prototype.registerPlugins = function(plugin_names)
 {
-  if ( !Xinha.isSupportedBrowser ) return;
+  if (!Xinha.isSupportedBrowser) 
+  {
+    return;
+  }
   
   if ( plugin_names )
   {
@@ -7167,16 +7295,16 @@ Xinha.getElementTopLeft = function(element)
   var curtop =  0;
   if (element.offsetParent) 
   {
-    curleft = element.offsetLeft
-    curtop = element.offsetTop
+    curleft = element.offsetLeft;
+    curtop = element.offsetTop;
     while (element = element.offsetParent) 
     {
-      curleft += element.offsetLeft
-      curtop += element.offsetTop
+      curleft += element.offsetLeft;
+      curtop += element.offsetTop;
     }
   }
   return { top:curtop, left:curleft };
-}
+};
 /** Find left pixel position of an element in the DOM.
  *  @param  {DomNode} element HTML Element
  *  @returns {Integer} 
@@ -7186,7 +7314,7 @@ Xinha.findPosX = function(obj)
   var curleft = 0;
   if ( obj.offsetParent )
   {
-    return Xinha.getElementTopLeft(obj).left;    
+    return Xinha.getElementTopLeft(obj).left;
   }
   else if ( obj.x )
   {
@@ -7222,8 +7350,11 @@ Xinha.createLoadingMessages = function(xinha_editors)
   
   for (var i=0;i<xinha_editors.length;i++)
   {
-     if (!document.getElementById(xinha_editors[i])) continue;
-	 Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
+    if (!document.getElementById(xinha_editors[i])) 
+    {
+      continue;
+    }
+    Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
   }
 };
 
@@ -7275,7 +7406,10 @@ Xinha.prototype.setLoadingMessage = function(subMessage, mainMessage)
 
 Xinha.setLoadingMessage = function(string)
 {
-  if (!Xinha.loadingMessages) return;  
+  if (!Xinha.loadingMessages) 
+  {
+    return;
+  }
   for ( var i = 0; i < Xinha.loadingMessages.length; i++ )
   {
     Xinha.loadingMessages[i].innerHTML = string;
@@ -7294,7 +7428,10 @@ Xinha.removeLoadingMessages = function(xinha_editors)
 {
   for (var i=0;i< xinha_editors.length;i++)
   {
-     if (!document.getElementById(xinha_editors[i])) continue;
+     if (!document.getElementById(xinha_editors[i])) 
+     {
+       continue;
+     }
      var main = document.getElementById("loading_" + document.getElementById(xinha_editors[i]).id);
      main.parentNode.removeChild(main);
   }
@@ -7373,14 +7510,14 @@ Xinha.collectGarbageForIE = function()
  * @param {DomNode} toBeInserted
  */
 
-Xinha.prototype.insertNodeAtSelection = function(toBeInserted) { Xinha.notImplemented("insertNodeAtSelection"); }
+Xinha.prototype.insertNodeAtSelection = function(toBeInserted) { Xinha.notImplemented("insertNodeAtSelection"); };
 
 /** Get the parent element of the supplied or current selection. 
  *  @param {Selection} sel optional selection as returned by getSelection
  *  @returns {DomNode}
  */
   
-Xinha.prototype.getParentElement      = function(sel) { Xinha.notImplemented("getParentElement"); }
+Xinha.prototype.getParentElement      = function(sel) { Xinha.notImplemented("getParentElement"); };
 
 /**
  * Returns the selected element, if any.  That is,
@@ -7390,7 +7527,7 @@ Xinha.prototype.getParentElement      = function(sel) { Xinha.notImplemented("ge
  * @returns {DomNode|null}
  */
  
-Xinha.prototype.activeElement         = function(sel) { Xinha.notImplemented("activeElement"); }
+Xinha.prototype.activeElement         = function(sel) { Xinha.notImplemented("activeElement"); };
 
 /** 
  * Determines if the given selection is empty (collapsed).
@@ -7398,19 +7535,19 @@ Xinha.prototype.activeElement         = function(sel) { Xinha.notImplemented("ac
  * @returns {Boolean}
  */
  
-Xinha.prototype.selectionEmpty        = function(sel) { Xinha.notImplemented("selectionEmpty"); }
+Xinha.prototype.selectionEmpty        = function(sel) { Xinha.notImplemented("selectionEmpty"); };
 /** 
  * Returns a range object to be stored 
  * and later restored with Xinha.prototype.restoreSelection()
  * @returns {Range}
  */
 
-Xinha.prototype.saveSelection = function() { Xinha.notImplemented("saveSelection"); }
+Xinha.prototype.saveSelection = function() { Xinha.notImplemented("saveSelection"); };
 
 /** Restores a selection previously stored
  * @param {Range} savedSelection Range object as returned by Xinha.prototype.restoreSelection()
  */
-Xinha.prototype.restoreSelection = function(savedSelection)  { Xinha.notImplemented("restoreSelection"); }
+Xinha.prototype.restoreSelection = function(savedSelection)  { Xinha.notImplemented("restoreSelection"); };
 
 /**
  * Selects the contents of the given node.  If the node is a "control" type element, (image, form input, table)
@@ -7419,34 +7556,34 @@ Xinha.prototype.restoreSelection = function(savedSelection)  { Xinha.notImplemen
  * @param {DomNode} node 
  * @param {Integer} pos  Set to a numeric position inside the node to collapse the cursor here if possible. 
  */
-Xinha.prototype.selectNodeContents    = function(node,pos) { Xinha.notImplemented("selectNodeContents"); }
+Xinha.prototype.selectNodeContents    = function(node,pos) { Xinha.notImplemented("selectNodeContents"); };
 
 /** Insert HTML at the current position, deleting the selection if any. 
  *  
  *  @param {String} html
  */
  
-Xinha.prototype.insertHTML            = function(html) { Xinha.notImplemented("insertHTML"); }
+Xinha.prototype.insertHTML            = function(html) { Xinha.notImplemented("insertHTML"); };
 
 /** Get the HTML of the current selection.  HTML returned has not been passed through outwardHTML.
  *
  * @returns {String}
  */
-Xinha.prototype.getSelectedHTML       = function() { Xinha.notImplemented("getSelectedHTML"); }
+Xinha.prototype.getSelectedHTML       = function() { Xinha.notImplemented("getSelectedHTML"); };
 
 /** Get a Selection object of the current selection.  Note that selection objects are browser specific.
  *
  * @returns {Selection}
  */
  
-Xinha.prototype.getSelection          = function() { Xinha.notImplemented("getSelection"); }
+Xinha.prototype.getSelection          = function() { Xinha.notImplemented("getSelection"); };
 
 /** Create a Range object from the given selection.  Note that range objects are browser specific.
  *  @see Xinha#getSelection
  *  @param {Selection} sel Selection object 
  *  @returns {Range}
  */
-Xinha.prototype.createRange           = function(sel) { Xinha.notImplemented("createRange"); }
+Xinha.prototype.createRange           = function(sel) { Xinha.notImplemented("createRange"); };
 
 /** Determine if the given event object is a keydown/press event.
  *
@@ -7454,7 +7591,7 @@ Xinha.prototype.createRange           = function(sel) { Xinha.notImplemented("cr
  *  @returns {Boolean}
  */
  
-Xinha.prototype.isKeyEvent            = function(event) { Xinha.notImplemented("isKeyEvent"); }
+Xinha.prototype.isKeyEvent            = function(event) { Xinha.notImplemented("isKeyEvent"); };
 
 /** Determines if the given key event object represents a combination of CTRL-<key>,
  *  which for Xinha is a shortcut.  Note that CTRL-ALT-<key> is not a shortcut.
@@ -7471,7 +7608,7 @@ Xinha.prototype.isShortCut = function(keyEvent)
   }
   
   return false;
-}
+};
 
 /** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
  *  this method will return 'a', press SHIFT-a and it will return 'A'.
@@ -7480,7 +7617,7 @@ Xinha.prototype.isShortCut = function(keyEvent)
  *  @returns {String}
  */
                                    
-Xinha.prototype.getKey = function(keyEvent) { Xinha.notImplemented("getKey"); }
+Xinha.prototype.getKey = function(keyEvent) { Xinha.notImplemented("getKey"); };
 
 /** Return the HTML string of the given Element, including the Element.
  * 
@@ -7488,7 +7625,7 @@ Xinha.prototype.getKey = function(keyEvent) { Xinha.notImplemented("getKey"); }
  * @returns {String}
  */
  
-Xinha.getOuterHTML = function(element) { Xinha.notImplemented("getOuterHTML"); }
+Xinha.getOuterHTML = function(element) { Xinha.notImplemented("getOuterHTML"); };
 
 /** Get a new XMLHTTPRequest Object ready to be used. 
  *
@@ -7512,7 +7649,7 @@ Xinha.getXMLHTTPRequestObject = function()
   {
     Xinha.notImplemented('getXMLHTTPRequestObject');
   }
-}
+};
  
 // Compatability - all these names are deprecated and will be removed in a future version
 /** Alias of activeElement()
@@ -7520,29 +7657,30 @@ Xinha.getXMLHTTPRequestObject = function()
  * @deprecated
  * @returns {DomNode|null}
  */
-Xinha.prototype._activeElement  = function(sel) { return this.activeElement(sel); }
+Xinha.prototype._activeElement  = function(sel) { return this.activeElement(sel); };
 /** Alias of selectionEmpty()
  * @see Xinha#selectionEmpty
  * @deprecated
  * @param {Selection} sel Selection object as returned by getSelection
  * @returns {Boolean}
  */
-Xinha.prototype._selectionEmpty = function(sel) { return this.selectionEmpty(sel); }
+Xinha.prototype._selectionEmpty = function(sel) { return this.selectionEmpty(sel); };
 /** Alias of getSelection()
  * @see Xinha#getSelection
  * @deprecated
  * @returns {Selection}
  */
-Xinha.prototype._getSelection   = function() { return this.getSelection(); }
+Xinha.prototype._getSelection   = function() { return this.getSelection(); };
 /** Alias of createRange()
  * @see Xinha#createRange
  * @deprecated
  * @param {Selection} sel Selection object
  * @returns {Range}
  */
-Xinha.prototype._createRange    = function(sel) { return this.createRange(sel); }
+Xinha.prototype._createRange    = function(sel) { return this.createRange(sel); };
 HTMLArea = Xinha;
 
+//what is this for? Do we need it?
 Xinha.init();
 
 if ( Xinha.ie_version < 8 )
@@ -7556,22 +7694,28 @@ if ( Xinha.ie_version < 8 )
  */
 Xinha.debugMsg = function(text, level)
 {
-  if (typeof console != 'undefined' && typeof console.log == 'function')
+  if (typeof console != 'undefined' && typeof console.log == 'function') 
   {
-    if (level && level == 'warn' && typeof console.warn == 'function')
+    if (level && level == 'warn' && typeof console.warn == 'function') 
     {
-      console.warn(text)
+      console.warn(text);
     }
-    else if (level && level == 'info' && typeof console.info == 'function')
-    {
-      console.info(text)
-    }
-    else console.log(text);
+    else 
+      if (level && level == 'info' && typeof console.info == 'function') 
+      {
+        console.info(text);
+      }
+      else 
+      {
+        console.log(text);
+      }
   }
-  else if (typeof opera != 'undefined' && typeof opera.postError == 'function') opera.postError(text);
-  
-}
+  else if (typeof opera != 'undefined' && typeof opera.postError == 'function') 
+  {
+    opera.postError(text);
+  }
+};
 Xinha.notImplemented = function(methodName) 
 {
   throw new Error("Method Not Implemented", "Part of Xinha has tried to call the " + methodName + " method which has not been implemented.");
-}
+};
