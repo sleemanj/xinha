@@ -11,7 +11,8 @@ var PSLocal = window.PSLocal = function PSLocal(editor) {
       directory_operations: true,
       file_operations: true,
       image_operations: false,
-      upload_operations: false,
+      upload_operations: true,
+      import_operations: false,
       user_publish: false,
       shared_publish: false,
       user_storage: true
