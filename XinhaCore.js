@@ -1496,9 +1496,22 @@ Xinha.prototype._setConfig = function(config)
 /** FIXME: How can this be used??
 * @private
 */
-Xinha.prototype._addToolbar = function()
+Xinha.prototype._rebuildToolbar = function()
 {
 	this._createToolbar1(this, this._toolbar, this._toolbarObjects);
+
+  // We only want ONE editor at a time to be active
+  if ( Xinha._currentlyActiveEditor )
+  {
+    if ( Xinha._currentlyActiveEditor == this )
+    {
+      this.activateEditor();
+    }
+  }
+  else
+  {
+    this.disableToolbar();
+  }
 };
 
 /**
@@ -1525,6 +1538,12 @@ Xinha._createToolbarBreakingElement = function()
  */
 Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
 {
+  // We will clean out any existing toolbar elements.
+  while (toolbar.lastChild)
+  {
+    toolbar.removeChild(toolbar.lastChild);
+  }
+
   var tb_row;
   // This shouldn't be necessary, but IE seems to float outside of the container
   // when we float toolbar sections, so we have to clear:both here as well
@@ -3611,6 +3630,10 @@ Xinha.loadPlugin = function(pluginName, callback, url)
       var editor = this;
       multiStageLoader('start',pluginName);
     }
+  }
+  else
+  {
+    Xinha._loadback(url, callback, this, pluginName);
   }
   
   return false;

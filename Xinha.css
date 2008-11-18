@@ -14,14 +14,14 @@
 }
 .htmlarea .toolbar table { margin: 0; font-family: tahoma,verdana,sans-serif; font-size: 11px; }
 .htmlarea .toolbar img { border: none; vertical-align: top; }
-.htmlarea .toolbar .label { padding: 0px 3px; }
+.htmlarea .toolbar .label { padding: 0 3px; }
 
 .htmlarea .toolbar .button {
   background: ButtonFace;
   color: ButtonText;
   border: 1px solid ButtonFace;
   padding: 1px;
-  margin: 0px;
+  margin: 0;
   width: 18px;
   height: 18px;
 }
@@ -35,7 +35,7 @@
 .htmlarea .toolbar .buttonActive,
 .htmlarea .toolbar .buttonPressed
 {
-  padding: 2px 0px 0px 2px;
+  padding: 2px 0 0 2px;
   border: 1px solid;
   border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
@@ -43,7 +43,7 @@
   background: ButtonHighlight;
 }
 .htmlarea .toolbar .indicator {
-  padding: 0px 3px;
+  padding: 0 3px;
   overflow: hidden;
   width: 20px;
   text-align: center;
@@ -62,9 +62,9 @@
   margin:0 3px;
   border-left: 1px solid ButtonShadow;
   border-right: 1px solid ButtonHighlight;
-  width: 0px;
+  width: 0;
   height: 18px;
-  padding: 0px;
+  padding: 0;
 }
 
 .htmlarea .toolbar .space { width: 5px; }
@@ -157,7 +157,7 @@ body.xinha_dialog_background.modal {
   background: ActiveCaption;
   color: CaptionText;
   border-bottom: 1px solid #000;
-  padding: 1px 0px 2px 5px;
+  padding: 1px 0 2px 5px;
   font-size: 12px;
   font-weight: bold;
   cursor: default;
@@ -167,7 +167,7 @@ body.xinha_dialog_background.modal {
 .dialog .title .button {
   float: right;
   border: 1px solid #66a;
-  padding: 0px 1px 0px 2px;
+  padding: 0 1px 0 2px;
   margin-right: 1px;
   color: #fff;
   text-align: center;
@@ -177,10 +177,10 @@ body.xinha_dialog_background.modal {
 
 .dialog button {
   width: 5.5em;
-  padding: 0px;
+  padding: 0;
 }
 .dialog .closeButton {
-  padding: 0px;
+  padding: 0;
   cursor: default;
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
@@ -209,7 +209,7 @@ body.xinha_dialog_background.modal {
 .dialog .buttonColor .chooser, .dialog .buttonColor .nocolor {
   height: 0.6em;
   border: 1px solid;
-  padding: 0px 1em;
+  padding: 0 1em;
   border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
 
@@ -220,14 +220,14 @@ body.xinha_dialog_background.modal {
    border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
 
-.dialog .buttonColor .nocolor { padding: 0px; }
+.dialog .buttonColor .nocolor { padding: 0; }
 .dialog .buttonColor .nocolor-hilite { background-color: #fff; color: #f00; }
 
 .dialog .label { text-align: right; width: 6em; }
 .dialog .value input { width: 100%; }
 
 .dialog legend { font-weight: bold; }
-.dialog fieldset table { margin: 2px 0px; }
+.dialog fieldset table { margin: 2px 0; }
  
 .dialog  .buttons {
 
@@ -243,8 +243,8 @@ body.xinha_dialog_background.modal {
     cursor : nw-resize;
 }
 .popupwin {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 .popupwin .title {
@@ -258,7 +258,7 @@ body.xinha_dialog_background.modal {
   letter-spacing: 2px;
 }
 
-form { margin: 0px; border: none; }
+form { margin: 0; border: none; }
 
 
 /** Panels **/
@@ -326,4 +326,111 @@ form { margin: 0px; border: none; }
   font-size:9px;
   color:#666;
   text-align:center;
+}
+/* Classes for filemanager styles in a dialog. */
+.dialog a img
+{
+border: 0 none transparent;
+}
+
+.dialog fieldset.collapsed {
+border: 0 none transparent;
+}
+
+.dialog fieldset.collapsed form {
+display: none;
+}
+
+.hidden
+{
+display: none;
+}
+
+.placesmanager
+{
+  width: 95%;
+  overflow: auto;
+}
+
+.filemanager
+{
+  width: 95%;
+  height: 200px;
+  overflow: auto;
+  background-color: #fff;
+}
+.filemanager div.file
+{
+  min-width: 80px;
+  height: 100px;
+  position: relative;
+  float: left;
+  border: 1px outset #666;
+  margin: 4px;
+}
+.placesmanager div.file
+{
+  min-width: 60px;
+  height: 70px;
+  position: relative;
+  float: left;
+  border: 1px outset #666;
+  margin: 4px;
+}
+.filemanager div.file:hover,
+.placesmanager div.file:hover
+{
+  border: 1px solid #333;
+  background: #fffff3;
+}
+
+.filemanager div.selected,
+.filemanager div.selected:hover,
+.placesmanager div.selected,
+.placesmanager div.selected:hover
+{
+  background: #ffffda;
+  border: 1px solid #000;
+}
+.filemanager .filename {
+	margin: 0.5em;
+	color: #222;
+}
+.filemanager div.selected .filename {
+  color: #000;
+}
+.filemanager img.thumb
+{
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+  border: 1px solid black;
+}
+.filemanager img.icon
+{
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -16px 0 0 -16px;
+}
+.filemanager img.action
+{
+  width: 15px;
+  height: 15px;
+  position: absolute;
+}
+.filemanager img.delete
+{
+  bottom: 3px;
+  left: 20px;
+}
+.filemanager img.copy
+{
+  bottom: 3px;
+  left: 3px;
 }
