@@ -12,19 +12,8 @@
     --      Copyright (c) 2002-2003 interactivetools.com, inc.
     --      This copyright notice MUST stay intact for use.
     --
-    --  Developers - Coding Style:
-    --   For the sake of not committing needlessly conflicting changes,
-    --
-    --   * New code to be indented with 2 spaces ("soft tab").
-    --   * New code preferably uses BSD-Style Bracing
-    --      if ( foo )
-    --      {
-    --        bar();
-    --      }
-    --   * Don't change brace styles.
-    --   * Don't change indentation.
-    --   * Jedit is the recommended editor, a comment of this format should be
-    --     included in the top 10 lines of the file (see the embedded edit mode)
+    --  Developers - Coding Style: 
+    --         Before you are going to work on Xinha code, please see http://trac.xinha.org/wiki/Documentation/StyleGuide
     --
     --  $HeadURL$
     --  $LastChangedDate$
