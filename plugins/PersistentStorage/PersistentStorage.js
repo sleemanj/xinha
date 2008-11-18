@@ -874,7 +874,7 @@ PersistentStorage.prototype.setBackend = function(backendName) {
   }
   this._activeBackend = backendName;
   var module = this._backends[this._activeBackend];
-  if (module.config.capabilities.upload_operations) {
+  if (module.config.capabilities.import_operations) {
     Xinha._removeClass(this.dialog.getElementById("import"),'hidden');
 
     var importUI = this.dialog.getElementById("importui");
