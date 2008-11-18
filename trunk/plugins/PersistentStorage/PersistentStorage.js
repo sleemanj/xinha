@@ -719,7 +719,7 @@ PersistentStorage.prototype._prepareDialog = function() {
   }
 
   this.dialog = new Xinha.Dialog(editor, this.html, "PersistentStorage", 
-                                 {width: 700,
+                                 {width: 800,
                                   closeOnEscape: true,
                                   resizable: true,
                                   centered: true,
