@@ -5392,6 +5392,10 @@ Xinha.prototype.fixRelativeLinks = function(html)
 {
   if ( typeof this.config.expandRelativeUrl != 'undefined' && this.config.expandRelativeUrl ) 
   {
+    if (html == null)
+    {
+      return "";
+    }
     var src = html.match(/(src|href)="([^"]*)"/gi);
     var b = document.location.href;
     if ( src )
