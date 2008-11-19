@@ -357,7 +357,7 @@ function Xinha(textarea, config)
   {
     if(!panels[i].container) { continue; } // prevent iterating over wrong type
     panels[i].div = panels[i].container; // legacy
-    panels[i].container.className = 'panels ' + i;
+    panels[i].container.className = 'panels panels_' + i;
     Xinha.freeLater(panels[i], 'container');
     Xinha.freeLater(panels[i], 'div');
   }
