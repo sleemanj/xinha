@@ -262,25 +262,25 @@ form { margin: 0; border: none; }
 
 
 /** Panels **/
-.htmlarea .panels.top
+.htmlarea .panels_top
 {
   border-bottom : 1px solid;
   border-color: ButtonShadow;
 }
 
-.htmlarea .panels.right
+.htmlarea .panels_right
 {
   border-left : 1px solid;
   border-color: ButtonShadow;
 }
 
-.htmlarea .panels.left
+.htmlarea .panels_left
 {
   border-right : 1px solid;
   border-color: ButtonShadow;
 }
 
-.htmlarea .panels.bottom
+.htmlarea .panels_bottom
 {
   border-top : 1px solid;
   border-color: ButtonShadow;
@@ -297,10 +297,10 @@ form { margin: 0; border: none; }
   padding-bottom:0 !IMPORTANT;
   border: none !IMPORTANT;
 }
-.htmlarea .panels.left  .panel { border-right:none; border-left:none; }
-.htmlarea .panels.left  h1     { border-right:none;  }
-.htmlarea .panels.right .panel { border-right:none; border-left:none; }
-.htmlarea .panels.left  h1     { border-left:none;  }
+.htmlarea .panels_left  .panel { border-right:none; border-left:none; }
+.htmlarea .panels_left  h1     { border-right:none;  }
+.htmlarea .panels_right .panel { border-right:none; border-left:none; }
+.htmlarea .panels_left  h1     { border-left:none;  }
 .htmlarea { border: 1px solid black; }
 
 .loading
