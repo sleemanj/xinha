@@ -280,6 +280,16 @@ PersistentStorage.prototype.saveDialog = function () {
     self.saveDocument();
   };
 
+  // Enable and disable the buttons with filename input
+  var nameinput = this.dialog.getElementById("filename");
+
+  button.disabled = nameinput.value ? false : true;
+
+  nameinput.onkeyup = nameinput.onkeypress = nameinput.onchange = function() {
+
+    button.disabled = nameinput.value ? false : true;
+  }
+
   this.showDialog({typeFilter:['document','html','text','folder'], styleFor:'documentsave'});
 }
 
@@ -487,6 +497,12 @@ PersistentStorage.prototype.buildThumbnail = function(entry) {
     }
     self.selectedEntry = [entry, fileBlock];
     self.selectedEntry[1].className += ' selected';
+
+    var filename = self.dialog.getElementById('filename');
+    filename.value = entry.name;
+
+    var confirmbutton = self.dialog.getElementById('confirm');
+    confirmbutton.disabled = false;
   });
 
   var image = document.createElement('img');

@@ -247,12 +247,21 @@ PSLocal.prototype.getMetadata = function(filedata, filterPath) {
   var fileList = filedata.files;
 
   for (var index=0; index<fileList.length; ++index) {
-    if (filterPath == fileList[index].path) {
+      // Gah perform file splitting here..
+    var pathpart = fileList[index].fullpath.split('/');
+    if (pathpart.length > 2) {
+      pathpart = pathpart.slice(0,pathpart.length-1).join('/');
+    } else {
+      pathpart = '/';
+    }
+
+    var filepart = fileList[index].fullpath.split('/').slice(-1)[0];
+    if (filterPath == pathpart) {
       metadata.push({
         URL: fileList[index].url,
         thumbURL: editor.imgURL('images/tango/32x32/mimetypes/text-x-generic.png'),
-        name: fileList[index].filename,
-        key: fileList[index].path + fileList[index].filename,
+        name: filepart,
+        key: fileList[index].fullpath,
         $type: fileList[index].filetype
       });
     }
