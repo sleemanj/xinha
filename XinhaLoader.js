@@ -1,5 +1,42 @@
 var Xinha = {};
 
+// Auto detect _editor_url if it's not set.
+if (!window._editor_url) {
+  // Because of the way the DOM is loaded, this is guaranteed to always pull our script tag.
+  var this_script = Array.prototype.slice.call(document.getElementsByTagName('script'),-1)[0];
+
+  // We'll allow two ways to specify arguments.  We'll accept them in the
+  // argument of the script, or we'll accept them embedded into our script tag.
+  var args = this_script.src.split('?');
+  args = args.length == 2 ? args[1].split('&') : '';
+  for (var index=0; index<args.length; ++index) {
+    var arg = args[index].split('=');
+    if (arg.length == 2) {
+        switch (arg[0]) {
+            case 'lang':
+            case 'icons':
+            case 'skin':
+            case 'url':
+              window['_editor_'+arg[0]] = arg[1];
+              break;
+        }
+    }
+  }
+
+  // We can grab the script innerHTML and execute that to cut down on script
+  // tags.  Thanks John Resig!
+  // http://ejohn.org/blog/degrading-script-tags/
+  if (this_script.innerHTML.replace(/\s+/,'')) {
+      eval(this_script.innerHTML);
+  }
+
+  // Default values
+  _editor_lang = window._editor_lang || 'de';
+
+  // Chop off any query string.  Chop the filename off of the URL.
+  _editor_url = window._editor_url || this_script.src.split('?')[0].split('/').slice(0,-1).join('/');
+}
+
 _editor_url = _editor_url.replace(/\x2f*$/, '/');
 
 Xinha.agt       = navigator.userAgent.toLowerCase();
