@@ -64,6 +64,7 @@ if (typeof RegExp.prototype.compile == 'function') {
 		Xinha.RegExpCache[i] = new RegExp().compile(Xinha.RegExpCache[i]);
 	}
 }
+
 /** 
   * Cleans HTML into wellformed xhtml
   */
@@ -85,15 +86,17 @@ Xinha.prototype.cleanHTML = function(sHtml) {
 		replace(c[8], '<').//strip tagstart whitespace
 		replace(c[10], ' ');//trim extra whitespace
 	if(Xinha.is_ie && c[13].test(sHtml)) {
-		sHtml = sHtml.replace(c[13],'$1'+this.stripBaseURL(RegExp.$3)+'"');
+          sHtml = sHtml.replace(c[13],'$1'+Xinha._escapeDollars(stripBaseURL(RegExp.$3))+'"');
 	}
+
 	if(this.config.only7BitPrintablesInURLs) {
 		if (Xinha.is_ie) c[13].test(sHtml); // oddly the test below only triggers when we call this once before (IE6), in Moz it fails if tested twice
 		if ( c[13].test(sHtml)) {
 			try { //Mozilla returns an incorrectly encoded value with innerHTML
-				sHtml = sHtml.replace(c[13], '$1'+decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
+                          sHtml = sHtml.replace(c[13], '$1'+Xinha._escapeDollars(decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g, function(chr) 
+                                                                                                                       {return escape(chr);}))+'"');
 			} catch (e) { // once the URL is escape()ed, you can't decodeURIComponent() it anymore
-				sHtml = sHtml.replace(c[13], '$1'+RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"');
+                          sHtml = sHtml.replace(c[13], Xinha._escapeDollars('$1'+RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"'));
 			}
 		}
 	}
@@ -214,4 +217,14 @@ Xinha.getHTML = function(root, outputRoot, editor) {
 //	html = Xinha.htmlEncode(html);
 
 	return html;
+};
+
+/** 
+  * Escapes dollar signs ($) to make them safe to use in regex replacement functions by replacing each $ in the input with $$.
+  * 
+  * This is advisable any time the replacement string for a call to replace() is a variable and could contain dollar signs that should not be interpreted as references to captured groups (e.g., when you want the text "$10" and not the first captured group followed by a 0).
+  * See http://trac.xinha.org/ticket/1337
+  */
+Xinha._escapeDollars = function(str) {
+  return str.replace(/\$/g, "$$$$");
 };
