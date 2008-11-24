@@ -62,6 +62,10 @@ xinha_init = xinha_init ? xinha_init : function()
    *   xinha_config.width  = '640px';
    *   xinha_config.height = '420px';
    *
+   *
+   * For a list of the available configuration options, see:
+   * http://trac.xinha.org/wiki/Documentation/ConfigVariablesList
+   *
    *************************************************************************/
 
    xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
