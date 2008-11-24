@@ -3207,7 +3207,7 @@ Xinha.prototype.initIframe = function()
   // If this IFRAME had been configured for autofocus, we'll focus it now,
   // since everything needed to do so is now fully loaded.
   if ((typeof editor.config.autofocus != "undefined") &&
-      ((editor.config.autofocus == editor._textArea.id) || editor.config.autofocus))
+      ((editor.config.autofocus == editor._textArea.id) || editor.config.autofocus == true))
   {
     editor.activateEditor();
     editor.focusEditor();
