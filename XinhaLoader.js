@@ -3,7 +3,8 @@ var Xinha = {};
 // Auto detect _editor_url if it's not set.
 if (!window._editor_url) {
   // Because of the way the DOM is loaded, this is guaranteed to always pull our script tag.
-  var this_script = Array.prototype.slice.call(document.getElementsByTagName('script'),-1)[0];
+  var scripts = document.getElementsByTagName('script');
+  var this_script = scripts[scripts.length-1];
 
   // We'll allow two ways to specify arguments.  We'll accept them in the
   // argument of the script, or we'll accept them embedded into our script tag.
