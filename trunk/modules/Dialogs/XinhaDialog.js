@@ -196,6 +196,10 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   var main = document.createElement('div');
   rootElem.appendChild(main);
   main.innerHTML = html;
+
+  // If the localizer is a string containing a plugin name, it can be used to
+  // lookup the plugin.
+  this.fixupDOM(main, localizer);
   
   //make the first h1 to drag&drop the rootElem
   var captionBar = main.removeChild( main.getElementsByTagName("h1")[0]);
@@ -1132,6 +1136,56 @@ Xinha.Dialog.prototype.translateHtml = function(html,localizer)
     }
   );
   return html;
+};
+
+/**
+ * Fixup links in the elements to allow linking to Xinha resources
+ */
+Xinha.Dialog.prototype.fixupDOM = function(root,plugin)
+{
+  var dialog = this;
+  if(typeof plugin != 'string')
+  {
+    plugin = 'GenericPlugin';
+  }
+
+  var linkReplace = function(fullString, resource) {
+    switch(resource) {
+      case "editor":
+        return _editor_url;
+      case "plugin":
+        return Xinha.getPluginDir(plugin);
+      case "images":
+        return dialog.editor.imgURL('images');
+    };
+  };
+
+  var images = Xinha.collectionToArray(root.getElementsByTagName('img'));
+
+  for (var index=0; index<images.length; ++index) {
+    var image = images[index];
+    var reference = image.getAttribute('src');
+    if (reference) {
+      var fixedReference = reference.replace(/^\[(editor|plugin|images)\]/, linkReplace);
+      if (fixedReference != reference) {
+        image.setAttribute('src', fixedReference);
+      }
+    }
+  }
+
+  var links = Xinha.collectionToArray(root.getElementsByTagName('a'));
+
+  for (var index=0; index<links.length; ++index) {
+    var link = links[index];
+    var reference = image.getAttribute('href');
+    if (reference) {
+      var fixedReference = reference.replace(/^\[(editor|plugin|images)\]/, linkReplace);
+      if (fixedReference != reference) {
+        link.setAttribute('href', fixedReference);
+      }
+    }
+  }
+
 };
 
 /** Use this function when adding an element with a new ID/name to a 
