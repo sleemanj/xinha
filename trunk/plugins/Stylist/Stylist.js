@@ -331,10 +331,17 @@ Xinha.prototype._stylistRemoveClassesFull = function(el, classes)
     {
       // Must be a span with no classes and no id, so we can splice it out
       var prnt = el.parentNode;
-      var childs = el.childNodes;
-      for(var x = 0; x < childs.length; x++)
+      var tmp;
+      while (el.hasChildNodes())
       {
-        prnt.insertBefore(childs[x], el);
+        if (el.firstChild.nodeType == 1)
+        {
+          // if el.firstChild is an element, we've got to recurse to make sure classes are
+          // removed from it and and any of its children.
+          this._stylistRemoveClassesFull(el.firstChild, classes);
+        }
+        tmp = el.removeChild(el.firstChild);
+        prnt.insertBefore(tmp, el);
       }
       prnt.removeChild(el);
     }
