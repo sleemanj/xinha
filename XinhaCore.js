@@ -1150,10 +1150,10 @@ Xinha.Config.prototype.registerIcon = function (id, icon)
 *   var editor = new Xinha("your_text_area_id");
 *   var cfg = editor.config; // this is the default configuration
 *   cfg.btnList["my-hilite"] =
-*	[ function(editor) { editor.surroundHTML('<span style="background:yellow">', '</span>'); }, // action
-*	  "Highlight selection", // tooltip
+*	[ "Highlight selection", // tooltip
 *	  "my_hilite.gif", // image
 *	  false // disabled in text mode
+*	  function(editor) { editor.surroundHTML('<span style="background:yellow">', '</span>'); }, // action
 *	];
 *   cfg.toolbar.push(["linebreak", "my-hilite"]); // add the new button to the toolbar
 *
