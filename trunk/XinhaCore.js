@@ -5187,7 +5187,18 @@ Xinha.prototype.setEditorContent = function(html)
 {
   this.setHTML(this.inwardHtml(html));
 };
-
+/** Saves the contents of all Xinhas to their respective textareas
+ *  @public 
+ */
+Xinha.updateTextareas = function()
+{
+  var e;
+  for (var i=0;i<__xinhas.length;i++)
+  {
+    e = __xinhas[i];
+    e._textArea.value = e.getEditorContent();
+  }
+}
 /** Get the raw edited HTML, should not be used without Xinha.prototype.outwardHtml()
  *  
  *  @private
