@@ -1177,7 +1177,7 @@ Xinha.Dialog.prototype.fixupDOM = function(root,plugin)
 
   for (var index=0; index<links.length; ++index) {
     var link = links[index];
-    var reference = image.getAttribute('href');
+    var reference = link.getAttribute('href');
     if (reference) {
       var fixedReference = reference.replace(/^\[(editor|plugin|images)\]/, linkReplace);
       if (fixedReference != reference) {
