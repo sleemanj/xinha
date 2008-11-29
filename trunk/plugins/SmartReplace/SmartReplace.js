@@ -112,11 +112,11 @@ SmartReplace.prototype.keyEvent = function(ev)
 	}
 	if (charCode == 32) //space bar
 	{
-		return this.smartReplace(ev, 2, /^\s-/, ' –', false); // space-space -> dash 
+		return this.smartReplace(ev, 2, /^\s-/, ' '+String.fromCharCode(8211), false); // space-space -> dash 
 	}
 	if ( key == '.' ) // ... -> ellipsis
 	{
-		return this.smartReplace(ev, 2, /\.\./, '…', true);
+		return this.smartReplace(ev, 2, /\.\./, String.fromCharCode(8230), true);
 	}
 	return true;
 }
