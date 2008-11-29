@@ -4350,6 +4350,18 @@ Xinha.prototype.updateToolbar = function(noStatus)
           }
         );
         var txt = el.tagName.toLowerCase();
+        switch (txt)
+        {
+          case 'b':
+            txt = 'strong';
+          break;
+          case 'i':
+            txt = 'em';
+          break;
+          case 'strike':
+            txt = 'del';
+          break;
+        }
         if (typeof el.style != 'undefined')
         {
           a.title = el.style.cssText;
@@ -4366,7 +4378,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
         this._statusBarTree.appendChild(a);
         if ( i !== 0 )
         {
-          this._statusBarTree.appendChild(document.createTextNode(String.fromCharCode(0xbb)));          
+          this._statusBarTree.appendChild(document.createTextNode(String.fromCharCode(0xbb)));
         }
         Xinha.freeLater(a);
       }
