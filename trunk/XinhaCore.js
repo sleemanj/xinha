@@ -154,6 +154,12 @@ Xinha.webkit_version = parseInt(navigator.appVersion.replace(/.*?AppleWebKit\/([
 @type string 
 */
 Xinha.is_safari  = (Xinha.agt.indexOf("safari") != -1);
+
+/** Browser is Google Chrome
+@type string 
+*/
+Xinha.is_chrome = (Xinha.agt.indexOf("chrome") != -1);
+
 /** OS is MacOS
 @type string 
 */

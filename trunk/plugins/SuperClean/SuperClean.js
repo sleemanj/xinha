@@ -6,7 +6,7 @@ function SuperClean(editor, args)
   this.editor = editor;
   var superclean = this;
   editor._superclean_on = false;
-  editor.config.registerButton('superclean', this._lc("Clean up HTML"), editor.imgURL('ed_superclean.gif', 'SuperClean'), true, function(e, objname, obj) { superclean._superClean(null, obj); });
+  editor.config.registerButton('superclean', this._lc("Clean up HTML"), [_editor_url +'iconsets/Tango/ed_buttons_main.png',6,4], true, function(e, objname, obj) { superclean._superClean(null, obj); });
 
   // See if we can find 'killword' and replace it with superclean
   editor.config.addToolbarElement("superclean", "killword", 0);
