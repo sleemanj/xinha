@@ -12,7 +12,7 @@
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
-.htmlarea .toolbar table { margin: 0; font-family: tahoma,verdana,sans-serif; font-size: 11px; }
+.htmlarea .toolbar table { margin: 0; font-family: Tahoma, Verdana,sans-serif; font-size: 11px; }
 .htmlarea .toolbar img { border: none; vertical-align: top; }
 .htmlarea .toolbar .label { padding: 0 3px; }
 
@@ -119,6 +119,31 @@
 }
 div.dialog {
   padding-bottom:10px;
+  border-radius: 8px 8px 0 0;
+  -moz-border-radius: 8px 8px 0 0;
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  
+  box-shadow: 4px 4px 5px #888;
+  -moz-box-shadow: 4px 4px 5px #888;
+  -webkit-box-shadow: 4px 4px 5px #888;
+}
+div.dialog.modal {
+  box-shadow: 9px 9px 10px #444;
+  -moz-box-shadow: 9px 9px 10px #444;
+  -webkit-box-shadow: 9px 9px 10px #444;
+}
+div.dialog.chrome {
+  -webkit-box-shadow: none !IMPORTANT;
+}
+.panels div.dialog.panel {
+  border-radius:0;
+  -moz-border-radius: 0;
+  -webkit-border-radius:0;
+  
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
 }
 .xinha_dialog_background {
   filter: alpha(opacity=0);
@@ -163,7 +188,18 @@ body.xinha_dialog_background.modal {
   cursor: default;
   letter-spacing: 0.01em;
 }
-.dialog h1 { margin:0;}
+.dialog h1 { 
+  margin:0;
+  border-radius: 8px 8px 0 0;
+  -moz-border-radius: 8px 8px 0 0;
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+}
+.panels .dialog.panel h1 { 
+  -moz-border-radius: 0;
+  -webkit-border-radius:0;
+}
+
 .dialog .title .button {
   float: right;
   border: 1px solid #66a;
@@ -240,7 +276,7 @@ body.xinha_dialog_background.modal {
     height: 12px;
     border-bottom: 2px solid #000;
     border-right: 2px solid #000;
-    cursor : nw-resize;
+    cursor : se-resize;
 }
 .popupwin {
   padding: 0;
