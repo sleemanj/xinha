@@ -2057,36 +2057,124 @@ Xinha.makeBtnImg = function(imgDef, doc)
  */
 Xinha.prototype._createStatusBar = function()
 {
+  // TODO: Move styling into separate stylesheet
   this.setLoadingMessage(Xinha._lc('Create Statusbar'));
-  var statusbar = document.createElement("div");
-  statusbar.className = "statusBar";
-  this._statusBar = statusbar;
+  var statusBar = document.createElement("div");
+  statusBar.style.position = "relative";
+  statusBar.className = "statusBar";
+  statusBar.style.width = "100%";
   Xinha.freeLater(this, '_statusBar');
-  
+
+  var widgetContainer = document.createElement("div");
+  widgetContainer.className = "statusBarWidgetContainer";
+  widgetContainer.style.position = "absolute";
+  widgetContainer.style.right = "0";
+  widgetContainer.style.top = "0";
+  widgetContainer.style.padding = "3px 3px 3px 10px";
+  statusBar.appendChild(widgetContainer);
+
   // statusbar.appendChild(document.createTextNode(Xinha._lc("Path") + ": "));
   // creates a holder for the path view
-  var div = document.createElement("span");
-  div.className = "statusBarTree";
-  div.innerHTML = Xinha._lc("Path") + ": ";
+  var statusBarTree = document.createElement("span");
+  statusBarTree.className = "statusBarTree";
+  statusBarTree.innerHTML = Xinha._lc("Path") + ": ";
 
-  this._statusBarTree = div;
+  this._statusBarTree = statusBarTree;
   Xinha.freeLater(this, '_statusBarTree');
-  this._statusBar.appendChild(div);
+  statusBar.appendChild(statusBarTree);
+  var statusBarTextMode = document.createElement("span");
+  statusBarTextMode.innerHTML = Xinha._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
+  statusBarTextMode.style.display = "none";
 
-  div = document.createElement("span");
-  div.innerHTML = Xinha._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
-  div.style.display = "none";
-
-  this._statusBarTextMode = div;
+  this._statusBarTextMode = statusBarTextMode;
   Xinha.freeLater(this, '_statusBarTextMode');
-  this._statusBar.appendChild(div);
+  statusBar.appendChild(statusBarTextMode);
+
+  statusBar.style.whiteSpace = "nowrap";
+
+  var self = this;
+  this.notifyOn("before_resize", function(evt, size) {
+    self._statusBar.style.width = null;
+  });
+  this.notifyOn("resize", function(evt, size) {
+    // HACK! IE6 doesn't update the width properly when resizing if it's 
+    // given in pixels, but does hide the overflow content correctly when 
+    // using 100% as the width. (FF, Safari and IE7 all require fixed
+    // pixel widths to do the overflow hiding correctly.)
+    if (Xinha.is_ie && Xinha.ie_version == 6)
+    {
+      self._statusBar.style.width = "100%";
+    } 
+    else
+    {
+      var width = size['width'];
+      self._statusBar.style.width = width + "px";
+    }
+  });
+
+  this.notifyOn("modechange", function(evt, mode) {
+    // Loop through all registered status bar items
+    // and show them only if they're turned on for
+    // the new mode.
+    for (var i in self._statusWidgets)
+    {
+      var widget = self._statusWidgets[i];
+      for (var index=0; index<widget.modes.length; index++)
+      {
+        if (widget.modes[index] == mode.mode)
+        {
+          var found = true;
+        }
+      }
+      if (typeof found == 'undefined')
+      {
+        widget.block.style.display = "none";  
+      }
+      else
+      {
+        widget.block.style.display = "";
+      }
+    }
+  });
 
   if ( !this.config.statusBar )
   {
     // disable it...
-    statusbar.style.display = "none";
+    statusBar.style.display = "none";
   }
-  return statusbar;
+  return statusBar;
+};
+
+/** Registers and inserts a new block for a widget in the status bar
+ @param id unique string identifer for this block
+ @param modes list of modes this block should be shown in
+
+ @returns reference to HTML element inserted into the status bar
+ */
+Xinha.prototype.registerStatusWidget = function(id, modes)
+{
+  modes = modes || ['wysiwyg'];
+  if (!this._statusWidgets)
+  {
+    this._statusWidgets = {};
+  }
+
+  var block = document.createElement("div");
+  block.className = "statusBarWidget";
+  block = this._statusBar.firstChild.appendChild(block);
+
+  var showWidget = false;
+  for (var i=0; i<modes.length; i++)
+  {
+    if (modes[i] == this._editMode)
+    {
+      showWidget = true;
+    }
+  }
+  block.style.display = showWidget == true ? "" : "none";
+
+  this._statusWidgets[id] = {block: block, modes: modes};
+  return block;
 };
 
 /** Creates the Xinha object and replaces the textarea with it. Loads required files.
@@ -2463,7 +2551,8 @@ Xinha.prototype.generate = function ()
   
     // creates & appends the status bar
   var statusbar = this._createStatusBar();
-  fw.sb_cell.appendChild(statusbar);
+  this._statusBar = fw.sb_cell.appendChild(statusbar);
+
 
   // insert Xinha before the textarea.
   var textarea = this._textArea;

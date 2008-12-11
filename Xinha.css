@@ -93,6 +93,7 @@
   color: ButtonText;
   font: 11px Tahoma,Verdana,sans-serif;
   height:16px;
+  overflow: hidden;
 }
 
 .htmlarea .statusBar .statusBarTree a {
@@ -108,6 +109,9 @@
   border: 1px solid HighlightText;
 }
 
+.statusBarWidgetContainer {
+  background-color: ButtonFace;
+}
 
 /* popup dialogs */
 

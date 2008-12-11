@@ -91,6 +91,13 @@ html > body .htmlarea .toolbar .button {
   vertical-align: middle;
 }
 
+.htmlarea .statusBar .statusBarWidgetContainer
+{
+  background-image: url(statusbar.png);
+  background-repeat: repeat-x;
+  background-color: white;
+}
+
 .htmlarea .statusBar .statusBarTree
 {
   display:block;

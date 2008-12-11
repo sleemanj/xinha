@@ -39,27 +39,8 @@ CharCounter.prototype._lc = function(string) {
 CharCounter.prototype.onGenerateOnce = function() {
   var self = this;
   if (this.charCount==null) {
-    var charCount = document.createElement("span");
-    charCount.style.padding = "2px 5px";
-    if(Xinha.is_ie) {
-      charCount.style.styleFloat = "right";
-    } else {
-      charCount.style.cssFloat = "right";
-    }
-    var brk = document.createElement('div');
-    brk.style.height =
-    brk.style.width =
-    brk.style.lineHeight =
-    brk.style.fontSize = '1px';
-    brk.style.clear = 'both';
-    if(Xinha.is_ie) {
-      this.editor._statusBarTree.style.styleFloat = "left";
-    } else {
-      this.editor._statusBarTree.style.cssFloat = "left";
-    }
-    this.editor._statusBar.appendChild(charCount);
-    this.editor._statusBar.appendChild(brk);
-    this.charCount = charCount;
+      var charCount = self.editor.registerStatusWidget('CharCounter', ['wysiwyg']);
+      this.charCount = charCount;
   }
 };
 
@@ -118,19 +99,3 @@ CharCounter.prototype.onUpdateToolbar = function() {
   this._timeoutID = window.setTimeout(function() {e._updateCharCount();}, 1000);
 };
 
-CharCounter.prototype.onMode = function (mode)
-{
-  //Hide Chars in statusbar when switching into textmode
-  switch (mode)
-  {
-    case "textmode":
-      this.charCount.style.display = "none";
-      break;
-    case "wysiwyg":
-      this.charCount.style.display = "";
-      break;
-    default:
-      alert("Mode <" + mode + "> not defined!");
-      return false;
-  }
-};
