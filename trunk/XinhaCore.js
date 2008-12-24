@@ -25,6 +25,9 @@ glovar: false, debug: false, eqeqeq: false, passfail: false, sidebar: false, lax
 white: false, widget: false, undef: true, plusplus: false*/
 /*global  Dialog , _editor_css , _editor_icons, _editor_lang , _editor_skin , _editor_url, dumpValues, ActiveXObject, HTMLArea, _editor_lcbackend*/
 
+/** Information about the Xinha version 
+ * @type Object
+ */
 Xinha.version =
 {
   'Release'   : 'Trunk',
@@ -68,11 +71,14 @@ if ( typeof _editor_url == "string" )
   _editor_url = _editor_url.replace(/\x2f*$/, '/');
   
   // convert _editor_url to absolute
-  if(!_editor_url.match(/^([^:]+\:)?\//)){
-    Xinha.tmpPath = window.location.toString().replace(/\?.*$/,'').split("/");
-    Xinha.tmpPath.pop();
-    _editor_url = Xinha._resolveRelativeUrl(Xinha.tmpPath.join("/"), _editor_url);
-    delete Xinha.tmpPath;  
+  if(!_editor_url.match(/^([^:]+\:)?\//))
+  {
+    (function()
+    {
+      var tmpPath = window.location.toString().replace(/\?.*$/,'').split("/");
+      tmpPath.pop();
+      _editor_url = Xinha._resolveRelativeUrl(tmpPath.join("/"), _editor_url);
+    })();
   }
 }
 else
@@ -114,24 +120,25 @@ var __xinhas = [];
 
 // browser identification
 /** Cache the user agent for the following checks
+ * @type String
  * @private
  */
 Xinha.agt       = navigator.userAgent.toLowerCase();
 /** Browser is Microsoft Internet Explorer
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_ie    = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera") == -1));
 /** Version Number, if browser is Microsoft Internet Explorer
-@type string 
-*/
+ * @type Float 
+ */
 Xinha.ie_version= parseFloat(Xinha.agt.substring(Xinha.agt.indexOf("msie")+5));
 /** Browser is Opera
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_opera  = (Xinha.agt.indexOf("opera") != -1);
 /** Version Number, if browser is Opera 
-@type string 
-*/
+  * @type Float 
+  */
 if(Xinha.is_opera && Xinha.agt.match(/opera[\/ ]([0-9.]+)/))
 {
   Xinha.opera_version = parseFloat(RegExp.$1);
@@ -141,53 +148,65 @@ else
   Xinha.opera_version = 0;
 }
 /** Browserengine is KHTML (Konqueror, Safari)
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_khtml  = (Xinha.agt.indexOf("khtml") != -1);
 /** Browser is WebKit
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_webkit  = (Xinha.agt.indexOf("applewebkit") != -1);
+/** Webkit build number
+ * @type Integer
+ */
 Xinha.webkit_version = parseInt(navigator.appVersion.replace(/.*?AppleWebKit\/([\d]).*?/,'$1'), 10);
 
 /** Browser is Safari
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_safari  = (Xinha.agt.indexOf("safari") != -1);
 
 /** Browser is Google Chrome
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_chrome = (Xinha.agt.indexOf("chrome") != -1);
 
 /** OS is MacOS
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_mac	   = (Xinha.agt.indexOf("mac") != -1);
 /** Browser is Microsoft Internet Explorer Mac
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_mac_ie = (Xinha.is_ie && Xinha.is_mac);
 /** Browser is Microsoft Internet Explorer Windows
-@type string 
-*/
+ * @type Boolean 
+ */
 Xinha.is_win_ie = (Xinha.is_ie && !Xinha.is_mac);
 /** Browser engine is Gecko (Mozilla), applies also to Safari and Opera which work
  *  largely similar.
-@type string 
-*/
+ *@type Boolean 
+ */
 Xinha.is_gecko  = (navigator.product == "Gecko") || Xinha.is_opera;
+/** Browser engine is really Gecko, i.e. Browser is Firefox (or Netscape, SeaMonkey, Flock, Songbird, Beonex, K-Meleon, Camino, Galeon, Kazehakase, Skipstone, or whatever derivate might exist out there...)
+ * @type Boolean 
+ */
 Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
+/** Gecko version 1.9 (or greater)
+ * @type Boolean 
+ */
 Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub, 10) >= 2007121016;
+/** Gecko version lower than 1.9
+ * @type Boolean 
+ */
 Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub, 10) < 2007121016;
 
 /** File is opened locally opened ("file://" protocol)
- * @type string
+ * @type Boolean
  * @private
  */
 Xinha.isRunLocally = document.URL.toLowerCase().search(/^file:/) != -1;
 /** Editing is enabled by document.designMode (Gecko, Opera), as opposed to contenteditable (IE)
- * @type string
+ * @type Boolean
  * @private
  */
 Xinha.is_designMode = (typeof document.designMode != 'undefined' && !Xinha.is_ie); // IE has designMode, but we're not using it
@@ -489,6 +508,9 @@ Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_\-]{2,}(\.[
  */
 Xinha.Config = function()
 {
+  /** The svn revision number 
+   * @type Number
+   */
   this.version = Xinha.version.Revision;
   
  /** This property controls the width of the editor.<br />
@@ -738,7 +760,17 @@ Xinha.Config = function()
    * @return {String} The processed HTML 
    */
   this.outwardHtml = function (html) { return html; };
-
+  
+  /** This setting determines whether or not the editor will be automatically activated and focused when the page loads. 
+   *  If the page contains only a single editor, autofocus can be set to true to focus it. 
+   *  Alternatively, if the page contains multiple editors, autofocus may be set to the ID of the text area of the editor to be focused. 
+   *  For example, the following setting would focus the editor attached to the text area whose ID is "myTextArea": 
+   *  <code>xinha_config.autofocus = "myTextArea";</code>
+   *  Default: <code>false</code>
+   *  @type Boolean|String
+   */
+  this.autofocus = false;
+  
  /** Set to true if you want Word code to be cleaned upon Paste. This only works if 
    * you use the toolbr button to paste, not ^V. This means that due to the restrictions
    * regarding pasting, this actually has no real effect in Mozilla <br />
@@ -6087,12 +6119,12 @@ Xinha.isParaContainer = function(el)
 };
 
 
-/* * These are all the tags for which the end tag is not optional or  forbidden, taken from the list at:
+/** These are all the tags for which the end tag is not optional or  forbidden, taken from the list at:
  *   http: www.w3.org/TR/REC-html40/index/elements.html
  *  
  *  @private
  *  @see Xinha#needsClosingTag
- *  @type {String}
+ *  @type String
  */
 Xinha._closingTags = " a abbr acronym address applet b bdo big blockquote button caption center cite code del dfn dir div dl em fieldset font form frameset h1 h2 h3 h4 h5 h6 i iframe ins kbd label legend map menu noframes noscript object ol optgroup pre q s samp script select small span strike strong style sub sup table textarea title tt u ul var ";
 
@@ -6146,14 +6178,18 @@ Xinha.prototype.stripBaseURL = function(string)
   var basere = new RegExp(baseurl);
   return string.replace(basere, "");
 };
-/** Removes whitespace from beginning and end of a string
- *  
- *  @returns {String} 
- */
-String.prototype.trim = function()
+
+if (typeof String.prototype.trim != 'function')
 {
-  return this.replace(/^\s+/, '').replace(/\s+$/, '');
-};
+  /** Removes whitespace from beginning and end of a string. Custom implementation for JS engines that don't support it natively
+   *  
+   *  @returns {String} 
+   */
+  String.prototype.trim = function()
+  {
+    return this.replace(/^\s+/, '').replace(/\s+$/, '');
+  };
+}
 
 /** Creates a rgb-style rgb(r,g,b) color from a (24bit) number
  *  
@@ -6551,11 +6587,25 @@ Xinha._hasClass = function(el, className)
  *                           an answer from the server. We pass it the request object.
  */
  
-// mod_security (an apache module which scans incoming requests for potential hack attempts)
-// has a rule which triggers when it gets an incoming Content-Type with a charset
-// see ticket:1028 to try and work around this, if we get a failure in a postback
-// then Xinha._postback_send_charset will be set to false and the request tried again (once)
+/** mod_security (an apache module which scans incoming requests for potential hack attempts)
+ *  has a rule which triggers when it gets an incoming Content-Type with a charset
+ *  see ticket:1028 to try and work around this, if we get a failure in a postback
+ *  then Xinha._postback_send_charset will be set to false and the request tried again (once)
+ *  @type Boolean
+ *  @private
+ */ 
+// 
+// 
+// 
 Xinha._postback_send_charset = true;
+/** Use XMLHTTPRequest to send some some data to the server and do something
+ *  with the getback (asyncronously!)
+ * @param {String} url The address for the HTTPRequest
+ * @param {Function} success A function that is called when an answer is
+ *                           received from the server with the responseText as argument.
+ * @param {Function} failure A function that is called when we fail to receive
+ *                           an answer from the server. We pass it the request object.
+ */
 Xinha._postback = function(url, data, success, failure)
 {
   var req = null;
@@ -6609,8 +6659,7 @@ Xinha._postback = function(url, data, success, failure)
   req.send(content);
 };
 
-/** 
- * Use XMLHTTPRequest to receive some data from the server and do something
+/** Use XMLHTTPRequest to receive some data from the server and do something
  * with the it (asyncronously!)
  * @param {String} url The address for the HTTPRequest
  * @param {Function} success A function that is called when an answer is
@@ -6797,7 +6846,8 @@ if ( !Array.prototype.append )
     return this;
   };
 }
-/** Executes a provided function once per array element
+/** Executes a provided function once per array element.
+ *  Custom implementation for JS engines that don't support it natively
  * @source http://developer.mozilla.org/En/Core_JavaScript_1.5_Reference/Global_Objects/Array/ForEach
  * @param {Function} fn Function to execute for each element
  * @param {Object} thisObject Object to use as this when executing callback. 
@@ -6822,6 +6872,11 @@ if (!Array.prototype.forEach)
     }
   };
 }
+/** Returns all elements within a given class name inside an element
+ * @type Array
+ * @param {DomNode|document} el wherein to search
+ * @param {Object} className
+ */
 Xinha.getElementsByClassName = function(el,className)
 {
   if (el.getElementsByClassName)

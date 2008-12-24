@@ -25,29 +25,132 @@ white: false, widget: false, undef: true, plusplus: false*/
 /*global  Xinha */
 
 /** Xinha Dialog
- *
- *
- * @param editor Xinha object    
- * @param html string 
- * @param localizer string the "context" parameter for Xinha._lc(), typically the name of the plugin
- * @param size object with two possible properties of the size: width & height as int, where height is optional
- * @param options dictionary with optional boolean attributes 'modal', 'closable', 'resizable', and 'centered', as well as integer attribute 'layer'
+ *  
+ * @constructor
+ * @version $LastChangedRevision$ $LastChangedDate$
+ * @param {Xinha} editor Xinha object    
+ * @param {String} html string The HTML for the dialog's UI
+ * @param {String} localizer string the "context" parameter for Xinha._lc(), typically the name of the plugin
+ * @param {Object} size object with two possible properties of the size: width & height as int, where height is optional
+ * @param {Object} options dictionary with optional boolean attributes 'modal', 'closable', 'resizable', and 'centered', as well as integer attribute 'layer'
+
  */
 Xinha.Dialog = function(editor, html, localizer, size, options)
 {
   var dialog = this;
+  
+  /** Used for dialog.getElementById()
+   * @type Object
+   * @private
+   */
   this.id    = { };
+  /** Used for dialog.getElementById()
+   * @type Object
+   * @private
+   */
   this.r_id  = { }; // reverse lookup id
+  /** The calling Xinha instance
+   * @type Xinha
+   * @private
+   */
   this.editor   = editor;
+  /** 
+   * @private
+   * @type Document
+   */
   this.document = document;
+  /** Object with width, height as numbers
+   * @type Object
+   */
+  
   this.size = size;
+  /** 
+   * @type Boolean
+   * @private
+   */
   this.modal = (options && options.modal === false) ? false : true;
+  /** 
+   * @type Boolean
+   * @private
+   */
   this.closable = (options && options.closable === false) ? false : true;
+  /** 
+   * @type Boolean
+   * @private
+   */
   this.resizable = (options && options.resizable === false) ? false : true;
+  /** 
+   * @type Number
+   * @private
+   */
   this.layer = (options && options.layer) ? options.layer : 0;
+  /** 
+   * @type Boolean
+   * @private
+   */
   this.centered = (options && options.centered === true) ? true : false;
+  /** 
+   * @type Boolean
+   * @private
+   */
   this.closeOnEscape = (options && options.closeOnEscape === true) ? true : false;
-
+  
+  /** The div that is the actual dialog
+   *  @type DomNode
+   */
+  this.rootElem = null;
+  
+  /** The caption at the top of the dialog that is used to dragged the dialog. It is automatically created from the first h1 in the dialog's HTML
+   *  @type DomNode
+   */
+  this.captionBar = null;
+  /** This div contains the content
+   *  @type DomNode
+   */
+  this.main = null;
+  
+  /** Each dialog has a background
+   *  @type DomNode
+   *  @private
+   */
+  this.background = null;
+  /** 
+   * @type Boolean
+   * @private
+   */
+  this.centered = null;
+  /** 
+   * @type Boolean
+   * @private
+   */
+  this.greyout = null;
+  
+  /** 
+   * @type DomNode
+   * @private
+   */
+  this.buttons = null;
+  /** 
+   * @type DomNode
+   * @private
+   */
+  this.closer = null;
+  /** 
+   * @type DomNode
+   * @private
+   */
+  this.icon = null;
+  /** 
+   * @type DomNode
+   * @private
+   */
+  this.resizer = null;
+  /** 
+   * @type Number
+   * @private
+   */
+  this.initialZ = null;
+  
   /* Check global config to see if we should override any of the above options
     If a global option is set, it will apply to all dialogs, regardless of their
     individual settings (i.e., it will override them). If the global option is
@@ -151,6 +254,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   s.zIndex = (this.modal ? z + 25 : z +1 ) + this.layer;
 
   document.body.appendChild(backG);
+
   this.background = backG;
 
   backG = null;
@@ -325,12 +429,33 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   this.size = {};
 
 };
-
+/** This function is called when the dialog is resized. 
+ *  By default it does nothing, but you can override it in your Xinha.Dialog object e.g. to resize elements within you Dialog.
+ *  Example:<br />
+ *  <code>
+ *  var dialog = this.dialog; //The plugin's dialog instance;
+ *  dialog.onresize = function() 
+ *  {
+ *    var el = dialog.getElementById('foo');
+ *    el.style.width = dialog.width;
+ *  }
+ *  </code>
+ */
 Xinha.Dialog.prototype.onresize = function()
 {
   return true;
 };
-
+/** This function shows the dialog and populates form elements with values.
+ * Example:<br />
+ * Given your dialog contains an input element like <code>&lt;input name="[myInput]" type="text" /&gt;</code>
+ * <code>
+ *  var dialog = this.dialog; //The plugin's dialog instance;
+ *  var values = {myInput : 'My input value'}
+ *  dialog.show(values);
+ *  </code>
+ *  @see #setValues
+ *  @param {Object} values Object indexed by names of input elements
+ */
 Xinha.Dialog.prototype.show = function(values)
 {
   var rootElem = this.rootElem;
@@ -488,7 +613,10 @@ Xinha.Dialog.prototype.show = function(values)
   }
   this.dialogShown = true;
 };
-
+/** Hides the dialog and returns an object with the valuse of form elements
+ * @see #getValues
+ * @type Object
+ */
 Xinha.Dialog.prototype.hide = function()
 {
   if ( this.attached )
@@ -537,7 +665,9 @@ Xinha.Dialog.prototype.hide = function()
   this.editor.focusEditor();
   return this.getValues();
 };
-
+/** Shows/hides the dialog
+ * 
+ */
 Xinha.Dialog.prototype.toggle = function()
 {
   if(this.rootElem.style.display == 'none')
@@ -549,6 +679,9 @@ Xinha.Dialog.prototype.toggle = function()
     this.hide();
   }
 };
+/** Reduces the dialog to the size of the caption bar
+ * 
+ */
 Xinha.Dialog.prototype.collapse = function()
 {
   if(this.collapsed)
@@ -563,7 +696,7 @@ Xinha.Dialog.prototype.collapse = function()
   }
 };
 /** Equivalent to document.getElementById. You can't use document.getElementById because id's are dynamic to avoid id clashes between plugins
- * @type {Element}
+ * @type DomNode
  * @param {String} id
  */
 Xinha.Dialog.prototype.getElementById = function(id)
@@ -571,7 +704,7 @@ Xinha.Dialog.prototype.getElementById = function(id)
   return this.document.getElementById(this.id[id] ? this.id[id] : id);
 };
 /** Equivalent to document.getElementByName. You can't use document.getElementByName because names are dynamic to avoid name clashes between plugins
- * @type {Array}
+ * @type Array
  * @param {String} name
  */
 Xinha.Dialog.prototype.getElementsByName = function(name)
@@ -580,7 +713,7 @@ Xinha.Dialog.prototype.getElementsByName = function(name)
   return Xinha.collectionToArray(els);
 };
 /** Return all elements in the dialog that have the given class
- * @type {Array} 
+ * @type Array 
  * @param {String} className
  */
 Xinha.Dialog.prototype.getElementsByClassName = function(className)
@@ -588,6 +721,10 @@ Xinha.Dialog.prototype.getElementsByClassName = function(className)
   return Xinha.getElementsByClassName(this.rootElem,className);
 };
 
+/** Initiates dragging
+ * @private
+ * @param {Object} ev Mousedown event
+ */
 Xinha.Dialog.prototype.dragStart = function (ev) 
 {
   if ( this.attached || this.dragging) 
@@ -627,7 +764,10 @@ Xinha.Dialog.prototype.dragStart = function (ev)
     Xinha._addEvent(this.background.contentWindow.document, "mouseup", dialog.mouseUp);
   }
 };
-
+/** Sets the position while dragging
+ * @private
+ * @param {Object} ev Mousemove event
+ */
 Xinha.Dialog.prototype.dragIt = function(ev)
 {
   var dialog = this;
@@ -654,7 +794,10 @@ Xinha.Dialog.prototype.dragIt = function(ev)
   
   dialog.posDialog(newPos);
 };
-
+/** Ends dragging
+ * @private
+ * @param {Object} ev Mouseup event
+ */
 Xinha.Dialog.prototype.dragEnd = function(ev)
 {
   var dialog = this;
@@ -692,7 +835,10 @@ Xinha.Dialog.prototype.dragEnd = function(ev)
   }
 
 };
-
+/** Initiates resizing
+ * @private
+ * @param {Object} ev Mousedown event
+ */
 Xinha.Dialog.prototype.resizeStart = function (ev) {
   var dialog = this;
   if (dialog.resizing)
@@ -727,7 +873,10 @@ Xinha.Dialog.prototype.resizeStart = function (ev) {
     Xinha._addEvent(this.background.contentWindow.document, "mouseup", dialog.mouseUp);
   }
 };
-
+/** Sets the size while resiziong
+ * @private
+ * @param {Object} ev Mousemove event
+ */
 Xinha.Dialog.prototype.resizeIt = function(ev)
 {
   var dialog = this;
@@ -762,7 +911,10 @@ Xinha.Dialog.prototype.resizeIt = function(ev)
 
   dialog.onresize();
 };
-
+/** Ends resizing
+ * @private
+ * @param {Object} ev Mouseup event
+ */
 Xinha.Dialog.prototype.resizeEnd = function(ev)
 {
   var dialog = this;
@@ -792,7 +944,10 @@ Xinha.Dialog.prototype.resizeEnd = function(ev)
     this.sizeBgToDialog();
   }  
 };
-
+/** Attaches a modeless dialog to a panel on the given side
+ *  Triggers a notifyOf panel_change event
+ *  @param {String} side one of 'left', 'right', 'top', 'bottom'
+ */
 Xinha.Dialog.prototype.attachToPanel = function(side)
 {
   var dialog = this;
@@ -830,8 +985,10 @@ Xinha.Dialog.prototype.attachToPanel = function(side)
 
   editor.notifyOf('panel_change', {'action':'add','panel':rootElem});
 };
-
-Xinha.Dialog.prototype.detachFromPanel = function(ev)
+/** Removes a panel dialog from its panel and makes it float
+ * 
+ */
+Xinha.Dialog.prototype.detachFromPanel = function()
 {
   var dialog = this;
   var rootElem = dialog.rootElem;
@@ -868,14 +1025,19 @@ Xinha.Dialog.prototype.detachFromPanel = function(ev)
   dialog.captionBar.ondblclick = function() { dialog.attachToPanel(rootElem.side); };
   
 };
-
+/** 
+ * @private
+ * @type Object Object with width, height strings incl. "px" for CSS
+ */
 Xinha.Dialog.calcFullBgSize = function()
 {
   var page = Xinha.pageSize();
   var viewport = Xinha.viewportSize();
   return {width:(page.x > viewport.x  ? page.x : viewport.x )  + "px",height:(page.x > viewport.y ? page.y : viewport.y ) + "px"};
 };
-
+/** Sizes the background to the size of the dialog
+ *  @private
+ */
 Xinha.Dialog.prototype.sizeBgToDialog = function()
 {
   var rootElemStyle = this.rootElem.style;
@@ -885,16 +1047,26 @@ Xinha.Dialog.prototype.sizeBgToDialog = function()
   bgStyle.width = rootElemStyle.width;
   bgStyle.height = rootElemStyle.height;
 };
+/** Hides the background
+ *  @private
+ */
 Xinha.Dialog.prototype.hideBackground = function()
 {
   //this.background.style.display = 'none';
   Xinha.Dialog.fadeOut(this.background);
 };
+/** Shows the background
+ *  @private
+ */
 Xinha.Dialog.prototype.showBackground = function()
 {
   //this.background.style.display = '';
   Xinha.Dialog.fadeIn(this.background,70);
 };
+/** Positions the background
+ *  @private
+ *  @param {Object} pos Object with top, left strings incl. "px" for CSS
+ */
 Xinha.Dialog.prototype.posBackground = function(pos)
 {
   if (this.background.style.display != 'none')
@@ -903,6 +1075,10 @@ Xinha.Dialog.prototype.posBackground = function(pos)
     this.background.style.left = pos.left;
   }
 };
+/** Resizes the background
+ *  @private
+ *  @param {Object} size Object with width, height strings incl. "px" for CSS
+ */
 Xinha.Dialog.prototype.resizeBackground = function(size)
 {
   if (this.background.style.display != 'none')
@@ -911,12 +1087,19 @@ Xinha.Dialog.prototype.resizeBackground = function(size)
     this.background.style.height = size.height;
   }
 };
+/** Positions the dialog
+ *  @param {Object} pos Object with top, left strings incl. "px" for CSS
+ */
 Xinha.Dialog.prototype.posDialog = function(pos)
 {
   var st = this.rootElem.style;
   st.left = pos.left;
   st.top  = pos.top;
 };
+/** Resizes the dialog
+ * 
+ * @param {Object} size Object with width, height strings incl. "px" for CSS
+ */
 Xinha.Dialog.prototype.sizeDialog = function(size)
 {
   var st = this.rootElem.style;
@@ -927,6 +1110,10 @@ Xinha.Dialog.prototype.sizeDialog = function(size)
   this.main.style.height = (height > 20) ? height : 20 + "px";
   this.main.style.width = (width > 10) ? width : 10 + 'px';
 };
+/** Sets the values like Xinha.Dialog.prototype.show(values)
+ * @see #show
+ * @param {Object} values 
+ */
 Xinha.Dialog.prototype.setValues = function(values)
 {
   for(var i in values)
@@ -1001,6 +1188,10 @@ Xinha.Dialog.prototype.setValues = function(values)
   }
 };
 
+/** Retrieves the values like Xinha.Dialog.prototype.hide()
+ * @see #hide
+ * @type Object values 
+ */
 Xinha.Dialog.prototype.getValues = function()
 {
   var values = [ ];
@@ -1096,8 +1287,12 @@ Xinha.Dialog.prototype.getValues = function()
   }
   return values;
 };
-
-Xinha.Dialog.prototype.translateHtml = function(html,localizer)
+/** Localizes strings in the dialog.
+ * @private
+ * @param {String} html The HTML to translate
+ * @param {String} localizer Context for translation, usually plugin's name
+ */
+Xinha.Dialog.prototype.translateHtml = function(html, localizer)
 {
   var dialog = this;
   if(typeof localizer == 'function')
@@ -1141,6 +1336,7 @@ Xinha.Dialog.prototype.translateHtml = function(html,localizer)
 
 /**
  * Fixup links in the elements to allow linking to Xinha resources
+ * @private
  */
 Xinha.Dialog.prototype.fixupDOM = function(root,plugin)
 {
