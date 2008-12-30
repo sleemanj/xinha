@@ -742,7 +742,7 @@ Xinha.prototype.setCC = function ( target )
         ta.value = before + after.substring( 0, tagEnd ) + cc + after.substring( tagEnd, after.length );
       }
       else ta.value = before + cc + after;
-      ta.value = ta.value.replace(new RegExp ('(&[^'+cc+']*?)('+cc+')([^'+cc+']*?;)'), "$1$3$2");
+      ta.value = ta.value.replace(new RegExp ('(&[^'+cc+';]*?)('+cc+')([^'+cc+']*?;)'), "$1$3$2");
       ta.value = ta.value.replace(new RegExp ('(<script[^>]*>[^'+cc+']*?)('+cc+')([^'+cc+']*?<\/script>)'), "$1$3$2");
       ta.value = ta.value.replace(new RegExp ('^([^'+cc+']*)('+cc+')([^'+cc+']*<body[^>]*>)(.*?)'), "$1$3$2$4");
     }
