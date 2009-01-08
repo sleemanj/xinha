@@ -1717,6 +1717,7 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
     {
       el = document.createElement("select");
       el.title = tooltip;
+      el.style.width = 'auto';
       el.name = txt;
       var obj =
       {
