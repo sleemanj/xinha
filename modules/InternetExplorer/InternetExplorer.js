@@ -841,11 +841,13 @@ Xinha.prototype.findCC = function ( target )
   {
     range.select();
     range.text = '';
+    range.select();
   }
   if( range.findText( Xinha.cc ) )
   {
     range.select();
     range.text = '';
+    range.select();
   }
   if ( target == 'textarea' ) this._textArea.focus();
 };
