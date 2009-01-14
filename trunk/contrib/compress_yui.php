@@ -59,7 +59,7 @@ $core_prefix = '
     --  Use of Xinha is granted by the terms of the htmlArea License (based on
     --  BSD license)  please read license.txt in this package for details.
     --
-    --  Copyright (c) 2005-2008 Xinha Developer Team and contributors
+    --  Copyright (c) 2005-2009 Xinha Developer Team and contributors
     --  
     --  Xinha was originally based on work by Mihai Bazon which is:
     --      Copyright (c) 2003-2004 dynarch.com.
@@ -77,7 +77,7 @@ foreach ($return as $file)
 	
 	file_put_contents($file."_uncompr${ext}", preg_replace('/(\/\/[^\n]*)?(?![*])\\\[\n]/','',file_get_contents($file)));
 
-	exec("echo \"".(preg_match('/XinhaCore.js$/',$file) ? $prefix.$core_prefix : $prefix)."\" > $file && java -jar ${cwd}/yuicompressor-2.2.5.jar  --charset UTF-8 ${file}_uncompr${ext} >> $file 2>&1");
+	passthru("echo \"".(preg_match('/XinhaCore.js$/',$file) ? $prefix.$core_prefix : $prefix)."\" > $file && java -jar ${cwd}/yuicompressor-2.4.2.jar  --charset UTF-8 ${file}_uncompr${ext} >> $file 2>&1");
 	if (preg_match('/\d+:\d+:syntax error/',file_get_contents($file)))
 	{
 		unlink($file);
