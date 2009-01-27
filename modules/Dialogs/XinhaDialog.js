@@ -275,8 +275,8 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   // FIXME: This is nice, but I don't manage to get it switched off on text inputs :(
   // rootElem.style.MozUserSelect = "none";
   
-  rootElem.className = 'dialog' + (this.modal ? ' modal' : ' modeless');
-  if (Xinha.is_chrome) rootElem.className += ' chrome'; // Hack because border-raadius & box-shadow don't go well together in chrome
+  rootElem.className = 'dialog' + (this.modal ? '' : ' modeless');
+  if (Xinha.is_chrome) rootElem.className += ' chrome'; // Hack because border-radius & box-shadow don't go well together in chrome
   
  // this.background[1].appendChild(rootElem);
   document.body.appendChild(rootElem);

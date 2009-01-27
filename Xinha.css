@@ -128,14 +128,14 @@ div.dialog {
   -webkit-border-top-left-radius: 8px;
   -webkit-border-top-right-radius: 8px;
   
-  box-shadow: 4px 4px 5px #888;
-  -moz-box-shadow: 4px 4px 5px #888;
-  -webkit-box-shadow: 4px 4px 5px #888;
-}
-div.dialog.modal {
   box-shadow: 9px 9px 10px #444;
   -moz-box-shadow: 9px 9px 10px #444;
   -webkit-box-shadow: 9px 9px 10px #444;
+}
+div.dialog.modeless {
+  box-shadow: 4px 4px 5px #888;
+  -moz-box-shadow: 4px 4px 5px #888;
+  -webkit-box-shadow: 4px 4px 5px #888;
 }
 div.dialog.chrome {
   -webkit-box-shadow: none !IMPORTANT;
