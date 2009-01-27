@@ -129,6 +129,19 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         for ( i = 0; i < attrs.length; ++i )
         {
           var a = attrs.item(i);
+          // In certain browsers (*cough* firefox) the dom node loses
+          // information if the image is currently broken.  In order to prevent
+          // corrupting the height and width of image tags, we strip height and
+          // width from the image rather than reporting bad information.
+          if (Xinha.is_real_gecko && (root.tagName.toLowerCase() == 'img') &&
+              ((a.nodeName.toLowerCase() == 'height') || (a.nodeName.toLowerCase() == 'width')))
+          {
+            if (!root.complete || root.naturalWidth === 0)
+            {
+              // This means that firefox has been unable to read the dimensions from the actual image
+              continue;
+            }
+          }
           if (typeof a.nodeValue == 'object' ) continue; // see #684
           if (root.tagName.toLowerCase() == "input" 
               && root.type.toLowerCase() == "checkbox" 
