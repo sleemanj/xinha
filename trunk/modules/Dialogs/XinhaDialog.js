@@ -997,9 +997,6 @@ Xinha.Dialog.prototype.detachFromPanel = function()
   
   dialog.attached = false;
   
-  this.background.style.display = '';
-  this.sizeBgToDialog();
-  
   var pos = Xinha.getElementTopLeft(rootElem);
   rootElemStyle.position = "absolute";
   rootElemStyle.top = pos.top + "px";
@@ -1024,6 +1021,8 @@ Xinha.Dialog.prototype.detachFromPanel = function()
   
   dialog.captionBar.ondblclick = function() { dialog.attachToPanel(rootElem.side); };
   
+  this.background.style.display = '';
+  this.sizeBgToDialog();
 };
 /** 
  * @private
