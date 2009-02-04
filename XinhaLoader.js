@@ -220,6 +220,8 @@ Xinha.addOnloadHandler = function (func)
 {
   // Dean Edwards/Matthias Miller/John Resig 
   // http://dean.edwards.name/weblog/2006/06/again/
+  // IE part from jQuery
+  
   
   var init = function ()
   {
@@ -234,15 +236,27 @@ Xinha.addOnloadHandler = function (func)
   }
   if (Xinha.is_ie)
   {
-    document.write("<sc"+"ript id=__ie_onload defer src=javascript:void(0)><\/script>");
-    var script = document.getElementById("__ie_onload");
-    script.onreadystatechange = function()
-    {
-      if (this.readyState == "loaded")
-      {
-        init(); // call the onload handler
+    // ensure firing before onload,
+    // maybe late but safe also for iframes
+    document.attachEvent("onreadystatechange", function(){
+      if ( document.readyState === "complete" ) {
+        document.detachEvent( "onreadystatechange", arguments.callee );
+        init();
       }
-    };
+    });
+    if ( document.documentElement.doScroll && typeof window.frameElement === "undefined" ) (function(){
+      if (arguments.callee.done) return;
+      try {
+        // If IE is used, use the trick by Diego Perini
+        // http://javascript.nwbox.com/IEContentLoaded/
+        document.documentElement.doScroll("left");
+      } catch( error ) {
+        setTimeout( arguments.callee, 0 );
+        return;
+      }
+      // and execute any waiting functions
+      init();
+    })();
   }
   else if (/WebKit/i.test(navigator.userAgent))
   {

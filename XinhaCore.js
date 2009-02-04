@@ -5904,8 +5904,9 @@ Xinha._removeEvents = function(el, evs, func)
 
 /** Adds a function that is executed in the moment the DOM is ready, but as opposed to window.onload before images etc. have been loaded
 *   http://dean.edwards.name/weblog/2006/06/again/
+*   IE part from jQuery
 *  @public
-*  @author Dean Edwards/Matthias Miller/ John Resig
+*  @author Dean Edwards/Matthias Miller/ John Resig / Diego Perini
 *  @param {Function}  func the function to be executed
 *  @param {Window}    scope the window that is listened to
 */
@@ -5930,19 +5931,30 @@ Xinha.addOnloadHandler = function (func, scope)
 
    func();
  };
- if (Xinha.is_ie)
- {
-   scope.document.write("<sc"+"ript id=__ie_onload defer src=javascript:void(0)><\/script>");
-   var script = scope.document.getElementById("__ie_onload");
-      script.onreadystatechange = function()
-   {
-     if (this.readyState == "loaded") // We want this as early as possible, so I changed 'complete' to 'loaded', because otherwise it fired even after window.onload
-     {
-                this.parentNode.removeChild(script);
-       init(); // call the onload handler
-     }
-   };
- }
+  if (Xinha.is_ie)
+  {
+    // ensure firing before onload,
+    // maybe late but safe also for iframes
+    document.attachEvent("onreadystatechange", function(){
+      if ( document.readyState === "complete" ) {
+        document.detachEvent( "onreadystatechange", arguments.callee );
+        init();
+      }
+    });
+    if ( document.documentElement.doScroll && typeof window.frameElement === "undefined" ) (function(){
+      if (arguments.callee.done) return;
+      try {
+        // If IE is used, use the trick by Diego Perini
+        // http://javascript.nwbox.com/IEContentLoaded/
+        document.documentElement.doScroll("left");
+      } catch( error ) {
+        setTimeout( arguments.callee, 0 );
+        return;
+      }
+      // and execute any waiting functions
+      init();
+    })();
+  }
  else if (/applewebkit|KHTML/i.test(navigator.userAgent) ) /* Safari/WebKit/KHTML */
  {
    Xinha.onloadTimer = scope.setInterval(function()
