@@ -1481,14 +1481,12 @@ EnterParagraphs.prototype.moveCursorOnEdge = function(selection)
   var cursorParent = selection.anchorNode;
   var cursorOffset = selection.anchorOffset;
 
-  while (this.cursorAtEnd(cursorParent, cursorOffset))
+  for (;this.cursorAtEnd(cursorParent, cursorOffset);)
   {
     if (TEXT_NODE == cursorParent.nodeType)
     {
-      // If we're at the end and stuck inside of a text node, we move not just
-      // out of the text node, but out of the node containing the text node.
-      // The second part will be performed by the standard node moving logic
-      // below.  We'll just move out of the text node here.
+      // If we're at the end and stuck inside of a text node, we move out of
+      // the text node, which is a simpler case, than continue.
       var parentOffset = this.indexInParent(cursorParent);
       if (null === parentOffset)
       {
@@ -1498,6 +1496,7 @@ EnterParagraphs.prototype.moveCursorOnEdge = function(selection)
 
       cursorParent = cursorParent.parentNode;
       cursorOffset = parentOffset + 1;
+      continue;
     }
 
     var parentOffset = this.indexInParent(cursorParent);
@@ -1524,14 +1523,12 @@ EnterParagraphs.prototype.moveCursorOnEdge = function(selection)
     }
   }
 
-  while (this.cursorAtBeginning(cursorParent, cursorOffset))
+  for (;this.cursorAtBeginning(cursorParent, cursorOffset);)
   {
     if (TEXT_NODE == cursorParent.nodeType)
     {
-      // If we're at the beginning and stuck inside of a text node, we move not
-      // just out of the text node, but out of the node containing the text
-      // node.  The second part will be performed by the standard node moving
-      // logic below.  We'll just move out of the text node here.
+      // If we're at the beginning and stuck inside of a text node, we move out
+      // of the text node, which is a simpler case, than continue.
       var parentOffset = this.indexInParent(cursorParent);
       if (null === parentOffset)
       {
@@ -1541,6 +1538,7 @@ EnterParagraphs.prototype.moveCursorOnEdge = function(selection)
 
       cursorParent = cursorParent.parentNode;
       cursorOffset = parentOffset;
+      continue;
     }
 
     var parentOffset = this.indexInParent(cursorParent);
