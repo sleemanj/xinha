@@ -2027,15 +2027,7 @@ Xinha.makeBtnImg = function(imgDef, doc)
         img.style.width = '18px';
         img.style.height = '18px';
         img.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef+'")';
-
-        var png = doc.createElement('img');
-        png.style.width = '18px';
-        png.style.height = '18px';
-        png.style.border = '0';
-        png.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(opacity=0)';
-        png.src = imgDef;
-
-        img.appendChild(png);
+		img.unselectable = 'on';
       }
       else
       {
@@ -2059,15 +2051,7 @@ Xinha.makeBtnImg = function(imgDef, doc)
         img.style.width = '18px';
         img.style.height = '18px';
         img.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'+imgDef[0]+'")';
-
-        var png = doc.createElement('img');
-        png.style.width = '18px';
-        png.style.height = '18px';
-        png.style.border = '0';
-        png.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(opacity=0)';
-        png.src = imgDef[0];
-
-        img.appendChild(png);
+		img.unselectable = 'on';
       }
       else
       {
