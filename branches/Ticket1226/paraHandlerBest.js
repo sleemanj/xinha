@@ -958,6 +958,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     }
 
     var insertNode = breaker;
+    // XXX TODO don't use a closure to access this, pass it in...
     for (;recreateStack.length>0;)
     {
       var stackEl = safeShallowCopy(recreateStack.pop(), doc)
@@ -966,13 +967,19 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
       insertNode = stackEl;
     }
 
-    var innermostNode = insertNode;
+    // We need to keep track of the new cursor location.  When our cursor is in
+    // the middle of a text node, the new cursor will be at the beginning of
+    // the text node we create to contain the text to the right of the cursor.
+    // Otherwise, the cursor will point to a node, and the new cursor needs to
+    // point to that node in it's new location.
+    var newCursorNode = null;
 
     var sourceNode = splitNode;
+    var sourceOffset = splitOffset;
     if (TEXT_NODE == sourceNode.nodeType)
     {
       var textNode = doc.createTextNode(sourceNode.nodeValue.substring(splitOffset,sourceNode.nodeValue.length));
-      innermostNode = textNode = insertNode.appendChild(textNode);
+      newCursorNode = textNode = insertNode.appendChild(textNode);
       sourceNode.nodeValue = sourceNode.nodeValue.substring(0,splitOffset);
     }
 
@@ -982,10 +989,10 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     // of the source outwards, and move the offending nodes to the equivalent
     // position on the newly duplicated tree.
 
-    // Move insertNode from the inside outwards towards the root, moving any content nodes as we go.
+    // Move insertNode from the inside outwards towards the root, moving any content nodes as we go.  We'll make sure that we can do the same with sourceNode
     while (insertNode != root.parentNode)
     {
-      for (var moveNode=sourceNode.nextSibling;moveNode;)
+      for (var moveNode=sourceNode.childNodes[sourceOffset];moveNode;)
       {
         // We have to take a reference to the next sibling before cutting out
         // of the tree, or we will lose our place.
@@ -998,6 +1005,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
       }
 
       // Move both of our node pointers one step closer to the root node.
+      sourceOffset = EnterParagraphs.prototype.indexInParent(sourceNode);
       sourceNode = sourceNode.parentNode;
       insertNode = insertNode.parentNode;
     }
@@ -1059,14 +1067,21 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
       }
     }
 
+    // If the cursor node wasn't created by the split (it was moved), then that
+    // means we need to point to the inside of our brand new tree.
+    if (!newCursorNode)
+    {
+      newCursorNode = breaker.childNodes[0];
+    }
+
     // Make sure when we split the tree that we don't leave any empty nodes, as
     // that would have visual glitches.
     stuffEmptyNode(splitNode, doc);
-    stuffEmptyNode(innermostNode, doc);
+    stuffEmptyNode(newCursorNode, doc);
 
     // So that we can correctly set the selection, we'll return a reference to
     // the inserted subtree.
-    return innermostNode;
+    return newCursorNode;
   }
   function insertLineBreak(cursorParent, cursorOffset, useNewline, doc)
   {
@@ -1510,8 +1525,8 @@ EnterParagraphs.prototype.moveCursorOnEdge = function(selection)
     cursorOffset = parentOffset + 1;
 
     // If we are no longer inside of one of our trigger nodes, we're done.
-    if (!this._pifyParent.test(cursorParent.parentNode.nodeName) &&
-        !this._pifySibling.test(cursorParent.parentNode.nodeName))
+    if (!this._pifyParent.test(cursorParent.nodeName) &&
+        !this._pifySibling.test(cursorParent.nodeName))
     {
       // Move the real cursor.
       selection.removeAllRanges();
@@ -1552,8 +1567,8 @@ EnterParagraphs.prototype.moveCursorOnEdge = function(selection)
     cursorOffset = parentOffset;
 
     // If we are no longer inside of one of our trigger nodes, we're done.
-    if (!this._pifyParent.test(cursorParent.parentNode.nodeName) &&
-        !this._pifySibling.test(cursorParent.parentNode.nodeName))
+    if (!this._pifyParent.test(cursorParent.nodeName) &&
+        !this._pifySibling.test(cursorParent.nodeName))
     {
       // Move the real cursor.
       selection.removeAllRanges();
