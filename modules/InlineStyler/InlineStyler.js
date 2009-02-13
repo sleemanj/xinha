@@ -461,6 +461,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
     input = doc.createElement("input");
     input.name = this.dialog.createId("borderCollapse");
     input.type = "checkbox";
+    input.value = "on";
     this.inputs.styles['borderCollapse'] = input;
     input.id = "f_st_borderCollapse";
     var val = (/collapse/i.test(el.style.borderCollapse));

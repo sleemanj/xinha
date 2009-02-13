@@ -186,12 +186,12 @@ SuperClean.Dialog.prototype._prepareDialog = function()
     var filtDetail = this.SuperClean.editor.config.SuperClean.filters[filter];
     if(typeof filtDetail.label == 'undefined')
     {
-      htmlFilters += "        <input type=\"checkbox\" name=\"["+filter+"]\" id=\"["+filter+"]\" checked />\n";
+      htmlFilters += "        <input type=\"checkbox\" name=\"["+filter+"]\" id=\"["+filter+"]\" checked value=\"on\" />\n";
       htmlFilters += "        <label for=\"["+filter+"]\">"+this.SuperClean.editor.config.SuperClean.filters[filter]+"</label>\n";
     }
     else
     {
-      htmlFilters += "        <input type=\"checkbox\" name=\"["+filter+"]\" id=\"["+filter+"]\" " + (filtDetail.checked ? "checked" : "") + " />\n";
+      htmlFilters += "        <input type=\"checkbox\" name=\"["+filter+"]\" id=\"["+filter+"]\" value=\"on\"" + (filtDetail.checked ? "checked" : "") + " />\n";
       htmlFilters += "        <label for=\"["+filter+"]\">"+filtDetail.label+"</label>\n";
     }
     htmlFilters += "    </div>\n";
