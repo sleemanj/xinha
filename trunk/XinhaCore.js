@@ -6088,7 +6088,7 @@ Xinha.prototype.notifyOf = function(ev, args)
  */
 Xinha._blockTags = " body form textarea fieldset ul ol dl li div " +
 "p h1 h2 h3 h4 h5 h6 quote pre table thead " +
-"tbody tfoot tr td th iframe address blockquote ";
+"tbody tfoot tr td th iframe address blockquote title meta link style head ";
 
 /** Checks if one element is in the list of elements that are defined as block level elements in HTML
  *  
@@ -6105,7 +6105,7 @@ Xinha.isBlockElement = function(el)
  *  @see Xinha#isParaContainer
  *  @type {String}
  */
-Xinha._paraContainerTags = " body td th caption fieldset div";
+Xinha._paraContainerTags = " body td th caption fieldset div ";
 /** Checks if one element is in the list of elements that are allowed to contain a paragraph in HTML
  *  
  *  @param {DomNode}  el The DOM element to check
