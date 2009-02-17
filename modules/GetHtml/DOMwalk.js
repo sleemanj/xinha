@@ -109,9 +109,10 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         var save_multiline = RegExp.multiline;
         RegExp.multiline = true;
         var txt = 
-        root.innerHTML.replace(Xinha.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); }) // lowercasize
+        root.innerHTML
+        .replace(Xinha.RE_tagName, function(str, p1, p2) { return p1 + p2.toLowerCase(); }) // lowercasize
         .replace(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g, '="$2$4$5"$3') //add attribute quotes
-        .replace(/<(link|meta)((\s*\S*="[^"]*")*)>/g, '<$1$2 />'); //terminate singlet tags
+        .replace(/<(link|meta)((\s*\S*="[^"]*")*)>([\n\r]*)/g, '<$1$2 />\n'); //terminate singlet tags
         RegExp.multiline = save_multiline;
         html += txt + '\n';
         if ( outputRoot )
