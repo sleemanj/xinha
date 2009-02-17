@@ -223,11 +223,11 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   backG.className = "xinha_dialog_background";
   if (this.modal) 
   {
-    backG.className += ' modal';
+    backG.className += '_modal';
   }
   if (this.greyout) 
   {
-    backG.className += ' greyout';
+    backG.className += '_greyout';
   }
   var z = 1000;
   if (!Xinha.Dialog.initialZ)
