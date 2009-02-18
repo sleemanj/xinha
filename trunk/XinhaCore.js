@@ -3872,8 +3872,12 @@ Xinha.refreshPlugin = function(plugin)
   }
   if ( plugin && typeof plugin.onGenerateOnce == "function" )
   {
-    plugin.onGenerateOnce();
-    plugin.onGenerateOnce = null;
+    //#1392: in fullpage mode this function is called recusively by setFullHTML() when it is used to set the editor content
+	// this is a temporary fix, that should better be handled by a better implemetation of setFullHTML
+	plugin._ongenerateOnce = plugin.onGenerateOnce;
+    delete(plugin.onGenerateOnce);
+	plugin._ongenerateOnce();
+	delete(plugin._ongenerateOnce);
   }
 };
 
