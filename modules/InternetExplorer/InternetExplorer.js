@@ -472,8 +472,7 @@ Xinha.prototype.restoreSelection = function(savedSelection)
 
   if (findDoc(savedSelection.parentElement()) == findDoc(range.parentElement()))
   {
-    if ((0 == range.compareEndPoints('StartToStart',savedSelection)) &&
-        (0 == range.compareEndPoints('EndToEnd',savedSelection)))
+    if (range.isEqual(savedSelection))
     {
       // The selection hasn't moved, no need to restore.
       return;
