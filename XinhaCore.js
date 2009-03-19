@@ -3532,8 +3532,26 @@ Xinha.prototype.setEditorEvents = function()
       {
         editor._onGenerate();
       }
-
-      Xinha.addDom0Event(window, 'resize', function(e) { editor.sizeEditor(); });
+      //ticket #1407 IE8 fires two resize events on one actual resize, seemingly causing an infinite loop (but not  when Xinha is in an frame/iframe) 
+      Xinha.addDom0Event(window, 'resize', function(e) 
+      {
+        if (Xinha.ie_version > 7 && !window.parent)
+        {
+          if (editor.execResize)
+          {
+            editor.sizeEditor(); 
+            editor.execResize = false;
+          }
+          else
+          {
+            editor.execResize = true;
+          }
+        }
+        else
+        {
+          editor.sizeEditor(); 
+        }
+      });
       editor.removeLoadingMessage();
     }
   );
