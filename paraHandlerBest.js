@@ -926,7 +926,13 @@ EnterParagraphs.RunTests = function(xinha, debug)
     selection.addRange(range);
 
     // Breakline
-    xinha.plugins['EnterParagraphs'].instance.breakLine(mockEvent, xinha._doc);
+    try {
+      xinha.plugins['EnterParagraphs'].instance.breakLine(mockEvent, xinha._doc);
+    } catch (e) {
+      console.error('Breakline threw exception ', e);
+      console.groupEnd();
+      return;
+    }
 
     var selection = xinha.getSelection();
     var range = xinha.createRange(selection);
@@ -993,6 +999,35 @@ EnterParagraphs.RunTests = function(xinha, debug)
        'Hi<p>&nbsp;</p>', [['child', 1]],  // This is not ideal output, but the line breaker never sees the text node and
                           [['child', 1], ['child', 0]]); // so can't do anything about it.
 
+  test('Body with inline tag: em node',
+       '<em>hi</em>', [],
+       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: text node',
+       '<em>hi</em>', [['child', 0]],
+       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: first char',
+       '<em>hi</em>', [['child', 0], ['child', 0]],
+       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: split text',
+       '<em>hi</em>', [['child', 0], ['child', 0], ['offset', 1]],
+       '<p><em>h</em></p><p><em>i</em></p>', [['child', 1], ['child', 0]],
+                                             [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: after text',
+       '<em>hi</em>', [['child', 0], ['child', 0], ['offset', 'length']],
+       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: after text node',
+       '<em>hi</em>', [['child', 0], ['offset', 'length']],
+       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: after em node',
+       '<em>hi</em>', [['offset', 'length']],
+       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+
   /***************  Repeat the header block for each header level once the tests are passing *********************/
   test('Split header 1: h1 node',
        '<h1>hi</h1>', [],
@@ -1023,34 +1058,6 @@ EnterParagraphs.RunTests = function(xinha, debug)
        '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
                                    [['child', 1], ['child', 0]]);
 
-  test('Body with inline tag: em node',
-       '<em>hi</em>', [],
-       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
-                                          [['child', 1], ['child', 0], ['child', 0]]);
-  test('Body with inline tag: text node',
-       '<em>hi</em>', [['child', 0]],
-       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
-                                          [['child', 1], ['child', 0], ['child', 0]]);
-  test('Body with inline tag: first char',
-       '<em>hi</em>', [['child', 0], ['child', 0]],
-       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
-                                          [['child', 1], ['child', 0], ['child', 0]]);
-  test('Body with inline tag: split text',
-       '<em>hi</em>', [['child', 0], ['child', 0], ['offset', 1]],
-       '<p><em>h</em></p><p><em>i</em></p>', [['child', 1], ['child', 0]],
-                                             [['child', 1], ['child', 0], ['child', 0]]);
-  test('Body with inline tag: after text',
-       '<em>hi</em>', [['child', 0], ['child', 0], ['offset', 'length']],
-       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
-                                          [['child', 1], ['child', 0], ['child', 0]]);
-  test('Body with inline tag: after text node',
-       '<em>hi</em>', [['child', 0], ['offset', 'length']],
-       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
-                                          [['child', 1], ['child', 0], ['child', 0]]);
-  test('Body with inline tag: after em node',
-       '<em>hi</em>', [['offset', 'length']],
-       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
-                                          [['child', 1], ['child', 0], ['child', 0]]);
   console.groupEnd();
   xinha.setHTML(contentBackup);
   // EnterParagraphs.RunTests(xinha_editors['myTextArea'])
