@@ -859,8 +859,8 @@ EnterParagraphs.prototype.cursorAtEnd = function (cursorNode, cursorOffset)
 */
 EnterParagraphs.RunTests = function(xinha, debug)
 {
-  function test(message, before, cursorBefore, after, cursorAfter) {
-    console.group('Test: ', message, null, before);
+  function test(message, before, cursorBefore, after, cursorAfter, cursorAfter2) {
+    console.group('Test: ', message);
     if (before !== null) {
       xinha.setHTML(before);
     }
@@ -874,39 +874,44 @@ EnterParagraphs.RunTests = function(xinha, debug)
     function setCursor(commands) {
       cAnchor = xinha._doc.body;
       cOffset = 0;
-      for (var index=0; index<commands.length; ++index) {
-        var command = commands[index];
-        if ('id' == command[0]) {
-            cAnchor = xinha._doc.getElementById(command[1]);
-        } else if ('tag' == command[0]) {
-            cAnchor = xinha._doc.getElementsByTagName(command[1])[0];
-        } else if ('child' == command[0]) {
-            cAnchor = cAnchor.childNodes[command[1]];
-        } else if ('next' == command[0]) {
-          for (var next=command[1]; next > 0 && cAnchor.nextSibling; --next) {
-            cAnchor = cAnchor.nextSibling;
-          }
-        } else if ('previous' == command[0]) {
-          for (var previous=command[1]; previous > 0 && cAnchor.previousSibling; --previous) {
-            cAnchor = cAnchor.previousSibling;
-          }
-        } else if ('offset' == command[0]) {
-          if (command[1] == 'length') {
-            if (TEXT_NODE == cAnchor.nodeType) {
-              cOffset = cAnchor.nodeValue.length;
-            } else {
-              cOffset = cAnchor.childNodes.length;
+      try {
+        for (var index=0; index<commands.length; ++index) {
+          var command = commands[index];
+          if ('id' == command[0]) {
+              cAnchor = xinha._doc.getElementById(command[1]);
+          } else if ('firsttag' == command[0]) {
+              cAnchor = xinha._doc.getElementsByTagName(command[1])[0];
+          } else if ('child' == command[0]) {
+              cAnchor = cAnchor.childNodes[command[1]];
+          } else if ('next' == command[0]) {
+            for (var next=command[1]; next > 0 && cAnchor.nextSibling; --next) {
+              cAnchor = cAnchor.nextSibling;
             }
-          } else if (command[1] < 0) {
-            if (TEXT_NODE == cAnchor.nodeType) {
-              cOffset = cAnchor.nodeValue.length + command[1];
-            } else {
-              cOffset = cAnchor.childNodes.length + command[1];
+          } else if ('previous' == command[0]) {
+            for (var previous=command[1]; previous > 0 && cAnchor.previousSibling; --previous) {
+              cAnchor = cAnchor.previousSibling;
             }
-          } else {
-            cOffset = command[1];
+          } else if ('offset' == command[0]) {
+            if (command[1] == 'length') {
+              if (TEXT_NODE == cAnchor.nodeType) {
+                cOffset = cAnchor.nodeValue.length;
+              } else {
+                cOffset = cAnchor.childNodes.length;
+              }
+            } else if (command[1] < 0) {
+              if (TEXT_NODE == cAnchor.nodeType) {
+                cOffset = cAnchor.nodeValue.length + command[1];
+              } else {
+                cOffset = cAnchor.childNodes.length + command[1];
+              }
+            } else {
+              cOffset = command[1];
+            }
           }
         }
+      } catch(e) {
+        cAnchor = null;
+        cOffset = null;
       }
     }
 
@@ -929,7 +934,15 @@ EnterParagraphs.RunTests = function(xinha, debug)
     setCursor(cursorAfter);
 
     if ((selection.anchorNode != cAnchor) || (selection.anchorOffset != cOffset)) {
-      console.error('Actual anchor:', selection.anchorNode, 'Actual offset:', selection.anchorOffset, 'Expected anchor:', cAnchor, 'Expected offset:', cOffset);
+      // Sometimes there are multiple equivalent selection, let's see if we received alternatives.
+      if (typeof cursorAfter2 != 'undefined') {
+        setCursor(cursorAfter2);
+        if ((selection.anchorNode != cAnchor) || (selection.anchorOffset != cOffset)) {
+          console.error('Actual anchor:', selection.anchorNode, 'Actual offset:', selection.anchorOffset, 'Expected anchor:', cAnchor, 'Expected offset:', cOffset);
+        }
+      } else {
+        console.error('Actual anchor:', selection.anchorNode, 'Actual offset:', selection.anchorOffset, 'Expected anchor:', cAnchor, 'Expected offset:', cOffset);
+      }
     }
 
     result = xinha.getInnerHTML();
@@ -953,15 +966,62 @@ EnterParagraphs.RunTests = function(xinha, debug)
   test('Initial Xinha Content: Recreated',
        '<br>\n', [],
        '<p>&nbsp;</p><p><br>&nbsp;</p>\n', [['child', 1]]);  // Mozilla kicks off a trailing newline.  Do I care about this?
+
   test('Empty Body',
        '', [],
-       '<p>&nbsp;</p><p></p>', [['child', 1], ['offset', 0]]);
-  test('Text node in body',
-       'Hi', [],
-       '<p>&nbsp;</p><p>Hi</p>', [['child', 1], ['offset', 0]]);
-  test('Split h1',
-       '<h1 id="before">hi</h1>', [['id', 'before'], ['child', 0], ['offset', 2]],
-       '<h1 id="before">hi</h1><h1></h1>', [['id', 'before'], ['next', 1], ['offset', 2]]);
+       '<p>&nbsp;</p><p>&nbsp;</p>', [['child', 1]],
+                                     [['child', 1], ['child', 0]]);
+
+  test('Text node in body: text node',
+       'Hi', [], // Point to text node
+       '<p>&nbsp;</p><p>Hi</p>', [['child', 1]],
+                                 [['child', 1], ['child', 0]]);
+  test('Text node in body: first char',
+       'Hi', [['child', 0]], // Point to 'H'
+       '<p>&nbsp;</p><p>Hi</p>', [['child', 1]],
+                                 [['child', 1], ['child', 0]]);
+  test('Text node in body: split text',
+       'Hi', [['child', 0], ['offset', 1]], // Point to 'i'
+       '<p>H</p><p>i</p>', [['child', 1]],
+                           [['child', 1], ['child', 0]]);
+  test('Text node in body: after text',
+       'Hi', [['child', 0], ['offset', -1]], // Point after 'i'
+       '<p>Hi</p><p>&nbsp;</p>', [['child', 1]],
+                                 [['child', 1], ['child', 0]]);
+  test('Text node in body: after text node',
+       'Hi', [['offset', -1]], // Point after text node
+       '<p>Hi</p><p>&nbsp;</p>', [['child', 1]],
+                                 [['child', 1], ['child', 0]]);
+
+  /***************  Repeat the header block for each header level once the tests are passing *********************/
+  test('Split header 1: h1 node',
+       '<h1>hi</h1>', [],
+       '<p>&nbsp;</p><h1>hi</h1>', [['child', 1]],
+                                   [['child', 1], ['child', 0]]);
+  test('Split header 1: text node',
+       '<h1>hi</h1>', [['child', 0]],
+       '<p>&nbsp;</p><h1>hi</h1>', [['child', 1]],
+                                   [['child', 1], ['child', 0]]);
+  test('Split header 1: first char',
+       '<h1>hi</h1>', [['child', 0], ['child', 0]],
+       '<p>&nbsp;</p><h1>hi</h1>', [['child', 1]],
+                                   [['child', 1], ['child', 0]]);
+  test('Split header 1: split text',
+       '<h1>hi</h1>', [['child', 0], ['child', 0], ['offset', 1]],
+       '<h1>h</h1><h1>i</h1>', [['child', 1]],
+                               [['child', 1], ['child', 0]]);
+  test('Split header 1: after text',
+       '<h1>hi</h1>', [['child', 0], ['child', 0], ['offset', -1]],
+       '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
+                                   [['child', 1], ['child', 0]]);
+  test('Split header 1: after text node',
+       '<h1>hi</h1>', [['child', 0], ['offset', -1]],
+       '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
+                                   [['child', 1], ['child', 0]]);
+  test('Split header 1: after h1 node',
+       '<h1>hi</h1>', [['offset', -1]],
+       '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
+                                   [['child', 1], ['child', 0]]);
   console.groupEnd();
   xinha.setHTML(contentBackup);
   // EnterParagraphs.RunTests(xinha_editors['myTextArea'])
@@ -1509,6 +1569,10 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     if ((TEXT_NODE == treeRoot.nodeType) && !/\S/.test(treeRoot.nodeValue))
     {
       var newCursor = treeRoot;
+    }
+    else if (TEXT_NODE == treeRoot.nodeType)
+    {
+      var newCursor = splitTree(embedNode, treeRoot, cursorOffset, doc);
     }
     else
     {
