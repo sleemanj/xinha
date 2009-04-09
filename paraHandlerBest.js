@@ -857,16 +857,19 @@ EnterParagraphs.prototype.cursorAtEnd = function (cursorNode, cursorOffset)
 /*
 * Test suite for this, because it's really tough to get right.
 */
-EnterParagraphs.RunTests = function(xinha)
+EnterParagraphs.RunTests = function(xinha, debug)
 {
-  function test(before, cursorBefore, after, cursorAfter) {
-    xinha.setHTML(before);
+  function test(message, before, cursorBefore, after, cursorAfter) {
+    console.group('Test: ', message, null, before);
+    if (before !== null) {
+      xinha.setHTML(before);
+    }
     // Do something
     var cAnchor, cOffset;
 
     var mockEvent = {
-      preventDefault: function() {console.log("Preventing default.");},
-      stopPropagation: function() {console.log("Stopping propagation.");},
+      preventDefault: function() {if (debug) console.log("Preventing default.");},
+      stopPropagation: function() {if (debug) console.log("Stopping propagation.");},
     }
     function setCursor(commands) {
       cAnchor = xinha._doc.body;
@@ -875,6 +878,8 @@ EnterParagraphs.RunTests = function(xinha)
         var command = commands[index];
         if ('id' == command[0]) {
             cAnchor = xinha._doc.getElementById(command[1]);
+        } else if ('tag' == command[0]) {
+            cAnchor = xinha._doc.getElementsByTagName(command[1])[0];
         } else if ('child' == command[0]) {
             cAnchor = cAnchor.childNodes[command[1]];
         } else if ('next' == command[0]) {
@@ -886,7 +891,21 @@ EnterParagraphs.RunTests = function(xinha)
             cAnchor = cAnchor.previousSibling;
           }
         } else if ('offset' == command[0]) {
-          cOffset = command[1];
+          if (command[1] == 'length') {
+            if (TEXT_NODE == cAnchor.nodeType) {
+              cOffset = cAnchor.nodeValue.length;
+            } else {
+              cOffset = cAnchor.childNodes.length;
+            }
+          } else if (command[1] < 0) {
+            if (TEXT_NODE == cAnchor.nodeType) {
+              cOffset = cAnchor.nodeValue.length + command[1];
+            } else {
+              cOffset = cAnchor.childNodes.length + command[1];
+            }
+          } else {
+            cOffset = command[1];
+          }
         }
       }
     }
@@ -901,7 +920,6 @@ EnterParagraphs.RunTests = function(xinha)
     selection.removeAllRanges();
     selection.addRange(range);
 
-    return;
     // Breakline
     xinha.plugins['EnterParagraphs'].instance.breakLine(mockEvent, xinha._doc);
 
@@ -916,16 +934,35 @@ EnterParagraphs.RunTests = function(xinha)
 
     result = xinha.getInnerHTML();
     if (result == after) {
-      console.info('Was', before, 'Got', after)
+      console.info('Success!')
     } else {
-      console.error('Was', before, 'Expected', after, 'Got', result)
+      console.error('Was', null, before, null, 'Expected', null, after, null, 'Got', null, result, null)
     }
+    console.groupEnd();
   }
   contentBackup = xinha.getInnerHTML();
   console.group('Running tests:');
-  test('<h1 id="before">hi</h1>', [['id', 'before'], ['child', 0], ['offset', 2]], '<h1 id="before">hi</h1><h1></h1>', [['id', 'before'], ['next', 1], ['offset', 2]]);
+  /*
+     The initial content on browser load seems to be:
+     <body><br />\n</body>
+     That's a break tag and a whitespace text node containing a newline character.
+    */
+  test('Initial Xinha Content',
+       null, [],
+       '<p>&nbsp;</p><p><br>&nbsp;</p>\n', [['child', 1]]);  // Mozilla kicks off a trailing newline.  Do I care about this?
+  test('Initial Xinha Content: Recreated',
+       '<br>\n', [],
+       '<p>&nbsp;</p><p><br>&nbsp;</p>\n', [['child', 1]]);  // Mozilla kicks off a trailing newline.  Do I care about this?
+  test('Empty Body',
+       '', [],
+       '<p>&nbsp;</p><p></p>', [['child', 1], ['offset', 0]]);
+  test('Text node in body',
+       'Hi', [],
+       '<p>&nbsp;</p><p>Hi</p>', [['child', 1], ['offset', 0]]);
+  test('Split h1',
+       '<h1 id="before">hi</h1>', [['id', 'before'], ['child', 0], ['offset', 2]],
+       '<h1 id="before">hi</h1><h1></h1>', [['id', 'before'], ['next', 1], ['offset', 2]]);
   console.groupEnd();
-  return;
   xinha.setHTML(contentBackup);
   // EnterParagraphs.RunTests(xinha_editors['myTextArea'])
 }
@@ -1475,7 +1512,13 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     }
     else
     {
-      var newCursor = splitTree(embedNode, treeRoot, cursorOffset, doc);
+      var parentOffset = this.indexInParent(treeRoot);
+      if (null === parentOffset)
+      {
+        // We can't do anything with this cursor, so return.
+        return;
+      }
+      var newCursor = splitTree(embedNode, treeRoot.parentNode, parentOffset, doc);
     }
   }
   else if (wrapNode.nodeName.toLowerCase() in {td:'',address:''})
