@@ -855,6 +855,81 @@ EnterParagraphs.prototype.cursorAtEnd = function (cursorNode, cursorOffset)
   return true;
 }
 /*
+* Test suite for this, because it's really tough to get right.
+*/
+EnterParagraphs.RunTests = function(xinha)
+{
+  function test(before, cursorBefore, after, cursorAfter) {
+    xinha.setHTML(before);
+    // Do something
+    var cAnchor, cOffset;
+
+    var mockEvent = {
+      preventDefault: function() {console.log("Preventing default.");},
+      stopPropagation: function() {console.log("Stopping propagation.");},
+    }
+    function setCursor(commands) {
+      cAnchor = xinha._doc.body;
+      cOffset = 0;
+      for (var index=0; index<commands.length; ++index) {
+        var command = commands[index];
+        if ('id' == command[0]) {
+            cAnchor = xinha._doc.getElementById(command[1]);
+        } else if ('child' == command[0]) {
+            cAnchor = cAnchor.childNodes[command[1]];
+        } else if ('next' == command[0]) {
+          for (var next=command[1]; next > 0 && cAnchor.nextSibling; --next) {
+            cAnchor = cAnchor.nextSibling;
+          }
+        } else if ('previous' == command[0]) {
+          for (var previous=command[1]; previous > 0 && cAnchor.previousSibling; --previous) {
+            cAnchor = cAnchor.previousSibling;
+          }
+        } else if ('offset' == command[0]) {
+          cOffset = command[1];
+        }
+      }
+    }
+
+    setCursor(cursorBefore);
+
+    var selection = xinha.getSelection();
+    var range = xinha.createRange(selection);
+
+    range.setStart(cAnchor, cOffset);
+    range.setEnd(cAnchor, cOffset);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    return;
+    // Breakline
+    xinha.plugins['EnterParagraphs'].instance.breakLine(mockEvent, xinha._doc);
+
+    var selection = xinha.getSelection();
+    var range = xinha.createRange(selection);
+
+    setCursor(cursorAfter);
+
+    if ((selection.anchorNode != cAnchor) || (selection.anchorOffset != cOffset)) {
+      console.error('Actual anchor:', selection.anchorNode, 'Actual offset:', selection.anchorOffset, 'Expected anchor:', cAnchor, 'Expected offset:', cOffset);
+    }
+
+    result = xinha.getInnerHTML();
+    if (result == after) {
+      console.info('Was', before, 'Got', after)
+    } else {
+      console.error('Was', before, 'Expected', after, 'Got', result)
+    }
+  }
+  contentBackup = xinha.getInnerHTML();
+  console.group('Running tests:');
+  test('<h1 id="before">hi</h1>', [['id', 'before'], ['child', 0], ['offset', 2]], '<h1 id="before">hi</h1><h1></h1>', [['id', 'before'], ['next', 1], ['offset', 2]]);
+  console.groupEnd();
+  return;
+  xinha.setHTML(contentBackup);
+  // EnterParagraphs.RunTests(xinha_editors['myTextArea'])
+}
+/*
 * Determine if a cursor points to the end of it's containing node.
 */
 EnterParagraphs.prototype.cursorAtBeginning = function (cursorNode, cursorOffset)
@@ -989,7 +1064,9 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     // of the source outwards, and move the offending nodes to the equivalent
     // position on the newly duplicated tree.
 
-    // Move insertNode from the inside outwards towards the root, moving any content nodes as we go.  We'll make sure that we can do the same with sourceNode
+    // Move insertNode from the inside outwards towards the root, moving any
+    // content nodes as we go.  We'll make sure that we can do the same with
+    // sourceNode
     while (insertNode != root.parentNode)
     {
       for (var moveNode=sourceNode.childNodes[sourceOffset];moveNode;)
@@ -1413,9 +1490,19 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     // Check to see if the leftSibling and rightSibling are the same and then just insert the one term.
     // XXX TODO
   }
-  else if (wrapNode.nodeName.toLowerCase() in {dt:'',dd:'',li:'',h1:'',h2:'',h3:'',h4:'',h5:'',h6:'',p:''})
+  else if (wrapNode.nodeName.toLowerCase() in {h1:'',h2:'',h3:'',h4:'',h5:'',h6:'',p:''})
   {
     // Split wrapNode into two.
+    var newCursor = splitTree(wrapNode, cursorParent, cursorOffset, doc);
+  }
+  else if (wrapNode.nodeName.toLowerCase() in {dt:'',dd:'',li:''})
+  {
+    // To the bane of software developers the world over, users expect to be
+    // able to hit enter twice to end a list, whether at the end or in the
+    // middle.  This means that we need to have special handling for list items
+    // to check for the second return.  We do this by testing to see if the
+    // current list item is empty, and if so, deleting it, splitting the list
+    // into two if necessary, and inserting a paragraph.
     var newCursor = splitTree(wrapNode, cursorParent, cursorOffset, doc);
   }
   else if (wrapNode.nodeName.toLowerCase() in {ol:'',ul:''})
