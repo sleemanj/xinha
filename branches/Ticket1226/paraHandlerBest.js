@@ -967,7 +967,7 @@ EnterParagraphs.RunTests = function(xinha, debug)
        '<br>\n', [],
        '<p>&nbsp;</p><p><br>&nbsp;</p>\n', [['child', 1]]);  // Mozilla kicks off a trailing newline.  Do I care about this?
 
-  test('Empty Body',
+  test('No tags: Empty Body',
        '', [],
        '<p>&nbsp;</p><p>&nbsp;</p>', [['child', 1]],
                                      [['child', 1], ['child', 0]]);
@@ -985,11 +985,11 @@ EnterParagraphs.RunTests = function(xinha, debug)
        '<p>H</p><p>i</p>', [['child', 1]],
                            [['child', 1], ['child', 0]]);
   test('Text node in body: after text',
-       'Hi', [['child', 0], ['offset', -1]], // Point after 'i'
+       'Hi', [['child', 0], ['offset', 'length']], // Point after 'i'
        '<p>Hi</p><p>&nbsp;</p>', [['child', 1]],
                                  [['child', 1], ['child', 0]]);
   test('Text node in body: after text node',
-       'Hi', [['offset', -1]], // Point after text node
+       'Hi', [['offset', 'length']], // Point after text node
        '<p>Hi</p><p>&nbsp;</p>', [['child', 1]],
                                  [['child', 1], ['child', 0]]);
 
@@ -1011,15 +1011,15 @@ EnterParagraphs.RunTests = function(xinha, debug)
        '<h1>h</h1><h1>i</h1>', [['child', 1]],
                                [['child', 1], ['child', 0]]);
   test('Split header 1: after text',
-       '<h1>hi</h1>', [['child', 0], ['child', 0], ['offset', -1]],
+       '<h1>hi</h1>', [['child', 0], ['child', 0], ['offset', 'length']],
        '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
                                    [['child', 1], ['child', 0]]);
   test('Split header 1: after text node',
-       '<h1>hi</h1>', [['child', 0], ['offset', -1]],
+       '<h1>hi</h1>', [['child', 0], ['offset', 'length']],
        '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
                                    [['child', 1], ['child', 0]]);
   test('Split header 1: after h1 node',
-       '<h1>hi</h1>', [['offset', -1]],
+       '<h1>hi</h1>', [['offset', 'length']],
        '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
                                    [['child', 1], ['child', 0]]);
   console.groupEnd();
