@@ -967,7 +967,7 @@ EnterParagraphs.RunTests = function(xinha, debug)
        '<br>\n', [],
        '<p>&nbsp;</p><p><br>&nbsp;</p>\n', [['child', 1]]);  // Mozilla kicks off a trailing newline.  Do I care about this?
 
-  test('No tags: Empty Body',
+  test('Empty Body',
        '', [],
        '<p>&nbsp;</p><p>&nbsp;</p>', [['child', 1]],
                                      [['child', 1], ['child', 0]]);
@@ -1022,6 +1022,35 @@ EnterParagraphs.RunTests = function(xinha, debug)
        '<h1>hi</h1>', [['offset', 'length']],
        '<h1>hi</h1><p>&nbsp;</p>', [['child', 1]],
                                    [['child', 1], ['child', 0]]);
+
+  test('Body with inline tag: em node',
+       '<em>hi</em>', [],
+       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: text node',
+       '<em>hi</em>', [['child', 0]],
+       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: first char',
+       '<em>hi</em>', [['child', 0], ['child', 0]],
+       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: split text',
+       '<em>hi</em>', [['child', 0], ['child', 0], ['offset', 1]],
+       '<p><em>h</em></p><p><em>i</em></p>', [['child', 1], ['child', 0]],
+                                             [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: after text',
+       '<em>hi</em>', [['child', 0], ['child', 0], ['offset', 'length']],
+       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: after text node',
+       '<em>hi</em>', [['child', 0], ['offset', 'length']],
+       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
+  test('Body with inline tag: after em node',
+       '<em>hi</em>', [['offset', 'length']],
+       '<p><em>hi</em></p><p>&nbsp;</p>', [['child', 1], ['child', 0]],
+                                          [['child', 1], ['child', 0], ['child', 0]]);
   console.groupEnd();
   xinha.setHTML(contentBackup);
   // EnterParagraphs.RunTests(xinha_editors['myTextArea'])
