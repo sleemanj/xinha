@@ -231,6 +231,10 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
           {
             value = root.style.cssText.replace(/rgb\(.*?\)/ig,function(rgb){ return Xinha._colorToRgb(rgb) });
           }
+          else if (!value) // IE8 has style in attributes (see below), but it's empty! 
+          {
+            continue;
+          }
           if ( /^(_moz)?$/.test(value) )
           {
             // Mozilla reports some special tags
@@ -242,7 +246,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         //IE fails to put style in attributes list & cssText is UPPERCASE
         if ( Xinha.is_ie && root.style.cssText )
         {
-          html += ' style="' + root.style.cssText.toLowerCase() + '"';
+          html += ' style="' + root.style.cssText.replace(/(^)?([^:]*):(.*?)(;|$)/g, function(m0, m1,m2,m3, m4){return m2.toLowerCase() + ':' + m3 + m4;}) + '"';
         }
         if ( Xinha.is_ie && root.tagName.toLowerCase() == "option" && root.selected )
         {
