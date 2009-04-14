@@ -170,13 +170,13 @@ SmartReplace.prototype.smartQuotes = function(kind)
 
 		
 		if(r.toString().match(/[^\s\xA0]/))
-		{
+		{;
 			r.collapse(false);
 			editor.insertNodeAtSelection(document.createTextNode(closing));
 		}
 		else
 		{
-			editor.insertNodeAtSelection(document.createTextNode(opening));				
+			editor.insertNodeAtSelection(document.createTextNode(r.toString()[0]+opening));			
 		}
 		editor.getSelection().collapseToEnd();
 	}
