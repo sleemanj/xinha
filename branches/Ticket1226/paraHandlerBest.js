@@ -1530,12 +1530,39 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     // then split the whole thing.
 
     // The cursor might be at the ending edge of the wrapNode.
+    // 0. Pointing inside a completely empty element <body></body>
     // 1. Pointing to a text node <body>^This is text</body>
     // 2. Pointing to an inline node that is the child of the wrapNode.<body>^<em>text</em></body>
     // 3. Pointing to an inline node that is a non-direct descendant of the wrapNode.<body><q>^<em>text</em></q></body>
     // 4. Pointing to an inline node that is a non-direct descendant of the wrapNode.<body><q><em>text</em> this^</q></body>
     // 5. Pointing to the end of the wrapNode.<body>Here is some text.^</body>
     // 6. Pointing to a block node that is just inside of the wrapNode.<body>^<p>text</p></body>
+
+    // In the special case of a completely empty node, the cursor is still
+    // visible, and the user expects to have two lines after hitting the enter
+    // key.  We'll add two paragraphs to any of these nodes if they are empty.
+    if (!wrapNode.firstChild) {
+      var embedNode1 = doc.createElement('p');
+      var embedNode2 = doc.createElement('p');
+      embedNode1 = wrapNode.appendChild(embedNode1);
+      embedNode2 = wrapNode.appendChild(embedNode2);
+      // The unicode character below is a representation of a non-breaking
+      // space we use to prevent the paragraph from having visual glitches.
+      var emptyTextNode1 = doc.createTextNode('\u00a0');
+      var emptyTextNode2 = doc.createTextNode('\u00a0');
+      emptyTextNode1 = embedNode1.appendChild(emptyTextNode1);
+      emptyTextNode2 = embedNode2.appendChild(emptyTextNode2);
+
+      Xinha._stopEvent(ev);
+
+      range.setStart(emptyTextNode2, 0);
+      range.setEnd(emptyTextNode2, 0);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      return false;
+    }
+
     var startNode = cursorParent;
     for (;(startNode != wrapNode) && (startNode.parentNode != wrapNode);)
     {
