@@ -6745,7 +6745,7 @@ Xinha.ping = function(url, successHandler, failHandler)
   // Opera seems to have some problems mixing HEAD requests with GET requests.
   // The GET is slower, so it's a net slowdown for Opera, but it keeps things
   // from breaking.
-  var method = Xinha.is_opera ? "GET" : "HEAD";
+  var method = 'GET';
   req.onreadystatechange = callBack;
   req.open(method, url, true);
   req.send(null);
