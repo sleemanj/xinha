@@ -44,7 +44,7 @@ xinha_init = xinha_init ? xinha_init : function()
    'PSLocal',
    'Linker',
    'SuperClean',
-   'TableOperations','GetHtml'
+   'TableOperations'
   ];
   
          // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
