@@ -44,7 +44,7 @@ xinha_init = xinha_init ? xinha_init : function()
    'PSLocal',
    'Linker',
    'SuperClean',
-   'TableOperations'
+   'TableOperations','GetHtml'
   ];
   
          // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
@@ -70,12 +70,27 @@ xinha_init = xinha_init ? xinha_init : function()
 
    xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
         
+  //this is the standard toolbar, feel free to remove buttons as you like
+  xinha_config.toolbar =
+  [
+    ["popupeditor"],
+    ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
+    ["separator","forecolor","hilitecolor","textindicator"],
+    ["separator","subscript","superscript"],
+    ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
+    ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
+    ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
+    ["linebreak","separator","undo","redo","selectall","print"], (Xinha.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
+    ["separator","killword","clearfonts","removeformat","toggleborders","splitblock","lefttoright", "righttoleft"],
+    ["separator","htmlmode","showhelp","about"]
+  ];
+
    // To adjust the styling inside the editor, we can load an external stylesheet like this
    // NOTE : YOU MUST GIVE AN ABSOLUTE URL
-  
    xinha_config.pageStyleSheets = [ _editor_url + "examples/files/full_example.css" ];
    //if you're using Stylist, import a stylesheet like this
    xinha_config.stylistLoadStylesheet(_editor_url + "examples/files/stylist.css");
+
 
   /** STEP 4 ***************************************************************
    * We first create editors for the textareas.
