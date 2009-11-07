@@ -1,33 +1,33 @@
 /**
- * An input field Image Picker utilising the Xinha ImageManager.
+ * An input field File Picker utilising the Xinha ExtendedFileManager.
  *
- * Hijack the Xinha ImageManager plugin to provide an image URL picker
+ * Hijack the Xinha ExtendedFileManager plugin to provide a file URL picker
  * for any form input field in the form of a "Browse" button to the
  * right of the field, in the same manner as a file type input field
- * except it opens the familiar ImageManager dialog to upload/select/edit
- * an image and returns the URL of the image to the field's value.
+ * except it opens the familiar ExtendedFileManager dialog to upload/select
+ * a file and returns the URL of the file to the field's value.
  *
  * Example Usage:
  *
  *  <script type="text/javascript">_editor_url = '/url/to/xinha';</script>
- *  <script type="text/javascript" src="image-picker.js" />
+ *  <script type="text/javascript" src="file-picker.js" />
  *  <script type="text/javascript">
  *   <?php require_once('/path/to/xinha/contrib/php-xinha.php'); ?>
- *   with(ImagePicker.prototype)
+ *   with(FilePicker.prototype)
  *   {
  *     <?php 
  *      $Conf = array
  *       (
- *         'images_dir' => '/path/to/images', 
- *         'images_url' => '/url/to/images', 
+ *         'files_dir' => '/path/to/downloads', 
+ *         'files_url' => '/url/to/downloads', 
  *         'show_full_options' => false, // Full options are not useful as a URL picker
- *         // See ImageManager for more configuration options !           
+ *         // See ExtendedFileManager for more configuration options !           
  *       );
  *      xinha_pass_to_php_backend($Conf);
  *     ?>
  *   }
  *
- *   window.onload = function() { new ImagePicker(document.getElementById('idOfTheInputField')); }
+ *   window.onload = function() { new FilePicker(document.getElementById('idOfTheInputField')); }
  *  </script>
  *
  *
@@ -37,7 +37,7 @@
  */
 
 
-function ImagePicker(field)
+function FilePicker(field)
 {
   this.field = field;
   var picker = this;
@@ -52,12 +52,12 @@ function ImagePicker(field)
   field.style.textAlign = 'right';
 };
 
-ImagePicker.prototype.backend             = Xinha.getPluginDir('ImageManager') + '/backend.php?__plugin=ImageManager&';
-ImagePicker.prototype.backend_data        = null;
+FilePicker.prototype.backend             = _editor_url + 'plugins/ExtendedFileManager/backend.php?__plugin=ExtendedFileManager&';
+FilePicker.prototype.backend_data        = null;
 
-ImagePicker.prototype.append_query_string = true;
+FilePicker.prototype.append_query_string = true;
 
-ImagePicker.prototype.popup_picker = function()
+FilePicker.prototype.popup_picker = function()
 {
   var picker = this; // closure for later  
   var outparam = null;
@@ -65,34 +65,16 @@ ImagePicker.prototype.popup_picker = function()
   {
     outparam =
 		{      
-			f_url    : picker.field.value,			
-			f_width  : null,
-			f_height  : null,
-     
-      // None of this stuff is useful to us, we return only a URL.
-      f_alt    : picker.field.value,
-			f_border : null,
-			f_align  : null,
-			f_padding: null,
-			f_margin : null,
-      f_backgroundColor: null,
-      f_borderColor: null,
-      f_border : null,
-      f_padding: null,
-      f_margin: null
+			f_href    : picker.field.value,
+      f_title   : '',
+      f_target  : '',
+      f_usetarget : false,
+      baseHref: null
     };
-    
-    while(outparam.f_url.match(/[?&]((f_[a-z0-9]+)=([^&#]+))/i))
-    {
-      outparam[RegExp.$2] = decodeURIComponent(RegExp.$3);
-      outparam.f_url = outparam.f_url.replace(RegExp.$1, '');
-    }
-    
-    outparam.f_url = outparam.f_url.replace(/&{2,}/g, '&');
-    outparam.f_url = outparam.f_url.replace(/\?&*(#.*)?$/, ''); 
+     
   }
 
-  var manager = this.backend + '__function=manager';
+  var manager = this.backend + '__function=manager&mode=link';
   if(this.backend_config != null)
   {
     manager += '&backend_config='
@@ -116,30 +98,7 @@ ImagePicker.prototype.popup_picker = function()
 			return false;
 		}
     
-    picker.field.value = param.f_url;
-    if(picker.append_query_string)
-    {
-      if(picker.field.value.match(/[?&](.*)$/))
-      {
-        if(RegExp.$1.length)
-        {
-          picker.field.value += '&';
-        }
-      }
-      else
-      {
-        picker.field.value += '?';
-      }
-      
-      for(var i in param)
-      {        
-        if(i == 'f_url' || param[i] == null || param[i] == 'null' || param[i] == '') continue;                
-        if(typeof param[i] == 'function') continue;
-        if(param[i].length = 0) continue;
-        
-        picker.field.value += i + '=' + encodeURIComponent(param[i]) + '&';
-      }
-    }
+    picker.field.value = param.f_href;
     
 		}, outparam);
 }
@@ -199,7 +158,7 @@ if(typeof Dialog == 'undefined')
 
 // Deprecated method for passing config, use above instead!
 //---------------------------------------------------------
-ImagePicker.prototype.backend_config      = null;
-ImagePicker.prototype.backend_config_hash = null;
-ImagePicker.prototype.backend_config_secret_key_location = 'Xinha:ImageManager';
+FilePicker.prototype.backend_config      = null;
+FilePicker.prototype.backend_config_hash = null;
+FilePicker.prototype.backend_config_secret_key_location = 'Xinha:ExtendedFileManager';
 //---------------------------------------------------------

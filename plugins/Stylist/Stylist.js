@@ -23,6 +23,11 @@ Xinha.Config.prototype.stylistLoadStylesheet = function(url, altnames)
       this.css_style[i] = newStyles[i];
     }
   }
+  
+  for(var x = 0; x < this.pageStyleSheets.length; x++)
+  {
+    if(this.pageStyleSheets[x] == url) return;
+  }
   this.pageStyleSheets[this.pageStyleSheets.length] = url;
 };
 
