@@ -701,6 +701,11 @@ Xinha.Dialog.prototype.collapse = function()
  */
 Xinha.Dialog.prototype.getElementById = function(id)
 {
+  if(!this.rootElem.parentNode)
+  {     
+    this.document.body.appendChild(this.rootElem);
+  }
+  
   return this.document.getElementById(this.id[id] ? this.id[id] : id);
 };
 /** Equivalent to document.getElementByName. You can't use document.getElementByName because names are dynamic to avoid name clashes between plugins
@@ -709,6 +714,11 @@ Xinha.Dialog.prototype.getElementById = function(id)
  */
 Xinha.Dialog.prototype.getElementsByName = function(name)
 {
+  if(!this.rootElem.parentNode)
+  {     
+    this.document.body.appendChild(this.rootElem);
+  }
+    
   var els = this.document.getElementsByName(this.id[name] ? this.id[name] : name); 
   return Xinha.collectionToArray(els);
 };
@@ -1286,13 +1296,15 @@ Xinha.Dialog.prototype.getValues = function()
   }
   return values;
 };
-/** Localizes strings in the dialog.
- * @private
- * @param {String} html The HTML to translate
- * @param {String} localizer Context for translation, usually plugin's name
+
+/** Sets the localizer to use for the dialog
+ *  @param function|string Either a function which takes a string as a parameter and returns 
+ *    a localized string, or the name of a contact to pass to the standard Xinha localizer
+ *    the "context" usually means the name of a plugin.
  */
-Xinha.Dialog.prototype.translateHtml = function(html, localizer)
-{
+ 
+Xinha.Dialog.prototype.setLocalizer = function(localizer)
+{  
   var dialog = this;
   if(typeof localizer == 'function')
   {
@@ -1312,7 +1324,19 @@ Xinha.Dialog.prototype.translateHtml = function(html, localizer)
       return string;
     };
   }
+}
 
+/** Localizes strings in the dialog.
+ * @private
+ * @param {String} html The HTML to translate
+ * @param {String} localizer Context for translation, usually plugin's name (optional if setLocalizer() has been used) 
+ */
+ 
+Xinha.Dialog.prototype.translateHtml = function(html,localizer)
+{  
+  var dialog = this;
+  if(localizer) this.setLocalizer(localizer);
+  
   // looking for strings of the form name='[foo]' or id="[bar]"
   html = html.replace(/((?:name)|(?:id))=(['"])\[([a-z0-9_]+)\]\2/ig,
     function(fullString, type, quote, id)

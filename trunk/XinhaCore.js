@@ -5729,6 +5729,109 @@ Xinha.cloneObject = function(obj)
   return newObj;
 };
 
+
+/** Extend one class from another, that is, make a sub class.
+ *  This manner of doing it was probably first devised by Kevin Lindsey
+ *
+ *  http://kevlindev.com/tutorials/javascript/inheritance/index.htm
+ *
+ *  It has subsequently been used in one form or another by various toolkits 
+ *  such as the YUI.
+ *
+ *  I make no claim as to understanding it really, but it works.
+ * 
+ *  Example Usage:
+ *  {{{
+ *  -------------------------------------------------------------------------
+ 
+    // =========  MAKING THE INITIAL SUPER CLASS ===========
+    
+        document.write("<h1>Superclass Creation And Test</h1>");
+    
+        function Vehicle(name, sound)
+        {    
+          this.name  = name;
+          this.sound = sound
+        }
+      
+        Vehicle.prototype.pressHorn = function()
+        {
+          document.write(this.name + ': ' + this.sound + '<br/>');
+        }
+        
+        var Bedford  = new Vehicle('Bedford Van', 'Honk Honk');
+        Bedford.pressHorn(); // Vehicle::pressHorn() is defined
+    
+    
+    // ========= MAKING A SUBCLASS OF A SUPER CLASS =========
+    
+        document.write("<h1>Subclass Creation And Test</h1>");
+        
+        // Make the sub class constructor first
+        Car = function(name)
+        {
+          // This is how we call the parent's constructor, note that
+          // we are using Car.parent.... not "this", we can't use this.
+          Car.parentConstructor.call(this, name, 'Toot Toot');
+        }
+        
+        // Remember the subclass comes first, then the base class, you are extending
+        // Car with the methods and properties of Vehicle.
+        Xinha.extend(Car, Vehicle);
+        
+        var MazdaMx5 = new Car('Mazda MX5');  
+        MazdaMx5.pressHorn(); // Car::pressHorn() is inherited from Vehicle::pressHorn()
+    
+    // =========  ADDING METHODS TO THE SUB CLASS ===========
+
+        document.write("<h1>Add Method to Sub Class And Test</h1>");
+        
+        Car.prototype.isACar = function()
+        {
+          document.write(this.name + ": Car::isACar() is implemented, this is a car! <br/>");
+          this.pressHorn();
+        }
+       
+        MazdaMx5.isACar(); // Car::isACar() is defined as above
+        try      { Bedford.isACar(); } // Vehicle::isACar() is not defined, will throw this exception
+        catch(e) { document.write("Bedford: Vehicle::onGettingCutOff() not implemented, this is not a car!<br/>"); }
+    
+    // =========  EXTENDING A METHOD (CALLING MASKED PARENT METHODS) ===========
+    
+        document.write("<h1>Extend/Override Inherited Method in Sub Class And Test</h1>");
+        
+        Car.prototype.pressHorn = function()
+        { 
+          document.write(this.name + ': I am going to press the horn... <br/>');
+          Car.superClass.pressHorn.call(this);        
+        }
+        MazdaMx5.pressHorn(); // Car::pressHorn()
+        Bedford.pressHorn();  // Vehicle::pressHorn()
+        
+    // =========  MODIFYING THE SUPERCLASS AFTER SUBCLASSING ===========
+    
+        document.write("<h1>Add New Method to Superclass And Test In Subclass</h1>");  
+        
+        Vehicle.prototype.startUp = function() { document.write(this.name + ": Vroooom <br/>"); }  
+        MazdaMx5.startUp(); // Cars get the prototype'd startUp() also.
+        
+ *  -------------------------------------------------------------------------
+ *  }}}  
+ *
+ *  @param subclass_constructor (optional)  Constructor function for the subclass
+ *  @param superclass Constructor function for the superclass 
+ */
+
+Xinha.extend = function(subClass, baseClass) {
+   function inheritance() {}
+   inheritance.prototype = baseClass.prototype;
+
+   subClass.prototype = new inheritance();
+   subClass.prototype.constructor = subClass;
+   subClass.parentConstructor = baseClass;
+   subClass.superClass = baseClass.prototype;
+}
+
 /** Event Flushing
  *  To try and work around memory leaks in the rather broken
  *  garbage collector in IE, Xinha.flushEvents can be called
