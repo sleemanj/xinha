@@ -86,7 +86,7 @@ Xinha.prototype.cleanHTML = function(sHtml) {
 		replace(c[8], '<').//strip tagstart whitespace
 		replace(c[10], ' ');//trim extra whitespace
 	if(Xinha.is_ie && c[13].test(sHtml)) {
-          sHtml = sHtml.replace(c[13],'$1'+Xinha._escapeDollars(stripBaseURL(RegExp.$3))+'"');
+          sHtml = sHtml.replace(c[13],'$1'+Xinha._escapeDollars(this.stripBaseURL(RegExp.$3))+'"');
 	}
 
 	if(this.config.only7BitPrintablesInURLs) {
