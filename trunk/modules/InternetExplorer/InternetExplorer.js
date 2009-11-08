@@ -770,6 +770,7 @@ Xinha.prototype.getSelection = function()
 Xinha.prototype.createRange = function(sel)
 {
   if (!sel) sel = this.getSelection();
+  if(sel.type == 'None') this.focusEditor();
   return sel.createRange();
 };
 
