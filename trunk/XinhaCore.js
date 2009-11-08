@@ -4969,7 +4969,7 @@ Xinha.prototype._comboSelected = function(el, txt)
       var dropdown = this.config.customSelects[txt];
       if ( typeof dropdown != "undefined" )
       {
-        dropdown.action(this);
+        dropdown.action(this, value, el, txt);
       }
       else
       {
