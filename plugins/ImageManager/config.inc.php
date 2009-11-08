@@ -163,6 +163,17 @@ $IMConfig['thumbnail_dir'] = '.thumbs';
 // -------------------------------------------------------------------------
 
 /**
+ * Resize files, or not.  If the dimensions for an image are changed
+ * this will control if the image is actually resized.  
+ *
+ * Usually you want this true, unless you are very disk space concious.
+ */
+ 
+$IMConfig['resize_files'] = true;
+
+// -------------------------------------------------------------------------
+
+/**
 * Resized prefix
 *
 * The prefix for resized files, something like .resized will do.  The
