@@ -26,7 +26,8 @@ ContextMenu._pluginInfo = {
 };
 
 Xinha.Config.prototype.ContextMenu = {
-	disableMozillaSpellCheck : false
+	disableMozillaSpellCheck : false,
+  customHooks : { } // 'a': [ ['Label', function() { alert('Action'); }, 'Tooltip', '/icon.jpg' ] ]
 }
 
 ContextMenu.prototype.onGenerate = function() {
@@ -237,6 +238,16 @@ ContextMenu.prototype.getContextMenu = function(target) {
            function() { editor.config.btnList['createlink'][3](editor); },
 				  Xinha._lc("Create a link", "ContextMenu"),
 				  config.btnList["createlink"][1] ]);
+
+  if(editor.config.ContextMenu.customHooks[currentTarget.tagName.toLowerCase()]) 
+  { 
+    var items = editor.config.ContextMenu.customHooks[currentTarget.tagName.toLowerCase()]; 
+    
+    for (var i = 0; i < items.length; ++i)
+    {
+      menu.push(items[i]); 
+    }
+  }
 
 	for (var i = 0; i < elmenus.length; ++i)
 		menu.push(elmenus[i]);

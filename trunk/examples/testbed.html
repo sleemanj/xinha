@@ -54,7 +54,7 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'CharacterMap', 'SpellChecker', 'Linker'
+        'CharacterMap', 'SpellChecker', 'Linker', 'ContextMenu'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -85,6 +85,7 @@
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
        xinha_config.fullPage = true;
        xinha_config.CharacterMap.mode = 'panel';
+       xinha_config.ContextMenu.customHooks = { 'a': [ ['Label', function() { alert('Action'); }, 'Tooltip', '/__classpath/xinha/images/ed_copy.gif' ] ] }
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
       //  otherwise it won't work!
