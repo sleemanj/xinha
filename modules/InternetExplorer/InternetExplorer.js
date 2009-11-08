@@ -92,6 +92,13 @@ InternetExplorer.prototype.onKeyPress = function(ev)
       }
     }
     break;
+    
+    case 9: // KEY tab, see ticket #1121
+    {
+      Xinha._stopEvent(ev);
+      return true;
+    }
+
   }
   
   return false;
