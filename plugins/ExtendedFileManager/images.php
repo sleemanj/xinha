@@ -113,11 +113,12 @@ function drawDirs_Files($list, &$manager)
     		{
     			?>
                 <tr>
-        		  <td><span style="width:20px;"><img src="<?php print $IMConfig['base_url']; if(is_file('icons/'.$file['ext'].'_small.gif')) echo "icons/".$file['ext']."_small.gif"; else echo $IMConfig['default_listicon']; ?>" alt="" /></span>
-					<a href="#" class="thumb" style="cursor: pointer;" ondblclick="this.onclick();window.top.onOK();" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" <?php if ($insertMode == 'image') { ?> onmouseover="showPreview('<?php echo $file['relative'];?>')" onmouseout="showPreview(window.parent.document.getElementById('f_url').value)" <?php } ?> >
+        		  <td>
+					<a href="#" class="thumb" style="cursor: pointer;vertical-align:middle;" ondblclick="this.onclick();window.top.onOK();" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo preg_replace('#\..{3,4}$#', '', $entry); ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" <?php if ($insertMode == 'image') { ?> onmouseover="showPreview('<?php echo $file['relative'];?>')" onmouseout="showPreview(window.parent.document.getElementById('f_url').value)" <?php } ?> >
+          <span style="width:20px;vertical-align:middle;"><img src="<?php print $IMConfig['base_url']; if(is_file('icons/'.$file['ext'].'_small.gif')) echo "icons/".$file['ext']."_small.gif"; else echo $IMConfig['default_listicon']; ?>" alt="" style="border:none;" /></span><span style="vertical-align:middle;">
         			<?php
         			if(strlen($entry)>$maxNameLength) echo substr($entry,0,$maxNameLength)."..."; else echo $entry;
-        			?>
+        			?></span>
                   </a></td>
                   <td><?php echo Files::formatSize($file['stat']['size']); ?></td>
                   <td><?php if($file['image'][0] > 0){ echo $file['image'][0].'x'.$file['image'][1]; } ?></td>
