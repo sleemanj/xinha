@@ -451,6 +451,20 @@ Xinha.prototype.saveSelection = function()
 Xinha.prototype.restoreSelection = function(savedSelection)
 {
   if (!savedSelection) return;
+  
+  // Ticket #1387
+  // avoid problem where savedSelection does not implement parentElement(). 
+  // This condition occurs if there was no text selection at the time saveSelection() was called.  In the case 
+  // an image selection, the situation is confusing... the image may be selected in two different ways:  1) by 
+  // simply clicking the image it will appear to be selected by a box with sizing handles; or 2) by clicking and 
+  // dragging over the image as you might click and drag over text.  In the first case, the resulting selection 
+  // object does not implement parentElement(), leading to a crash later on in the code below.  The following 
+  // hack avoids that problem. 
+  if (!savedSelection.parentElement) 
+  {
+    return;
+  } 
+  
   // In order to prevent triggering the IE bug mentioned below, we will try to
   // optimize by not restoring the selection if it happens to match the current
   // selection.
