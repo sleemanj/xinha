@@ -2765,8 +2765,8 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   //here 100% can lead to an effect that the editor is considerably higher in text mode
   this._textArea.style.height = '1px';
   
-  this._iframe.style.width    = '';
-  this._textArea.style.width  = '';
+  this._iframe.style.width    = '0px';
+  this._textArea.style.width  = '0px';
 
   if ( includingBars !== null )
   {
