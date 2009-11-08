@@ -1128,7 +1128,7 @@ Xinha.Config = function()
     htmlmode: [ "Toggle HTML Source", ["ed_buttons_main.png",7,0], true, function(e) { e.execCommand("htmlmode"); } ],
     toggleborders: [ "Toggle Borders", ["ed_buttons_main.png",7,2], false, function(e) { e._toggleBorders(); } ],
     print: [ "Print document", ["ed_buttons_main.png",8,1], false, function(e) { if(Xinha.is_gecko) {e._iframe.contentWindow.print(); } else { e.focusEditor(); print(); } } ],
-    saveas: [ "Save as", "ed_saveas.png", false, function(e) { e.execCommand("saveas",false,"noname.htm"); } ],
+    saveas: [ "Save as", ["ed_buttons_main.png",9,1], false, function(e) { e.execCommand("saveas",false,"noname.htm"); } ],
     about: [ "About this editor", ["ed_buttons_main.png",8,2], true, function(e) { e.getPluginInstance("AboutBox").show(); } ],
     showhelp: [ "Help using editor", ["ed_buttons_main.png",9,2], true, function(e) { e.execCommand("showhelp"); } ],
 
@@ -3246,6 +3246,7 @@ Xinha.prototype.initIframe = function()
   catch(ex)
   { // try later
     setTimeout(function() { editor.initIframe(); }, 50);
+    return false;
   }
   
   Xinha.freeLater(this, '_doc');
