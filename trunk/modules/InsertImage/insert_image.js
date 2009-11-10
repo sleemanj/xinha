@@ -34,6 +34,7 @@ function InsertImage(editor) {
 	var self = this;
 
    editor.config.btnList.insertimage[3] = function() { self.show(); }
+   if(typeof editor._insertImage == 'undefined') editor._insertImage = function() { self.show(); };
   }
   
 InsertImage.prototype._lc = function(string) {
