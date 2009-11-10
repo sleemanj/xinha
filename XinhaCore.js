@@ -2125,7 +2125,7 @@ Xinha.prototype._createStatusBar = function()
   Xinha.freeLater(this, '_statusBarTree');
   statusBar.appendChild(statusBarTree);
   var statusBarTextMode = document.createElement("span");
-  statusBarTextMode.innerHTML = Xinha.htmlEncode(Xinha._lc("You are in TEXT MODE.  Use the [[<>] button to switch back to WYSIWYG."));
+  statusBarTextMode.innerHTML = Xinha.htmlEncode(Xinha._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG."));
   statusBarTextMode.style.display = "none";
 
   this._statusBarTextMode = statusBarTextMode;
