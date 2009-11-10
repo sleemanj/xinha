@@ -68,7 +68,7 @@ Xinha.Config.prototype.LangMarks = {
   'attributes': [
     'lang',
     'xml:lang'    
-  ],
+  ]
 };
 
 LangMarks.prototype._lc = function(string) {
