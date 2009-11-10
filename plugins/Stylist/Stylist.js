@@ -240,7 +240,7 @@ Xinha.prototype._fillStylist = function()
         anch.style.background = 'Highlight';
         anch.style.color = 'HighlightText';
       }
-
+      anch.style.position = 'relative';
       main.appendChild(anch);
     }
   }
