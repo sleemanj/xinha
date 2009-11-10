@@ -900,6 +900,30 @@ Xinha.Config = function()
    */
   this.fullScreenMargins = [0,0,0,0];
   
+  
+  /** Specify the method that is being used to calculate the editor's size<br/>
+    * when we return from fullscreen mode.
+    *  There are two choices:
+    * 
+    * <table border="1">
+    *   <tr>
+    *       <td><em>initSize</em></td>
+    *       <td>Use the internal Xinha.initSize() method to calculate the editor's 
+    *       dimensions. This is suitable for most usecases.</td>
+    *   </tr>
+    *   <tr>
+    *       <td><em>restore</em></td>
+    *       <td>The editor's dimensions will be stored before going into fullscreen
+    *       mode and restored when we return to normal mode, taking a possible
+    *       window resize during fullscreen in account.</td>
+    *     </tr>
+    * </table>
+    *
+    * Default: <code>"initSize"</code>
+    * @type String
+    */
+  this.fullScreenSizeDownMethod = 'initSize';
+  
   /** This array orders all buttons except plugin buttons in the toolbar. Plugin buttons typically look for one 
    *  a certain button in the toolbar and place themselves next to it.
    * Default value:
