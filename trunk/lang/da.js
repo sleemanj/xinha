@@ -45,7 +45,7 @@
   "Toggle Borders": "Vis/Gem Kanter",
   "Save as": "Gem som",
   "Insert/Overwrite": "Indsæt/Overskriv",
-  "&mdash; format &mdash;": "&mdash; Format &mdash;",
+  "&#8212; format &#8212;": "&#8212; Format &#8212;",
   "Heading 1": "Overskrift 1",
   "Heading 2": "Overskrift 2",
   "Heading 3": "Overskrift 3",

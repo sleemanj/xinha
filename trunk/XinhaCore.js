@@ -963,7 +963,7 @@ Xinha.Config = function()
    *<pre>
    *xinha_config.fontname =
    *{
-   *  "&mdash; font &mdash;" : '',
+   *  "&#8212; font &#8212;" : '',
    *  "Arial"                : 'arial,helvetica,sans-serif',
    *  "Courier New"          : 'courier new,courier,monospace',
    *  "Georgia"              : 'georgia,times new roman,times,serif',
@@ -978,7 +978,7 @@ Xinha.Config = function()
    */
   this.fontname =
   {
-    "&mdash; font &mdash;": '',
+    "&#8212; font &#8212; '', // &#8212; is mdash
     "Arial"           :	'arial,helvetica,sans-serif',
     "Courier New"     :	'courier new,courier,monospace',
     "Georgia"         :	'georgia,times new roman,times,serif',
@@ -994,7 +994,7 @@ Xinha.Config = function()
    *<pre>
    *xinha_config.fontsize =
    *{
-   *  "&mdash; size &mdash;": "",
+   *  "&#8212; size &#8212;": "",
    *  "1 (8 pt)" : "1",
    *  "2 (10 pt)": "2",
    *  "3 (12 pt)": "3",
@@ -1008,7 +1008,7 @@ Xinha.Config = function()
    */
   this.fontsize =
   {
-    "&mdash; size &mdash;": "",
+    "&#8212; size &#8212;": "", // &#8212; is mdash
     "1 (8 pt)" : "1",
     "2 (10 pt)": "2",
     "3 (12 pt)": "3",
@@ -1022,7 +1022,7 @@ Xinha.Config = function()
    *<pre>
    *xinha_config.formatblock =
    *{
-   *  "&mdash; size &mdash;": "",
+   *  "&#8212; size &#8212;": "",
    *  "1 (8 pt)" : "1",
    *  "2 (10 pt)": "2",
    *  "3 (12 pt)": "3",
@@ -1036,7 +1036,7 @@ Xinha.Config = function()
    */
   this.formatblock =
   {
-    "&mdash; format &mdash;": "",
+    "&#8212; format &#8212;": "", // &#8212; is mdash
     "Heading 1": "h1",
     "Heading 2": "h2",
     "Heading 3": "h3",
@@ -2125,7 +2125,7 @@ Xinha.prototype._createStatusBar = function()
   Xinha.freeLater(this, '_statusBarTree');
   statusBar.appendChild(statusBarTree);
   var statusBarTextMode = document.createElement("span");
-  statusBarTextMode.innerHTML = Xinha._lc("You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.");
+  statusBarTextMode.innerHTML = Xinha.htmlEncode(Xinha._lc("You are in TEXT MODE.  Use the [[<>] button to switch back to WYSIWYG."));
   statusBarTextMode.style.display = "none";
 
   this._statusBarTextMode = statusBarTextMode;
