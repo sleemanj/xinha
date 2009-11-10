@@ -978,7 +978,7 @@ Xinha.Config = function()
    */
   this.fontname =
   {
-    "&#8212; font &#8212; '', // &#8212; is mdash
+    "&#8212; font &#8212;": "", // &#8212; is mdash
     "Arial"           :	'arial,helvetica,sans-serif',
     "Courier New"     :	'courier new,courier,monospace',
     "Georgia"         :	'georgia,times new roman,times,serif',
