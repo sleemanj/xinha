@@ -3190,6 +3190,11 @@ Xinha.prototype.activateEditor = function()
       {
         this._doc.designMode = 'on';
       }
+
+      // Opera loses some of it's event listeners when the designMode is set to on.
+	  // the true just shortcuts the method to only set some listeners.
+      if(Xinha.is_opera) this.setEditorEvents(true);
+
     } catch (ex) {}
   }
   else if ( Xinha.is_ie&& this._doc.body.contentEditable !== true )
@@ -3494,7 +3499,7 @@ Xinha.prototype.setFullHTML = function(html)
 /** Initialize some event handlers
  * @private
  */
-Xinha.prototype.setEditorEvents = function()
+Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
 {
   var editor=this;
   var doc = this._doc;
@@ -3502,6 +3507,7 @@ Xinha.prototype.setEditorEvents = function()
   editor.whenDocReady(
     function()
     {
+      if(!resetting_events_for_opera) {
       // if we have multiple editors some bug in Mozilla makes some lose editing ability
       Xinha._addEvents(
         doc,
@@ -3530,6 +3536,7 @@ Xinha.prototype.setEditorEvents = function()
           }
         );
       }
+      }
 
       // intercept some events; for updating the toolbar & keyboard handlers
       Xinha._addEvents(
@@ -3540,6 +3547,7 @@ Xinha.prototype.setEditorEvents = function()
           return editor._editorEvent(Xinha.is_ie ? editor._iframe.contentWindow.event : event);
         }
       );
+      if(resetting_events_for_opera) return;
 
       // FIXME - this needs to be cleaned up and use editor.firePluginEvent
       //  I don't like both onGenerate and onGenerateOnce, we should only
@@ -4469,7 +4477,8 @@ Xinha.prototype.updateToolbar = function(noStatus)
         item = null;
       }
 
-      this._statusBarTree.innerHTML = Xinha._lc("Path") + ": "; // clear
+      this._statusBarTree.innerHTML = ' ';
+      this._statusBarTree.appendChild(document.createTextNode(Xinha._lc("Path") + ": ")); 
       for ( var i = ancestors.length; --i >= 0; )
       {
         var el = ancestors[i];
