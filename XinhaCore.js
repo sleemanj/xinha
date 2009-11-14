@@ -191,14 +191,11 @@ Xinha.is_gecko  = (navigator.product == "Gecko") || Xinha.is_opera;
  * @type Boolean 
  */
 Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
-/** Gecko version 1.9 (or greater)
- * @type Boolean 
- */
-Xinha.is_ff3 = Xinha.is_real_gecko && parseInt(navigator.productSub, 10) >= 2007121016;
+
 /** Gecko version lower than 1.9
  * @type Boolean 
  */
-Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub, 10) < 2007121016;
+Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub.substr(0,10), 10) < 20071210;
 
 /** File is opened locally opened ("file://" protocol)
  * @type Boolean
