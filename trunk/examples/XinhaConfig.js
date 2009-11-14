@@ -40,8 +40,7 @@ xinha_init = xinha_init ? xinha_init : function()
    'ContextMenu',
    'SmartReplace',
    'Stylist',
-   'PersistentStorage',
-   'PSLocal',
+   'ExtendedFileManager',
    'Linker',
    'SuperClean',
    'TableOperations'
