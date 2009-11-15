@@ -225,6 +225,16 @@ $IMConfig['allow_cut_copy_paste'] = true;
 /*
   Possible values: true, false
 
+ TRUE -  Allow the user to delete files and folders.
+
+ FALSE - No delete icon will be displayed.
+
+*/
+$IMConfig['allow_delete'] = true;
+
+/*
+  Possible values: true, false
+
   TRUE - Display color pickers for image background / border colors
 
   FALSE - Don't display color pickers
