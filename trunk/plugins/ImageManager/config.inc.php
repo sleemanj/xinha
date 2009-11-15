@@ -244,6 +244,37 @@ $IMConfig['allow_upload'] = false;
 // -------------------------------------------------------------------------
 
 /**
+* Allow Delete
+*
+*  Possible values: true, false
+*
+*  TRUE - Allow the user to delete files/dirs
+*
+*  FALSE - No deleting allowed.
+* 
+*/
+
+$IMConfig['allow_delete'] = true;
+
+// -------------------------------------------------------------------------
+
+/**
+* Allow Edit
+*
+*  Possible values: true, false
+*
+*  TRUE - Allow the user to edit files
+*
+*  FALSE - No editing allowed.
+* 
+*/
+
+$IMConfig['allow_edit'] = true;
+
+
+// -------------------------------------------------------------------------
+
+/**
 * Validate Images
 *
 * Possible values: true, false
