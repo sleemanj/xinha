@@ -467,15 +467,34 @@ Xinha.prototype.restoreSelection = function(savedSelection)
   // dragging over the image as you might click and drag over text.  In the first case, the resulting selection 
   // object does not implement parentElement(), leading to a crash later on in the code below.  The following 
   // hack avoids that problem. 
-  if (!savedSelection.parentElement) 
+  
+  // Ticket #1488
+  // fix control selection in IE8
+  
+  var savedParentElement = null;
+  if (savedSelection.parentElement)
   {
-    return;
-  } 
+    savedParentElement =  savedSelection.parentElement();
+  }
+  else
+  {
+    savedParentElement = savedSelection.item(0);
+  }
   
   // In order to prevent triggering the IE bug mentioned below, we will try to
   // optimize by not restoring the selection if it happens to match the current
   // selection.
   var range = this.createRange(this.getSelection());
+
+  var rangeParentElement =  null;
+  if (range.parentElement)
+  {
+    rangeParentElement =  range.parentElement();
+  }
+  else
+  {
+    rangeParentElement = range.item(0);
+  }
 
   // We can't compare two selections that come from different documents, so we
   // must make sure they're from the same document.
@@ -491,7 +510,7 @@ Xinha.prototype.restoreSelection = function(savedSelection)
     return null;
   }
 
-  if (findDoc(savedSelection.parentElement()) == findDoc(range.parentElement()))
+  if (savedSelection.parentElement && findDoc(savedParentElement) == findDoc(rangeParentElement))
   {
     if (range.isEqual(savedSelection))
     {
@@ -502,7 +521,17 @@ Xinha.prototype.restoreSelection = function(savedSelection)
 
   try { savedSelection.select() } catch (e) {};
   range = this.createRange(this.getSelection());
-  if (range.parentElement() != savedSelection.parentElement())
+  
+  if (range.parentElement)
+  {
+    rangeParentElement =  range.parentElement();
+  }
+  else
+  {
+    rangeParentElement = range.item(0);
+  }
+  
+  if (rangeParentElement != savedParentElement)
   {
     // IE has a problem with selections at the end of text nodes that
     // immediately precede block nodes. Example markup:
@@ -522,7 +551,7 @@ Xinha.prototype.restoreSelection = function(savedSelection)
       case 'InsertSpan':
         // This workaround inserts an empty span element so that we are no
         // longer trying to select a text node,
-        var parentDoc = findDoc(savedSelection.parentElement());
+        var parentDoc = findDoc(savedParentElement);
 
         // A function used to generate a unique ID for our temporary span.
         var randLetters = function(count)
