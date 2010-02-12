@@ -48,7 +48,7 @@ Xinha.RegExpCache = [
 /*12*/  /\s+contenteditable(=[^>\s\/]*)?/gi,//strip contenteditable
 /*13*/  /((href|src)=")([^\s]*)"/g, //find href and src for stripBaseHref()
 /*14*/  /<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|dl|dt|dd|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g,
-/*15*/  /<\/(div|p|h[1-6]|table|tr|ul|ol|dl|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,//blocklevel closing tag
+/*15*/  /<\/(div|p|h[1-6]|table|tr|ul|ol|dl|blockquote|html|head|body|script|form|select)( [^>]*)?>/g,//blocklevel closing tag
 /*16*/  /<(div|p|h[1-6]|table|tr|ul|ol|dl|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,//blocklevel opening tag
 /*17*/  /<(td|th|li|dt|dd|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g,//singlet tag or output on 1 line
 /*18*/  /(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g,//find content NOT inside pre and script tags
