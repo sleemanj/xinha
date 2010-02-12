@@ -374,7 +374,7 @@ Xinha.Dialog = function(editor, html, localizer, size, options)
   icon.style.left = '2px';
   icon.ondrag = function () {return false;};
 
-  captionBar.style.paddingLeft = '22px';
+  //captionBar.style.paddingLeft = '22px';
   rootElem.appendChild(this.icon);
   
   var all = rootElem.getElementsByTagName("*");
@@ -1012,7 +1012,7 @@ Xinha.Dialog.prototype.detachFromPanel = function()
   rootElemStyle.top = pos.top + "px";
   rootElemStyle.left = pos.left + "px";
   
-  dialog.captionBar.style.paddingLeft = "22px";
+  //dialog.captionBar.style.paddingLeft = "22px";
   dialog.resizer.style.display = '';
   if (dialog.closable) 
   {
