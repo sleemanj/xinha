@@ -760,6 +760,7 @@
             this.iframe.style.position = "absolute";
             this.iframe.style.width = this.table.offsetWidth;
             this.iframe.style.height = this.table.offsetHeight;
+            this.iframe.style.zIndex = '1049';
             document.body.insertBefore(this.iframe, this.table);
           }
           this.iframe.style.display = '';
