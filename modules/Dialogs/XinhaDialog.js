@@ -528,8 +528,11 @@ Xinha.Dialog.prototype.show = function(values)
         {
           if (input[i].type == 'text')
           {
-            input[i].focus();
-            break;
+            try {
+              input[i].focus();
+              break;
+            }
+            catch (e) {}
           }
         }
       }
