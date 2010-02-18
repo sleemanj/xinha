@@ -34,27 +34,31 @@ Xinha.Config.prototype.MootoolsFileManager =
   'backend_data' : { }
 };
 
+MootoolsFileManager.AssetLoader = Xinha.includeAssets();
+
 // In case you want to use your own version of Mootools, you can load it first.
 if(typeof MooTools == 'undefined')
 {
-  Xinha.loadScript('mootools-filemanager/Demos/mootools-core.js', 'MootoolsFileManager');
-  Xinha.loadScript('mootools-filemanager/Demos/mootools-more.js', 'MootoolsFileManager');
+  MootoolsFileManager.AssetLoader
+    .loadScript('mootools-filemanager/Demos/mootools-core.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Demos/mootools-more.js', 'MootoolsFileManager');
 }
 
 // In case you want to use your own version of FileManager, you can load it first.
 // You better look at the changes we had to do to the standard one though.
 if(typeof FileManager == 'undefined')
 {
-  Xinha.loadStyle('mootools-filemanager/Css/FileManager.css', 'MootoolsFileManager');
-  Xinha.loadStyle('mootools-filemanager/Css/Additions.css', 'MootoolsFileManager');
-  Xinha.loadScript('mootools-filemanager/Source/FileManager.js', 'MootoolsFileManager');
-  Xinha.loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager');
-  Xinha.loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager');
-  Xinha.loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager');
-  Xinha.loadScript('mootools-filemanager/Source/Uploader/Swiff.Uploader.js', 'MootoolsFileManager');
-  Xinha.loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager');
+  MootoolsFileManager.AssetLoader
+    .loadStyle('mootools-filemanager/Css/FileManager.css', 'MootoolsFileManager')
+    .loadStyle('mootools-filemanager/Css/Additions.css', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Source/FileManager.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Source/Uploader/Swiff.Uploader.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager');
 }
-Xinha.loadStyle('MootoolsFileManager.css', 'MootoolsFileManager');
+MootoolsFileManager.AssetLoader.loadStyle('MootoolsFileManager.css', 'MootoolsFileManager');
 
 // Initialise the plugin for an editor instance.
 function MootoolsFileManager(editor)
@@ -289,7 +293,8 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       language:       _editor_lang,
       selectable:     true,
       uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
-      onComplete:     function(path, file, params) { self.ImageManagerReturn(path,file,params); }
+      onComplete:     function(path, file, params) { self.ImageManagerReturn(path,file,params); },
+      extendedAttributes: outparam
       // @TODO : Add support to pass in the existing src, alt etc...
     });     
   }

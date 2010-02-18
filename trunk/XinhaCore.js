@@ -4042,12 +4042,14 @@ Xinha.loadStyle = function(style, plugin, id,prepend)
 };
 
 /** Adds a script to the document
- * @param {String} style name of the stylesheet file
+ *
+ * Warning: Browsers may cause the script to load asynchronously.
+ *
+ * @param {String} style name of the javascript file
  * @param {String} plugin optional name of a plugin; if passed this function looks for the stylesheet file in the plugin directory 
- * @param {String} id optional a unique id for identifiing the created link element, e.g. for avoiding double loading 
- *                 or later removing it again
+ *
  */
-Xinha.loadScript = function(script, plugin)
+Xinha.loadScript = function(script, plugin, callback)
 {
   var url = _editor_url || '';
   if ( plugin )
@@ -4065,10 +4067,134 @@ Xinha.loadScript = function(script, plugin)
     url = script;
   }
   
-  Xinha._loadback(url);
+  Xinha._loadback(url, callback);
   
 };
 
+/** Load one or more assets, sequentially, where an asset is a CSS file, or a javascript file.
+ *
+ * Example Usage:
+ *
+ * Xinha.includeAssets( 'foo.css', 'bar.js', [ 'foo.css', 'MyPlugin' ], { type: 'text/css', url: 'foo.php', plugin: 'MyPlugin } );
+ *
+ * Alternative usage, use Xinha.includeAssets() to make a loader, then use loadScript, loadStyle and whenReady methods
+ * on your loader object as and when you wish, you can chain the calls if you like.
+ *
+ * Note whenReady can only have one active callback at a time, but once it's been called you can
+ * issue another whenReady(), if there is nothing waiting to be loaded, it will be executed immediately.
+ *
+ *   var myAssetLoader = Xinha.includeAssets();
+ *       myAssetLoader.loadScript('foo.js', 'MyPlugin')
+ *                    .loadStyle('foo.css', 'MyPlugin');                        
+ * 
+ */
+ 
+Xinha.includeAssets = function()
+{
+  var assetLoader = { pendingAssets: [ ], loaderRunning: false };
+  
+  assetLoader.callback = function() { };
+  
+  assetLoader.loadNext = function()
+  {  
+    var self = this;
+    this.loaderRunning = true;
+    
+    if(this.pendingAssets.length)
+    {
+      var nxt = this.pendingAssets[0];
+      this.pendingAssets.splice(0,1); // Remove 1 element
+      switch(nxt.type)
+      {
+        case 'text/css':
+          Xinha.loadStyle(nxt.url, nxt.plugin);
+          return this.loadNext();
+        
+        case 'text/javascript':
+          Xinha.loadScript(nxt.url, nxt.plugin, function() { self.loadNext(); });
+      }
+    }
+    else
+    {
+      this.loaderRunning = false;
+      this.runCallback();      
+    }
+  };
+  
+  assetLoader.loadScript = function(url, plugin)
+  {
+    var self = this;
+    
+    this.pendingAssets.push({ 'type': 'text/javascript', 'url': url, 'plugin': plugin });
+    if(!this.loaderRunning) this.loadNext();
+    
+    return this;
+  };
+  
+  assetLoader.loadStyle = function(url, plugin)
+  {
+    var self = this;
+    
+    this.pendingAssets.push({ 'type': 'text/css', 'url': url, 'plugin': plugin });
+    if(!this.loaderRunning) this.loadNext();
+    
+    return this;    
+  };
+  
+  assetLoader.whenReady = function(callback) 
+  {
+    this.callback = callback;    
+    if(!this.loaderRunning) this.loadNext();
+    
+    return this;    
+  };
+  
+  assetLoader.runCallback = function()
+  {
+    this.callback();
+    this.callback = null;
+    return this;
+  }
+  
+  for(var i = 0 ; i < arguments.length; i++)
+  {
+    if(typeof arguments[i] == 'string')
+    {
+      if(arguments[i].match(/\.css$/i))
+      {
+        assetLoader.loadStyle(arguments[i]);
+      }
+      else 
+      {
+        assetLoader.loadScript(arguments[i]);
+      }
+    }
+    else if(arguments[i].type)
+    {
+      if(arguments[i].type.match(/text\/css/i))
+      {
+        assetLoader.loadStyle(arguments[i].url, arguments[i].plugin);
+      }
+      else if(arguments[i].type.match(/text\/javascript/i))
+      {
+        assetLoader.loadScript(arguments[i].url, arguments[i].plugin);
+      }
+    }
+    else if(arguments[i].length >= 1)
+    {
+      if(arguments[i][0].match(/\.css$/i))
+      {
+        assetLoader.loadStyle(arguments[i][0], arguments[i][1]);
+      }
+      else 
+      {
+        assetLoader.loadScript(arguments[i][0], arguments[i][1]);
+      }
+    }
+  }
+  
+  return assetLoader;
+}
 
 /***************************************************
  *  Category: EDITOR UTILITIES
