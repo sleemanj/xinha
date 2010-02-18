@@ -4041,6 +4041,34 @@ Xinha.loadStyle = function(style, plugin, id,prepend)
   
 };
 
+/** Adds a script to the document
+ * @param {String} style name of the stylesheet file
+ * @param {String} plugin optional name of a plugin; if passed this function looks for the stylesheet file in the plugin directory 
+ * @param {String} id optional a unique id for identifiing the created link element, e.g. for avoiding double loading 
+ *                 or later removing it again
+ */
+Xinha.loadScript = function(script, plugin)
+{
+  var url = _editor_url || '';
+  if ( plugin )
+  {
+    url = Xinha.getPluginDir( plugin ) + "/";
+  }
+  url += script;
+  // @todo: would not it be better to check the first character instead of a regex ?
+  // if ( typeof style == 'string' && style.charAt(0) == '/' )
+  // {
+  //   url = style;
+  // }
+  if ( /^\//.test(script) )
+  {
+    url = script;
+  }
+  
+  Xinha._loadback(url);
+  
+};
+
 
 /***************************************************
  *  Category: EDITOR UTILITIES
