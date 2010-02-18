@@ -62,20 +62,9 @@ function MootoolsFileManager(editor)
   this.editor = editor;
   var self = this;
   var cfg = editor.config;
-  
-  // "manager" will be the URL including the backend data, it has a trailing '&'
-  var manager = editor.config.MootoolsFileManager.backend;
-  if(cfg.MootoolsFileManager.backend_data != null)
-  {
-    for ( var i in cfg.MootoolsFileManager.backend_data )
-    {
-      manager += i + '=' + encodeURIComponent(cfg.MootoolsFileManager.backend_data[i]) + '&';
-    }
-  }
-  cfg.MootoolsFileManager.manager = manager;
-  
-  // We read the rest of the configuration from PHP
-  Xinha._getback(manager+'__function=read-config', function(phpcfg) { eval ('var f = '+phpcfg+';'); self.hookUpButtons(f); });  
+    
+  Xinha._postback(editor.config.MootoolsFileManager.backend+'__function=read-config', editor.config.MootoolsFileManager.backend_data, function(phpcfg) { eval ('var f = '+phpcfg+';'); self.hookUpButtons(f); });  
+  return;  
 };
 
 // Connect up the plugin to the buttons in the editor, depending on the php configuration.
@@ -175,9 +164,9 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
     
     this.current_link = link;
     if(!this.FileManagerWidget)
-    {
+    {    
       this.FileManagerWidget = new FileManager({
-        url:            this.editor.config.MootoolsFileManager.manager,
+        url:            this.editor.config.MootoolsFileManager.backend +'__function=file-manager',
         assetBasePath:  Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets',
         language:       _editor_lang,
         selectable:     true,
@@ -295,7 +284,7 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
   if(!this.ImageManagerWidget)
   {
     this.ImageManagerWidget = new FileManager({
-      url:            this.editor.config.MootoolsFileManager.manager+'__function=image-manager&',
+      url:            this.editor.config.MootoolsFileManager.backend+'__function=image-manager&',
       assetBasePath:  Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets',
       language:       _editor_lang,
       selectable:     true,
