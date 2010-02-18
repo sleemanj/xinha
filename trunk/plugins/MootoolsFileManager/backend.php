@@ -92,7 +92,7 @@ switch ( @$_REQUEST[ "__function" ] )
       'directory'     => $IMConfig['images_dir'],
       'baseURL'       => $IMConfig['images_url'],
       
-      'assetBasePath' => $IMConfig['base_url'],
+      'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
       'upload'        => $IMConfig['allow_images_upload'],
       'maxUploadSize' => size_to_bytes($IMConfig['max_images_upload_size']),
@@ -114,7 +114,7 @@ switch ( @$_REQUEST[ "__function" ] )
       'directory'     => $IMConfig['files_dir'],
       'baseURL'       => $IMConfig['files_url'],
       
-      'assetBasePath' => $IMConfig['base_url'],
+      'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
       'upload'        => $IMConfig['allow_files_upload'],
       'maxUploadSize' => size_to_bytes($IMConfig['max_files_upload_size']),
