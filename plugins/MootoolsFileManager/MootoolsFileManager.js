@@ -166,7 +166,7 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
     if(!this.FileManagerWidget)
     {    
       this.FileManagerWidget = new FileManager({
-        url:            this.editor.config.MootoolsFileManager.backend +'__function=file-manager',
+        url:            this.editor.config.MootoolsFileManager.backend +'__function=file-manager&',
         assetBasePath:  Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets',
         language:       _editor_lang,
         selectable:     true,
