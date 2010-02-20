@@ -321,7 +321,7 @@ div.filemanager-engine-trident4 div.filemanager-preview img.preview {
 	height: 100px;
 }
 
-div.filemanager-preview ul, div.filemanager-preview div.textpreview {
+div.filemanager-preview ul, div.filemanager-uploader ul, div.filemanager-preview div.textpreview {
 	border: 1px solid #bebebe;
 	background: #fff;
 	
@@ -351,8 +351,8 @@ div.filemanager-container img.browser-add {
 	height: 16px;
 	z-index: 1010;
 }
-
 /* UPLOAD */
+
 div.filemanager-container .file span {
 	padding: 0 5px 0 0;
 }

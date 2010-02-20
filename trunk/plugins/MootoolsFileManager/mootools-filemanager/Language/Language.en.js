@@ -22,7 +22,7 @@ FileManager.Language.en = {
 	type: 'Type:',
 	size: 'Size:',
 	dir: 'Path:',
-	modified: 'Last modified:',
+	modified: 'Created:',
 	preview: 'Preview',
 	close: 'Close',
 	destroy: 'Delete',

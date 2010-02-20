@@ -53,11 +53,13 @@ class FileManager {
 			'mimeTypesPath' => $path . '/MimeTypes.ini',
 			'dateFormat' => 'j M Y - H:i',
 			'maxUploadSize' => 1024 * 1024 * 3,
-			'suggestedMaxImageDimension' => array('width' => 800, 'height' => 600),
 			'upload' => false,
 			'destroy' => false,
 			'safe' => true,
-			'filter' => null
+			'filter' => null,
+			
+			// Xinha: Allow to specify the "Resize Large Images" tolerance level.
+			'suggestedMaxImageDimension' => array('width' => 800, 'height' => 600),
 		), $options);
 		
 		$this->basedir = realpath($this->options['directory']);
@@ -126,10 +128,19 @@ class FileManager {
 		// Also the 'baseURL' seems to be wanted as the parent of the 'basedir' ("directory" option)
 		// Xinha is supplying both the same (eg url = /foo/test and dir = /home/bar/public_html/foo/test )
 		// so we will rip off the first part of directory, below.
-		$url = $this->options['baseURL'] . '/' . preg_replace('/^[^\/]*\//', '', $this->post['directory'] . '/' . $this->post['file']);//$this->normalize(substr($file, strlen($this->path)+1));
+		$url = $this->options['baseURL'] . '/' . preg_replace('/^[^\/]*\//', '', $this->post['directory'] . '/' . $this->post['file']);
+		
 		$mime = $this->getMimeType($file);
 		$content = null;
-		$extra_return_detail = array();
+		
+    // Xinha: We want to get some more information about what has been selected in a way
+    // we can use it.  Effectively what gets put in here will be passed into the
+    // 'onDetails' event handler of your FileManager object (if any).
+    $extra_return_detail = array
+      (
+        'url'  => $url,
+        'mime' => $mime
+      );
 		
 		if (FileManagerUtility::startsWith($mime, 'image/')){
 			$size = getimagesize($file);
@@ -139,8 +150,12 @@ class FileManager {
 					<dt>${width}</dt><dd>' . $size[0] . 'px</dd>
 					<dt>${height}</dt><dd>' . $size[1] . 'px</dd>
 				</dl>';
+		
+        // Xinha: Return some information about the image which can be access 
+        // from the onDetails event handler in FileManager
 				$extra_return_detail['width']  = $size[0];
 				$extra_return_detail['height'] = $size[1];
+				
 		}elseif (FileManagerUtility::startsWith($mime, 'text/') || $mime == 'application/x-javascript'){
 			$filecontent = file_get_contents($file, null, null, 0, 300);
 			if (!FileManagerUtility::isBinary($filecontent)) $content = '<div class="textpreview">' . nl2br(str_replace(array('$', "\t"), array('&#36;', '&nbsp;&nbsp;'), htmlentities($filecontent))) . '</div>';
@@ -177,9 +192,7 @@ class FileManager {
 		echo json_encode(array_merge(array(
 			'content' => $content ? $content : '<div class="margin">
 				${nopreview}<br/><button value="' . $url . '">${download}</button>
-			</div>',
-			'url'     => $url,
-			'mime'    => $mime,
+			</div>'
 		), $extra_return_detail));
 	}
 	
@@ -197,11 +210,8 @@ class FileManager {
 	}
 	
 	protected function onCreate(){
-    try
+    if ($this->options['upload'])
     {
-      if (!$this->options['upload'])
-        throw new FileManagerException('disabled');
-        
 		if (empty($this->post['directory']) || empty($this->post['file'])) return;
 		
 		$file = $this->getName($this->post['file'], $this->getDir($this->post['directory']));
@@ -209,15 +219,7 @@ class FileManager {
 		
 		mkdir($file);
 		}
-		catch(FileManagerException $e){
-		/*
-      echo json_encode(array(
-        'status' => 0,
-        'error' => '${upload.' . $e->getMessage() . '}'
-      ));
-     */
-    }
-    
+		
 		$this->onView();
 	}
 	

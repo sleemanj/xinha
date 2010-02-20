@@ -39,6 +39,8 @@ events:
   - onShow: fired when the FileManager opens
   - onHide: event fired when FileManager closes
   - onPreview: event fired when the user clicks an image in the preview
+  - onDetails: event fired when the details are updated after user picking a file
+  - onHidePreview: event fired when the "preview" is hidden (usually, user uploading file, or changing directory)
 ...
 */
 
@@ -55,7 +57,9 @@ var FileManager = new Class({
 		onModify: $empty,
 		onShow: $empty,
 		onHide: $empty,
-		onPreview: $empty*/
+		onPreview: $empty,
+		onDetails: $empty, // Xinha: Fired when an item is picked form the files list, supplied object (eg {width: 123, height:456} )
+		onHidePreview: $empty, // Xinha: Fired when the preview is hidden (eg when uploading) */
 		directory: '',
 		url: null,
 		baseURL: '',
@@ -102,18 +106,20 @@ var FileManager = new Class({
 
 			
 			if (self.Current) self.Current.removeClass('selected');
-			self.Current = this.addClass('selected');
+			self.Current = this.addClass('selected'); // NB: Also sets self.Current
+      
+      // Xinha: We need to have Current assigned before fillInfo because fillInfo adds to it      
       self.fillInfo(file);
 			self.switchButton();
 		};
 		this.browser = new Element('ul', {'class': 'filemanager-browser'}).addEvents({
 			click: (function(){
-				return self.deselect();
+				// return self.deselect();
 			}),
 			'click:relay(li span.fi)': this.relayClick
 		}).inject(this.el);
 		
-		this.addMenuButton('create');
+		if (this.options.upload)     this.addMenuButton('create'); // Xinha: Create directory permission = upload
 		if (this.options.selectable) this.addMenuButton('open');
 		
 		this.info = new Element('div', {'class': 'filemanager-infos', opacity: 0}).inject(this.el);
@@ -123,7 +129,13 @@ var FileManager = new Class({
 			new Element('h1')
 		]);
 
-		this.info.adopt([head, new Element('h2', {text: this.language.information})]);
+    // Xinha: We need to groupt he headers and lists togethor because we will
+    // use some CSS to reorganise a bit.  So we create "infoarea" which 
+    // will contain the h2 and list for the "Information", that is
+    // modification date, size, directory etc...
+    var infoarea = new Element('div', {'class': 'filemanager-info-area'});
+
+		this.info.adopt([head, infoarea.adopt(new Element('h2', {text: this.language.information}))]);
 
 		new Element('dl').adopt([
 			new Element('dt', {text: this.language.modified}),
@@ -134,15 +146,20 @@ var FileManager = new Class({
 			new Element('dd', {'class': 'filemanager-size'}),
 			new Element('dt', {text: this.language.dir}),
 			new Element('dd', {'class': 'filemanager-dir'})
-		]).inject(this.info);
+		]).inject(infoarea);
 		
 		this.preview = new Element('div', {'class': 'filemanager-preview'}).addEvent('click:relay(img.preview)', function(){
 			self.fireEvent('preview', [this.get('src')]);
 		});
-		this.info.adopt([
+		
+	// Xinha: We need to group the headers and lists togethor because we will
+    // use some CSS to reorganise a bit.  So we create "filemanager-preview-area" which 
+    // will contain the h2 for the preview and also the preview content returned from
+    // Backend/FileManager.php
+		this.info.adopt((new Element('div', {'class': 'filemanager-preview-area'})).adopt([
 			new Element('h2', {'class': 'filemanager-headline', text: this.language.preview}),
 			this.preview
-		]);
+		]));
 		
 		this.closeIcon = new Element('div', {
 			'class': 'filemanager-close',
@@ -238,6 +255,11 @@ var FileManager = new Class({
 		if (!this.Current) return false;
 		
 		this.fireEvent('complete', [
+      // Xinha: The URL path returned by normal MootoolsFileManager is odd, it includes the last component
+      // of the base directory, that is, if your base is /foo/bar/images then we get something like
+      // images/narf.jpg.
+      // To work around this we take the URL which was worked out by Backend/FileManager.php
+      // and return that as the url.       
 			this.normalize(this.Current.file_data ? this.Current.file_data.url : this.Directory + '/' + this.Current.retrieve('file').name),
 			this.Current.retrieve('file')
 		]);
@@ -341,7 +363,7 @@ var FileManager = new Class({
 
 	},
 
-	rename: function(e, file){
+	rename: function(e, file){	
 		e.stop();
 		this.tips.hide();
 		
@@ -438,6 +460,9 @@ var FileManager = new Class({
 
 			self.relayClick.apply(el);
 		};
+		
+		if(0) // This (drag to move into subdirectory) is breaking IE, we don't need it that badly
+          // See: http://github.com/cpojer/mootools-filemanager/issues#issue/11
 		$$(els[0]).makeDraggable({
 			droppables: $$(this.droppables, els[1]),
 
@@ -537,7 +562,10 @@ var FileManager = new Class({
 		
 		this.fireHooks('cleanup');
 		this.preview.empty();
-
+		    
+    // Xinha: We need to remove our custom attributes form when the preview is hidden 
+    this.fireEvent('hidePreview');
+    
 		this.info.getElement('h1').set('text', file.name);
 		this.info.getElement('dd.filemanager-modified').set('text', file.date);
 		this.info.getElement('dd.filemanager-type').set('text', file.mime);
@@ -586,6 +614,13 @@ var FileManager = new Class({
 					window.open(this.get('value'));
 				});
 				
+				// Xinha: We need to add in a form for setting the attributes of images etc,
+				// so we add this event and pass it the information we have about the item 
+				// as returned by Backend/FileManager.php
+				this.fireEvent('details', [j]);
+				
+				// Xinha: We also want to hold onto the data so we can access it
+				// when selecting the image.
 				if(this.Current) this.Current.file_data = j;
 			}).bind(this),
 			data: {
@@ -641,11 +676,16 @@ FileManager.Request = new Class({
 	Extends: Request.JSON,
 	
 	initialize: function(options, filebrowser){
+    // Xinha: We need ALL requests from the FileManager to have our authorisation data on it
+    // normal MootoolsFileManager only has the flash send it :-(    
     if(filebrowser)
     {      
       options.url += (options.url.match(/\?/) ? '&' : '?') +Hash.toQueryString(filebrowser.options.uploadAuthData);                    
     }
     
+    // Xinha: We also need to clean up the url because our backend already includes a query string
+    // and MootoolsFileManager adds ?event=..... indiscriminately, our query string always
+    // ends in an ampersand, so we can just clean up '&?event=' to be '&event='
     options.url = options.url.replace(/&\?event=/, '&event=');
     
 		this.parent(options);
