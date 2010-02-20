@@ -4072,7 +4072,7 @@ Xinha.loadScript = function(script, plugin, callback)
 };
 
 /** Load one or more assets, sequentially, where an asset is a CSS file, or a javascript file.
- *
+ *  
  * Example Usage:
  *
  * Xinha.includeAssets( 'foo.css', 'bar.js', [ 'foo.css', 'MyPlugin' ], { type: 'text/css', url: 'foo.php', plugin: 'MyPlugin } );
@@ -4080,20 +4080,19 @@ Xinha.loadScript = function(script, plugin, callback)
  * Alternative usage, use Xinha.includeAssets() to make a loader, then use loadScript, loadStyle and whenReady methods
  * on your loader object as and when you wish, you can chain the calls if you like.
  *
- * Note whenReady can only have one active callback at a time, but once it's been called you can
- * issue another whenReady(), if there is nothing waiting to be loaded, it will be executed immediately.
+ * You may add any number of callbacks using .whenReady() multiple times.
  *
  *   var myAssetLoader = Xinha.includeAssets();
  *       myAssetLoader.loadScript('foo.js', 'MyPlugin')
  *                    .loadStyle('foo.css', 'MyPlugin');                        
  * 
  */
- 
+
 Xinha.includeAssets = function()
 {
-  var assetLoader = { pendingAssets: [ ], loaderRunning: false };
+  var assetLoader = { pendingAssets: [ ], loaderRunning: false, loadedScripts: [ ] };
   
-  assetLoader.callback = function() { };
+  assetLoader.callbacks = [ ];
   
   assetLoader.loadNext = function()
   {  
@@ -4131,6 +4130,17 @@ Xinha.includeAssets = function()
     return this;
   };
   
+  assetLoader.loadScriptOnce = function(url, plugin)
+  {
+    for(var i = 0; i < this.loadedScripts.length; i++)
+    {
+      if(this.loadedScripts[i].url == url && this.loadedScripts[i].plugin == plugin)
+        return this; // Already done (or in process)
+    }
+    
+    return this.loadScript(url, plugin);
+  }
+  
   assetLoader.loadStyle = function(url, plugin)
   {
     var self = this;
@@ -4143,7 +4153,7 @@ Xinha.includeAssets = function()
   
   assetLoader.whenReady = function(callback) 
   {
-    this.callback = callback;    
+    this.callbacks.push(callback);    
     if(!this.loaderRunning) this.loadNext();
     
     return this;    
@@ -4151,8 +4161,12 @@ Xinha.includeAssets = function()
   
   assetLoader.runCallback = function()
   {
-    this.callback();
-    this.callback = null;
+    while(this.callbacks.length)
+    { 
+      var _callback = this.callbacks.splice(0,1);
+      _callback[0]();
+      _callback = null;
+    }
     return this;
   }
   

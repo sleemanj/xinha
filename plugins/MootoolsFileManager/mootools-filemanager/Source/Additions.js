@@ -87,7 +87,7 @@ this.Dialog = new Class({
 		
 		if (this.options.content) this.el.getElement('div').adopt(this.options.content);
 		
-		Array.each(this.options.buttons, function(v){
+		Array.each(this.options.buttons, function(v){		
 			new Element('button', {'class': 'fm-dialog-' + v, text: this.options.language[v]}).addEvent('click', (function(e){
 				if (e) e.stop();
 				this.fireEvent(v).fireEvent('close');

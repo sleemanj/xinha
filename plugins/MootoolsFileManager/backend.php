@@ -99,8 +99,8 @@ switch ( @$_REQUEST[ "__function" ] )
       
       'suggestedMaxImageDimension' => $IMConfig['suggested_images_image_dimension'],
             
-      'destroy'       => $IMConfig['allow_delete'],
-     // 'filter'        => $IMConfig['files_filter'],
+      'destroy'       => $IMConfig['allow_images_delete'],
+      'filter'        => 'image/',
             
     ));
 
@@ -121,7 +121,7 @@ switch ( @$_REQUEST[ "__function" ] )
       
       'suggestedMaxImageDimension' => $IMConfig['suggested_files_image_dimension'],
             
-      'destroy'       => $IMConfig['allow_delete'],
+      'destroy'       => $IMConfig['allow_files_delete'],
      // 'filter'        => $IMConfig['files_filter'],
             
     ));

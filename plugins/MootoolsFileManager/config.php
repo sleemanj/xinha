@@ -110,10 +110,12 @@
   */
 
   $IMConfig['allow_files_upload']     = false;
+  $IMConfig['allow_files_delete']     = false;
   $IMConfig['max_files_upload_size']  = '3M';
   $IMConfig['suggested_files_image_dimension']  = array('width' => 2048, 'height' => 1536);
 
-  $IMConfig['allow_images_upload']    = false;
+  $IMConfig['allow_images_upload']     = false;
+  $IMConfig['allow_images_delete']     = false;
   $IMConfig['max_images_upload_size']  = '3M';
   $IMConfig['suggested_images_image_dimension']  = array('width' => 1024, 'height' => 768);
 
@@ -174,8 +176,7 @@ require_once(realpath(dirname(__FILE__) . '/../../contrib/php-xinha.php'));
 if($passed_data = xinha_read_passed_data())
 {
   $IMConfig = array_merge($IMConfig, $passed_data);
-  $IMConfig['backend_url'] .= xinha_passed_data_querystring() . '&';  
 }
-
+@session_write_close(); // Close session now so we don't lock.
 
 ?>
