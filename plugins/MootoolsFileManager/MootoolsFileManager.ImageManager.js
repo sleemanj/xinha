@@ -324,8 +324,13 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
           th.className = td.className = 'filemanager-f_borderColor';    
         }
       }
-            
-      return table;
+      
+      var div = document.createElement('div');
+      var h2 = document.createElement('h2');
+      h2.appendChild(document.createTextNode('Image Attributes'));
+      div.appendChild(h2);
+      div.appendChild(table);
+      return div;
     })();
     
     
@@ -439,8 +444,8 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
         {
           var new_size = self.ScaleImage(details, {width: f('f_width').value, height: f('f_height').value});
           
-          f('f_width').value = new_size.width;
-          f('f_height').value = new_size.height;
+          f('f_width').value = f('f_width').value   ? new_size.width : '';
+          f('f_height').value = f('f_height').value ? new_size.height : '';
         }
       },
       
