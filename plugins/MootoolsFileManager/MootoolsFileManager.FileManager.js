@@ -91,6 +91,8 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
         selectable:     true,
         uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
         onComplete:     function(path, file) { self.FileManagerReturn(path,file); },
+        onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
+        onShow:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = ''; },
         onDetails:      function(details) 
                         {                                                 
                           this.info.adopt(self.FileManagerAttributes(details)); 

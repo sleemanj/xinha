@@ -71,6 +71,8 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       upload:         this.phpcfg.allow_images_upload,
       uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
       onComplete:     function(path, file) { self.ImageManagerReturn(path,file); },
+      onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
+      onShow:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = ''; },
       onDetails:      function(details) 
                       {                                                 
                         this.info.adopt(self.ImageManagerAttributes(details)); 
