@@ -81,6 +81,11 @@
       return "'" . xinha_js_encode($var) . "'";
     }
   
+    if(is_bool($var))
+    {
+      return $var ? 'true': 'false';
+    }
+  
     if(is_array($var))
     {
       $useObject = false;
