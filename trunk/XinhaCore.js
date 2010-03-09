@@ -834,6 +834,13 @@ Xinha.Config = function()
    */
   this.toolbarAlign = "left";
   
+  /** Set to true to display the font names in the toolbar font select list in their actual font.
+   *  Note that this doesn't work in IE, but doesn't hurt anything either.
+   *  Default: <code>false</code>
+   *  @type Boolean
+   */
+   this.showFontStylesInToolbar = false;
+  
   /** Set to true if you want the loading panel to show at startup<br />
    *  Default: <code>false</code>
    *  @type Boolean
@@ -1765,6 +1772,10 @@ Xinha.prototype._createToolbar1 = function (editor, toolbar, tb_objects)
         var op = document.createElement("option");
         op.innerHTML = Xinha._lc(i);
         op.value = options[i];
+        if (txt =='fontname' && editor.config.showFontStylesInToolbar)
+        {
+          op.style.fontFamily = options[i];
+        }
         el.appendChild(op);
       }
       Xinha._addEvent(el, "change", function () { editor._comboSelected(el, txt); } );
