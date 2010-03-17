@@ -59,7 +59,8 @@ Xinha.RegExpCache = [
 /*23*/  /(^|<\/script>)[\s\S]*?(<script[^>]*>|$)/g //find content NOT inside script tags
 ];
 // compile for performance; WebKit doesn't support this
-if (typeof RegExp.prototype.compile == 'function') {
+var testRE = new RegExp().compile(Xinha.RegExpCache[3]);
+if (typeof testRE != 'undefined') {
 	for (var i=0; i<Xinha.RegExpCache.length;i++ ) {
 		Xinha.RegExpCache[i] = new RegExp().compile(Xinha.RegExpCache[i]);
 	}
