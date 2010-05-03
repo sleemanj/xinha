@@ -84,7 +84,7 @@ foreach ($return as $file)
 	$file_prefix = $prefix."\n/* The URL of the most recent version of this file is $file_url */";
 	
 	exec("echo \"".(preg_match('/XinhaCore.js$/',$file) ? $file_prefix.$core_prefix : $file_prefix)."\" > $file && java -jar ${cwd}/dojo_js_compressor.jar -c ${file}_uncompr.js >> $file 2>&1");
-	if (preg_match('/js: ".*?", line \d+:/',file_get_contents($file)))
+	if (preg_match('/js: ".*?", line \d+:/',file_get_contents($file)) || preg_match('/sh: java: command not found/', file_get_contents($file)))
 	{
 		unlink($file);
 		rename($file."_uncompr.js",$file);
