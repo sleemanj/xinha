@@ -165,7 +165,7 @@ Equation.prototype.unParse = function ()
 	{
 		var node = spans[i];
 		if (node.className.indexOf ("AM") == -1 || node.getElementsByTagName("math").length == 0) continue;
-		var formula = node.getAttribute("title");
+		var formula = '`' + node.getElementsByTagName('math')[0].getAttribute('title') + '`';
 		node.innerHTML = formula;
 		node.setAttribute("title", null);
 	}
