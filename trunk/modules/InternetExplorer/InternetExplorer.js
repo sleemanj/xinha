@@ -333,8 +333,8 @@ Xinha.prototype.getParentElement = function(sel)
   if ( typeof sel == 'undefined' )
   {
     sel = this.getSelection();
-  }
-  var range = this.createRange(sel);
+  } 
+  var range = this.createRange(sel); 
   switch ( sel.type )
   {
     case "Text":
@@ -799,7 +799,20 @@ Xinha.prototype.getSelection = function()
 Xinha.prototype.createRange = function(sel)
 {
   if (!sel) sel = this.getSelection();
-  if(sel.type == 'None') this.focusEditor();
+  
+  // ticket:1508 - when you do a key event within a 
+  // absolute position div, in IE, the toolbar update
+  // for formatblock etc causes a getParentElement() (above)
+  // which produces a "None" select, then if we focusEditor() it
+  // defocuses the absolute div and focuses into the iframe outside of the
+  // div somewhere.  
+  //
+  // Removing this is probably a workaround and maybe it breaks something else
+  // focusEditor is used in a number of spots, I woudl have thought it should
+  // do nothing if the editor is already focused.
+  //
+  // if(sel.type == 'None') this.focusEditor();
+  
   return sel.createRange();
 };
 
