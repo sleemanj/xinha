@@ -73,7 +73,7 @@ Xinha.Config.prototype.ExtendedFileManager =
   // deprecated keys, use passing data through e.g. xinha_pass_to_php_backend()
   'backend_config'     : null,
   'backend_config_hash': null,
-  'backend_config_secret_key_location': 'Xinha:ImageManager'
+  'backend_config_secret_key_location': 'Xinha:ExtendedFileManager'
 };
 
 // Over ride the _insertImage function in htmlarea.js.

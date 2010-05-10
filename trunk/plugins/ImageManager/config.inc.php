@@ -411,6 +411,13 @@ elseif(isset($_REQUEST['backend_config']))
     $_REQUEST['backend_config'] = stripslashes($_REQUEST['backend_config']);
   }
   
+  if($_REQUEST['backend_config_secret_key_location'] !== 'Xinha:ImageManager')
+  {
+    trigger_error(E_USER_ERROR, 'Programming Error - please contact the website administrator/programmer to alert them to this problem. A non-default backend key location is being used to pass backend data to Xinha, but the same key location is not being used to receive data.  The special backend configuration has been ignored.  To resolve this, you should edit plugins/ImageManager/config.php and change the default key location from "Xinha:ImageManager" to your desired non default.  See: http://trac.xinha.org/ticket/1518');    
+  }
+  else
+  {
+  
   // Config specified from front end, check that it's valid
   session_start();
   $secret = $_SESSION[$_REQUEST['backend_config_secret_key_location']];
@@ -430,7 +437,7 @@ elseif(isset($_REQUEST['backend_config']))
   $IMConfig['backend_url'] .= "backend_config=" . rawurlencode($_REQUEST['backend_config']) . '&';
   $IMConfig['backend_url'] .= "backend_config_hash=" . rawurlencode($_REQUEST['backend_config_hash']) . '&';
   $IMConfig['backend_url'] .= "backend_config_secret_key_location=" . rawurlencode($_REQUEST['backend_config_secret_key_location']) . '&';
-
+  }
 }
 
 define('IMAGE_CLASS', $IMConfig['IMAGE_CLASS']);
