@@ -1170,6 +1170,18 @@ Xinha.Config = function()
     removeformat: [ "Remove formatting", ["ed_buttons_main.png",4,4], false, function(e) { e.execCommand("removeformat"); } ],
     killword: [ "Clear MSOffice tags", ["ed_buttons_main.png",4,3], false, function(e) { e.execCommand("killword"); } ]
   };
+  
+  /** A hash of double click handlers for the given elements, each element may have one or more double click handlers
+   *  called in sequence.  The element may contain a class selector ( a.somethingSpecial )
+   *  
+   */
+   
+  this.dblclickList = 
+  {
+    "a": [function(e, target) {e._createLink(target);}],
+    "img": [function(e, target) {e._insertImage(target);}]
+  };
+  
   /** A container for additional icons that may be swapped within one button (like fullscreen)
    * @private
    */
@@ -3555,6 +3567,16 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
           return editor._editorEvent(Xinha.is_ie ? editor._iframe.contentWindow.event : event);
         }
       );
+      
+      Xinha._addEvents(
+        doc, 
+        ["dblclick"],
+        function (event)
+        {
+          return editor._onDoubleClick(Xinha.is_ie ? editor._iframe.contentWindow.event : event);
+        }
+      );
+      
       if(resetting_events_for_opera) return;
 
       // FIXME - this needs to be cleaned up and use editor.firePluginEvent
@@ -5439,6 +5461,25 @@ Xinha.prototype._editorEvent = function(ev)
     },
     250);
   }
+};
+
+/** Handle double click events.
+ *  See dblclickList in the config.
+ */
+ 
+Xinha.prototype._onDoubleClick = function(ev)
+{
+  var editor=this;
+  var target = Xinha.is_ie ? ev.srcElement : ev.target;
+  var tag = target.tagName;
+  var className = target.className;
+  if (tag) {
+    tag = tag.toLowerCase();
+    if (className && (this.config.dblclickList[tag+"."+className] != undefined))
+      this.config.dblclickList[tag+"."+className][0](editor, target);
+    else if (this.config.dblclickList[tag] != undefined)
+      this.config.dblclickList[tag][0](editor, target);
+  };
 };
 
 /** Handles ctrl + key shortcuts 
