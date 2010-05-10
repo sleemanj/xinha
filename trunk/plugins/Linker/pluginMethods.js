@@ -359,7 +359,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
   {
     if(typeof files[i] == 'string')
     {
-      this.dTree.add(Linker.nxtid++, parent,
+      this.dTree.add(this.Dialog_nxtid++, parent,
                      files[i].replace(/^.*\//, ''),
                      'javascript:document.getElementsByName(\'' + this.dialog.id.href + '\')[0].value=decodeURIComponent(\'' + encodeURIComponent(files[i]) + '\');document.getElementsByName(\'' + this.dialog.id.type + '\')[0].click();document.getElementsByName(\'' + this.dialog.id.href + '\')[0].focus();void(0);',
                      files[i]);
@@ -372,12 +372,7 @@ Linker.Dialog.prototype.makeNodes = function(files, parent)
     }
     else if(typeof files[i] == 'object')
     {
-      if(files[i].children) {
-        var id = this.Dialog_nxtid++;
-      } else {
-        var id = Linker.nxtid++;
-      }
-
+      var id = this.Dialog_nxtid++;     
       if(files[i].title) var title = files[i].title;
       else if(files[i].url) var title = files[i].url.replace(/^.*\//, '');
       else var title = "no title defined";
