@@ -191,6 +191,8 @@ Equation.prototype.buttonPress = function()
 
 Equation.prototype.insert = function (param)
 {
+	if (typeof param == 'undefined' || param == null) return;
+
 	if (typeof param["formula"] != "undefined")
 	{
 		var formula = (param["formula"] != '') ? param["formula"].replace(/^`?(.*)`?$/m,"`$1`") : '';
