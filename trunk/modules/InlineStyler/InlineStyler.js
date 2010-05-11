@@ -111,7 +111,7 @@ Xinha.InlineStyler.prototype.applyStyle = function(params)
       }
       break;
     case "borderWidth":
-      style[i] = val + "px";
+      style[i] = val ? val + "px" : '0px';
       break;
     default:      
       style[i] = val;

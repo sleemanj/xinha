@@ -534,9 +534,6 @@ TableOperations.prototype.dialogTableProperties = function() {
       case "summary":
         table.summary = val;
         break;
-      case "width":
-        table.style.width = ("" + val) + params.f_unit;
-        break;
       case "align":
         table.align = val;
         break;

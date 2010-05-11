@@ -362,7 +362,15 @@ Xinha.prototype.getParentElement = function(sel)
       // only correct, but very important to us.  MSIE is
       // certainly the buggiest browser in the world and I
       // wonder, God, how can Earth stand it?
-      return range.parentElement();
+      try
+      {
+        return range.parentElement();
+      }
+      catch(e)
+      {
+        return this._doc.body; // ??
+      }
+      
     case "Control":
       return range.item(0);
     default:
@@ -447,9 +455,9 @@ Xinha.prototype.selectionEmpty = function(sel)
  * 
  * @returns Range
  */
-Xinha.prototype.saveSelection = function()
+Xinha.prototype.saveSelection = function(sel)
 {
-  return this.createRange(this.getSelection())
+  return this.createRange(sel ? sel : this.getSelection())
 }
 /** 
  * Restores a selection previously stored

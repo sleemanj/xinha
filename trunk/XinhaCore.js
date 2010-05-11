@@ -1546,8 +1546,7 @@ Xinha.prototype._createToolbar = function ()
   var toolbar = document.createElement("div");
   // ._toolbar is for legacy, ._toolBar is better thanks.
   this._toolBar = this._toolbar = toolbar;
-  toolbar.className = "toolbar";
-  toolbar.unselectable = "1";
+  toolbar.className = "toolbar";  
   toolbar.align = this.config.toolbarAlign;
   
   Xinha.freeLater(this, '_toolBar');
@@ -1558,6 +1557,21 @@ Xinha.prototype._createToolbar = function ()
   this._toolbarObjects = tb_objects;
 
 	this._createToolbar1(editor, toolbar, tb_objects);
+	
+	// IE8 is totally retarded, if you click on a toolbar element (eg button)
+	// and it doesn't have unselectable="on", then it defocuses the editor losing the selection
+	// so nothing works.  Particularly prevalent with TableOperations
+	function noselect(e)
+	{
+    if(e.tagName) e.unselectable = "on";        
+    if(e.childNodes)
+    {
+      for(var i = 0; i < e.childNodes.length; i++) if(e.tagName) noselect(e.childNodes(i));
+    }
+	}
+	noselect(toolbar);
+	
+	
 	this._htmlArea.appendChild(toolbar);      
   
   return toolbar;
@@ -3614,7 +3628,7 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
         {
           editor.sizeEditor(); 
         }
-      });
+      });      
       editor.removeLoadingMessage();
     }
   );
