@@ -1569,7 +1569,7 @@ Xinha.prototype._createToolbar = function ()
       for(var i = 0; i < e.childNodes.length; i++) if(e.tagName) noselect(e.childNodes(i));
     }
 	}
-	noselect(toolbar);
+	if(Xinha.is_ie) noselect(toolbar);
 	
 	
 	this._htmlArea.appendChild(toolbar);      
