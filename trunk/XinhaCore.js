@@ -5736,6 +5736,7 @@ Xinha.prototype.inwardHtml = function(html)
   
   html = this.inwardSpecialReplacements(html);
 
+  html = html.replace(/(<script)(?![^>]*((type=[\"\']text\/)|(language=[\"\']))javascript[\"\'])/gi,'$1 type="text/javascript"');
   html = html.replace(/(<script[^>]*((type=[\"\']text\/)|(language=[\"\'])))(javascript)/gi,"$1freezescript");
 
   // For IE's sake, make any URLs that are semi-absolute (="/....") to be
