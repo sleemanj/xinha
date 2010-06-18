@@ -863,6 +863,11 @@ Xinha.Config = function()
    */
    this.convertUrlsToLinks = true;
 
+ /** Set to true to hide media objects when a div-type dialog box is open, to prevent show-through
+  *  Default: <code>false</code>
+  *  @type Boolean
+  */
+  this.hideObjectsBehindDialogs = false;
 
  /** Size of color picker cells<br />
    * Use number + "px"<br />

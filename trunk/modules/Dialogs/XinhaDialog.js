@@ -537,6 +537,23 @@ Xinha.Dialog.prototype.show = function(values)
         }
       }
     });
+    //hide object & embed tags in document so they won't show through
+    if (this.editor.config.hideObjectsBehindDialogs)
+    {
+      this.objTags = this.editor._doc.getElementsByTagName('object');
+      this.embedTags = this.editor._doc.getElementsByTagName('embed');
+      for (var j=0; j<this.objTags.length; j++)
+      {
+        this.objTags[j].__object_hidden = this.objTags[j].style.visibility;
+        this.objTags[j].style.visibility = 'hidden';
+      }
+      for (j=0; j<this.embedTags.length; j++)
+      {
+        this.embedTags[j].__embed_hidden = this.embedTags[j].style.visibility;
+        this.embedTags[j].style.visibility = 'hidden';
+      }
+    }
+
     var dialogHeight = rootElem.offsetHeight;
     var dialogWidth = rootElem.offsetWidth;
     var viewport = Xinha.viewportSize();
@@ -638,6 +655,19 @@ Xinha.Dialog.prototype.hide = function()
       this.editor._textArea.style.display = this._restoreTo[0];
       this.editor._iframe.style.visibility   = this._restoreTo[1];
       this.editor.showPanels(this._restoreTo[2]);
+    }
+
+    //restore visibility of object & embed tags in document
+    if (this.editor.config.hideObjectsBehindDialogs)
+    {
+      for (var j=0; j<this.objTags.length; j++)
+      {
+        this.objTags[j].style.visibility = this.objTags[j].__object_hidden;
+      }
+      for (j=0; j<this.embedTags.length; j++)
+      {
+        this.embedTags[j].style.visibility = this.embedTags[j].__embed_hidden;
+      }
     }
 
     if (!this.editor._isFullScreen && this.modal)
