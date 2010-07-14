@@ -95,7 +95,7 @@ class Upload {
 		
 		$mime = null;
 		$ini = error_reporting(0);
-		if (function_exists('finfo_open') && $f = finfo_open(FILEINFO_MIME, getenv('MAGIC'))){
+		if (function_exists('finfo_open') && $f = @finfo_open(FILEINFO_MIME, getenv('MAGIC'))){
 			$mime = finfo_file($f, $file);
 			finfo_close($f);
 		}
