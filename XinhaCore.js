@@ -7222,7 +7222,7 @@ if ( !Array.prototype.indexOf )
         return i;
       }
     }
-    return null;
+    return -1;
   };
 }
 if ( !Array.prototype.append )
