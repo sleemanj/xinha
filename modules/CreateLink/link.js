@@ -28,7 +28,12 @@ function CreateLink(editor) {
 	var cfg = editor.config;
 	var self = this;
 
-   editor.config.btnList.createlink[3] = function() { self.show(self._getSelectedAnchor()); }
+	if(typeof editor._createLink == 'undefined') {
+	    editor._createLink = function(target) {
+		if(!target) target = self._getSelectedAnchor();
+		self.show(target);
+	    }
+	}
 }
 
 CreateLink._pluginInfo = {
