@@ -37,7 +37,7 @@ function DoubleClick(editor) {
   //              - target is the selected object
   this.editor.dblClickList = {
     // Edit Link dialog
-    a: [ function(e) {e.config.btnList['createlink'][3](e); } ],
+    a: [ function(e, target) {e.execCommand("createlink", false, target);} ],
     // Follow link
     //a: [ function(editor, target) { window.location = target.href; properties(target); } ],
 

@@ -1154,7 +1154,7 @@ Xinha.Config = function()
     selectall: [ "Select all", ["ed_buttons_main.png",3,5], false, function(e) {e.execCommand("selectall");} ],
 
     inserthorizontalrule: [ "Horizontal Rule", ["ed_buttons_main.png",6,0], false, function(e) { e.execCommand("inserthorizontalrule"); } ],
-    createlink: [ "Insert Web Link", ["ed_buttons_main.png",6,1], false, function(e) { e._createLink(); } ],
+    createlink: [ "Insert Web Link", ["ed_buttons_main.png",6,1], false, function(e) { e.execCommand("createlink"); } ],
     insertimage: [ "Insert/Modify Image", ["ed_buttons_main.png",6,3], false, function(e) { e.execCommand("insertimage"); } ],
     inserttable: [ "Insert Table", ["ed_buttons_main.png",6,2], false, function(e) { e.execCommand("inserttable"); } ],
 
@@ -1183,7 +1183,7 @@ Xinha.Config = function()
    
   this.dblclickList = 
   {
-    "a": [function(e, target) {e._createLink(target);}],
+      "a": [function(e, target) {e.execCommand("createlink", false, target);}],
     "img": [function(e, target) {e._insertImage(target);}]
   };
   
