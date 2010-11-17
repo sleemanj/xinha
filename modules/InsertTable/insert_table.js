@@ -38,8 +38,12 @@ function InsertTable(editor) {
 	var cfg = editor.config;
 	var self = this;
 
-	editor.config.btnList.inserttable[3] = function() { self.show(); }
-      }
+	if(typeof editor._insertTable == 'undefined') {
+	    editor._insertTable = function() {
+		self.show();
+	    }
+	}
+}
 
 InsertTable.prototype._lc = function(string) {
 	return Xinha._lc(string, 'Xinha');
