@@ -30,7 +30,7 @@ function DefinitionList(editor) {
 
 DefinitionList._pluginInfo = {
   name          : "DefinitionList",
-  version       : "1.0",
+  version       : "1.1",
   developer     : "Udo Schmal",
   developer_url : "",
   c_owner       : "Udo Schmal",
