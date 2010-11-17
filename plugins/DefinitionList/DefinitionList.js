@@ -55,12 +55,16 @@ DefinitionList.prototype.onGenerate = function() {
 DefinitionList.prototype.buttonPress = function(editor,button_id) {
   if (button_id=='dl') { //definition list
     var pe = editor.getParentElement();
-    while (pe.parentNode.tagName.toLowerCase() != 'body') {
-      pe = pe.parentNode;
+    if( pe.tagName.toLowerCase() != 'body' ) {
+      while (pe.parentNode.tagName.toLowerCase() != 'body') {
+        pe = pe.parentNode;
+      }
     }
     var dx = editor._doc.createElement(button_id);
     dx.innerHTML = '&nbsp;';
-    if(pe.parentNode.lastChild==pe) {
+    if( pe.tagName.toLowerCase() == 'body' ) {
+      pe.appendChild(dx);
+    }else if(pe.parentNode.lastChild==pe) {
       pe.parentNode.appendChild(dx);
     }else{
       pe.parentNode.insertBefore(dx,pe.nextSibling);
