@@ -3798,13 +3798,13 @@ Xinha.loadPlugin = function(pluginName, callback, url)
         nextstage = 'unsupported_old_name';
         dir = Xinha.getPluginDir(pluginName, true);
         file = pluginName + ".js";
-        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/wiki/Documentation/UnsupportedPlugins';
         break;
       case 'unsupported_old_name':
         nextstage = '';
         dir = Xinha.getPluginDir(pluginName, true);
         file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/wiki/Documentation/UnsupportedPlugins';
         break;
       default:
         Xinha._pluginLoadStatus[pluginName] = 'failed';
