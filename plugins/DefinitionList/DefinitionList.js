@@ -9,28 +9,25 @@ function DefinitionList(editor) {
   var bl = DefinitionList.btnList;
   var self = this;
   // register the toolbar buttons provided by this plugin
-  var toolbar = ["linebreak"];
   for (var i = 0; i < bl.length; ++i) {
     var btn = bl[i];
     if (!btn) {
-      toolbar.push("separator");
-    } else {
-      var id = btn[0];
-      cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "DefinitionList"), false,
-             function(editor, id) {
-               // dispatch button press event
-               self.buttonPress(editor, id);
-             });
-      toolbar.push(id);
+      continue;
     }
+    var id = btn[0];
+    cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "DefinitionList"), false,
+      function(editor, id) {
+        // dispatch button press event
+        self.buttonPress(editor, id);
+      });
   }
 
   // We'll insert the buttons next to the UL/OL buttons, if they exist.
   // If neither of those buttons exists, addToolbarElement puts our buttons
   // at the beginning of the toolbar, which is good enough.
-  for( var i = 0; i < toolbar.length; ++i ) {
-    cfg.addToolbarElement(toolbar[i], ["insertunorderedlist", "insertorderedlist"], 1);
-  }
+  cfg.addToolbarElement("dl", ["insertunorderedlist", "insertorderedlist"], 1);
+  cfg.addToolbarElement("dt", "dl", 1);
+  cfg.addToolbarElement("dd", "dt", 1);
 }
 
 DefinitionList._pluginInfo = {
