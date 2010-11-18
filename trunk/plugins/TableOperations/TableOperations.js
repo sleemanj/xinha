@@ -62,7 +62,8 @@ function TableOperations(editor) {
   {
     Xinha._loadback(_editor_url + 'modules/InlineStyler/InlineStyler.js');
   }
-  
+
+  cfg.dblclickList['td'] = [function() { self.dialogTableProperties() }];
 }
 
 TableOperations._pluginInfo = {
