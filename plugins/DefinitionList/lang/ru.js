@@ -2,7 +2,7 @@
 
 // LANG: "ru", ENCODING: UTF-8
 
-// Author: zerok
+// Author: Helen Mitkina (zerok) <e.mitkina at gmail>
 {
   "definition list": "Список с определением",
   "definition term": "Заголовок",
