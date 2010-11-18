@@ -24,8 +24,13 @@ function DefinitionList(editor) {
       toolbar.push(id);
     }
   }
-  // add a new line in the toolbar
-  cfg.toolbar.push(toolbar);
+
+  // We'll insert the buttons next to the UL/OL buttons, if they exist.
+  // If neither of those buttons exists, addToolbarElement puts our buttons
+  // at the beginning of the toolbar, which is good enough.
+  for( var i = 0; i < toolbar.length; ++i ) {
+    cfg.addToolbarElement(toolbar[i], ["insertunorderedlist", "insertorderedlist"], 1);
+  }
 }
 
 DefinitionList._pluginInfo = {
