@@ -55,14 +55,16 @@ DefinitionList.prototype.onGenerate = function() {
 };
 
 DefinitionList.prototype.buttonPress = function(editor,button_id) {
+  var pe;
+  var dx;
   if (button_id=='dl') { //definition list
-    var pe = editor.getParentElement();
+    pe = editor.getParentElement();
     if( pe.tagName.toLowerCase() != 'body' ) {
       while (pe.parentNode.tagName.toLowerCase() != 'body') {
         pe = pe.parentNode;
       }
     }
-    var dx = editor._doc.createElement(button_id);
+    dx = editor._doc.createElement(button_id);
     dx.innerHTML = '&nbsp;';
     if( pe.tagName.toLowerCase() == 'body' ) {
       pe.appendChild(dx);
@@ -72,15 +74,15 @@ DefinitionList.prototype.buttonPress = function(editor,button_id) {
       pe.parentNode.insertBefore(dx,pe.nextSibling);
     }
   } else if ((button_id=='dt')||(button_id=='dd')) { //definition term or description
-    var pe = editor.getParentElement();
+    pe = editor.getParentElement();
     while (pe && (pe.nodeType == 1) && (pe.tagName.toLowerCase() != 'body')) {
       if(pe.tagName.toLowerCase() == 'dl') {
-        var dx = editor._doc.createElement(button_id);
+        dx = editor._doc.createElement(button_id);
         dx.innerHTML = '&nbsp;';
         pe.appendChild(dx);
         break;
       }else if((pe.tagName.toLowerCase() == 'dt')||(pe.tagName.toLowerCase() == 'dd')){
-        var dx = editor._doc.createElement(button_id)
+        dx = editor._doc.createElement(button_id);
         dx.innerHTML = '&nbsp;';
         if(pe.parentNode.lastChild==pe) {
         pe.parentNode.appendChild(dx);
