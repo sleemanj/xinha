@@ -1031,15 +1031,17 @@ Xinha.Config = function()
    *<pre>
    *xinha_config.formatblock =
    *{
-   *  "&#8212; size &#8212;": "",
-   *  "1 (8 pt)" : "1",
-   *  "2 (10 pt)": "2",
-   *  "3 (12 pt)": "3",
-   *  "4 (14 pt)": "4",
-   *  "5 (18 pt)": "5",
-   *  "6 (24 pt)": "6",
-   *  "7 (36 pt)": "7"
-   *};
+   *  "&#8212; format &#8212;": "", // &#8212; is mdash
+   *  "Heading 1": "h1",
+   *  "Heading 2": "h2",
+   *  "Heading 3": "h3",
+   *  "Heading 4": "h4",
+   *  "Heading 5": "h5",
+   *  "Heading 6": "h6",
+   *  "Normal"   : "p",
+   *  "Address"  : "address",
+   *  "Formatted": "pre"
+   *}
    *</pre>
    * @type Object
    */
