@@ -1186,6 +1186,22 @@ Xinha.Config = function()
       "a": [function(e, target) {e.execCommand("createlink", false, target);}],
     "img": [function(e, target) {e._insertImage(target);}]
   };
+
+ /**
+  * HTML class attribute to apply to the <body> tag within the editor's iframe.
+  * If it is not specified, no class will be set.
+  * 
+  *  Default: <code>null</code>
+  */
+  this.bodyClass = null;
+
+ /**
+  * HTML ID attribute to apply to the <body> tag within the editor's iframe.
+  * If it is not specified, no ID will be set.
+  * 
+  *  Default: <code>null</code>
+  */
+  this.bodyID = null;
   
   /** A container for additional icons that may be swapped within one button (like fullscreen)
    * @private
