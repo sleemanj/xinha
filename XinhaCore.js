@@ -4908,16 +4908,16 @@ Xinha.prototype.updateToolbar = function(noStatus)
           }
         }
 
-        var deepestAncestor = this._getFirstAncestor(this.getSelection(), blocks);
+        var match = this._getFirstAncestorAndWhy(this.getSelection(), blocks);
+        var deepestAncestor = match[0];
+        var matchIndex = match[1]; 
+
+
         if ( deepestAncestor )
         {
-          for ( var x = 0; x < blocks.length; x++ )
-          {
-            if ( blocks[x].toLowerCase() == deepestAncestor.tagName.toLowerCase() )
-            {
-              btn.element.selectedIndex = x;
-            }
-          }
+          // the function can return null for its second element even if a match is found,
+          // but we passed in an array, so we know it will be a numerical index.
+	  btn.element.selectedIndex = matchIndex;
         }
         else
         {
@@ -5042,10 +5042,21 @@ Xinha.prototype.getAllAncestors = function()
 
 /** Traverses the DOM upwards and returns the first element that is of one of the specified types
  *  @param {Selection} sel  Selection object as returned by getSelection
- *  @param {Array} types Array of matching criteria.  Each criteria is either a string containing the tag name, or a callback used to select the element.
+ *  @param {Array|String} types Array of matching criteria.  Each criteria is either a string containing the tag name, or a callback used to select the element.
  *  @returns {DomNode|null} 
  */
 Xinha.prototype._getFirstAncestor = function(sel, types)
+{
+  return this._getFirstAncestorAndWhy(sel, types)[0];
+};
+
+/** Traverses the DOM upwards and returns the first element that is one of the specified types,
+ *  and which (of the specified types) the found element successfully matched.
+ *  @param {Selection} sel  Selection object as returned by getSelection
+ *  @param {Array|String} types Array of matching criteria.  Each criteria is either a string containing the tag name, or a callback used to select the element.
+ *  @returns {Array} The array will look like [{DomNode|null}, {Integer|null}] -- that is, it always contains two elements.  The first element is the element that matched, or null if no match was found. The second is the numerical index that can be used to identify which element of the "types" was responsible for the match.  It will be null if no match was found.  It will also be null if the "types" argument was omitted. 
+ */
+Xinha.prototype._getFirstAncestorAndWhy = function(sel, types)
 {
   var prnt = this.activeElement(sel);
   if ( prnt === null )
@@ -5057,7 +5068,7 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
     }
     catch(ex)
     {
-      return null;
+      return [null, null];
     }
   }
 
@@ -5072,16 +5083,16 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
     {
       if ( types === null )
       {
-        return prnt;
+	return [prnt, null];
       }
       for (var index=0; index<types.length; ++index) {
         if (typeof types[index] == 'string' && types[index] == prnt.tagName.toLowerCase()){
           // Criteria is a tag name.  It matches
-        return prnt;
+	  return [prnt, index];
       }
         else if (typeof types[index] == 'function' && types[index](this, prnt)) {
           // Criteria is a callback.  It matches
-          return prnt;
+	  return [prnt, index];
         }
       }
 
@@ -5097,7 +5108,7 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
     prnt = prnt.parentNode;
   }
 
-  return null;
+  return [null, null];
 };
 
 /** Traverses the DOM upwards and returns the first element that is a block level element
