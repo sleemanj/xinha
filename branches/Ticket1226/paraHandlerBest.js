@@ -944,18 +944,26 @@ EnterParagraphs.RunTests = function(xinha, debug)
       if (typeof cursorAfter2 != 'undefined') {
         setCursor(cursorAfter2);
         if ((selection.anchorNode != cAnchor) || (selection.anchorOffset != cOffset)) {
-          console.error('Actual anchor:', selection.anchorNode, 'Actual offset:', selection.anchorOffset, 'Expected anchor:', cAnchor, 'Expected offset:', cOffset);
+          console.error('Actual anchor: ' + selection.anchorNode +
+                       '\nActual offset: ' + selection.anchorOffset +
+                       '\nExpected anchor: ' + cAnchor +
+                       '\nExpected offset: ' + cOffset);
         }
       } else {
-        console.error('Actual anchor:', selection.anchorNode, 'Actual offset:', selection.anchorOffset, 'Expected anchor:', cAnchor, 'Expected offset:', cOffset);
+        console.error('Actual anchor: ' + selection.anchorNode +
+                     '\nActual offset: ' + selection.anchorOffset +
+                     '\nExpected anchor: ' + cAnchor +
+                     '\nExpected offset: ' + cOffset);
       }
     }
 
     result = xinha.getInnerHTML();
     if (result == after) {
-      console.info('Success!')
+      console.info('Success!');
     } else {
-      console.error('Was', null, before, null, 'Expected', null, after, null, 'Got', null, result, null)
+      console.error('Was: \n' + before +
+                   '\nExpected: \n' + after +
+                   '\nGot: \n' + result);
     }
     console.groupEnd();
   }
