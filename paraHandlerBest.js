@@ -859,7 +859,7 @@ EnterParagraphs.prototype.cursorAtEnd = function (cursorNode, cursorOffset)
 */
 EnterParagraphs.RunTests = function(xinha, debug)
 {
-  function test(message, before, cursorBefore, after, cursorAfter, cursorAfter2) {
+  var test = function(message, before, cursorBefore, after, cursorAfter, cursorAfter2) {
     console.group('Test: ', message);
     if (before !== null) {
       xinha.setHTML(before);
@@ -1133,7 +1133,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
 {
   // Helper function that copies a DOM element and its attributes (except the
   // id) without any of the contents.
-  function safeShallowCopy(node, doc)
+  var safeShallowCopy = function(node, doc)
   {
     var copy = doc.createElement(node.nodeName);
     for (var index=0; index < node.attributes.length; ++index)
@@ -1152,7 +1152,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
   // markup of the document, this means that if a node to the right of this
   // node in the text is at a lower depth in the DOM tree, than we will return
   // it's first parent that is at our depth our higher in the tree.
-  function nextRootNode(node)
+  var nextRootNode = function(node)
   {
     if (node.nextSibling)
     {
@@ -1171,7 +1171,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
   // location.  It should be noted that if splitNode is a text node,
   // splitOffset is an offset into the text contents.  If not, it is an index
   // into the childNodes array.
-  function splitTree(root, splitNode, splitOffset, doc)
+  var splitTree = function(root, splitNode, splitOffset, doc)
   {
     // Split root into two.
     var breaker = safeShallowCopy(root, doc);
@@ -1242,7 +1242,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     // Below code needs to check for element node with empty text node.
     // An empty node is an text node of zero length or an element node with no
     // children, or whose only children are zero-length text nodes.
-    function emptyNode(node)
+    var emptyNode = function(node)
     {
       if ((TEXT_NODE == node.nodeType) && (0 == node.nodeValue.length))
       {
@@ -1270,7 +1270,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
       return false;
     }
 
-    function stuffEmptyNode(node, doc)
+    var stuffEmptyNode = function(node, doc)
     {
       if (!emptyNode(node))
       {
@@ -1312,7 +1312,7 @@ EnterParagraphs.prototype.breakLine = function(ev, doc)
     // the inserted subtree.
     return newCursorNode;
   }
-  function insertLineBreak(cursorParent, cursorOffset, useNewline, doc)
+  var insertLineBreak = function(cursorParent, cursorOffset, useNewline, doc)
   {
     if (TEXT_NODE == cursorParent.nodeType)
     {
