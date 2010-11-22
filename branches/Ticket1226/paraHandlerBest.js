@@ -1008,9 +1008,15 @@ EnterParagraphs.RunTests = function(xinha, debug)
                           [['child', 1], ['child', 0]]); // so can't do anything about it.
 
   test('Body with inline tag: em node',
-       '<em>hi</em>', [],
+       '<em>hi</em>', [], // Point to document body
        '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
-                                          [['child', 1], ['child', 0], ['child', 0]]);
+                                         [['child', 1], ['child', 0], ['child', 0]]);
+
+  test('Body with inline em: inside em node',
+       '<em>hi</em>', [['child', 0]], // Point to beginning of em node (before h)
+       '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
+                                         [['child', 1], ['child', 0], ['child', 0]]);
+
   test('Body with inline tag: text node',
        '<em>hi</em>', [['child', 0]],
        '<p>&nbsp;</p><p><em>hi</em></p>', [['child', 1], ['child', 0]],
