@@ -1058,9 +1058,33 @@ Xinha.Config = function()
     "Address"  : "address",
     "Formatted": "pre"
   };
-  
+
+  /** You can provide custom functions that will be used to determine which of the
+   * "formatblock" options is currently active and selected in the dropdown.
+   *
+   * Example:
+   * <pre>
+   * xinha_config.formatblockDetector['h5'] = function(xinha, currentElement)
+   * {
+   *   if (my_special_matching_logic(currentElement)) {
+   *     return true;
+   *   } else {
+   *     return false;
+   *   }
+   * };
+   * </pre>
+   *
+   * You probably don't want to mess with this, unless you are adding new, custom
+   * "formatblock" options which don't correspond to real HTML tags.  If you want
+   * to do that, you can use this configuration option to tell xinha how to detect
+   * when it is within your custom context.
+   *
+   * For more, see: http://www.coactivate.org/projects/xinha/custom-formatblock-options
+   */
+  this.formatblockDetector = {};
+
   this.dialogOptions =
-  { 
+  {
     'centered' : true, //true: dialog is shown in the center the screen, false dialog is shown near the clicked toolbar button
     'greyout':true, //true: when showing modal dialogs, the page behind the dialoge is greyed-out
     'closeOnEscape':true
@@ -4901,16 +4925,17 @@ Xinha.prototype.updateToolbar = function(noStatus)
         var blocks = [];
         for ( var indexBlock in this.config.formatblock )
         {
+	  var blockname = this.config.formatblock[indexBlock];
           // prevent iterating over wrong type
-          if ( typeof this.config.formatblock[indexBlock] == 'string' )
+          if ( typeof blockname  == 'string' )
           {
-            blocks[blocks.length] = this.config.formatblock[indexBlock];
+            blocks[blocks.length] = this.config.formatblockDetector[blockname] || blockname;
           }
         }
 
         var match = this._getFirstAncestorAndWhy(this.getSelection(), blocks);
         var deepestAncestor = match[0];
-        var matchIndex = match[1]; 
+        var matchIndex = match[1];
 
 
         if ( deepestAncestor )
