@@ -3788,15 +3788,15 @@ Xinha.loadPlugin = function(pluginName, callback, url)
     return true;
   }
   Xinha._pluginLoadStatus[pluginName] = 'loading';
-  
-  // This function will try to load a plugin in multiple passes.  It tries to
-  // load the plugin from either the plugin or unsupported directory, using
-  // both naming schemes in this order:
-  // 1. /plugins -> CurrentNamingScheme
-  // 2. /plugins -> old-naming-scheme
-  // 3. /unsupported -> CurrentNamingScheme
-  // 4. /unsupported -> old-naming-scheme
 
+  /** This function will try to load a plugin in multiple passes.  It tries to
+   * load the plugin from either the plugin or unsupported directory, using
+   * both naming schemes in this order:
+   * 1. /plugins -> CurrentNamingScheme
+   * 2. /plugins -> old-naming-scheme
+   * 3. /unsupported -> CurrentNamingScheme
+   * 4. /unsupported -> old-naming-scheme
+   */
   function multiStageLoader(stage,pluginName)
   {
     var nextstage, dir, file, success_message;
