@@ -3657,6 +3657,12 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
       {
         editor._onGenerate();
       }
+      
+      if(editor._textArea.hasAttribute('onxinhaready'))
+      {               
+        (function() { eval(editor._textArea.getAttribute('onxinhaready')) }).call(editor.textArea);
+      }
+      
       //ticket #1407 IE8 fires two resize events on one actual resize, seemingly causing an infinite loop (but not  when Xinha is in an frame/iframe) 
       Xinha.addDom0Event(window, 'resize', function(e) 
       {
@@ -4204,7 +4210,8 @@ Xinha.includeAssets = function()
           Xinha.loadStyle(nxt.url, nxt.plugin);
           return this.loadNext();
         
-        case 'text/javascript':
+        case 'text/javascript':          
+          this.loadedScripts.push(nxt);
           Xinha.loadScript(nxt.url, nxt.plugin, function() { self.loadNext(); });
       }
     }
@@ -4230,9 +4237,21 @@ Xinha.includeAssets = function()
     for(var i = 0; i < this.loadedScripts.length; i++)
     {
       if(this.loadedScripts[i].url == url && this.loadedScripts[i].plugin == plugin)
+      {
+        if(!this.loaderRunning) this.loadNext();
         return this; // Already done (or in process)
+      }
     }
     
+    for(var i = 0; i < this.pendingAssets.length; i++)
+    {
+      if(this.pendingAssets[i].url == url && this.pendingAssets[i].plugin == plugin)
+      {
+        if(!this.loaderRunning) this.loadNext();
+        return this; // Already pending
+      }
+    }
+        
     return this.loadScript(url, plugin);
   }
   
@@ -7201,6 +7220,44 @@ Xinha._geturlcontent = function(url, returnXML)
   }
 };
 
+
+/** Use XMLHTTPRequest to send some some data to the server and return the result synchronously
+ *
+ * @param {String} url The address for the HTTPRequest
+ * @param data the data to send, streing or array
+ */
+Xinha._posturlcontent = function(url, data, returnXML)
+{
+  var req = null;
+  req = Xinha.getXMLHTTPRequestObject();
+
+  var content = '';
+  if (typeof data == 'string')
+  {
+    content = data;
+  }
+  else if(typeof data == "object")
+  {
+    for ( var i in data )
+    {
+      content += (content.length ? '&' : '') + i + '=' + encodeURIComponent(data[i]);
+    }
+  }
+
+  req.open('POST', url, false);    
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'+(Xinha._postback_send_charset ? '; charset=UTF-8' : ''));
+  req.send(content);
+  
+  if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status === 0 )
+  {
+    return (returnXML) ? req.responseXML : req.responseText;
+  }
+  else
+  {
+    return '';
+  }
+  
+};
 // Unless somebody already has, make a little function to debug things
 
 if (typeof dumpValues == 'undefined') 
@@ -7265,7 +7322,7 @@ if ( !Array.prototype.indexOf )
 {
   /** Walks through an array and, if the specified item exists in it, returns the position
   * @param {String} needle The string to search for
-  * @returns {Integer|null} Index position if item found, null otherwise 
+  * @returns {Integer|-1} Index position if item found, -1 otherwise (same as built in js)
   */
   Array.prototype.indexOf = function(needle)
   {
