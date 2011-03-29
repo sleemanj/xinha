@@ -76,6 +76,17 @@ function size_to_bytes($s)
 
 require_once('config.php');
 
+// Ensure thumbnail path is OK
+if(!isset($IMConfig['files_dir']) || !isset($IMConfig['images_dir']))
+{
+  unset($IMConfig['thumbs_dir']);
+  unset($IMConfig['thumbs_url']);
+}
+else
+{ 
+  if(!file_exists($IMConfig['thumbs_dir'])) @mkdir($IMConfig['thumbs_dir']);
+}
+
 switch ( @$_REQUEST[ "__function" ] )
 {
   case 'read-config':        
@@ -86,15 +97,17 @@ switch ( @$_REQUEST[ "__function" ] )
     break;
 
   case 'image-manager':
-    include('mootools-filemanager/Backend/FileManager.php');
+    include('mootools-filemanager/Assets/Connector/FileManager.php');
 
     $browser = new FileManager(array(
       'directory'     => $IMConfig['images_dir'],
       'baseURL'       => $IMConfig['images_url'],
+      'thumbnailPath' => $IMConfig['thumbs_dir'],
       
       'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
       'upload'        => $IMConfig['allow_images_upload'],
+      'create'        => $IMConfig['allow_images_upload'],
       'maxUploadSize' => size_to_bytes($IMConfig['max_images_upload_size']),
       
       'suggestedMaxImageDimension' => $IMConfig['suggested_images_image_dimension'],
@@ -108,15 +121,17 @@ switch ( @$_REQUEST[ "__function" ] )
     break;
   
   case 'file-manager':
-    include('mootools-filemanager/Backend/FileManager.php');
+    include('mootools-filemanager/Assets/Connector/FileManager.php');
 
     $browser = new FileManager(array(
       'directory'     => $IMConfig['files_dir'],
       'baseURL'       => $IMConfig['files_url'],
+      'thumbnailPath' => $IMConfig['thumbs_dir'],
       
       'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
       'upload'        => $IMConfig['allow_files_upload'],
+      'create'        => $IMConfig['allow_files_upload'],
       'maxUploadSize' => size_to_bytes($IMConfig['max_files_upload_size']),
       
       'suggestedMaxImageDimension' => $IMConfig['suggested_files_image_dimension'],

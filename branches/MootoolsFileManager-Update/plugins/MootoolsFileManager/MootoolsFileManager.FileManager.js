@@ -89,6 +89,9 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
         assetBasePath:  Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets',
         language:       _editor_lang,
         selectable:     true,
+        upload:         this.phpcfg.allow_files_upload,
+        destroy:        this.phpcfg.allow_files_delete,
+        createFolders:  this.phpcfg.allow_files_upload,   
         uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
         onComplete:     function(path, file) { self.FileManagerReturn(path,file); },
         onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
@@ -106,7 +109,34 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
       });       
     }
     
-    this.FileManagerWidget.show();    
+    if(link)
+    {      
+        var src  = Xinha.is_ie ? link.href : link.getAttribute("href");
+        if(!src.match(/^(([a-z]+:)|\/)/i))
+        {
+            src = self.editor.config.baseHref.replace(/\/[^\/]*$/, '') + '/' + src;
+            if(src.match(/^[a-z]+:/i) && !self.phpcfg.files_url.match(/^[a-z]:/i))
+            {
+              src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
+            }
+        }
+        
+        // Get exploded path without the base url
+        var path = src.replace(self.phpcfg.files_url+'/', '').split('/');
+        
+        // Pull off the file
+        var base = path.pop();      
+        
+        // Join the path back togethor (no base url, trailing slash if the path has any length)
+        path = path.length ? (path.join('/') + '/') : '';
+        
+        // feed to widget
+        this.FileManagerWidget.show(null, path, base);          
+    }
+    else
+    {
+      this.FileManagerWidget.show();    
+    }    
 };
 
 // Take the values from the file selection and make it (or update) a link

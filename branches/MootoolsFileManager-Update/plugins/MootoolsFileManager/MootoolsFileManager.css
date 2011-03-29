@@ -1,7 +1,7 @@
 .filemanager-container .filemanager { overflow:visible; }
 .filemanager-info-area { width:50%; float:left; clear:left; }
 .filemanager-preview-area { width:50%; float:left; clear:right; }
-div.filemanager-info-area dt, div.filemanager-preview-area dt { width:25%; margin-left:5px; }
+div.filemanager-info-area dt, div.filemanager-preview-area dt { width:80px; margin-left:5px; }
 div.filemanager-info-area dd, div.filemanager-preview-area dd { width:auto; }
 
 div.filemanager-preview-area dt { float:left; }

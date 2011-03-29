@@ -40,26 +40,47 @@ MootoolsFileManager.AssetLoader = Xinha.includeAssets();
 if(typeof MooTools == 'undefined')
 {
   MootoolsFileManager.AssetLoader
-    .loadScript('mootools-filemanager/Demos/mootools-core.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Demos/mootools-more.js', 'MootoolsFileManager');
+    .loadScript('mootools-filemanager/Demos/mootools-core-1.3.1.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Demos/mootools-more-1.3.1.1.js', 'MootoolsFileManager');
 }
 
 // In case you want to use your own version of FileManager, you can load it first.
 // You better look at the changes we had to do to the standard one though.
 if(typeof FileManager == 'undefined')
 {
+  if(typeof __MFM_ASSETS_DIR__ == 'undefined')
+  {
+    __MFM_ASSETS_DIR__ = Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets'
+  }
+  
+  if(typeof __MFM_USE_FLASH__ == 'undefined')
+  {
+    __MFM_USE_FLASH__ = true;
+  }
+  
   MootoolsFileManager.AssetLoader
-    .loadStyle('mootools-filemanager/Css/FileManager.css', 'MootoolsFileManager')
-    .loadStyle('mootools-filemanager/Css/Additions.css', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')        
-    .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Uploader/Swiff.Uploader.js', 'MootoolsFileManager')
+    // These are now loaded by FileManager.js automatically
+    //.loadStyle('mootools-filemanager/Assets/Css/FileManager.css', 'MootoolsFileManager')
+    //.loadStyle('mootools-filemanager/Assets/Css/Additions.css', 'MootoolsFileManager')
+    //.loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')        
     .loadScript('mootools-filemanager/Source/FileManager.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager')
     .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager');
+    
+ if(__MFM_USE_FLASH__)
+ {
+   MootoolsFileManager.AssetLoader
+     .loadScript('mootools-filemanager/Source/Uploader/Swiff.Uploader.js', 'MootoolsFileManager')
+     .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
+     .loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager');
+ }
+ else
+ {
+   MootoolsFileManager.AssetLoader
+      .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
+      .loadScript('mootools-filemanager/Source/NoFlash.Uploader.js', 'MootoolsFileManager');
+ }    
 }
 MootoolsFileManager.AssetLoader.loadStyle('MootoolsFileManager.css', 'MootoolsFileManager');
-
 
 function MootoolsFileManager(editor)
 {  

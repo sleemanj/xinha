@@ -69,27 +69,13 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       language:       _editor_lang,
       selectable:     true,
       upload:         this.phpcfg.allow_images_upload,
+      destroy:        this.phpcfg.allow_images_delete,
+      createFolders:  this.phpcfg.allow_images_upload,            
       uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
       onComplete:     function(path, file) { self.ImageManagerReturn(path,file); },
       onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
       onShow:         function() {        
         if(this.swf && this.swf.box) this.swf.box.style.display = ''; 
-        if(self.current_image)
-        {
-            var src  = self.current_image.getAttribute('src');
-            if(!src.match(/^(([a-z]+:)|\/)/i))
-            {
-                src = self.editor.config.baseHref.replace(/\/[^\/]*$/, '') + '/' + src;
-                if(src.match(/^[a-z]+:/i) && !self.phpcfg.images_url.match(/^[a-z]:/i))
-                {
-                  src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
-                }
-            }
-            var path = src.replace(self.phpcfg.images_url+'/', '').split('/');
-            var base = path.pop();
-            path     = self.phpcfg.images_url.split('/').pop() + (path.length ? ('/' + path.join('/')) : '');  
-            this.load(path, true, (function() { this.fillInfo(base); }).bind(this));            
-        }
       },
       onDetails:      function(details) 
                       {                                                 
@@ -104,7 +90,34 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
     });        
   }
   
-  this.ImageManagerWidget.show();    
+  if(self.current_image)
+  {      
+      var src  = self.current_image.getAttribute('src');
+      if(!src.match(/^(([a-z]+:)|\/)/i))
+      {
+          src = self.editor.config.baseHref.replace(/\/[^\/]*$/, '') + '/' + src;
+          if(src.match(/^[a-z]+:/i) && !self.phpcfg.images_url.match(/^[a-z]:/i))
+          {
+            src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
+          }
+      }
+      
+      // Get exploded path without the base url
+      var path = src.replace(self.phpcfg.images_url+'/', '').split('/');
+      
+      // Pull off the file
+      var base = path.pop();      
+      
+      // Join the path back togethor (no base url, trailing slash if the path has any length)
+      path = path.length ? (path.join('/') + '/') : '';
+      
+      // feed to widget
+      this.ImageManagerWidget.show(null, path, base);          
+  }
+  else
+  {
+    this.ImageManagerWidget.show();    
+  }
 };
 
 /** Return a DOM fragment which has all the fields needed to set the
