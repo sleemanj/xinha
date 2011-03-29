@@ -188,7 +188,7 @@ $IMConfig['resized_dir'] = '';
  NOTE: If $IMConfig['safe_mode'] = true, this parameter
        is ignored, you can not create directories
 */
-$IMConfig['allow_new_dir'] = true;
+$IMConfig['allow_new_dir'] = false;
 
 /*
   Possible values: true, false
@@ -200,7 +200,7 @@ $IMConfig['allow_new_dir'] = true;
  NOTE: If $IMConfig['img_library'] = false, this parameter
        is ignored, you can not edit images.
 */
-$IMConfig['allow_edit_image'] = true;
+$IMConfig['allow_edit_image'] = false;
 
 /*
   Possible values: true, false
@@ -210,7 +210,7 @@ $IMConfig['allow_edit_image'] = true;
  FALSE - No rename icon will be displayed.
 
 */
-$IMConfig['allow_rename'] = true;
+$IMConfig['allow_rename'] = false;
 
 /*
   Possible values: true, false
@@ -220,7 +220,7 @@ $IMConfig['allow_rename'] = true;
  FALSE - No cut/copy/paste icons will be displayed.
 
 */
-$IMConfig['allow_cut_copy_paste'] = true;
+$IMConfig['allow_cut_copy_paste'] = false;
 
 /*
   Possible values: true, false
@@ -230,7 +230,7 @@ $IMConfig['allow_cut_copy_paste'] = true;
  FALSE - No delete icon will be displayed.
 
 */
-$IMConfig['allow_delete'] = true;
+$IMConfig['allow_delete'] = false;
 
 /*
   Possible values: true, false

@@ -87,6 +87,8 @@
 
   $IMConfig['images_dir'] = FALSE; // No trailing slash
   $IMConfig['images_url'] = FALSE; // No trailing slash
+  
+  $IMConfig['thumbs_dir'] = NULL;  // Will default to images_url/.thumbs or files_url/.thumbs
 
   /**
     == Turning On Uploads ==
@@ -190,4 +192,8 @@ if($passed_data = xinha_read_passed_data())
 }
 @session_write_close(); // Close session now so we don't lock.
 
+if(!isset($IMConfig['thumbs_dir']))
+{
+  $IMConfig['thumbs_dir'] = (isset($IMConfig['images_dir']) ? $IMConfig['images_dir'] : $IMConfig['files_dir']) . '/.thumbs';
+}
 ?>
