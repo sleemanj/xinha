@@ -118,7 +118,7 @@ switch ( @$_REQUEST[ "__function" ] )
       
       'maxUploadSize' => size_to_bytes($IMConfig['max_images_upload_size']),      
       'suggestedMaxImageDimension' => $IMConfig['suggested_images_image_dimension'],
-                  
+      'thumbnailsMustGoThroughBackend' => FALSE,          
       'filter'        => 'image/',            
     ));
 
@@ -146,7 +146,7 @@ switch ( @$_REQUEST[ "__function" ] )
       
       'maxUploadSize' => size_to_bytes($IMConfig['max_files_upload_size']),      
       'suggestedMaxImageDimension' => $IMConfig['suggested_files_image_dimension'],
-            
+      'thumbnailsMustGoThroughBackend' => FALSE,      
      // 'filter'        => $IMConfig['files_filter'],
             
     ));

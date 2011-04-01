@@ -1,14 +1,15 @@
-Make preview image (250 thumb) work with POST type propagateData.  There are 2 ways I could have done this, either just used getThumb() to obtain the thumb250, or hijack onThumbnail() to do the work.  I chose the latter because it more closely aligns with the previous logic even if it is a larger diff to do it.
+Add an option "thumbnailsMustGoThroughBackend" to FileManager.php, it defaults to true (current behaviour).  When set to false, IF and only if a thumbnail of the correct size has been created already, then onView will return the direct thumbnail url, otherwise it will still go through the onThumbnail event to get the thumbnail (the first time).  This is a means to reduce the roundtrips required whe using the POST type of propagateData, it also would reduce server load for normal GET type setups because it cuts down drastically on PHP execution requests and all that entails.
 
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 # On branch master
-# Your branch is ahead of 'origin/master' by 1 commit.
+# Your branch is ahead of 'origin/master' by 2 commits.
 #
 # Changes to be committed:
 #   (use "git reset HEAD <file>..." to unstage)
 #
 #	modified:   Assets/Connector/FileManager.php
+#	modified:   Source/FileManager.js
 #
 # Untracked files:
 #   (use "git add <file>..." to include in what will be committed)
