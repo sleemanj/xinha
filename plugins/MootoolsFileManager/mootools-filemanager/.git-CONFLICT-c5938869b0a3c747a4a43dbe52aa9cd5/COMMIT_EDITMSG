@@ -1,0 +1,31 @@
+Initial ability to *optionally* POST the propagateData instead of GET'ing it, thumbnails are supported in the list view but not yet in the preview/details, probably need to have onDetails actually generate the thumb(s), this would be fine since if you're calling onDetails one assumes you will be rather shortly hitting up the image anyway.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   Assets/Connector/FileManager.php
+#	modified:   Source/FileManager.js
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	.svn/
+#	Assets/.svn/
+#	Assets/Connector/.svn/
+#	Assets/Connector/Assets/.svn/
+#	Assets/Connector/Assets/getid3/.svn/
+#	Assets/Connector/Assets/helperapps/.svn/
+#	Assets/Css/.svn/
+#	Assets/Images/.svn/
+#	Assets/Images/Icons/.svn/
+#	Assets/Images/Icons/Large/.svn/
+#	Assets/js/.svn/
+#	Assets/js/milkbox/.svn/
+#	Assets/js/milkbox/css/.svn/
+#	Demos/.svn/
+#	Language/.svn/
+#	Source/.svn/
+#	Source/Uploader/.svn/

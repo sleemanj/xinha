@@ -97,24 +97,29 @@ switch ( @$_REQUEST[ "__function" ] )
     break;
 
   case 'image-manager':
-    include('mootools-filemanager/Assets/Connector/FileManager.php');
-
-    $browser = new FileManager(array(
-      'directory'     => $IMConfig['images_dir'],
-      'baseURL'       => $IMConfig['images_url'],
-      'thumbnailPath' => $IMConfig['thumbs_dir'],
+    // include('mootools-filemanager/Assets/Connector/FileManager.php');
+    include('XinhaFileManager.php');
+    
+    $browser = new XinhaFileManager(array(
+      'images_dir'    => $IMConfig['images_dir'],
+      'images_url'    => $IMConfig['images_url'],
+      
+      'thumbs_dir'    => $IMConfig['thumbs_dir'],
+      'thumbs_url'    => $IMConfig['thumbs_url'],
       
       'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
       'upload'        => $IMConfig['allow_images_upload'],
-      'create'        => $IMConfig['allow_images_upload'],
-      'maxUploadSize' => size_to_bytes($IMConfig['max_images_upload_size']),
+      'destroy'       => $IMConfig['allow_images_delete'],      
+      'create'        => $IMConfig['allow_images_create_dir'],
+      'move'          => $IMConfig['allow_images_move'],
+      'download'      => $IMConfig['allow_images_download'],
       
+      
+      'maxUploadSize' => size_to_bytes($IMConfig['max_images_upload_size']),      
       'suggestedMaxImageDimension' => $IMConfig['suggested_images_image_dimension'],
-            
-      'destroy'       => $IMConfig['allow_images_delete'],
-      'filter'        => 'image/',
-            
+                  
+      'filter'        => 'image/',            
     ));
 
     $browser->fireEvent(!empty($_REQUEST['event']) ? $_REQUEST['event'] : null);
@@ -124,19 +129,24 @@ switch ( @$_REQUEST[ "__function" ] )
     include('mootools-filemanager/Assets/Connector/FileManager.php');
 
     $browser = new FileManager(array(
-      'directory'     => $IMConfig['files_dir'],
-      'baseURL'       => $IMConfig['files_url'],
-      'thumbnailPath' => $IMConfig['thumbs_dir'],
+      'files_dir'     => $IMConfig['files_dir'],
+      'files_url'     => $IMConfig['files_url'],
+      
+      'thumbs_dir'    => $IMConfig['thumbs_dir'],
+      'thumbs_url'    => $IMConfig['thumbs_dir'],
       
       'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
       'upload'        => $IMConfig['allow_files_upload'],
-      'create'        => $IMConfig['allow_files_upload'],
-      'maxUploadSize' => size_to_bytes($IMConfig['max_files_upload_size']),
+      'destroy'       => $IMConfig['allow_files_delete'],
+      'create'        => $IMConfig['allow_files_create_dir'],
+      'move'          => $IMConfig['allow_files_move'],
+      'download'      => $IMConfig['allow_files_download'],
       
+      
+      'maxUploadSize' => size_to_bytes($IMConfig['max_files_upload_size']),      
       'suggestedMaxImageDimension' => $IMConfig['suggested_files_image_dimension'],
             
-      'destroy'       => $IMConfig['allow_files_delete'],
      // 'filter'        => $IMConfig['files_filter'],
             
     ));

@@ -22,7 +22,7 @@ FileManager.Gallery = new Class({
 
   initialize: function(options) {
     this.offsets = {y: -72};
-    this.galleryPlugin = true; // prevent that this.show() is called in the base class again
+    //this.galleryPlugin = true; // prevent that this.show() is called in the base class again
     this.parent(options);
 
     var show = function() {
@@ -67,6 +67,7 @@ FileManager.Gallery = new Class({
         this.hideClone();
         this.wrapper.setStyle('display', 'none');
       },
+
       modify: function(file){
         var name = this.normalize(file.path);
         var el = (this.gallery.getElements('li').filter(function(el){
@@ -117,17 +118,23 @@ FileManager.Gallery = new Class({
     this.howto = new Element('div', {'class': 'howto', text: this.language.gallery.drag}).inject(this.galleryContainer);
     this.switchButton();
 
-    if(typeof jsGET != 'undefined' && jsGET.get('fmID') == this.ID)
-        this.show();
-    else {
-      window.addEvent('jsGETloaded',(function(){
-        if(typeof jsGET != 'undefined' && jsGET.get('fmID') == this.ID)
-          this.show();
-      }).bind(this));
-      }
+	// invoke the parent method directly
+	this.initialShowBase();
+  },
+
+  // override the parent's initialShow method: we do not want to jump to the jsGET-stored position again!
+  initialShow: function() {
+  },
+
+  // override the parent's allow_DnD method: always allow drag and drop as otherwise we cannot construct our gallery!
+  allow_DnD: function(j, pagesize) {
+    return true;
   },
 
   onDragComplete: function(el, droppable) {
+
+	this.imageadd.fade(0);
+
     if(this.howto){
       this.howto.destroy();
       this.howto = null;
@@ -147,7 +154,7 @@ FileManager.Gallery = new Class({
       file = el.retrieve('file');
     }
 
-    var  self = this, name = this.normalize((file.dir ? file.dir + '/' : '') + file.name);
+    var self = this, name = this.normalize(file.dir + '/' + file.name);
 
     if (this.files.contains(name)) return true;
     this.files.push(name);
@@ -160,7 +167,7 @@ FileManager.Gallery = new Class({
 
     var li = new Element('li').store('file', file).adopt(
       destroyIcon,
-      new Asset.image(file.path, {
+      new Asset.image(this.normalize('/' + this.root + file.dir + '/' + file.name), {
         onload: function(){
           var el = this;
           li.setStyle('background', 'none').addEvent('click', function(e){
@@ -295,7 +302,7 @@ FileManager.Gallery = new Class({
     }, this);
   },
 
-  serialize: function(e){
+  serialize_on_click: function(e){
     if(e) e.stop();
     var serialized = {};
     this.files.each(function(v){
@@ -309,3 +316,4 @@ FileManager.Gallery = new Class({
 });
 
 })();
+

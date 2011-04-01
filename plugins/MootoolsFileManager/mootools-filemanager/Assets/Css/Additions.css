@@ -13,7 +13,7 @@
 }
 
 /* Overlay */
-div.fm-overlay {
+div.filemanager-overlay {
   position: absolute;
   left: 0;
   top: 0;
@@ -24,12 +24,12 @@ div.fm-overlay {
 }
 
 /* Dialog */
-div.fm-overlay-dialog {
+div.filemanager-overlay-dialog {
   z-index: 1999;
   background: #fff;
 }
 
-div.fm-dialog {
+div.filemanager-dialog {
   position: absolute;
   display: none;
   z-index: 2000;
@@ -49,17 +49,17 @@ div.fm-dialog {
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
 }
 
-div.fm-dialog-engine-trident {
+div.filemanager-dialog-engine-trident {
   background: #000;
 }
 
-div.fm-dialog-engine-trident4 { width: 249px; }
+div.filemanager-dialog-engine-trident4 { width: 249px; }
 
-div.fm-dialog a { color: #aaa; }
-div.fm-dialog a:hover { text-decoration: none; }
-div.fm-dialog div { margin: 10px; }
+div.filemanager-dialog a { color: #aaa; }
+div.filemanager-dialog a:hover { text-decoration: none; }
+div.filemanager-dialog div { margin: 10px; }
 
-div.fm-dialog input, div.fm-dialog select {
+div.filemanager-dialog input, div.filemanager-dialog select {
   width: 94%;
   margin: 20px 2%;
   padding: 2px 1%;
@@ -71,11 +71,11 @@ div.fm-dialog input, div.fm-dialog select {
   font-size: 12px;
 }
 
-div.fm-dialog-engine-trident4 input, div.fm-dialog-engine-trident5 input {
+div.filemanager-dialog-engine-trident4 input, div.filemanager-dialog-engine-trident5 input {
   width: 80%;
 }
 
-div.fm-dialog button {
+div.filemanager-dialog button {
   position: absolute;
   bottom: 15px;
   right: 15px;
@@ -99,12 +99,12 @@ div.fm-dialog button {
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-div.fm-dialog-engine-trident4 button, div.fm-dialog-engine-trident5 button {
+div.filemanager-dialog-engine-trident4 button, div.filemanager-dialog-engine-trident5 button {
   padding: 0 .25em;
   overflow: visible;
 }
 
-div.fm-dialog button.fm-dialog-decline {
+div.filemanager-dialog button.filemanager-dialog-decline {
   right: auto;
   left: 15px;
 }
