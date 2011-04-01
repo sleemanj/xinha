@@ -45,6 +45,12 @@ FileManager.Language.nl = {
 
 	nodestroy: 'Het is niet mogelijk bestanden te verwijderen op deze server.',
 
+	toggle_side_boxes: 'Thumbnail view',
+	toggle_side_list: 'List view',
+	drag_n_drop: 'Drag & drop has been enabled for this directory',
+	drag_n_drop_disabled: 'Drag & drop has been temporarily disabled for this directory',
+	goto_page: 'Go to page',
+
 	'backend.disabled': 'Deze operatie is uitgeschakeld op deze server.',
 	'backend.authorized': 'Je hebt geen toestemming om deze aktie uit te voeren.',
 	'backend.path': 'Deze map bestaat niet.  Contacteer de beheerder van deze website voor hulp.',
@@ -55,6 +61,7 @@ FileManager.Language.nl = {
 	'backend.partial': 'Het bestand dat je verstuurde werd slechts gedeeltelijk ontvangen, probeer het bestand opnieuw te versturen.',
 	'backend.nofile': 'Er werd géén bestand verstuurd of het bestand / folder kon niet worden gevonden.',
 	'backend.default': 'Er ging iets fout bij het uploaden van het bestand.',
+	'backend.unidentified_error': 'An unindentified error occurred while communicating with the backend (web server).',
 
 	'backend.nonewfile': 'A new name for the file to be moved / copied is missing.',
 	'backend.corrupt_img': 'This file is a not a image or a corrupt file: ', // path
@@ -73,7 +80,7 @@ FileManager.Language.nl = {
 	'backend.imageallocalpha50pctgrey_failed': 'The image processing unit failed: cannot allocate space for the alpha channel and the 50% background.',
 	'backend.imagecolorallocatealpha_failed': 'The image processing unit failed: cannot allocate space for the alpha channel for this color image.',
 	'backend.imagerotate_failed': 'The image processing unit failed: GD imagerotate() failed.',
-	'backend.imagecopyresampled_failed': 'The image processing unit failed: GD imagecopyresampled() failed.',
+	'backend.imagecopyresampled_failed': 'The image processing unit failed: GD imagecopyresampled() failed. Image resolution: ', /* x * y */
 	'backend.imagecopy_failed': 'The image processing unit failed: GD imagecopy() failed.',
 	'backend.imageflip_failed': 'The image processing unit failed: cannot flip the image.',
 	'backend.imagejpeg_failed': 'The image processing unit failed: GD imagejpeg() failed.',
@@ -89,7 +96,8 @@ FileManager.Language.nl = {
 	uploader: {
 		unknown: 'Onbekende fout',
 		sizeLimitMin: 'Je kan het bestand "<em>${name}</em>" (${size}) niet toevoegen, de minimum bestandsgrootte voor upload is <strong>${size_min}</strong>!',
-		sizeLimitMax: 'Je kan het bestand "<em>${name}</em>" (${size}) niet toevoegen, de minimum bestandsgrootte voor upload is <strong>${size_max}</strong>!'
+		sizeLimitMax: 'Je kan het bestand "<em>${name}</em>" (${size}) niet toevoegen, de minimum bestandsgrootte voor upload is <strong>${size_max}</strong>!',
+		mod_security: 'No response was given from the uploader, this may mean that "mod_security" is active on the server and one of the rules in mod_security has cancelled this request.  If you can not disable mod_security, you may need to use the NoFlash Uploader.'
 	},
 
 	flash: {
@@ -99,4 +107,12 @@ FileManager.Language.nl = {
 	},
 
 	resizeImages: 'Pas de dimensies van grote afbeeldingen aan'
+
+	serialize: 'Save gallery',
+	gallery: {
+		text: 'Image caption',
+		save: 'Save',
+		remove: 'Remove from gallery',
+		drag: 'Drag items here to create a gallery...'
+	}
 };

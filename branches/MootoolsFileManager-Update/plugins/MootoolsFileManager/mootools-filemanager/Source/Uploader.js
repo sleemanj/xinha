@@ -77,7 +77,9 @@ FileManager.implement({
 
     if (this.options.resizeImages){
       var resizer = new Element('div', {'class': 'checkbox'}),
-        check = (function(){ this.toggleClass('checkboxChecked'); }).bind(resizer);
+        check = (function(){
+			this.toggleClass('checkboxChecked');
+		}).bind(resizer);
       check();
       this.upload.label = new Element('label').adopt(
         resizer, new Element('span', {text: this.language.resizeImages})
@@ -92,10 +94,13 @@ FileManager.implement({
 
         this.parent(base, data);
 
+		//if (typeof console !== 'undefined' && console.log) console.log('Uploader: setOptions');
         this.setOptions({
-          url: self.options.url + (self.options.url.indexOf('?') == -1 ? '?' : '&') + Object.toQueryString(Object.merge({}, self.options.uploadAuthData, {
+		  //data: Object.merge({}, base.options.data, self.options.uploadAuthData),
+          url: self.options.url + (self.options.url.indexOf('?') == -1 ? '?' : '&') + Object.toQueryString(Object.merge({}, self.options.propagateData, {
             event: 'upload',
             directory: self.normalize(self.Directory),
+			filter: self.options.filter,
             resize: self.options.resizeImages && resizer.hasClass('checkboxChecked') ? 1 : 0
           }))
         });
@@ -179,16 +184,16 @@ FileManager.implement({
         this.remove();
       },
 
-      onComplete: function(){
+      onComplete: function(file_obj) {
         this.ui.progress = this.ui.progress.cancel().element.destroy();
         this.ui.cancel = this.ui.cancel.destroy();
 
         var response = JSON.decode(this.response.text);
         if (!response)
-        {            
-          new Dialog(self.language.uploader.mod_security, {language: {confirm: self.language.ok}, buttons: ['confirm']});            
+        {
+          new Dialog(self.language.uploader.mod_security, {language: {confirm: self.language.ok}, buttons: ['confirm']});
         }
-        
+
         if (!response.status)
           new Dialog(('' + response.error).substitute(self.language, /\\?\$\{([^{}]+)\}/g) , {language: {confirm: self.language.ok}, buttons: ['confirm']});
 
@@ -219,11 +224,12 @@ FileManager.implement({
       if(this.options.filter == 'text')
         fileTypes = {'Text (*.txt, *.rtf, *.rtx, *.html, *.htm, *.css, *.as, *.xml, *.tpl)': '*.txt; *.rtf; *.rtx; *.html; *.htm; *.css; *.as; *.xml; *.tpl'};
       if(this.options.filter == 'application')
-        fileTypes = {'Application (*.bin, *.doc, *.exe, *.iso, *.js,*.odt, *.pdf, *.php, *.ppt, *.swf, *.rar, *.zip)': '*.ai; *.bin; *.ccad; *.class; *.cpt; *.dir; *.dms; *.drw; *.doc; *.dvi; *.dwg; *.eps; *.exe; *.gtar; *.gz; *.js; *.latex; *.lnk; *.lnk; *.oda; *.odt; *.ods; *.odp; *.odg; *.odc; *.odf; *.odb; *.odi; *.odm; *.ott; *.ots; *.otp; *.otg; *.pdf; *.php; *.pot; *.pps; *.ppt; *.ppz; *.pre; *.ps; *.rar; *.set; *.sh; *.skd; *.skm; *.smi; *.smil; *.spl; *.src; *.stl; *.swf; *.tar; *.tex; *.texi; *.texinfo; *.tsp; *.unv; *.vcd; *.vda; *.xlc; *.xll; *.xlm; *.xls; *.xlw; *.zip'};
+        fileTypes = {'Application (*.bin, *.doc, *.exe, *.iso, *.js, *.odt, *.pdf, *.php, *.ppt, *.swf, *.rar, *.zip)': '*.ai; *.bin; *.ccad; *.class; *.cpt; *.dir; *.dms; *.drw; *.doc; *.dvi; *.dwg; *.eps; *.exe; *.gtar; *.gz; *.js; *.latex; *.lnk; *.lnk; *.oda; *.odt; *.ods; *.odp; *.odg; *.odc; *.odf; *.odb; *.odi; *.odm; *.ott; *.ots; *.otp; *.otg; *.pdf; *.php; *.pot; *.pps; *.ppt; *.ppz; *.pre; *.ps; *.rar; *.set; *.sh; *.skd; *.skm; *.smi; *.smil; *.spl; *.src; *.stl; *.swf; *.tar; *.tex; *.texi; *.texinfo; *.tsp; *.unv; *.vcd; *.vda; *.xlc; *.xll; *.xlm; *.xls; *.xlw; *.zip'};
 
   		return fileTypes;
     };
 
+	//if (typeof console !== 'undefined' && console.log) console.log('Uploader: SWF init');
     this.swf = new Swiff.Uploader({
       id: 'SwiffFileManagerUpload',
       path: this.assetBasePath + 'Swiff.Uploader.swf',
@@ -231,6 +237,11 @@ FileManager.implement({
       target: this.upload.button,
       allowDuplicates: true,
       instantStart: true,
+	  appendCookieData: true, // pass along any session cookie data, etc. in the request section (PHP: $_GET[])
+	  data: Object.merge({},
+			//(self.options.propagateData  || {}),
+			(self.options.uploadAuthData || {})
+		),
       fileClass: File,
       timeLimit: 260,
       fileSizeMax: 2600 * 2600 * 25,
@@ -255,3 +266,4 @@ FileManager.implement({
   }
 
 });
+

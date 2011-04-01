@@ -88,8 +88,8 @@
   $IMConfig['images_dir'] = FALSE; // No trailing slash
   $IMConfig['images_url'] = FALSE; // No trailing slash
   
-  $IMConfig['thumbs_dir'] = NULL;  // Will default to images_url/.thumbs or files_url/.thumbs
-
+  $IMConfig['thumbs_dir'] = NULL;  // Will default to images_dir/.thumbs or files_dir/.thumbs
+  $IMConfig['thumbs_url'] = NULL;  // Will default to images_url/.thumbs or files_url/.thumbs
   /**
     == Turning On Uploads ==
     We have two sets of settings for turning on uploads, one controls the files mode
@@ -126,6 +126,17 @@
 //                OPTIONAL SETTINGS 
 // -------------------------------------------------------------------------
 
+/** Expanded Permissions */
+
+$IMConfig['allow_images_create_dir']  = NULL;  // Defaults to allow_images_upload
+$IMConfig['allow_images_move']        = false; 
+$IMConfig['allow_images_download']    = false; 
+  
+$IMConfig['allow_files_create_dir']  = NULL; // Defaults to allow_files_upload
+$IMConfig['allow_files_move']        = false; 
+$IMConfig['allow_files_download']    = false; 
+  
+  
 /**
 
 == Plugin Path ==
@@ -196,4 +207,22 @@ if(!isset($IMConfig['thumbs_dir']))
 {
   $IMConfig['thumbs_dir'] = (isset($IMConfig['images_dir']) ? $IMConfig['images_dir'] : $IMConfig['files_dir']) . '/.thumbs';
 }
+
+if(!isset($IMConfig['thumbs_url']))
+{
+  $IMConfig['thumbs_url'] = (isset($IMConfig['images_url']) ? $IMConfig['images_url'] : $IMConfig['files_url']) . '/.thumbs';
+}
+
+if(!isset($IMConfig['allow_images_create_dir'])) 
+{
+  $IMConfig['allow_images_create_dir'] = $IMConfig['allow_images_upload'];
+}
+
+if(!isset($IMConfig['allow_files_create_dir'])) 
+{
+  $IMConfig['allow_files_create_dir'] = $IMConfig['allow_files_upload'];
+}
+
+
+
 ?>
