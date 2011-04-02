@@ -555,6 +555,7 @@ class FileManager
 			'DestroyIsAuthorized_cb' => null,
 			'MoveIsAuthorized_cb' => null,
 			'thumbnailsMustGoThroughBackend' => true, // If set true (default) all thumbnail requests go through the backend (onThumbnail), if false, thumbnails will "shortcircuit" if they exist, saving roundtrips when using POST type propagateData
+			'showHiddenFoldersAndFiles'      => false, // Hide dot dirs/files ?
 			'URIpropagateData' => null
 		), (is_array($options) ? $options : array()));
 
@@ -667,6 +668,19 @@ class FileManager
 			throw new FileManagerException('nofile');
 		}
 		$files = $this->scandir($dir, $filemask);
+
+    // This can not be done in scandir, because other stuff (particularly delete)
+    // might need those dotfiles.
+    if(!$this->options['showHiddenFoldersAndFiles'])
+    {
+      $nohidden = array();
+      foreach($files as $file)
+      {
+        if($file[0] == '.' && $file != '.' & $file != '..') continue;
+        $nohidden[] = $file;
+      }
+      $files = $nohidden;
+    }
 
 		if ($files === false)
 			throw new FileManagerException('nofile');
@@ -781,9 +795,9 @@ class FileManager
 				if(!$this->options['thumbnailsMustGoThroughBackend'])
         {
           try
-          {
-            $thumb48  = $this->getThumb ($legal_url, $file, 48, 48, true);
-            $thumb250 = $this->getThumb ($legal_url, $file, 250, 250, true);
+          {  
+            $thumb48  = $this->getThumb ($url, $file, 48, 48, true);
+            $thumb250 = $this->getThumb ($url, $file, 250, 250, true);
           }
           catch(Exception $E)
           {
@@ -858,8 +872,8 @@ class FileManager
 			$thumb = $icon;
 		}
 		return array(
-			'dirs' => (!empty($out[0]) ? $out[0] : array()),
-			'files' => (!empty($out[1]) ? $out[1] : array()),
+			'dirs' => (!empty($out[1]) ? $out[1] : array()),
+			'files' => (!empty($out[0]) ? $out[0] : array()),
 			'json' => array_merge((is_array($json) ? $json : array()), array(
 				'root' => substr($this->options['directory'], 1),
 				'path' => $legal_url,                                  // is relative to options['directory']
@@ -1643,6 +1657,8 @@ class FileManager
 	 *                        matching this (set of) mimetypes will be listed.
 	 *                        Examples: 'image/' or 'application/zip'
 	 *
+	 * $_GET['asJson']        if true, returns { status:1, url: '.....' } or { status:0, error: '......' }
+	 *
 	 * On errors a HTTP 403 error response will be sent instead.
 	 */
 	protected function onDownload()
@@ -1688,6 +1704,13 @@ class FileManager
 			if (!empty($this->options['DownloadIsAuthorized_cb']) && function_exists($this->options['DownloadIsAuthorized_cb']) && !$this->options['DownloadIsAuthorized_cb']($this, 'download', $fileinfo))
 				throw new FileManagerException('authorized');
 
+      if($this->getGETparam('asJson', 0))
+      {
+        $Response = array('status' => 1, 'url' => $this->legal2abs_url_path($fileinfo['legal_url']), 'fileinfo' => $fileinfo);
+        echo json_encode($Response);
+        exit;
+      }
+      
 			$legal_url = $fileinfo['legal_url'];
 			$file = $fileinfo['file'];
 			$mime = $fileinfo['mime'];
@@ -1721,13 +1744,27 @@ class FileManager
 			}
 		}
 		catch(FileManagerException $e)
-		{
+		{ 
+      if($this->getGETparam('asJson', 0))
+      {
+        $Response = array('status' => 0, 'error' => $e->getMessage());
+        echo json_encode($Response);
+        exit;
+      }
+      
 			// we don't care whether it's a 404, a 403 or something else entirely: we feed 'em a 403 and that's final!
 			send_response_status_header(403);
 			echo $e->getMessage();
 		}
 		catch(Exception $e)
 		{
+      if($this->getGETparam('asJson', 0))
+      {
+        $Response = array('status' => 0, 'error' => $e->getMessage());
+        echo json_encode($Response);
+        exit;
+      }
+      
 			// we don't care whether it's a 404, a 403 or something else entirely: we feed 'em a 403 and that's final!
 			send_response_status_header(403);
 			echo $e->getMessage();
@@ -1794,7 +1831,11 @@ class FileManager
 
 			$mime_filter = $this->getGETparam('filter', $this->options['filter']);
 			$tmppath = $_FILES['Filedata']['tmp_name'];
-			$mime = $this->getMimeType($tmppath);
+			
+			// tmp_name does not include an extention, if we don't provide it, the mime detection is too
+			// easily thwarted and returns application/octet-stream, if you are using a filter to only have images, you're dead
+			// even if it was an image (because the GD based image check only checks if the extention is recognised)			
+			$mime = $this->getMimeType($tmppath, false, strtolower(preg_replace('/.*\.([a-z0-9]+)$/i', '$1',$_FILES['Filedata']['name'])) );
 			$mime_filters = $this->getAllowedMimeTypes($mime_filter);
 			if (!$this->IsAllowedMimeType($mime, $mime_filters))
 				throw new FileManagerException('extension');
@@ -1879,7 +1920,7 @@ class FileManager
 				unset($img);
 			}
 
-			if (!headers_sent()) header('Content-Type: application/json');
+			if (!headers_sent()) header('Content-Type: text/plain');//application/json');
 
 			echo json_encode(array(
 					'status' => 1,
@@ -1899,11 +1940,11 @@ class FileManager
 
 		$this->modify_json4exception($jserr, $emsg);
 
-		if (!headers_sent()) header('Content-Type: application/json');
+		if (!headers_sent()) header('Content-Type: text/plain');//application/json');
 
 		// when we fail here, it's pretty darn bad and nothing to it.
 		// just push the error JSON as go.
-		echo json_encode($jserr);
+		echo json_encode(array_merge($jserr, $_FILES));
 	}
 
 	/**
@@ -2786,7 +2827,7 @@ class FileManager
 	 */
 	public function getIcon($file, $smallIcon)
 	{
-		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
 		$largeDir = (!$smallIcon ? 'Large/' : '');
 		$url_path = $this->options['assetBasePath'] . 'Images/Icons/' .$largeDir.$ext.'.png';
@@ -3367,11 +3408,12 @@ class FileManager
 	 *                            but instead only the swift (and blunt) process of guestimating
 	 *                            the mime type from the file extension is performed.
 	 */
-	public function getMimeType($file, $just_guess = false)
+	public function getMimeType($file, $just_guess = false, $ext = NULL)
 	{
 		if (is_dir($file))
 			return 'text/directory';
 
+    if(!isset($ext)) // _FILES['tmp_name'] does not have an extention, we need to provide it   
 		$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
 		$mime = null;

@@ -78,6 +78,8 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
                                                                              
       propagateData:  Object.merge({'__function': 'image-manager'}, this.editor.config.MootoolsFileManager.backend_data),
       propagateType:  'POST',
+      
+      uploadAuthData: Object.merge({'__function': 'image-manager'}, this.editor.config.MootoolsFileManager.backend_data),
                                               
       onComplete:     function(path, file, mgr) { self.ImageManagerReturn(path,file); },
       onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
