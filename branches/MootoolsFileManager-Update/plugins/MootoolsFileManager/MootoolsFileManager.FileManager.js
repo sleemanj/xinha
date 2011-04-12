@@ -85,15 +85,23 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
     if(!this.FileManagerWidget)
     {    
       this.FileManagerWidget = new FileManager({
-        url:            this.editor.config.MootoolsFileManager.backend +'__function=file-manager&',
+        url:            this.editor.config.MootoolsFileManager.backend,
         assetBasePath:  Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets',
         language:       _editor_lang,
         selectable:     true,
         upload:         this.phpcfg.allow_files_upload,
         destroy:        this.phpcfg.allow_files_delete,
-        createFolders:  this.phpcfg.allow_files_upload,   
-        uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
-        onComplete:     function(path, file) { self.FileManagerReturn(path,file); },
+        createFolders:  this.phpcfg.allow_files_create_dir,   
+        rename:         this.phpcfg.allow_files_rename,
+        move_or_copy:   this.phpcfg.allow_files_rename,
+        download:       this.phpcfg.allow_files_download,   
+                                                     
+        propagateData:  Object.merge({'__function': 'file-manager'}, this.editor.config.MootoolsFileManager.backend_data),
+        propagateType:  'POST',
+      
+        uploadAuthData: Object.merge({'__function': 'file-manager'}, this.editor.config.MootoolsFileManager.backend_data),
+                                               
+        onComplete:     function(path, file, mgr) { self.FileManagerReturn(path,file); },
         onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
         onShow:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = ''; },
         onDetails:      function(details) 

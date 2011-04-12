@@ -475,7 +475,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
   {
     // Check if this is the same image
     var warn = function() {      
-      new Dialog('This image is a different size, would you like to use the new size?', {
+      new FileManager.Dialog('This image is a different size, would you like to use the new size?', {
         language: {        
           confirm: 'Shrink/Grow To Fit',        
           decline: 'Fullsize'
@@ -503,7 +503,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
       });
     }
       
-      if(!details.url) warn();
+      if(!details.path) warn();
       else if(!this.current_image) warn();
       else
       {
@@ -516,7 +516,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
                 src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
               }
           }
-          if(details.url != src) warn();
+          if(details.path != src) warn();
       }
     
   }

@@ -97,6 +97,12 @@ switch ( @$_REQUEST[ "__function" ] )
     break;
 
   case 'image-manager':
+    if(!@$IMConfig['images_dir'])
+    {
+      // Session time out
+      echo '{"status" : 0, "error": "No images_dir, most likely your session has timed out."}';exit;
+    }
+    
     // include('mootools-filemanager/Assets/Connector/FileManager.php');
     include('XinhaFileManager.php');
     
@@ -126,14 +132,20 @@ switch ( @$_REQUEST[ "__function" ] )
     break;
   
   case 'file-manager':
-    include('mootools-filemanager/Assets/Connector/FileManager.php');
-
-    $browser = new FileManager(array(
+    if(!@$IMConfig['files_dir'])
+    {
+      // Session time out
+      echo '{"status" : 0, "error": "No files_dir, most likely your session has timed out."}';exit;
+    }
+    
+    include('XinhaFileManager.php');
+    
+    $browser = new XinhaFileManager(array(
       'files_dir'     => $IMConfig['files_dir'],
       'files_url'     => $IMConfig['files_url'],
       
       'thumbs_dir'    => $IMConfig['thumbs_dir'],
-      'thumbs_url'    => $IMConfig['thumbs_dir'],
+      'thumbs_url'    => $IMConfig['thumbs_url'],
       
       'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
