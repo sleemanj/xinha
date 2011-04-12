@@ -97,7 +97,7 @@
       {
         $i = "";
         if($useObject) {
-          if(preg_match('#^[a-zA-Z]+[a-zA-Z0-9]*$#', $k)) {
+          if(preg_match('#^[a-zA-Z_]+[a-zA-Z0-9_]*$#', $k)) {
             $i .= "$k: ";
           } else {
             $i .= "'$k': ";
