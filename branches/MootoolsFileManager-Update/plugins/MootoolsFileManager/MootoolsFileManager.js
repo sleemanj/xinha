@@ -40,8 +40,8 @@ MootoolsFileManager.AssetLoader = Xinha.includeAssets();
 if(typeof MooTools == 'undefined')
 {
   MootoolsFileManager.AssetLoader
-    .loadScript('mootools-filemanager/Demos/mootools-core.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Demos/mootools-more.js', 'MootoolsFileManager');
+    .loadScript('mootools-core.js', 'MootoolsFileManager')
+    .loadScript('mootools-more.js', 'MootoolsFileManager');
 }
 
 // In case you want to use your own version of FileManager, you can load it first.
