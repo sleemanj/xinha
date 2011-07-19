@@ -108,9 +108,10 @@
                 'images_url' => preg_replace('/\/examples.*/', '', $_SERVER['REQUEST_URI']) . '/examples/images',
                 'allow_images_upload' => true,
                 'allow_images_delete' => true,
+                'allow_images_download' => true,
                 
-                'files_dir' => getcwd() . '/downloads',
-                'files_url' => preg_replace('/\/examples.*/', '', $_SERVER['REQUEST_URI']) .'/examples/downloads',
+                'files_dir' => getcwd() . '/images',
+                'files_url' => preg_replace('/\/examples.*/', '', $_SERVER['REQUEST_URI']) . '/examples/images',
                 'allow_files_upload' => true,
                 'max_files_upload_size' => '4M',
               )
