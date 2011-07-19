@@ -223,6 +223,4 @@ if(!isset($IMConfig['allow_files_create_dir']))
   $IMConfig['allow_files_create_dir'] = $IMConfig['allow_files_upload'];
 }
 
-
-
 ?>

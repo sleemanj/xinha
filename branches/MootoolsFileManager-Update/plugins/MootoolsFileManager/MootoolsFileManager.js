@@ -58,13 +58,21 @@ if(typeof FileManager == 'undefined')
     __MFM_USE_FLASH__ = true;
   }
   
+  // Because dom is probably already ready for us, we can't use the autoinit, we do it manually
+  __MILKBOX_NO_AUTOINIT__ = true;
+  
   MootoolsFileManager.AssetLoader
     // These are now loaded by FileManager.js automatically
     //.loadStyle('mootools-filemanager/Assets/Css/FileManager.css', 'MootoolsFileManager')
     //.loadStyle('mootools-filemanager/Assets/Css/Additions.css', 'MootoolsFileManager')
     //.loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')        
     .loadScript('mootools-filemanager/Source/FileManager.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager');
+    .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager')
+    .whenReady(function() {
+      window.milkbox =  new Milkbox({
+        centered:false
+      });
+    });
     
  if(__MFM_USE_FLASH__)
  {
@@ -117,7 +125,7 @@ function MootoolsFileManager(editor)
 MootoolsFileManager.prototype.hookUpButtons = function() 
 {
   var self = this;  
-  var phpcfg = self.phpcfg;
+  var phpcfg = self.phpcfg;    
   
   if (phpcfg.files_dir) 
   {

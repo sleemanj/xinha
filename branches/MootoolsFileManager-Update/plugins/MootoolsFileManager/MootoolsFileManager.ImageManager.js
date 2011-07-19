@@ -93,7 +93,10 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
                       {                        
                         $(self.ImageManagerAttributes().table).dispose();
                         return true;
-                      }
+                      },
+                      
+      showDirGallery: false,
+      keyboardNavigation: false
     });        
   }
   

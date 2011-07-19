@@ -113,7 +113,10 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
                         {                        
                           $(self.FileManagerAttributes().table).dispose();
                           return true;
-                        }
+                        },
+                        
+        showDirGallery: false,
+        keyboardNavigation: false
       });       
     }
     
