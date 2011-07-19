@@ -22,7 +22,7 @@
  *   - FileManager.php
  */
 
-require_once(str_replace('\\', '/', dirname(__FILE__)) . '/mootools-filemanager/Assets/Connector/FMgr4Alias.php');
+require_once(str_replace('\\', '/', dirname(__FILE__)) . '/mootools-filemanager/Assets/Connector/FileManagerWithAliasSupport.php');
 
 
 class XinhaFileManager extends FileManagerWithAliasSupport
@@ -58,10 +58,12 @@ class XinhaFileManager extends FileManagerWithAliasSupport
 	// when you want img.preview style max-width = 164px (was before: max-width: 140px)
 	// 
 	// Note that this will force all 250px thumbnails to a maximum width of 140px
-	public function getThumb($legal_url, $path, $width, $height)
+	/*
+	public function getThumb($meta, $path, $width, $height, $onlyIfExistsInCache = false)
 	{
-		return parent::getThumb($legal_url, $path, min(164, $width), $height);
+		return parent::getThumb($meta, $path, min(164, $width), $height, $onlyIfExistsInCache);
 	}
+	*/
 }
 
 

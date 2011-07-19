@@ -77,7 +77,7 @@ function size_to_bytes($s)
 require_once('config.php');
 
 // Ensure thumbnail path is OK
-if(!isset($IMConfig['files_dir']) || !isset($IMConfig['images_dir']))
+if(!isset($IMConfig['files_dir']) && !isset($IMConfig['images_dir']))
 {
   unset($IMConfig['thumbs_dir']);
   unset($IMConfig['thumbs_url']);
@@ -125,7 +125,9 @@ switch ( @$_REQUEST[ "__function" ] )
       'maxUploadSize' => size_to_bytes($IMConfig['max_images_upload_size']),      
       'suggestedMaxImageDimension' => $IMConfig['suggested_images_image_dimension'],
       'thumbnailsMustGoThroughBackend' => FALSE,          
-      'filter'        => 'image/',            
+      'filter'        => 'image/',          
+      
+      'thumbBigSize'  => 150,
     ));
 
     $browser->fireEvent(!empty($_REQUEST['event']) ? $_REQUEST['event'] : null);
@@ -160,7 +162,8 @@ switch ( @$_REQUEST[ "__function" ] )
       'suggestedMaxImageDimension' => $IMConfig['suggested_files_image_dimension'],
       'thumbnailsMustGoThroughBackend' => FALSE,      
      // 'filter'        => $IMConfig['files_filter'],
-            
+      'thumbBigSize'  => 150,
+      'useGetID3IfAvailable' => false,
     ));
 
     $browser->fireEvent(!empty($_REQUEST['event']) ? $_REQUEST['event'] : null);
