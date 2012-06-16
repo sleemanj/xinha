@@ -57,6 +57,12 @@
  *   - MoveIsAuthorized_cb (function/reference, default is *null*) authentication + authorization callback which can be used to determine whether the given file / subdirectory may be renamed, moved or copied.
  *     Note that currently support for copying subdirectories is missing.
  *     The parameter $action = 'move'.
+ *     UploadIsComplete_cb (function/reference, default is *null*) Upload complete callback which can be used to post process a newly upload file.
+ *     The parameter $action = 'upload'.
+ *     DownloadIsComplete_cb (function/reference, default is *null*) Download complete callback which can be used to post process after a file has been downloaded file.
+ *     The parameter $action = 'download'.
+ *     DestroyIsComplete_cb (function/reference, default is *null*) Destroy complete callback which can be used to cleanup after a newly deleted/destroyed file.
+ *     The parameter $action = 'destroy'.
  *
  * Obsoleted options:
  *   - maxImageSize: (integer, default is 1024) The maximum number of pixels in both height and width an image can have, if the user enables "resize on upload". (This option is obsoleted by the 'suggestedMaxImageDimension' option.)
@@ -524,8 +530,8 @@ if (!defined('DEVELOPMENT')) define('DEVELOPMENT', 0);   // make sure this #defi
 
 
 
-require(strtr(dirname(__FILE__), '\\', '/') . '/Tooling.php');
-require(strtr(dirname(__FILE__), '\\', '/') . '/Image.class.php');
+require_once(strtr(dirname(__FILE__), '\\', '/') . '/Tooling.php');
+require_once(strtr(dirname(__FILE__), '\\', '/') . '/Image.class.php');
 
 
 
@@ -1030,8 +1036,14 @@ class FileManager
 			'CreateIsAuthorized_cb' => null,
 			'DestroyIsAuthorized_cb' => null,
 			'MoveIsAuthorized_cb' => null,
+			
+			'UploadIsComplete_cb' => null,
+			'DownloadIsComplete_cb' => null,
+			'DestroyIsComplete_cb' => null,
+			
 			'showHiddenFoldersAndFiles' => false,      // Hide dot dirs/files ?
-			'useGetID3IfAvailable' => true
+			'useGetID3IfAvailable' => true,
+			'enableXSendFile' => false
 		), (is_array($options) ? $options : array()));
 
 		// transform the obsoleted/deprecated options:
@@ -1824,6 +1836,10 @@ class FileManager
 					'status' => 1,
 					'content' => 'destroyed'
 				));
+			
+			if (!empty($this->options['DestroyIsComplete_cb']) && function_exists($this->options['DestroyIsComplete_cb']))
+				$this->options['DestroyIsComplete_cb']($this, 'destroy', $fileinfo);	
+			
 			return;
 		}
 		catch(FileManagerException $e)
@@ -2129,6 +2145,13 @@ class FileManager
 			{
 				$fsize = filesize($file);
 				$fi = pathinfo($legal_url);
+				
+				// Based on the gist here: https://gist.github.com/854168
+				// Reference: http://codeutopia.net/blog/2009/03/06/sending-files-better-apache-mod_xsendfile-and-php/
+				// We should:
+				// 1. try to use Apache mod_xsendfile
+				// 2. Try to chunk the file into pieces
+				// 3. If the file is sufficiently small, send it directly
 
 				$hdrs = array();
 				// see also: http://www.boutell.com/newfaq/creating/forcedownload.html
@@ -2143,20 +2166,63 @@ class FileManager
 					$hdrs[] = 'Content-Type: application/octet-stream';
 					break;
 				}
+				
 				$hdrs[] = 'Content-Disposition: attachment; filename="' . $fi['basename'] . '"'; // use 'attachment' to force a download
-				$hdrs[] = 'Content-length: ' . $fsize;
-				$hdrs[] = 'Expires: 0';
-				$hdrs[] = 'Cache-Control: must-revalidate, post-check=0, pre-check=0';
-				$hdrs[] = '!Cache-Control: private'; // flag as FORCED APPEND; use this to open files directly
+				
+				// Content length isn't requied for mod_xsendfile (Apache handles this for us)
+				$modx = $this->options['enableXSendFile'] && function_exists('apache_get_modules') && in_array('mod_xsendfile', apache_get_modules());
+				if ($modx)
+				{
+					$hdrs[] = 'X-Sendfile: '.$file;
+				}
+				else
+				{
+					$hdrs[] = 'Content-length: ' . $fsize;
+					$hdrs[] = 'Expires: 0';
+					$hdrs[] = 'Cache-Control: must-revalidate, post-check=0, pre-check=0';
+					$hdrs[] = '!Cache-Control: private'; // flag as FORCED APPEND; use this to open files directly
+				}
 
 				$this->sendHttpHeaders($hdrs);
+				
+				if (!$modx)
+				{
+					$chunksize = 4*1024; // 4KB blocks
+					if ($fsize > $chunksize)
+					{
+						// Turn off compression which prevents files from being re-assembled properly (especially zip files)
+						function_exists('apache_setenv') && @apache_setenv('no-gzip', 1);
+						@ini_set('zlib.output_compression', 0);
+						
+						// Turn off any additional buffering by the server
+						@ini_set('implicit_flush', 1);
+						
+						// Disable any timeouts
+						@set_time_limit(0);
+						while (!feof($fd))
+						{
+							echo @fread($fd, $chunksize);
+							ob_flush();
+							flush();
+						}
+					}
+					else
+					{
+						fpassthru($fd);
+					}
+				}
 
-				fpassthru($fd);
 				fclose($fd);
+				
+				if (!empty($this->options['DownloadIsComplete_cb']) && function_exists($this->options['DownloadIsComplete_cb']))
+	               		  $this->options['DownloadIsComplete_cb']($this, 'download', $fileinfo);
+	
 				return;
 			}
 			
 			$emsg = 'read_error';
+
+			
 		}
 		catch(FileManagerException $e)
 		{
@@ -2432,6 +2498,10 @@ class FileManager
 					'status' => 1,
 					'name' => basename($file)
 				));
+			
+			if (!empty($this->options['UploadIsComplete_cb']) && function_exists($this->options['UploadIsComplete_cb']))
+				$this->options['UploadIsComplete_cb']($this, 'upload', $fileinfo);
+			
 			return;
 		}
 		catch(FileManagerException $e)

@@ -6,7 +6,7 @@ Translation:
 	[Alexandre Rocha](http://twitter.com/procy0n)
 */
 
-FileManager.Language.en = {
+FileManager.Language.pt = {
 	more: 'Detalhes',
 	width: 'Largura:',
 	height: 'Altura:',
