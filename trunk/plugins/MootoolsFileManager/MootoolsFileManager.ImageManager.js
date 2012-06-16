@@ -72,8 +72,8 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       upload:         this.phpcfg.allow_images_upload,
       destroy:        this.phpcfg.allow_images_delete,
       createFolders:  this.phpcfg.allow_images_create_dir,
-      rename:         this.phpcfg.allow_images_rename,
-      move_or_copy:   this.phpcfg.allow_images_rename,
+      rename:         this.phpcfg.allow_images_move,
+      move_or_copy:   this.phpcfg.allow_images_move,
       download:       this.phpcfg.allow_images_download,
                                                                              
       propagateData:  Object.merge({'__function': 'image-manager'}, this.editor.config.MootoolsFileManager.backend_data),

@@ -92,8 +92,8 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
         upload:         this.phpcfg.allow_files_upload,
         destroy:        this.phpcfg.allow_files_delete,
         createFolders:  this.phpcfg.allow_files_create_dir,   
-        rename:         this.phpcfg.allow_files_rename,
-        move_or_copy:   this.phpcfg.allow_files_rename,
+        rename:         this.phpcfg.allow_files_move,
+        move_or_copy:   this.phpcfg.allow_files_move,
         download:       this.phpcfg.allow_files_download,   
                                                      
         propagateData:  Object.merge({'__function': 'file-manager'}, this.editor.config.MootoolsFileManager.backend_data),
