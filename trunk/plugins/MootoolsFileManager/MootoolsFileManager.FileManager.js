@@ -105,7 +105,7 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
                         }
       });       
     }
-    
+    if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
     this.FileManagerWidget.show();    
 };
 
@@ -117,7 +117,7 @@ MootoolsFileManager.prototype.FileManagerReturn = function(path, file)
   
   var param = this.FileManagerAttributes();  
   param.f_href = path;
-    
+  if(Xinha.is_ie) this.editor.restoreSelection(this.current_selection);  
   if (!a)
   {
     try 

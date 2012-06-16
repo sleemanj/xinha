@@ -104,6 +104,7 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
     });        
   }
   
+  if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
   this.ImageManagerWidget.show();    
 };
 
@@ -513,12 +514,15 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
  
 MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
 {
+  
   var editor = this.editor;
   var self   = this;
   var image  = this.current_image;
   
   var param = self.ImageManagerAttributes();  
   param.f_url = path;
+  
+  if(Xinha.is_ie) this.editor.restoreSelection(this.current_selection);
   
   var img = image;
   if (!img) {
@@ -527,6 +531,7 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
       var range = editor._createRange(sel);
       editor._doc.execCommand("insertimage", false, param.f_url);
       img = range.parentElement();
+            
       // wonder if this works...
       if (img.tagName.toLowerCase() != "img") {
         img = img.previousSibling;
@@ -590,7 +595,7 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
         }
         break;
         
-        case "f_align"  : if(value && value !== true) { img.align  = value; } else { img.removeAttribute('align'); } break;
+        case "f_align"  : if(value && value !== true && value !== 'true') { img.align  = value; } else { img.removeAttribute('align'); } break;
           
         case "f_width" : 
         {
