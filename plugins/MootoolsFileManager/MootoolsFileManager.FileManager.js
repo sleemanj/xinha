@@ -111,7 +111,7 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
                         },
         onHidePreview:  function()
                         {                        
-                          $(self.FileManagerAttributes().table).dispose();
+                          document.id(self.FileManagerAttributes().table).dispose();
                           return true;
                         },
                         
@@ -120,6 +120,7 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
       });       
     }
     
+    if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
     if(link)
     {      
         var src  = Xinha.is_ie ? link.href : link.getAttribute("href");
@@ -159,6 +160,7 @@ MootoolsFileManager.prototype.FileManagerReturn = function(path, file)
   var param = this.FileManagerAttributes();  
   param.f_href = path;
     
+  if(Xinha.is_ie) this.editor.restoreSelection(this.current_selection);  
   if (!a)
   {
     try 

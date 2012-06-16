@@ -91,7 +91,7 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
                       },
       onHidePreview:  function()
                       {                        
-                        $(self.ImageManagerAttributes().table).dispose();
+                        document.id(self.ImageManagerAttributes().table).dispose();
                         return true;
                       },
                       
@@ -99,6 +99,7 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       keyboardNavigation: false
     });        
   }
+  if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
   
   if(self.current_image)
   {      
@@ -543,9 +544,10 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
   var param = self.ImageManagerAttributes();  
   param.f_url = path;
   
+  if(Xinha.is_ie) this.editor.restoreSelection(this.current_selection);
   var img = image;
   if (!img) {
-    if (Xinha.is_ie) {
+    if (0 && Xinha.is_ie) {  // Maybe IE7 Needs this, 9 seems to be ok, I think 8 too
       var sel = editor._getSelection();
       var range = editor._createRange(sel);
       editor._doc.execCommand("insertimage", false, param.f_url);
@@ -613,7 +615,7 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
         }
         break;
         
-        case "f_align"  : if(value && value !== true) { img.align  = value; } else { img.removeAttribute('align'); } break;
+        case "f_align"  : if(value && value !== true && value !== 'true') { img.align  = value; } else { img.removeAttribute('align'); } break;
           
         case "f_width" : 
         {
