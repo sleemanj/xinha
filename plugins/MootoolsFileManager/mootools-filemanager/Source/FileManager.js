@@ -90,7 +90,9 @@ var FileManager = new Class({
 		this.loader = new Element('div', {'class': 'loader', opacity: 0, tween: {duration: 200}}).inject(this.menu);
 
 		var self = this;
-		this.relayClick = function(e){
+		this.relayClick = function(e, f){
+			function actualRelayClick(e)
+			{
 			if(e) e.stop();
 			var file = this.retrieve('file');
 			if (this.retrieve('block') && !Browser.Engine.trident){
@@ -111,6 +113,8 @@ var FileManager = new Class({
       // Xinha: We need to have Current assigned before fillInfo because fillInfo adds to it      
       self.fillInfo(file);
 			self.switchButton();
+			}
+			actualRelayClick.apply(f,[e]);
 		};
 		this.browser = new Element('ul', {'class': 'filemanager-browser'}).addEvents({
 			click: (function(){

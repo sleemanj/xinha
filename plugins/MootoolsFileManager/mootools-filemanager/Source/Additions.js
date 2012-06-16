@@ -15,7 +15,7 @@ license:
   MIT-style license
 
 contains:
-  - Element.appearOn: Can be used to show an element when another one is hovered: $(myElement).appearOn(myWrapper)
+  - Element.appearOn: Can be used to show an element when another one is hovered: document.id(myElement).appearOn(myWrapper)
   - Element.center: Centers an element
   - Dialog, Overlay: Classes used by the FileManager
 ...

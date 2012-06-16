@@ -121,7 +121,7 @@ PasteText.prototype.apply = function()
 	if ( returnValues.insertParagraphs)
 	{
 		html = html.replace(/\t/g,"&nbsp;&nbsp;&nbsp;&nbsp;");
-		html = html.replace(/\n/g,"</p><p>");
+		html = html.replace(/\n+/g,"</p><p>");
 		html="<p>" + html + "</p>";
 		if (Xinha.is_ie)
 		{
@@ -129,7 +129,8 @@ PasteText.prototype.apply = function()
 		}
 		else
 		{
-			this.editor.execCommand("inserthtml",false,html);
+      this.editor.insertHTML(html);
+			// this.editor.execCommand("inserthtml",false,html);
 		}
 	}
 	else

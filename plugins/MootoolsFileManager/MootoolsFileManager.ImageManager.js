@@ -98,7 +98,7 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
                       },
       onHidePreview:  function()
                       {                        
-                        $(self.ImageManagerAttributes().table).dispose();
+                        document.id(self.ImageManagerAttributes().table).dispose();
                         return true;
                       }
     });        
