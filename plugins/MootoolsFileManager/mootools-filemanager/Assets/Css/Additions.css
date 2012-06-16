@@ -87,7 +87,7 @@ div.filemanager-dialog-engine-trident4 input, div.filemanager-dialog-engine-trid
 	width: 80%;
 }
 
-div.filemanager-dialog button {
+div.filemanager-dialog button, div.filemanager-dialog .filemanager-button {
 	position: absolute;
 	bottom: 15px;
 	right: 15px;
@@ -111,12 +111,13 @@ div.filemanager-dialog button {
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 }
-div.filemanager-dialog-engine-trident4 button, div.filemanager-dialog-engine-trident5 button {
+div.filemanager-dialog-engine-trident4 button, div.filemanager-dialog-engine-trident4 .filemanager-button,
+div.filemanager-dialog-engine-trident5 button, div.filemanager-dialog-engine-trident5 .filemanager-button {
 	padding: 0 .25em;
 	overflow: visible;
 }
 
-div.filemanager-dialog button.filemanager-dialog-decline {
+div.filemanager-dialog button.filemanager-dialog-decline, div.filemanager-dialog .filemanager-button.filemanager-dialog-decline {
 	right: auto;
 	left: 15px;
 }

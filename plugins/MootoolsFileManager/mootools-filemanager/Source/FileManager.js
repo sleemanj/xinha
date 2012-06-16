@@ -3249,9 +3249,9 @@ var FileManager = new Class({
 
 	// adds buttons to the file main menu, which onClick start a method with the same name
 	addMenuButton: function(name) {
-		var el = new Element('button', {
-			'class': 'filemanager-' + name,
-			text: this.language[name]
+		var el = new Element('div', {
+			'class': 'filemanager-button filemanager-' + name,
+			text: this.language[name],
 		}).inject(this.menu, 'top');
 
 		if (this[name+'_on_click'])
@@ -3614,6 +3614,10 @@ Asset.javascript(__MFM_ASSETS_DIR__+'/js/milkbox/milkbox.js');
 Asset.css(__MFM_ASSETS_DIR__+'/js/milkbox/css/milkbox.css');
 Asset.css(__MFM_ASSETS_DIR__+'/Css/FileManager.css');
 Asset.css(__MFM_ASSETS_DIR__+'/Css/Additions.css');
+if(Browser.ie && Browser.version <= 7) 
+{   
+  Asset.css(__MFM_ASSETS_DIR__+'/Css/FileManager_ie7.css');
+}
 Asset.javascript(__MFM_ASSETS_DIR__+'/js/jsGET.js', {
 	events: {
 		load: (function() {

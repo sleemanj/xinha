@@ -499,7 +499,11 @@ this.Milkbox = new Class({
 		this.formElements = $$('select, textarea');
 		if(this.formElements.length == 0) return;
 
-		this.formElements = this.formElements.map(function(elem){
+		this.formElements = this.formElements.filter(function(elem){   
+      var vis = elem.getStyle('visibility');    
+      var dis = elem.getStyle('display');     
+      return (dis !== 'none' && vis !== 'hidden');     
+    }).map(function(elem){
 			elem.store('visibility',elem.getStyle('visibility'));
 			elem.store('display',elem.getStyle('display'));
 			return elem;
