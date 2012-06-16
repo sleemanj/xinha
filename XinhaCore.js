@@ -1613,7 +1613,7 @@ Xinha.prototype._createToolbar = function ()
     if(e.tagName) e.unselectable = "on";        
     if(e.childNodes)
     {
-      for(var i = 0; i < e.childNodes.length; i++) if(e.tagName) noselect(e.childNodes(i));
+      for(var i = 0; i < e.childNodes.length; i++) if(e.tagName) noselect(e.childNodes[i]);
     }
 	}
 	if(Xinha.is_ie) noselect(toolbar);
@@ -6277,8 +6277,25 @@ if ( document.addEventListener )
  */
   Xinha._stopEvent = function(ev)
   {
-    ev.preventDefault();
-    ev.stopPropagation();
+    if(ev.preventDefault)
+    {  
+      ev.preventDefault();
+    }
+    // IE9 now supports addEventListener, but does not support preventDefault.  Sigh
+    else
+    {
+      ev.returnValue = false;
+    }
+    
+    if(ev.stopPropagation)
+    {
+      ev.stopPropagation();
+    }
+    // IE9 now supports addEventListener, but does not support stopPropagation.  Sigh
+    else
+    {
+      ev.cancelBubble = true;
+    }
   };
 }
  /** same as above, for IE
