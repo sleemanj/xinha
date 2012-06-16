@@ -85,7 +85,7 @@ InsertAnchor.prototype.show = function()
 	var editor = this.editor;
 	this.selectedHTML = editor.getSelectedHTML();
 	var sel  = editor.getSelection();
-  var range  = editor.createRange(sel);
+  this.range  = editor.createRange(sel);
   this.a = editor.activeElement(sel);
   
   if(!(this.a != null && this.a.tagName.toLowerCase() == 'a'))
@@ -139,7 +139,7 @@ InsertAnchor.prototype.apply = function ()
 		  if (html) a.innerHTML += html;
 			if (Xinha.is_ie) 
 			{
-            range.pasteHTML(a.outerHTML);
+            this.range.pasteHTML(a.outerHTML);
           	}
 			else 
 			{
