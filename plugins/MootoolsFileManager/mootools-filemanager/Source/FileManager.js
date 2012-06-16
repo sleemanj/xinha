@@ -83,6 +83,7 @@ var FileManager = new Class({
 		download: false,
 		createFolders: false,
 		filter: '',
+		listType: 'thumb',								// the standard list type can be 'list' or 'thumb'
     keyboardNavigation: true,         // set to false to turn off keyboard navigation (tab, up/dn/pageup/pagedn etc)
 		detailInfoMode: '',               // (string) whether you want to receive extra metadata on select/etc. and/or view this metadata in the preview pane (modes: '', '+metaHTML', '+metaJSON'. Modes may be combined)
     previewHandlers: {},              // [partial] mimetype: function, function is called with previewArea (DOM element, put preview in here), fileDetails
@@ -91,7 +92,7 @@ var FileManager = new Class({
 		hideOnClick: false,
 		hideClose: false,
 		hideOverlay: false,
-		hideQonDelete: false,
+		hideOnDelete: false,
 		hideOnSelect: true,               // (boolean). Default to true. If set to false, it leavers the FM open after a picture select.
     showDirGallery: true,
 		thumbSize4DirGallery: 120,        // To set the thumb gallery container size for each thumb (dir-gal-thumb-bg); depending on size, it will pick either the small or large thumbnail provided by the backend and scale that one
@@ -134,7 +135,7 @@ var FileManager = new Class({
 		this.assetBasePath = this.options.assetBasePath.replace(/(\/|\\)*$/, '/');
 		this.root = null;
 		this.CurrentDir = null;
-		this.listType = 'list';
+		this.listType = this.options.listType;
 		this.dialogOpen = false;
 		this.storeHistory = false;
 		this.fmShown = false;
@@ -272,7 +273,7 @@ var FileManager = new Class({
 		this.pathTitle = new Element('a', {href:'#','class': 'filemanager-dir-title',text: this.language.dir}).addEvent('click',(function(e) {
 			this.diag.log('pathTitle-click event: ', e, ' @ ', e.target.outerHTML);
 			e.stop();
-			if (this.header.getElement('span.filemanager-dir') != null) {
+			if (this.header.getElement('span.filemanager-dir') !== null) {
 				this.selectablePath.setStyle('width',(this.header.getSize().x - this.pathTitle.getSize().x - 55));
 				this.selectablePath.replaces(this.clickablePath);
 			}
@@ -372,16 +373,25 @@ var FileManager = new Class({
 				'class':'listType',
 				'style' : 'margin-right: 10px;',
 				'title': this.language.toggle_side_boxes
-			}).set('opacity',0.5).addEvents({
+			}).setStyle('opacity',0.5).addEvents({
 				click: this.toggleList.bind(this)
 			});
 		this.browserMenu_list = new Element('a',{
 				'id':'toggle_side_list',
 				'class':'listType',
 				'title': this.language.toggle_side_list
-			}).set('opacity',1).addEvents({
+			}).setStyle('opacity',1).addEvents({
 				click: this.toggleList.bind(this)
 			});
+
+		if(this.listType == 'thumb') {
+			this.browserMenu_thumb.setStyle('opacity',1);
+			this.browserMenu_list.setStyle('opacity',0.5);
+		}
+
+		// set startup list type
+		if(this.options.thumbnailList === true)
+			this.toggleList.bind(this);
 
 		// Add a scroller to scroll the browser list when dragging a file
 		this.scroller = new Scroller(this.browserScroll, {
@@ -394,6 +404,8 @@ var FileManager = new Class({
 			}
 		});
 
+    if(this.options.showDirGallery)
+    {
 // Partikule : Thumbs list in preview panel
 		this.browserMenu_thumbList = new Element('a',{
 				'id': 'show_dir_thumb_gallery',
@@ -418,7 +430,7 @@ var FileManager = new Class({
 				this.fillInfo();
 			}.bind(this));
 // /Partikule
-
+    }
 
 		this.browser_dragndrop_info = new Element('a',{
 				'id':'drag_n_drop',
@@ -426,25 +438,25 @@ var FileManager = new Class({
 			}); // .setStyle('visibility', 'hidden');
 		this.browser_paging = new Element('div',{
 				'id':'fm_view_paging'
-			}).set('opacity', 0); // .setStyle('visibility', 'hidden');
+			}).setStyle('opacity', 0); // .setStyle('visibility', 'hidden');
 		this.browser_paging_first = new Element('a',{
 				'id':'paging_goto_first'
-			}).set('opacity', 1).addEvents({
+			}).setStyle('opacity', 1).addEvents({
 				click: this.paging_goto_first.bind(this)
 			});
 		this.browser_paging_prev = new Element('a',{
 				'id':'paging_goto_previous'
-			}).set('opacity', 1).addEvents({
+			}).setStyle('opacity', 1).addEvents({
 				click: this.paging_goto_prev.bind(this)
 			});
 		this.browser_paging_next = new Element('a',{
 				'id':'paging_goto_next'
-			}).set('opacity', 1).addEvents({
+			}).setStyle('opacity', 1).addEvents({
 				click: this.paging_goto_next.bind(this)
 			});
 		this.browser_paging_last = new Element('a',{
 				'id':'paging_goto_last'
-			}).set('opacity', 1).addEvents({
+			}).setStyle('opacity', 1).addEvents({
 				click: this.paging_goto_last.bind(this)
 			});
 		this.browser_paging_info = new Element('span',{
@@ -521,6 +533,9 @@ var FileManager = new Class({
 
 		// Thumbs list container (in preview panel)
 		this.dir_filelist = new Element('div', {'class': 'filemanager-filelist'});
+		// creates a list, HELPS to make the thumblist DRAGABLE
+		this.dir_filelist_thumbUl = new Element('ul');
+		this.dir_filelist_thumbUl.inject(this.dir_filelist);
 
 // /Partikule
 
@@ -552,9 +567,14 @@ var FileManager = new Class({
 				});
 			}
 		});
+
+		// add toolTips
 		if (!this.options.hideClose) {
 			this.tips.attach(this.closeIcon);
 		}
+		this.tips.attach(this.browserMenu_thumb);
+		this.tips.attach(this.browserMenu_list);
+		this.tips.attach(this.browserMenu_thumbList);
 
 		this.imageadd = Asset.image(this.assetBasePath + 'Images/add.png', {
 			'class': 'browser-add',
@@ -562,7 +582,7 @@ var FileManager = new Class({
 			{
 				'z-index': this.options.zIndex + 1600
 			}
-		}).set('opacity', 0).set('tween', {duration: 'short'}).inject(this.container);
+		}).setStyle('opacity', 0).set('tween', {duration: 'short'}).inject(this.container);
 
 		if (!this.options.hideOverlay) {
 			this.overlay = new Overlay(Object.append((this.options.hideOnClick ? {
@@ -733,7 +753,7 @@ var FileManager = new Class({
 		}
 		else
 		{
-			var parent = (this.options.parentContainer != null ? $(this.options.parentContainer) : this.container.getParent());
+			var parent = (this.options.parentContainer !== null ? document.id(this.options.parentContainer) : this.container.getParent());
 			if (parent)
 			{
 				parentSize = parent.getSize();
@@ -768,11 +788,15 @@ var FileManager = new Class({
 	relayClick: function(e, el) {
 		if (e) e.stop();
 
+		// if the clicked elelement is from the preview gallery, get the corresponding element
+		if(el.retrieve('el_ref'))
+				el = el.retrieve('el_ref');
+
 		// ignore mouse clicks while drag&drop + resulting copy/move is pending.
 		//
 		// Theoretically only the first click originates from the same mouse event as the 'drop' event, so we
 		// COULD reset 'drop_pending' after processing that one.
-		if (this.drop_pending != 0)
+		if (this.drop_pending !== 0)
 		{
 			this.drop_pending = 0;
 		}
@@ -810,47 +834,30 @@ var FileManager = new Class({
 			this.fillInfo(file);
 
 			this.switchButton4Current();
+
+			// // // now make sure we can see the selected item in the left pane: scroll there:
+			this.browserSelection('current');
 		}
 	},
 
 // Partikule
 
 	/**
-	 * Catches both single and double click on thumb list icon in the directory preview thumb/gallery list
-	 */
-	relayDblClick: function(e, self, dg_el, file, clicks)
+	* Catches double clicks and open the file if selectable is true */
+	relayDblClick: function(e, el)
 	{
+		if(this.options.selectable === false)
+			return;
 		if (e) e.stop();
 
-		this.diag.log('on relayDblClick file = ', file, ', current dir: ', this.CurrentDir, ', # clicks: ', clicks);
+		this.diag.log('on relayDblClick file = ', el.retrieve('file'), ', current dir: ', this.CurrentDir);
 
 		this.tips.hide();
 
-		var el_ref = dg_el.retrieve('el_ref');
+		this.CurrentFile = el.retrieve('file');
 
-		if (this.Current)
-		{
-			this.Current.removeClass('selected');
-		}
-
-		this.Current = el_ref.addClass('selected');
-		file = el_ref.retrieve('file');
-
-		this.CurrentFile = file;
-
-		// now make sure we can see the selected item in the left pane: scroll there:
-		this.browserSelection('none');
-
-		// only simulate the 'select' button click by doubleclick on thumbnail in directory preview, when 'select' is actually allowed.
-		if (clicks === 2 && this.options.selectable)
-		{
+		if (this.CurrentFile.mime !== 'text/directory')
 			this.open_on_click(null);
-		}
-		else
-		{
-			// the single-click action is to simulate a click on the corresponding line in the directory view (left pane)
-			this.relayClick(e, el_ref);
-		}
 	},
 
 // /Partikule
@@ -858,15 +865,15 @@ var FileManager = new Class({
 	toggleList: function(e) {
 		if (e) e.stop();
 
-		$$('.filemanager-browserheader a.listType').set('opacity',0.5);
+		$$('.filemanager-browserheader a.listType').setStyle('opacity',0.5);
 		if (!this.browserMenu_thumb.retrieve('set',false)) {
 			this.browserMenu_list.store('set',false);
-			this.browserMenu_thumb.store('set',true).set('opacity',1);
+			this.browserMenu_thumb.store('set',true).setStyle('opacity',1);
 			this.listType = 'thumb';
 			if (typeof jsGET !== 'undefined') jsGET.set('fmListType=thumb');
 		} else {
 			this.browserMenu_thumb.store('set',false);
-			this.browserMenu_list.store('set',true).set('opacity',1);
+			this.browserMenu_list.store('set',true).setStyle('opacity',1);
 			this.listType = 'list';
 			if (typeof jsGET !== 'undefined') jsGET.set('fmListType=list');
 		}
@@ -911,7 +918,7 @@ var FileManager = new Class({
 
 			case 'fmFile':
 				var hot_item = (this.Current && this.Current.retrieve('file'));
-				if (hot_item == null || value !== hot_item.name)
+				if (hot_item === null || value !== hot_item.name)
 				{
 					this.browser.getElements('span.fi span').each((function(current)
 					{
@@ -945,14 +952,14 @@ var FileManager = new Class({
 		if (typeof preselect === 'undefined') preselect = null;
 		if (typeof loaddir === 'undefined') loaddir = null;
 
-		if (loaddir == null && typeof jsGET !== 'undefined')
+		if (loaddir === null && typeof jsGET !== 'undefined')
 		{
-			if (jsGET.get('fmPath') != null)
+			if (jsGET.get('fmPath') !== null)
 			{
 				loaddir = jsGET.get('fmPath');
 			}
 		}
-		if (loaddir == null)
+		if (loaddir === null)
 		{
 			if (this.CurrentDir)
 			{
@@ -969,13 +976,13 @@ var FileManager = new Class({
 			if (jsGET.get('fmFile')) {
 				this.diag.log('on show: set onShow on fmFile: ', jsGET.get('fmFile'));
 			}
-			if (jsGET.get('fmListType') != null) {
-				$$('.filemanager-browserheader a.listType').set('opacity',0.5);
+			if (jsGET.get('fmListType') !== null) {
+				$$('.filemanager-browserheader a.listType').setStyle('opacity',0.5);
 				this.listType = jsGET.get('fmListType');
 				if (this.listType === 'thumb')
-					this.browserMenu_thumb.store('set',true).set('opacity',1);
+					this.browserMenu_thumb.store('set',true).setStyle('opacity',1);
 				else
-					this.browserMenu_list.store('set',true).set('opacity',1);
+					this.browserMenu_list.store('set',true).setStyle('opacity',1);
 			}
 			jsGET.set({
 				'fmID': this.ID,
@@ -1436,10 +1443,14 @@ var FileManager = new Class({
 						clearTimeout(this.view_fill_timer);
 						this.view_fill_timer = null;
 
-						rerendering_list = true;
-						this.fill(null, this.get_view_fill_startindex(), this.listPaginationLastSize);
+						// was here before
 					}
 				}
+
+				// -> move this here, so it always reloads the thumbnail pane in the preview window
+						rerendering_list = true;
+						this.fill(null, this.get_view_fill_startindex(), this.listPaginationLastSize);
+
 				// make sure fade does not clash with parallel directory (re)load:
 				if (!rerendering_list)
 				{
@@ -1451,6 +1462,10 @@ var FileManager = new Class({
 					}
 				}
 				this.browserLoader.fade(0);
+
+				// clear preview pane thumbnails
+				// this.dir_filelist.empty();
+
 			}).bind(this),
 			onComplete: function() {},
 			onError: (function(text, error) {
@@ -1463,7 +1478,7 @@ var FileManager = new Class({
 	},
 
 	destroy: function(file) {
-		if (this.options.hideQonDelete) {
+		if (this.options.hideOnDelete) {
 			this.destroy_noQasked(file);
 		}
 		else {
@@ -1556,10 +1571,10 @@ var FileManager = new Class({
 	},
 
 	browserSelection: function(direction) {
-		var csel;
+		var csel,current;
 
 		this.diag.log('browserSelection : direction = ', direction);
-		if (this.browser.getElement('li') == null) return;
+		if (this.browser.getElement('li') === null) return;
 
 		if (direction === 'go-bottom')
 		{
@@ -1568,7 +1583,7 @@ var FileManager = new Class({
 
 			// blow away any lingering 'selected' after a page switch like that
 			csel = this.browser.getElement('span.fi.selected');
-			if (csel != null)
+			if (csel !== null)
 				csel.removeClass('selected');
 		}
 		else if (direction === 'go-top')
@@ -1578,22 +1593,25 @@ var FileManager = new Class({
 
 			// blow away any lingering 'selected' after a page switch like that
 			csel = this.browser.getElement('span.fi.selected');
-			if (csel != null)
+			if (csel !== null)
 				csel.removeClass('selected');
 		}
-		else if (this.browser.getElement('span.fi.hover') == null && this.browser.getElement('span.fi.selected') == null)
+		else if (this.browser.getElement('span.fi.hover') === null && this.browser.getElement('span.fi.selected') === null)
 		{
 			// none is selected: select first item (folder/file)
 			current = this.browser.getFirst('li').getElement('span.fi');
 		}
+		else if(direction === 'current') {
+			current = this.Current;
+		}
 		else
 		{
 			// select the current file/folder or the one with hover
-			var current = null;
-			if (this.browser.getElement('span.fi.hover') == null && this.browser.getElement('span.fi.selected') != null) {
+			current = null;
+			if (this.browser.getElement('span.fi.hover') === null && this.browser.getElement('span.fi.selected') !== null) {
 				current = this.browser.getElement('span.fi.selected');
 			}
-			else if (this.browser.getElement('span.fi.hover') != null) {
+			else if (this.browser.getElement('span.fi.hover') !== null) {
 				current = this.browser.getElement('span.fi.hover');
 			}
 		}
@@ -1627,7 +1645,7 @@ var FileManager = new Class({
 
 			// when we're at the bottom of the view and there are more pages, go to the next page:
 			next = current.getNext('li');
-			if (next == null)
+			if (next === null)
 			{
 				if (this.paging_goto_next(null, 'go-bottom'))
 					break;
@@ -1636,7 +1654,7 @@ var FileManager = new Class({
 			{
 				for ( ; stepsize > 0; stepsize--) {
 					next = current.getNext('li');
-					if (next == null)
+					if (next === null)
 						break;
 					current = next;
 				}
@@ -1667,7 +1685,7 @@ var FileManager = new Class({
 
 			// when we're at the top of the view and there are pages before us, go to the previous page:
 			var previous = current.getPrevious('li');
-			if (previous == null)
+			if (previous === null)
 			{
 				if (this.paging_goto_prev(null, 'go-top'))
 					break;
@@ -1676,7 +1694,7 @@ var FileManager = new Class({
 			{
 				for ( ; stepsize > 0; stepsize--) {
 					previous = current.getPrevious('li');
-					if (previous == null)
+					if (previous === null)
 						break;
 					current = previous;
 				}
@@ -1699,14 +1717,14 @@ var FileManager = new Class({
 			this.storeHistory = true;
 			this.Current = current;
 			csel = this.browser.getElement('span.fi.selected');
-			if (csel != null) // remove old selected one
+			if (csel !== null) // remove old selected one
 				csel.removeClass('selected');
 
 			current.addClass('selected');
 			currentFile = current.retrieve('file');
 			this.diag.log('on key ENTER file = ', currentFile);
 			if (currentFile.mime === 'text/directory') {
-				this.load(currentFile.dir + currentFile.name /*.replace(this.root,'')*/);
+				this.load(currentFile.path /*.replace(this.root,'')*/);
 			}
 			else {
 				this.fillInfo(currentFile);
@@ -1724,10 +1742,10 @@ var FileManager = new Class({
 			// and before we go and delete the entry, see if we pick the next one down or up as our next cursor position:
 			var parent = current.getParent('li');
 			next = parent.getNext('li');
-			if (next == null) {
+			if (next === null) {
 				next = parent.getPrevious('li');
 			}
-			if (next != null) {
+			if (next !== null) {
 				next = next.getElement('span.fi');
 				next.addClass('hover');
 			}
@@ -1895,7 +1913,7 @@ var FileManager = new Class({
 		this.browser.empty();
 
 		// Adding the thumbnail list in the preview panel: blow away any pre-existing list now, as we'll generate a new one now:
-		this.dir_filelist.empty();
+		this.dir_filelist_thumbUl.empty();
 
 		// set history
 		if (typeof jsGET !== 'undefined' && this.storeHistory)
@@ -2193,7 +2211,7 @@ var FileManager = new Class({
 		{
 			file = j.dirs[idx];
 
-			if (idx % 10 == 0) {
+		if (idx % 10 === 0) {
 				// try not to spend more than 100 msecs per (UI blocking!) loop run!
 				loop_duration = new Date().getTime() - loop_starttime;
 				duration = new Date().getTime() - starttime;
@@ -2239,7 +2257,7 @@ var FileManager = new Class({
 
 			editButtons.each(function(v) {
 				//icons.push(
-				Asset.image(this.assetBasePath + 'Images/' + v + '.png', {title: this.language[v]}).addClass('browser-icon').set('opacity', 0).addEvent('mouseup', (function(e, target) {
+				Asset.image(this.assetBasePath + 'Images/' + v + '.png', {title: this.language[v]}).addClass('browser-icon').setStyle('opacity', 0).addEvent('mouseup', (function(e, target) {
 					// this = el, self = FM instance
 					e.preventDefault();
 					this.store('edit', true);
@@ -2274,7 +2292,7 @@ var FileManager = new Class({
 			{
 				file = j.files[idx - dir_count];
 
-				if (idx % 10 == 0) {
+				if (idx % 10 === 0) {
 					// try not to spend more than 100 msecs per (UI blocking!) loop run!
 					loop_duration = new Date().getTime() - loop_starttime;
 					duration = new Date().getTime() - starttime;
@@ -2452,6 +2470,15 @@ var FileManager = new Class({
 					}).bind(el));
 				}
 
+				// add double click functionality to the list elements
+				if(this.options.selectable === true) {
+					el.addEvent('dblclick', (function(e) {
+						self.diag.log('is_file:DBLCLICK: ', e);
+						var node = this;
+						self.relayDblClick.apply(self, [e, node]);
+					}).bind(el));
+				}
+
 				editButtons = [];
 
 				// download, rename, delete icon
@@ -2460,7 +2487,7 @@ var FileManager = new Class({
 				if (this.options.destroy) editButtons.push('destroy');
 
 				editButtons.each(function(v) {
-					Asset.image(this.assetBasePath + 'Images/' + v + '.png', {title: this.language[v]}).addClass('browser-icon').set('opacity', 0).addEvent('mouseup', (function(e, target) {
+					Asset.image(this.assetBasePath + 'Images/' + v + '.png', {title: this.language[v]}).addClass('browser-icon').setStyle('opacity', 0).addEvent('mouseup', (function(e, target) {
 						// this = el, self = FM instance
 						e.preventDefault();
 						this.store('edit', true);
@@ -2509,24 +2536,17 @@ var FileManager = new Class({
 
 // Partikule
 // Thumbs list
+// edit: Fabian Vogelsteller: made thumblist DRAGGABLE
 
 				// use a closure to keep a reference to the current dg_el, otherwise dg_el, file, etc. will carry the values they got at the end of the loop!
 				(function(dg_el, el, file)
 				{
-					dg_el.store('el_ref', el).addEvents({
-						'click': function(e)
-						{
-							clearTimeout(self.dir_gallery_click_timer);
-							self.dir_gallery_click_timer = self.relayDblClick.delay(700, self, [e, this, dg_el, file, 1]);
-						},
-						'dblclick': function(e)
-						{
-							clearTimeout(self.dir_gallery_click_timer);
-							self.dir_gallery_click_timer = self.relayDblClick.delay(0, self, [e, this, dg_el, file, 2]);
-						}
-					});
+					var thumbLi = new Element('li');
 
-					dg_el.inject(this.dir_filelist);
+					dg_el.store('el_ref', el).store('file',file).store('parent',thumbLi);
+
+					thumbLi.inject(this.dir_filelist_thumbUl);
+					dg_el.inject(thumbLi);
 				}).bind(this)(dg_el, el, file);
 
 // / Partikule
@@ -2562,6 +2582,13 @@ var FileManager = new Class({
 		duration = new Date().getTime() - starttime;
 		//this.diag.log(' + time taken in array traversal + revert = ', duration);
 
+		// -> made preview thumblist DRAGGABLE
+		// add the thumbnail pane in preview window to the dropable elements
+		this.dir_filelist.getChildren('ul li div.fi').each((function(thumb){
+			els[0].push(thumb);
+		}).bind(this));
+
+		// make draggable
 		if (support_DnD_for_this_dir) {
 			// -> make draggable
 			$$(els[0]).makeDraggable({
@@ -2749,10 +2776,13 @@ var FileManager = new Class({
 										clearTimeout(this.view_fill_timer);
 										this.view_fill_timer = null;
 
-										rerendering_list = true;
-										this.fill(null, this.get_view_fill_startindex(), this.listPaginationLastSize);
+										// was here
 									}
 								}
+
+								// -> moves this here so it always reloads the thumbnail pane in the preview window
+								rerendering_list = true;
+								this.fill(null, this.get_view_fill_startindex(), this.listPaginationLastSize);
 
 								// make sure fade does not clash with parallel directory (re)load:
 								if (!rerendering_list)
@@ -2793,6 +2823,9 @@ var FileManager = new Class({
 			this.browser_dragndrop_info.setStyle('background-position', '0px 0px');
 			this.browser_dragndrop_info.set('title', this.language.drag_n_drop);
 		}
+
+		// add tooltip for drag n drop icon
+		this.tips.attach(this.browser_dragndrop_info);
 
 		// check how much we've consumed so far:
 		duration = new Date().getTime() - starttime;
@@ -2924,7 +2957,7 @@ var FileManager = new Class({
 			var dir = this.CurrentDir.path;
 
 			this.diag.log('fillInfo: request detail for file: ', Object.clone(file), ', dir: ', dir);
-      if(this.options.showDirGallery == false && file.mime === 'text/directory') return;
+      if(this.options.showDirGallery === false && file.mime === 'text/directory') return;
 			var tx_cfg = this.options.mkServerRequestURL(this, 'detail', {
 							directory: this.dirname(file.path),
 							// fixup for root directory detail requests:
@@ -3149,7 +3182,7 @@ var FileManager = new Class({
                 .adopt(new Element('dd').set('text', fileDetails.bitrate))
               .inject(previewArea);
               
-    previewArea = new Element('div', {class: 'filemanager-preview-content'}).inject(previewArea);
+    previewArea = new Element('div', {'class': 'filemanager-preview-content'}).inject(previewArea);
     
     var dewplayer = this.assetBasePath + '/dewplayer.swf';
                   
@@ -3174,12 +3207,12 @@ var FileManager = new Class({
 			opacity: opacity[1]
 		});
 
-		$(appearOn).addEvents({
+		document.id(appearOn).addEvents({
 			mouseenter: (function() {
-							this.set('opacity', opacity[0]);
+							this.setStyle('opacity', opacity[0]);
 						}).bind(icon),
 			mouseleave: (function() {
-							this.set('opacity', opacity[1]);
+							this.setStyle('opacity', opacity[1]);
 						}).bind(icon)
 		});
 		return icon;
@@ -3717,18 +3750,9 @@ FileManager.Dialog = new Class({
 		var autofocus_el = (this.options.autofocus_on ? this.el.getElement(this.options.autofocus_on) : (this.el.getElement('button.filemanager-dialog-confirm') || this.el.getElement('button')));
 		if (autofocus_el)
 		{
-			if (('autofocus' in autofocus_el) && !(Browser.Engine && Browser.Engine.webkit))
-			{
 				// HTML5 support: see    http://diveintohtml5.org/detect.html
-				//
-				// Unfortunately, it's not really working for me in webkit browsers (Chrome, Safari)  :-((
-				autofocus_el.set('autofocus', 'autofocus');
-				autofocus_el = null;
-			}
-			else
-			{
-				// Safari / Chrome have trouble focussing on things not yet fully rendered!
-			}
+			autofocus_el.setProperty('autofocus', 'autofocus');
+      autofocus_el.focus();
 		}
 		this.el.center().fade(1).get('tween').chain((function() {
 				// Safari / Chrome have trouble focussing on things not yet fully rendered!
@@ -3862,10 +3886,8 @@ this.Overlay = new Class({
 
 		this.resize();
 
-		this.el.setStyles({
-			opacity: 0,
-			display: 'block'
-		}).get('tween'). /* pause(). */ start('opacity', 0.5);
+		this.el.setStyle('display', 'block');
+		this.el.fade('hide').fade(0.5);
 
 		window.addEvent('resize', this.resize.bind(this));
 
@@ -3907,7 +3929,7 @@ this.Overlay = new Class({
 	revertObjects: function() {
 		if (this.objects && this.objects.length) {
 			this.objects.each(function(el) {
-				el.style.visibility = 'visible';
+					el.setStyle('visibility', 'visible');
 			});
 		}
 
