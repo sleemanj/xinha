@@ -688,8 +688,8 @@ var FileManager = new Class({
 	},
 
 	addMenuButton: function(name){
-		var el = new Element('button', {
-			'class': 'filemanager-' + name,
+		var el = new Element('div', {
+			'class': 'filemanager-' + name + ' button',
 			text: this.language[name]
 		}).inject(this.menu, 'top');
 		if (this[name]) el.addEvent('click', this[name].bind(this));
