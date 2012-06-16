@@ -149,7 +149,7 @@
    {
      $bk = $_REQUEST['backend_data'];
      session_name($bk['session_name']);
-     @session_start();
+     @session_start(); @session_write_close();
      if(!isset($_SESSION[$bk['key_location']])) return NULL;
      
      if($KeyLocation !== $bk['key_location'])

@@ -143,6 +143,9 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
               continue;
             }
           }
+
+          if(root.tagName.toLowerCase() == 'img' && a.nodeName.toLowerCase() == 'complete') continue;
+
           if (typeof a.nodeValue == 'object' ) continue; // see #684
           if (root.tagName.toLowerCase() == "input" 
               && root.type.toLowerCase() == "checkbox" 

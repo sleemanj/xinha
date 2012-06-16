@@ -332,7 +332,7 @@ class FileManager {
 	}
 
 	protected function getMimeType($file){
-		return is_dir($file) ? 'text/directory' : Upload::mime($file);
+		return preg_replace('/; charset.*$/', '', is_dir($file) ? 'text/directory' : Upload::mime($file));
 	}
 	
 	protected function getDir($dir){
@@ -348,6 +348,7 @@ class FileManager {
 	protected function checkFile($file){
 		$mimes = $this->getAllowedMimeTypes();
 		$hasFilter = $this->options['filter'] && count($mimes);
+
 		if ($hasFilter) array_push($mimes, 'text/directory');
 		return !(!$file || !FileManagerUtility::startsWith($file, $this->basedir) || !file_exists($file) || ($hasFilter && !in_array($this->getMimeType($file), $mimes)));
 	}

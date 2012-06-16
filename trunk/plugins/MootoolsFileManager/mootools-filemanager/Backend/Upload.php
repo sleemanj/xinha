@@ -101,6 +101,7 @@ class Upload {
 		}
 		error_reporting($ini);
 		
+		$mime = preg_replace('/;\s*charset=.*$/', '', $mime);
 		if(!$mime && in_array($options['extension'], array('gif', 'jpg', 'jpeg', 'png'))){
 			$image = getimagesize($file);
 			if(!empty($image['mime']))

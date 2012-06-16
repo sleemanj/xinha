@@ -539,7 +539,10 @@ Xinha.ripStylesFromCSSString = function(css, skip_imports, imports_relative_to)
   //  so we'll drop out all coments and rules
   var RE_comment = /\/\*(.|\r|\n)*?\*\//g;
   var RE_rule    = /\{(.|\r|\n)*?\}/g;
+  var RE_special = /\@[a-zA-Z]+[^;]*;/g;
+
   css = css.replace(RE_comment, '');
+  css = css.replace(RE_special, ',');
   css = css.replace(RE_rule, ',');
 
   // And split on commas

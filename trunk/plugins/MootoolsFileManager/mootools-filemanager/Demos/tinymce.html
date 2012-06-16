@@ -96,9 +96,9 @@
 		});
 
 		window.addEvent('domready', function(){
-			$('getEditorText').addEvent('click', function(e){
+			document.id('getEditorText').addEvent('click', function(e){
 				e.stop();
-				$('editorContent').set('html', tinyMCE.activeEditor.getContent());
+				document.id('editorContent').set('html', tinyMCE.activeEditor.getContent());
 			});
 		});
 	</script>

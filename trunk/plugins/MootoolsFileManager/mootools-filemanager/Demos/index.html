@@ -79,10 +79,10 @@
 				language: 'en',
 				uploadAuthData: {session: 'MySessionId'}
 			});
-			$('example1').addEvent('click', manager1.show.bind(manager1));
+			document.id('example1').addEvent('click', manager1.show.bind(manager1));
 
 			/* Select a file */
-			var el = $('example2');
+			var el = document.id('example2');
 			var div, manager2;
 			var complete = function(path, file){
 				el.set('value', path);
@@ -133,12 +133,12 @@
 				hideOnClick: true,
 				uploadAuthData: {session: 'MySessionId'}
 			});
-			$('example3').addEvent('click', manager3.show.bind(manager3));
+			document.id('example3').addEvent('click', manager3.show.bind(manager3));
 
 
 			/* Gallery Example */
 			var global = this;
-			var example4 = $('myGallery');
+			var example4 = document.id('myGallery');
 			var manager4 = new FileManager.Gallery({
 				url: 'selectImage.php',
 				assetBasePath: '../Assets',
@@ -161,7 +161,7 @@
 					*/
 				}
 			});
-			$('example4').addEvent('click', manager4.show.bind(manager4));
+			document.id('example4').addEvent('click', manager4.show.bind(manager4));
 		});
 	</script>
 </head>
