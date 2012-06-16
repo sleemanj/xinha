@@ -223,7 +223,7 @@ $IMConfig['show_full_options'] = true;
 * DEFAULT: for demo purposes we turn this off.
 */
 
-$IMConfig['allow_new_dir'] = true;
+$IMConfig['allow_new_dir'] = false;
 
 // -------------------------------------------------------------------------
 
@@ -254,7 +254,7 @@ $IMConfig['allow_upload'] = false;
 * 
 */
 
-$IMConfig['allow_delete'] = true;
+$IMConfig['allow_delete'] = false;
 
 // -------------------------------------------------------------------------
 
@@ -269,7 +269,7 @@ $IMConfig['allow_delete'] = true;
 * 
 */
 
-$IMConfig['allow_edit'] = true;
+$IMConfig['allow_edit'] = false;
 
 
 // -------------------------------------------------------------------------

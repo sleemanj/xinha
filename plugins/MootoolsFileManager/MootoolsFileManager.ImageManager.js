@@ -64,33 +64,26 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
   if(!this.ImageManagerWidget)
   {
     this.ImageManagerWidget = new FileManager({
-      url:            this.editor.config.MootoolsFileManager.backend+'__function=image-manager&',
+      url:            this.editor.config.MootoolsFileManager.backend,
       assetBasePath:  Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets',
       language:       _editor_lang,
       selectable:     true,
+                                              
       upload:         this.phpcfg.allow_images_upload,
-      uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
-      onComplete:     function(path, file) { self.ImageManagerReturn(path,file); },
+      destroy:        this.phpcfg.allow_images_delete,
+      createFolders:  this.phpcfg.allow_images_create_dir,
+      rename:         this.phpcfg.allow_images_rename,
+      move_or_copy:   this.phpcfg.allow_images_rename,
+      download:       this.phpcfg.allow_images_download,
+                                                                             
+      propagateData:  Object.merge({'__function': 'image-manager'}, this.editor.config.MootoolsFileManager.backend_data),
+      propagateType:  'POST',
+      
+      uploadAuthData: Object.merge({'__function': 'image-manager'}, this.editor.config.MootoolsFileManager.backend_data),
+                                              
+      onComplete:     function(path, file, mgr) { self.ImageManagerReturn(path,file); },
       onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
-      onShow:         function() {        
-        if(this.swf && this.swf.box) this.swf.box.style.display = ''; 
-        if(self.current_image)
-        {
-            var src  = self.current_image.getAttribute('src');
-            if(!src.match(/^(([a-z]+:)|\/)/i))
-            {
-                src = self.editor.config.baseHref.replace(/\/[^\/]*$/, '') + '/' + src;
-                if(src.match(/^[a-z]+:/i) && !self.phpcfg.images_url.match(/^[a-z]:/i))
-                {
-                  src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
-                }
-            }
-            var path = src.replace(self.phpcfg.images_url+'/', '').split('/');
-            var base = path.pop();
-            path     = self.phpcfg.images_url.split('/').pop() + (path.length ? ('/' + path.join('/')) : '');  
-            this.load(path, true, (function() { this.fillInfo(base); }).bind(this));            
-        }
-      },
+      onShow:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = '';     },
       onDetails:      function(details) 
                       {                                                 
                         this.info.adopt(self.ImageManagerAttributes(details)); 
@@ -100,12 +93,42 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
                       {                        
                         document.id(self.ImageManagerAttributes().table).dispose();
                         return true;
-                      }
+                      },
+                      
+      showDirGallery: false,
+      keyboardNavigation: false
     });        
   }
-  
   if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
-  this.ImageManagerWidget.show();    
+  
+  if(self.current_image)
+  {      
+      var src  = self.current_image.getAttribute('src');
+      if(!src.match(/^(([a-z]+:)|\/)/i))
+      {
+          src = self.editor.config.baseHref.replace(/\/[^\/]*$/, '') + '/' + src;
+          if(src.match(/^[a-z]+:/i) && !self.phpcfg.images_url.match(/^[a-z]:/i))
+          {
+            src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
+          }
+      }
+      
+      // Get exploded path without the base url
+      var path = src.replace(self.phpcfg.images_url+'/', '').split('/');
+      
+      // Pull off the file
+      var base = path.pop();      
+      
+      // Join the path back togethor (no base url, trailing slash if the path has any length)
+      path = path.length ? (path.join('/') + '/') : '';
+      
+      // feed to widget
+      this.ImageManagerWidget.show(null, path, base);          
+  }
+  else
+  {
+    this.ImageManagerWidget.show();    
+  }
 };
 
 /** Return a DOM fragment which has all the fields needed to set the
@@ -456,7 +479,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
   {
     // Check if this is the same image
     var warn = function() {      
-      new Dialog('This image is a different size, would you like to use the new size?', {
+      new FileManager.Dialog('This image is a different size, would you like to use the new size?', {
         language: {        
           confirm: 'Shrink/Grow To Fit',        
           decline: 'Fullsize'
@@ -484,7 +507,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
       });
     }
       
-      if(!details.url) warn();
+      if(!details.path) warn();
       else if(!this.current_image) warn();
       else
       {
@@ -497,7 +520,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
                 src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
               }
           }
-          if(details.url != src) warn();
+          if(details.path != src) warn();
       }
     
   }
@@ -523,10 +546,9 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
   param.f_url = path;
   
   if(Xinha.is_ie) this.editor.restoreSelection(this.current_selection);
-  
   var img = image;
   if (!img) {
-    if (Xinha.is_ie) {
+    if (0 && Xinha.is_ie) {  // Maybe IE7 Needs this, 9 seems to be ok, I think 8 too
       var sel = editor._getSelection();
       var range = editor._createRange(sel);
       editor._doc.execCommand("insertimage", false, param.f_url);

@@ -40,26 +40,55 @@ MootoolsFileManager.AssetLoader = Xinha.includeAssets();
 if(typeof MooTools == 'undefined')
 {
   MootoolsFileManager.AssetLoader
-    .loadScript('mootools-filemanager/Demos/mootools-core.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Demos/mootools-more.js', 'MootoolsFileManager');
+    .loadScript('mootools-core.js', 'MootoolsFileManager')
+    .loadScript('mootools-more.js', 'MootoolsFileManager');
 }
 
 // In case you want to use your own version of FileManager, you can load it first.
 // You better look at the changes we had to do to the standard one though.
 if(typeof FileManager == 'undefined')
 {
+  if(typeof __MFM_ASSETS_DIR__ == 'undefined')
+  {
+    __MFM_ASSETS_DIR__ = Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets'
+  }
+  
+  if(typeof __MFM_USE_FLASH__ == 'undefined')
+  {
+    __MFM_USE_FLASH__ = true;
+  }
+  
+  // Because dom is probably already ready for us, we can't use the autoinit, we do it manually
+  __MILKBOX_NO_AUTOINIT__ = true;
+  
   MootoolsFileManager.AssetLoader
-    .loadStyle('mootools-filemanager/Css/FileManager.css', 'MootoolsFileManager')
-    .loadStyle('mootools-filemanager/Css/Additions.css', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')        
-    .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Uploader/Swiff.Uploader.js', 'MootoolsFileManager')
+    // These are now loaded by FileManager.js automatically
+    //.loadStyle('mootools-filemanager/Assets/Css/FileManager.css', 'MootoolsFileManager')
+    //.loadStyle('mootools-filemanager/Assets/Css/Additions.css', 'MootoolsFileManager')
+    //.loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')        
     .loadScript('mootools-filemanager/Source/FileManager.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager');
+    .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager')
+    .whenReady(function() {
+      window.milkbox =  new Milkbox({
+        centered:false
+      });
+    });
+    
+ if(__MFM_USE_FLASH__)
+ {
+   MootoolsFileManager.AssetLoader
+     .loadScript('mootools-filemanager/Source/Uploader/Swiff.Uploader.js', 'MootoolsFileManager')
+     .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
+     .loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager');
+ }
+ else
+ {
+   MootoolsFileManager.AssetLoader
+      .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
+      .loadScript('mootools-filemanager/Source/NoFlash.Uploader.js', 'MootoolsFileManager');
+ }    
 }
 MootoolsFileManager.AssetLoader.loadStyle('MootoolsFileManager.css', 'MootoolsFileManager');
-
 
 function MootoolsFileManager(editor)
 {  
@@ -96,7 +125,7 @@ function MootoolsFileManager(editor)
 MootoolsFileManager.prototype.hookUpButtons = function() 
 {
   var self = this;  
-  var phpcfg = self.phpcfg;
+  var phpcfg = self.phpcfg;    
   
   if (phpcfg.files_dir) 
   {

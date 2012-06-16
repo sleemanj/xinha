@@ -1,12 +1,12 @@
 .filemanager-container .filemanager { overflow:visible; }
-.filemanager-info-area { width:50%; float:left; clear:left; }
-.filemanager-preview-area { width:50%; float:left; clear:right; }
-div.filemanager-info-area dt, div.filemanager-preview-area dt { width:25%; margin-left:5px; }
+
+div.filemanager-info-area dt, div.filemanager-preview-area dt { width: 100px; margin-left:5px; }
 div.filemanager-info-area dd, div.filemanager-preview-area dd { width:auto; }
+div.filemanager div.filemanager-preview-content {clear:none; }
 
 div.filemanager-preview-area dt { float:left; }
 div.filemanager-preview-area h2 { display:none; }
-div.filemanager-preview-area img.preview { margin-left:5px; margin-right:5px; margin-top:0px; float:right; clear:right; max-width:140px; }
+div.filemanager-preview-area img.preview { margin-left:5px; margin-right:5px; margin-top:0px; float:right; clear:right; /*max-width:140px;*/ }
 div.filemanager-preview-area dl { float:left; clear:left; width:auto; }
 div.filemanager-preview div.object { margin-left:15%; margin-right:15%; margin-top:0px; float:right; clear:right; }
 
@@ -51,3 +51,11 @@ table.filemanager-extended-options .buttonColor .nocolor { padding: 0px; }
 table.filemanager-extended-options .buttonColor .nocolor-hilite { background-color: #fff; color: #f00; }
 
 div.filemanager-uploader-area { clear:both; }
+div.filemanager-preview p.tech_info {
+  clear: both;
+}
+
+div.filemanager-preview p.err_info {
+  clear: both;
+}
+
