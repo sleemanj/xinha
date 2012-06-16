@@ -10,7 +10,7 @@ div.filemanager a img {
 
 div.filemanager-container,
 div.filemanager,
-div.filemanager button,
+div.filemanager button, div.filemanager .filemanager-button,
 div.filemanager label,
 div.filemanager h1 {
 	width: auto;
@@ -91,7 +91,7 @@ div.filemanager div.filemanager-menu {
 	-o-border-radius: 0 0 8px 0;
 }
 
-div.filemanager button {
+div.filemanager button, div.filemanager .filemanager-button {
 	cursor: pointer;
 	height: 22px;
 	line-height: 20px;        /* lift the text in the button by 1 px: line-height: 20px vs height: 22px */
@@ -109,25 +109,25 @@ div.filemanager button {
 	-o-border-radius: 4px;
 	border-radius: 4px;
 }
-div.filemanager-engine-trident4 button,
-div.filemanager-engine-trident5 button {
+div.filemanager-engine-trident4 button, div.filemanager-engine-trident4 .filemanager-button,
+div.filemanager-engine-trident5 button, div.filemanager-engine-trident5 .filemanager-button {
 	padding: 0 .25em;
 	overflow: visible;
 }
 
-div.filemanager-menu button {
+div.filemanager-menu button, div.filemanager-menu .filemanager-button {
 	float: right;
 }
 
-div.filemanager button:hover,
-div.filemanager button.hover,
-div.filemanager button:focus {
+div.filemanager button:hover, div.filemanager .filemanager-button:hover,
+div.filemanager button.hover, div.filemanager .filemanager-button.hover,
+div.filemanager button:focus, div.filemanager .filemanager-button:focus {
 	border: 1px solid #5f676e;
 }
 
-div.filemanager button.disabled,
-div.filemanager button.disabled:hover,
-div.filemanager button.disabled:focus {
+div.filemanager button.disabled,       div.filemanager .filemanager-button.disabled,
+div.filemanager button.disabled:hover, div.filemanager .filemanager-button.disabled:hover,
+div.filemanager button.disabled:focus, div.filemanager .filemanager-button.disabled:focus {
 	cursor: default;
 	color: #666;
 	text-shadow: none;
@@ -135,7 +135,7 @@ div.filemanager button.disabled:focus {
 	border-color: #bababa;
 }
 
-div.filemanager button.filemanager-open {
+div.filemanager button.filemanager-open, div.filemanager .filemanager-button.filemanager-open  {
 	font-weight: bold;
 }
 
@@ -831,7 +831,7 @@ div.selected-file .file-cancel {
 
 
 /* GALLERY */
-div.filemanager button.filemanager-serialize {
+div.filemanager button.filemanager-serialize, div.filemanager .filemanager-button.filemanager-serialize {
 	font-weight: bold;
 }
 
@@ -962,9 +962,12 @@ div.filemanager-wrapper textarea {
 
 	border: 1px solid #bebebe;
 	background: #fff;
+  
+  /* and prevent FF, Chrome, Safari et al from resizing the textarea and destroy the layout that way: */
+  resize: none;
 }
 
-div.filemanager-wrapper button {
+div.filemanager-wrapper button, div.filemanager-wrapper .filemanager-button {
 	margin: 3px 7px;
 }
 
