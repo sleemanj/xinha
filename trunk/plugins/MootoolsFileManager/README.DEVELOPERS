@@ -1,11 +1,5 @@
-The mootools-filemanager is a git repository which (probably) contains local modifications to work better with Xinha.  Therefore, we want to keep it as a git repo so we can easily update.
+The mootools-filemanager directory contains a version of mootools-filemanager as extracted from the following git repository
 
-The upstream git repository is (from http://github.com/cpojer/mootools-filemanager)
+https://github.com/sleemanj/mootools-filemanager/
 
-git://github.com/cpojer/mootools-filemanager.git
-
-Simply CD'ing into the mootools-filemanager directory and performing
-  git pull
-should be sufficient to update.
-
-The mootools-filemanager/.git/ directory should be stripped prior to shipping for space concerns.
+it has been stripped of unnecessary code including the "GetID3" library as this is GPL licenced rather than MIT, no code changes are necessary from the git above, just stuff deleted.
