@@ -2,7 +2,7 @@ div.filemanager-container { display: none; }
 div.filemanager * { outline: 0; }
 div.filemanager a img { border: 0 }
 
-div.filemanager-container, div.filemanager, div.filemanager button, div.filemanager label, div.filemanager h1 {
+div.filemanager-container, div.filemanager, div.filemanager .button, div.filemanager label, div.filemanager h1 {
 	width: auto;
 	margin: 0;
 	
@@ -38,7 +38,7 @@ div.filemanager div.filemanager-menu {
 	background: url(../Assets/menu.png) repeat-x;
 }
 
-div.filemanager button {
+div.filemanager .button {
 	cursor: pointer;
 	height: 22px;
 	line-height: 22px;
@@ -55,20 +55,20 @@ div.filemanager button {
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 }
-div.filemanager-engine-trident4 button, div.filemanager-engine-trident5 button {
+div.filemanager-engine-trident4 .button, div.filemanager-engine-trident5 .button {
 	padding: 0 .25em;
 	overflow: visible;
 }
 
-div.filemanager-menu button {
+div.filemanager-menu .button {
 	float: right;
 }
 
-div.filemanager button:hover, div.filemanager button.hover, div.filemanager button:focus {
+div.filemanager .button:hover, div.filemanager .button.hover, div.filemanager .button:focus {
 	border: 1px solid #5f676e;
 }
 
-div.filemanager button.disabled, div.filemanager button.disabled:hover, div.filemanager button.disabled:focus {
+div.filemanager .button.disabled, div.filemanager .button.disabled:hover, div.filemanager .button.disabled:focus {
 	cursor: default;
 	color: #666;
 	text-shadow: none;
@@ -76,7 +76,7 @@ div.filemanager button.disabled, div.filemanager button.disabled:hover, div.file
 	border-color: #bababa;
 }
 
-div.filemanager button.filemanager-open {
+div.filemanager .button.filemanager-open {
 	font-weight: bold;
 }
 
@@ -401,7 +401,7 @@ div.selected-file .file-cancel {
 
 
 /* GALLERY */
-div.filemanager button.filemanager-serialize {
+div.filemanager .button.filemanager-serialize {
 	font-weight: bold;
 }
 
@@ -526,7 +526,7 @@ div.filemanager-wrapper input {
 	background: #fff;
 }
 
-div.filemanager-wrapper button {
+div.filemanager-wrapper .button {
 	margin: 3px 7px;
 }
 
