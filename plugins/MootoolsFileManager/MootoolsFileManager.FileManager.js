@@ -89,12 +89,12 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
         assetBasePath:  Xinha.getPluginDir('MootoolsFileManager')+'/mootools-filemanager/Assets',
         language:       _editor_lang,
         selectable:     true,
-        upload:         this.phpcfg.allow_files_upload,
-        destroy:        this.phpcfg.allow_files_delete,
-        createFolders:  this.phpcfg.allow_files_create_dir,   
-        rename:         this.phpcfg.allow_files_move,
-        move_or_copy:   this.phpcfg.allow_files_move,
-        download:       this.phpcfg.allow_files_download,   
+        upload:         this.phpcfg.files_allow_upload,
+        destroy:        this.phpcfg.files_allow_delete,
+        createFolders:  this.phpcfg.files_allow_create_dir,   
+        rename:         this.phpcfg.files_allow_move,
+        move_or_copy:   this.phpcfg.files_allow_move,
+        download:       this.phpcfg.files_allow_download,   
                                                      
         propagateData:  Object.merge({'__function': 'file-manager'}, this.editor.config.MootoolsFileManager.backend_data),
         propagateType:  'POST',
@@ -116,7 +116,11 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
                         },
                         
         showDirGallery: false,
-        keyboardNavigation: false
+        keyboardNavigation: false,
+        listType:           this.phpcfg.files_list_type,
+        listPaginationSize: this.phpcfg.files_pagination_size,
+        listMaxSuggestedDirSizeForThumbnails: this.phpcfg.files_list_mode_over,
+        directory:          this.phpcfg.files_list_start_in
       });       
     }
 

@@ -115,15 +115,15 @@ switch ( @$_REQUEST[ "__function" ] )
       
       'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
-      'upload'        => $IMConfig['allow_images_upload'],
-      'destroy'       => $IMConfig['allow_images_delete'],      
-      'create'        => $IMConfig['allow_images_create_dir'],
-      'move'          => $IMConfig['allow_images_move'],
-      'download'      => $IMConfig['allow_images_download'],
+      'upload'        => $IMConfig['images_allow_upload'],
+      'destroy'       => $IMConfig['images_allow_delete'],      
+      'create'        => $IMConfig['images_allow_create_dir'],
+      'move'          => $IMConfig['images_allow_move'],
+      'download'      => $IMConfig['images_allow_download'],
       
       
-      'maxUploadSize' => size_to_bytes($IMConfig['max_images_upload_size']),      
-      'suggestedMaxImageDimension' => $IMConfig['suggested_images_image_dimension'],
+      'maxUploadSize' => size_to_bytes($IMConfig['images_max_upload_size']),      
+      'suggestedMaxImageDimension' => $IMConfig['images_suggested_image_dimension'],
       'thumbnailsMustGoThroughBackend' => FALSE,          
       'filter'        => 'image/',          
       
@@ -151,15 +151,15 @@ switch ( @$_REQUEST[ "__function" ] )
       
       'assetBasePath' => $IMConfig['base_url'] .'/mootools-filemanager/Assets',
       
-      'upload'        => $IMConfig['allow_files_upload'],
-      'destroy'       => $IMConfig['allow_files_delete'],
-      'create'        => $IMConfig['allow_files_create_dir'],
-      'move'          => $IMConfig['allow_files_move'],
-      'download'      => $IMConfig['allow_files_download'],
+      'upload'        => $IMConfig['files_allow_upload'],
+      'destroy'       => $IMConfig['files_allow_delete'],
+      'create'        => $IMConfig['files_allow_create_dir'],
+      'move'          => $IMConfig['files_allow_move'],
+      'download'      => $IMConfig['files_allow_download'],
       
       
-      'maxUploadSize' => size_to_bytes($IMConfig['max_files_upload_size']),      
-      'suggestedMaxImageDimension' => $IMConfig['suggested_files_image_dimension'],
+      'maxUploadSize' => size_to_bytes($IMConfig['files_max_upload_size']),      
+      'suggestedMaxImageDimension' => $IMConfig['files_suggested_image_dimension'],
       'thumbnailsMustGoThroughBackend' => FALSE,      
      // 'filter'        => $IMConfig['files_filter'],
       'thumbBigSize'  => 150,

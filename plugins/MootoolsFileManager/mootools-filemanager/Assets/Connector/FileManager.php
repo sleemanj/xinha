@@ -1043,7 +1043,13 @@ class FileManager
 			
 			'showHiddenFoldersAndFiles' => false,      // Hide dot dirs/files ?
 			'useGetID3IfAvailable' => true,
-			'enableXSendFile' => false
+			'enableXSendFile' => false,
+			'readme_file'          => '.readme.html', // If a directory contains a file of this name, the contents of this file 
+                                               //  will be returned in the ajax.  The MFM front end will display this in 
+                                               //  the preview area, provided there is nothing else to display there.
+                                               //  Useful for displaying help text.  The file should only be an 
+                                               //  html snippet, not a complete html file.
+                                               
 		), (is_array($options) ? $options : array()));
 
 		// transform the obsoleted/deprecated options:
@@ -1365,7 +1371,10 @@ class FileManager
 					'date' => date($this->options['dateFormat'], @filemtime($dir)),
 					'mime' => 'text/directory',
 					'icon48' => $icon48_de,
-					'icon' => $icon_de
+					'icon' => $icon_de,
+					'readme' => file_exists($dir . '/' . $this->options['readme_file']) 
+                  ? file_get_contents($dir . '/' . $this->options['readme_file']) 
+                  : null,
 				),
 				'preselect_index' => ($file_preselect_index >= 0 ? $file_preselect_index + count($out[1]) + 1 : 0),
 				'preselect_name' => ($file_preselect_index >= 0 ? $file_preselect_arg : null),
@@ -3561,7 +3570,7 @@ class FileManager
           
           if(function_exists('exif_imagetype') && exif_imagetype($file) !== FALSE)
           {
-            $rv['exif'] = exif_read_data($file, 0, true);    
+            $rv['exif'] = @exif_read_data($file, 0, true);    
             $rv['jpg']['exif'] = $rv['exif']; // Not strictly true!
           }
         }

@@ -58,6 +58,11 @@ if(typeof FileManager == 'undefined')
     __MFM_USE_FLASH__ = true;
   }
   
+  if(typeof __MFM_USE_BACK_BUTTON_NAVIGATION__ == 'undefined')
+  {
+    __MFM_USE_BACK_BUTTON_NAVIGATION__ = false;
+  }
+  
   // Because dom is probably already ready for us, we can't use the autoinit, we do it manually
   __MILKBOX_NO_AUTOINIT__ = true;
   

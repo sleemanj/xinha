@@ -100,7 +100,8 @@ var FileManager = new Class({
 		styles: {},
 		listPaginationSize: 100,          // add pagination per N items for huge directories (speed up interaction)
 		listPaginationAvgWaitTime: 2000,  // adaptive pagination: strive to, on average, not spend more than this on rendering a directory chunk
-
+    listMaxSuggestedDirSizeForThumbnails: 30, // if a directory load has more than this many items (dirs+files), and the view mode is currently thumbs
+                                              // it is dropped back to the listing view mode, the user can still switch back, at their own risk!
 		standalone: true,                 // (boolean). Default to true. If set to false, returns the Filemanager without enclosing window / overlay.
 		parentContainer: null,            // (string). ID of the parent container. If not set, FM will consider its first container parent for fitSizes();
 		propagateData: {},                // extra query parameters sent with every request to the backend
@@ -386,12 +387,17 @@ var FileManager = new Class({
 
 		if(this.listType == 'thumb') {
 			this.browserMenu_thumb.setStyle('opacity',1);
-			this.browserMenu_list.setStyle('opacity',0.5);
+      this.browserMenu_list.setStyle('opacity',0.5);      
+      this.browserMenu_thumb.store('set', true);
+			this.browserMenu_list.store('set', false);
 		}
-
-		// set startup list type
-		if(this.options.thumbnailList === true)
-			this.toggleList.bind(this);
+		else
+    {
+      this.browserMenu_thumb.setStyle('opacity',0.5);
+      this.browserMenu_list.setStyle('opacity',1);      
+      this.browserMenu_thumb.store('set', false);
+      this.browserMenu_list.store('set', true);
+    }
 
 		// Add a scroller to scroll the browser list when dragging a file
 		this.scroller = new Scroller(this.browserScroll, {
@@ -864,7 +870,8 @@ var FileManager = new Class({
 
 	toggleList: function(e) {
 		if (e) e.stop();
-
+    if(e && e.target && document.id(e.target).retrieve('set', false)) return; // Already Set
+                            
 		$$('.filemanager-browserheader a.listType').setStyle('opacity',0.5);
 		if (!this.browserMenu_thumb.retrieve('set',false)) {
 			this.browserMenu_list.store('set',false);
@@ -1324,7 +1331,16 @@ var FileManager = new Class({
 					this.browserLoader.fade(0);
 					return;
 				}
-
+       
+       if(this.listType == 'thumb' && (j.files.length + j.dirs.length) > this.options.listMaxSuggestedDirSizeForThumbnails) 
+       {
+          this.listType = 'list';
+          this.browserMenu_thumb.setStyle('opacity',0.5);
+          this.browserMenu_list.setStyle('opacity',1);      
+          this.browserMenu_thumb.store('set', false);
+          this.browserMenu_list.store('set', true);
+       }
+         
 				// make sure we store the JSON list!
 				this.reset_view_fill_store(j);
 
@@ -2320,7 +2336,7 @@ var FileManager = new Class({
 				// As we now have two views into the directory, we have to fetch the thumbnails, even when we're in 'list' view: the direcory gallery will need them!
 				// Besides, fetching the thumbs and all right after we render the directory also makes these thumbs + metadata available for drag&drop gallery and
 				// 'select mode', so they don't always have to ask for the meta data when it is required there and then.
-				if (file.thumb48 || /* this.listType !== 'thumb' || */ !file.thumbs_deferred)
+				if (file.thumb48 ||  this.listType !== 'thumb' || !file.thumbs_deferred)
 				{
 					// This is just a raw image
 					el = this.list_row_maker((this.listType === 'thumb' ? (file.thumb48 ? file.thumb48 : file.icon48) : file.icon), file);
@@ -2957,14 +2973,19 @@ var FileManager = new Class({
 			var dir = this.CurrentDir.path;
 
 			this.diag.log('fillInfo: request detail for file: ', Object.clone(file), ', dir: ', dir);
-      if(this.options.showDirGallery === false && file.mime === 'text/directory') return;
+      if(file.mime === 'text/directory')
+      {    
+        if(file.readme && file.readme.length) { this.preview.set('html', file.readme); this.preview_area.setStyle('display', 'block').fade('in'); return; }
+        if(this.options.showDirGallery === false) return;    
+      }
+      
 			var tx_cfg = this.options.mkServerRequestURL(this, 'detail', {
 							directory: this.dirname(file.path),
 							// fixup for root directory detail requests:
 							file: (file.mime === 'text/directory' && file.path === '/') ? '/' : file.name,
 							filter: this.options.filter,
 							// provide either direct links to the thumbnails (when available in cache) or PHP event trigger URLs for delayed thumbnail image creation (performance optimization: faster page render):
-							mode: 'auto' + this.options.detailInfoMode
+							mode: 'direct' + this.options.detailInfoMode
 						});
 
 			this.Request = new FileManager.Request({
@@ -3618,13 +3639,18 @@ if(Browser.ie && Browser.version <= 7)
 {   
   Asset.css(__MFM_ASSETS_DIR__+'/Css/FileManager_ie7.css');
 }
-Asset.javascript(__MFM_ASSETS_DIR__+'/js/jsGET.js', {
-	events: {
-		load: (function() {
-			window.fireEvent('jsGETloaded');
-		}).bind(this)
-	}
-});
+
+
+if( __MFM_USE_BACK_BUTTON_NAVIGATION__ )
+{
+  Asset.javascript(__MFM_ASSETS_DIR__+'/js/jsGET.js', {
+    events: {
+      load: (function() {
+        window.fireEvent('jsGETloaded');
+      }).bind(this)
+    }
+  });
+}
 
 Element.implement({
 

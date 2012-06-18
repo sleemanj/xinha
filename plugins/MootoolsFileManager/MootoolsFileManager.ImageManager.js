@@ -69,12 +69,12 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       language:       _editor_lang,
       selectable:     true,
                                               
-      upload:         this.phpcfg.allow_images_upload,
-      destroy:        this.phpcfg.allow_images_delete,
-      createFolders:  this.phpcfg.allow_images_create_dir,
-      rename:         this.phpcfg.allow_images_move,
-      move_or_copy:   this.phpcfg.allow_images_move,
-      download:       this.phpcfg.allow_images_download,
+      upload:         this.phpcfg.images_allow_upload,
+      destroy:        this.phpcfg.images_allow_delete,
+      createFolders:  this.phpcfg.images_allow_create_dir,
+      rename:         this.phpcfg.images_allow_move,
+      move_or_copy:   this.phpcfg.images_allow_move,
+      download:       this.phpcfg.images_allow_download,
                                                                              
       propagateData:  Object.merge({'__function': 'image-manager'}, this.editor.config.MootoolsFileManager.backend_data),
       propagateType:  'POST',
@@ -96,9 +96,14 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
                       },
                       
       showDirGallery: false,
-      keyboardNavigation: false
+      keyboardNavigation: false,
+      listType:           this.phpcfg.images_list_type,
+      listPaginationSize: this.phpcfg.images_pagination_size,
+      listMaxSuggestedDirSizeForThumbnails: this.phpcfg.images_list_mode_over,
+      directory:          this.phpcfg.images_list_start_in
     });        
   }
+  
   if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
   
   if(self.current_image)
@@ -239,7 +244,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
           
         }
         
-        if(self.phpcfg.UseHSpaceVSpace)      
+        if(self.phpcfg.images_use_hspace_vspace)      
         { // HSPACE/VSPACE        
           var th    = tr.appendChild(document.createElement('th'));
           var label = th.appendChild(document.createTextNode('L/R Margin:'));

@@ -111,15 +111,15 @@
   
   */
 
-  $IMConfig['allow_files_upload']     = false;
-  $IMConfig['allow_files_delete']     = false;
-  $IMConfig['max_files_upload_size']  = '3M';
-  $IMConfig['suggested_files_image_dimension']  = array('width' => 2048, 'height' => 1536);
+  $IMConfig['files_allow_upload']     = false;
+  $IMConfig['files_allow_delete']     = false;
+  $IMConfig['files_max_upload_size']  = '3M';
+  $IMConfig['files_suggested_image_dimension']  = array('width' => 2048, 'height' => 1536);
 
-  $IMConfig['allow_images_upload']     = false;
-  $IMConfig['allow_images_delete']     = false;
-  $IMConfig['max_images_upload_size']  = '3M';
-  $IMConfig['suggested_images_image_dimension']  = array('width' => 1024, 'height' => 768);
+  $IMConfig['images_allow_upload']     = false;
+  $IMConfig['images_allow_delete']     = false;
+  $IMConfig['images_max_upload_size']  = '3M';
+  $IMConfig['images_suggested_image_dimension']  = array('width' => 1024, 'height' => 768);
 
 
 // -------------------------------------------------------------------------
@@ -128,15 +128,33 @@
 
 /** Expanded Permissions */
 
-$IMConfig['allow_images_create_dir']  = NULL;  // Defaults to allow_images_upload
-$IMConfig['allow_images_move']        = false; 
-$IMConfig['allow_images_download']    = false; 
+$IMConfig['images_allow_create_dir']  = NULL;  // Defaults to allow_images_upload
+$IMConfig['images_allow_move']        = false; 
+$IMConfig['images_allow_download']    = false; 
   
-$IMConfig['allow_files_create_dir']  = NULL; // Defaults to allow_files_upload
-$IMConfig['allow_files_move']        = false; 
-$IMConfig['allow_files_download']    = false; 
+$IMConfig['files_allow_create_dir']  = NULL; // Defaults to allow_files_upload
+$IMConfig['files_allow_move']        = false; 
+$IMConfig['files_allow_download']    = false; 
   
-  
+/** Listing Mode Configuration */
+
+$IMConfig['images_list_type']        = 'list'; // Or 'thumb'
+$IMConfig['images_pagination_size']  = 10000;  // By default, a large number to avoid pagination strongly
+                                               // The MFM may reduce this automatically however.                                               
+$IMConfig['images_list_mode_over']   = 30;     // If a folder contains more than this many entries
+                                               // it will fall back to 'list' mode when in 'thumb' mode
+                                               // the user can switch back to 'thumb' if they want.
+$IMConfig['images_list_start_in']    = NULL;   // You can set this to a path relative to the images_dir
+
+
+$IMConfig['files_list_type']        = 'list';  // Or 'thumb'
+$IMConfig['files_pagination_size']  = 10000;   // By default, a large number to avoid pagination strongly
+                                               // The MFM may reduce this automatically however.                                               
+$IMConfig['files_list_mode_over']   = 30;      // If a folder contains more than this many entries
+                                               // it will fall back to 'list' mode when in 'thumb' mode
+                                               // the user can switch back to 'thumb' if they want.
+$IMConfig['files_list_start_in']    = NULL;    // You can set this to a path relative to the images_dir
+                                               
 /**
 
 == Plugin Path ==
@@ -153,44 +171,15 @@ $IMConfig['base_url'] = preg_replace('/\/backend\.php.*/', '', $_SERVER['REQUEST
 
 == HTML Compatability ==
 
- For most people the default of using CSS will be fine, but if the HTML you are editing
- in Xinha is destined for an email you will probably want to use hspace and vspace
- instead of CSS margins because of poor Email support for CSS.
+ If the HTML you are editing in Xinha is destined for an email you will probably want to use hspace and vspace instead of CSS margins because of poor Email support for CSS.
  
 */
 
-$IMConfig['UseHSpaceVSpace'] = TRUE;
-
- /**
-  // Future use, not yet required.
-  
-  == ImageMagick Path ==
-  
-  Certain operations require that ImageMagick is available on your server,
-  mogrify, convert and identify executables are required.
-    
-  If these executables are not in your executable path, you'll want to 
-  set the path to them here, for Linux/Unix etc this will be something like
-  
-  {{{ 
-    /usr/bin
-  }}}
-  
-  for Windows servers, something like
-  
-  {{{
-    C:/"Program Files"/ImageMagick-5.5.7-Q16/
-  }}}
-    
-  
-
-  $IMConfig['IMAGE_TRANSFORM_LIB_PATH'] = '';
-*/
+$IMConfig['images_use_hspace_vspace'] = TRUE;
 
 ////////////////////////////////////////////////////////////////////////////////
 //       ================== END OF CONFIGURATION =======================      //
 ////////////////////////////////////////////////////////////////////////////////
-
 
 // Standard PHP Backend Data Passing
 //  if data was passed using xinha_pass_to_php_backend() we merge the items
@@ -203,6 +192,39 @@ if($passed_data = xinha_read_passed_data())
 }
 @session_write_close(); // Close session now so we don't lock.
 
+// Back Compat, Some of our config options have been renamed, 
+// if the old name is present, that takes precendence.
+$RenamedConfigVars = array(
+  'UseHSpaceVSpace'        => 'images_use_hspace_vspace',
+  
+  'allow_files_upload'     => 'files_allow_upload',
+  'allow_files_delete'     => 'files_allow_delete',
+  'allow_files_create_dir' => 'files_allow_create_dir',
+  'allow_files_move'       => 'files_allow_move',
+  'allow_files_download'   => 'files_allow_download',
+  
+  'max_files_upload_size'   => 'files_max_upload_size',
+  'suggested_files_image_dimension' => 'files_suggested_image_dimension',
+  
+  'allow_images_upload'     => 'images_allow_upload',
+  'allow_images_delete'     => 'images_allow_delete',
+  'allow_images_create_dir' => 'images_allow_create_dir',
+  'allow_images_move'       => 'images_allow_move',
+  'allow_images_download'   => 'images_allow_download',
+  
+  'max_images_upload_size'  => 'images_max_upload_size',
+  'suggested_images_image_dimension' => 'images_suggested_image_dimension',  
+);
+
+foreach($RenamedConfigVars as $Old => $New)
+{
+  if(isset($IMConfig[$Old]))
+  {
+    $New = $IMConfig[$Old];
+    unset($IMConfig[$Old]);    
+  }
+}
+
 if(!isset($IMConfig['thumbs_dir']))
 {
   $IMConfig['thumbs_dir'] = (isset($IMConfig['images_dir']) ? $IMConfig['images_dir'] : $IMConfig['files_dir']) . '/.thumbs';
@@ -213,14 +235,14 @@ if(!isset($IMConfig['thumbs_url']))
   $IMConfig['thumbs_url'] = (isset($IMConfig['images_url']) ? $IMConfig['images_url'] : $IMConfig['files_url']) . '/.thumbs';
 }
 
-if(!isset($IMConfig['allow_images_create_dir'])) 
+if(!isset($IMConfig['images_allow_create_dir'])) 
 {
-  $IMConfig['allow_images_create_dir'] = $IMConfig['allow_images_upload'];
+  $IMConfig['images_allow_create_dir'] = $IMConfig['images_allow_upload'];
 }
 
-if(!isset($IMConfig['allow_files_create_dir'])) 
+if(!isset($IMConfig['files_allow_create_dir'])) 
 {
-  $IMConfig['allow_files_create_dir'] = $IMConfig['allow_files_upload'];
+  $IMConfig['files_allow_create_dir'] = $IMConfig['files_allow_upload'];
 }
 
 ?>
