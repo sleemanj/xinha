@@ -3658,7 +3658,7 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
         editor._onGenerate();
       }
       
-      if(editor._textArea.hasAttribute('onxinhaready'))
+      if(Xinha.hasAttribute(editor._textArea, 'onxinhaready'))
       {               
         (function() { eval(editor._textArea.getAttribute('onxinhaready')) }).call(editor.textArea);
       }
@@ -7928,6 +7928,17 @@ Xinha.hasParentNode = function(el)
 
   return false;
 };
+/** Determines if a given element has a given attribute.  IE<8 doesn't support it nativly */
+Xinha.hasAttribute = function(el,at)
+{
+  if(typeof el.hasAttribute == 'undefined')
+  {
+    var node = el.getAttributeNode(at);
+    return !!(node && (node.specified || node.nodeValue));
+  }
+  
+  return el.hasAttribute(at);
+}
 
 /** Detect the size of visible area
  *  @param {Window} scope optional When calling from a popup window, pass its window object to get the values of the popup
