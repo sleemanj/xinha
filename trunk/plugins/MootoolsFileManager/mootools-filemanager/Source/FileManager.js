@@ -1804,12 +1804,13 @@ var FileManager = new Class({
 	// -> cancel dragging
 	revert_drag_n_drop: function(el) {
 		el.fade(1).removeClass('drag').removeClass('move').setStyles({
-			'z-index': 'auto',
+		//	'z-index': 'auto',
 			position: 'relative',
 			width: 'auto',
 			left: 0,
 			top: 0
 		}).inject(el.retrieve('parent'));
+    try{ el.setStyle('z-index', 'auto'); } catch(e) { el.setStyle('z-index', ''); } // IE<8 Complains about 'auto' for z-index
 		// also dial down the opacity of the icons within this row (download, rename, delete):
 		var icons = el.getElements('img.browser-icon');
 		if (icons) {
@@ -3272,7 +3273,7 @@ var FileManager = new Class({
 	addMenuButton: function(name) {
 		var el = new Element('div', {
 			'class': 'filemanager-button filemanager-' + name,
-			text: this.language[name],
+			text: this.language[name]
 		}).inject(this.menu, 'top');
 
 		if (this[name+'_on_click'])
@@ -3782,7 +3783,7 @@ FileManager.Dialog = new Class({
 		{
 				// HTML5 support: see    http://diveintohtml5.org/detect.html
 			autofocus_el.setProperty('autofocus', 'autofocus');
-      autofocus_el.focus();
+      try{autofocus_el.focus();}catch(e) { /* IE<8 Failes */ }
 		}
 		this.el.center().fade(1).get('tween').chain((function() {
 				// Safari / Chrome have trouble focussing on things not yet fully rendered!
@@ -3945,7 +3946,7 @@ this.Overlay = new Class({
 			this.destroy();
 		}
 		else {
-			this.el.setStyles({
+			document.id(this.el).setStyles({ // IE7 thinks this.el is no longer a mootools object, ^shrug^
 				width: document.getScrollWidth(),
 				height: document.getScrollHeight()
 			});
