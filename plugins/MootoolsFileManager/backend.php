@@ -74,6 +74,7 @@ function size_to_bytes($s)
   return intval($s); // Bytes
 }
 
+define('I_KNOW_ABOUT_SUHOSIN', TRUE); // /contrib/xinha-php.js does it's best to avoid this problem for us
 require_once('config.php');
 
 // Ensure thumbnail path is OK

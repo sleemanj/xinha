@@ -524,6 +524,12 @@ if (function_exists('UploadIsAuthenticated'))
 	throw Exception('FileManager callback has not been upgraded!');   // this exception will most probably not be caught; that's our intent!
 }
 
+if(!defined("I_KNOW_ABOUT_SUHOSIN") && ini_get('suhosin.session.cryptua'))
+{
+  header('HTTP/1.0 500 Developer must read https://github.com/sleemanj/mootools-filemanager/wiki/suhosin', true, 500); // Internal server error
+  throw Exception('suhosin.session.cryptua: https://github.com/sleemanj/mootools-filemanager/wiki/suhosin" }');   // this exception will most probably not be caught; that's our intent!  
+  exit;
+}
 //-------------------------------------------------------------------------------------------------------------
 
 if (!defined('DEVELOPMENT')) define('DEVELOPMENT', 0);   // make sure this #define is always known to us

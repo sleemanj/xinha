@@ -190,7 +190,6 @@ if($passed_data = xinha_read_passed_data())
 {
   $IMConfig = array_merge($IMConfig, $passed_data);
 }
-@session_write_close(); // Close session now so we don't lock.
 
 // Back Compat, Some of our config options have been renamed, 
 // if the old name is present, that takes precendence.

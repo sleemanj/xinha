@@ -55,7 +55,7 @@ if(typeof FileManager == 'undefined')
   
   if(typeof __MFM_USE_FLASH__ == 'undefined')
   {
-    __MFM_USE_FLASH__ = true;
+    __MFM_USE_FLASH__ = Browser.Plugins.Flash.version ? true : false;
   }
   
   if(typeof __MFM_USE_BACK_BUTTON_NAVIGATION__ == 'undefined')
