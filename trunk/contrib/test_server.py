@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 """Runs a very basic file server so that we can test Xinha.  By default, the
 server runs on port 8080, but you can pass the -p or --port option to change
 the port used."""
