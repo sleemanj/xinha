@@ -174,6 +174,8 @@ Xinha.is_chrome = (Xinha.agt.indexOf("chrome") != -1);
  * @type Boolean 
  */
 Xinha.is_mac	   = (Xinha.agt.indexOf("mac") != -1);
+Xinha.is_ios	   = (Xinha.agt.indexOf("iphone") != -1) || (Xinha.agt.indexOf("ipad") != -1) ;
+
 /** Browser is Microsoft Internet Explorer Mac
  * @type Boolean 
  */
@@ -195,7 +197,8 @@ Xinha.is_real_gecko = (navigator.product == "Gecko" && !Xinha.is_webkit);
 /** Gecko version lower than 1.9
  * @type Boolean 
  */
-Xinha.is_ff2 = Xinha.is_real_gecko && parseInt(navigator.productSub.substr(0,10), 10) < 20071210;
+// http://trac.xinha.org/ticket/1620
+Xinha.is_ff2 = Xinha.is_real_gecko && navigator.productSub && parseInt(navigator.productSub.substr(0,10), 10) < 20071210;
 
 /** File is opened locally opened ("file://" protocol)
  * @type Boolean
@@ -2200,7 +2203,14 @@ Xinha.prototype._createStatusBar = function()
   // creates a holder for the path view
   var statusBarTree = document.createElement("span");
   statusBarTree.className = "statusBarTree";
-  statusBarTree.innerHTML = Xinha._lc("Path") + ": ";
+  if(Xinha.is_ios)
+  {
+    statusBarTree.innerHTML = Xinha._lc("Touch here first to activate editor.");
+  }
+  else
+  {
+    statusBarTree.innerHTML = Xinha._lc("Path") + ": ";
+  }
 
   this._statusBarTree = statusBarTree;
   Xinha.freeLater(this, '_statusBarTree');
@@ -2711,6 +2721,7 @@ Xinha.prototype.generate = function ()
       {
         editor.firePluginEvent('onBeforeSubmit');
         editor._textArea.value = editor.outwardHtml(editor.getHTML());
+        editor.firePluginEvent('onBeforeSubmitTextArea');
         return true;
       }
     );
@@ -3298,6 +3309,15 @@ Xinha.prototype.deactivateEditor = function()
   // If the editor isn't active then the user shouldn't use the toolbar
   this.disableToolbar();
 
+  if(Xinha.is_ios)
+  {
+    this._statusBarTree.innerHTML = Xinha._lc("Touch here first to activate editor.");
+  }
+  else
+  {
+    this._statusBarTree.innerHTML = Xinha._lc("Path") + ": ";
+  }
+
   if ( Xinha.is_designMode && this._doc.designMode != 'off' )
   {
     try
@@ -3591,6 +3611,8 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
     {
       if(!resetting_events_for_opera) {
       // if we have multiple editors some bug in Mozilla makes some lose editing ability
+      if(!Xinha.is_ios)
+      {
       Xinha._addEvents(
         doc,
         ["mousedown"],
@@ -3600,6 +3622,21 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
           return true;
         }
       );
+      }
+      else
+      {         
+        Xinha._addEvents(
+          editor._statusBar,
+          ["click"],
+          function()
+          {           
+            editor.activateEditor();
+            editor.focusEditor();
+            return true;
+          }
+        );
+      }
+
       if (Xinha.is_ie)
       { // #1019 Cusor not jumping to editable part of window when clicked in IE, see also #1039
         Xinha._addEvent(
