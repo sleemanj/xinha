@@ -5587,6 +5587,14 @@ Xinha.prototype._editorEvent = function(ev)
     }
   }
 
+  if ( ev.type == 'mouseup' )
+  {
+    if(editor.firePluginEvent('onMouseUp', ev))
+    {
+      return false;
+    }
+  }
+  
   // update the toolbar state after some time
   if ( editor._timerToolbar )
   {
