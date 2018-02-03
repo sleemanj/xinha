@@ -41,7 +41,7 @@ Xinha.Config.prototype.cssPluginConfig =
     ]
   };
 
-function CSS(editor, params) {
+function CSSDropDowns(editor, params) {
 	this.editor = editor;
 	var cfg = editor.config;
 	var self = this;
@@ -72,7 +72,7 @@ function CSS(editor, params) {
  	}
 }
 
-CSS._pluginInfo = {
+CSSDropDowns._pluginInfo = {
 	name          : "CSS",
 	version       : "1.0",
 	developer     : "Mihai Bazon",
@@ -83,7 +83,7 @@ CSS._pluginInfo = {
 	license       : "htmlArea"
 };
 
-CSS.prototype.onSelect = function(editor, obj, context, updatecontextclass) {
+CSSDropDowns.prototype.onSelect = function(editor, obj, context, updatecontextclass) {
 	var tbobj = editor._toolbarObjects[obj.id];
 	var index = tbobj.element.selectedIndex;
 	var className = tbobj.element.value;
@@ -131,7 +131,7 @@ CSS.prototype.onSelect = function(editor, obj, context, updatecontextclass) {
 	}
 };
 
-CSS.prototype.updateValue = function(editor, obj) {
+CSSDropDowns.prototype.updateValue = function(editor, obj) {
 	var select = editor._toolbarObjects[obj.id].element;
 	var parent = editor.getParentElement();
 	if (typeof parent.className != "undefined" && /\S/.test(parent.className)) {
