@@ -4109,6 +4109,14 @@ Xinha.prototype.firePluginEvent = function(methodName)
   for ( i in this.plugins )
   {
     var plugin = this.plugins[i].instance;
+    
+    if(i == 'Events')
+    {
+      // 'Events' is a dummy plugin for events passed into config.Events
+      //   so make sure we actually reference that config object in case
+      //   it had been overwritten entirely (ticket:1602)
+      plugin = this.config.Events;
+    }
 
     // Skip the browser specific plugin
     if (plugin == this._browserSpecificPlugin) 
