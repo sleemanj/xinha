@@ -94,6 +94,10 @@
   font: 11px Tahoma,Verdana,sans-serif;
   height:16px;
   overflow: hidden;
+  
+  /* Fix #1601 Incorrect sized status statusBar*/
+  box-sizing:border-box;
+  height:22px; /* 4px pad + 1x border additional to the 16px which was used above */
 }
 
 .htmlarea .statusBar .statusBarTree a {
