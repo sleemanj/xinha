@@ -4478,7 +4478,7 @@ Xinha.prototype._wordClean = function()
       node.className = newc;
       if ( !/\S/.test(node.className))
       {
-        node.removeAttribute("className");
+        node.removeAttribute("class");
         ++stats.mso_class;
       }
     }
