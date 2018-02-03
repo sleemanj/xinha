@@ -127,7 +127,7 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
         html += ((Xinha.isBlockElement(root)) ? ('\n' + indent) : '') + "<" + root.tagName.toLowerCase();
         var attrs = root.attributes;
         
-        for ( i = 0; i < attrs.length; ++i )
+        for ( i = attrs.length-1; i >= 0; --i )
         {
           var a = attrs.item(i);
           // In certain browsers (*cough* firefox) the dom node loses
@@ -238,12 +238,16 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
           {
             continue;
           }
+
+/* This looks wrong, http://trac.xinha.org/ticket/1391#comment:7
           if ( /^(_moz)?$/.test(value) )
           {
             // Mozilla reports some special tags
             // here; we don't need them.
             continue;
           }
+*/
+
           html += " " + name + '="' + Xinha.htmlEncode(value) + '"';
         }
         //IE fails to put style in attributes list & cssText is UPPERCASE
