@@ -5704,6 +5704,41 @@ Xinha.prototype.scrollToElement = function(e)
   this._iframe.contentWindow.scrollTo(position.left, position.top);
 };
 
+/** Scroll the viewport so that the given element is viewable
+ *  if it is not already so.
+ */
+
+Xinha.prototype.scrollElementIntoViewport = function(e)
+{
+  if(!e)
+  {
+    e = this.getParentElement();
+    if(!e)
+    {
+      return;
+    }
+  }
+  
+  // This was at one time limited to Gecko only, but I see no reason for it to be. - James
+  var position = Xinha.getElementTopLeft(e);  
+  var currentScroll = this.scrollPos(this._iframe.contentWindow);
+  var currentSize   = Xinha.viewportSize(this._iframe.contentWindow);
+  
+  var canSeeX = [currentScroll.x, currentScroll.x + (currentSize.x*0.9)];
+  var canSeeY = [currentScroll.y, currentScroll.y + (currentSize.y*0.9)];
+  if(   canSeeX[0] <= position.left
+    &&  canSeeX[1] >= position.left
+    &&  canSeeY[0] <= position.top
+    &&  canSeeY[1] >= position.top
+  )
+  {
+    // The item is in the viewport, no scroll
+    return;
+  }
+  
+  this._iframe.contentWindow.scrollTo(position.left, Math.min(position.top,position.top-(currentSize.y*0.1)));
+};
+
 /** Get the edited HTML
  *  
  *  @public

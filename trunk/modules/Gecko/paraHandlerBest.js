@@ -888,7 +888,8 @@ EnterParagraphs.prototype.handleEnter = function(ev)
         holdEnd = holdEnd.parentNode;
       }
       
-      this.editor.scrollToElement(holdEnd);
+      this.editor.scrollElementIntoViewport(holdEnd);
+      //this.editor.scrollToElement(holdEnd);
     }
     catch (e)
     {
