@@ -97,7 +97,7 @@ Xinha.prototype.cleanHTML = function(sHtml) {
                           sHtml = sHtml.replace(c[13], '$1'+Xinha._escapeDollars(decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g, function(chr) 
                                                                                                                        {return escape(chr);}))+'"');
 			} catch (e) { // once the URL is escape()ed, you can't decodeURIComponent() it anymore
-                          sHtml = sHtml.replace(c[13], Xinha._escapeDollars('$1'+RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"'));
+                          sHtml = sHtml.replace(c[13], '$1'+Xinha._escapeDollars(RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"'));
 			}
 		}
 	}
