@@ -1987,7 +1987,7 @@ function LMprocessNode(n) {
   try {
     st = n.innerHTML;
   } catch(err) {}
-  var am = /amath\b|graph/i.test(st);
+  var am = /amath\b|\bagraph/i.test(st);
   if ((st==null || st.indexOf("\$ ")!=-1 || st.indexOf("\$<")!=-1 || 
        st.indexOf("\\begin")!=-1 || am || st.slice(-1)=="$" ||
        st.indexOf("\$\n")!=-1)&& !/edit-content|HTMLArea|wikiedit|wpTextbox1/.test(st)){
