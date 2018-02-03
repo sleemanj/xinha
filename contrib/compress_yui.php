@@ -1,4 +1,4 @@
-<?
+<?php
 // This is script that uses the YUI compressor (http://www.julienlecomte.net/blog/2007/08/11/)
 // It yields gradually better results than the dojo comressor, but it produces unreadable code
 //die("Run this script to batch-compress the current Xinha snapshot. To run the script, open the file and comment out the die() command");
