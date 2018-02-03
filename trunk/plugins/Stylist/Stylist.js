@@ -707,6 +707,6 @@ Stylist.prototype.onUpdateToolbar = function()
     }
 
     var e = this.editor;
-    this._timeoutID = window.setTimeout(function() { e._fillStylist(); }, 500);
+    this._timeoutID = window.setTimeout(function() { if(e.editorIsActivated()) e._fillStylist(); }, 500);
   }
 };
