@@ -22,7 +22,7 @@
 
 // Node object
 
-function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
+function dTreeNode(id, pid, name, url, title, target, icon, iconOpen, open) {
 
   this.id = id;
 
@@ -120,7 +120,7 @@ function dTree(objName, baseDir) {
 
   this.aIndent = [];
 
-  this.root = new Node(-1);
+  this.root = new dTreeNode(-1);
 
   this.selectedNode = null;
 
@@ -136,7 +136,7 @@ function dTree(objName, baseDir) {
 
 dTree.prototype.add = function(id, pid, name, url, title, target, icon, iconOpen, open) {
 
-  this.aNodes[this.aNodes.length] = new Node(id, pid, name, url, title, target, icon, iconOpen, open);
+  this.aNodes[this.aNodes.length] = new dTreeNode(id, pid, name, url, title, target, icon, iconOpen, open);
 
 };
 
