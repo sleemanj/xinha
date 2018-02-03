@@ -1,4 +1,6 @@
-You can use the contrib/compress.php to batch-convert the current Xinha snapshot. To use this script, open it in a text editor, comment out the die() command at the top and open it in your browser.
+You can use the contrib/compress.php to batch-convert the current Xinha snapshot.
+
+Make sure you have PHP installed on your machine. To use this script, open it in a text editor, comment out the die() command at the top and run via "php compress.php" from the command-line.
  
 You can use the contrib/compress.bat to compress JavaScript files by drag&drop in Windows.
 
