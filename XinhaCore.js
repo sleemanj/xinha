@@ -2241,7 +2241,10 @@ Xinha.prototype._createStatusBar = function()
     else
     {
       var width = size['width'];
-      self._statusBar.style.width = width + "px";
+      
+      // ticket:1601 fixed here by 2px adjustment for borders
+      //    and by setting box-sizing on .htmlarea .statusBar in Xinha.css
+      self._statusBar.style.width = (width-2) + "px";
     }
   });
 
