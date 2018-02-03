@@ -706,6 +706,14 @@ Xinha.prototype.isKeyEvent = function(event)
 Xinha.prototype.getKey = function(keyEvent)
 { 
  // with ctrl pressed Safari does not give the charCode, unfortunately this (shortcuts) is about the only thing this function is for
+  if(typeof keyEvent.keyIdentifier == 'undefined')
+  {
+    if(typeof keyEvent.key != 'undefined')
+    {
+      return keyEvent.key;
+    }
+  }
+  
   var key = String.fromCharCode(parseInt(keyEvent.keyIdentifier.replace(/^U\+/,''),16));
   if (keyEvent.shiftKey) return key;
   else return key.toLowerCase();
