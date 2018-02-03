@@ -47,18 +47,18 @@ Xinha.Config.prototype.SuperClean =
   // filterFunction in the second format above is optional.
 
   'filters': { 'tidy': Xinha._lc('General tidy up and correction of some problems.', 'SuperClean'),
-               'word_clean': Xinha._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),
+               'word_clean': Xinha._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),               
+               'word': {label:Xinha._lc('Vigorously purge HTML from Microsoft Word', 'SuperClean'), checked:false},
                'remove_faces': Xinha._lc('Remove custom typefaces (font "styles").', 'SuperClean'),
                'remove_sizes': Xinha._lc('Remove custom font sizes.', 'SuperClean'),
                'remove_colors': Xinha._lc('Remove custom text colors.', 'SuperClean'),
                'remove_lang': Xinha._lc('Remove lang attributes.', 'SuperClean'),
-               'remove_fancy_quotes': {label:Xinha._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false}
+               'remove_fancy_quotes': {label:Xinha._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false},
   //additional custom filters (defined in plugins/SuperClean/filters/word.js)
-               //'paragraph': 'remove paragraphs'},
-               //'word': 'exteded Word-Filter' },
-              },
+               'paragraph':{label:Xinha._lc('Remove Paragraphs', 'SuperClean'), checked:false}
+             },
   //if false all filters are applied, if true a dialog asks what filters should be used
-  'show_dialog': false
+  'show_dialog': true
 };
 
 SuperClean.filterFunctions = { };
