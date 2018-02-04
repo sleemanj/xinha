@@ -131,12 +131,15 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 
   // helper function that clears the content in a table row
   function clearRow(tr) {
-    var tds = tr.getElementsByTagName("td").append(tr.getElementsByTagName("th"));
+    [ 'td', 'th' ].forEach(function(e)
+    {
+    var tds = tr.getElementsByTagName(e);
     for (var i = tds.length; --i >= 0;) {
       var td = tds[i];
       td.rowSpan = 1;
       td.innerHTML = mozbr;
     }
+    });
   }
 
   function splitRow(td) {
