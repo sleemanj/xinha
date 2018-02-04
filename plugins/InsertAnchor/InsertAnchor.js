@@ -3,7 +3,7 @@ function InsertAnchor(editor) {
   var cfg = editor.config;
   var self = this;
   
-  this.placeholderImg = '<img class="IA_placeholder" src="'+Xinha.getPluginDir("InsertAnchor")+'/img/placeholder.gif" />';
+  this.placeholderImg = '<img class="IA_placeholder" src="'+Xinha.getPluginDir("InsertAnchor")+'/img/insert-anchor.gif" />';
   
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
@@ -82,6 +82,7 @@ InsertAnchor.prototype.show = function()
 		window.setTimeout(function() {self.show();},100);
 		return;
   }
+  
 	var editor = this.editor;
 	this.selectedHTML = editor.getSelectedHTML();
 	var sel  = editor.getSelection();
@@ -93,12 +94,18 @@ InsertAnchor.prototype.show = function()
     this.a = editor._getFirstAncestor(sel, 'a'); 
   }
   
+  this.dialog.getElementById('warning').style.display = 'none';
+  
   if (this.a != null && this.a.tagName.toLowerCase() == 'a')
   {
     inputs = { name : this.a.id };
   }
   else
   {
+    if(!this.editor.selectionEmpty(sel))
+    {
+      this.dialog.getElementById('warning').style.display = '';
+    }
     inputs = { name : '' };
   } 
 
@@ -135,8 +142,8 @@ InsertAnchor.prototype.apply = function ()
           a.title = anchor;
           a.className = "anchor";
           a.innerHTML = self.placeholderImg;
-			var html = editor.getSelectedHTML();
-		  if (html) a.innerHTML += html;
+		//	var html = editor.getSelectedHTML();
+		//  if (html) a.innerHTML += html;
 			if (Xinha.is_ie) 
 			{
             this.range.pasteHTML(a.outerHTML);
