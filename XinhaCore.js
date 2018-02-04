@@ -125,6 +125,17 @@ var __xinhas = [];
  */
 Xinha.agt       = navigator.userAgent.toLowerCase();
 /** Browser is Microsoft Internet Explorer
+ * 
+ * WARNING Starting with Internet Explorer 11, this no longer detects as IE, but instead 
+ *           detects as Gecko.  Oddly enough, it seems to work pretty much fine under
+ *           Xinha's Gecko Engine, so I don't think we should change this to match IE11
+ *           and continue to just pretend it is Gecko.
+ * 
+ *           https://blogs.msdn.microsoft.com/ieinternals/2013/09/21/internet-explorer-11s-many-user-agent-strings/
+ *         
+ * NOTE    I am unable to test with Microsoft Edge yet to see what it picks up as, 
+ *           I suspect webkit
+ * 
  * @type Boolean 
  */
 Xinha.is_ie    = ((Xinha.agt.indexOf("msie") != -1) && (Xinha.agt.indexOf("opera") == -1));
@@ -965,7 +976,7 @@ Xinha.Config = function()
     ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
     ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
     ["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
-    ["linebreak","separator","undo","redo","selectall","print"], (Xinha.is_gecko ? [] : ["cut","copy","paste","overwrite","saveas"]),
+    ["linebreak","separator","undo","redo","selectall","print"], (Xinha.is_gecko ? [] : ["cut","copy","paste","overwrite"]),
     ["separator","killword","clearfonts","removeformat","toggleborders","splitblock","lefttoright", "righttoleft"],
     ["separator","htmlmode","showhelp","about"]
   ];
