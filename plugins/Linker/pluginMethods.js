@@ -15,6 +15,7 @@ Linker.prototype._createLink = function(a)
   {
     type:     'url',
     href:     'http://www.example.com/',
+    title:    this._lc('Shows On Hover'),
     target:   '',
     p_width:  '',
     p_height: '',
@@ -24,13 +25,14 @@ Linker.prototype._createLink = function(a)
     body:     '',
     anchor:   ''
   };
-
+  
   if(a && a.tagName.toLowerCase() == 'a')
   {
     var href =this.editor.fixRelativeLinks(a.getAttribute('href'));
     var m = href.match(/^mailto:(.*@[^?&]*)(\?(.*))?$/);
     var anchor = href.match(/^#(.*)$/);
-
+    var title = a.getAttribute('title');
+    
     if(m)
     {
       // Mailto
@@ -58,12 +60,13 @@ Linker.prototype._createLink = function(a)
     }
     else
     {
-      if(a.getAttribute('onclick'))
+      if(a.getAttribute('onclick') && String(a.getAttribute('onclick')).length)
       {
         var m = a.getAttribute('onclick').match(/window\.open\(\s*this\.href\s*,\s*'([a-z0-9_]*)'\s*,\s*'([a-z0-9_=,]*)'\s*\)/i);
 
         // Popup Window
         inputs.href   = href ? href : '';
+        inputs.title = title;
         inputs.target = 'popup';
         inputs.p_name = m[1];
         inputs.p_options = [ ];
@@ -88,6 +91,7 @@ Linker.prototype._createLink = function(a)
         // Normal
         inputs.href   = href;
         inputs.target = a.target;
+        inputs.title = title;
       }
     }
   }
@@ -114,13 +118,19 @@ Linker.prototype._createLink = function(a)
       title:'',
       onclick:''
     };
-
+    
+    if(values.title == linker._lc('Shows On Hover')) 
+    {
+      values.title = '';
+    }
+    
     if(values.type == 'url')
     {
      if(values.href)
      {
        atr.href = values.href.trim();
        atr.target = values.target;
+       atr.title = values.title;
        if(values.target == 'popup')
        {
 
@@ -176,7 +186,14 @@ Linker.prototype._createLink = function(a)
         // Update the link
         for(var i in atr)
         {
-          a.setAttribute(i, atr[i]);
+          if(String(atr[i]).length > 0)
+          {
+            a.setAttribute(i, atr[i]);
+          }
+          else
+          {
+            a.removeAttribute(i);
+          }
         }
         
         // If we change a mailto link in IE for some hitherto unknown
@@ -210,7 +227,8 @@ Linker.prototype._createLink = function(a)
           if (!a) a = anchor;
           for(var j in atr)
           {
-            anchor.setAttribute(j, atr[j]);
+            if(String(atr[j]).length > 0)
+              anchor.setAttribute(j, atr[j]);
           }
         }
       }
