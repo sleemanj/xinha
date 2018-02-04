@@ -188,9 +188,23 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
             // development.  Browser differences
             // suck.
             //
+            // If you have a percent width in width/height then we may need to use nodeValue
+            //  it may well be OK to use nodeValue all the time these days, but it's easier
+            //  to just do it for these and not fix what's not broke
+            if(name == "width" || name == "height")
+            {
+              if(a.nodeValue.match(/%$/))
+              {
+                value = a.nodeValue;
+              }
+              else
+              {
+                value = root[a.nodeName];
+              }
+            }
             // Using Gecko the values of href and src are converted to absolute links
-            // unless we get them using nodeValue()
-            if ( typeof root[a.nodeName] != "undefined" && name != "href" && name != "src" && !(/^on/.test(name)) )
+            // unless we get them using nodeValue()            
+            else if ( typeof root[a.nodeName] != "undefined" && name != "href" && name != "src" && !(/^on/.test(name)) )
             {
               value = root[a.nodeName];
             }
