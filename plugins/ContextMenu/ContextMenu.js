@@ -233,6 +233,14 @@ ContextMenu.prototype.getContextMenu = function(target) {
 		}
 	}
 
+	// If there is a selection, and not a link, image, or multiple words
+	//  then this may be a misspelled word, cancel the context menu so that
+	//  the browser's default will appear and offer suggestions
+	if (selection && !link && !img && !editor.getSelectedHTML().replace(/<[^>]+>/, '').match(/\s/))
+  {
+    return false;
+  }
+	
 	if (selection && !link)
 		menu.push(null, [ Xinha._lc("Make lin_k...", "ContextMenu"),
            function() { editor.config.btnList['createlink'][3](editor); },
@@ -377,6 +385,8 @@ ContextMenu.prototype.popupMenu = function(ev) {
 	table.appendChild(parent);
 
 	var options = this.getContextMenu(target);
+  if(options === false) return false; // No context menu
+  
 	for (var i = 0; i < options.length; ++i) {
 		var option = options[i];
 		var item = doc.createElement("tr");
