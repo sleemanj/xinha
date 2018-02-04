@@ -1,4 +1,7 @@
 <?php
+
+  die('Developer, this plugin ExtendedFileManager has been deprecated.  You are STRONGLY advised to use MootoolsFileManager plugin instead.  If you really must continue using this plugin, please edit xinha/unsupported_plugins/ExtendedFileManager/config.php to remove this notice.');
+
 /**
  * ExtendedFileManager configuration file.
  * Authors: Wei Zhuo, Afru
