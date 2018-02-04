@@ -5901,8 +5901,9 @@ Xinha.prototype.inwardHtml = function(html)
   // Both IE and Gecko use strike instead of del (#523)
   html = html.replace(/<(\/?)del(\s|>|\/)/ig, "<$1strike$2");
 
-  // disable inline event handle inside Xinha iframe
-  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=["'])/gi,'$1if(window.parent &amp;&amp; window.parent.Xinha){return false}');
+  // disable inline event handle inside Xinha iframe but only if they are not empty attributes
+  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=')([^']+')/gi,'$1if(window.parent &amp;&amp; window.parent.Xinha){return false}$4');
+  html = html.replace(/(<[^>]*on(click|mouse(over|out|up|down))=")([^"]+")/gi,'$1if(window.parent &amp;&amp; window.parent.Xinha){return false}$4');
   
   html = this.inwardSpecialReplacements(html);
 
