@@ -133,8 +133,22 @@ Xinha.agt       = navigator.userAgent.toLowerCase();
  * 
  *           https://blogs.msdn.microsoft.com/ieinternals/2013/09/21/internet-explorer-11s-many-user-agent-strings/
  *         
- * NOTE    I am unable to test with Microsoft Edge yet to see what it picks up as, 
- *           I suspect webkit
+ * WARNING Starting with Microsoft Edge (what a silly name for a browser) this no longer 
+ *          detects as Gecko but instead detects as Webkit.  I can't really see any obvious
+ *          behavioural differences between using Gecko and using Webkit (you can force 
+ *          this by, after loading XinhaCore.js but before configuring/initialising setting
+ *             Xinha.is_webkit = false; Xinha.is_gecko = true;
+ * 
+ *          Quoting from Wikipedia:
+ *              EdgeHTML is meant to be fully compatible with the WebKit layout engine 
+ *              used by Safari, Chrome and other browsers. Microsoft has stated that 
+ *              "any Edge-WebKit differences are bugs that we’re interested in fixing."[24]
+ * 
+ *          So I think that we best have it detect as Webkit, seems that should in theory
+ *          be closest to the mark (vs Gecko).  Chrome also uses the Webkit Xinha module..
+ * 
+ *          It should be noted that the old InternetExplorer engine absolutely does not work
+ *          with edge (and probably not with IE11 I expect but I have not tried).
  * 
  * @type Boolean 
  */
