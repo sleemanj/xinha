@@ -176,7 +176,7 @@ SmartReplace.prototype.smartQuotes = function(kind)
 		}
 		else
 		{
-			editor.insertNodeAtSelection(document.createTextNode(r.toString()[0]+opening));			
+			editor.insertNodeAtSelection(document.createTextNode(r.toString()+opening));			
 		}
 		editor.getSelection().collapseToEnd();
 	}
