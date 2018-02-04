@@ -70,6 +70,7 @@ function TableOperations(editor) {
   }
 
   cfg.dblclickList['td'] = [function() { self.dialogTableProperties() }];
+  cfg.dblclickList['th'] = [function() { self.dialogTableProperties() }];
 }
 
 TableOperations._pluginInfo = {
@@ -108,6 +109,20 @@ TableOperations.prototype.getClosest = function(tagName) {
   return ret;
 };
 
+TableOperations.prototype.getClosestMatch = function(regExpTagName) {
+  var editor = this.editor;
+  var ancestors = editor.getAllAncestors();
+  var ret = null;
+  
+  for (var i = 0; i < ancestors.length; ++i) {
+    var el = ancestors[i];
+    if (el.tagName.toLowerCase().match(regExpTagName)) {
+      ret = el;
+      break;
+    }
+  }
+  return ret;
+};
 // this function gets called when some button from the TableOperations toolbar
 // was pressed.
 TableOperations.prototype.buttonPress = function(editor, button_id) {
@@ -116,7 +131,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 
   // helper function that clears the content in a table row
   function clearRow(tr) {
-    var tds = tr.getElementsByTagName("td");
+    var tds = tr.getElementsByTagName("td").append(tr.getElementsByTagName("th"));
     for (var i = tds.length; --i >= 0;) {
       var td = tds[i];
       td.rowSpan = 1;
@@ -265,7 +280,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
     editor.updateToolbar();
     break;
   case "TO-row-split":
-    var td = this.getClosest("td");
+    var td = this.getClosestMatch(/^(td|th)$/i);
     if (!td) {
       break;
     }
@@ -276,7 +291,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 
   case "TO-col-insert-before":
   case "TO-col-insert-after":
-    var td = this.getClosest("td");
+    var td = this.getClosestMatch(/^(td|th)$/i);
     if (!td) {
       break;
     }
@@ -300,14 +315,14 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
     editor.focusEditor();
     break;
   case "TO-col-split":
-    var td = this.getClosest("td");
+    var td = this.getClosestMatch(/^(td|th)$/i);
     if (!td) {
       break;
     }
     splitCol(td);
     break;
   case "TO-col-delete":
-    var td = this.getClosest("td");
+    var td = this.getClosestMatch(/^(td|th)$/i);
     if (!td) {
       break;
     }
@@ -331,7 +346,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
     // CELLS
 
   case "TO-cell-split":
-    var td = this.getClosest("td");
+    var td = this.getClosestMatch(/^(td|th)$/i);
     if (!td) {
       break;
     }
@@ -339,7 +354,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
     break;
   case "TO-cell-insert-before":
   case "TO-cell-insert-after":
-    var td = this.getClosest("td");
+    var td = this.getClosestMatch(/^(td|th)$/i);
     if (!td) {
       break;
     }
@@ -351,7 +366,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
     editor.focusEditor();
     break;
   case "TO-cell-delete":
-    var td = this.getClosest("td");
+    var td = this.getClosestMatch(/^(td|th)$/i);
     if (!td) {
       break;
     }
@@ -400,7 +415,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
       cellMerge(table, cell_index, row_index, no_cols, no_rows); 
     } else {
       // Internet Explorer "browser" or not more than one cell selected in Moz
-      var td = this.getClosest("td");
+      var td = this.getClosestMatch(/^(td|th)$/i);
       if (!td) {
         alert(Xinha._lc("Please click into some cell", "TableOperations"));
         break;
@@ -448,19 +463,19 @@ TableOperations.btnList = [
   null,
 
   // COLS
-  ["col-insert-before", "td", "Insert column before"],
-  ["col-insert-after",  "td", "Insert column after"],
-  ["col-delete",        "td", "Delete column"],
-  ["col-split",         "td[colSpan!=1]", "Split column"],
+  ["col-insert-before", ["td","th"], "Insert column before"],
+  ["col-insert-after",  ["td","th"], "Insert column after"],
+  ["col-delete",        ["td","th"], "Delete column"],
+  ["col-split",         ["td[colSpan!=1]","th[colSpan!=1]"], "Split column"],
   null,
 
   // CELLS
-  ["cell-prop",          "td", "Cell properties"],
-  ["cell-insert-before", "td", "Insert cell before"],
-  ["cell-insert-after",  "td", "Insert cell after"],
-  ["cell-delete",        "td", "Delete cell"],
+  ["cell-prop",          ["td","th"], "Cell properties"],
+  ["cell-insert-before", ["td","th"], "Insert cell before"],
+  ["cell-insert-after",  ["td","th"], "Insert cell after"],
+  ["cell-delete",        ["td","th"], "Delete cell"],
   ["cell-merge",         "tr", "Merge cells"],
-  ["cell-split",         "td[colSpan!=1,rowSpan!=1]", "Split cell"]
+  ["cell-split",         ["td[colSpan!=1,rowSpan!=1]","th[colSpan!=1,rowSpan!=1]"], "Split cell"]
 ];
 
 TableOperations.prototype.dialogMerge = function(merge_func, cell_index, row_index) {
@@ -604,7 +619,7 @@ TableOperations.prototype.dialogTableProperties = function() {
 
 TableOperations.prototype.dialogRowCellProperties = function(cell) {
   // retrieve existing values
-  var element = this.getClosest(cell ? "td" : "tr");
+  var element = cell ? this.getClosestMatch(/^(td|th)$/i) : this.getClosest("tr");
   var table = this.getClosest("table");
 
   var self = this;
