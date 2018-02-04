@@ -352,7 +352,7 @@ form { margin: 0; border: none; }
 {
   font-family:sans-serif;
   position:absolute;
-  z-index:998;
+  z-index:1000;
   text-align:center;
   width:212px;
   padding: 55px 0 5px 0;
