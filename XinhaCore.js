@@ -1315,7 +1315,7 @@ Xinha.Config.prototype.registerIcon = function (id, icon)
  *      action   : function(editor) { // called when the button is clicked
  *                   editor.surroundHTML('<span class="hilite">', '</span>');
  *                 },
- *      context  : "p"               // will be disabled if outside a <p> element
+ *      context  : "p" or [ "p", "h1" ]  // will be disabled if outside a <p> element (in array case, <p> or <h1>)
  *    });</pre>
  */
 Xinha.Config.prototype.registerButton = function(id, tooltip, image, textMode, action, context)
@@ -4903,48 +4903,54 @@ Xinha.prototype.updateToolbar = function(noStatus)
     }
     if ( btn.context && !text )
     {
-      inContext = false;
-      var context = btn.context;
-      var attrs = [];
-      if ( /(.*)\[(.*?)\]/.test(context) )
+      var contexts = typeof btn.context == 'object' ? btn.context : [ btn.context ];
+      for(var context_i = 0; context_i < contexts.length; context_i++)
       {
-        context = RegExp.$1;
-        attrs = RegExp.$2.split(",");
-      }
-      context = context.toLowerCase();
-      var match = (context == "*");
-      for ( var k = 0; k < ancestors.length; ++k )
-      {
-        if ( !ancestors[k] )
+        inContext = false;
+        var context = contexts[context_i];
+        var attrs = [];
+        if ( /(.*)\[(.*?)\]/.test(context) )
         {
-          // the impossible really happens.
-          continue;
+          context = RegExp.$1;
+          attrs = RegExp.$2.split(",");
         }
-        if ( match || ( ancestors[k].tagName.toLowerCase() == context ) )
+        context = context.toLowerCase();
+        var match = (context == "*");
+        for ( var k = 0; k < ancestors.length; ++k )
         {
-          inContext = true;
-          var contextSplit = null;
-          var att = null;
-          var comp = null;
-          var attVal = null;
-          for ( var ka = 0; ka < attrs.length; ++ka )
+          if ( !ancestors[k] )
           {
-            contextSplit = attrs[ka].match(/(.*)(==|!=|===|!==|>|>=|<|<=)(.*)/);
-            att = contextSplit[1];
-            comp = contextSplit[2];
-            attVal = contextSplit[3];
-
-            if (!eval(ancestors[k][att] + comp + attVal))
+            // the impossible really happens.
+            continue;
+          }
+          if ( match || ( ancestors[k].tagName.toLowerCase() == context ) )
+          {
+            inContext = true;
+            var contextSplit = null;
+            var att = null;
+            var comp = null;
+            var attVal = null;
+            for ( var ka = 0; ka < attrs.length; ++ka )
             {
-              inContext = false;
+              contextSplit = attrs[ka].match(/(.*)(==|!=|===|!==|>|>=|<|<=)(.*)/);
+              att = contextSplit[1];
+              comp = contextSplit[2];
+              attVal = contextSplit[3];
+
+              if (!eval(ancestors[k][att] + comp + attVal))
+              {
+                inContext = false;
+                break;
+              }
+            }
+            if ( inContext )
+            {
               break;
             }
           }
-          if ( inContext )
-          {
-            break;
-          }
         }
+        
+        if(inContext) break;
       }
     }
     btn.state("enabled", (!text || btn.text) && inContext);
