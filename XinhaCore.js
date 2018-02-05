@@ -3816,8 +3816,8 @@ Xinha.prototype.registerPlugin2 = function(plugin, args)
       name: pluginName
     };
   }
-  var obj = new plugin(this, args);
-  if ( obj )
+  var obj;
+  if ( (typeof plugin == 'function') && (obj = new plugin(this, args)) )
   {
     var clone = {};
     var info = plugin._pluginInfo;
@@ -3923,6 +3923,8 @@ Xinha.loadPlugin = function(pluginName, callback, url)
       default:
         Xinha._pluginLoadStatus[pluginName] = 'failed';
         Xinha.debugMsg('Xinha was not able to find the plugin '+pluginName+'. Please make sure the plugin exists.', 'warn');
+        Xinha.debugMsg('If '+pluginName+' is located in unsupported_plugins you should also check unsupported_plugins/.htaccess for possible access restrictions.', 'warn');
+        
         return;
     }
     var url = dir + "/" + file;

@@ -1,7 +1,5 @@
 <?php
 
-  die('Developer, this plugin ImageManager has been deprecated.  You are STRONGLY advised to use MootoolsFileManager plugin instead.  If you really must continue using this plugin, please edit xinha/unsupported_plugins/ImageManager/config.php to remove this notice.');
-
 /**
  * Image Manager configuration file.
  * @author $Author:gogo $
