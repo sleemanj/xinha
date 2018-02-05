@@ -10,7 +10,7 @@
   then we will load our own version, so ensure you load your version
   first if you need a newer one (then this might break, but oh well).
   
-  == Usage ==
+  == Usage ==._
   Instruct Xinha to load the WebKitImageResuze plugin (follow the NewbieGuide),
   you can load this plugin even in non WebKit browsers, it will do 
   nothing (no harm, no benefit).
@@ -71,5 +71,23 @@ WebKitResize.prototype.onGenerateOnce = function()
     jQuery(this.editor._iframe).webkitimageresize();
     jQuery(this.editor._iframe).webkittableresize();
     jQuery(this.editor._iframe).webkittdresize();
+  }
+}
+
+// When changing modes, make sure that we stop displaying the handles
+// if they were displaying, otherwise they create duplicates (because
+// the images are recreated).
+WebKitResize.prototype.onBeforeMode = function(mode)
+{
+  if(Xinha.is_webkit)
+  {
+    if(typeof this.editor._iframe._WebKitImageResizeEnd)
+      this.editor._iframe._WebKitImageResizeEnd();
+    
+    if(typeof this.editor._iframe._WebKitTableResizeEnd)
+      this.editor._iframe._WebKitTableResizeEnd();
+    
+    if(typeof this.editor._iframe._WebKitTdResizeEnd)
+      this.editor._iframe._WebKitTdResizeEnd();
   }
 }
