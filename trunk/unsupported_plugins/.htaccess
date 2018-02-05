@@ -44,7 +44,6 @@
   #SetEnvIf Request_URI "/NoteServer/" not_a_security_threat  
   #SetEnvIf Request_URI "/Template/" not_a_security_threat
   
-  SetEnvIf Request_URI "/ClientsideSpellcheck/" security_threat
   SetEnvIf Request_URI "/ExtendedFileManager/"  security_threat
   SetEnvIf Request_URI "/HtmlTidy/"             security_threat
   SetEnvIf Request_URI "/ImageManager/"         security_threat
