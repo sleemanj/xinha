@@ -390,9 +390,10 @@
             $ifrm.bind('webkitresize-updatecrc', function (event, crc) {                
                 lastCrc = crc;
             });
-
+            
             methods.refresh(context);
 
+            ifrm._WebKitImageResizeEnd = function(){ methods.reset(context); }
         });
     };
 
@@ -712,6 +713,7 @@
 
             methods.refresh(context);
 
+            ifrm._WebKitTableResizeEnd = function(){ methods.reset(context); }
         });
     };
 
@@ -1034,6 +1036,7 @@
 
             methods.refresh(context);
 
+            ifrm._WebKitTdResizeEnd = function(){ methods.reset(context); }
         });
     };
 })(jQuery);
