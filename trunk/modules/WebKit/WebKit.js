@@ -186,6 +186,38 @@ WebKit.prototype.onKeyPress = function(ev)
  
     break;
     
+    case 9: // KEY tab
+    {
+      // Note that the ListOperations plugin will handle tabs in list items and indent/outdent those
+      // at some point TableOperations might do also
+      // so this only has to handle a tab/untab in text
+      if(editor.config.tabSpanClass)
+      {
+        if(!ev.shiftKey)
+        {
+          editor.insertHTML('<span class="'+editor.config.tabSpanClass+'">'+editor.config.tabSpanContents+'</span>');
+          var s = editor.getSelection().collapseToEnd();
+        }
+        else
+        {
+          var existingTab = editor.getParentElement();
+          if(existingTab && existingTab.className.match(editor.config.tabSpanClass))
+          {
+            var s = editor.getSelection();
+            s.removeAllRanges();
+            var r = editor.createRange();
+            r.selectNode(existingTab);
+            s.addRange(r);
+            s.deleteFromDocument();
+          }
+        }
+      }
+      
+      Xinha._stopEvent(ev);
+      
+    }
+    break;
+    
     case 8: // KEY backspace
     case 46: // KEY delete
       // We handle the mozilla backspace directly??
