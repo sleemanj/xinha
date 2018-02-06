@@ -770,6 +770,17 @@ Xinha.Config = function()
    */
   this.specialReplacements = {}; //{ 'html_string' : 'wysiwyg_string' }
   
+  /** When the user presses the Tab in the editor, Xinha will insert a span.
+   *  with the given class and contents.
+   * 
+   *  You can set tabSpanClass to false to disable this function, in which
+   *    case tabs will be disabled in Xinha (except for in lists if you load 
+   *    the ListOperations plugin.
+   */
+  
+  this.tabSpanClass    = 'xinha-tab';
+  this.tabSpanContents = '&nbsp;&nbsp;&nbsp;&nbsp;';
+  
   /** A filter function for the HTML used inside the editor<br />
    * Default: function (html) { return html }
    * 
