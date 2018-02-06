@@ -5201,6 +5201,11 @@ Xinha.prototype._getFirstAncestorAndWhy = function(sel, types)
   {
     types = [types];
   }
+  return this._getFirstAncestorForNodeAndWhy(prnt, types);
+};
+ 
+Xinha.prototype._getFirstAncestorForNodeAndWhy = function(node, types) {
+  var prnt = node.parentNode;
 
   while ( prnt )
   {
