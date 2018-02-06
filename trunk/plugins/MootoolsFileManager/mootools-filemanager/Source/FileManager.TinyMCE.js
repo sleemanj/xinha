@@ -51,7 +51,7 @@ FileManager.TinyMCE = function(options){
 
 		if (src.length > 0)
 		{
-			src = this.documentBaseURI.toAbsolute(src);
+			//src = this.documentBaseURI.toAbsolute(src);
 		}
 		if (src.match(/^[a-z]+:/i))
 		{

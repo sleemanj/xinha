@@ -743,10 +743,25 @@ var FileManager = new Class({
 	 */
 	mkServerRequestURL: function(fm_obj, request_code, post_data)
 	{
+    // HACK: Encode the post_data to get around mod_security issues
+    function rot13(s)
+    {
+        return (s ? s : this).split('').map(function(_)
+        {
+            if (!_.match(/[A-Za-z]/)) return _;
+            c = Math.floor(_.charCodeAt(0) / 97);
+            k = (_.toLowerCase().charCodeAt(0) - 83) % 26 || 26;
+            return String.fromCharCode(k + ((c == 0) ? 64 : 96));
+        }).join('');
+    }
+   // console.log(rot13(JSON.encode(post_data)));
+    
+    post_data = { encoded_data: rot13(JSON.encode(post_data)) };
+    
 		return {
-			url: fm_obj.options.url + (fm_obj.options.url.indexOf('?') == -1 ? '?' : '&') + Object.toQueryString({
+			url: (fm_obj.options.url + (fm_obj.options.url.indexOf('?') == -1 ? '?' : '&') + Object.toQueryString({
 					event: request_code
-				}),
+				})).replace(/&&/, '&'),
 			data: post_data
 		};
 	},
@@ -3642,7 +3657,7 @@ if(Browser.ie && Browser.version <= 7)
 }
 
 
-if( __MFM_USE_BACK_BUTTON_NAVIGATION__ )
+if( typeof __MFM_USE_BACK_BUTTON_NAVIGATION__ != 'undefined' && __MFM_USE_BACK_BUTTON_NAVIGATION__ )
 {
   Asset.javascript(__MFM_ASSETS_DIR__+'/js/jsGET.js', {
     events: {

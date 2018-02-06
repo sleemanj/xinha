@@ -341,7 +341,7 @@ FileManager.implement({
 			}.bind(this),
 			onFileComplete: function(f) {
 				self.diag.log('FlashUploader: onFileComplete', arguments, ', fileList: ', self.swf.fileList);
-				self.upload.lastFileUploaded = f.name;
+				self.upload.lastFileUploaded = f.name.replace(/\s+/g, '_').replace(/_{2,}/g, '_');
 			},
 			onFail: function(error) {
 				self.diag.log('FlashUploader: onFail', arguments, ', swf: ', self.swf, ', fileList: ', (typeof self.swf !== 'undefined' ? self.swf : '---'));

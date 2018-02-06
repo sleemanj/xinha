@@ -35,7 +35,8 @@ this.Milkbox = new Class({
 		imageOfText:'of',
 		onXmlGalleries:function(){},
 		onClosed:function(){},
-		onFileReady:function(){}
+		onFileReady:function(){},
+    zIndex: 50001,
 	},
 
 	initialize: function(options){
@@ -475,7 +476,8 @@ this.Milkbox = new Class({
 			centered:this.options.centered,
 			autoSize:this.options.autoSize,
 			autoSizeMaxHeight:this.options.autoSizeMaxHeight,
-			imageOfText:this.options.imageOfText
+			imageOfText:this.options.imageOfText,
+      zIndex:this.options.zIndex
 		});
 	},
 	
@@ -712,7 +714,7 @@ var MilkboxDisplay= new Class({
 				'position':(this.options.centered) ? 'fixed' : 'absolute',
 				'overflow':'hidden',
 				'display':'none',
-				'z-index':50001,//overlay z-index (see css) + 1
+				'z-index':this.options.zIndex,//50001,//overlay z-index (see css) + 1
 				'width':this.options.initialWidth,
 				'height':this.options.initialHeight,
 				'opacity':0,
@@ -1173,9 +1175,12 @@ var MilkboxGallery = new Class({
 
 
 //Creating Milkbox instance: you can comment this code and instantiate Milkbox somewhere else instead.
-window.addEvent('domready', function(){ 
-	//milkbox = new Milkbox({overlayOpacity:1, fileboxBorderWidth:'10px', fileboxBorderColor:'#ff0000', fileboxPadding:'20px', centered:true});
-	milkbox = new Milkbox({ 
-		//autoPlay:true
-	});
-});
+if( typeof __MILKBOX_NO_AUTOINIT__ == 'undefined' || __MILKBOX_NO_AUTOINIT__ == false)
+{
+  window.addEvent('domready', function(){ 
+    //milkbox = new Milkbox({overlayOpacity:1, fileboxBorderWidth:'10px', fileboxBorderColor:'#ff0000', fileboxPadding:'20px', centered:true});
+    milkbox = new Milkbox({ 
+      //autoPlay:true
+    });
+  });
+}
