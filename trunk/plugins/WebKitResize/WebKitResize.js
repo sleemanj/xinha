@@ -79,15 +79,36 @@ WebKitResize.prototype.onGenerateOnce = function()
 // the images are recreated).
 WebKitResize.prototype.onBeforeMode = function(mode)
 {
+  console.log("B CHANGE");
   if(Xinha.is_webkit)
   {
-    if(typeof this.editor._iframe._WebKitImageResizeEnd)
-      this.editor._iframe._WebKitImageResizeEnd();
-    
-    if(typeof this.editor._iframe._WebKitTableResizeEnd)
-      this.editor._iframe._WebKitTableResizeEnd();
-    
-    if(typeof this.editor._iframe._WebKitTdResizeEnd)
-      this.editor._iframe._WebKitTdResizeEnd();
+    if(mode == 'textmode')
+    {
+      if(typeof this.editor._iframe._WebKitImageResizeEnd)
+        this.editor._iframe._WebKitImageResizeEnd();
+      
+      if(typeof this.editor._iframe._WebKitTableResizeEnd)
+        this.editor._iframe._WebKitTableResizeEnd();
+      
+      if(typeof this.editor._iframe._WebKitTdResizeEnd)
+        this.editor._iframe._WebKitTdResizeEnd();
+    }
+  }
+}
+
+WebKitResize.prototype.onMode = function(mode)
+{
+  console.log("CHANGE");
+  if(Xinha.is_webkit)
+  {
+    if(mode == 'textmode')
+    {
+      
+    }
+    else
+    {
+      if(typeof this.editor._iframe._WebKitImageResizeStart)
+        this.editor._iframe._WebKitImageResizeStart();
+    }
   }
 }

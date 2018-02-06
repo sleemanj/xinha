@@ -60,9 +60,9 @@
                     var imgHeight = $(img).outerHeight();
                     var imgWidth = $(img).outerWidth();
                     var iframePos = context.$ifrm.offset();
-                    var imgPosition = $(img).offset();
-                    var ifrmScrollTop = context.$ifrmBody.scrollTop();
-                    var ifrmScrollLeft = context.$ifrmBody.scrollLeft();
+                    var imgPosition = $(img).offset();       
+                    var ifrmScrollTop = Math.max(context.ifrm.contentWindow.document.documentElement.scrollTop, context.$ifrmBody.scrollTop());
+                    var ifrmScrollLeft = Math.max(context.ifrm.contentWindow.document.documentElement.scrollLeft, context.$ifrmBody.scrollLeft());
 
                     context.$docBody.append("<span data-guid='" + context.guid + "' class='img-resize-selector' style='margin:10px;position:absolute;top:" + (iframePos.top + imgPosition.top - ifrmScrollTop + imgHeight - 10) + "px;left:" + (iframePos.left + imgPosition.left - ifrmScrollLeft + imgWidth - 10) + "px;border:solid 2px red;width:6px;height:6px;cursor:se-resize;z-index:1000;'></span>");
 
@@ -241,6 +241,12 @@
                         });
                     });
                 },
+                
+                debind: function (context) {
+                    context.$ifrm.contents().find("img").each(function (i, v) {
+                        $(v).unbind('click');                        
+                    });
+                },
 
                 refresh: function (context) {                                                   
                     methods.rebind(context);
@@ -393,7 +399,8 @@
             
             methods.refresh(context);
 
-            ifrm._WebKitImageResizeEnd = function(){ methods.reset(context); }
+            ifrm._WebKitImageResizeEnd   = function(){ methods.reset(context); methods.removeResizeElements(context); methods.debind(context); }
+            ifrm._WebKitImageResizeStart = function(){ methods.reset(context); context.$ifrmBody = $ifrm.contents().find("body"); }
         });
     };
 
@@ -443,8 +450,8 @@
                     var tblWidth = $(tbl).outerWidth();
                     var iframePos = context.$ifrm.offset();
                     var tblPosition = $(tbl).offset();
-                    var ifrmScrollTop = context.$ifrmBody.scrollTop();
-                    var ifrmScrollLeft = context.$ifrmBody.scrollLeft();
+                    var ifrmScrollTop = Math.max(context.ifrm.contentWindow.document.documentElement.scrollTop, context.$ifrmBody.scrollTop());
+                    var ifrmScrollLeft = Math.max(context.ifrm.contentWindow.document.documentElement.scrollLeft, context.$ifrmBody.scrollLeft());
 
                     context.$docBody.append("<span data-guid='" + context.guid + "' class='resize-selector' style='margin:10px;position:absolute;top:" + (iframePos.top + tblPosition.top - ifrmScrollTop + tblHeight - 10) + "px;left:" + (iframePos.left + tblPosition.left - ifrmScrollLeft + tblWidth - 10) + "px;border:solid 2px red;width:6px;height:6px;cursor:se-resize;z-index:1000;'></span>");
 
@@ -564,6 +571,12 @@
                                 methods.tableClick(context, v);
                             }
                         });
+                    });
+                },
+
+                debind: function (context) {
+                    context.$ifrm.contents().find("table").each(function (i, v) {
+                        $(v).unbind('click');                        
                     });
                 },
 
@@ -713,7 +726,8 @@
 
             methods.refresh(context);
 
-            ifrm._WebKitTableResizeEnd = function(){ methods.reset(context); }
+            ifrm._WebKitTableResizeEnd = function(){ methods.reset(context); methods.removeResizeElements(context); methods.debind(context); }
+            ifrm._WebKitImageResizeStart = function(){ methods.reset(context); context.$ifrmBody = $ifrm.contents().find("body"); }
         });
     };
 
@@ -763,8 +777,8 @@
                     var tdWidth = $(td).outerWidth();
                     var iframePos = context.$ifrm.offset();
                     var tdPosition = $(td).offset();
-                    var ifrmScrollTop = context.$ifrmBody.scrollTop();
-                    var ifrmScrollLeft = context.$ifrmBody.scrollLeft();
+                    var ifrmScrollTop = Math.max(context.ifrm.contentWindow.document.documentElement.scrollTop, context.$ifrmBody.scrollTop());
+                    var ifrmScrollLeft = Math.max(context.ifrm.contentWindow.document.documentElement.scrollLeft, context.$ifrmBody.scrollLeft());
 
                     context.$docBody.append("<span data-guid='" + context.guid + "' class='td-resize-selector' style='margin:10px;position:absolute;top:" + (iframePos.top + tdPosition.top - ifrmScrollTop + tdHeight - 10) + "px;left:" + (iframePos.left + tdPosition.left - ifrmScrollLeft + tdWidth - 10) + "px;border:solid 2px red;width:6px;height:6px;cursor:se-resize;z-index:1000;'></span>");
 
@@ -883,6 +897,12 @@
                                 methods.tdClick(context, v);
                             }
                         });
+                    });
+                },
+                
+                debind: function (context) {
+                    context.$ifrm.contents().find("td").each(function (i, v) {
+                        $(v).unbind('click');                        
                     });
                 },
 
@@ -1036,7 +1056,8 @@
 
             methods.refresh(context);
 
-            ifrm._WebKitTdResizeEnd = function(){ methods.reset(context); }
+            ifrm._WebKitTdResizeEnd = function(){ methods.reset(context); methods.removeResizeElements(context); methods.debind(context);  }
+            ifrm._WebKitImageResizeStart = function(){ methods.reset(context); context.$ifrmBody = $ifrm.contents().find("body"); }
         });
     };
 })(jQuery);
