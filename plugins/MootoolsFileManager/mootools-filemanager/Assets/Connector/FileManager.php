@@ -1071,7 +1071,7 @@ class FileManager
 		}
 		if (empty($document_root_fspath))
 		{
-			$document_root_fspath = realpath($_SERVER['DOCUMENT_ROOT']);
+			$document_root_fspath = realpath(isset($_SERVER['REDIRECT_DOCUMENT_ROOT']) ? $_SERVER['REDIRECT_DOCUMENT_ROOT'] : $_SERVER['DOCUMENT_ROOT']);
 		}
 		$document_root_fspath = strtr($document_root_fspath, '\\', '/');
 		$document_root_fspath = rtrim($document_root_fspath, '/');
@@ -2344,6 +2344,12 @@ class FileManager
 				}
 				else
 				{
+          if ($this->options['safe'])
+          {
+            $safeext      = $this->getSafeExtension(preg_replace('/^.*\./', '', $file_arg));           
+            $file_arg = preg_replace('/\..*$/', '', $file_arg) . ".$safeext";
+          }
+          
 					$filename = $this->getUniqueName($file_arg, $dir);
 					if ($filename !== null)
 					{
@@ -4197,6 +4203,9 @@ class FileManager
 		case 'php3':
 		case 'php4':
 		case 'php5':
+		case 'php6':
+		case 'php7':
+		case 'php8':
 		case 'phps':
 			return (!empty($safe_extension) ? $safe_extension : $extension);
 
@@ -4280,7 +4289,7 @@ class FileManager
 		 * This is faster than using a dirscan to collect a set of existing filenames and feeding them as
 		 * an option array to pagetitle(), particularly for large directories.
 		 */
-		$filename = FileManagerUtility::pagetitle($fileinfo['filename'], null, '-_., []()~!@+' /* . '#&' */, '-_,~@+#&');
+		$filename = FileManagerUtility::pagetitle($fileinfo['filename'], null, '-_.,[]()~!@+' /* . '#&' */, '-_,~@+#&');
 		if (!$filename && !$dotfile)
 			return null;
 

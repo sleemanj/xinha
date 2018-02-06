@@ -119,7 +119,7 @@
   $IMConfig['images_allow_upload']     = false;
   $IMConfig['images_allow_delete']     = false;
   $IMConfig['images_max_upload_size']  = '3M';
-  $IMConfig['images_suggested_image_dimension']  = array('width' => 1024, 'height' => 768);
+  $IMConfig['images_suggested_image_dimension']  = $IMConfig['files_suggested_image_dimension'];
 
 
 // -------------------------------------------------------------------------

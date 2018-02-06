@@ -21,7 +21,7 @@
 
 MootoolsFileManager._pluginInfo = {
   name          : "Mootols File Manager",
-  version       : "1.0",
+  version       : "1.5",
   developer     : "James Sleeman (Xinha), Christoph Pojer (FileManager)",  
   license       : "MIT"
 };
@@ -40,8 +40,8 @@ MootoolsFileManager.AssetLoader = Xinha.includeAssets();
 if(typeof MooTools == 'undefined')
 {
   MootoolsFileManager.AssetLoader
-    .loadScript('mootools-core.js', 'MootoolsFileManager')
-    .loadScript('mootools-more.js', 'MootoolsFileManager');
+    .loadScript('MooTools-Core-1.6.0.js', 'MootoolsFileManager')
+    .loadScript('MooTools-More-1.6.0.js', 'MootoolsFileManager');
 }
 
 // In case you want to use your own version of FileManager, you can load it first.
@@ -55,7 +55,15 @@ if(typeof FileManager == 'undefined')
   
   if(typeof __MFM_USE_FLASH__ == 'undefined')
   {
-    __MFM_USE_FLASH__ = Browser.Plugins.Flash.version ? true : false;
+    // Flash is now disabled by default, there is no good reason to use it
+    // as the NoFlash uploader works exactly the same on modern browsers
+    // (allows multiple file uploads, progress bars and so forth)
+    __MFM_USE_FLASH__ = false;
+    
+    /*
+      __MFM_USE_FLASH__ = Browser.Plugins.Flash.version ? true : false;
+      if(Browser.Platform.mac && Browser.firefox3) __MFM_USE_FLASH__ = false;
+    */
   }
   
   if(typeof __MFM_USE_BACK_BUTTON_NAVIGATION__ == 'undefined')
@@ -89,7 +97,6 @@ if(typeof FileManager == 'undefined')
  else
  {
    MootoolsFileManager.AssetLoader
-      .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
       .loadScript('mootools-filemanager/Source/NoFlash.Uploader.js', 'MootoolsFileManager');
  }    
 }
@@ -139,7 +146,7 @@ MootoolsFileManager.prototype.hookUpButtons = function()
     this.editor.config.registerButton({
         id        : "linkfile",
         tooltip   : Xinha._lc("Insert File Link",'ExtendedFileManager'),
-        image     : Xinha.getPluginDir('ExtendedFileManager') + '/img/ed_linkfile.gif',
+        image     : Xinha.getPluginDir('MootoolsFileManager') + '/img/ed_linkfile.gif',
         textMode  : false,
         action    : function(editor) { MootoolsFileManager.AssetLoader.whenReady(function() { self.OpenFileManager(); }); }
         });

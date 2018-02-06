@@ -87,6 +87,12 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       onDetails:      function(details) 
                       {                                                 
                         this.info.adopt(self.ImageManagerAttributes(details)); 
+                        
+                        // This is some meta data we don't need to see, messes up the formatting.
+                        if(this.info.getElement('.filemanager-preview dl+p'))
+                        {
+                          this.info.getElement('.filemanager-preview dl+p').style.display = 'none';
+                        }
                         return true;
                       },
       onHidePreview:  function()
@@ -219,12 +225,13 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
           
           var td    = tr.appendChild(document.createElement('td'));
           td.rowSpan = 2;
+          td.style.verticalAlign = 'middle';
           
           var div   = td.appendChild(document.createElement('div'));
           div.style.position = 'relative';
           
           var img   = div.appendChild(document.createElement('img'));
-          img.src   =  Xinha.getPluginDir("ImageManager") + '/img/locked.gif';
+          img.src   =  Xinha.getPluginDir("MootoolsFileManager") + '/img/locked.gif';
           img.width = 25;
           img.height = 32;
           img.alt = 'Constrain Proportions';
@@ -234,8 +241,8 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
           input.type = 'checkbox';
           input.name = 'f_constrain';                  
           input.style.position = 'absolute';
-          input.style.top = '8px';
-          input.style.left = '0px';
+          input.style.top = '10px';
+          input.style.left = '-4px';
           input.value = 'on';        
           input.checked = true;
           div.appendChild(input);        
@@ -378,6 +385,14 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
         }
       }
       
+      { // Size Warning
+         var tr    = tbody.appendChild(document.createElement('tr'));
+                
+         var td    = tr.appendChild(document.createElement('td'));
+         td.colSpan = 7;
+         td.className = 'filemanager-img-size-notice';        
+      }
+      
       var div = document.createElement('div');
       var h2 = document.createElement('h2');
       h2.appendChild(document.createTextNode('Image Attributes'));
@@ -472,6 +487,15 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
       table: this._ImageManagerAttributesTable
     } 
     return details;
+  }
+  
+  if(details.width && !isNaN(parseInt(details.width)) && parseInt(details.width) > 400)
+  {
+    this._ImageManagerAttributesTable.getElement('.filemanager-img-size-notice').set('html', '<p class="tip" style="margin-top:4px;">This original image is ' + (details.width) + ' pixels wide, you may wish to reduce the size by putting a lesser number in the "Width" field above.  It is not usually desirable to exceed 400 pixels in width on most normal pages.</p>');
+  }
+  else
+  {
+      this._ImageManagerAttributesTable.getElement('.filemanager-img-size-notice').set('text', '');
   }
   
   // If details were supplied, we set the appropriate ones.  

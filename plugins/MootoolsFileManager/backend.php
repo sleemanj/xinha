@@ -52,6 +52,12 @@ if(function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc())
   }
 }
 
+if(isset($_POST['encoded_data']))
+{
+  $D = json_decode(str_rot13($_POST['encoded_data']));
+  foreach($D as $k => $v) { $_POST[$k]=$v; if(!isset($_REQUEST[$k])) $_REQUEST[$k] = $v; }
+}
+
 function size_to_bytes($s)
 {
   if(preg_match('/([0-9\.])+([a-zA-Z]+)/', $s, $M))
@@ -101,7 +107,7 @@ switch ( @$_REQUEST[ "__function" ] )
     if(!@$IMConfig['images_dir'])
     {
       // Session time out
-      echo '{"status" : 0, "error": "No images_dir, most likely your session has timed out."}';exit;
+      echo '{"status" : 0, "error": "No images_dir, most likely your session has timed out, or the file upload was too large for this server to handle, try refreshing your browser, or uploading a smaller file if it still does not work.", "data": ' . json_encode($_REQUEST).'}';exit;
     }
     
     // include('mootools-filemanager/Assets/Connector/FileManager.php');

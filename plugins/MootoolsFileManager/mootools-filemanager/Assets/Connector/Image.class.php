@@ -594,7 +594,7 @@ class Image {
 	 *
 	 * @return Image object
 	 */
-	public function process($ext = null, $file = null, $quality = 100, $store_original_if_unaltered = false){
+	public function process($ext = null, $file = null, $quality = 60, $store_original_if_unaltered = true){
 		if(empty($this->image)) return $this;
 
 		if(!$ext) $ext = $this->meta['ext'];
@@ -652,7 +652,7 @@ class Image {
 	 *
 	 * @return Image
 	 */
-	public function save($file = null, $quality = 100, $store_original_if_unaltered = false){
+	public function save($file = null, $quality = 60, $store_original_if_unaltered = true){
 		if(empty($this->image)) return $this;
 
 		if(!$file) $file = $this->file;
