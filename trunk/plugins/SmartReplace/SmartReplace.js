@@ -6,7 +6,7 @@
 
 function SmartReplace(editor) {
 	this.editor = editor;
-	
+	this._wasShowing = false; // Set true when switching to textmode if the dialog is visible, so it can be restored
 	var cfg = editor.config;
 	var self = this;
 	
@@ -342,3 +342,28 @@ SmartReplace.prototype.show = function(inputs)
   // Init the sizes
   this.dialog.onresize();
 };
+
+SmartReplace.prototype.onBeforeMode = function(mode)
+{
+  switch(mode)
+  {
+    case 'textmode':      
+      if ( this.dialog.rootElem.style.display != 'none')
+      {
+        this._wasShowing = true;
+        this.dialog.hide();
+      }
+      else
+      {
+        this._wasShowing = false;
+      }
+      break;
+      
+    case 'wysiwyg':
+      if(this._wasShowing)
+      {
+        this.buttonPress();
+      }
+      break;
+  }
+}
