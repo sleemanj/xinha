@@ -365,15 +365,47 @@
       var e = element;
       var top  = 0;
       var left = 0;
+      
+      // Check for overflow:scroll elements which do not have position:relative
+      while(e.parentNode)
+      {
+        e = e.parentNode;
+        if(typeof e.tagName != 'undefined' && !e.tagName.toLowerCase().match(/body|html/))
+        {
+          if( ( e.scrollTop || e.scrollLeft ) && !e.style.position.match(/fixed|absolute|relative/))
+          {
+            Xinha.debugMsg('Warning, the Xinha editor is included in a '+e.tagName+' which has scroll (overflow) but is not positioned relative, absolute, or fixed.  The ColorPicker plugin may not display in the correct location.', 'warn');
+          }
+        }
+      }
+      e = element;
+      
       do
       {
         if (e.style.position == 'fixed') 
         {
           this.table.style.position = 'fixed';
         }
-        top += e.offsetTop - e.scrollTop;
-        left += e.offsetLeft - e.scrollLeft;
-
+        
+        if(e.tagName.toLowerCase() == 'body')
+        {
+                              // I don't think we need adjust for scroll at all on body
+                              // In standards these would be 0 for the body (vs document.documentElement.scrollTop/Left)
+                              // in quirks they are not, and it doesn't work in quirks with them.
+          top += e.offsetTop;  // - e.scrollTop;
+          left += e.offsetLeft;// - e.scrollLeft;
+        }
+        else
+        {
+          // Caution, unless an element is positioned (position: fixed/relative/absolute) 
+          // then it will not be considered because it is not an offsetParent
+          // so if you haev an overflow:scroll; div containing your Xinha, then you
+          // must set position:relative;  (or other position) on it in order to get it 
+          // to be considered.
+          top += e.offsetTop - e.scrollTop;
+          left += e.offsetLeft - e.scrollLeft;
+        }
+        
         e = e.offsetParent;
       }
       while(e);
