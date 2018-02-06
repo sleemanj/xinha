@@ -7,11 +7,11 @@
  At present the only feature is
  
  {{{
-   xinha_config.ListOperations.tabToIndent = true;
+   xinha_config.ListOperations.tabToIndent = [true | 'atstart' | false];
  }}}
  
  which causes pressig tab ina list to indent (or shift-tab to detent) to 
- a new list level.
+ a new list level
  
  Note that the HTML structure of this list may be, for example
  {{{
@@ -37,6 +37,13 @@ ListOperations._pluginInfo = {
   license       : "htmlArea"
 }
 
+Xinha.Config.prototype.ListOperations = 
+{ 
+  // One of true, false, 'atstart'
+  //  where 'atstart' will indent only at the start of a list item (can be a bit wonky if there is a leading space)
+  tabToIndent: true 
+}
+
 function ListOperations(editor)
 {
   this.editor = editor;
@@ -45,22 +52,28 @@ function ListOperations(editor)
 ListOperations.prototype.onKeyPress = function(ev)
 {
   var editor = this.editor;
-   
-  if( ev.keyCode !== 9 ) { return; }
+ 
+  // Not enabled, drop out
+  if(!editor.config.ListOperations.tabToIndent) return false;
+  
+  if( ev.keyCode !== 9 ) { return false; }
 
   var sel = editor.getSelection(),
       rng = editor.createRange(sel),
       containing_list = editor._getFirstAncestorAndWhy(sel, ["ol", "ul"]);
 
   if( containing_list[0] === null ) {
-      return;
+      return false;
   }
 
   containing_list_type = ["ol", "ul"][containing_list[1]];
   containing_list = containing_list[0];
 
-  if( rng.startOffset !== 0 ) {
-    return;
+  if(!editor.config.ListOperations.tabToIndent == 'atstart')
+  {
+    if( rng.startOffset !== 0 ) {
+      return false;
+    }
   }
 
   ev.preventDefault();
