@@ -35,7 +35,7 @@
 .htmlarea .toolbar .buttonActive,
 .htmlarea .toolbar .buttonPressed
 {
-  padding: 2px 0 0 2px;
+  /*padding: 2px 0 0 2px;*/ padding:0;
   border: 1px solid;
   border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
