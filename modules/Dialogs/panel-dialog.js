@@ -75,3 +75,7 @@ Xinha.PanelDialog.prototype.getValues  = Xinha.Dialog.prototype.getValues;
 Xinha.PanelDialog.prototype.getElementById    = Xinha.Dialog.prototype.getElementById;
 
 Xinha.PanelDialog.prototype.getElementsByName = Xinha.Dialog.prototype.getElementsByName;
+
+Xinha.PanelDialog.prototype.getElementsByClassName = Xinha.Dialog.prototype.getElementsByClassName;
+
+Xinha.PanelDialog.prototype.createElement = Xinha.Dialog.prototype.createElement;

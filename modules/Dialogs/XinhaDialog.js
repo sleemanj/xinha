@@ -764,6 +764,29 @@ Xinha.Dialog.prototype.getElementsByClassName = function(className)
   return Xinha.getElementsByClassName(this.rootElem,className);
 };
 
+/** Return all elements in the dialog that have the given class
+ * @type Array 
+ * @param {String} className
+ */
+Xinha.Dialog.prototype.getElementsByTagName = function(className)
+{
+  return Xinha.getElementsByTagName(this.rootElem,className);
+};
+
+/** Creates an elementin the dialog, with the given id if provided
+ *   (note that the id is transfomed into a unique id)
+ */
+
+Xinha.Dialog.prototype.createElement = function(tagName, id)
+{
+  var newElement = this.document.createElement(tagName);
+  if(typeof id == 'string')
+  {
+    newElement.id = this.createId(id);
+  }
+  return newElement;
+};
+
 /** Initiates dragging
  * @private
  * @param {Object} ev Mousedown event
