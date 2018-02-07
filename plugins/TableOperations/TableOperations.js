@@ -18,6 +18,7 @@ Xinha.Config.prototype.TableOperations = {
   'showButtons' : true, // Set to false to hide all but inserttable and toggleborders buttons on the toolbar
   // this is useful if you have the ContextMenu plugin and want to save toolbar space
   // (the context menu can perform all the button operations)
+  'tabToNext':   true, // Hit tab in a table cell goes to next (shift for prev) cell
   'addToolbarLineBreak': true // By default TableOperations adds a 'linebreak' in the toolbar.
   // Set to false to prevent this and instead just append the buttons without a 'linebreak'.
 }
@@ -721,3 +722,80 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
   this.dialogRowCell.getElementById('ok').onclick = apply;
   this.dialogRowCell.show();
 };
+
+TableOperations.prototype.onKeyPress = function(ev)
+{
+  var editor = this.editor;
+ 
+  // Not enabled, drop out
+  if(!editor.config.TableOperations.tabToNext) return false;
+  
+  if( ev.keyCode !== 9 ) { return false; }
+
+  var currentcell = editor.getElementIsOrEnclosingSelection(['td','th']);
+  
+  if( currentcell === null ) 
+  {
+    // Not in a table cell, drop through for others
+    return false;
+  }
+
+  ev.preventDefault();
+    
+  // find the next cell, get all the cells (td/th) which are in this table
+  // find ourself in that list
+  // set the new cell to pick to be the current index +/- 1
+  // select that new cell
+  var row = currentcell.parentNode;
+  var candidates = [ ];
+  var all = row.parentNode.getElementsByTagName("*")
+  var ourindex = null;
+  
+  for(var i = 0; i < all.length; i++)
+  {
+    // Same table (or tbody/thead)
+    if(all[i].parentNode.parentNode != currentcell.parentNode.parentNode) continue;
+    
+    if(all[i].tagName.toLowerCase() == 'td' || all[i].tagName.toLowerCase() == 'th')
+    {
+      candidates[candidates.length] = all[i];
+      if(all[i] == currentcell) ourindex=candidates.length-1;
+    }
+  }
+  
+  var nextIndex = null;
+  if(ev.shiftKey)
+  {
+     nextIndex = Math.max(0,ourindex-1);
+  }
+  else
+  {
+    nextIndex = Math.min(ourindex+1, candidates.length-1);
+  }
+  
+  if(ourindex == nextIndex)
+  {
+    // No other cell to go to, stop now
+    // maybe @TODO add a new row?
+    return true;
+  }
+  
+  editor.selectNodeContents(candidates[nextIndex]);
+  
+  /* If you wanted to collapse the selection to put the caret before/after it, you coudl do this.
+   *  but I think having it selected
+   * is more natural, that's how spreadsheets work (you tab into a field and start typing it will
+   * replace the field contents with the new contents)
+   
+      if(ourindex < nextIndex)
+      {
+        sel.collapseToEnd();
+      }
+      else
+      {
+        sel.collapseToEnd();
+      }
+  */
+
+  return true;
+}
