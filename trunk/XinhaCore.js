@@ -5160,6 +5160,53 @@ Xinha.prototype.getPluginInstance = function (plugin)
     return null;
   }
 };
+
+/** If the given or current selection comprises or is enclosed by 
+ *   one of the given tag names, return the deepest encloser.
+ * 
+ *  Example
+ * 
+ *    <ul> <li> [Caret Here] </li> </li>
+ * 
+ * editor.getElementIsOrEnclosingSelection(['ul','li'])
+ * 
+ * will return the list element
+ * 
+ */
+
+Xinha.prototype.getElementIsOrEnclosingSelection = function(types, sel)
+{
+  if(sel == null) 
+  {
+    sel = this.getSelection();
+  }
+  
+  var currentElement = this.activeElement(sel) ? this.activeElement(sel) : this.getParentElement(sel);
+  
+  
+  var typeMatched = false;
+  if(!(typeof currentElement.tagName == 'undefined'))
+  {
+    for(var i = 0; i < types.length; i++)
+    {
+      if(currentElement.tagName.toLowerCase().match(types[i].toLowerCase()))
+      {
+        typeMatched = true; 
+        break;
+      }
+    }
+  }
+  
+  // It wasn't the selected element, see if there is an ancestor
+  if(!typeMatched)
+  {
+    currentElement = null;
+    currentElement = this._getFirstAncestor(sel, types);
+  }
+  
+  return currentElement;
+};
+
 /** Returns an array with all the ancestor nodes of the selection or current cursor position.
 * @returns {Array}
 */
