@@ -749,8 +749,11 @@ EnterParagraphs.prototype.isNormalListItem = function(rng)
   {
     // neither we nor our parent are a list item. this is not a normal
     // li case.
-    
-    return false;
+    var listNode = editor._getFirstAncestorForNodeAndWhy(node, ["li"])[0];
+    if ( typeof listNode == 'undefined' )
+    {
+      return false;
+    }
   }
   
   // at this point we have a listNode. Is it the first list item?
