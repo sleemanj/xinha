@@ -19,6 +19,7 @@ Xinha.Config.prototype.TableOperations = {
   // this is useful if you have the ContextMenu plugin and want to save toolbar space
   // (the context menu can perform all the button operations)
   'tabToNext':   true, // Hit tab in a table cell goes to next (shift for prev) cell
+  'dblClickOpenTableProperties': false, // Double click on a cell to open table properties (I don't like this, it's unintuitive when you double-click to select a word, perhaps if it was default only for empty cells - James)
   'addToolbarLineBreak': true // By default TableOperations adds a 'linebreak' in the toolbar.
   // Set to false to prevent this and instead just append the buttons without a 'linebreak'.
 }
@@ -70,8 +71,11 @@ function TableOperations(editor) {
     Xinha._loadback(_editor_url + 'modules/InlineStyler/InlineStyler.js');
   }
 
-  cfg.dblclickList['td'] = [function() { self.dialogTableProperties() }];
-  cfg.dblclickList['th'] = [function() { self.dialogTableProperties() }];
+  if(cfg.TableOperations.doubleClickOpenTableProperties)
+  {
+    cfg.dblclickList['td'] = [function() { self.dialogTableProperties() }];
+    cfg.dblclickList['th'] = [function() { self.dialogTableProperties() }];
+  }
 }
 
 TableOperations._pluginInfo = {
@@ -112,6 +116,27 @@ TableOperations.prototype.getClosest = function(tagName) {
 
 TableOperations.prototype.getClosestMatch = function(regExpTagName) {
   var editor = this.editor;
+  
+  var sel = editor.getSelection();
+  
+  // Safari is really weird, if you right click in a cell with (only?) whitespace
+  // it selects the entire contents of the cell and the end of the selection is 
+  // inside the next cell. We have collapse to start to get this to work!  
+  sel.collapseToStart();
+  /*
+  if(typeof sel.focusNode != 'undefined' && typeof sel.focusNode.tagName != 'undefined' && sel.focusNode.tagName.match(regExpTagName))
+  {
+    return sel.focusNode;
+  }
+  */
+  
+  var currentElement = editor.activeElement(sel) ? editor.activeElement(sel) : editor.getParentElement(sel);
+
+  if(typeof currentElement.tagName != 'undefined' && currentElement.tagName.match(regExpTagName))
+  {
+    return currentElement;
+  }
+  
   var ancestors = editor.getAllAncestors();
   var ret = null;
   
