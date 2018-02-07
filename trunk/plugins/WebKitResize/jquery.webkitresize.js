@@ -567,7 +567,7 @@
                     context.$ifrm.contents().find("table").each(function (i, v) {
                         $(v).unbind('click');
                         $(v).click(function (e) {
-                            if (e.target == v || ($(e.target).is('td') && $(e.target).parents("table")[0] == v)) {
+                            if (e.target == v || (($(e.target).is('td')||$(e.target).is('th')) && $(e.target).parents("table")[0] == v)) {
                                 methods.tableClick(context, v);
                             }
                         });
@@ -890,7 +890,7 @@
                 },
 
                 rebind: function (context) {
-                    context.$ifrm.contents().find("td").each(function (i, v) {
+                    context.$ifrm.contents().find("td,th").each(function (i, v) {
                         $(v).unbind('click');
                         $(v).click(function (e) {
                             if (e.target == v) {
@@ -901,7 +901,7 @@
                 },
                 
                 debind: function (context) {
-                    context.$ifrm.contents().find("td").each(function (i, v) {
+                    context.$ifrm.contents().find("td,th").each(function (i, v) {
                         $(v).unbind('click');                        
                     });
                 },

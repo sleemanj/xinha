@@ -134,6 +134,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 				       Xinha._lc("Unlink the current element", "ContextMenu") ]
 				);
 			break;
+        case "th":
 		    case "td":
 			td = target;
 			if (!tbo) break;

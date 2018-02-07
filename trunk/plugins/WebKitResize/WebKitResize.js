@@ -35,7 +35,8 @@
 WebKitResize._pluginInfo = {
   name          : "WebKit Image Resize",
   version       : "1.0",
-  developer     : "EditorBoost (http://www.editorboost.net/Webkitresize/Index), James Sleeman (Xinha)",  
+  developer     : "EditorBoost, James Sleeman (Xinha)",
+  developer_url : "http://www.editorboost.net/Webkitresize/Index",
   license       : "GPLv3"
 };
 

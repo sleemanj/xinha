@@ -643,9 +643,56 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
   dialog.getElementById('title').innerHTML = cell ? Xinha._lc("Cell Properties", "TableOperations") : Xinha._lc("Row Properties", "TableOperations");
   var Styler = new Xinha.InlineStyler(element, self.editor, dialog);
   
+  // Insert a cell type selector into the layout section
+  var typeRow    = dialog.createElement('tr');
+  var typeLabel  = dialog.createElement('th');
+  typeLabel.className = 'label';
+  typeLabel.innerHTML = Xinha._lc('Cell Type:', 'TableOperations');
+  var typeSelect = dialog.createElement('select', 'to_type_select');
+  typeSelect.options[0] = new Option(Xinha._lc('Do Not Change','TableOperations'));
+  typeSelect.options[1] = new Option(Xinha._lc('Normal (td)','TableOperations'), 'td');
+  typeSelect.options[2] = new Option(Xinha._lc('Header (th)','TableOperations'), 'th');
+  
+  typeRow.appendChild(typeLabel);
+  typeRow.appendChild(typeSelect);
+  
   function apply() {
     var params = dialog.hide();
-    Styler.applyStyle(params);
+    
+    // If we need to change the cell type(s)
+    if(typeSelect.selectedIndex > 0)
+    {
+      if(element.tagName.toLowerCase() == 'tr')
+      {
+        // Change td into th
+        var toChange = element.getElementsByTagName(typeSelect.options[typeSelect.selectedIndex].value == 'td' ? 'th': 'td');
+        for(var i = toChange.length-1; i >= 0; i--)
+        {
+          if(element == toChange[i].parentNode)
+          {
+            var newNode = editor.convertNode(toChange[i], typeSelect.options[typeSelect.selectedIndex].value);
+            if(toChange[i].parentNode)
+            {
+              toChange[i].parentNode.replaceChild(newNode,toChange[i]);
+            }
+          }
+        }
+      }
+      else
+      {
+        if(element.tagName.toLowerCase() != typeSelect.options[typeSelect.selectedIndex].value)
+        {          
+          Styler.element = editor.convertNode(element, typeSelect.options[typeSelect.selectedIndex].value);
+          if(element.parentNode)
+          {
+            element.parentNode.replaceChild(Styler.element,element);
+          }
+          element = Styler.element
+        }
+      }
+    }
+    
+    Styler.applyStyle(params);    
     
     // various workarounds to refresh the table display (Gecko,
     // what's going on?! do not disappoint me!)
@@ -660,13 +707,17 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
   
   var st_layout = Styler.createStyleLayoutFieldset();
   var p = dialog.getElementById("TO_layout");
-
   p.replaceChild(st_layout,p.firstChild);
+  
+  // Insert the type selector into the Layout section
+  p.getElementsByTagName('table')[0].appendChild(typeRow);
+  
   
   var st_prop = Styler.createStyleFieldset();
   p = dialog.getElementById("TO_style");
   p.replaceChild(st_prop,p.firstChild);
 
+  
   this.dialogRowCell.getElementById('ok').onclick = apply;
   this.dialogRowCell.show();
 };
