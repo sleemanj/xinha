@@ -119,7 +119,20 @@ FancySelects.prototype.onGenerateOnce = function()
         jQuery(e).select2({dropdownAutoWidth: true, theme: 'default', width: width});
     }
     
+    jQuery(e).on('select2:opening', function(){
+      // IE11 needs this because opening the select2 de-selects the selected text
+      // so if we don't save and restore it nothing happens (except that the text is deselected)
+      // FF, Chrome and Edge are fine without this, but they also don't seem to care with it
+      // so I guess just do it across the board is safe enough
+      el._FancySelects_SavedSelection = editor.saveSelection();
+    });
+    
     jQuery(e).on('select2:select', function(){
+      if(el._FancySelects_SavedSelection) 
+      {
+        editor.restoreSelection(el._FancySelects_SavedSelection);
+      }
+      el._FancySelects_SavedSelection = null;
       editor._comboSelected(el, txt);
     });
     
@@ -129,13 +142,9 @@ FancySelects.prototype.onGenerateOnce = function()
 FancySelects.prototype.onUpdateToolbar = function()
 {
     var editor = this;
+    
     jQuery('.toolbarElement select').each(function(i,e){
-      
-      if(e.name.match(/CSS-class/))
-      {
-        
-      }
-      
       jQuery(e).trigger('change');
     });
+    
 };
