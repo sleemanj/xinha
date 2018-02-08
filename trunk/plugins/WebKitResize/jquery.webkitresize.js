@@ -409,7 +409,7 @@
         return this.each(function () {
 
             if (!$.browser.webkit) {
-                return;
+            //    return;
             }
 
 
@@ -736,7 +736,7 @@
         return this.each(function () {
 
             if (!$.browser.webkit) {
-                return;
+           //     return;
             }
 
 
