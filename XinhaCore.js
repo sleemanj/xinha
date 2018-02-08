@@ -5099,7 +5099,7 @@ Xinha.prototype.updateToolbar = function(noStatus)
             // variable in config has the same name as
             // button name in the toolbar.
             var options = this.config[cmd];
-            var sIndex = 0;
+            var selectedValue = null;
             for ( var j in options )
             {
             // FIXME: the following line is scary.
@@ -5107,8 +5107,8 @@ Xinha.prototype.updateToolbar = function(noStatus)
               
               if ( ( j.toLowerCase() == value ) || ( options[j].substr(0, value.length).toLowerCase() == value ) )
               {
-                btn.element.selectedIndex = sIndex;
-                throw "ok";
+                selectedValue = options[j];
+                break;
               }
               
               // The fontname is troublesome, 'foo,bar' may become 'foo, bar' in the element
@@ -5124,14 +5124,28 @@ Xinha.prototype.updateToolbar = function(noStatus)
                 
                 if ( ( fixedOpt.substr(0, value.length).toLowerCase() == value ) )
                 {
-                  btn.element.selectedIndex = sIndex;
-                  throw "ok";
+                  selectedValue = options[j];
+                  break;
                 }
               }
-              
-              ++sIndex;
             }
-            btn.element.selectedIndex = 0;
+            
+            if(selectedValue != null)
+            {
+              // Find the selected value in the toolbar element
+              for(var i = 0; i < this._toolbarObjects[cmd].element.options.length; i++)
+              {
+                if(this._toolbarObjects[cmd].element.options[i].value == selectedValue)
+                {
+                  this._toolbarObjects[cmd].element.selectedIndex = i;
+                  break;
+                }
+              }
+            }
+            else
+            {
+              this._toolbarObjects[cmd].element.selectedIndex = 0;
+            }
           } catch(ex) {}
         }
       break;
@@ -5154,14 +5168,19 @@ Xinha.prototype.updateToolbar = function(noStatus)
 
         var match = this._getFirstAncestorAndWhy(this.getSelection(), blocks);
         var deepestAncestor = match[0];
-        var matchIndex = match[1];
-
 
         if ( deepestAncestor )
         {
-          // the function can return null for its second element even if a match is found,
-          // but we passed in an array, so we know it will be a numerical index.
-	  btn.element.selectedIndex = matchIndex;
+          // Find the selected value in the toolbar element
+          deepestAncestor = deepestAncestor.tagName.toLowerCase();
+          for(var i = 0; i < this._toolbarObjects[cmd].element.options.length; i++)
+          {
+            if(this._toolbarObjects[cmd].element.options[i].value == deepestAncestor)
+            {
+              this._toolbarObjects[cmd].element.selectedIndex = i;
+              break;
+            }
+          }
         }
         else
         {
