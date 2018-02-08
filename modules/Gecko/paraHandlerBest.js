@@ -749,7 +749,7 @@ EnterParagraphs.prototype.isNormalListItem = function(rng)
   {
     // neither we nor our parent are a list item. this is not a normal
     // li case.
-    var listNode = editor._getFirstAncestorForNodeAndWhy(node, ["li"])[0];
+    var listNode = this.editor._getFirstAncestorForNodeAndWhy(node, ["li"])[0];
     if ( typeof listNode == 'undefined' )
     {
       return false;
