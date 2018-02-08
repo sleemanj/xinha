@@ -22,6 +22,7 @@ Xinha.Config.prototype.TableOperations = {
   'dblClickOpenTableProperties': false, // Double click on a cell to open table properties (I don't like this, it's unintuitive when you double-click to select a word, perhaps if it was default only for empty cells - James)
   'toolbarLayout': 'compact', // 'compact' or anything else will give you full
   'renameSplitCellButton': 'Unmerge Cells', // Split cell isn't a very obvious term, it implies being able to make new cells, really it is unmerging merged cells and can only be used in that context
+  'noFrameRulesOptions': true, // Disable "Frame and Border" options in the table properties, these are confusing (and not very good)
   'addToolbarLineBreak': true // By default TableOperations adds a 'linebreak' in the toolbar.
   // Set to false to prevent this and instead just append the buttons without a 'linebreak'.
 }
@@ -677,17 +678,46 @@ TableOperations.prototype.dialogTableProperties = function() {
         table.cellPadding = val;
         break;
       case "borders":
-        table.border = val;
+        if(!editor.config.TableOperations.noFrameRulesOptions) table.border = val;
         break;
       case "frames":
-        table.frame = val;
+        if(!editor.config.TableOperations.noFrameRulesOptions) table.frame = val;
         break;
       case "rules":
-        table.rules = val;
+        if(!editor.config.TableOperations.noFrameRulesOptions) table.rules = val;
         break;
       }
     }
 
+    // Without frame and rules options, apply the border style
+    // also to the cells in the table, this is what the user 
+    // will probably want (they can change it later per-cell)
+    if(editor.config.TableOperations.noFrameRulesOptions)
+    {
+      var applyTo = [ ];
+      function findCells(inThis)
+      {
+        for(var i = 0; i < inThis.childNodes.length; i++)
+        {
+          if(inThis.childNodes[i].nodeType == 1 && inThis.childNodes[i].tagName.toLowerCase().match(/tbody|thead|tr/))
+          {
+            findCells(inThis.childNodes[i]);
+          }
+          else if(inThis.childNodes[i].nodeType == 1 && inThis.childNodes[i].tagName.toLowerCase().match(/td|th/))
+          {
+            applyTo.push(inThis.childNodes[i]);
+          }
+        }
+      }
+      findCells(table);
+      console.log(applyTo);
+      for(var i = 0; i < applyTo.length; i++)
+      {
+        Styler.element = applyTo[i];
+        Styler.applyStyleIfMatch(params, /border/);
+      }
+    }
+    
     // various workarounds to refresh the table display (Gecko,
     // what's going on?! do not disappoint me!)
     self.editor.forceRedraw();
@@ -707,6 +737,11 @@ TableOperations.prototype.dialogTableProperties = function() {
   p = dialog.getElementById("TO_style");
   p.replaceChild(st_prop,p.firstChild);
 
+  if(editor.config.TableOperations.noFrameRulesOptions)
+  {
+    dialog.getElementById('TO_frameRules').style.display = 'none';
+  }
+  
   this.dialogTable.getElementById('ok').onclick = apply;
 
   // gather element's values

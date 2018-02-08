@@ -23,7 +23,7 @@ Xinha.InlineStyler.getLength = function(value)
 };
 
 // Applies the style found in "params" to the given element.
-Xinha.InlineStyler.prototype.applyStyle = function(params)
+Xinha.InlineStyler.prototype.applyStyle = function(params, _ifMatchRe, _exceptMatchRe)
 {
   var element = this.element;
   var style = element.style;
@@ -34,7 +34,10 @@ Xinha.InlineStyler.prototype.applyStyle = function(params)
       continue;
     if (params[i] != null)
       var val = params[i].value || params[i];
-
+    
+    if(_ifMatchRe && !i.match(_ifMatchRe))        continue;
+    if(_exceptMatchRe && i.match(_exceptMatchRe)) continue;
+    
     switch (i)
     {
     case "backgroundImage":
@@ -124,6 +127,16 @@ Xinha.InlineStyler.prototype.applyStyle = function(params)
       // 			break;
     }
   }
+};
+
+Xinha.InlineStyler.prototype.applyStyleExceptMatch = function(params, exceptMatchRe)
+{
+  return this.applyStyle(params, null, exceptMatchRe);
+};
+
+Xinha.InlineStyler.prototype.applyStyleIfMatch    = function(params, ifMatchRe)
+{
+  return this.applyStyle(params, ifMatchRe);
 };
 
 Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
@@ -388,6 +401,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
+  var borderColourInput = input;
   input.name = this.dialog.createId("borderColor");
   input.value = Xinha._colorToRgb( el.style.borderColor );
   input.type = "hidden";
@@ -397,6 +411,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   new Xinha.colorPicker.InputBinding(input)
   
   select = doc.createElement("select");
+  var borderSelect = select;  
   select.name = this.dialog.createId("borderStyle");
   var borderFields = [];
   td.appendChild(select);
@@ -434,7 +449,10 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
     setBorderFieldsStatus(this.value == "none");
   };
   
+
+  
   input = doc.createElement("input");
+  var borderWidthInput = input
   input.name = this.dialog.createId("borderWidth");
   borderFields.push(input);
   input.type = "text";
@@ -449,6 +467,21 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   borderFields.push(span);
   
   setBorderFieldsStatus(select.value == "none");
+  
+  // if somebody changes the border colour, and the border Style is not set, set it
+  // because otherwise they might not do that and get confused
+  borderColourInput.oncolorpicked = function(){
+    if(borderSelect.selectedIndex == 0)
+    {
+      borderSelect.selectedIndex = 3;
+      borderSelect.onchange();
+    } 
+    
+    if(!borderWidthInput.value.length) 
+    {
+      borderWidthInput.value = 1;
+    }
+  };
   
   if (el.tagName.toLowerCase() == "table") 
   {

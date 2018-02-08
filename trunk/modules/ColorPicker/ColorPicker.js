@@ -923,7 +923,7 @@ Xinha.colorPicker.InputBinding = function(input,pickerConfig)
   Xinha._addEvent(input,'change',function() {chooser.style.backgroundColor = this.value;})
 
   pickerConfig = (pickerConfig) ? Xinha.cloneObject(pickerConfig) : { cellsize:'5px' };
-  pickerConfig.callback = (pickerConfig.callback) ? pickerConfig.callback : function(color) {chooser.style.backgroundColor = color;input.value=color};
+  pickerConfig.callback = (pickerConfig.callback) ? pickerConfig.callback : function(color) {chooser.style.backgroundColor = color;input.value=color;if(typeof input.oncolorpicked == 'function') input.oncolorpicked();};
 
   chooser.onclick = function() 
   { 
