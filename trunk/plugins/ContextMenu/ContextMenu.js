@@ -51,7 +51,6 @@ ContextMenu.prototype.getContextMenu = function(target) {
 	var menu = [];
 	var tbo = this.editor.plugins.TableOperations;
 	if (tbo) tbo = tbo.instance;
-
 	var selection = editor.hasSelectedText();
 	if (!Xinha.is_gecko) {
 		if (selection) {
@@ -138,82 +137,124 @@ ContextMenu.prototype.getContextMenu = function(target) {
 		    case "td":
 			td = target;
 			if (!tbo) break;
-			elmenus.push(null,
-				     [ Xinha._lc("C_ell Properties...", "ContextMenu"),
+			elmenus.push(null);
+      if(typeof config.btnList["TO-cell-prop"] != 'undefined')
+      {
+				     elmenus.push([ Xinha._lc("C_ell Properties...", "ContextMenu"),
 				       function() { tableOperation("TO-cell-prop"); },
 				       Xinha._lc("Show the Table Cell Properties dialog", "ContextMenu"),
-				       config.btnList["TO-cell-prop"][1] ],
-
+				       config.btnList["TO-cell-prop"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-cell-insert-after"] != 'undefined')
+      {
+             elmenus.push(
              [ Xinha._lc("Insert Cell After", "ContextMenu"),
 				       function() { tableOperation("TO-cell-insert-after"); },
 				       Xinha._lc("Insert Cell After", "ContextMenu"),
-				       config.btnList["TO-cell-insert-after"][1] ],
-
-             [ Xinha._lc("Insert Cell Before", "ContextMenu"),
+				       config.btnList["TO-cell-insert-after"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-cell-insert-before"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("Insert Cell Before", "ContextMenu"),
 				       function() { tableOperation("TO-cell-insert-before"); },
 				       Xinha._lc("Insert Cell After", "ContextMenu"),
-				       config.btnList["TO-cell-insert-before"][1] ],
-
-             [ Xinha._lc("Delete Cell", "ContextMenu"),
+				       config.btnList["TO-cell-insert-before"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-cell-delete"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("Delete Cell", "ContextMenu"),
 				       function() { tableOperation("TO-cell-delete"); },
 				       Xinha._lc("Delete Cell", "ContextMenu"),
-				       config.btnList["TO-cell-delete"][1] ],
-
-             [ Xinha._lc("Merge Cells", "ContextMenu"),
+				       config.btnList["TO-cell-delete"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-cell-merge"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("Merge Cells", "ContextMenu"),
 				       function() { tableOperation("TO-cell-merge"); },
 				       Xinha._lc("Merge Cells", "ContextMenu"),
 				       config.btnList["TO-cell-merge"][1] ]
 				);
+      }
 			break;
 		    case "tr":
 			tr = target;
 			if (!tbo) break;
-			elmenus.push(null,
-				     [ Xinha._lc("Ro_w Properties...", "ContextMenu"),
+			elmenus.push(null);
+      
+      if(typeof config.btnList["TO-row-prop"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("Ro_w Properties...", "ContextMenu"),
 				       function() { tableOperation("TO-row-prop"); },
 				       Xinha._lc("Show the Table Row Properties dialog", "ContextMenu"),
-				       config.btnList["TO-row-prop"][1] ],
-
-				     [ Xinha._lc("I_nsert Row Before", "ContextMenu"),
+				       config.btnList["TO-row-prop"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-row-insert-above"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("I_nsert Row Before", "ContextMenu"),
 				       function() { tableOperation("TO-row-insert-above"); },
 				       Xinha._lc("Insert a new row before the current one", "ContextMenu"),
-				       config.btnList["TO-row-insert-above"][1] ],
-
-				     [ Xinha._lc("In_sert Row After", "ContextMenu"),
+				       config.btnList["TO-row-insert-above"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-row-insert-under"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("In_sert Row After", "ContextMenu"),
 				       function() { tableOperation("TO-row-insert-under"); },
 				       Xinha._lc("Insert a new row after the current one", "ContextMenu"),
-				       config.btnList["TO-row-insert-under"][1] ],
-
-				     [ Xinha._lc("_Delete Row", "ContextMenu"),
+				       config.btnList["TO-row-insert-under"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-row-delete"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("_Delete Row", "ContextMenu"),
 				       function() { tableOperation("TO-row-delete"); },
 				       Xinha._lc("Delete the current row", "ContextMenu"),
 				       config.btnList["TO-row-delete"][1] ]
 				);
+      }
 			break;
 		    case "table":
 			table = target;
 			if (!tbo) break;
-			elmenus.push(null,
-				     [ Xinha._lc("_Table Properties...", "ContextMenu"),
+			elmenus.push(null);
+      
+      if(typeof config.btnList["TO-table-prop"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("_Table Properties...", "ContextMenu"),
 				       function() { tableOperation("TO-table-prop"); },
 				       Xinha._lc("Show the Table Properties dialog", "ContextMenu"),
-				       config.btnList["TO-table-prop"][1] ],
-
-				     [ Xinha._lc("Insert _Column Before", "ContextMenu"),
+				       config.btnList["TO-table-prop"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-col-insert-before"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("Insert _Column Before", "ContextMenu"),
 				       function() { tableOperation("TO-col-insert-before"); },
 				       Xinha._lc("Insert a new column before the current one", "ContextMenu"),
-				       config.btnList["TO-col-insert-before"][1] ],
-
-				     [ Xinha._lc("Insert C_olumn After", "ContextMenu"),
+				       config.btnList["TO-col-insert-before"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-col-insert-after"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("Insert C_olumn After", "ContextMenu"),
 				       function() { tableOperation("TO-col-insert-after"); },
 				       Xinha._lc("Insert a new column after the current one", "ContextMenu"),
-				       config.btnList["TO-col-insert-after"][1] ],
-
-				     [ Xinha._lc("De_lete Column", "ContextMenu"),
+				       config.btnList["TO-col-insert-after"][1] ]);
+      }
+      
+      if(typeof config.btnList["TO-col-delete"] != 'undefined')
+      {
+             elmenus.push([ Xinha._lc("De_lete Column", "ContextMenu"),
 				       function() { tableOperation("TO-col-delete"); },
 				       Xinha._lc("Delete the current column", "ContextMenu"),
 				       config.btnList["TO-col-delete"][1] ]
 				);
+      }
 			break;
 		    case "body":
 			elmenus.push(null,

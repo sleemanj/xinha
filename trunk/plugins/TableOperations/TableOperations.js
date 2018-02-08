@@ -20,6 +20,8 @@ Xinha.Config.prototype.TableOperations = {
   // (the context menu can perform all the button operations)
   'tabToNext':   true, // Hit tab in a table cell goes to next (shift for prev) cell
   'dblClickOpenTableProperties': false, // Double click on a cell to open table properties (I don't like this, it's unintuitive when you double-click to select a word, perhaps if it was default only for empty cells - James)
+  'toolbarLayout': 'compact', // 'compact' or anything else will give you full
+  'renameSplitCellButton': 'Unmerge Cells', // Split cell isn't a very obvious term, it implies being able to make new cells, really it is unmerging merged cells and can only be used in that context
   'addToolbarLineBreak': true // By default TableOperations adds a 'linebreak' in the toolbar.
   // Set to false to prevent this and instead just append the buttons without a 'linebreak'.
 }
@@ -28,7 +30,6 @@ function TableOperations(editor) {
   this.editor = editor;
 
   var cfg = editor.config;
-  var bl = TableOperations.btnList;
   var self = this;
 
   // register the toolbar buttons provided by this plugin
@@ -38,16 +39,97 @@ function TableOperations(editor) {
 
   var toolbar;
   if( cfg.TableOperations.addToolbarLineBreak ) {
-    toolbar = ["linebreak", "inserttable", "toggleborders"];
+    toolbar = ["linebreak"];
   } else {
-    toolbar = ["inserttable", "toggleborders"];
+    toolbar = ["inserttable"];
   }
 
+  var bl = [ ];
+  var tb_order = null;
+  switch(editor.config.TableOperations.toolbarLayout)
+  {
+    case 'compact':
+      tb_order = [
+        null,
+        'inserttable',
+        'toggleborders',
+        'table-prop',
+        'row-prop',
+        'cell-prop',
+        null,
+        'row-insert-above',
+        'row-insert-under',
+        'row-delete',
+
+        'col-insert-before',
+        'col-insert-after',
+        'col-delete',
+        null,
+        'cell-merge',
+        'cell-split'
+      ];
+      
+      break;    
+      
+    default:
+      break;
+  }
+  
+  if(tb_order != null)
+  {
+    for(var i = 0; i < tb_order.length; i++)
+    {
+      if(tb_order[i] == null)
+      {
+        bl.push(null);
+      }
+      else if(tb_order[i].match(/inserttable|toggleborders/))
+      {
+        bl.push(tb_order[i]);
+      }
+      else
+      {
+        for(var j = 0; j < TableOperations.btnList.length; j++)
+        {
+          if(TableOperations.btnList[j] != null && TableOperations.btnList[j][0] == tb_order[i])
+          {
+            bl.push(TableOperations.btnList[j]);
+          }          
+        }
+      }
+    }
+  }
+  else
+  {
+    bl.push(null);
+    bl.push('inserttable');
+    bl.push('toggleborders');
+    for(var j = 0; j < TableOperations.btnList.length; j++)
+    {
+      bl.push(TableOperations.btnList[j]);
+    }
+  }
+  
+  
   for (var i = 0; i < bl.length; ++i) {
     var btn = bl[i];
+    
     if (!btn) {
       if(cfg.TableOperations.showButtons) toolbar.push("separator");
+    }
+    else if(typeof btn == 'string')
+    {
+      toolbar.push(btn);
     } else {
+      
+      if(this.editor.config.TableOperations.renameSplitCellButton)
+      {
+        if(btn[0] == 'cell-split')
+        {
+          btn[2] = this.editor.config.TableOperations.renameSplitCellButton;
+        }
+      }
+      
       var id = "TO-" + btn[0];
       cfg.registerButton(id, Xinha._lc(btn[2], "TableOperations"), editor.imgURL(btn[0] + ".gif", "TableOperations"), false,
                          function(editor, id) {
