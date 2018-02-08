@@ -1018,7 +1018,7 @@ Xinha.Config = function()
    *  "Tahoma"               : 'tahoma,arial,helvetica,sans-serif',
    *  "Times New Roman"      : 'times new roman,times,serif',
    *  "Verdana"              : 'verdana,arial,helvetica,sans-serif',
-   *  "impact"               : 'impact',
+   *  "Impact"               : 'impact',
    *  "WingDings"            : 'wingdings'
    *};
    *</pre>
@@ -1033,7 +1033,7 @@ Xinha.Config = function()
     "Tahoma"          :	'tahoma,arial,helvetica,sans-serif',
     "Times New Roman" : 'times new roman,times,serif',
     "Verdana"         :	'verdana,arial,helvetica,sans-serif',
-    "impact"          :	'impact',
+    "Impact"          :	'impact',
     "WingDings"       : 'wingdings' 
   };
 
@@ -1672,6 +1672,7 @@ Xinha.prototype._setConfig = function(config)
 	this.config = config;
 };
 /** FIXME: How can this be used??
+ * The only thing that used this seems to have been PersistentStorage, which is DOA
 * @private
 */
 Xinha.prototype._rebuildToolbar = function()
@@ -4271,58 +4272,26 @@ Xinha.loadScript = function(script, plugin, callback)
  *
  *   var myAssetLoader = Xinha.includeAssets();
  *       myAssetLoader.loadScript('foo.js', 'MyPlugin')
- *                    .loadStyle('foo.css', 'MyPlugin');                        
+ *                    .loadStyle('foo.css', 'MyPlugin')
+ *                    .loadScriptOnce('bar.js', 'MyPlugin')
+ *                    .loadScriptIf( true, 'narf.js', 'MyPlugin')
+ *                    .loadScriptOnceIf( false, 'zort.js', 'MyPlugin')
+ *                    .loadStyleIf( 1 > 0, 'flurp.css', 'MyPlugin')
+ *                    .whenReady(function(){ doSomethingCool(); });
  * 
  */
 
 Xinha.includeAssets = function()
 {
-  var assetLoader = { pendingAssets: [ ], loaderRunning: false, loadedScripts: [ ] };
+  var assetLoader = { pendingAssets: [ ], loaderRunning: false, loadedAssets: [ ] };
   
   assetLoader.callbacks = [ ];
   
-  assetLoader.loadNext = function()
-  {  
-    var self = this;
-    this.loaderRunning = true;
-    
-    if(this.pendingAssets.length)
-    {
-      var nxt = this.pendingAssets[0];
-      this.pendingAssets.splice(0,1); // Remove 1 element
-      switch(nxt.type)
-      {
-        case 'text/css':
-          Xinha.loadStyle(nxt.url, nxt.plugin);
-          return this.loadNext();
-        
-        case 'text/javascript':          
-          this.loadedScripts.push(nxt);
-          Xinha.loadScript(nxt.url, nxt.plugin, function() { self.loadNext(); });
-      }
-    }
-    else
-    {
-      this.loaderRunning = false;
-      this.runCallback();      
-    }
-  };
-  
-  assetLoader.loadScript = function(url, plugin)
+  assetLoader.isAlreadyLoaded = function(url, plugin)
   {
-    var self = this;
-    
-    this.pendingAssets.push({ 'type': 'text/javascript', 'url': url, 'plugin': plugin });
-    if(!this.loaderRunning) this.loadNext();
-    
-    return this;
-  };
-  
-  assetLoader.loadScriptOnce = function(url, plugin)
-  {
-    for(var i = 0; i < this.loadedScripts.length; i++)
+    for(var i = 0; i < this.loadedAssets.length; i++)
     {
-      if(this.loadedScripts[i].url == url && this.loadedScripts[i].plugin == plugin)
+      if(this.loadedAssets[i].url == url && this.loadedAssets[i].plugin == plugin)
       {
         if(!this.loaderRunning) this.loadNext();
         return this; // Already done (or in process)
@@ -4337,11 +4306,66 @@ Xinha.includeAssets = function()
         return this; // Already pending
       }
     }
+    
+    return false;
+  };
+  
+  assetLoader.loadNext = function()
+  {  
+    var self = this;
+    this.loaderRunning = true;
+    
+    if(this.pendingAssets.length)
+    {
+      var nxt = this.pendingAssets[0];
+      this.pendingAssets.splice(0,1); // Remove 1 element
+      switch(nxt.type)
+      {
+        case 'text/css':
+          this.loadedAssets.push(nxt);
+          Xinha.loadStyle(nxt.url, nxt.plugin);
+          return this.loadNext();
         
-    return this.loadScript(url, plugin);
+        case 'text/javascript':          
+          this.loadedAssets.push(nxt);
+          Xinha.loadScript(nxt.url, nxt.plugin, function() { self.loadNext(); });
+      }
+    }
+    else
+    {
+      this.loaderRunning = false;
+      this.runCallback();      
+    }
+  };
+  
+  assetLoader.loadScriptAlways = function(url, plugin)
+  {
+    if(!url) return this;
+    
+    var self = this;
+    
+    this.pendingAssets.push({ 'type': 'text/javascript', 'url': url, 'plugin': plugin });
+    if(!this.loaderRunning) this.loadNext();
+    
+    return this;
+  };
+  
+  assetLoader.loadScriptOnce = function(url, plugin)
+  {
+    if(this.isAlreadyLoaded(url, plugin)) 
+    {
+      return this;
+    }
+        
+    return this.loadScriptAlways(url, plugin);
   }
   
-  assetLoader.loadStyle = function(url, plugin)
+  assetLoader.loadScript = function(url, plugin)
+  {
+    return this.loadScriptOnce(url, plugin);
+  };
+  
+  assetLoader.loadStyleAlways = function(url, plugin)
   {
     var self = this;
     
@@ -4349,6 +4373,21 @@ Xinha.includeAssets = function()
     if(!this.loaderRunning) this.loadNext();
     
     return this;    
+  };
+  
+  assetLoader.loadStyleOnce = function(url, plugin)
+  {
+    if(this.isAlreadyLoaded(url, plugin)) 
+    {
+      return this;
+    }
+        
+    return this.loadStyleAlways(url, plugin);
+  };
+  
+  assetLoader.loadStyle = function(url, plugin)
+  {
+    return this.loadStyleOnce(url, plugin);
   };
   
   assetLoader.whenReady = function(callback) 
@@ -4368,7 +4407,25 @@ Xinha.includeAssets = function()
       _callback = null;
     }
     return this;
-  }
+  };
+  
+  assetLoader.loadScriptIf = function(condition, url, plugin)
+  {
+    if(condition) this.loadScript(url, plugin);
+    return this;
+  };
+  
+  assetLoader.loadScriptOnceIf = function(condition, url, plugin)
+  {
+    if(condition) this.loadScriptOnce(url, plugin);
+    return this;
+  };
+  
+  assetLoader.loadStyleIf = function(condition, url, plugin)
+  {
+    if(condition) this.loadStyle(url, plugin);
+    return this;
+  };
   
   for(var i = 0 ; i < arguments.length; i++)
   {
@@ -4408,6 +4465,36 @@ Xinha.includeAssets = function()
   }
   
   return assetLoader;
+}
+
+Xinha._libraryAssetLoader = Xinha.includeAssets();
+Xinha.loadLibrary = function(libraryName, minVersion, maxVersion)
+{
+  switch(libraryName.toLowerCase())
+  {
+    case 'jquery':
+      if(typeof jQuery == 'undefined')
+      {
+        Xinha._libraryAssetLoader.loadScriptOnce('libraries/jquery-3.3.1.js');
+      }
+      break;
+      
+    case 'mootools':
+      if(typeof MooTools == 'undefined')
+      {
+        Xinha._libraryAssetLoader.loadScriptOnce('libraries/MooTools-Core-1.6.0.js')
+                                 .loadScriptOnce('libraries/MooTools-More-1.6.0.js');
+      }
+      break;
+      
+    default:
+      Xinha.debugMsg("Unknown library "+libraryName+", libraries need to be handled by Xinha.loadLibrary, add code there.", 'warn'); 
+      break;
+  }
+  
+  // We return the loader so that the callee can do whenReady() on it
+  //  if they want.
+  return Xinha._libraryAssetLoader;
 }
 
 /***************************************************
@@ -5016,11 +5103,32 @@ Xinha.prototype.updateToolbar = function(noStatus)
             for ( var j in options )
             {
             // FIXME: the following line is scary.
+              // console.log(j + ': ' + options[j].replace(/,\s*/g, ', ').substr(0, value.length).toLowerCase() + ' =? ' + value);
+              
               if ( ( j.toLowerCase() == value ) || ( options[j].substr(0, value.length).toLowerCase() == value ) )
               {
                 btn.element.selectedIndex = sIndex;
                 throw "ok";
               }
+              
+              // The fontname is troublesome, 'foo,bar' may become 'foo, bar' in the element
+              // and 'foo bar, foobar' may become '"foo bar", foobar'
+              
+              if(cmd == 'fontname')
+              {
+                var fixedOpt = options[j].replace(/,\s*/g, ', ');
+                fixedOpt= fixedOpt.replace(/(^|,\s)([a-z]+(\s[a-z]+)+)(,|$)/, '$1"$2"$4');
+                
+                // Debugging to work out why things are not matching!
+                // console.log(fixedOpt.substr(0, value.length).toLowerCase() + '=?' + value );
+                
+                if ( ( fixedOpt.substr(0, value.length).toLowerCase() == value ) )
+                {
+                  btn.element.selectedIndex = sIndex;
+                  throw "ok";
+                }
+              }
+              
               ++sIndex;
             }
             btn.element.selectedIndex = 0;

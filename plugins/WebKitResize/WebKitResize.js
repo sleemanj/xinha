@@ -40,24 +40,11 @@ WebKitResize._pluginInfo = {
   license       : "GPLv3"
 };
 
-WebKitResize.AssetLoader = Xinha.includeAssets();
-
 if(Xinha.is_webkit)
 {
-  // In case you want to use your own version of jQuery, you can load it first
-  if(typeof jQuery == 'undefined')
-  {
-    // We seem to be able to use jQuery 3.3.1 with no issue which is the latest
-    // version at time of writing, so make that the defauilt.
-    WebKitResize.AssetLoader
-      //.loadScript('jquery-1.12.4.js', 'WebKitResize')
-      //.loadScript('jquery-2.2.4.js', 'WebKitResize')
-      .loadScript('jquery-3.3.1.js', 'WebKitResize')
-      .loadScript('jquery.mb.browser.min.js', 'WebKitResize');
-  }
-
-  WebKitResize.AssetLoader
-    .loadScript('jquery.webkitresize.js', 'WebKitResize');
+  Xinha.loadLibrary('jQuery')
+       .loadScriptOnce('jquery.mb.browser.min.js', 'WebKitResize')
+       .loadScriptOnce('jquery.webkitresize.js',   'WebKitResize');
 }
 
 function WebKitResize(editor)
@@ -67,6 +54,14 @@ function WebKitResize(editor)
 
 WebKitResize.prototype.onGenerateOnce = function()
 {
+  // jQuery not loaded yet?
+  if(!(jQuery && jQuery.fn && jQuery.fn.webkitimageresize))
+  {
+    var self = this;
+    window.setTimeout(function(){self.onGenerateOnce()}, 500);
+    return;
+  }
+  
   if(Xinha.is_webkit)
   {
     jQuery(this.editor._iframe).webkitimageresize();
@@ -80,7 +75,6 @@ WebKitResize.prototype.onGenerateOnce = function()
 // the images are recreated).
 WebKitResize.prototype.onBeforeMode = function(mode)
 {
-  console.log("B CHANGE");
   if(Xinha.is_webkit)
   {
     if(mode == 'textmode')
@@ -99,7 +93,6 @@ WebKitResize.prototype.onBeforeMode = function(mode)
 
 WebKitResize.prototype.onMode = function(mode)
 {
-  console.log("CHANGE");
   if(Xinha.is_webkit)
   {
     if(mode == 'textmode')

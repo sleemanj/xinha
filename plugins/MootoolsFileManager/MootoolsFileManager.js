@@ -34,15 +34,8 @@ Xinha.Config.prototype.MootoolsFileManager =
   'backend_data' : { }
 };
 
-MootoolsFileManager.AssetLoader = Xinha.includeAssets();
-
 // In case you want to use your own version of Mootools, you can load it first.
-if(typeof MooTools == 'undefined')
-{
-  MootoolsFileManager.AssetLoader
-    .loadScript('MooTools-Core-1.6.0.js', 'MootoolsFileManager')
-    .loadScript('MooTools-More-1.6.0.js', 'MootoolsFileManager');
-}
+MootoolsFileManager.AssetLoader = Xinha.loadLibrary('MooTools');
 
 // In case you want to use your own version of FileManager, you can load it first.
 // You better look at the changes we had to do to the standard one though.
@@ -141,7 +134,7 @@ MootoolsFileManager.prototype.hookUpButtons = function()
   
   if (phpcfg.files_dir) 
   {
-    MootoolsFileManager.AssetLoader.loadScriptOnce('MootoolsFileManager.FileManager.js', 'MootoolsFileManager');
+    MootoolsFileManager.AssetLoader.loadScript('MootoolsFileManager.FileManager.js', 'MootoolsFileManager');
     
     this.editor.config.registerButton({
         id        : "linkfile",
@@ -156,7 +149,7 @@ MootoolsFileManager.prototype.hookUpButtons = function()
   
   if(phpcfg.images_dir)
   {     
-    MootoolsFileManager.AssetLoader.loadScriptOnce('MootoolsFileManager.ImageManager.js', 'MootoolsFileManager');
+    MootoolsFileManager.AssetLoader.loadScript('MootoolsFileManager.ImageManager.js', 'MootoolsFileManager');
     
     // Override our Editors insert image button action.  
     self.editor._insertImage = function(image)
