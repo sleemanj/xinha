@@ -710,11 +710,11 @@ TableOperations.prototype.dialogTableProperties = function() {
         }
       }
       findCells(table);
-      console.log(applyTo);
+      
       for(var i = 0; i < applyTo.length; i++)
       {
         Styler.element = applyTo[i];
-        Styler.applyStyleIfMatch(params, /border/);
+        Styler.applyStyleIfMatch(params, /border($|Color|Width|Style)/);
       }
     }
     
