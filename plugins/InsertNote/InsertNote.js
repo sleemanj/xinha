@@ -567,6 +567,9 @@ InsertNote.prototype.onKeyPress = function (event)
 {
   // This seems a bit hacky, but I don't presently see
   // a better way.
+  //@NOTE: 8 = Backspace, 46 = Delete; this undocumented
+  //  function apears to be for handling delete note references
+  //  to have the note automatically deleted also
   if (event.keyCode == 8 || event.keyCode == 46)
   {
     var self = this;

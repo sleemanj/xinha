@@ -716,6 +716,10 @@ TableOperations.prototype.dialogTableProperties = function() {
         Styler.element = applyTo[i];
         Styler.applyStyleIfMatch(params, /border($|Color|Width|Style)/);
       }
+      
+      // It is also friendly to remove table borders as it tends to override
+      // and this could be confusing when styling borders (user thinks it didn't work)
+      Xinha._removeClass(table, 'htmtableborders');
     }
     
     // various workarounds to refresh the table display (Gecko,
@@ -882,7 +886,7 @@ TableOperations.prototype.onKeyPress = function(ev)
     return false;
   }
 
-  ev.preventDefault();
+  Xinha._stopEvent(ev);
     
   // find the next cell, get all the cells (td/th) which are in this table
   // find ourself in that list

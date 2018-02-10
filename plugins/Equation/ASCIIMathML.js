@@ -2388,7 +2388,6 @@ function changepicturesize(evt,factor) {
   src = src.replace(/width\s*=\s*\d+/,"width="+(factor*(pic.getAttribute("width")-0)));
   src = src.replace(/height\s*=\s*\d+/,"height="+(factor*(pic.getAttribute("height")-0)));
   document.getElementById(name+"input").value = src;
-//alert(getKey(evt.keycode))
   updatePicture(name);
 }
 

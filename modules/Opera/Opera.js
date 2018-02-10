@@ -1,5 +1,16 @@
 
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --
+    --
+    --  NOTICE Modern Opera does not use this engine any more, it identifies as
+    --           and uses WebKit (Opera is these days based on Blink).
+    --
+    --   People using older versions of Opera that need this engine should
+    --   upgrade to a WebKit or Gecko based browser.
+    --
+    --  This engine is no longer officially supported or tested.
+    --
+    -----------------------------------------------------------------------------
     --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
     --
     --  Use of Xinha is granted by the terms of the htmlArea License (based on
@@ -49,7 +60,6 @@ function Opera(editor) {
 
 /** Allow Opera to handle some key events in a special way.
  */
-  
 Opera.prototype.onKeyPress = function(ev)
 {
   var editor = this.editor;
@@ -692,16 +702,58 @@ Xinha.prototype.createRange = function(sel)
   }
 };
 
-/** Determine if the given event object is a keydown/press event.
+/** 
+ * @NOTE I don't have a way to test this any more (don't have old opera version
+ *   and don't care enough to find one), I'm assuming it will probably be close
+ *   to Gecko so I have just copied it directly.
+ * 
+ * Due to browser differences, some keys which Xinha prefers to call a keyPress
+ *   do not get an actual keypress event.  This browser specific function 
+ *   overridden in the browser's engine (eg modules/WebKit/WebKit.js) as required
+ *   takes a keydown event type and tells us if we should treat it as a 
+ *   keypress event type.
  *
- *  @param event Event 
- *  @returns true|false
+ *  To be clear, the keys we are interested here are
+ *        Escape, Tab, Backspace, Delete, Enter
+ *   these are "non printable" characters which we still want to regard generally
+ *   as a keypress.  
+ * 
+ *  If the browser does not report these as a keypress
+ *   ( https://dvcs.w3.org/hg/d4e/raw-file/tip/key-event-test.html )
+ *   then this function must return true for such keydown events as it is
+ *   given.
+ * 
+ * @param KeyboardEvent with keyEvent.type == keydown
+ * @return boolean
  */
- 
-Xinha.prototype.isKeyEvent = function(event)
+
+Xinha.prototype.isKeyDownThatShouldGetButDoesNotGetAKeyPressEvent = function(keyEvent)
 {
-  return event.type == "keypress";
-}
+  // Dom 3
+  if(typeof keyEvent.key != 'undefined')
+  {
+    // Found using IE11 (which uses Gecko)
+    //   this seems to be a reasonable way to distinguish
+    //   between IE11 and other Gecko browsers which do 
+    //   not provide the "Old DOM3" .char property
+    if(typeof keyEvent.char != 'undefined')
+    {
+      if(keyEvent.key.match(/^(Tab|Backspace|Del)/))
+      {
+        return true;
+      }
+    }
+    
+    // Firefox reports everything we need as a keypress
+    // correctly (in terms of Xinha)
+  }
+  // Legacy
+  else
+  {
+    // Even very old firefox reports everything we need as a keypress
+    // correctly (in terms of Xinha)
+  }
+};
 
 /** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
  *  this method will return 'a', press SHIFT-a and it will return 'A'.

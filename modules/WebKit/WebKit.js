@@ -56,7 +56,7 @@ WebKit.prototype.onKeyPress = function(ev)
   
   // Handle shortcuts
   if(editor.isShortCut(ev))
-  {
+  {    
     switch(editor.getKey(ev).toLowerCase())
     {
       case 'z':
@@ -114,7 +114,6 @@ WebKit.prototype.onKeyPress = function(ev)
           editor._unlinkOnUndo = false;
         };
         editor._unlinkOnUndo = true;
-    
         return a;
       };
   
@@ -141,7 +140,7 @@ WebKit.prototype.onKeyPress = function(ev)
           var midTextEmail   = leftTextEmail.splitText(midStart);
 
           autoWrap(midTextEmail, 'a').href = 'mailto:' + mEmail[0];
-          break;
+          return true;
         }
 
         RE_date = /([0-9]+\.)+/; //could be date or ip or something else ...
@@ -161,7 +160,7 @@ WebKit.prototype.onKeyPress = function(ev)
           var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
           var midTextUrl   = leftTextUrl.splitText(midStart);
           autoWrap(midTextUrl, 'a').href = (mUrl[1] ? mUrl[1] : 'http://') + mUrl[2];
-          break;
+          return true;
         }
       }
     break;
@@ -717,16 +716,70 @@ Xinha.prototype.createRange = function(sel)
   }
 };
 
-/** Determine if the given event object is a keydown/press event.
+
+/** Due to browser differences, some keys which Xinha prefers to call a keyPress
+ *   do not get an actual keypress event.  This browser specific function 
+ *   overridden in the browser's engine (eg modules/WebKit/WebKit.js) as required
+ *   takes a keydown event type and tells us if we should treat it as a 
+ *   keypress event type.
  *
- *  @param event Event 
- *  @returns true|false
+ *  To be clear, the keys we are interested here are
+ *        Escape, Tab, Backspace, Delete, Enter
+ *   these are "non printable" characters which we still want to regard generally
+ *   as a keypress.  
+ * 
+ *  If the browser does not report these as a keypress
+ *   ( https://dvcs.w3.org/hg/d4e/raw-file/tip/key-event-test.html )
+ *   then this function must return true for such keydown events as it is
+ *   given.
+ * 
+ * @param KeyboardEvent with keyEvent.type == keydown
+ * @return boolean
  */
- 
-Xinha.prototype.isKeyEvent = function(event)
+
+Xinha.prototype.isKeyDownThatShouldGetButDoesNotGetAKeyPressEvent = function(keyEvent)
 {
-  return event.type == "keydown";
-}
+  // Dom 3
+  if(typeof keyEvent.key != 'undefined')
+  {
+    if(typeof Xinha.DOM3_WebKit_KeyDownKeyPress_RE == 'undefined')
+    {
+      // I don't know if pre-defining this is really faster in the modern world of
+      //  Javascript JIT compiling, but it does no harm
+      Xinha.DOM3_WebKit_KeyDownKeyPress_RE = /^(Escape|Esc|Tab|Backspace|Delete|Del)/;
+    }
+    
+    // Found using Chrome 65 and Opera 50, Edge
+    //  Note that Edge calls Escape Esc, and Delete Del
+    if(Xinha.DOM3_WebKit_KeyDownKeyPress_RE.test(keyEvent.key))
+    {
+      return true;
+    }
+  }
+  // Old Safari and Chrome
+  else if(typeof keyEvent.keyIdentifier != 'undefined' && keyEvent.keyIdentifier.length)
+  {
+    var kI = parseInt(keyEvent.keyIdentifier.replace(/^U\+/,''),16);
+    // Found using Safari 9.1.1 - safari seems to pass ESC ok as a keyPress
+    if(kI == 9 /* Tab */ || kI == 8 /* Backspace */ || kI == 127 /* Delete */ ) return true;
+  }
+  // Legacy
+  else
+  {
+    // Also Chrome 65, I'm assuming perhaps dangerously, that it's about the same as 
+    // older pre-KeyboardEvent.key but that's been around a few years now so
+    // people will mostly be on supporting browsers anyway so this probably
+    // won't be hit by that many people
+    if(keyEvent.charCode == 0)
+    {
+      if( keyEvent.keyCode == 27  // ESC
+       || keyEvent.keyCode == 9   // Tab
+       || keyEvent.keyCode == 8   // Backspace
+       || keyEvent.keyCode == 46  // Del
+      ) return true;
+    }
+  }
+};
 
 /** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
  *  this method will return 'a', press SHIFT-a and it will return 'A'.
@@ -737,18 +790,42 @@ Xinha.prototype.isKeyEvent = function(event)
                                    
 Xinha.prototype.getKey = function(keyEvent)
 { 
- // with ctrl pressed Safari does not give the charCode, unfortunately this (shortcuts) is about the only thing this function is for
-  if(typeof keyEvent.keyIdentifier == 'undefined')
+  // DOM3 Key is easy (ish)
+  if(typeof keyEvent.key != 'undefined' && keyEvent.key.length > 0)
   {
-    if(typeof keyEvent.key != 'undefined')
+    return keyEvent.key;
+  }
+  // Old DOM3 used by (Old?) Safari SOMETIMES (but not ALWAYS!) and old Chrome
+  else if(typeof keyEvent.keyIdentifier != 'undefined' && keyEvent.keyIdentifier.length > 0 && keyEvent.keyIdentifier.match(/^U\+/))
+  {
+      var key = String.fromCharCode(parseInt(keyEvent.keyIdentifier.replace(/^U\+/,''),16));
+      if (keyEvent.shiftKey) return key;
+      else return key.toLowerCase();
+  }
+  // If charCode is specified, that's what we want
+  else if(keyEvent.charCode)
+  {
+    return String.fromCharCode(keyEvent.charCode);
+  }
+  // Safari does not set charCode if CTRL is pressed
+  //  but does set keyCode to the key, it also sets keyCode
+  //  for the actual pressing of ctrl, skip that
+  //  the keyCode in Safari si the uppercase character's code 
+  //  for that key, so if shift is not pressed, lowercase it
+  else if(keyEvent.ctrlKey && keyEvent.keyCode != 17)
+  {
+    if(keyEvent.shiftKey)
     {
-      return keyEvent.key;
+      return String.fromCharCode(keyEvent.keyCode);
+    }
+    else
+    {
+      return String.fromCharCode(keyEvent.keyCode).toLowerCase();
     }
   }
   
-  var key = String.fromCharCode(parseInt(keyEvent.keyIdentifier.replace(/^U\+/,''),16));
-  if (keyEvent.shiftKey) return key;
-  else return key.toLowerCase();
+  // Ok, give up, no idea!
+  return '';
 }
 
 /** Return the HTML string of the given Element, including the Element.

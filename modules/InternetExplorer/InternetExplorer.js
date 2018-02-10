@@ -1,5 +1,19 @@
 
   /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --
+    --  NOTICE Modern IE does not use this engine any more
+    --
+    --          IE 11 identifies as Gecko
+    --          Edge  identifies as WebKit
+    --
+    --  The last IE version to use this engine is probably IE10, people should
+    --   not use such an old version of IE and should upgrade or use a WebKit
+    --   or Gecko based browser.
+    --
+    --  This engine is no longer officially supported or tested.
+    --
+    -----------------------------------------------------------------------------
+    --
     --  Xinha (is not htmlArea) - http://xinha.gogo.co.nz/
     --
     --  Use of Xinha is granted by the terms of the htmlArea License (based on
@@ -49,9 +63,10 @@ function InternetExplorer(editor) {
 
 /** Allow Internet Explorer to handle some key events in a special way.
  */
-  
 InternetExplorer.prototype.onKeyPress = function(ev)
 {
+  var editor = this.editor;
+  
   // Shortcuts
   if(this.editor.isShortCut(ev))
   {
@@ -93,11 +108,32 @@ InternetExplorer.prototype.onKeyPress = function(ev)
     }
     break;
     
-    case 9: // KEY tab, see ticket #1121
+    case 9: // KEY tab
     {
+      // Note that the ListOperations plugin will handle tabs in list items and indent/outdent those
+      // at some point TableOperations might do also
+      // so this only has to handle a tab/untab in text
+      if(editor.config.tabSpanClass)
+      {
+        if(!ev.shiftKey)
+        {
+          editor.insertHTML('<span class="'+editor.config.tabSpanClass+'">'+editor.config.tabSpanContents+'</span>');
+          var s = editor.getSelection();
+          var r = editor.createRange(s);                   
+          r.collapse(true);
+          r.select();
+        }
+        else
+        {
+          // Shift tab is not trivial to fix in old IE
+          // and I don't care enough about it to try hard
+        }
+      }
+      
       Xinha._stopEvent(ev);
       return true;
     }
+    break;
 
   }
   
@@ -824,16 +860,47 @@ Xinha.prototype.createRange = function(sel)
   return sel.createRange();
 };
 
-/** Determine if the given event object is a keydown/press event.
+/** Due to browser differences, some keys which Xinha prefers to call a keyPress
+ *   do not get an actual keypress event.  This browser specific function 
+ *   overridden in the browser's engine (eg modules/WebKit/WebKit.js) as required
+ *   takes a keydown event type and tells us if we should treat it as a 
+ *   keypress event type.
  *
- *  @param event Event 
- *  @returns true|false
+ *  To be clear, the keys we are interested here are
+ *        Escape, Tab, Backspace, Delete, Enter
+ *   these are "non printable" characters which we still want to regard generally
+ *   as a keypress.  
+ * 
+ *  If the browser does not report these as a keypress
+ *   ( https://dvcs.w3.org/hg/d4e/raw-file/tip/key-event-test.html )
+ *   then this function must return true for such keydown events as it is
+ *   given.
+ * 
+ * @param KeyboardEvent with keyEvent.type == keydown
+ * @return boolean
  */
- 
-Xinha.prototype.isKeyEvent = function(event)
+
+Xinha.prototype.isKeyDownThatShouldGetButDoesNotGetAKeyPressEvent = function(keyEvent)
 {
-  return event.type == "keydown";
-}
+  // Dom 3
+  if(typeof keyEvent.key != 'undefined')
+  {
+    // Found using IE11 in 9-10 modes
+    if(keyEvent.key.match(/^(Tab|Backspace|Del)/))
+    {
+      return true;
+    }
+  }
+  // Legacy
+  else
+  {
+    // Found using IE11 in 5-8 modes
+    if(keyEvent.keyCode == 9   // Tab
+    || keyEvent.keyCode == 8   // Backspace
+    || keyEvent.keyCode == 46  // Del
+    ) return true;
+  }
+};
 
 /** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
  *  this method will return 'a', press SHIFT-a and it will return 'A'.

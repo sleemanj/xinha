@@ -76,7 +76,7 @@ ListOperations.prototype.onKeyPress = function(ev)
     }
   }
 
-  ev.preventDefault();
+  Xinha._stopEvent(ev);
 
   if( ev.shiftKey ) {
     if( editor._getFirstAncestorForNodeAndWhy(containing_list, ["ol", "ul"])[0] !== null ) {
