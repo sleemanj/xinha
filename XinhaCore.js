@@ -6266,32 +6266,7 @@ Xinha.prototype.inwardSpecialReplacements = function(html)
  */
 Xinha.prototype.fixRelativeLinks = function(html)
 {
-  if ( typeof this.config.expandRelativeUrl != 'undefined' && this.config.expandRelativeUrl ) 
-  {
-    if (html == null)
-    {
-      return "";
-    }
-    var src = html.match(/(src|href)="([^"]*)"/gi);
-    var b = document.location.href;
-    if ( src )
-    {
-      var url,url_m,relPath,base_m,absPath;
-      for ( var i=0;i<src.length;++i )
-      {
-        url = src[i].match(/(src|href)="([^"]*)"/i);
-        url_m = url[2].match( /\.\.\//g );
-        if ( url_m )
-        {
-          relPath = new RegExp( "(.*?)(([^\/]*\/){"+ url_m.length+"})[^\/]*$" );
-          base_m = b.match( relPath );
-          absPath = url[2].replace(/(\.\.\/)*/,base_m[1]);
-          html = html.replace( new RegExp(Xinha.escapeStringForRegExp(url[2])),absPath );
-        }
-      }
-    }
-  }
-  
+
   if ( typeof this.config.stripSelfNamedAnchors != 'undefined' && this.config.stripSelfNamedAnchors )
   {
     var stripRe = new RegExp("((href|src|background)=\")("+Xinha.escapeStringForRegExp(window.unescape(document.location.href.replace(/&/g,'&amp;'))) + ')([#?][^\'" ]*)', 'g');
@@ -6310,6 +6285,101 @@ Xinha.prototype.fixRelativeLinks = function(html)
     html = html.replace(baseRe, '$1');
   }
 
+  // Rewrite 2018 expandRelativeUrl
+  //  note that this must be done AFTER stripBaseHref otherwise we can get
+  //  absolute urls, which won't be expanded
+  if ( typeof this.config.expandRelativeUrl != 'undefined' && this.config.expandRelativeUrl ) 
+  {
+    if(html == null) return '';
+    
+    // These are the regexes for matching the urls globally
+    var url_regexp_global = [ 
+     /(src|href|background|action)(=")([^"]+?)((?:(?:#|\?).*)?")/gi,
+     /(src|href|background|action)(=')([^']+?)((?:(?:#|\?).*)?')/gi
+    ];
+    
+    // And singly (you can not change a regex flag after creation)
+    var url_regexp_single = [ 
+     /(src|href|background|action)(=")([^"]+?)((?:(?:#|\?).*)?")/i,
+     /(src|href|background|action)(=')([^']+?)((?:(?:#|\?).*)?')/i
+    ];
+    
+    // Find a list of urls in the document to inspect
+    //  we want urls that include a relative component
+    //
+    //  that is ./,  ../, or start with a basename
+    //   (dirname or filename)
+    //
+    //  excluded are urls with a protocol (http://...)
+    //               urls with a same-protocol (//...)
+    //
+    
+    var candidates = [ ];
+    
+    for(var i = 0; i < url_regexp_global.length ; i++)
+    {
+
+            
+      var all_urls   =  html.match(url_regexp_global[i]);
+      if(!all_urls) continue;
+      
+      for(var j = 0; j < all_urls.length; j++)
+      {
+        if(all_urls[j].match(/=["']([a-z]+:)?\/\//)) continue; // Exclude: '//...' and 'https://'
+        if(
+             ( !all_urls[j].match(/=["']\//)       ) // Starts with something other than a slash
+          || ( all_urls[j].match(/=["']\.{1,2}\//) ) // Starts with a ./ or ../
+          || ( all_urls[j].match(/\/\.{1,2}\//   ) ) // Includes a ./ or ../
+          || ( all_urls[j].match(/\/{2,}/   )      ) // Includes repeated /, we will clean these up too
+        )
+        {
+          // We have to run the match again to get the parts
+          candidates[candidates.length] =  all_urls[j].match(url_regexp_single[i]);
+        }
+      }
+    }
+          
+    // Get our PATH for the page that is doing the editing something like /foo/bar/xinha.php
+    var ourpath = document.location.pathname;
+    
+    // Remove our basename --> /foo/bar/
+    ourpath = ourpath.replace(/\/[^/]+$/, '/');
+    
+    // For each of the candidate urls, fix them
+    for(var i = 0; i < candidates.length; i++)
+    {
+      var src = candidates[i];
+      
+      var lastHtml = html;
+      
+      // Add the relative url to our path if it is not semi-absolute
+      var fixedUrl = (!src[3].match(/^\//)) ? ourpath + src[3] : src[3];
+      
+      // Remove any /./ components
+      fixedUrl = fixedUrl.replace(/\/\.\//g, '/');
+      
+      // Reduce any multiple slash
+      fixedUrl = fixedUrl.replace(/\/{2,}/g, '/');
+      
+      // Remove any /[something]/../ components
+      //  (this makes /foo/../bar become /bar correctly
+      //  repeat this until either there are no more /../
+      //  or there has been no further change
+      var lastFixedUrl;
+      do
+      {
+        lastFixedUrl = fixedUrl;
+        fixedUrl = fixedUrl.replace(/\/[^/]+\/\.\.\//g, '/');          
+      } while( lastFixedUrl != fixedUrl );
+      
+      // Now if we have any /../ left, they should be invalid, so kill those
+      fixedUrl = fixedUrl.replace('/../', '/');
+      
+      // And that's all
+      html = html.replace( src[0], src[1]+src[2]+fixedUrl+src[4]);  
+    }
+  }
+  
   return html;
 };
 
