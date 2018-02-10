@@ -94,10 +94,10 @@ Xinha.prototype.cleanHTML = function(sHtml) {
 		if (Xinha.is_ie) c[13].test(sHtml); // oddly the test below only triggers when we call this once before (IE6), in Moz it fails if tested twice
 		if ( c[13].test(sHtml)) {
 			try { //Mozilla returns an incorrectly encoded value with innerHTML
-                          sHtml = sHtml.replace(c[13], '$1'+Xinha._escapeDollars(decodeURIComponent(RegExp.$3).replace(/([^!-~]+)/g, function(chr) 
+                          sHtml = sHtml.replace(c[13], '$1'+Xinha._escapeDollars(decodeURIComponent(RegExp.$3).replace(/([^!-~]+|%[0-9]+)/g, function(chr) 
                                                                                                                        {return escape(chr);}))+'"');
 			} catch (e) { // once the URL is escape()ed, you can't decodeURIComponent() it anymore
-                          sHtml = sHtml.replace(c[13], '$1'+Xinha._escapeDollars(RegExp.$3.replace(/([^!-~]+)/g,function(chr){return escape(chr);})+'"'));
+                          sHtml = sHtml.replace(c[13], '$1'+Xinha._escapeDollars(RegExp.$3.replace(/([^!-~]+|%[0-9]+)/g,function(chr){return escape(chr);})+'"'));
 			}
 		}
 	}
