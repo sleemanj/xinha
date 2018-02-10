@@ -4831,6 +4831,7 @@ Xinha.prototype.undo = function()
     if ( txt )
     {
       this.setHTML(txt);
+      
     }
     else
     {
@@ -5787,18 +5788,65 @@ Xinha.prototype._editorEvent = function(ev)
     editor._textArea['on'+ev.type](ev);
   }
   
-  if ( this.isKeyEvent(ev) )
+
+  var isShortCut = this.isShortCut(ev);
+  
+  // Order of priority is something like...
+  // Keydown Cancels
+  //   KeyPress Cancels
+  //      ShortCut Cancels 
+  //         (built in shortcuts)
+  //         KeyUp
+  
+  if(ev.type == 'keydown')
   {
-    // Run the ordinary plugins first
-    if(editor.firePluginEvent('onKeyPress', ev))
+    if(editor.firePluginEvent('onKeyDown', ev))
     {
       return false;
     }
     
-    // Handle the core shortcuts
-    if ( this.isShortCut( ev ) )
+    // If this is a shortcut, fire it as a keypress but when the key down
+    //  happens, this is because some browsers (various versions and platform combinations even!) 
+    //  fire press and some do not, so we can only rely on keydown here
+    //  we will suppress an actual shortcut press a bit further down to avoid duplicates
+    if(isShortCut)
     {
+      if(editor.firePluginEvent('onKeyPress', ev))
+      {
+        return false;
+      }
+      
+      // Also we have a special onShortCut which only fires for them
+      if(editor.firePluginEvent('onShortCut', ev, isShortCut))
+      {
+        return false;
+      }
+      
       this._shortCuts(ev);
+    }
+  }
+  
+  // Shortcuts were fired as a keydown masquerading as a keypress already
+  // so don't fire them again on an actual keypress.  Additionally
+  // browsers differ slightly in what they call a keypress, to be sure we 
+  // issue keyress on a standard set of things we pass off to isKeyPressEvent
+  // to do some more indepth checking, it will a boolean, some keypress will
+  // be invalid and skiped, some keydown will be repeated as a keypress because
+  // that browser wouldn't normally issue a keypress.  Sigh.
+  if(!isShortCut && this.isKeyPressEvent(ev))
+  {
+    if(editor.firePluginEvent('onKeyPress', ev))
+    {
+      return false;
+    }
+  }
+  
+  // At last, something we can rely on!
+  if(ev.type == 'keyup')
+  {
+    if(editor.firePluginEvent('onKeyUp', ev))
+    {
+      return false;
     }
   }
 
@@ -8633,26 +8681,192 @@ Xinha.prototype.getSelection          = function() { Xinha.notImplemented("getSe
  */
 Xinha.prototype.createRange           = function(sel) { Xinha.notImplemented("createRange"); };
 
-/** Determine if the given event object is a keydown/press event.
- *
- *  @param {Event} event 
- *  @returns {Boolean}
+/** Different browsers have subtle differences in what they call a "keypress", we try and
+ *  standardise them here.  For example, Firefox calls Tab a keypress (with keyCode 9)
+ *  while WebKit does not record a keypress for the Tab key.
+ * 
+ *  Webkit does record a keydown for tab, but typically not a keyup as it's caused a 
+ *  defocus by then, and there is no keypress.
+ *  
+ *  For the sake of Xinha, we will define keyPress something like...
+ * 
+ *   "Adding Characters"
+ *      letters, numbers, space, punctuation, symbols, tab, enter
+ * 
+ *   "Deleting Characters"
+ *      delete, backspace
+ * 
+ *   "Shortcuts and Other Useful Things"
+ *      esc, ctrl-a, ctrl-b...
+ * 
+ * Note that in the interests of performance, we are not too strict about removing things
+ *   that should not be keypresses if they don't happen frequently, like for example,
+ *   Function Keys **might** get passed as onKeyPress, depending on browser, since it's
+ *   rare and plugins probably won't be looking for them anyway, there's no sense
+ *   wasting cycles looking for them.
+ * 
+ * If you are looking for something that is not "officially" a keypress as defined above
+ *   use onKeyDown and you will get notifications for EVERY key down, even if it's for
+ *   example a modifier like shift (eg ctrl-shift-a would give three keydowns), which is 
+ *   why keypress is a better idea if you can do that.
+ * 
+ * Note also that you can listen to onShortCut to only hear about those if you want, 
+ *   it gets a second argument of the shortcut key already decoded for you.
+ * 
+ * A useful key Tester is here:
+ *    https://dvcs.w3.org/hg/d4e/raw-file/tip/key-event-test.html
+ * 
+ * A useful reference of DOM3 key names is here:
+ *    https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+ * 
+ * @param KeyboardEvent
+ * @return boolean
  */
- 
-Xinha.prototype.isKeyEvent            = function(event) { Xinha.notImplemented("isKeyEvent"); };
+
+Xinha.prototype.isKeyPressEvent = function(keyEvent)
+{
+  if(typeof Xinha.DOM3NotAKeyPress == 'undefined')
+  {
+    // The following regular expressions match KeyboardEvent.key for keys which should NOT be 
+    //  regarded as a keypress
+    //
+    // Note that we don't actually test them all, currently only modifier, navigation and editing
+    // are actually tested and excluded, the others wont' happen frequently enough to bother
+    // with testing.  It's not typically a big deal if keys slip-through the net and issue 
+    // a keypress as plugins will likely just skip it as an unknown key.
+    //
+    // See:   https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+    
+    Xinha.DOM3NotAKeyPress = {
+      'modifier'    : /^(Alt|CapsLock|Control|F[0-9]+|FnLock|Hyper|Meta|NumLock|ScrollLock|Shift|Super|Symbol|OS|Scroll)/,
+      'navigation'  : /^(Arrow|Page|End|Home|Left|Right|Up|Down)/,
+      'editing'     : /^(Insert)/,
+      'ui'          : /^(Accept|Again|Attn|Cancel|ContextMenu|Execute|Find|Finish|Help|Pause|Play|Props|Select|Zoom|Pause|Apps)/,
+      'device'      : /^(Brightness|Eject|LoghOff|Power|Print|Hibernate|Standby|WakeUp)/,
+      'ime'         : /^(AllCandidates|Alphanumeric|CodeInput|Compose|Convert|Dead|FinalMode|Group|ModeChange|NextCandidate|NonConvert|PreviousCandidate|Process|SingleCandidate|Multi|Nonconvert|AltGraph)/,
+      'korean'      : /^(Hangul|Hanja|Junja)/,
+      'japanese'    : /^(Eisu|Hanakaku|Hirigana|Kana|Kanji|Katakana|Romanji|Zenkaku|RomanCharacters|HalfWidth|FullWidth)/,
+      'function'    : /^(F[0-9]+|Soft[0-9]+)/,
+      'phone'       : /^(AppSwitch|Call|Camera|EndCall|GoBack|GoHome|HeadsetHook|LastNumber|Notification|Manner|Voice|Exit|MozHomeScreen)/,
+      'multimedia'  : /^(Channel|Media|FastFwd)/,
+      'audio'       : /^(Audio|Microphone|Volume)/,
+      'tv'          : /^(TV|Live)/,
+      'media'       : /^(AVR|Color|ClosedCaption|Dummer|DisplaySwap|DVR|Exit|Favorite|Guide|Info|InstantReplay|Link|List|Live|Lock|Media|Navigate|Next|OnDemand|Pairing|PinP|Play|Random|RcLow|Record|RfBypass|ScanChannels|ScreenMode|Settings|SplitScreen|STBInput|Subtitle|Teletext|VideoMode|Wink|ZoomToggle|Zoom)/,
+      'speech'      : /^(Speech)/,
+      'document'    : /^(Close|New|Open|Print|Save|Spellcheck|Mail)/,
+      'application' : /^(Launch|MediaSelect|SelectMedia)/
+    };
+  }
+
+  if(keyEvent.type == 'keypress')
+  {
+    // Detect some things that might come in as a press and should not be a press
+    
+    //  DOM3 Keys
+    
+    if(typeof keyEvent.key != 'undefined')
+    {
+      if(keyEvent.key == 'Unidentified')
+      {
+        // Some old Gecko versions called Shift-tab Unidentified !
+        if(typeof keyEvent.keyCode != 'undefined' && keyEvent.keyCode == 9) return true;
+        return false;
+      }
+
+      // Modifier keys
+      if(Xinha.DOM3NotAKeyPress.modifier.test(keyEvent.key))   return false;
+         
+      // Navigation Keys
+      if(Xinha.DOM3NotAKeyPress.navigation.test(keyEvent.key)) return false;
+                
+      // Editing Keys
+      if(Xinha.DOM3NotAKeyPress.editing.test(keyEvent.key))    return false;
+           
+    }
+    // Old DOM3 (only Safari and old Chrome)
+    /* I could not find anything reported as a press that should not be in Safari 9.1 and that 
+     * is as far back as I can easily test, my thought is that dropping straight through to the 
+     * legacy keys should work fine so I have disabled this
+     */ 
+    else if( 0 && typeof keyEvent.keyIdentifier != 'undefined' && keyEvent.keyIdentifier.length)
+    {
+      var kI = parseInt(keyEvent.keyIdentifier.replace(/^U\+/,''),16);
+      
+    }
+    // Legacy Keys
+    else 
+    {
+      if(keyEvent.charCode == 0)
+      {
+        if((keyEvent.keyCode >= 37 && keyEvent.keyCode <= 40)) return false; // Arrows
+           
+        if(   keyEvent.keyCode == 45 // Insert
+          ||  keyEvent.keyCode == 36 // Home
+          ||  keyEvent.keyCode == 35 // End
+          ||  keyEvent.keyCode == 33 // Page Up
+          ||  keyEvent.keyCode == 34 // Page Dn
+          ||  keyEvent.keyCode == 19 // Pause/Break
+          ||  keyEvent.keyCode == 17 // Control
+          ||  keyEvent.keyCode == 18 // Alt
+          ||  keyEvent.keyCode == 20 // CapsLock
+          ||  keyEvent.keyCode == 91 // OS
+          ||  keyEvent.keyCode == 93 // ContextMenu          
+        ) return false;
+        
+        if( keyEvent.keyCode >= 112 && keyEvent <= 123 ) return false; // F1 through F12
+        if( keyEvent.keyCode == 0) return false; // Other things (like "LaunchApp1")
+      }
+    }
+   
+    // If it wasn't a bad thing we skiped, then a keypress is a keypress
+    return true;
+  }
+  else if(keyEvent.type == 'keydown')
+  {
+    // Now we get into browser specifics, we want to return true 
+    //  if the keydown event is for a key which should be reported as a press
+    //  and is NOT reported as  a press (otherwise press would fire twice for it)
+    return this.isKeyDownThatShouldGetButDoesNotGetAKeyPressEvent(keyEvent);
+  }
+};
+
+/** Due to browser differences, some keys which Xinha prefers to call a keyPress
+ *   do not get an actual keypress event.  This browser specific function 
+ *   overridden in the browser's engine (eg modules/WebKit/WebKit.js) as required
+ *   takes a keydown event type and tells us if we should treat it as a 
+ *   keypress event type.
+ *
+ *  To be clear, the keys we are interested here are
+ *        Escape, Tab, Backspace, Delete, Enter
+ *   these are "non printable" characters which we still want to regard generally
+ *   as a keypress.  
+ * 
+ *  If the browser does not report these as a keypress
+ *   ( https://dvcs.w3.org/hg/d4e/raw-file/tip/key-event-test.html )
+ *   then this function must return true for such keydown events as it is
+ *   given.
+ * 
+ * @param KeyboardEvent
+ * @return boolean
+ */
+
+Xinha.prototype.isKeyDownThatShouldGetButDoesNotGetAKeyPressEvent = function(keyEvent)
+{
+  return false;
+};
 
 /** Determines if the given key event object represents a combination of CTRL-<key>,
  *  which for Xinha is a shortcut.  Note that CTRL-ALT-<key> is not a shortcut.
  *
  *  @param    {Event} keyEvent
- *  @returns  {Boolean}
+ *  @returns  {mixed} Either the key representing the short cut (eg ctrl-b gives 'b'), or false
  */
  
 Xinha.prototype.isShortCut = function(keyEvent)
 {
-  if(keyEvent.ctrlKey && !keyEvent.altKey)
+  if(keyEvent.ctrlKey && !keyEvent.altKey && this.getKey(keyEvent).length == 1)
   {
-    return true;
+    return this.getKey(keyEvent);
   }
   
   return false;

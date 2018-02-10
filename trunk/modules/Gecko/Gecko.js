@@ -49,12 +49,10 @@ function Gecko(editor) {
 
 /** Allow Gecko to handle some key events in a special way.
  */
-  
 Gecko.prototype.onKeyPress = function(ev)
 {
   var editor = this.editor;
   var s = editor.getSelection();
-  
   // Handle shortcuts
   if(editor.isShortCut(ev))
   {
@@ -132,7 +130,7 @@ Gecko.prototype.onKeyPress = function(ev)
     
         return a;
       };
-  
+
       if ( editor.config.convertUrlsToLinks && s && s.isCollapsed && s.anchorNode.nodeType == 3 && s.anchorNode.data.length > 3 && s.anchorNode.data.indexOf('.') >= 0 )
       {
         var midStart = s.anchorNode.data.substring(0,s.anchorOffset).search(/\S{4,}$/);
@@ -156,7 +154,7 @@ Gecko.prototype.onKeyPress = function(ev)
           var midTextEmail   = leftTextEmail.splitText(midStart);
 
           autoWrap(midTextEmail, 'a').href = 'mailto:' + mEmail[0];
-          break;
+          return true;
         }
 
         RE_date = /([0-9]+\.)+/; //could be date or ip or something else ...
@@ -176,7 +174,7 @@ Gecko.prototype.onKeyPress = function(ev)
           var rightTextUrl = leftTextUrl.splitText(s.anchorOffset);
           var midTextUrl   = leftTextUrl.splitText(midStart);
           autoWrap(midTextUrl, 'a').href = (mUrl[1] ? mUrl[1] : 'http://') + mUrl[2];
-          break;
+          return true;
         }
       }
     }
@@ -733,16 +731,60 @@ Xinha.prototype.createRange = function(sel)
   }
 };
 
-/** Determine if the given event object is a keydown/press event.
+/** Due to browser differences, some keys which Xinha prefers to call a keyPress
+ *   do not get an actual keypress event.  This browser specific function 
+ *   overridden in the browser's engine (eg modules/WebKit/WebKit.js) as required
+ *   takes a keydown event type and tells us if we should treat it as a 
+ *   keypress event type.
  *
- *  @param event Event 
- *  @returns true|false
+ *  To be clear, the keys we are interested here are
+ *        Escape, Tab, Backspace, Delete, Enter
+ *   these are "non printable" characters which we still want to regard generally
+ *   as a keypress.  
+ * 
+ *  If the browser does not report these as a keypress
+ *   ( https://dvcs.w3.org/hg/d4e/raw-file/tip/key-event-test.html )
+ *   then this function must return true for such keydown events as it is
+ *   given.
+ * 
+ * @param KeyboardEvent with keyEvent.type == keydown
+ * @return boolean
  */
- 
-Xinha.prototype.isKeyEvent = function(event)
+
+Xinha.prototype.isKeyDownThatShouldGetButDoesNotGetAKeyPressEvent = function(keyEvent)
 {
-  return event.type == "keypress";
-}
+  // Dom 3
+  if(typeof keyEvent.key != 'undefined')
+  {
+    // Found using IE11 (which uses Gecko)
+    //   this seems to be a reasonable way to distinguish
+    //   between IE11 and other Gecko browsers which do 
+    //   not provide the "Old DOM3" .char property
+    if(typeof keyEvent.char != 'undefined')
+    {
+      if(typeof Xinha.DOM3_IE11_KeyDownKeyPress_RE == 'undefined')
+      {
+        // I don't know if pre-defining this is really faster in the modern world of
+        //  Javascript JIT compiling, but it does no harm
+        Xinha.DOM3_IE11_KeyDownKeyPress_RE = /^(Tab|Backspace|Del)/;
+      }
+      
+      if(Xinha.DOM3_IE11_KeyDownKeyPress_RE.test(keyEvent.key))
+      {
+        return true;
+      }
+    }
+    
+    // Firefox reports everything we need as a keypress
+    // correctly (in terms of Xinha)
+  }
+  // Legacy
+  else
+  {
+    // Even very old firefox reports everything we need as a keypress
+    // correctly (in terms of Xinha)
+  }
+};
 
 /** Return the character (as a string) of a keyEvent  - ie, press the 'a' key and
  *  this method will return 'a', press SHIFT-a and it will return 'A'.
@@ -750,10 +792,51 @@ Xinha.prototype.isKeyEvent = function(event)
  *  @param   keyEvent
  *  @returns string
  */
-                                   
+
 Xinha.prototype.getKey = function(keyEvent)
-{
-  return String.fromCharCode(keyEvent.charCode);
+{ 
+  // DOM3 Key is easy (ish)
+  if(typeof keyEvent.key != 'undefined' && keyEvent.key.length > 0)
+  {
+    switch(keyEvent.key)
+    {
+      case 'Unidentified':
+        // Some old Gecko version reports Shift-Tab as Unidentified
+        if(typeof keyEvent.keyCode != 'undefined' && keyEvent.keyCode == 9) return 'Tab';
+        
+        // Otherwise not know
+        return '';
+        
+      case 'Spacebar': // FF<37
+        return ' '; 
+    }
+    
+    return keyEvent.key;
+  }
+  // If charCode is specified, that's what we want
+  else if(keyEvent.charCode)
+  {
+    return String.fromCharCode(keyEvent.charCode);
+  }
+  // Safari does not set charCode if CTRL is pressed
+  //  but does set keyCode to the key, it also sets keyCode
+  //  for the actual pressing of ctrl, skip that
+  //  the keyCode in Safari si the uppercase character's code 
+  //  for that key, so if shift is not pressed, lowercase it
+  else if(keyEvent.ctrlKey && keyEvent.keyCode != 17)
+  {
+    if(keyEvent.shiftKey)
+    {
+      return String.fromCharCode(keyEvent.keyCode);
+    }
+    else
+    {
+      return String.fromCharCode(keyEvent.keyCode).toLowerCase();
+    }
+  }
+  
+  // Ok, give up, no idea!
+  return '';
 }
 
 /** Return the HTML string of the given Element, including the Element.

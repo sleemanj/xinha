@@ -45,9 +45,26 @@ GenericPlugin.prototype.onExecCommand = function ( cmdID, UI, param )
 	return false;
 }
 
+GenericPlugin.prototype.onKeyDown = function ( event )
+{
+  return false;
+}
+
 GenericPlugin.prototype.onKeyPress = function ( event )
 {
 	return false;
+}
+
+GenericPlugin.prototype.onOnShortCut = function ( event , shortCut )
+{
+  // Where shortCut is a single character, eg if you press ctrl-a, then
+  //  shortCut == 'a'
+  return false;
+}
+
+GenericPlugin.prototype.onKeyUp = function ( event )
+{
+  return false;
 }
 
 GenericPlugin.prototype.onMouseDown = function ( event )
