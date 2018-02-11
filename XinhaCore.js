@@ -4804,16 +4804,127 @@ Xinha.prototype._undoTakeSnapshot = function()
     this._undoQueue.shift();
     --this._undoPos;
   }
-  // use the fasted method (getInnerHTML);
+  
+  var snapshotData = { 
+    'txt'        : null,
+    'caretInBody': false
+  };
+  
+  
+  // Caret preservation, when you hit undo, ideally put the caret back where it was.
+  // To accomplish this we figure out what NODE (Text Node typically) and offset into 
+  // it had the caret save this into the parent element of that node if it has one
+  // as an attribute, and attach a classname to be able to find it again
+  // then in the actual undo function we look for that class name after dropping 
+  // the HTML back into place, and reverse the process
+  
+  // Note that IE <11 does not support this, FF <3.6 won't either, 
+  // nor Safari <5.1, Chrome I dont' know it does currently I don't know how long ago
+  // Opera same, don't know how long but it works currently
+  // If a browser doesn't work with it, it won't cause a problem, it just won't 
+  // preserve the caret.
+  
+  try
+  {
+    // Insert a marker so we know where we are
+    var sel = this.getSelection();
+    var caretNode    = sel.focusNode;
+    if(caretNode)
+    {
+      var caretOffset  = sel.focusOffset
+      var rng = this.createRange(sel);
+      var caretParent   = this.getParentElement(sel);
+      
+      var caretRestorationData = false;
+      
+      switch(caretNode.nodeType)
+      {
+        case 3:  // TEXT
+        case 4:  // CDATA
+        case 8:  // COMMENT
+          // We need to record which child node the focus node is of the parent
+          //  default to the end
+          var whichChild = caretParent.childNodes.length-1;
+          for(var i = 0; i < caretParent.childNodes.length; i++)
+          {
+            if(caretParent.childNodes[i] == caretNode)
+            {
+              whichChild = i;
+            }
+          }
+          caretRestorationData = {
+            caretChild:   whichChild,
+            caretOffset:  caretOffset
+          };
+          break;
+        
+        case 1:
+          // Ehhhm, not sure.  This would be the case if the selection is an image, table whatever
+          //
+          // For example <p><img></p> with img selected you get caretNode = img, caretParent = p, 
+          // caretOffset = 0 (0th child of the p)
+          //
+          // I was going to make this handled so it would select the image again, but actually
+          // I think it works just fine without this, it feels natural-enough anyway.
+          break;
+      }
+      
+      if(caretRestorationData)
+      {
+        if(caretParent == this._doc.body)
+        {
+          // Body is tricky because it won't be included in the snapshot or restoration
+          // unless fullPage mode is being used, since there is only one body then we
+          // can record it in the snapshot data and we know where to put it in undo
+          snapshotData.caretInBody            = true;
+          snapshotData.caretRestorationData   = JSON.stringify(caretRestorationData);
+        }
+        else
+        {
+          // For other elements encode the caret data in the element itself
+          // so we can be sure we are looking at the right one when we find it
+          Xinha.addClass(caretParent, 'xinha-undo-caret');
+          caretParent.setAttribute('xinha-undo-caret', JSON.stringify(caretRestorationData));
+        }
+      }
+      
+      // Debug helper
+      //console.log({n: caretNode, p: caretOffset, r: rng, e: caretParent});
+    }
+  }
+  catch(e)
+  {
+    // Browser doesn't support something.  I'm not going to try and support
+    // very old browsers for this caret preservation feature
+    
+    // Old IE doesn't support
+    if(Xinha.is_gecko || Xinha.is_webkit)
+    {
+      Xinha.debugMsg('Caret preservation code for undo snapshot failed. If your browser is modern, developers need to check it out in XinhaCore.js (search for caret preservation).','warn');
+    }
+  }
+  
+  // use the faster method (getInnerHTML);
   var take = true;
-  var txt = this.getInnerHTML();
+  snapshotData.txt = this.getInnerHTML();
+  
+  // Find all carets we might have added (in theory, 0 or 1, but always a possibility of more)
+  var existingCarets = Xinha.getElementsByClassName(this._doc.body, 'xinha-undo-caret');
+  
+  // Remove them all
+  for(var i = 0; i < existingCarets.length; i++)
+  {
+    Xinha.removeClass(existingCarets[i], 'xinha-undo-caret');
+    existingCarets[i].removeAttribute('xinha-undo-caret');
+  }
+    
   if ( this._undoPos > 0 )
   {
-    take = (this._undoQueue[this._undoPos - 1] != txt);
+    take = (this._undoQueue[this._undoPos - 1].txt != snapshotData.txt);
   }
   if ( take )
   {
-    this._undoQueue[this._undoPos] = txt;
+    this._undoQueue[this._undoPos] = snapshotData;
   }
   else
   {
@@ -4827,11 +4938,11 @@ Xinha.prototype.undo = function()
 {
   if ( this._undoPos > 0 )
   {
-    var txt = this._undoQueue[--this._undoPos];
-    if ( txt )
+    var snapshotData = this._undoQueue[--this._undoPos];
+    if ( snapshotData.txt )
     {
-      this.setHTML(txt);
-      
+      this.setHTML(snapshotData.txt);
+      this._restoreCaretForUndoRedo(snapshotData);
     }
     else
     {
@@ -4839,6 +4950,7 @@ Xinha.prototype.undo = function()
     }
   }
 };
+
 /** Custom implementation of redo functionality
  * @private
  */
@@ -4846,10 +4958,11 @@ Xinha.prototype.redo = function()
 {
   if ( this._undoPos < this._undoQueue.length - 1 )
   {
-    var txt = this._undoQueue[++this._undoPos];
-    if ( txt )
+    var snapshotData = this._undoQueue[++this._undoPos];
+    if ( snapshotData.txt )
     {
-      this.setHTML(txt);
+      this.setHTML(snapshotData.txt);
+      this._restoreCaretForUndoRedo(snapshotData);
     }
     else
     {
@@ -4857,6 +4970,74 @@ Xinha.prototype.redo = function()
     }
   }
 };
+
+/** Used by undo and redo to restore a saved caret position.
+ * 
+ *  Undo and redo must have already set the html when they call this.
+ * 
+ * @private
+ * @param mixed snapshotData as recorded by _undoTakeSnapshot
+ */
+
+Xinha.prototype._restoreCaretForUndoRedo = function(snapshotData)
+{
+  // Caret restoration
+  try
+  {
+    // If the snapped caret was actually in the body as it's parent
+    //  (ie text with no containing element except body)
+    // push that data back into the body element so we can treat it as
+    // any other element
+    if(snapshotData.caretInBody)
+    {
+      Xinha.addClass(this._doc.body, 'xinha-undo-caret');
+      this._doc.body.setAttribute('xinha-undo-caret', snapshotData.caretRestorationData);
+    }
+    
+    // Find the caret data we might have recorded in the html
+    var caretParents = Xinha.getElementsByClassName(this._doc.body,'xinha-undo-caret');
+    
+    // Body itself may be the one
+    if(Xinha._hasClass(this._doc.body, 'xinha-undo-caret'))
+    {
+      caretParents[caretParents.length] = this._doc.body;
+    }
+            
+    // Just in case some bug happened and there was more than one caret saved
+    //  we will do them all to clear them, but there should only really be 0 or 1
+    for(var i = 0; i < caretParents.length; i++)
+    {
+      if(caretParents[i].getAttribute('xinha-undo-caret').length)
+      {
+        var caretRestorationData = JSON.parse(caretParents[i].getAttribute('xinha-undo-caret'));
+        
+        if(caretParents[i].childNodes.length > caretRestorationData.caretChild)
+        {
+          var rng = this.createRange();
+          rng.setStart(caretParents[i].childNodes[caretRestorationData.caretChild], caretRestorationData.caretOffset);
+          rng.collapse(true); // collapse to the start, although end would be ok I think, should be the same
+          
+          var sel = this.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(rng);
+        }
+      }
+      
+      Xinha.removeClass(caretParents[i], 'xinha-undo-caret');
+      caretParents[i].removeAttribute('xinha-undo-caret');
+    }
+  }
+  catch(e)
+  {
+    // Browser doesn't support something, I'm not going to try and 
+    //  implement this on old browsers.
+    if(Xinha.is_gecko || Xinha.is_webkit)
+    {
+      Xinha.debugMsg('Caret restoration code for undo failed. If your browser is modern, developers should check it out in XinhaCore.js (search for caret restoration).','warn');
+    }
+  }
+}
+
 /** Disables (greys out) the buttons of the toolbar
  * @param {Array} except this array contains ids of toolbar objects that will not be disabled
  */
