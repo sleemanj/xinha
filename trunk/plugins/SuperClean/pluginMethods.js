@@ -17,11 +17,25 @@ SuperClean.prototype._superClean = function(opts, obj)
     var editor = superclean.editor;
 
     if(opts.word_clean) editor._wordClean();
-    var D = editor.getEditorContent();
+    
+    var D;
+    
+    if(opts['scope'].value == 'selection')
+    {
+      D = editor.getSelectedHTML();
+    }
+    else
+    {
+      D = editor.getEditorContent();
+    }
 
     for(var filter in editor.config.SuperClean.filters)
     {
       if(filter=='tidy' || filter=='word_clean') continue;
+      
+      // Any full only ones need to happen later
+      if(typeof filter == 'object' && filter.fullonly) continue;
+      
       if(opts[filter])
       {
         D = SuperClean.filterFunctions[filter](D, editor);
@@ -31,8 +45,30 @@ SuperClean.prototype._superClean = function(opts, obj)
     D = D.replace(/(style|class)="\s*"/gi, '');
     D = D.replace(/<(font|span)\s*>/gi, '');
 
-    editor.setEditorContent(D);
+    if(opts['scope'].value == 'selection')
+    {
+      editor.insertHTML(D);
+    }
+    else
+    {
+      editor.setEditorContent(D);
+    }
 
+    // Do the full only ones
+    D = editor.getEditorContent();
+    for(var filter in editor.config.SuperClean.filters)
+    {
+      // Skip tidy we do that last, and word_clean was done
+      // first
+      if(filter=='tidy' || filter=='word_clean') continue;
+      
+      // Any full only ones need to happen last
+      if(typeof filter == 'object' && filter.fullonly && opts[filter])
+      {
+        D = SuperClean.filterFunctions[filter](D, editor);
+      }
+    }
+    
     if(opts.tidy)
     {
       var callback = function(javascriptResponse) 
@@ -172,6 +208,42 @@ SuperClean.filterFunctions.tidy = function(html, editor)
   Xinha._postback(editor.config.SuperClean.tidy_handler, args, callback);         
 };
 
+SuperClean.filterFunctions.remove_emphasis = function(html)
+{  
+  html = SuperClean.stripTags(html, [ 'b', 'strong', 'i', 'em', 'u', 'mark', 'ins','abbr', 'acronym', 'kbd', 'samp', 'strike', 's'  ]);
+  
+  // for del we delete it entirely or it would be confising (<del>old thing</del> <ins>new thing</ins> would become old thing new thing)  
+  html = SuperClean.stripTags(html, [ 'del' ], true);
+  
+  html = html.replace(/font-weight:[^;}"']+;?/gi, '');
+  html = html.replace(/font-style:[^;}"']+;?/gi, '');
+  return html;
+};
+
+SuperClean.filterFunctions.remove_sup_sub = function(html)
+{
+  return SuperClean.stripTags(html, ['sup', 'sub']).replace(/vertical-align:\s*(sub|super)[^;}"']+;?/gi);
+};
+
+SuperClean.filterFunctions.remove_alignment = function(html)
+{
+  return html.replace(/ align=[^\s|>]*/gi,'').replace(/(text-align|vertical-align|float):[^;}"']+;?/gi, '');
+};
+
+SuperClean.filterFunctions.remove_all_css_classes = function(html)
+{
+  return SuperClean.stripAttributes(html, 'class');
+};
+
+SuperClean.filterFunctions.remove_all_css_styles = function(html)
+{
+  return SuperClean.stripAttributes(html, 'style');
+};
+
+SuperClean.filterFunctions.remove_all_tags = function(html)
+{
+  return  html.replace(/<[\!]*?[^<>]*?>/g, "");
+};
 
 SuperClean.Dialog = function (SuperClean)
 {
@@ -208,7 +280,7 @@ SuperClean.Dialog.prototype._prepareDialog = function()
     else
     {
       htmlFilters += "        <input type=\"checkbox\" name=\"["+filter+"]\" id=\"["+filter+"]\" value=\"on\"" + (filtDetail.checked ? "checked" : "") + " />\n";
-      htmlFilters += "        <label for=\"["+filter+"]\">"+filtDetail.label+"</label>\n";
+      htmlFilters += "        <label for=\"["+filter+"]\">"+filtDetail.label+(filtDetail.fullonly?'^ ':'')+"</label>\n";
     }
     htmlFilters += "    </div>\n";
   }
@@ -253,6 +325,16 @@ SuperClean.Dialog.prototype.show = function(inputs, ok, cancel)
     this.dialog.getElementById('cancel').onclick = function() { lDialog.hide()};
   }
 
+  // If there is selected text, set that the default scope
+  if(this.SuperClean.editor.hasSelectedText())
+  {
+    this.dialog.getElementsByName('scope')[0].selectedIndex = 1;
+  }
+  else
+  {
+    this.dialog.getElementsByName('scope')[0].selectedIndex = 0;
+  }
+  
   // Show the dialog
   this.SuperClean.editor.disableToolbar(['fullscreen','SuperClean']);
 

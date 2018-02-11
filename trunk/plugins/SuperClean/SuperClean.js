@@ -46,16 +46,22 @@ Xinha.Config.prototype.SuperClean =
   // or 'filter_name' : {label: "Label", checked: true/false, filterFunction: function(html) { ... return html;} }
   // filterFunction in the second format above is optional.
 
-  'filters': { 'tidy': Xinha._lc('General tidy up and correction of some problems.', 'SuperClean'),
-               'word_clean': Xinha._lc('Clean bad HTML from Microsoft Word', 'SuperClean'),               
-               'word': {label:Xinha._lc('Vigorously purge HTML from Microsoft Word', 'SuperClean'), checked:false},
-               'remove_faces': Xinha._lc('Remove custom typefaces (font "styles").', 'SuperClean'),
-               'remove_sizes': Xinha._lc('Remove custom font sizes.', 'SuperClean'),
-               'remove_colors': Xinha._lc('Remove custom text colors.', 'SuperClean'),
-               'remove_lang': Xinha._lc('Remove lang attributes.', 'SuperClean'),
+  'filters': { 'tidy':          {label:Xinha._lc('General tidy up and correction of some problems.', 'SuperClean'), checked:true, fullonly: true},
+               'word_clean':    {label:Xinha._lc('Clean bad HTML from Microsoft Word.', 'SuperClean'), checked:true, fullonly: true},              
+               'word':          {label:Xinha._lc('Vigorously purge HTML from Microsoft Word.', 'SuperClean'), checked:false, fullonly: true},
+               'remove_faces':  {label:Xinha._lc('Remove custom typefaces (font "styles").', 'SuperClean'),checked:true},
+               'remove_sizes':  {label:Xinha._lc('Remove custom font sizes.', 'SuperClean'),checked:true},
+               'remove_colors': {label:Xinha._lc('Remove custom text colors.', 'SuperClean'),checked:true},
+               'remove_emphasis': {label:Xinha._lc('Remove emphasis and annotations.', 'SuperClean'), checked:true},
+               'remove_sup_sub':  {label:Xinha._lc('Remove superscripts and subscripts.', 'SuperClean'), checked:false},
+               'remove_alignment': {label:Xinha._lc('Remove alignment (left/right/justify).', 'SuperClean'),checked:true},
+               'remove_all_css_classes': {label:Xinha._lc('Remove all classes (CSS).', 'SuperClean'), checked: false},
+               'remove_all_css_styles':         {label:Xinha._lc('Remove all styles (CSS).', 'SuperClean'),checked:true},
+               'remove_lang': {label:Xinha._lc('Remove lang attributes.', 'SuperClean'),checked:true},
                'remove_fancy_quotes': {label:Xinha._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false},
   //additional custom filters (defined in plugins/SuperClean/filters/word.js)
-               'paragraph':{label:Xinha._lc('Remove Paragraphs', 'SuperClean'), checked:false}
+               'paragraph':{label:Xinha._lc('Remove Paragraphs', 'SuperClean'), checked:false},
+               'remove_all_tags': {label:Xinha._lc('Remove All HTML Tags'), checked:false }
              },
   //if false all filters are applied, if true a dialog asks what filters should be used
   'show_dialog': true
@@ -63,6 +69,54 @@ Xinha.Config.prototype.SuperClean =
 
 SuperClean.filterFunctions = { };
 
+/** Helper function to strip tags from given html.
+ * 
+ * @param string
+ * @param array|string An array pf tag names, or a tag name string
+ * @param bool         true == completely remove tag and contents, false == remove tag only
+ * @return string
+ */
+
+SuperClean.stripTags = function(html, tagNames, completelyRemove)
+{
+  if(typeof tagNames == 'string')
+  {
+    tagNames = [ tagNames ];
+  }
+  
+  for(var i = 0; i < tagNames.length; i++)
+  {
+    var tagName = tagNames[i];
+    if(completelyRemove)
+    {
+      html = html.replace(new RegExp('<'+tagName+'( [^>]*)?>.*?</'+tagName+'( [^>]*)?>', 'gi'), '');
+    }
+    else
+    {
+      html = html.replace(new RegExp('</?'+tagName+'( [^>]*)?>', 'gi'), '');
+    }
+  }
+  
+  return html;
+}
+
+SuperClean.stripAttributes = function(html, attributeNames)
+{
+  if(typeof attributeNames == 'string')
+  {
+    attributeNames = [ attributeNames ];
+  }
+  
+  for(var i = 0; i < attributeNames.length; i++)
+  {
+    var attributeName = attributeNames[i];
+    
+    // @TODO - make this less likely to false-positive outside of tags
+    html = html.replace(new RegExp(' ('+attributeName+'="[^"]*"|'+attributeName+'=\'[^\']*\'|'+attributeName+'=[^ >]*)', 'gi'), ' ');    
+  }
+  
+  return html;
+}
 
 SuperClean.prototype.onGenerateOnce = function()
 {
@@ -105,7 +159,7 @@ SuperClean.prototype.loadFilters = function()
   //load the filter-functions
   for(var filter in this.editor.config.SuperClean.filters)
   {
-    if (/^(remove_colors|remove_sizes|remove_faces|remove_lang|word_clean|remove_fancy_quotes|tidy)$/.test(filter)) continue; //skip built-in functions
+    if (/^(remove_colors|remove_sizes|remove_faces|remove_lang|word_clean|remove_fancy_quotes|tidy|remove_emphasis|remove_sup_sub|remove_alignment|remove_all_css_classes|remove_all_css_styles|remove_all_tags)$/.test(filter)) continue; //skip built-in functions
     
     if(!SuperClean.filterFunctions[filter])
     {
