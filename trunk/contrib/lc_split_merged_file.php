@@ -162,7 +162,7 @@
         unset($existingFile['__OBSOLETE__']);
       }
       
-      // if the existign file string isn't in the new data
+      // if the existing file string isn't in the new data
       // it is obsolete
       foreach($existingFile as $English=>$Local)
       {
@@ -172,9 +172,16 @@
         }
       }
       
+      // Remove any note
+      unset($Data['__ TRANSLATOR NOTE __']);
+      
+      // Sort on the key (english text)
+      ksort($Data);
+      
       // Push those obsoletes into the data so marked
       if(count($obsoleteStrings))
       {
+        ksort($obsoleteStrings);
         $Data['__OBSOLETE__'] = $obsoleteStrings;
       }
       
@@ -199,6 +206,7 @@
           }
           $Data = $newData;
       */
+      
     }
     
     $Dest = $OutDir . '/'. $langFile;

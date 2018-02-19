@@ -180,7 +180,7 @@ Usage: {$argv[0]} {ln} [of]
   $outputData     = array();
   
   // Setup the array so that the ordering is correct
-  $Nt = '___ TRANSLATOR NOTE   ___';   
+  $Nt = '__ TRANSLATOR NOTE __';   
   foreach($languageDirs as $langX => $dir)
   {
     $moduleName = '';
