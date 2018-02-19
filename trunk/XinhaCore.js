@@ -3558,9 +3558,10 @@ Xinha.prototype.setMode = function(mode)
         this._statusBarTree.style.display = "none";
         this._statusBarTextMode.style.display = "";
       }
-      this.findCC("textarea");
+
       this.notifyOf('modechange', {'mode':'text'});
       this.firePluginEvent('onMode', 'textmode');
+      this.findCC("textarea");
     break;
 
     case "wysiwyg":
@@ -3578,10 +3579,10 @@ Xinha.prototype.setMode = function(mode)
         this._statusBarTree.style.display = "";
         this._statusBarTextMode.style.display = "none";
       }
-      this.findCC("iframe");
+      
       this.notifyOf('modechange', {'mode':'wysiwyg'});
       this.firePluginEvent('onMode', 'wysiwyg');
-
+      this.findCC("iframe");
     break;
 
     default:
