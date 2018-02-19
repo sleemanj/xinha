@@ -1,12 +1,29 @@
-<!DOCTYPE BHTML PUBLIC "-//BC//DTD BHTML 3.2 Final//EN">
+<?php 
+  switch(@$_REQUEST['DocType'])
+  {
+    
+    case 'quirks':
+      break;
+      
+   case 'almost':
+      echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
+      break;
+    
+    case 'standards':
+    default:
+      echo '<!DOCTYPE html>';
+      break;
+      
+  }
+?>
 <html>
 <head>
 
   <!-- ---------------------------------------------------------------------
-    --  $HeadURL$
-    --  $LastChangedDate$
-    --  $LastChangedRevision$
-    --  $LastChangedBy$
+    --  $HeadURL: http://svn.xinha.org/branches/MootoolsFileManager-Update/examples/files/ext_example-body.html $
+    --  $LastChangedDate: 2008-10-13 06:42:42 +1300 (Mon, 13 Oct 2008) $
+    --  $LastChangedRevision: 1084 $
+    --  $LastChangedBy: ray $
     ------------------------------------------------------------------------ -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,7 +43,7 @@
     // You may try a relative URL if you wish]
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
-    _editor_url  = document.location.href.replace(/examples\/files\/ext_example-body\.html.*/, '')
+    _editor_url  = document.location.href.replace(/examples\/files\/ext_example-body\.php.*/, '')
     //moved _editor_lang & _editor_skin to init function because of error thrown when frame document not ready
   </script>
 
@@ -46,6 +63,8 @@
       var f = top.frames["menu"].document.forms["fsettings"];
       _editor_lang = f.lang[f.lang.selectedIndex].value; // the language we need to use in the editor.
       _editor_skin = f.skin[f.skin.selectedIndex].value; // the skin we use in the editor
+      _editor_icons = f.icons[f.icons.selectedIndex].value;
+      
 // What are the plugins you will be using in the editors on this page.
 // List all the plugins you will need, even if not all the editors will use all the plugins.
       xinha_plugins = [ ];
@@ -124,7 +143,7 @@
 
       if(typeof CharacterMap != 'undefined') xinha_config.CharacterMap.mode = settings.CharacterMapMode;
       if(typeof ListType != 'undefined') xinha_config.ListType.mode = settings.ListTypeMode;
-      if(typeof CSS != 'undefined') xinha_config.pageStyle = xinha_config.pageStyle + "\n" + "@import url(custom.css);";
+      if(typeof CSSDropDowns != 'undefined') xinha_config.pageStyle = xinha_config.pageStyle + "\n" + "@import url(custom.css);";
       if(typeof DynamicCSS != 'undefined') xinha_config.pageStyle = "@import url(dynamic.css);";
       if(typeof Filter != 'undefined') xinha_config.Filters = ["Word", "Paragraph"];
 
@@ -160,6 +179,34 @@
         }
       }
 
+
+      if(typeof MootoolsFileManager != 'undefined')
+      {
+        with (xinha_config.MootoolsFileManager)
+        { 
+          <?php 
+            require_once('../../contrib/php-xinha.php');
+            xinha_pass_to_php_backend
+            (       
+              array
+              (
+                'images_dir' => getcwd() . '/../images',
+                'images_url' => preg_replace('/\/examples.*/', '', $_SERVER['REQUEST_URI']) . '/examples/images',
+                'images_allow_upload' => false,
+                'images_allow_delete' => false,
+                'images_allow_download' => true,
+                'images_use_hspace_vspace' => false,
+                
+                'files_dir' => getcwd() . '/../images',
+                'files_url' => preg_replace('/\/examples.*/', '', $_SERVER['REQUEST_URI']) . '/examples/images',
+                'files_allow_upload' => false,
+                'max_files_upload_size' => '4M',
+              )
+            )
+          ?>
+        }
+        
+      }
 // First create editors for the textareas.
 // You can do this in two ways, either
 //   xinha_editors   = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
@@ -202,5 +249,8 @@
   <button type="button" onclick="submitHandler('to_submit');">Submit</button>
   <textarea id="errors" name="errors" style="width:100%; height:100px; background:silver;"></textarea><!-- style="display:none;" -->
   </form>
+  
+  <!-- This script is used to show the rendering mode (Quirks, Standards, Almost Standards) --> 
+  <script type="text/javascript" src="../render-mode-developer-help.js"></script>
 </body>
 </html>
