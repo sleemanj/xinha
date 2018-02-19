@@ -1133,3 +1133,10 @@ PersistentStorage.prototype.insertImage = function() {
 //    return Xinha._colorToRgb(color);
 //}
 //});
+
+// Xinha._lc("Hello  There A ")
+// Xinha._lc("Hello \" There B \"")
+// Xinha._lc('Hello    There C ')
+// Xinha._lc('Hello \' There D \'')
+
+

@@ -70,7 +70,7 @@
   window.resizeTo(500, 490);
 var Xinha = window.opener.Xinha;
 function i18n(str) {
-  return (Xinha._lc(str, 'Xinha'));
+  return (Xinha._lc(str, 'InsertPicture'));
 }
 
 function Init() {
@@ -195,9 +195,10 @@ function openFile() {
   while (false !== ($entry = $d->read())) {
     if(substr($entry,0,1) != '.') {  //not a dot file or directory
       if ($entry == $DestFileName)
-        echo '<OPTION value="' . $PicturePath.$entry. '" selected="selected">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
+        // Split to stop lc_parse_strings picking it up
+        echo '<OP'.'TION value="' . $PicturePath.$entry. '" selected="selected">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
       else
-        echo '<OPTION value="' . $PicturePath.$entry. '">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
+        echo '<OP'.'TION value="' . $PicturePath.$entry. '">' . $entry . '(' . formatSize(filesize($LocalPicturePath.'\\'.$entry)) .')</OPTION>';
     }
   }
   $d->close();

@@ -1,27 +1,34 @@
 ﻿<?php
-die("this script is disabled for security");
+//die("this script is disabled for security");
 
 /**
   * LC-Parse-Strings-Script
   *
-  * This script parses all xinhas source-files and creates base lang-files
-  * in the lang-folders (one for base and one every plugin)
+  * This script parses all xinhas source-files and creates base language files...
+  *
+  *   /lang/lc_base.js
+  *   /modules/.../lang/lc_base.js
+  *   /plugins/.../lang/lc_base.js
+  *   /unsupported_plugins/.../lang/lc_base.js
+  *
+  * This script should be used from the command line, not from a web browser
+  *  (well it should work, but anyway).
   *
   * How To use it: - remove the die() in line 2 (security)
-  *                - make sure all lang-folders are writeable for your webserver
-  *                - open the contrib/lc_parse_strings.php in your browser
-  *                - lang/base.js will be written
-  *                - open base.js, translate all strings into your language and save it
+  *                - cd contrib && php ./lc_parse_strings.php
+  *                - lang/lc_base.js will be written
+  *                - open lc_base.js, translate all strings into your language and save it
   *                  as yourlangauge.js
   *                - send the translated file to the xinha-team
  **/
 
 
-
 error_reporting(E_ALL);
 
+$XinhaRoot = realpath(dirname(__FILE__).'/..');
+
 $ret = array();
-$files = getFiles("../", "js$");
+$files = getFiles($XinhaRoot, "/js$/");
 foreach($files as $file) {
     $fp = fopen($file, "r");
     $data = "";
@@ -29,17 +36,19 @@ foreach($files as $file) {
         $data .= fread($fp, 1024);
     }
 
-    preg_match_all('#_lc\("([^"]+)"\)|_lc\(\'([^\']+)\'\)#', $data, $m);
+    preg_match_all("#_lc\(\s*\"((?:[^\"]|\\\\\")+)\"\s*[,)]#", $data, $m);            
     foreach($m[1] as $i) {
-        if(trim($i)=="") continue;
-        $ret[] = $i;
+        if(trim(strip_tags($i))=="") continue;
+        $ret[] = preg_replace('/\\\\"/', '"', $i);
     }
-    foreach($m[2] as $i) {
-        if(trim($i)=="") continue;
-        $ret[] = $i;
+    
+    preg_match_all('#_lc\(\s*\'((?:[^\']|\\\\\')+)\'\s*[,)]#', $data, $m);
+    foreach($m[1] as $i) {
+        if(trim(strip_tags($i))=="") continue;
+        $ret[] = preg_replace("/\\\\'/", "'", $i);
     }
 
-    if(eregi('htmlarea\\.js$', $file)) {
+    if(preg_match('/(XinhaCore|XinhaLoader|htmlarea)\.js$/', $file)) {
         //toolbar-buttons
         //bold:          [ "Bold"
         preg_match_all('#[a-z]+: *\[ * "([^"]+)"#', $data, $m);
@@ -49,7 +58,7 @@ foreach($files as $file) {
         }
 
         //HTMLArea._lc({key: 'button_bold', string
-        preg_match_all('#HTMLArea\\._lc\\({key: \'([^\']*)\'#', $data, $m);
+        preg_match_all('#(Xinha|HTMLArea)\\._lc\\({key: \'(([^\']|\\\\\')+)\'\s*[,)]#', $data, $m);
         foreach($m[1] as $i) {
             if(trim($i)=="") continue;
             $ret[] = $i;
@@ -65,7 +74,7 @@ foreach($files as $file) {
     }
 }
 
-$files = getFiles("../popups/", "html$");
+$files = getFiles("{$XinhaRoot}/popups", "/html$/");
 foreach($files as $file)
 {
     if(preg_match("#custom2.html$#", $file)) continue;
@@ -76,112 +85,66 @@ $ret = array_unique($ret);
 $langData['HTMLArea'] = $ret;
 
 
-
-$plugins = getFiles("../plugins/");
+foreach(array('plugins', 'modules', 'unsupported_plugins') as $pDir)
+{
+$plugins = getFiles("{$XinhaRoot}/{$pDir}");
 foreach($plugins as $pluginDir) {
-    $plugin = substr($pluginDir, 12);
-    if($plugin=="ibrowser") continue;
+    $plugin = basename($pluginDir);//preg_replace('/\.\.\/[^/]+\//', '', $pluginDir);
+    
     $ret = array();
 
-    $files = getFiles("$pluginDir/", "js$");
-    $files = array_merge($files, getFiles("$pluginDir/popups/", "html$"));
-    $files = array_merge($files, getFiles("$pluginDir/", "php$"));
+    $files = getFiles("$pluginDir", "/js$/");
+    $files = array_merge($files, getFiles("$pluginDir/popups", "/html$/"));
+    $files = array_merge($files, getFiles("$pluginDir", "/php$/"));
     foreach($files as $file)
     {
         $fp = fopen($file, "r");
         $data = "";
         if($fp) {
-            echo "$file open...<br>";
+            echo "$file open\n";
             while(!feof($fp)) {
               $data .= fread($fp, 1024);
             }
-            preg_match_all('#_lc\("([^"]+)"|_lc\(\'([^\']+)\'#', $data, $m);
+            
+            preg_match_all("#_lc\(\s*\"((?:[^\"]|\\\\\")+)\"\s*[,)]#", $data, $m);            
             foreach($m[1] as $i) {
                 if(trim(strip_tags($i))=="") continue;
-                $ret[] = $i;
+                $ret[] = preg_replace('/\\\\"/', '"', $i);
             }
-            foreach($m[2] as $i) {
+            
+            preg_match_all('#_lc\(\s*\'((?:[^\']|\\\\\')+)\'\s*[,)]#', $data, $m);
+            foreach($m[1] as $i) {
                 if(trim(strip_tags($i))=="") continue;
-                $ret[] = $i;
+                $ret[] = preg_replace("/\\\\'/", "'", $i);
             }
+            
+            
         }
     }
 
-    if($plugin=="TableOperations")
-    {
-        preg_match_all('#options = \\[([^\\]]+)\\];#', $data, $m);
-        foreach($m[1] as $i) {
-            preg_match_all('#"([^"]+)"#', $i, $m1);
-            foreach($m1[1] as $i) {
-                $ret[] = $i;
-            }
-        }
-        
-        //["cell-delete",        "td", "Delete cell"],
-        preg_match_all('#\\["[^"]+",[ \t]*"[^"]+",[ \t]*"([^"]+)"\\]#', $data, $m);
-        foreach($m[1] as $i) {
-            $ret[] = $i;
-        }
-    }
-
-
-    $files = getFiles("$pluginDir/", "html$");
-    $files = array_merge($files, getFiles("$pluginDir/", "php$"));
+    $files = array_merge($files, getFiles("$pluginDir", "/\.(html|php)$/"));
+    $files = array_merge($files, getFiles("$pluginDir/popups", "/\.(html|php)$/"));
+    $files = array_merge($files, getFiles("$pluginDir/dialogs", "/\.(html|php)$/"));
     foreach($files as $file)
     {
         $ret = array_merge($ret, parseHtmlFile($file, $plugin));
     }
     
-    $files = getFiles("$pluginDir/popups/", "html$");
-    foreach($files as $file)
-    {
-        $ret = array_merge($ret, parseHtmlFile($file, $plugin));
-    }
-    $ret = array_unique($ret);
-
-    $langData[$plugin] = $ret;
+    $langData[$plugin] = array_unique($ret);    
+}
 }
 
-$plugins = getFiles("../modules/");
-foreach($plugins as $pluginDir) {
-    $plugin = substr($pluginDir, 12);
-    $ret = array();
-    $files = getFiles("$pluginDir/", "js$");
-    foreach($files as $file)
-    {
-        $fp = fopen($file, "r");
-        $data = "";
-        if($fp) {
-            echo "$file open...<br>";
-            while(!feof($fp)) {
-              $data .= fread($fp, 1024);
-            }
-            preg_match_all('#_lc\("([^"]+)"|_lc\(\'([^\']+)\'#', $data, $m);
-            foreach($m[1] as $i) {
-                if(trim(strip_tags($i))=="") continue;
-                $ret[] = $i;
-            }
-            foreach($m[2] as $i) {
-                if(trim(strip_tags($i))=="") continue;
-                $ret[] = $i;
-            }
-        }
-    }
-    $ret = array_unique($ret);
-    $langData[$plugin] = $ret;
-}
 
 
 foreach($langData as $plugin=>$strings) {
-    if(sizeof($strings)==0) continue;
     
 
     $data = "// I18N constants\n";
     $data .= "//\n";
-    $data .= "// LANG: \"base\", ENCODING: UTF-8\n";
+    $data .= "// LANG: \"en\", ENCODING: UTF-8\n";
     $data .= "// Author: Translator-Name, <email@example.com>\n";
     $data .= "//\n";   
-    $data .= "// Last revision: 06 september 2007\n";
+    $data .= "// Last revision: ".date('Y-m-d')."\n";
     $data .= "// Please don´t remove this information\n";
     $data .= "// If you modify any source, please insert a comment with your name and e-mail\n";
     $data .= "//\n";
@@ -198,7 +161,9 @@ foreach($langData as $plugin=>$strings) {
     $data .= "//      (if this is not possible, please include a comment\n";
     $data .= "//       that states what encoding is necessary.)\n";
     $data .= "\n";
+    /*
     $data .= "{\n";
+    
     sort($strings);
     foreach($strings as $string) {
         $string = str_replace(array('\\', '"'), array('\\\\', '\\"'), $string);
@@ -207,42 +172,52 @@ foreach($langData as $plugin=>$strings) {
     $data = substr($data, 0, -2);
     $data .= "\n";
     $data .= "}\n";
-
-    if($plugin=="HTMLArea") {
-       $file = "../lang/base.js";
-    			$fp = fopen($file, "w");
-    		  if(!$fp) continue;
-    			fwrite($fp, $data);
-    			fclose($fp);
-    			echo "$file written...<br>";
-		}	elseif (($plugin=="InternetExplorer")||($plugin=="InsertTable")||($plugin=="InsertImage")||($plugin=="GetHtml")||($plugin=="Gecko")||($plugin=="Dialogs")||($plugin=="CreateLink")||($plugin=="ColorPicker")) {
-        $file = "../modules/$plugin/lang/base.js";	
-    			$fp = fopen($file, "w");
-    		  if(!$fp) continue;
-    			fwrite($fp, $data);
-    			fclose($fp);
-    			echo "$file written...<br>";
-		} elseif ($plugin=="FullScreen") {
-        $file = "../modules/$plugin/lang/base.js";
-    			$fp = fopen($file, "w");
-    		  if(!$fp) continue;
-    			fwrite($fp, $data);
-    			fclose($fp);
-    			echo "$file written...<br>";
-				$file = "../plugins/$plugin/lang/base.js";		
-    			$fp = fopen($file, "w");
-    		  if(!$fp) continue;
-    			fwrite($fp, $data);
-    			fclose($fp);
-    			echo "$file written...<br>";
-		} else {
-        $file = "../plugins/$plugin/lang/base.js";		
-    			$fp = fopen($file, "w");
-    		  if(!$fp) continue;
-    			fwrite($fp, $data);
-    			fclose($fp);
-    			echo "$file written...<br>";
-		}       
+    */
+    sort($strings);
+    $js_data = array();
+    foreach($strings as $string)
+    {
+      $js_data[$string] = '';
+    }    
+    $data .= json_encode($js_data,  JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+    
+    $langfile = false;
+    if(preg_match('/HTMLArea|Xinha/', $plugin))
+    {
+      $langfile = dirname(__FILE__).'/../lang/lc_base.js';
+    }
+    elseif (is_dir(dirname(__FILE__).'/../modules/'.$plugin)) 
+    {
+      $langfile = dirname(__FILE__).'/../modules/'.$plugin.'/lang/lc_base.js';
+    }
+    elseif (is_dir(dirname(__FILE__).'/../plugins/'.$plugin)) 
+    {
+      $langfile = dirname(__FILE__).'/../plugins/'.$plugin.'/lang/lc_base.js';
+    }
+    elseif (is_dir(dirname(__FILE__).'/../unsupported_plugins/'.$plugin)) 
+    {
+      $langfile = dirname(__FILE__).'/../unsupported_plugins/'.$plugin.'/lang/lc_base.js';
+    }
+    else
+    {
+      echo "Unknown {$plugin}\n";
+      continue;
+      throw new Exception("What sort of plugin is {$plugin}?");
+    }
+    
+    // If we don't have any data, remove any existing lc_base.js
+    if(!count($js_data))
+    {
+      if(file_exists($langfile)) unlink($langfile);
+      continue;
+    }
+    
+     if(!file_exists(dirname($langfile)))
+     {
+       mkdir(dirname($langfile));
+     }
+    file_put_contents($langfile, $data);
+    echo "$langfile written\n";
 }
 
 
@@ -250,23 +225,22 @@ foreach($langData as $plugin=>$strings) {
 
 function parseHtmlFile($file, $plugin="")
 {
+echo "Parsing $file\n";
     $ret = array();
     
-    $fp = fopen($file, "r");
-    if(!$fp) {
-        die("invalid fp");
-    }
-    $data = "";
-    while(!feof($fp)) {
-        $data .= fread($fp, 1024);
-    }
+    $data = file_get_contents($file);
     
-    if($plugin=="FormOperations" || $plugin=="SuperClean" || $plugin=="Linker") {
-        //<l10n>-tags for inline-dialog or panel-dialog based dialogs
-        $elems = array("l10n");
-    } else {
-        $elems = array("title", "input", "select", "legend", "span", "option", "td", "button", "div", "label");
+    if(preg_match('/<l10n>/i', $data) || preg_match('/"_\([^"]*\)"/', $data))
+    {
+      // Newer plugin dialogs use our <l10n>english</l10n> tag to indicate a translation text.
+      // also a attribute="_([english])"
+      $elems = array('l10n');
     }
+    else
+    {
+      $elems = array("title", "input", "select", "legend", "span", "option", "td", "button", "div", "label");
+    }
+
     foreach($elems as $elem) {
         preg_match_all("#<{$elem}[^>]*>([^<^\"]+)</$elem>#i", $data, $m);
         foreach($m[1] as $i) {
@@ -279,16 +253,15 @@ function parseHtmlFile($file, $plugin="")
         }
     }
     
-    if($plugin=="FormOperations" || $plugin=="SuperClean" || $plugin=="Linker")
-    {
-        //_( for inline-dialog or panel-dialog based dialogs
-        preg_match_all('#"_\(([^"]+)\)"#i', $data, $m);
-        foreach($m[1] as $i) {
-            if(trim($i)=="") continue;
-            $ret[] = $i;
-        }
+    // "_( ... )" is only valide for an attribute value
+    preg_match_all('#"_\(([^"]+)\)"#i', $data, $m);
+    foreach($m[1] as $i) {
+        if(trim($i)=="") continue;
+        $ret[] = $i;
     }
-    else
+      
+    // Older plugins translate the title attribute
+    if(count($elems) > 1)
     {
         preg_match_all('#title="([^"]+)"#i', $data, $m);
         foreach($m[1] as $i) {
@@ -297,19 +270,20 @@ function parseHtmlFile($file, $plugin="")
             $ret[] = $i;
         }
     }
+    
     return($ret);
 }
 
 
-function getFiles($rootdirpath, $eregi_match='') {
+function getFiles($rootdirpath, $preg_match='') {
  $array = array();
  if ($dir = @opendir($rootdirpath)) {
    $array = array();
    while (($file = readdir($dir)) !== false) {
-     if($file=="." || $file==".." || $file==".svn") continue;
-      if($eregi_match=="")
+     if($file=="." || $file==".." || $file==".svn" || $file == ".htaccess") continue;
+      if($preg_match=="")
         $array[] = $rootdirpath."/".$file;
-      else if(eregi($eregi_match,$file))
+      else if(preg_match($preg_match,$file))
         $array[] = $rootdirpath."/".$file;
       
    }
@@ -317,9 +291,6 @@ function getFiles($rootdirpath, $eregi_match='') {
  }
  return $array;
 }
-
-
-
 
 
 ?>

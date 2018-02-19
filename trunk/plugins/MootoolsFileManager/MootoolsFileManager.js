@@ -138,7 +138,7 @@ MootoolsFileManager.prototype.hookUpButtons = function()
     
     this.editor.config.registerButton({
         id        : "linkfile",
-        tooltip   : Xinha._lc("Insert File Link",'ExtendedFileManager'),
+        tooltip   : Xinha._lc("Insert File Link",'MootoolsFileManager'),
         image     : Xinha.getPluginDir('MootoolsFileManager') + '/img/ed_linkfile.gif',
         textMode  : false,
         action    : function(editor) { MootoolsFileManager.AssetLoader.whenReady(function() { self.OpenFileManager(); }); }

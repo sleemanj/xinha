@@ -1,6 +1,13 @@
 // I18N constants
 // LANG: "pl", ENCODING: UTF-8
-// translated: Krzysztof Kotowicz, koto1sa@o2.pl, http://www.eskot.krakow.pl/portfolio
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Maximize/Minimize Editor": "Maksymalizuj/minimalizuj edytor"
+    "Maximize/Minimize Editor": "Maksymalizuj/minimalizuj edytor"
 };

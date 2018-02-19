@@ -1,11 +1,18 @@
 // I18N constants
 // LANG: "es", ENCODING: UTF-8
-// translated: Derick Leony <dleony@gmail.com>
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "language select": "seleccionar idioma",
-  "&mdash; language &mdash;":	"&mdash; idioma &mdash;",
-  "Greek": "Griego",
-  "English": "Inglés",
-  "French": "Francés",
-  "Latin": "Latín"
+    "&mdash; language &mdash;": "&mdash; idioma &mdash;",
+    "English": "Inglés",
+    "French": "Francés",
+    "Greek": "Griego",
+    "Latin": "Latín",
+    "language select": "seleccionar idioma"
 };

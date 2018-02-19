@@ -1,50 +1,48 @@
 // I18N constants
-
 // LANG: "ee", ENCODING: UTF-8
-// Author: Martin Raie, <albertvill@hot.ee>
-
-// FOR TRANSLATORS:
 //
-//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
-//      (at least a valid email address)
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
 //
-//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
-//      (if this is not possible, please include a comment
-//       that states what encoding is necessary.)
-
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Bold": "Paks",
-  "Italic": "Kursiiv",
-  "Underline": "Allakriipsutatud",
-  "Strikethrough": "Läbikriipsutatud",
-  "Subscript": "Allindeks",
-  "Superscript": "Ülaindeks",
-  "Justify Left": "Joonda vasakule",
-  "Justify Center": "Joonda keskele",
-  "Justify Right": "Joonda paremale",
-  "Justify Full": "Rööpjoonda",
-  "Ordered List": "Nummerdus",
-  "Bulleted List": "Täpploend",
-  "Decrease Indent": "Vähenda taanet",
-  "Increase Indent": "Suurenda taanet",
-  "Font Color": "Fondi värv",
-  "Background Color": "Tausta värv",
-  "Horizontal Rule": "Horisontaaljoon",
-  "Insert Web Link": "Lisa viit",
-  "Insert/Modify Image": "Lisa pilt",
-  "Insert Table": "Lisa tabel",
-  "Toggle HTML Source": "HTML/tavaline vaade",
-  "Enlarge Editor": "Suurenda toimeti aken",
-  "About this editor": "Teave toimeti kohta",
-  "Help using editor": "Spikker",
-  "Current style": "Kirjastiil",
-  "Undoes your last action": "Võta tagasi",
-  "Redoes your last action": "Tee uuesti",
-  "Cut selection": "Lõika",
-  "Copy selection": "Kopeeri",
-  "Paste from clipboard": "Kleebi",
-  "OK": "OK",
-  "Cancel": "Loobu",
-  "Path": "Path",
-  "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Sa oled tekstireziimis.  Kasuta nuppu [<>] lülitamaks tagasi WYSIWIG reziimi."
-}
+    "About this editor": "Teave toimeti kohta",
+    "Background Color": "Tausta värv",
+    "Bold": "Paks",
+    "Bulleted List": "Täpploend",
+    "Copy selection": "Kopeeri",
+    "Current style": "Kirjastiil",
+    "Cut selection": "Lõika",
+    "Decrease Indent": "Vähenda taanet",
+    "Font Color": "Fondi värv",
+    "Help using editor": "Spikker",
+    "Horizontal Rule": "Horisontaaljoon",
+    "Increase Indent": "Suurenda taanet",
+    "Insert Table": "Lisa tabel",
+    "Insert Web Link": "Lisa viit",
+    "Insert/Modify Image": "Lisa pilt",
+    "Italic": "Kursiiv",
+    "Justify Center": "Joonda keskele",
+    "Justify Full": "Rööpjoonda",
+    "Justify Left": "Joonda vasakule",
+    "Justify Right": "Joonda paremale",
+    "Ordered List": "Nummerdus",
+    "Paste from clipboard": "Kleebi",
+    "Path": "Path",
+    "Redoes your last action": "Tee uuesti",
+    "Strikethrough": "Läbikriipsutatud",
+    "Subscript": "Allindeks",
+    "Superscript": "Ülaindeks",
+    "Toggle HTML Source": "HTML/tavaline vaade",
+    "Underline": "Allakriipsutatud",
+    "Undoes your last action": "Võta tagasi",
+    "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Sa oled tekstireziimis.  Kasuta nuppu [<>] lülitamaks tagasi WYSIWIG reziimi.",
+    "__OBSOLETE__": {
+        "Enlarge Editor": "Suurenda toimeti aken",
+        "OK": "OK",
+        "Cancel": "Loobu"
+    }
+};

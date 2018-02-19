@@ -1,11 +1,18 @@
 // I18N constants
 // LANG: "nl", ENCODING: UTF-8
-// Author: Maarten Molenschot, maarten@nrgmm.nl
-{ 
-"Insert Snippet": "Snippet invoegen",
-"Cancel": "Annuleren",
-"Variable":"Variabele",
-"Insert as":"Invoegen als",
-"Show preview":"Laat voorbeeld zien",
-"Hide preview":"Verberg voorbeeld"
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
+{
+    "Cancel": "Annuleren",
+    "Hide preview": "Verberg voorbeeld",
+    "Insert Snippet": "Snippet invoegen",
+    "Insert as": "Invoegen als",
+    "Show preview": "Laat voorbeeld zien",
+    "Variable": "Variabele"
 };

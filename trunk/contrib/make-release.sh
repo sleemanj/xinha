@@ -4,7 +4,27 @@
 
 VER=0.96.1
 
-#
+if ! [ -f XinhaCore.js ]
+then 
+  echo "Run this script from inside your Xinha Root directory."
+  exit 1
+fi
+
+if ! [ -f .svn ]
+then 
+  echo "This script must be run inside a subversion working copy."
+  exit 1
+fi
+
+# Create merged language files for translators
+php contrib/lc_parse_strings.php
+for lang in $(find . -wholename "*/lang/*.js" | sed -r 's/.*\///' | sort | uniq | grep -v base | sed -r 's/.js//')
+do
+  php contrib/lc_create_merged_file.php $lang lang/merged/$lang.js
+done
+php contrib/lc_create_merged_file.php NEW lang/merged/__new__.js
+
+
 #
 svn export $(pwd) /tmp/Xinha-$VER
 cd /tmp

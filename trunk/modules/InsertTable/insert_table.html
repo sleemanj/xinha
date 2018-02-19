@@ -12,12 +12,12 @@ window.resizeTo(425, 250);
 
 Xinha = window.opener.Xinha;
 function i18n(str) {
-  return (Xinha._lc(str, 'Xinha'));
+  return (Xinha._lc(str, 'InsertTable'));
 }
 
 function Init() {
   Xinha = window.opener.Xinha; // load the Xinha plugin and lang file
-  __dlg_translate('Xinha');
+  __dlg_translate('InsertTable');
   __dlg_init(null, Xinha.is_ie ? null : {width:425,height:250});
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_unit").selectedIndex = 1;

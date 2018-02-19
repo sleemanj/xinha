@@ -73,7 +73,8 @@ Xinha.prototype.listStyles = function(s) {
 	if(toggleState) Xinha._addClass(d, 'CSSPickerOptionActive');
 	
 	d.align='center';
-	d.innerHTML='<div class="'+s+'">'+CSSPicker.cssList[s].name+'</div>';
+              // v-- Avoid lc_parse_strings.php
+	d.innerHTML='<'+'div class="'+s+'">'+CSSPicker.cssList[s].name+'</div>';
 	d.onclick = function() {
 		editor.wrapStyle(s, mySel, myRange, CSSPicker.cssList[s].wrapper);
 		return false;

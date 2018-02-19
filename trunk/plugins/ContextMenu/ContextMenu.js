@@ -304,7 +304,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 
 	if (!/html|body/i.test(currentTarget.tagName))
 		menu.push(null,
-			  [ Xinha._lc({string: "Remove the $elem Element...", replace: {elem: "&lt;" + currentTarget.tagName + "&gt;"}}, "ContextMenu"),
+			  [ Xinha._lc("Remove the $elem Element...", 'ContextMenu', {elem: "&lt;" + currentTarget.tagName + "&gt;"}),
 			    function() {
 				    if (confirm(Xinha._lc("Please confirm that you want to remove this element:", "ContextMenu") + " " +
 						currentTarget.tagName)) {

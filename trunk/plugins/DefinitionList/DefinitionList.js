@@ -40,10 +40,10 @@ DefinitionList._pluginInfo = {
 };
 
 // the list of buttons added by this plugin
-DefinitionList.btnList = [
-  ["dl", "definition list"],
-  ["dt", "definition term"],
-  ["dd", "definition description"]
+DefinitionList.btnList = [         // for lc_parse_strings.php
+  ["dl", "definition list"],       // Xinha._lc('definition list', 'DefinitionList'); 
+  ["dt", "definition term"],       // Xinha._lc('definition term', 'DefinitionList'); 
+  ["dd", "definition description"] // Xinha._lc('definition description', 'DefinitionList'); 
   ];
 
 DefinitionList.prototype._lc = function(string) {

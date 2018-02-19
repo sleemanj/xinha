@@ -1,63 +1,60 @@
 // I18N constants
-
 // LANG: "ro", ENCODING: UTF-8
-// Author: Mihai Bazon, http://dynarch.com/mishoo
-
-// FOR TRANSLATORS:
 //
-//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
-//      (at least a valid email address)
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
 //
-//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
-//      (if this is not possible, please include a comment
-//       that states what encoding is necessary.)
-
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Bold": "Îngroşat",
-  "Italic": "Italic",
-  "Underline": "Subliniat",
-  "Strikethrough": "Tăiat",
-  "Subscript": "Indice jos",
-  "Superscript": "Indice sus",
-  "Justify Left": "Aliniere la stânga",
-  "Justify Center": "Aliniere pe centru",
-  "Justify Right": "Aliniere la dreapta",
-  "Justify Full": "Aliniere în ambele părţi",
-  "Ordered List": "Listă ordonată",
-  "Bulleted List": "Listă marcată",
-  "Decrease Indent": "Micşorează alineatul",
-  "Increase Indent": "Măreşte alineatul",
-  "Font Color": "Culoarea textului",
-  "Background Color": "Culoare de fundal",
-  "Horizontal Rule": "Linie orizontală",
-  "Insert Web Link": "Inserează/modifică link",
-  "Insert/Modify Image": "Inserează/modifică imagine",
-  "Insert Table": "Inserează un tabel",
-  "Toggle HTML Source": "Sursa HTML / WYSIWYG",
-  "Enlarge Editor": "Maximizează editorul",
-  "About this editor": "Despre editor",
-  "Help using editor": "Documentaţie (devel)",
-  "Current style": "Stilul curent",
-  "Undoes your last action": "Anulează ultima acţiune",
-  "Redoes your last action": "Reface ultima acţiune anulată",
-  "Cut selection": "Taie în clipboard",
-  "Copy selection": "Copie în clipboard",
-  "Paste from clipboard": "Aduce din clipboard",
-  "Direction left to right": "Direcţia de scriere: stânga - dreapta",
-  "Direction right to left": "Direcţia de scriere: dreapta - stânga",
-  "OK": "OK",
-  "Cancel": "Anulează",
-  "Path": "Calea",
-  "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Eşti în modul TEXT.  Apasă butonul [<>] pentru a te întoarce în modul WYSIWYG.",
-  "Cancel": "Renunţă",
-  "Insert/Modify Link": "Inserează/modifcă link",
-  "New window (_blank)": "Fereastră nouă (_blank)",
-  "None (use implicit)": "Nimic (foloseşte ce-i implicit)",
-  "Other": "Alt target",
-  "Same frame (_self)": "Aceeaşi fereastră (_self)",
-  "Target:": "Ţinta:",
-  "Title (tooltip):": "Titlul (tooltip):",
-  "Top frame (_top)": "Fereastra principală (_top)",
-  "URL:": "URL:",
-  "You must enter the URL where this link points to": "Trebuie să introduceţi un URL"
-}
+    "About this editor": "Despre editor",
+    "Background Color": "Culoare de fundal",
+    "Bold": "Îngroşat",
+    "Bulleted List": "Listă marcată",
+    "Copy selection": "Copie în clipboard",
+    "Current style": "Stilul curent",
+    "Cut selection": "Taie în clipboard",
+    "Decrease Indent": "Micşorează alineatul",
+    "Direction left to right": "Direcţia de scriere: stânga - dreapta",
+    "Direction right to left": "Direcţia de scriere: dreapta - stânga",
+    "Font Color": "Culoarea textului",
+    "Help using editor": "Documentaţie (devel)",
+    "Horizontal Rule": "Linie orizontală",
+    "Increase Indent": "Măreşte alineatul",
+    "Insert Table": "Inserează un tabel",
+    "Insert Web Link": "Inserează/modifică link",
+    "Insert/Modify Image": "Inserează/modifică imagine",
+    "Italic": "Italic",
+    "Justify Center": "Aliniere pe centru",
+    "Justify Full": "Aliniere în ambele părţi",
+    "Justify Left": "Aliniere la stânga",
+    "Justify Right": "Aliniere la dreapta",
+    "Ordered List": "Listă ordonată",
+    "Paste from clipboard": "Aduce din clipboard",
+    "Path": "Calea",
+    "Redoes your last action": "Reface ultima acţiune anulată",
+    "Strikethrough": "Tăiat",
+    "Subscript": "Indice jos",
+    "Superscript": "Indice sus",
+    "Toggle HTML Source": "Sursa HTML / WYSIWYG",
+    "Underline": "Subliniat",
+    "Undoes your last action": "Anulează ultima acţiune",
+    "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Eşti în modul TEXT.  Apasă butonul [<>] pentru a te întoarce în modul WYSIWYG.",
+    "__OBSOLETE__": {
+        "Enlarge Editor": "Maximizează editorul",
+        "OK": "OK",
+        "Cancel": "Renunţă",
+        "Insert/Modify Link": "Inserează/modifcă link",
+        "New window (_blank)": "Fereastră nouă (_blank)",
+        "None (use implicit)": "Nimic (foloseşte ce-i implicit)",
+        "Other": "Alt target",
+        "Same frame (_self)": "Aceeaşi fereastră (_self)",
+        "Target:": "Ţinta:",
+        "Title (tooltip):": "Titlul (tooltip):",
+        "Top frame (_top)": "Fereastra principală (_top)",
+        "URL:": "URL:",
+        "You must enter the URL where this link points to": "Trebuie să introduceţi un URL"
+    }
+};

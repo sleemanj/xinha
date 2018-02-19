@@ -1,19 +1,31 @@
 // I18N constants
 // LANG: "pl", ENCODING: UTF-8
-// translated: Krzysztof Kotowicz, http://www.eskot.krakow.pl/portfolio/, koto@webworkers.pl
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "You must select some text before making a new link.": "Zaznacz tekst przed dodaniem odnośnika.",
-  "Are you sure you wish to remove this link?": "Na pewno chcesz usunąć odnośnik?",
-  "Remove Link": "USUŃ ODNOŚNIK",
-  "URL Link": "Adres URL",
-  "Ordinary Link": "Zwykły odnośnik",
-  "Same Window (jump out of frames)": "To samo okno (wyskocz z ramek)",
-  "New Window": "Nowe okno",
-  "Popup Window": "Okienko pop-up",
-  "Email Link": "Link do e-maila",
-  "Email Address:": "Adres e-mail",
-  "Subject:": "Temat:",
-  "Message Template:": "Szablon wiadmości:",
-  "Size:": "Rozmiar:",
-  "Name:": "Nazwa:"
+    "Are you sure you wish to remove this link?": "Na pewno chcesz usunąć odnośnik?",
+    "Cancel": "Anuluj",
+    "Email Address:": "Adres e-mail",
+    "Email Link": "Link do e-maila",
+    "Insert/Modify Link": "Wstaw/edytuj odnośnik",
+    "Message Template:": "Szablon wiadmości:",
+    "Name:": "Nazwa:",
+    "New Window": "Nowe okno",
+    "OK": "OK",
+    "Ordinary Link": "Zwykły odnośnik",
+    "Popup Window": "Okienko pop-up",
+    "Remove Link": "USUŃ ODNOŚNIK",
+    "Same Window (jump out of frames)": "To samo okno (wyskocz z ramek)",
+    "Size:": "Rozmiar:",
+    "Subject:": "Temat:",
+    "Target:": "Okno docelowe:",
+    "URL Link": "Adres URL",
+    "URL:": "URL:",
+    "You must select some text before making a new link.": "Zaznacz tekst przed dodaniem odnośnika."
 };

@@ -1,6 +1,13 @@
-﻿// I18N constants
+// I18N constants
 // LANG: "ru", ENCODING: UTF-8
-// Author: Andrei Blagorazumov, a@fnr.ru
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Maximize/Minimize Editor": "Развернуть/Свернуть редактор"
+    "Maximize/Minimize Editor": "Развернуть/Свернуть редактор"
 };

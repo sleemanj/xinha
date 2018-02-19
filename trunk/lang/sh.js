@@ -1,77 +1,70 @@
-﻿// I18N constants
-
-// LANG: "sh", ENCODING: UTF-8 | ISO-8859-2
-// Author: Ljuba Ranković, http://www.rankovic.net/ljubar
-
-// FOR TRANSLATORS:
+// I18N constants
+// LANG: "sh", ENCODING: UTF-8
 //
-//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
-//      (at least a valid email address)
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
 //
-//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
-//      (if this is not possible, please include a comment
-//       that states what encoding is necessary.)
-
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-		"Bold": "Masno",
-		"Italic": "Kurziv",
-		"Underline": "Podvučeno",
-		"Strikethrough": "Precrtano",
-		"Subscript": "Indeks-tekst",
-		"Superscript": "Eksponent-tekst",
-		"Justify Left":"Ravnanje ulevo",
-		"Justify Center": "Ravnanje po simetrali",
-		"Justify Right": "Ravnanje udesno",
-		"Justify Full": "Puno ravnanje",
-		"Ordered List": "Lista sa rednim brojevima",
-		"Bulleted List": "Lista sa simbolima",
-		"Decrease Indent": "smanji uvlačenje",
-		"Increase Indent": "Povećaj uvlačenje",
-		"Font Color": "Boja slova",
-		"Background Color": "Boja pozadine",
-		"Horizontal Rule": "Horizontalna linija",
-		"Insert Web Link": "Dodaj web link",
-		"Insert/Modify Image": "Dodaj/promeni sliku",
-		"Insert Table": "Ubaci tabelu",
-		"Toggle HTML Source": "Prebaci na HTML kod",
-		"Enlarge Editor": "Povećaj editor",
-		"About this editor": "O ovom editoru",
-		"Help using editor": "Pomoć pri korišćenju editora",
-		"Current style": "Važeći stil",
-		"Undoes your last action": "Poništava poslednju radnju",
-		"Redoes your last action": "Vraća poslednju radnju",
-		"Cut selection": "Iseci izabrano",
-		"Copy selection": "Kopiraj izabrano",
-		"Paste from clipboard": "Zalepi iz klipborda",
-		"Direction left to right": "Pravac s leva na desno",
-		"Direction right to left": "Pravac s desna na levo",
-        "Remove formatting": "Ukoni formatiranje",
-        "Select all": "Izaberi sve",
-        "Print document": "Štampaj dokument",
-        "Clear MSOffice tags": "Obriši MSOffice tagove",
-        "Clear Inline Font Specifications": "Obriši dodeljene osobine fonta",
-        "Split Block": "Podeli blok",
-        "Toggle Borders": "Izmeni okvire",
-
-        "&#8212; format &#8212;": "&#8212; Format &#8212;",
-        "Heading 1": "Zaglavlje 1",
-        "Heading 2": "Zaglavlje 2",
-        "Heading 3": "Zaglavlje 3",
-        "Heading 4": "Zaglavlje 4",
-        "Heading 5": "Zaglavlje 5",
-        "Heading 6": "Zaglavlje 6",
-        "Normal": "Običan",
-        "Address": "Adresa",
-        "Formatted": "Formatiran",
-        
-        // dialogs
-		"OK": "OK",
-		"Cancel": "Poništi",
-		"Path": "Putanja",
-		"You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Nalazite se u TEXT režimu.  Koristite [<>] dugme za povratak na WYSIWYG.",
-
-		"The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly.": "",
-
+    "&#8212; format &#8212;": "&#8212; Format &#8212;",
+    "About this editor": "O ovom editoru",
+    "Address": "Adresa",
+    "Background Color": "Boja pozadine",
+    "Bold": "Masno",
+    "Bulleted List": "Lista sa simbolima",
+    "Clear Inline Font Specifications": "Obriši dodeljene osobine fonta",
+    "Clear MSOffice tags": "Obriši MSOffice tagove",
+    "Copy selection": "Kopiraj izabrano",
+    "Current style": "Važeći stil",
+    "Cut selection": "Iseci izabrano",
+    "Decrease Indent": "smanji uvlačenje",
+    "Direction left to right": "Pravac s leva na desno",
+    "Direction right to left": "Pravac s desna na levo",
+    "Font Color": "Boja slova",
+    "Formatted": "Formatiran",
+    "Heading 1": "Zaglavlje 1",
+    "Heading 2": "Zaglavlje 2",
+    "Heading 3": "Zaglavlje 3",
+    "Heading 4": "Zaglavlje 4",
+    "Heading 5": "Zaglavlje 5",
+    "Heading 6": "Zaglavlje 6",
+    "Help using editor": "Pomoć pri korišćenju editora",
+    "Horizontal Rule": "Horizontalna linija",
+    "Increase Indent": "Povećaj uvlačenje",
+    "Insert Table": "Ubaci tabelu",
+    "Insert Web Link": "Dodaj web link",
+    "Insert/Modify Image": "Dodaj/promeni sliku",
+    "Italic": "Kurziv",
+    "Justify Center": "Ravnanje po simetrali",
+    "Justify Full": "Puno ravnanje",
+    "Justify Left": "Ravnanje ulevo",
+    "Justify Right": "Ravnanje udesno",
+    "Normal": "Običan",
+    "Ordered List": "Lista sa rednim brojevima",
+    "Paste from clipboard": "Zalepi iz klipborda",
+    "Path": "Putanja",
+    "Print document": "Štampaj dokument",
+    "Redoes your last action": "Vraća poslednju radnju",
+    "Remove formatting": "Ukoni formatiranje",
+    "Select Color": "Izaberite boju",
+    "Select all": "Izaberi sve",
+    "Split Block": "Podeli blok",
+    "Strikethrough": "Precrtano",
+    "Subscript": "Indeks-tekst",
+    "Superscript": "Eksponent-tekst",
+    "Toggle Borders": "Izmeni okvire",
+    "Toggle HTML Source": "Prebaci na HTML kod",
+    "Underline": "Podvučeno",
+    "Undoes your last action": "Poništava poslednju radnju",
+    "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Nalazite se u TEXT režimu.  Koristite [<>] dugme za povratak na WYSIWYG.",
+    "__OBSOLETE__": {
+        "Enlarge Editor": "Povećaj editor",
+        "OK": "OK",
+        "Cancel": "Poništi",
+        "The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly.": "",
         "Alignment:": "Ravnanje",
         "Not set": "Nije postavljeno",
         "Left": "Levo",
@@ -83,7 +76,6 @@
         "Bottom": "Dno",
         "Middle": "Sredina",
         "Top": "Vrh",
-
         "Layout": "Prelom",
         "Spacing": "Razmak",
         "Horizontal:": "Po horizontali",
@@ -92,21 +84,16 @@
         "Vertical padding": "Vertikalno odstojanje",
         "Border thickness:": "Debljina okvira",
         "Leave empty for no border": "Ostavi prazno kad nema okvira",
-		
-        // Insert Link
-		"Insert/Modify Link": "Dodaj/promeni Link",
-		"None (use implicit)": "koristi podrazumevano",
-		"New window (_blank)": "Novom prozoru (_blank)",
-		"Same frame (_self)": "Isti frejm (_self)",
-		"Top frame (_top)": "Glavni frejm (_top)",
-		"Other": "Drugo",
-		"Target:": "Otvori u:",
-		"Title (tooltip):": "Naziv (tooltip):",
-		"URL:": "URL:",
-		"You must enter the URL where this link points to": "Morate uneti URL na koji vodi ovaj link",
-		
-        // Insert Table
-        "Insert Table": "Ubaci tabelu",
+        "Insert/Modify Link": "Dodaj/promeni Link",
+        "None (use implicit)": "koristi podrazumevano",
+        "New window (_blank)": "Novom prozoru (_blank)",
+        "Same frame (_self)": "Isti frejm (_self)",
+        "Top frame (_top)": "Glavni frejm (_top)",
+        "Other": "Drugo",
+        "Target:": "Otvori u:",
+        "Title (tooltip):": "Naziv (tooltip):",
+        "URL:": "URL:",
+        "You must enter the URL where this link points to": "Morate uneti URL na koji vodi ovaj link",
         "Rows:": "Redovi",
         "Number of rows": "Broj redova",
         "Cols:": "Kolone",
@@ -123,8 +110,6 @@
         "Space between adjacent cells": "Rastojanje naspramnih ćelija",
         "Cell padding:": "Unutrašnja odstojanja u ćeliji",
         "Space between content and border in cell": "Rastojanje između sadržaja i okvira ćelije",
-
-        // Insert Image
         "Insert Image": "Ubaci sliku",
         "Image URL:": "URL slike",
         "Enter the image URL here": "Unesite URL slike ovde",
@@ -133,8 +118,6 @@
         "Alternate text:": "Alternativni tekst",
         "For browsers that don't support images": "Za pretraživače koji ne podržavaju slike",
         "Positioning of this image": "Postavljanje ove slike",
-        "Image Preview:": "Pregled slike",
-        
-        // Select Color popup
-		"Select Color": "Izaberite boju"
+        "Image Preview:": "Pregled slike"
+    }
 };

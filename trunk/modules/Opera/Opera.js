@@ -358,7 +358,7 @@ Opera.prototype.onExecCommand = function(cmdID, UI, param)
     
     /*case 'paste':
     {
-      alert(Xinha._lc("The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly."));
+      alert(Xinha._lc("The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly.", "Opera"));
       return true; // Indicate paste is done, stop command being issued to browser by Xinha.prototype.execCommand
     }
     break;*/

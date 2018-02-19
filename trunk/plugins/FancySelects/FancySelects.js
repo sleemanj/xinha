@@ -82,8 +82,8 @@ FancySelects.prototype.onGenerateOnce = function()
     if(!opt.id) return opt.text;
     
     if(opt.id.match(/wingdings|webdings/i))
-    {
-      return jQuery('<span>'+opt.text+'</span> <span style="font-family:'+opt.id+'";" title="'+opt.text+'">*(JL</span>');
+    {               // v-- Avoid lc_parse_strings.php
+      return jQuery('<'+'span>'+opt.text+'</span> <'+'span style="font-family:'+opt.id+'";" title="'+opt.text+'">*(JL</span>');
     }
     else
     {

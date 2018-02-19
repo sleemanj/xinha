@@ -1,26 +1,32 @@
 // I18N constants
 // LANG: "fr", ENCODING: UTF-8
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  // messages
-  "Substitute this occurrence?": "Remplacer cette occurrence ?",
-  "Enter the text you want to find": "Texte à trouver",
-  "Inform a replacement word": "Indiquez un mot de remplacement",
-  "found items": "éléments trouvés",
-  "replaced items": "éléments remplacés",
-  "found item": "élément trouvé",
-  "replaced item": "élément remplacé",
-  "not found": "non trouvé",
-  // window
-  "Find and Replace": "Chercher et Remplacer",
-  "Search for:": "Chercher",
-  "Replace with:": "Remplacer par",
-  "Options": "Options",
-  "Whole words only": "Mots entiers seulement",
-  "Case sensitive search": "Recherche sensible à la casse",
-  "Substitute all occurrences": "Remplacer toutes les occurences",
-  "Clear": "Effacer",
-  "Highlight": "Surligner",
-  "Undo": "Annuler",
-  "Next": "Suivant",
-  "Done": "Fin"
+    "Case sensitive search": "Recherche sensible à la casse",
+    "Clear": "Effacer",
+    "Done": "Fin",
+    "Enter the text you want to find": "Texte à trouver",
+    "Find and Replace": "Chercher et Remplacer",
+    "Highlight": "Surligner",
+    "Inform a replacement word": "Indiquez un mot de remplacement",
+    "Next": "Suivant",
+    "Options": "Options",
+    "Replace with:": "Remplacer par",
+    "Search for:": "Chercher",
+    "Substitute all occurrences": "Remplacer toutes les occurences",
+    "Substitute this occurrence?": "Remplacer cette occurrence ?",
+    "Undo": "Annuler",
+    "Whole words only": "Mots entiers seulement",
+    "found item": "élément trouvé",
+    "found items": "éléments trouvés",
+    "not found": "non trouvé",
+    "replaced item": "élément remplacé",
+    "replaced items": "éléments remplacés"
 };
