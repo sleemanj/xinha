@@ -44,12 +44,11 @@
     "Vertical padding": "垂直余白",
     "Vertical:": "垂直:",
     "Width:": "幅:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "The file you are uploading doesn't have the correct extension.": "アップロード対象ファイルに正しい拡張子がありません。",
-        "The file you are uploading already exists.": "アップロード対象ファイルはすでに存在します。",
-        "The file you are uploading is to big. The max Filesize is": "アップロード対象ファイルは大きすぎます。ファイルサイズの上限:",
         "Images on the Server:": "サーバ上の画像:",
-        "Please select a file to upload.": "アップロードするファイルを選択してください。"
+        "Please select a file to upload.": "アップロードするファイルを選択してください。",
+        "The file you are uploading already exists.": "アップロード対象ファイルはすでに存在します。",
+        "The file you are uploading doesn't have the correct extension.": "アップロード対象ファイルに正しい拡張子がありません。",
+        "The file you are uploading is to big. The max Filesize is": "アップロード対象ファイルは大きすぎます。ファイルサイズの上限:"
     }
 };

@@ -12,5 +12,7 @@
     "Cancel": "Avbryt",
     "OK": "OK",
     "Replace with": "Ersätt med:",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

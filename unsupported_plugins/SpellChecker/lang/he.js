@@ -29,9 +29,8 @@
     "Spell-check": "בדיקת איות",
     "Suggestions": "הצעות",
     "This will drop changes and quit spell checker.  Please confirm.": "זה יבטל את השינויים ויצא מבודק האיות.  אנא אשר.",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "בדיקת האיות נסתיימה, לא נמצאו מילים מאויתות באופן שגוי.  נסגר כעת...",
-        "One moment...": "ענא המטן ;-)"
+        "One moment...": "ענא המטן ;-)",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "בדיקת האיות נסתיימה, לא נמצאו מילים מאויתות באופן שגוי.  נסגר כעת..."
     }
 };

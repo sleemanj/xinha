@@ -40,12 +40,11 @@
     "Vertical padding": "Vertikalt indrag på bild",
     "Vertical:": "Vertikal:",
     "Width:": "Bredd:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "The file you are uploading doesn't have the correct extension.": "Uppladdat bild har en ogiltig filändelse, uppladdning avbruten",
-        "The file you are uploading already exists.": "En fil med detta namn finns redan",
-        "The file you are uploading is to big. The max Filesize is": "Filen är för stor, maximal filstorlek är",
         "Images on the Server:": "Bilder på servern:",
-        "Please select a file to upload.": "Välj bild att ladda upp"
+        "Please select a file to upload.": "Välj bild att ladda upp",
+        "The file you are uploading already exists.": "En fil med detta namn finns redan",
+        "The file you are uploading doesn't have the correct extension.": "Uppladdat bild har en ogiltig filändelse, uppladdning avbruten",
+        "The file you are uploading is to big. The max Filesize is": "Filen är för stor, maximal filstorlek är"
     }
 };

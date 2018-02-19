@@ -9,7 +9,7 @@
 // that you want to be editing this file directly.
 //
 {
-    "Paste as Plain Text": "Lim inn som ren tekst",
     "Cancel": "Avbryt",
-    "OK": "OK"
+    "OK": "OK",
+    "Paste as Plain Text": "Lim inn som ren tekst"
 };

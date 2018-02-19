@@ -30,5 +30,7 @@
     "Top frame (_top)": "Главни фрејм (_top)",
     "Width": "Ширина",
     "Width:": "Ширина",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

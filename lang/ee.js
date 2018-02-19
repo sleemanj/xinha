@@ -41,8 +41,8 @@
     "Undoes your last action": "Võta tagasi",
     "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Sa oled tekstireziimis.  Kasuta nuppu [<>] lülitamaks tagasi WYSIWIG reziimi.",
     "__OBSOLETE__": {
+        "Cancel": "Loobu",
         "Enlarge Editor": "Suurenda toimeti aken",
-        "OK": "OK",
-        "Cancel": "Loobu"
+        "OK": "OK"
     }
 };

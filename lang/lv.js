@@ -41,8 +41,8 @@
     "Undoes your last action": "Atcelt pçdçjo darbîbu",
     "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Jûs patlaban darbojaties TEKSTA REÞÎMÂ. Lai pârietu atpakaï uz GRAFISKO REÞÎMU (WYSIWIG), lietojiet [<>] pogu.",
     "__OBSOLETE__": {
+        "Cancel": "Atcelt",
         "Enlarge Editor": "Palielinât Rediìçtâju",
-        "OK": "Labi",
-        "Cancel": "Atcelt"
+        "OK": "Labi"
     }
 };

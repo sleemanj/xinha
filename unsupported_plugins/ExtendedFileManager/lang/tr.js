@@ -37,5 +37,7 @@
     "Top frame (_top)": "En üst çerçeve (_top)",
     "Width": "Genişlik",
     "Width:": "Genişlik:",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

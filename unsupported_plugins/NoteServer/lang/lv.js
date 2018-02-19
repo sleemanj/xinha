@@ -11,5 +11,7 @@
 {
     "Cancel": "Atcelt",
     "OK": "Labi",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

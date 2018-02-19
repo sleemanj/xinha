@@ -40,5 +40,7 @@
     "Vertical padding": "پرکننده عمودی",
     "Vertical:": "عمودی",
     "Width:": "طول",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

@@ -12,5 +12,7 @@
     "Cancel": "Отмена",
     "OK": "OK",
     "Replace with": "Заменить с",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

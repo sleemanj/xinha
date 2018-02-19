@@ -11,5 +11,7 @@
 {
     "HTML Tidy": "HTML Tidy",
     "Tidy failed.  Check your HTML for syntax errors.": "Tidy feilet. Sjekk HTML koden for syntaksfeil.",
-    "___ TRANSLATOR NOTE   ___": "*** HTMLTIDY IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** HTMLTIDY IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

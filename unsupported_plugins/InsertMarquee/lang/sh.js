@@ -14,5 +14,7 @@
     "OK": "OK",
     "Right": "Desno",
     "Width:": "Širina",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

@@ -9,7 +9,6 @@
 // that you want to be editing this file directly.
 //
 {
-    "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "Cancel": "Avbryt",
     "Copy": "Kopier",
     "Delete": "Fjerne",
@@ -19,5 +18,8 @@
     "Insert Image": "Sett inn bilde",
     "New Folder": "Ny mappe",
     "Save": "Lagre",
-    "You must select some text before making a new link.": "Du må markere tekst eller et bilde før du kan lage en lenke."
+    "You must select some text before making a new link.": "Du må markere tekst eller et bilde før du kan lage en lenke.",
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

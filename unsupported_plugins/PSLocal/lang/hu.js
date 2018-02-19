@@ -10,5 +10,7 @@
 //
 {
     "Cancel": "Mégsem",
-    "___ TRANSLATOR NOTE   ___": "*** PSLOCAL IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PSLOCAL IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

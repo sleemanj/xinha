@@ -11,5 +11,7 @@
 {
     "Cancel": "取消",
     "OK": "好",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

@@ -27,5 +27,7 @@
     "With Mozilla, the applet will not be visible in editor, but only in Web page after submitting.": "Com Mozilla, o applet não estará visível no editor, somente na Página Web depois do envio.",
     "Zoom": "Ampliação",
     "Zoom :": "Ampliação :",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

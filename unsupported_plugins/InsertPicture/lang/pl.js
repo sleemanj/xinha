@@ -42,5 +42,7 @@
     "Vertical padding": "Wcięcie pionowe",
     "Vertical:": "Pionowe:",
     "Width:": "Szerokość:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

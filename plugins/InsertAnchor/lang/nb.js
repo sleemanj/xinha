@@ -10,8 +10,8 @@
 //
 {
     "Anchor name": "Ankernavn (ID)",
-    "Insert Anchor": "Sett inn anker",
     "Cancel": "Avbryt",
     "Delete": "Fjerne",
+    "Insert Anchor": "Sett inn anker",
     "OK": "OK"
 };

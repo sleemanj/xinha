@@ -10,5 +10,7 @@
 //
 {
     "Cancel": "Poništi",
-    "___ TRANSLATOR NOTE   ___": "*** TEMPLATE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** TEMPLATE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

@@ -31,9 +31,8 @@
     "Spell-check": "スペルチェック",
     "Suggestions": "候補",
     "This will drop changes and quit spell checker.  Please confirm.": "変更を破棄してスペルチェッカーを終了します。よろしいいですか。",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "スペルチェックが完了しましたが、つづり間違い単語はありませんでした。すぐに閉じます...",
-        "One moment...": "あともう少し..."
+        "One moment...": "あともう少し...",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "スペルチェックが完了しましたが、つづり間違い単語はありませんでした。すぐに閉じます..."
     }
 };

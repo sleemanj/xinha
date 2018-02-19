@@ -44,12 +44,11 @@
     "Vertical padding": "vertikaler Inhaltsabstand",
     "Vertical:": "vertikal:",
     "Width:": "Breite",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "The file you are uploading doesn't have the correct extension.": "Die hochgeladene Datei ist im falschen Format.",
-        "The file you are uploading already exists.": "Eine Datei mit diesem Namen existiert schon.",
-        "The file you are uploading is to big. The max Filesize is": "Die hochgeladene Datei ist zu groß. Die maximakle Dateigröße beträgt",
         "Images on the Server:": "Bilder auf dem Server:",
-        "Please select a file to upload.": "Wählen Sie eine Datei zum hochladen aus."
+        "Please select a file to upload.": "Wählen Sie eine Datei zum hochladen aus.",
+        "The file you are uploading already exists.": "Eine Datei mit diesem Namen existiert schon.",
+        "The file you are uploading doesn't have the correct extension.": "Die hochgeladene Datei ist im falschen Format.",
+        "The file you are uploading is to big. The max Filesize is": "Die hochgeladene Datei ist zu groß. Die maximakle Dateigröße beträgt"
     }
 };

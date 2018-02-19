@@ -64,7 +64,6 @@
         "Border": "Bordar",
         "Bottom": "Botão",
         "CSS Style": "Estilo (CSS)",
-        "Style [CSS]": "Estilo [CSS]",
         "Center": "Centralizar",
         "Char": "Caracter",
         "Collapsed borders": "Bordas fechadas",
@@ -83,12 +82,13 @@
         "None": "Nenhum",
         "Right": "Direita",
         "Rules": "Regras",
+        "Split cell": "Separar célula",
+        "Style [CSS]": "Estilo [CSS]",
         "Text align": "Alinhamento do texto",
         "Top": "Topo",
         "Unset color": "Cor não definida",
         "Vertical align": "Alinhamento vertical",
         "Width": "Largura",
-        "percent": "%",
-        "Split cell": "Separar célula"
+        "percent": "%"
     }
 };

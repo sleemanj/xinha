@@ -23,7 +23,6 @@
     "Right": "Höger",
     "Top": "Överkant",
     "Width:": "Bredd:",
-    "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
         "Image Manager": "Bildbehandlare"
     }

@@ -39,8 +39,8 @@
     "Underline": "Alleviivattu",
     "Undoes your last action": "Peruuta viimeinen toiminto",
     "__OBSOLETE__": {
+        "Cancel": "Peruuta",
         "Enlarge Editor": "Suurenna editori",
-        "OK": "Hyväksy",
-        "Cancel": "Peruuta"
+        "OK": "Hyväksy"
     }
 };

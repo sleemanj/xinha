@@ -16,5 +16,7 @@
     "Same frame (_self)": "Same frame (_self)",
     "Title (tooltip)": "Pavadinimas (tooltip):",
     "Top frame (_top)": "Top frame (_top)",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

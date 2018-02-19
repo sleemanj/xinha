@@ -28,9 +28,8 @@
     "Spell-check": "Detectează greşeli",
     "Suggestions": "Sugestii",
     "This will drop changes and quit spell checker.  Please confirm.": "Doriţi să renunţaţi la modificări şi să închid spell-checker-ul?",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "Am terminat, nu am detectat nici o greşeală.  Acum închid fereastra...",
-        "One moment...": "va rog ashteptatzi ;-)"
+        "One moment...": "va rog ashteptatzi ;-)",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "Am terminat, nu am detectat nici o greşeală.  Acum închid fereastra..."
     }
 };

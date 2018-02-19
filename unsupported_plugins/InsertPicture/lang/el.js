@@ -22,5 +22,7 @@
     "Spacing": "Αποστάσεις",
     "Top": "Πάνω",
     "Width:": "Πλάτος",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

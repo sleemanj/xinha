@@ -25,5 +25,7 @@
     "Source Code": "ソースコード",
     "With Mozilla, the applet will not be visible in editor, but only in Web page after submitting.": "Mozillaではエディタ内にアプレットは表示されませんが、送信後のWebページ内では有効です。",
     "Zoom": "拡大率:",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

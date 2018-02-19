@@ -25,7 +25,6 @@
     "Speed Control": "Snelheidscontrole",
     "Text:": "Tekst:",
     "Width:": "Breedte:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
         "Insert marquee": "Tekst invoegen"
     }

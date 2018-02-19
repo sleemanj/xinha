@@ -15,5 +15,7 @@
     "Options": "Опции",
     "Preview": "Предварительный просмотр",
     "Preview the image in a new window": "Предварительный просмотр в отдельном окне",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

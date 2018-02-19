@@ -13,5 +13,7 @@
     "Remove Current Background": "Fjern gjeldende bakgrunn",
     "Set Page Background Image": "Velg bakgrunnsbilde på Siden",
     "Set page background image": "Velg bakgrunnsbilde på siden",
-    "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

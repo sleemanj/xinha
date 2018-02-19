@@ -31,5 +31,7 @@
     "Top frame (_top)": "Pagina intera (_top)",
     "Width": "Larghezza",
     "Width:": "Larghezza",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

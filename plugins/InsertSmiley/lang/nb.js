@@ -11,7 +11,7 @@
 {
     "Insert Smiley": "Sett inn smiley",
     "__OBSOLETE__": {
-        "Smiley": "Smiley",
-        "Cancel": "Avbryt"
+        "Cancel": "Avbryt",
+        "Smiley": "Smiley"
     }
 };

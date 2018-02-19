@@ -28,9 +28,8 @@
     "Spell-check": "Kontrola správnosti slov",
     "Suggestions": "Doporučení",
     "This will drop changes and quit spell checker.  Please confirm.": "Změny budou zrušeny a kontrola správnosti slov ukončena. Prosím potvrďte.",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "Kontrola správnosti slov dokončena, nebyla nalezena žádná chybná slova. Ukončování ...",
-        "One moment...": "strpení prosím ;-)"
+        "One moment...": "strpení prosím ;-)",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "Kontrola správnosti slov dokončena, nebyla nalezena žádná chybná slova. Ukončování ..."
     }
 };

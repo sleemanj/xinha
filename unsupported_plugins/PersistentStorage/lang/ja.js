@@ -19,5 +19,7 @@
     "New Folder": "新規フォルダ",
     "Save": "保存",
     "You must select some text before making a new link.": "リンクを作成するにはテキストを選択する必要があります",
-    "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

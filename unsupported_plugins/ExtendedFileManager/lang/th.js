@@ -11,5 +11,7 @@
 {
     "Cancel": "ยกเลิก",
     "OK": "ตกลง",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

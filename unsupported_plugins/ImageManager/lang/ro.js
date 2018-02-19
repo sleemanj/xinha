@@ -19,5 +19,7 @@
     "Right": "Dreapta",
     "Top": "Sus",
     "Width:": "Lăţime",
-    "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

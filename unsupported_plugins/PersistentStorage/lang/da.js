@@ -18,5 +18,7 @@
     "New Folder": "Ny mappe",
     "Save": "Gem",
     "You must select some text before making a new link.": "Vælg venligst noget tekst før du laver et nyt link.",
-    "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

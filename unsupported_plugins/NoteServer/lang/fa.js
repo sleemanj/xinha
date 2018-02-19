@@ -14,5 +14,7 @@
     "OK": "بله",
     "Preview": "پیش نمایش",
     "Preview the image in a new window": "پیش نمایش تصویر در پنجره ای جدید",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

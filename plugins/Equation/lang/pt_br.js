@@ -21,11 +21,11 @@
     "Preview": "Visualizar",
     "`&quot;text&quot;`": "`&quot;texto&quot;`",
     "__OBSOLETE__": {
+        "Attention Internet Explorer users: Please note that there is no WYSIWYG representation of the formula in the editor! You might wish to use Mozilla Firefox instead.": "Atenção usuários do Internet Explorer: Observe que não é possível representar fórmulas no editor no modo de visualização! É preferivelmente que você utilize o Mozilla Firefox.",
+        "Attention: Editing the formula in the editor is not possible, please use this dialog!": "Atenção: Não é possível editar a fórmula no editor. Ppor favor, utilize este caixa de diálogo!",
         "Equation": "Equação",
         "Insert": "Inserir",
         "Select operation": "Selecionar operação",
-        "Attention Internet Explorer users: Please note that there is no WYSIWYG representation of the formula in the editor! You might wish to use Mozilla Firefox instead.": "Atenção usuários do Internet Explorer: Observe que não é possível representar fórmulas no editor no modo de visualização! É preferivelmente que você utilize o Mozilla Firefox.",
-        "Show MathML": "Mostrar MathML",
-        "Attention: Editing the formula in the editor is not possible, please use this dialog!": "Atenção: Não é possível editar a fórmula no editor. Ppor favor, utilize este caixa de diálogo!"
+        "Show MathML": "Mostrar MathML"
     }
 };

@@ -10,12 +10,12 @@
 //
 {
     "Are you sure you wish to remove this link?": "Er du sikker på at du vil fjerne lenken?",
-    "You must select some text before making a new link.": "Du må markere tekst eller et bilde før du kan lage en lenke.",
     "Cancel": "Avbryt",
     "Insert/Modify Link": "Rediger lenke",
     "Name:": "Navn",
     "OK": "OK",
     "Size:": "Størrelse",
     "Target:": "Mål:",
-    "URL:": "Adresse:"
+    "URL:": "Adresse:",
+    "You must select some text before making a new link.": "Du må markere tekst eller et bilde før du kan lage en lenke."
 };

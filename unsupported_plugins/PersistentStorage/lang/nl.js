@@ -19,5 +19,7 @@
     "New Folder": "Nieuw map",
     "Save": "Opslaan",
     "You must select some text before making a new link.": "Selecteer de tekst welke gelinkt moet worden.",
-    "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

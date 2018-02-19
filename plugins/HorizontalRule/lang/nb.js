@@ -10,6 +10,7 @@
 //
 {
     "Alignment:": "Justering:",
+    "Cancel": "Avbryt",
     "Center": "Sentrert",
     "Color:": "Farge",
     "Height:": "Høyde:",
@@ -18,13 +19,12 @@
     "Layout": "Oppsett",
     "Left": "Venstre",
     "No shading": "Ingen skygge",
+    "OK": "OK",
     "Right": "Høyre",
     "Style": "Stil",
     "Width:": "Bredde:",
     "percent": "prosent",
     "pixels": "Piksel",
-    "Cancel": "Avbryt",
-    "OK": "OK",
     "__OBSOLETE__": {
         "Note:": "Notat",
         "To select an existing horizontal rule, a double-click may be needed.": "For å velge en horisontal linje kan det hende du må dobbeltklikke."

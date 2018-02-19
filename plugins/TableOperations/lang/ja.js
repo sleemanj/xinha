@@ -64,7 +64,7 @@
         "Baseline": "ベースライン",
         "Border": "境界線",
         "Bottom": "下",
-        "Style [CSS]": "スタイル [CSS]",
+        "CSS Style": "CSSスタイル",
         "Center": "中央",
         "Char": "文字",
         "Collapsed borders": "隣接境界線を重ねる",
@@ -85,12 +85,12 @@
         "Right": "右",
         "Rules": "区切り",
         "Split cell": "セルの分割",
+        "Style [CSS]": "スタイル [CSS]",
         "Text align": "水平位置",
         "Top": "上",
         "Unset color": "色指定解除",
         "Vertical align": "垂直位置",
         "Width": "幅",
-        "percent": "パーセント",
-        "CSS Style": "CSSスタイル"
+        "percent": "パーセント"
     }
 };

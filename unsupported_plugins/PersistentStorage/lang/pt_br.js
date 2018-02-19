@@ -21,5 +21,7 @@
     "New Folder": "Nova Pasta",
     "Save": "Salvar",
     "You must select some text before making a new link.": "Você precisa selecionar algum texto antes de criar um novo link.",
-    "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

@@ -24,5 +24,7 @@
     "Preview the image in a new window": "Voransicht des Bildes in einem neuen Fenster",
     "Source Code": "Quell-Code",
     "Zoom": "Zoom",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };
