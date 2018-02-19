@@ -61,7 +61,7 @@ Xinha.Config.prototype.SuperClean =
                'remove_fancy_quotes': {label:Xinha._lc('Replace directional quote marks with non-directional quote marks.', 'SuperClean'), checked:false},
   //additional custom filters (defined in plugins/SuperClean/filters/word.js)
                'paragraph':{label:Xinha._lc('Remove Paragraphs', 'SuperClean'), checked:false},
-               'remove_all_tags': {label:Xinha._lc('Remove All HTML Tags'), checked:false }
+               'remove_all_tags': {label:Xinha._lc('Remove All HTML Tags', 'SuperClean'), checked:false }
              },
   //if false all filters are applied, if true a dialog asks what filters should be used
   'show_dialog': true

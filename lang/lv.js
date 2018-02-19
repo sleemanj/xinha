@@ -1,41 +1,48 @@
 // I18N constants
 // LANG: "lv", ENCODING: UTF-8
-// Author: Mihai Bazon, http://dynarch.com/mishoo
-// Translated by: Janis Klavins, <janis.klavins@devia.lv>
-
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Bold": "Trekniem burtiem",
-  "Italic": "Kursîvâ",
-  "Underline": "Pasvîtrots",
-  "Strikethrough": "Pârsvîtrots",
-  "Subscript": "Novietot zem rindas",
-  "Superscript": "Novietot virs rindas",
-  "Justify Left": "Izlîdzinât pa kreisi",
-  "Justify Center": "Izlîdzinât centrâ",
-  "Justify Right": "Izlîdzinât pa labi",
-  "Justify Full": "Izlîdzinât pa visu lapu",
-  "Ordered List": "Numurçts saraksts",
-  "Bulleted List": "Saraksts",
-  "Decrease Indent": "Samazinât atkâpi",
-  "Increase Indent": "Palielinât atkâpi",
-  "Font Color": "Burtu krâsa",
-  "Background Color": "Fona krâsa",
-  "Horizontal Rule": "Horizontâla atdalîtâjsvîtra",
-  "Insert Web Link": "Ievietot hipersaiti",
-  "Insert/Modify Image": "Ievietot attçlu",
-  "Insert Table": "Ievietot tabulu",
-  "Toggle HTML Source": "Skatît HTML kodu",
-  "Enlarge Editor": "Palielinât Rediìçtâju",
-  "About this editor": "Par ðo rediìçtâju",
-  "Help using editor": "Rediìçtâja palîgs",
-  "Current style": "Patreizçjais stils",
-  "Undoes your last action": "Atcelt pçdçjo darbîbu",
-  "Redoes your last action": "Atkârtot pçdçjo darbîbu",
-  "Cut selection": "Izgriezt iezîmçto",
-  "Copy selection": "Kopçt iezîmçto",
-  "Paste from clipboard": "Ievietot iezîmçto",
-  "OK": "Labi",
-  "Cancel": "Atcelt",
-  "Path": "Ceïð",
-  "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Jûs patlaban darbojaties TEKSTA REÞÎMÂ. Lai pârietu atpakaï uz GRAFISKO REÞÎMU (WYSIWIG), lietojiet [<>] pogu."
-}
+    "About this editor": "Par ðo rediìçtâju",
+    "Background Color": "Fona krâsa",
+    "Bold": "Trekniem burtiem",
+    "Bulleted List": "Saraksts",
+    "Copy selection": "Kopçt iezîmçto",
+    "Current style": "Patreizçjais stils",
+    "Cut selection": "Izgriezt iezîmçto",
+    "Decrease Indent": "Samazinât atkâpi",
+    "Font Color": "Burtu krâsa",
+    "Help using editor": "Rediìçtâja palîgs",
+    "Horizontal Rule": "Horizontâla atdalîtâjsvîtra",
+    "Increase Indent": "Palielinât atkâpi",
+    "Insert Table": "Ievietot tabulu",
+    "Insert Web Link": "Ievietot hipersaiti",
+    "Insert/Modify Image": "Ievietot attçlu",
+    "Italic": "Kursîvâ",
+    "Justify Center": "Izlîdzinât centrâ",
+    "Justify Full": "Izlîdzinât pa visu lapu",
+    "Justify Left": "Izlîdzinât pa kreisi",
+    "Justify Right": "Izlîdzinât pa labi",
+    "Ordered List": "Numurçts saraksts",
+    "Paste from clipboard": "Ievietot iezîmçto",
+    "Path": "Ceïð",
+    "Redoes your last action": "Atkârtot pçdçjo darbîbu",
+    "Strikethrough": "Pârsvîtrots",
+    "Subscript": "Novietot zem rindas",
+    "Superscript": "Novietot virs rindas",
+    "Toggle HTML Source": "Skatît HTML kodu",
+    "Underline": "Pasvîtrots",
+    "Undoes your last action": "Atcelt pçdçjo darbîbu",
+    "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Jûs patlaban darbojaties TEKSTA REÞÎMÂ. Lai pârietu atpakaï uz GRAFISKO REÞÎMU (WYSIWIG), lietojiet [<>] pogu.",
+    "__OBSOLETE__": {
+        "Enlarge Editor": "Palielinât Rediìçtâju",
+        "OK": "Labi",
+        "Cancel": "Atcelt"
+    }
+};

@@ -1,21 +1,32 @@
 // I18N constants
 // LANG: "nb", ENCODING: UTF-8
-// translated: Kim Steinhaug, http://www.steinhaug.com/, kim@steinhaug.com
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Insert/edit horizontal rule": "Sett inn/ rediger horisontal linje",
-  "Horizontal Rule": "Horisontal linje",
-  "Layout": "Oppsett",
-  "Width:": "Bredde:",
-  "percent": "prosent",
-  "pixels": "Piksel",
-  "Height:": "Høyde:",
-  "Alignment:": "Justering:",
-  "Left": "Venstre",
-  "Center": "Sentrert",
-  "Right": "Høyre",
-  "Style": "Stil",
-  "Color:": "Farge",
-  "No shading": "Ingen skygge",
-  "Note:": "Notat",
-  "To select an existing horizontal rule, a double-click may be needed.": "For å velge en horisontal linje kan det hende du må dobbeltklikke."
+    "Alignment:": "Justering:",
+    "Center": "Sentrert",
+    "Color:": "Farge",
+    "Height:": "Høyde:",
+    "Horizontal Rule": "Horisontal linje",
+    "Insert/edit horizontal rule": "Sett inn/ rediger horisontal linje",
+    "Layout": "Oppsett",
+    "Left": "Venstre",
+    "No shading": "Ingen skygge",
+    "Right": "Høyre",
+    "Style": "Stil",
+    "Width:": "Bredde:",
+    "percent": "prosent",
+    "pixels": "Piksel",
+    "Cancel": "Avbryt",
+    "OK": "OK",
+    "__OBSOLETE__": {
+        "Note:": "Notat",
+        "To select an existing horizontal rule, a double-click may be needed.": "For å velge en horisontal linje kan det hende du må dobbeltklikke."
+    }
 };

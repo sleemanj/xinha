@@ -1,11 +1,16 @@
 // I18N constants
 // LANG: "tr", ENCODING: UTF-8
-// Sponsored by http://www.km.co.at/
-// Author: Serdar Domurcuk, <serdar.domurcuk@km.co.at>
-// (c) Knowledge Markets 2011
-// Distributed under the same terms as HTMLArea itself.
-// This notice MUST stay intact for use (see license.txt).
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Insert special character": "Özel karakter ekle",
-  "Cancel": "İptal"
-}
+    "Insert special character": "Özel karakter ekle",
+    "__OBSOLETE__": {
+        "Cancel": "İptal"
+    }
+};

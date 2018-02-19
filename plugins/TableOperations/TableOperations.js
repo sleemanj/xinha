@@ -590,6 +590,33 @@ TableOperations.btnList = [
   ["cell-split",         ["td[colSpan!=1,rowSpan!=1]","th[colSpan!=1,rowSpan!=1]"], "Split cell"]
 ];
 
+/* 
+ This is just to convince the lc_parse_strings.php to collect
+ these strings, they are actually translated in the register button 
+ function.
+
+ Xinha._lc("Table properties", 'TableOperations'); 
+
+ Xinha._lc("Row properties", 'TableOperations'); 
+ Xinha._lc("Insert row before", 'TableOperations'); 
+ Xinha._lc("Insert row after", 'TableOperations'); 
+ Xinha._lc("Delete row", 'TableOperations'); 
+ Xinha._lc("Split row", 'TableOperations'); 
+
+ Xinha._lc("Insert column before", 'TableOperations'); 
+ Xinha._lc("Insert column after", 'TableOperations'); 
+ Xinha._lc("Delete column", 'TableOperations'); 
+ Xinha._lc("Split column", 'TableOperations'); 
+
+ Xinha._lc("Cell properties", 'TableOperations'); 
+ Xinha._lc("Insert cell before", 'TableOperations'); 
+ Xinha._lc("Insert cell after", 'TableOperations'); 
+ Xinha._lc("Delete cell", 'TableOperations'); 
+ Xinha._lc("Merge cells", 'TableOperations'); 
+ Xinha._lc("Merge cells", 'TableOperations'); 
+
+*/
+
 TableOperations.prototype.dialogMerge = function(merge_func, cell_index, row_index) {
   var table = this.getClosest("table");
   var self = this;

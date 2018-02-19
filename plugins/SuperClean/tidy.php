@@ -137,7 +137,7 @@
             ),
           'http://infohound.net/tidy/tidy.pl');
 
-      if(preg_match('/<a href="([^"]+)" title="Save the tidied HTML/', $res_1, $m))
+      if(preg_match('/<a href="([^"]+)" title'.'="Save the tidied HTML/', $res_1, $m))
       {
         $tgt = strtr($m[1], array_flip(get_html_translation_table(HTML_ENTITIES)));
         $content = implode('', file('http://infohound.net/tidy/' . $tgt));

@@ -1,11 +1,18 @@
 // I18N constants
-// LANG: "nl", ENCODING: UTF-8 | ISO-8859-1
-// Author: Udo Schmal (gocher), http://www.schaffrath-neuemedien.de/, udo.schmal@t-online.de
+// LANG: "nl", ENCODING: UTF-8
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "language select": "Taalkeuze",
-  "&mdash; language &mdash;":	"&mdash; taal &mdash;",
-  "Greek": "Grieks",
-  "English": "Engels",
-  "French": "Frans",
-  "Latin": "Latijn"
+    "&mdash; language &mdash;": "&mdash; taal &mdash;",
+    "English": "Engels",
+    "French": "Frans",
+    "Greek": "Grieks",
+    "Latin": "Latijn",
+    "language select": "Taalkeuze"
 };

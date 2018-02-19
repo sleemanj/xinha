@@ -148,7 +148,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   var fieldset = doc.createElement("fieldset");
   var legend = doc.createElement("legend");
   fieldset.appendChild(legend);
-  legend.innerHTML = Xinha._lc("Layout", "TableOperations");
+  legend.innerHTML = Xinha._lc("Layout", "InlineStyler");
   var table = doc.createElement("table");
   fieldset.appendChild(table);
   table.style.width = "100%";
@@ -165,7 +165,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
     td = doc.createElement("td");
     td.className = "label";
     tr.appendChild(td);
-    td.innerHTML = Xinha._lc("Float", "TableOperations") + ":";
+    td.innerHTML = Xinha._lc("Float", "InlineStyler") + ":";
     td = doc.createElement("td");
     tr.appendChild(td);
     select = doc.createElement("select");
@@ -174,12 +174,19 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
     this.inputs.styles['float'] = select;
     
     options = ["None", "Left", "Right"];
+    /* For lc_parse_strings.php
+   
+      Xinha._lc("None", "InlineStyler");
+      Xinha._lc("Left", "InlineStyler");
+      Xinha._lc("Right", "InlineStyler");
+      
+    */
     for (var i = 0; i < options.length; ++i) 
     {
       var Val = options[i];
       var val = options[i].toLowerCase();
       option = doc.createElement("option");
-      option.innerHTML = Xinha._lc(Val, "TableOperations");
+      option.innerHTML = Xinha._lc(Val, "InlineStyler");
       option.value = val;
       if (Xinha.is_ie) {
         option.selected = (("" + el.style.styleFloat).toLowerCase() == val);
@@ -196,7 +203,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   td = doc.createElement("td");
   td.className = "label";
   tr.appendChild(td);
-  td.innerHTML = Xinha._lc("Width", "TableOperations") + ":";
+  td.innerHTML = Xinha._lc("Width", "InlineStyler") + ":";
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
@@ -211,19 +218,19 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   select.name = this.dialog.createId("widthUnit");
   this.inputs.aux['widthUnit'] = select;
   option = doc.createElement("option");
-  option.innerHTML = Xinha._lc("percent", "TableOperations");
+  option.innerHTML = Xinha._lc("percent", "InlineStyler");
   option.value = "%";
   option.selected = /%/.test(el.style.width);
   select.appendChild(option);
   option = doc.createElement("option");
-  option.innerHTML = Xinha._lc("pixels", "TableOperations");
+  option.innerHTML = Xinha._lc("pixels", "InlineStyler");
   option.value = "px";
   option.selected = /px/.test(el.style.width);
   select.appendChild(option);
   td.appendChild(select);
   
   select.style.marginRight = "0.5em";
-  td.appendChild(doc.createTextNode(Xinha._lc("Text align", "TableOperations") + ":"));
+  td.appendChild(doc.createTextNode(Xinha._lc("Text align", "InlineStyler") + ":"));
   select = doc.createElement("select");
   select.name = this.dialog.createId("textAlign");
   select.style.marginLeft = select.style.marginRight = "0.5em";
@@ -234,6 +241,18 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   {
     options.push("Char");
   }
+  
+  /* For lc_parse_strings.php
+  
+    Xinha._lc("Left", "InlineStyler");
+    Xinha._lc("Center", "InlineStyler");
+    Xinha._lc("Right", "InlineStyler");
+    Xinha._lc("Justify", "InlineStyler");
+    Xinha._lc("-", "InlineStyler");
+    Xinha._lc("Char", "InlineStyler");
+    
+  */
+  
   input = doc.createElement("input");
   this.inputs.aux['textAlignChar'] = input;
   input.name= this.dialog.createId("textAlignChar");
@@ -247,7 +266,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
     var val = Val.toLowerCase();
     option = doc.createElement("option");
     option.value = val;
-    option.innerHTML = Xinha._lc(Val, "TableOperations");
+    option.innerHTML = Xinha._lc(Val, "InlineStyler");
     option.selected = ((el.style.textAlign.toLowerCase() == val) || (el.style.textAlign == "" && Val == "-"));
     select.appendChild(option);
   }
@@ -272,7 +291,7 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   td = doc.createElement("td");
   td.className = "label";
   tr.appendChild(td);
-  td.innerHTML = Xinha._lc("Height", "TableOperations") + ":";
+  td.innerHTML = Xinha._lc("Height", "InlineStyler") + ":";
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
@@ -287,32 +306,41 @@ Xinha.InlineStyler.prototype.createStyleLayoutFieldset = function()
   select.name = this.dialog.createId("heightUnit");
   this.inputs.aux['heightUnit'] = select;
   option = doc.createElement("option");
-  option.innerHTML = Xinha._lc("percent", "TableOperations");
+  option.innerHTML = Xinha._lc("percent", "InlineStyler");
   option.value = "%";
   option.selected = /%/.test(el.style.height);
   select.appendChild(option);
   option = doc.createElement("option");
-  option.innerHTML = Xinha._lc("pixels", "TableOperations");
+  option.innerHTML = Xinha._lc("pixels", "InlineStyler");
   option.value = "px";
   option.selected = /px/.test(el.style.height);
   select.appendChild(option);
   td.appendChild(select);
   
   select.style.marginRight = "0.5em";
-  td.appendChild(doc.createTextNode(Xinha._lc("Vertical align", "TableOperations") + ":"));
+  td.appendChild(doc.createTextNode(Xinha._lc("Vertical align", "InlineStyler") + ":"));
   select = doc.createElement("select");
   select.name = this.dialog.createId("verticalAlign");
   this.inputs.styles['verticalAlign'] = select;
   select.style.marginLeft = "0.5em";
   td.appendChild(select);
   options = ["Top", "Middle", "Bottom", "Baseline", "-"];
+  /* For lc_parse_strings.php
+   
+   Xinha._lc("Top", "InlineStyler");
+   Xinha._lc("Middle", "InlineStyler");
+   Xinha._lc("Bottom", "InlineStyler");
+   Xinha._lc("Baseline", "InlineStyler");
+   Xinha._lc("-", "InlineStyler");
+   
+   */
   for (var i = 0; i < options.length; ++i) 
   {
     var Val = options[i];
     var val = Val.toLowerCase();
     option = doc.createElement("option");
     option.value = val;
-    option.innerHTML = Xinha._lc(Val, "TableOperations");
+    option.innerHTML = Xinha._lc(Val, "InlineStyler");
     option.selected = ((el.style.verticalAlign.toLowerCase() == val) || (el.style.verticalAlign == "" && Val == "-"));
     select.appendChild(option);
   }
@@ -332,7 +360,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   var fieldset = doc.createElement("fieldset");
   var legend = doc.createElement("legend");
   fieldset.appendChild(legend);
-  legend.innerHTML = Xinha._lc("CSS Style", "TableOperations");
+  legend.innerHTML = Xinha._lc("CSS Style", "InlineStyler");
   var table = doc.createElement("table");
   fieldset.appendChild(table);
   table.style.width = "100%";
@@ -346,7 +374,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   td.className = "label";
-  td.innerHTML = Xinha._lc("Background", "TableOperations") + ":";
+  td.innerHTML = Xinha._lc("Background", "InlineStyler") + ":";
   td = doc.createElement("td");
   tr.appendChild(td);
 
@@ -359,7 +387,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td.appendChild(input);
   new Xinha.colorPicker.InputBinding(input)
   
-  td.appendChild(doc.createTextNode(" " + Xinha._lc("Image URL", "TableOperations") + ": "));
+  td.appendChild(doc.createTextNode(" " + Xinha._lc("Image URL", "InlineStyler") + ": "));
   input = doc.createElement("input");
   input.name = this.dialog.createId("backgroundImage");
   input.type = "text";
@@ -374,7 +402,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   td.className = "label";
-  td.innerHTML = Xinha._lc("FG Color", "TableOperations") + ":";
+  td.innerHTML = Xinha._lc("FG Color", "InlineStyler") + ":";
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
@@ -397,7 +425,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td = doc.createElement("td");
   tr.appendChild(td);
   td.className = "label";
-  td.innerHTML = Xinha._lc("Border", "TableOperations") + ":";
+  td.innerHTML = Xinha._lc("Border", "InlineStyler") + ":";
   td = doc.createElement("td");
   tr.appendChild(td);
   input = doc.createElement("input");
@@ -462,7 +490,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   td.appendChild(input);
   input.style.marginRight = "0.5em";
   var span = doc.createElement("span");
-  span.innerHTML = Xinha._lc("pixels", "TableOperations");
+  span.innerHTML = Xinha._lc("pixels", "InlineStyler");
   td.appendChild(span);
   borderFields.push(span);
   
@@ -505,7 +533,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
     tr.appendChild(td);
     var label = doc.createElement("label");
     label.htmlFor = "f_st_borderCollapse";
-    label.innerHTML = Xinha._lc("Collapsed borders", "TableOperations");
+    label.innerHTML = Xinha._lc("Collapsed borders", "InlineStyler");
     td.appendChild(label);
   }
   
@@ -514,7 +542,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   // 	td = doc.createElement("td");
   // 	td.className = "label";
   // 	tr.appendChild(td);
-  // 	td.innerHTML = Xinha._lc("Margin", "TableOperations") + ":";
+  // 	td.innerHTML = Xinha._lc("Margin", "InlineStyler") + ":";
   // 	td = doc.createElement("td");
   // 	tr.appendChild(td);
   // 	input = doc.createElement("input");
@@ -523,7 +551,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   // 	input.name = "f_st_margin";
   // 	td.appendChild(input);
   // 	input.style.marginRight = "0.5em";
-  // 	td.appendChild(doc.createTextNode(Xinha._lc("Padding", "TableOperations") + ":"));
+  // 	td.appendChild(doc.createTextNode(Xinha._lc("Padding", "InlineStyler") + ":"));
   
   // 	input = doc.createElement("input");
   // 	input.type = "text";
@@ -532,7 +560,7 @@ Xinha.InlineStyler.prototype.createStyleFieldset = function()
   // 	td.appendChild(input);
   // 	input.style.marginLeft = "0.5em";
   // 	input.style.marginRight = "0.5em";
-  // 	td.appendChild(doc.createTextNode(Xinha._lc("pixels", "TableOperations")));
+  // 	td.appendChild(doc.createTextNode(Xinha._lc("pixels", "InlineStyler")));
   
   return fieldset;
 };

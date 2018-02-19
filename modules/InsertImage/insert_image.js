@@ -42,7 +42,7 @@ function InsertImage(editor) {
   }
   
 InsertImage.prototype._lc = function(string) {
-	return Xinha._lc(string, 'Xinha');
+	return Xinha._lc(string, 'InsertImage');
 };
 
 InsertImage.prototype.onGenerateOnce = function()

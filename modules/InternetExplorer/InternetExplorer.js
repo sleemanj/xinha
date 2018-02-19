@@ -116,8 +116,8 @@ InternetExplorer.prototype.onKeyPress = function(ev)
       if(editor.config.tabSpanClass)
       {
         if(!ev.shiftKey)
-        {
-          editor.insertHTML('<span class="'+editor.config.tabSpanClass+'">'+editor.config.tabSpanContents+'</span>');
+        {                  //  v-- Avoid lc_parse_strings.php
+          editor.insertHTML('<'+'span class="'+editor.config.tabSpanClass+'">'+editor.config.tabSpanContents+'</span>');
           var s = editor.getSelection();
           var r = editor.createRange(s);                   
           r.collapse(true);

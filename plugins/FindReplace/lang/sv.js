@@ -1,27 +1,32 @@
 // I18N constants
-// LANG: "sv" (Swedish), ENCODING: UTF-8
-// translated: Erik Dalén, <dalen@jpl.se>
+// LANG: "sv", ENCODING: UTF-8
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  // messages
-  "Substitute this occurrence?": "Ersätt denna?",
-  "Enter the text you want to find": "Skriv in text du vill söka",
-  "Inform a replacement word": "Skriv in ett ersättningsord",
-  "found items": "förekomster funna i sökningen",
-  "replaced items": "förekomster erstatta",
-  "found item": "Träff",
-  "replaced item": "erstatt träff",
-  "not found": "inte funnet",
-  // window
-  "Find and Replace": "Sök och ersätt",
-  "Search for:": "Sök efter:",
-  "Replace with:": "Ersätt med:",
-  "Options": "Välj", 
-  "Whole words only": "Bara hela ord",
-  "Case sensitive search": "Skilj mellan stora och små bokstäver",
-  "Substitute all occurrences": "Erstatt alla träffar",
-  "Clear": "Töm",
-  "Highlight": "Markera",
-  "Undo": "Tillbaka",
-  "Next": "Nästa",
-  "Done": "Färdig"
+    "Case sensitive search": "Skilj mellan stora och små bokstäver",
+    "Clear": "Töm",
+    "Done": "Färdig",
+    "Enter the text you want to find": "Skriv in text du vill söka",
+    "Find and Replace": "Sök och ersätt",
+    "Highlight": "Markera",
+    "Inform a replacement word": "Skriv in ett ersättningsord",
+    "Next": "Nästa",
+    "Options": "Välj",
+    "Replace with:": "Ersätt med:",
+    "Search for:": "Sök efter:",
+    "Substitute all occurrences": "Erstatt alla träffar",
+    "Substitute this occurrence?": "Ersätt denna?",
+    "Undo": "Tillbaka",
+    "Whole words only": "Bara hela ord",
+    "found item": "Träff",
+    "found items": "förekomster funna i sökningen",
+    "not found": "inte funnet",
+    "replaced item": "erstatt träff",
+    "replaced items": "förekomster erstatta"
 };

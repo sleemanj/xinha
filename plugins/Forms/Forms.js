@@ -333,7 +333,8 @@ Forms.prototype.buttonPress = function(editor,button_id, node) {
             text = '<select' + text + '>';
             var optionsList =  param["f_options"];
             for (i=0; i<= optionsList.length-1; i++) {
-              text += '<option value="'+optionsList[i].value+'">'+optionsList[i].text+'</option>';
+                     //  v-- Avoid lc_parse_strings.php
+              text += '<'+'option value="'+optionsList[i].value+'">'+optionsList[i].text+'</option>';
             }
             text += '</select>';
           } else if(type == "label") {

@@ -147,7 +147,7 @@
     td.unselectable = "on";
     td.style.MozUserSelect = "none";
     td.style.cursor = "default";
-    td.appendChild(document.createTextNode(Xinha._lc('Click a color...')));
+    td.appendChild(document.createTextNode(Xinha._lc('Click a color...', 'ColorPicker')));
     td.style.borderBottom = '1px solid WindowFrame';
     tr.appendChild(td);
     td = null;
@@ -162,7 +162,7 @@
     
 
     var but = document.createElement('div');
-    but.title = Xinha._lc("Close");
+    but.title = Xinha._lc("Close", 'ColorPicker');
     but.className= 'buttonColor';
     but.style.height = '11px';
     but.style.width = '11px';
@@ -212,7 +212,7 @@
     this.backSample.fontSize = 'x-small';
 
     this.foreSample = document.createElement('div');
-    this.foreSample.appendChild(document.createTextNode(Xinha._lc('Sample')));
+    this.foreSample.appendChild(document.createTextNode(Xinha._lc('Sample', 'ColorPicker')));
     this.foreSample.style.fontWeight = 'bold';
     this.foreSample.style.fontFamily = 'small-caption,caption,sans-serif';
     this.foreSample.fontSize = 'x-small';
@@ -698,7 +698,7 @@
         {
         var div = document.createElement('div');
         var label = document.createElement('label');
-        label.appendChild(document.createTextNode(Xinha._lc('Web Safe: ')));
+        label.appendChild(document.createTextNode(Xinha._lc('Web Safe: ', 'ColorPicker')));
 
         this.constrain_cb.onclick = function() { picker.pick_color(); };
         label.appendChild(this.constrain_cb);
@@ -713,7 +713,7 @@
         var label = document.createElement('label');
         label.style.fontFamily = 'small-caption,caption,sans-serif';
         label.style.fontSize = 'x-small';
-        label.appendChild(document.createTextNode(Xinha._lc('Color: ')));
+        label.appendChild(document.createTextNode(Xinha._lc('Color: ', 'ColorPicker')));
         label.appendChild(this.chosenColor);
         div.appendChild(label);
         var but = document.createElement('span');
@@ -724,7 +724,7 @@
         but.style.padding = '0px 4px';
         but.style.cursor = 'pointer';
         but.onclick = function() { Xinha.colorPicker.remember(picker.chosenColor.value, picker.savecolors); picker.callback(picker.chosenColor.value); picker.close(); };
-        but.appendChild(document.createTextNode(Xinha._lc('OK')));
+        but.appendChild(document.createTextNode(Xinha._lc('OK', 'ColorPicker')));
         but.align = 'center';
         div.appendChild(but);
         td.appendChild(div);

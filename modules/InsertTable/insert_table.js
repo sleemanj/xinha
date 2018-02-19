@@ -46,7 +46,7 @@ function InsertTable(editor) {
 }
 
 InsertTable.prototype._lc = function(string) {
-	return Xinha._lc(string, 'Xinha');
+	return Xinha._lc(string, 'InsertTable');
 };
 
 

@@ -1,15 +1,29 @@
 // I18N constants
-// LANG: "de", ENCODING: UTF-8 | ISO-8859-1
-// Author: Udo Schmal (gocher), http://www.schaffrath-neuemedien.de/, udo.schmal@t-online.de
+// LANG: "de", ENCODING: UTF-8
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Insert scrolling marquee": "Marquee einfügen",
-  "Insert marquee": "Marquee einfügen",
-  "Direction:": "Ausrichtung:",
-  "Behavior:": "Bewegung:",
-  "Text:": "Text:",
-  "Background-Color:": "Hintergrundfarbe:",
-  "Width:": "Breite:",
-  "Height:": "Höhe:",
-  "Speed Control": "Geschwindigkeitseinstellungen",
-  "Cancel": "Abbrechen"
+    "Background-Color:": "Hintergrundfarbe:",
+    "Behavior:": "Bewegung:",
+    "Cancel": "Abbrechen",
+    "Direction:": "Ausrichtung:",
+    "Height:": "Höhe:",
+    "Insert scrolling marquee": "Marquee einfügen",
+    "Left": "links",
+    "Name": "Name",
+    "OK": "OK",
+    "Right": "rechts",
+    "Speed Control": "Geschwindigkeitseinstellungen",
+    "Text:": "Text:",
+    "Width:": "Breite:",
+    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
+    "__OBSOLETE__": {
+        "Insert marquee": "Marquee einfügen"
+    }
 };

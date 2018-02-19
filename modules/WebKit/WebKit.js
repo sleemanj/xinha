@@ -193,8 +193,8 @@ WebKit.prototype.onKeyPress = function(ev)
       if(editor.config.tabSpanClass)
       {
         if(!ev.shiftKey)
-        {
-          editor.insertHTML('<span class="'+editor.config.tabSpanClass+'">'+editor.config.tabSpanContents+'</span>');
+        {                  //  v-- Avoid lc_parse_strings.php
+          editor.insertHTML('<'+'span class="'+editor.config.tabSpanClass+'">'+editor.config.tabSpanContents+'</span>');
           var s = editor.getSelection().collapseToEnd();
         }
         else
@@ -354,7 +354,7 @@ WebKit.prototype.onExecCommand = function(cmdID, UI, param)
   switch(cmdID)
   {
     case 'paste':
-      alert(Xinha._lc("The Paste button does not work in the Safari browser for security reasons. Press CTRL-V on your keyboard to paste directly."));
+      alert(Xinha._lc("The Paste button does not work in this browser for security reasons. Press CTRL-V on your keyboard to paste directly.", "WebKit"));
       return true; // Indicate paste is done, stop command being issued to browser by Xinha.prototype.execCommand
     break;
     case 'removeformat':
@@ -609,6 +609,7 @@ Xinha.prototype.restoreSelection = function(savedSelection)
  
 Xinha.prototype.selectNodeContents = function(node, collapseToStart)
 {
+  if(!node) return; // I've seen this once
   this.focusEditor();
   this.forceRedraw();
   var range;

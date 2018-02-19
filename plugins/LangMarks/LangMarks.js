@@ -58,11 +58,11 @@ LangMarks._pluginInfo = {
 };
 
 Xinha.Config.prototype.LangMarks = {
-  'languages': [
-    { name:"Greek",   code: "el" } ,
-    { name:"English", code: "en" },
-    { name:"French",  code: "fr" } ,
-    { name:"Latin" ,  code: "la" }  
+  'languages': [                     // Below are so lc_parse_strings.php finds them
+    { name:"Greek",   code: "el" } , // Xinha._lc('Greek', 'LangMarks')
+    { name:"English", code: "en" },  // Xinha._lc('English', 'LangMarks')
+    { name:"French",  code: "fr" } , // Xinha._lc('French', 'LangMarks')
+    { name:"Latin" ,  code: "la" }   // Xinha._lc('Latin', 'LangMarks')
   ],
   
   'attributes': [

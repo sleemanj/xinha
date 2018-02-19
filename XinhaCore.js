@@ -3883,7 +3883,7 @@ Xinha.loadPlugin = function(pluginName, callback, url)
   {
     return;
   }
-  Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin="+pluginName+"$"));
+  Xinha.setLoadingMessage (Xinha._lc("Loading plugin $plugin", 'Xinha', {plugin: pluginName}));
 
   // Might already be loaded
   if ( typeof Xinha.getPluginConstructor(pluginName) != 'undefined' )
@@ -8167,6 +8167,7 @@ Xinha._loadlang = function(context,url)
   }
   else
   {
+    Xinha.debugMsg("Unable to read Language File '"+url+"' or file blank, either does not exist (which is probably ok) or permissions issue (which is probably not ok).", 'info');
     lang = {};
   }
 
@@ -8219,6 +8220,7 @@ Xinha._lc = function(string, context, replace)
   }
   else
   {
+    
     if ( typeof Xinha._lc_catalog == 'undefined' )
     {
       Xinha._lc_catalog = [ ];
@@ -8229,6 +8231,50 @@ Xinha._lc = function(string, context, replace)
       context = 'Xinha';
     }
 
+    // Allow to provide an explicitly merged translation file for testing translations 
+    // (and for easy using a merged translation set)    
+    if ( typeof _editor_lang_merged_file == 'string' )
+    {
+      // Note that if this fails to load (doesn't exist)
+      //  then we will get an empty object
+      Xinha._lc_catalog = Xinha._loadlang(null, _editor_lang_merged_file);
+      _editor_lang_merged_file = null;
+      
+      // Resolve the __NEW_TRANSLATIONS__ section by pushing it's translations
+      //  back one level into the catalog proper
+      if(typeof Xinha._lc_catalog['__NEW_TRANSLATIONS__'])
+      {
+        for(var moduleName in Xinha._lc_catalog['__NEW_TRANSLATIONS__'])
+        {
+          for(var englishString in Xinha._lc_catalog['__NEW_TRANSLATIONS__'][moduleName])
+          {
+            var translatedString = Xinha._lc_catalog['__NEW_TRANSLATIONS__'][moduleName][englishString];
+            if(translatedString.match(/<<([A-Za-z0-9_]+)(:.*)?>>/))
+            {
+              var linkedModule = RegExp.$1;
+              if(typeof Xinha._lc_catalog[linkedModule] != 'undefined' && typeof Xinha._lc_catalog[linkedModule][englishString] == 'string')
+              {
+                translatedString = Xinha._lc_catalog[linkedModule][englishString];
+              }
+              else
+              {
+                translatedString = '';
+              }
+            }
+            
+            if(translatedString.length)
+            {
+              if(typeof Xinha._lc_catalog[moduleName] == 'undefined')
+              {
+                Xinha._lc_catalog[moduleName] = { };
+              }
+              Xinha._lc_catalog[moduleName][englishString] = translatedString;
+            }
+          }
+        }
+      }
+    }
+    
     if ( typeof Xinha._lc_catalog[context] == 'undefined' )
     {
       Xinha._lc_catalog[context] = Xinha._loadlang(context,url);
@@ -8262,10 +8308,32 @@ Xinha._lc = function(string, context, replace)
           ret = string;
         }
       }
-      else
+      else 
       {
-        //if string is not found and context is not Xinha try if it is in Xinha
-        return Xinha._lc(string, 'Xinha', replace);
+        // See if the Xinha context has it, if so use that as it must be 
+        //  something more global probably
+        if(typeof Xinha._lc_catalog['Xinha'][key] != 'undefined')
+        {
+          return  Xinha._lc(string, 'Xinha', replace);
+        }
+        
+        // See if we have it in our OBSOLETE, if so use that
+        //  it might be that this means we obsoleted something mistakenly
+        //  because lc_parse_strings.php didn't find it
+        else if( typeof Xinha._lc_catalog[context]['__OBSOLETE__'] != 'undefined'
+         && typeof Xinha._lc_catalog[context]['__OBSOLETE__'][key] != 'undefined' )
+        {
+          ret = Xinha._lc_catalog[context]['__OBSOLETE__'][key];
+          Xinha.debugMsg("Using a translation which is marked __OBSOLETE__, likely lc_parse_strings.php did not pick something up that it should have. " + context + ": " + key, 'warn');
+        }
+        
+        // If string is not found and context is not Xinha, fall back to Xinha
+        //  now and it will do some funky stuff (above) I'm not sure exactly
+        //  what the purpose of it (passing an object as string) was
+        else 
+        {
+          return Xinha._lc(string, 'Xinha', replace);
+        }
       }
     }
     else

@@ -1,35 +1,51 @@
 // I18N constants
 // LANG: "nl", ENCODING: UTF-8
-// Author: Maarten Molenschot, maarten@nrgmm.nl
-
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-  "Insert Image": "Afbeelding invoegen",
-  "Image Preview:": "Afbeeldingsvoorbeeld:",
-  "Image URL:": "Afbeelding URL:",
-  "Preview": "Voorbeeld",
-  "Alternate text:": "Alternatieve tekst:",
-  "Layout": "Weergave",
-  "Alignment:": "Positie:",
-  "Border thickness:": "Rand dikte:",
-  "Spacing": "Marge",
-  "Horizontal:": "Horizontaal:",
-  "Vertical:": "Verticaal:",
-  "The file you are uploading doesn't have the correct extension.": "Het bestand dat is geupload heeft niet de juiste extentie.",
-  "The file you are uploading already exists.": "Het bestand dat is geupload bestaat al.",
-  "The file you are uploading is to big. The max Filesize is": "Het bestand dat is geupload is te groot. De maximaal toegestane grootte is:",
-  "Images on the Server:": "Afbeeldingen op de server:",
-  "Please select a file to upload.": "Selecteer een bestand om te uploaden",
-  "Upload file": "Upload bestand",
-  "Size": "Grootte",
-  "Width:": "Breedte:",
-  "Height:": "Hoogte:",
-  // tooltips
-  "Enter the image URL here":"Afbeeldingslocatie (URL)",
-  "Preview the image in a new window": "Afbeelding bekijken in nieuw venster",
-  "For browsers that don't support images":"Voor browsers welke geen afbeeldingen ondersteunen",
-  "Positioning of this image": "Positie van de afbeelding",
-  "Leave empty for no border": "Leeg voor geen rand",
-  "Leave empty for not defined": "Leeg voor niet gedefinieerd",
-  "Horizontal padding": "Horizontale ruimte",
-  "Vertical padding": "Verticale ruimte"
+    "Alignment:": "Positie:",
+    "Alternate text:": "Alternatieve tekst:",
+    "Baseline": "Basis",
+    "Border thickness:": "Rand dikte:",
+    "Bottom": "Onder",
+    "Cancel": "Annuleren",
+    "Enter the image URL here": "Afbeeldingslocatie (URL)",
+    "For browsers that don't support images": "Voor browsers welke geen afbeeldingen ondersteunen",
+    "Height:": "Hoogte:",
+    "Horizontal padding": "Horizontale ruimte",
+    "Horizontal:": "Horizontaal:",
+    "Image Preview:": "Afbeeldingsvoorbeeld:",
+    "Image URL:": "Afbeelding URL:",
+    "Insert Image": "Afbeelding invoegen",
+    "Layout": "Weergave",
+    "Leave empty for no border": "Leeg voor geen rand",
+    "Leave empty for not defined": "Leeg voor niet gedefinieerd",
+    "Left": "Links",
+    "Middle": "Midden",
+    "OK": "OK",
+    "Positioning of this image": "Positie van de afbeelding",
+    "Preview": "Voorbeeld",
+    "Preview the image in a new window": "Afbeelding bekijken in nieuw venster",
+    "Right": "Rechts",
+    "Size": "Grootte",
+    "Spacing": "Marge",
+    "Top": "Boven",
+    "Upload file": "Upload bestand",
+    "Vertical padding": "Verticale ruimte",
+    "Vertical:": "Verticaal:",
+    "Width:": "Breedte:",
+    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
+    "__OBSOLETE__": {
+        "The file you are uploading doesn't have the correct extension.": "Het bestand dat is geupload heeft niet de juiste extentie.",
+        "The file you are uploading already exists.": "Het bestand dat is geupload bestaat al.",
+        "The file you are uploading is to big. The max Filesize is": "Het bestand dat is geupload is te groot. De maximaal toegestane grootte is:",
+        "Images on the Server:": "Afbeeldingen op de server:",
+        "Please select a file to upload.": "Selecteer een bestand om te uploaden"
+    }
 };

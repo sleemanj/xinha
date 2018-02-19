@@ -1,77 +1,70 @@
-﻿// I18N constants
-
-// LANG: "sh", ENCODING: UTF-8 | ISO-8859-5
-// Author: Ljuba Ranković, http://www.rankovic.net/ljubar
-
-// FOR TRANSLATORS:
+// I18N constants
+// LANG: "sr", ENCODING: UTF-8
 //
-//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
-//      (at least a valid email address)
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
 //
-//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
-//      (if this is not possible, please include a comment
-//       that states what encoding is necessary.)
-
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-		"Bold": "Масно",
-		"Italic": "Курзив",
-		"Underline": "Подвучено",
-		"Strikethrough": "Прецртано",
-		"Subscript": "Индекс-текст",
-		"Superscript": "Експонент-текст",
-		"Justify Left": "Равнање улево",
-		"Justify Center": "Равнање по симетрали",
-		"Justify Right": "Равнање удесно",
-		"Justify Full": "Пуно равнање",
-		"Ordered List": "Листа са редним бројевима",
-		"Bulleted List": "Листа са симболима",
-		"Decrease Indent": "Смањи увлачење",
-		"Increase Indent": "Повећај увлачење",
-		"Font Color": "Боја слова",
-		"Background Color": "Боја позадине",
-		"Horizontal Rule": "Хоризонтална линија",
-		"Insert Web Link": "додај веб линк",
-		"Insert/Modify Image": "додај/промени слику",
-		"Insert Table": "Убаци табелу",
-		"Toggle HTML Source": "Пребаци на приказ ХТМЛ кода",
-		"Enlarge Editor": "Повећај едитор",
-		"About this editor": "О овом едитору",
-		"Help using editor": "Помоћ при коришћењу едитора",
-		"Current style": "Важећи стил",
-		"Undoes your last action": "Поништава последњу радњу",
-		"Redoes your last action": "Враћа последњу радњу",
-		"Cut selection": "Исеци изабрано",
-		"Copy selection": "Копирај изабрано",
-		"Paste from clipboard": "Залепи из клипборда",
-		"Direction left to right": "Правац с лева на десно",
-		"Direction right to left": "Правац с десна на лево",
-        "Remove formatting": "Уклони форматирање",
-        "Select all": "Изабери све",
-        "Print document": "Штампај документ",
-        "Clear MSOffice tags": "Обриши MSOffice тагове",
-        "Clear Inline Font Specifications": "Обриши примењене особине фонта",
-        "Split Block": "Подели блок",
-        "Toggle Borders": "Пребаци оквирне линије",
-
-        "&#8212; format &#8212;": "&#8212; Format &#8212;",
-        "Heading 1": "Заглавље 1",
-        "Heading 2": "Заглавље 2",
-        "Heading 3": "Заглавље 3",
-        "Heading 4": "Заглавље 4",
-        "Heading 5": "Заглавље 5",
-        "Heading 6": "Заглавље 6",
-        "Normal": "обичан",
-        "Address": "адреса",
-        "Formatted": "форматиран",		
-		
-        // dialogs
-		"OK": "OK",
-		"Cancel": "Поништи",
-		"Path": "Путања",
-		"You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.":    "Налазите се у ТЕКСТ режиму.  Користите [<>] дугме за повратак на ШВТИД (WYSIWYG).",
-
-		"The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly.": "Дугме 'залепи' не ради у претраживачима породице Mozilla (из разлога сигурности). Притисните CTRL-V на тастатури да директно залепите.",
-		
+    "&#8212; format &#8212;": "&#8212; Format &#8212;",
+    "About this editor": "О овом едитору",
+    "Address": "адреса",
+    "Background Color": "Боја позадине",
+    "Bold": "Масно",
+    "Bulleted List": "Листа са симболима",
+    "Clear Inline Font Specifications": "Обриши примењене особине фонта",
+    "Clear MSOffice tags": "Обриши MSOffice тагове",
+    "Copy selection": "Копирај изабрано",
+    "Current style": "Важећи стил",
+    "Cut selection": "Исеци изабрано",
+    "Decrease Indent": "Смањи увлачење",
+    "Direction left to right": "Правац с лева на десно",
+    "Direction right to left": "Правац с десна на лево",
+    "Font Color": "Боја слова",
+    "Formatted": "форматиран",
+    "Heading 1": "Заглавље 1",
+    "Heading 2": "Заглавље 2",
+    "Heading 3": "Заглавље 3",
+    "Heading 4": "Заглавље 4",
+    "Heading 5": "Заглавље 5",
+    "Heading 6": "Заглавље 6",
+    "Help using editor": "Помоћ при коришћењу едитора",
+    "Horizontal Rule": "Хоризонтална линија",
+    "Increase Indent": "Повећај увлачење",
+    "Insert Table": "Убаци табелу",
+    "Insert Web Link": "додај веб линк",
+    "Insert/Modify Image": "додај/промени слику",
+    "Italic": "Курзив",
+    "Justify Center": "Равнање по симетрали",
+    "Justify Full": "Пуно равнање",
+    "Justify Left": "Равнање улево",
+    "Justify Right": "Равнање удесно",
+    "Normal": "обичан",
+    "Ordered List": "Листа са редним бројевима",
+    "Paste from clipboard": "Залепи из клипборда",
+    "Path": "Путања",
+    "Print document": "Штампај документ",
+    "Redoes your last action": "Враћа последњу радњу",
+    "Remove formatting": "Уклони форматирање",
+    "Select Color": "Изабери боју",
+    "Select all": "Изабери све",
+    "Split Block": "Подели блок",
+    "Strikethrough": "Прецртано",
+    "Subscript": "Индекс-текст",
+    "Superscript": "Експонент-текст",
+    "Toggle Borders": "Пребаци оквирне линије",
+    "Toggle HTML Source": "Пребаци на приказ ХТМЛ кода",
+    "Underline": "Подвучено",
+    "Undoes your last action": "Поништава последњу радњу",
+    "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Налазите се у ТЕКСТ режиму.  Користите [<>] дугме за повратак на ШВТИД (WYSIWYG).",
+    "__OBSOLETE__": {
+        "Enlarge Editor": "Повећај едитор",
+        "OK": "OK",
+        "Cancel": "Поништи",
+        "The Paste button does not work in Mozilla based web browsers (technical security reasons). Press CTRL-V on your keyboard to paste directly.": "Дугме 'залепи' не ради у претраживачима породице Mozilla (из разлога сигурности). Притисните CTRL-V на тастатури да директно залепите.",
         "Alignment:": "Равнање",
         "Not set": "Није постављено",
         "Left": "Лево",
@@ -83,7 +76,6 @@
         "Bottom": "Дно",
         "Middle": "Средина",
         "Top": "Врх",
-
         "Layout": "Прелом",
         "Spacing": "Размак",
         "Horizontal:": "По хоризонтали",
@@ -92,21 +84,16 @@
         "Vertical padding": "Вертикално одстојање",
         "Border thickness:": "Дебљина оквира",
         "Leave empty for no border": "Остави празно кад нема оквира",
-
-        // Insert Link
-		"Insert/Modify Link": "додај/промени линк",
-		"None (use implicit)": "користи подразумевано",
-		"New window (_blank)": "Новом прозору (_blank)",
-		"Same frame (_self)": "Исти фрејм (_self)",
-		"Top frame (_top)": "Главни фрејм (_top)",
-		"Other": "Друго",
-		"Target:": "Отвори у:",
-		"Title (tooltip):": "Назив (tooltip):",
-		"URL:": "УРЛ:",
-		"You must enter the URL where this link points to": "Морате унети УРЛ на који води овај линк",
-
-        // Insert Table
-        "Insert Table": "Убаци табелу",
+        "Insert/Modify Link": "додај/промени линк",
+        "None (use implicit)": "користи подразумевано",
+        "New window (_blank)": "Новом прозору (_blank)",
+        "Same frame (_self)": "Исти фрејм (_self)",
+        "Top frame (_top)": "Главни фрејм (_top)",
+        "Other": "Друго",
+        "Target:": "Отвори у:",
+        "Title (tooltip):": "Назив (tooltip):",
+        "URL:": "УРЛ:",
+        "You must enter the URL where this link points to": "Морате унети УРЛ на који води овај линк",
         "Rows:": "Редови",
         "Number of rows": "Број редова",
         "Cols:": "Колоне",
@@ -123,8 +110,6 @@
         "Space between adjacent cells": "Размак између наспрамних ћелија",
         "Cell padding:": "Унутрашња одстојања од ивица ћелије",
         "Space between content and border in cell": "Растојање између садржаја у ћелији и њеног оквира",
-
-        // Insert Image
         "Insert Image": "Убаци слику",
         "Image URL:": "УРЛ слике",
         "Enter the image URL here": "Унесите УРЛ слике овде",
@@ -133,8 +118,6 @@
         "Alternate text:": "алтернативни текст",
         "For browsers that don't support images": "За претраживаче који не подржавају слике",
         "Positioning of this image": "Постављање ове слике",
-        "Image Preview:": "Преглед слике",
-
-        // Select Color popup
-		"Select Color": "Изабери боју"
+        "Image Preview:": "Преглед слике"
+    }
 };

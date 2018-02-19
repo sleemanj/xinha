@@ -58,7 +58,7 @@ function Init() {
 			insertAsVariable = ' | <a href="javascript:onOK('+i+','+'\'variable\''+')">'+Xinha._lc("Variable","InsertSnippet")+'</a>';
 		}
 		var new_cell = trow.insertCell(0);
-		new_cell.innerHTML = snippet_name +': '+Xinha._lc("Insert as","InsertSnippet")+' <a href="javascript:onOK('+i+','+'\'html\''+')">HTML</a>'+insertAsVariable + ' (<a id="show_preview'+i+'" href="javascript:preview(\'show\','+i+')">'+Xinha._lc("Show preview","InsertSnippet")+'</a>)<div id="preview'+i+'" style="display:none">'+snippets[i]['HTML']+'</div>'; 
+		new_cell.innerHTML = snippet_name +': '+Xinha._lc("Insert as","InsertSnippet")+' <a href="javascript:onOK('+i+','+'\'html\''+')">HTML</a>'+insertAsVariable + ' (<a id="show_preview'+i+'" href="javascript:preview(\'show\','+i+')">'+Xinha._lc("Show preview","InsertSnippet")+'</a>)<'+/*stop lc_parse_strings*/+'div id="preview'+i+'" style="display:none">'+snippets[i]['HTML']+'</div>'; 
 		new_cell.id = 'cell' + i;
 			
 	}

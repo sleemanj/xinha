@@ -527,7 +527,7 @@ var swfobject = function() {
 			var pt = ua.ie && ua.win ? "ActiveX" : "PlugIn";
 			document.title = document.title.slice(0, 47) + " - Flash Player Installation";
 			var dt = document.title;
-			var fv = "MMredirectURL=" + window.location + "&MMplayerType=" + pt + "&MMdoctitle=" + dt;
+			var fv = "MMredirectURL=" + window.location + "&MMplayerType=" + pt + '&MMdoctitle=' + dt;
 			var replaceId = regObj.id;
 			// For IE when a SWF is loading (AND: not available in cache) wait for the onload event to fire to remove the original object element
 			// In IE you cannot properly cancel a loading SWF file without breaking browser load references, also obj.onreadystatechange doesn't work

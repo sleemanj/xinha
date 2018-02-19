@@ -1,7 +1,20 @@
 // I18N constants
-// LANG: "it", ENCODING: UTF-8 | ISO-8859-1
-// Author: Udo Schmal (gocher), http://www.schaffrath-neuemedien.de/, udo.schmal@t-online.de
+// LANG: "it", ENCODING: UTF-8
+//
+// IMPORTANT NOTICE FOR TRANSLATORS
+// ============================================================================
+//
+// Please be sure you read the README_TRANSLATORS.TXT in the Xinha Root 
+// Directory.  Unless you are making a new plugin or module it is unlikely 
+// that you want to be editing this file directly.
+//
 {
-	"Insert scrolling marquee": "Inserisca marquee",
-	"Cancel": "Annullamento"
+    "Cancel": "Annullamento",
+    "Height:": "Altezza",
+    "Insert scrolling marquee": "Inserisca marquee",
+    "Left": "Sinistra",
+    "OK": "OK",
+    "Right": "Destra",
+    "Width:": "Larghezza",
+    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
 };

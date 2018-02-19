@@ -61,8 +61,8 @@ var tagLib =  {
 'p': true,
 'table': true
 };
-// tags that needs some complement
-var subTagLib = {'table': {'op': '<tbody><tr><td>',
+// tags that needs some complement               v-- Avoid lc_parse_strings.php
+var subTagLib = {'table': {'op': '<tbody><tr><td'+'>',
                            'cl': '</td></tr></tbody>'}
 };
 
@@ -167,7 +167,7 @@ var opTag_all = {
 'onKeyDown': 'onKeyDown="',
 'onKeyUp': 'onKeyUp="',
 'style': 'style="',
-'title': 'title="'
+'title': 'title='+'"' // //  <-- Avoid lc_parse_strings.php
 };
 var opAtt_all = {
 'class': {},
