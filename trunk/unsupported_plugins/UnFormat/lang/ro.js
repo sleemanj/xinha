@@ -11,5 +11,7 @@
 {
     "Cancel": "Renunţă",
     "OK": "Acceptă",
-    "___ TRANSLATOR NOTE   ___": "*** UNFORMAT IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** UNFORMAT IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

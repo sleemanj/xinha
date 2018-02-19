@@ -98,7 +98,6 @@
     "Y:": "Y:",
     "You must select some text before making a new link.": "Você precisa selecionar um texto antes de criar um novo link.",
     "Zoom": "Ampliação",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
         "Angle:": "Angulo:",
         "Image Format": "Formato da Imagem"

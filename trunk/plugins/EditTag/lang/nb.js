@@ -9,7 +9,7 @@
 // that you want to be editing this file directly.
 //
 {
-    "Edit HTML for selected text": "Rediger HTML for den valgte teksten",
     "Cancel": "Avbryt",
+    "Edit HTML for selected text": "Rediger HTML for den valgte teksten",
     "OK": "OK"
 };

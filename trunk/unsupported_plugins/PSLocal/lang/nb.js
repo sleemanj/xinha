@@ -9,6 +9,8 @@
 // that you want to be editing this file directly.
 //
 {
-    "___ TRANSLATOR NOTE   ___": "*** PSLOCAL IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
-    "Cancel": "Avbryt"
+    "Cancel": "Avbryt",
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PSLOCAL IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

@@ -16,5 +16,7 @@
     "Same frame (_self)": "本匡 (_self)",
     "Title (tooltip)": "主題 (tooltip):",
     "Top frame (_top)": "上匡 (_top)",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

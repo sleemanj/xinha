@@ -119,6 +119,7 @@
         "Cols:": "Colunas:",
         "Developer": "Desenvolvedor",
         "Em": "Em",
+        "Enlarge Editor": "Expandir Editor",
         "Enter the image URL here": "Entre aqui com a URL da imagem",
         "Fixed width columns": "Colunas com largura fixa",
         "For browsers that don't support images": "Para navegadores que não suportam imagens",
@@ -169,7 +170,6 @@
         "Width unit": "Unidade de largura",
         "Width:": "Largura:",
         "Xinha Help": "Ajuda do Xinha",
-        "Your Document is not well formed. Check JavaScript console for details.": "Seu Documento não está formatado corretamente. Verifique o console do JavaScript para maiores detalhes.",
-        "Enlarge Editor": "Expandir Editor"
+        "Your Document is not well formed. Check JavaScript console for details.": "Seu Documento não está formatado corretamente. Verifique o console do JavaScript para maiores detalhes."
     }
 };

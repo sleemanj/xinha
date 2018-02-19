@@ -10,8 +10,8 @@
 //
 {
     "Abbreviation": "Beskrive forkortelse",
+    "Cancel": "Avbryt",
     "Delete": "Fjerne",
     "Expansion:": "Betydning:",
-    "Cancel": "Avbryt",
     "OK": "OK"
 };

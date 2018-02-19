@@ -47,10 +47,10 @@
     "Vertical:": "Vertical:",
     "Width:": "Largura:",
     "__OBSOLETE__": {
-        "The file you are uploading doesn't have the correct extension.": "O arquivo que você está enviando não possuia a extensão correta.",
-        "The file you are uploading already exists.": "Já existe o arquivo que você está enviando.",
-        "The file you are uploading is to big. The max Filesize is": "O arquivo que você está enviando é muito grande. O tamanho máximo é",
         "Images on the Server:": "Imagens no Servidor:",
-        "Please select a file to upload.": "Por favor, selecione um arquivo para enviar."
+        "Please select a file to upload.": "Por favor, selecione um arquivo para enviar.",
+        "The file you are uploading already exists.": "Já existe o arquivo que você está enviando.",
+        "The file you are uploading doesn't have the correct extension.": "O arquivo que você está enviando não possuia a extensão correta.",
+        "The file you are uploading is to big. The max Filesize is": "O arquivo que você está enviando é muito grande. O tamanho máximo é"
     }
 };

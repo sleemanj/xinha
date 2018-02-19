@@ -41,8 +41,8 @@
     "Undoes your last action": "Razveljavi zadnjo akcijo",
     "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Si v tekstovnem načinu.  Uporabi [<>] gumb za prklop nazaj na WYSIWYG.",
     "__OBSOLETE__": {
+        "Cancel": "Prekliči",
         "Enlarge Editor": "Povečaj urejevalnik",
-        "OK": "V redu",
-        "Cancel": "Prekliči"
+        "OK": "V redu"
     }
 };

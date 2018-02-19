@@ -22,7 +22,6 @@
     "Speed Control": "Geschwindigkeitseinstellungen",
     "Text:": "Text:",
     "Width:": "Breite:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
         "Insert marquee": "Marquee einfügen"
     }

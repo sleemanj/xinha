@@ -15,5 +15,7 @@
     "OK": "Tamam",
     "Right": "Sağa",
     "Width:": "Genişlik:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

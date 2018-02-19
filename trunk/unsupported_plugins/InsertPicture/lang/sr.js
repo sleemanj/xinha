@@ -40,5 +40,7 @@
     "Vertical padding": "Вертикално одстојање",
     "Vertical:": "По вертикали",
     "Width:": "Ширина",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

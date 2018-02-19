@@ -24,5 +24,7 @@
     "Texttop": "Врх текста",
     "Top": "Врх",
     "Width:": "Ширина",
-    "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

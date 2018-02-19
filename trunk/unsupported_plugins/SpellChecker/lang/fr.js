@@ -29,9 +29,8 @@
     "Spell-check": "Correction",
     "Suggestions": "Suggestions",
     "This will drop changes and quit spell checker.  Please confirm.": "Ceci fermera la fenêtre et annulera les modifications. Veuillez confirmer.",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "Vérification terminée, aucune erreur orthographique détectée.  Fermeture en cours...",
-        "One moment...": "Veuillez patienter"
+        "One moment...": "Veuillez patienter",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "Vérification terminée, aucune erreur orthographique détectée.  Fermeture en cours..."
     }
 };

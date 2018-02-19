@@ -28,9 +28,8 @@
     "Spell-check": "Stavekontroll",
     "Suggestions": "Forslag",
     "This will drop changes and quit spell checker.  Please confirm.": "Dette vil droppe endringene og avbryte stavekontrollen, vennligst bekreft.",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "Stavekontroll fullført, ingen feilstavede ord ble funnet, stavekontroll avsluttes.",
-        "One moment...": "Et øyeblikk..."
+        "One moment...": "Et øyeblikk...",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "Stavekontroll fullført, ingen feilstavede ord ble funnet, stavekontroll avsluttes."
     }
 };

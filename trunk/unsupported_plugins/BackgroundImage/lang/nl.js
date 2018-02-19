@@ -13,5 +13,7 @@
     "Remove Current Background": "Huidige Achtergrond Afbeelding Verwijderen",
     "Set Page Background Image": "Pagina Achtergrond Afbeelding Instellen",
     "Set page background image": "Pagina achtergrond afbeelding instellen",
-    "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

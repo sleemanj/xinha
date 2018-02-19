@@ -10,7 +10,6 @@
 //
 {
     "Tidy failed.  Check your HTML for syntax errors.": "Tidy mislukt. Controleer HTML op fouten.",
-    "___ TRANSLATOR NOTE   ___": "*** HTMLTIDY IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
         "HT-html-tidy": "HTML opschonen"
     }

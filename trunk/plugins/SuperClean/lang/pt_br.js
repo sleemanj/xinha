@@ -9,8 +9,10 @@
 // that you want to be editing this file directly.
 //
 {
+    "Cancel": "Cancelar",
     "Clean up HTML": "Limpar HTML",
     "General tidy up and correction of some problems.": "Limpesa geral e correção de alguns problemas.",
+    "OK": "OK",
     "Please select from the following cleaning options...": "Por favor, selecione uma das opções de limpesa...",
     "Remove custom font sizes.": "Remover tamanho de fontes personalizados (font size).",
     "Remove custom text colors.": "Remover cores de texto personalizados (font color).",

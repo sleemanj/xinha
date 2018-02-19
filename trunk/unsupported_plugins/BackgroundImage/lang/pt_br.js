@@ -13,5 +13,7 @@
     "Remove Current Background": "Remover fundo atual",
     "Set Page Background Image": "Definir Imagem de Fundo",
     "Set page background image": "Definir imagem de fundo",
-    "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

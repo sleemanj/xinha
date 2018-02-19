@@ -13,5 +13,7 @@
     "Remove Current Background": "現在の背景画像を除去",
     "Set Page Background Image": "ページの背景画像を設定",
     "Set page background image": "ページの背景画像を設定",
-    "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** BACKGROUNDIMAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

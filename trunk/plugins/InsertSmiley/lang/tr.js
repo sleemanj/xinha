@@ -11,7 +11,7 @@
 {
     "Insert Smiley": "Gülen yüz ekle",
     "__OBSOLETE__": {
-        "Smiley": "Gülen yüz",
-        "Cancel": "İptal"
+        "Cancel": "İptal",
+        "Smiley": "Gülen yüz"
     }
 };

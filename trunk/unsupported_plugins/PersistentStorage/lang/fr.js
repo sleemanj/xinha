@@ -19,5 +19,7 @@
     "New Folder": "Nouveau répertoire",
     "Save": "Enregistrer",
     "You must select some text before making a new link.": "Vous devez sélectionner un texte avant de créer un nouveau lien",
-    "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** PERSISTENTSTORAGE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

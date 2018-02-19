@@ -24,5 +24,7 @@
     "Texttop": "Irudiaren goialdean",
     "Top": "Goian",
     "Width:": "Zabalera:",
-    "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

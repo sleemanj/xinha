@@ -28,9 +28,8 @@
     "Spell-check": "Ueberpruefung",
     "Suggestions": "Vorschlag",
     "This will drop changes and quit spell checker.  Please confirm.": "Aenderungen werden nicht uebernommen.  Bitte bestaettigen.",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "Rechtsschreibpruefung wurde ohne Fehler fertiggestellt.  Wird nun geschlossen...",
-        "One moment...": "Bitte warten..."
+        "One moment...": "Bitte warten...",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "Rechtsschreibpruefung wurde ohne Fehler fertiggestellt.  Wird nun geschlossen..."
     }
 };

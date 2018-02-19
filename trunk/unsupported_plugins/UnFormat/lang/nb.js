@@ -11,13 +11,15 @@
 {
     "All": "Hele dokumentet",
     "All HTML:": "All HTML-kode:",
+    "Cancel": "Avbryt",
     "Cleaning Area": "Vaskeområde",
     "Cleaning options": "Vaskemetoder",
     "Formatting:": "Formattering:",
+    "OK": "OK",
     "Page Cleaner": "Dokumentvasker",
     "Select which types of formatting you would like to remove.": "Velg hva slags formattering du ønsker å fjerne.",
     "Selection": "Markert område",
-    "___ TRANSLATOR NOTE   ___": "*** UNFORMAT IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
-    "Cancel": "Avbryt",
-    "OK": "OK"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** UNFORMAT IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

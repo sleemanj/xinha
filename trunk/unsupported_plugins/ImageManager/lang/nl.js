@@ -54,7 +54,6 @@
     "Trash": "Prullenbak",
     "W:": "W:",
     "Width:": "Breedte:",
-    "___ TRANSLATOR NOTE   ___": "*** IMAGEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
         "Image Manager": "Afbeeldingen Beheer"
     }

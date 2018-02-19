@@ -28,9 +28,8 @@
     "Spell-check": "Helyesírásellenőrzés",
     "Suggestions": "Tippek",
     "This will drop changes and quit spell checker.  Please confirm.": "Kilépés a változások eldobásával. Jóváhagyja?",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "A helyesírásellenőrzés kész, tévesztett szó nem fordult elő. Bezárás...",
-        "One moment...": "Kis türelmet ;-)"
+        "One moment...": "Kis türelmet ;-)",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "A helyesírásellenőrzés kész, tévesztett szó nem fordult elő. Bezárás..."
     }
 };

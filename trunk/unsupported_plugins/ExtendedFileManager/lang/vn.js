@@ -16,5 +16,7 @@
     "Same frame (_self)": "Trên cùng khung (_self)",
     "Title (tooltip)": "Tiêu đề (của hướng dẫn):",
     "Top frame (_top)": "Khung trên cùng (_top)",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

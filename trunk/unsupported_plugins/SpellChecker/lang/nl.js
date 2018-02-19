@@ -29,9 +29,8 @@
     "Spell-check": "Spell-check",
     "Suggestions": "Suggestie",
     "This will drop changes and quit spell checker.  Please confirm.": "Dit zal alle veranderingen annuleren en de spell checker sluiten.  Weet u het zeker?",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "Spell checking is klaar, geen fouten gevonden.  spell checking word gesloten...",
-        "One moment...": "Even wachten ;-)"
+        "One moment...": "Even wachten ;-)",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "Spell checking is klaar, geen fouten gevonden.  spell checking word gesloten..."
     }
 };

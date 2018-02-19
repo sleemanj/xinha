@@ -41,8 +41,8 @@
     "Undoes your last action": "Vrátí poslední akci",
     "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "Jste v TEXTOVÉM REŽIMU.  Použijte tlačítko [<>] pro přepnutí do WYSIWIG.",
     "__OBSOLETE__": {
+        "Cancel": "Zrušit",
         "Enlarge Editor": "Nové okno editoru",
-        "OK": "OK",
-        "Cancel": "Zrušit"
+        "OK": "OK"
     }
 };

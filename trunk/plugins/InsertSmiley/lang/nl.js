@@ -11,7 +11,7 @@
 {
     "Insert Smiley": "Smiley invoegen",
     "__OBSOLETE__": {
-        "Smiley": "Smiley",
-        "Cancel": "Annuleren"
+        "Cancel": "Annuleren",
+        "Smiley": "Smiley"
     }
 };

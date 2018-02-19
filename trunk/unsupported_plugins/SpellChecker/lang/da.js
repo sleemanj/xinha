@@ -28,9 +28,8 @@
     "Spell-check": "Stavekontrol",
     "Suggestions": "Forslag",
     "This will drop changes and quit spell checker.  Please confirm.": "Alle dine ændringer vil gå tabt, vil du fortsætte?",
-    "___ TRANSLATOR NOTE   ___": "*** SPELLCHECKER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "Spell check complete, didn't find any mispelled words.  Closing now...": "Stavekontrollen er gennemført, der blev ikke fundet nogle stavefejl.  Lukker...",
-        "One moment...": "Vent venligst"
+        "One moment...": "Vent venligst",
+        "Spell check complete, didn't find any mispelled words.  Closing now...": "Stavekontrollen er gennemført, der blev ikke fundet nogle stavefejl.  Lukker..."
     }
 };

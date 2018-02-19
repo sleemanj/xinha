@@ -14,5 +14,7 @@
     "OK": "OK",
     "Preview": "Pregled",
     "Preview the image in a new window": "Pregledaj sliku u novom prozoru",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

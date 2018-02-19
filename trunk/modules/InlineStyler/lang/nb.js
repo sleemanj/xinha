@@ -27,11 +27,11 @@
     "Middle": "Midten",
     "None": "Ingen",
     "Padding": "Luft",
-    "percent": "prosent",
-    "pixels": "Piksel",
     "Right": "Høyre",
     "Text align": "Juster tekst",
     "Top": "Overkant",
     "Vertical align": "Vertikal justering",
-    "Width": "Bredde"
+    "Width": "Bredde",
+    "percent": "prosent",
+    "pixels": "Piksel"
 };

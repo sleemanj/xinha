@@ -16,5 +16,7 @@
     "Same frame (_self)": "Ugyanabba a keretbe (_self)",
     "Title (tooltip)": "Cím (tooltip):",
     "Top frame (_top)": "Felső keret (_top)",
-    "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** EXTENDEDFILEMANAGER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

@@ -40,12 +40,11 @@
     "Vertical padding": "Verticale ruimte",
     "Vertical:": "Verticaal:",
     "Width:": "Breedte:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTPICTURE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
     "__OBSOLETE__": {
-        "The file you are uploading doesn't have the correct extension.": "Het bestand dat is geupload heeft niet de juiste extentie.",
-        "The file you are uploading already exists.": "Het bestand dat is geupload bestaat al.",
-        "The file you are uploading is to big. The max Filesize is": "Het bestand dat is geupload is te groot. De maximaal toegestane grootte is:",
         "Images on the Server:": "Afbeeldingen op de server:",
-        "Please select a file to upload.": "Selecteer een bestand om te uploaden"
+        "Please select a file to upload.": "Selecteer een bestand om te uploaden",
+        "The file you are uploading already exists.": "Het bestand dat is geupload bestaat al.",
+        "The file you are uploading doesn't have the correct extension.": "Het bestand dat is geupload heeft niet de juiste extentie.",
+        "The file you are uploading is to big. The max Filesize is": "Het bestand dat is geupload is te groot. De maximaal toegestane grootte is:"
     }
 };

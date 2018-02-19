@@ -10,5 +10,7 @@
 //
 {
     "Tidy failed.  Check your HTML for syntax errors.": "Tidy mislykkedes. Tjek din HTML for syntaksfejl.",
-    "___ TRANSLATOR NOTE   ___": "*** HTMLTIDY IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** HTMLTIDY IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

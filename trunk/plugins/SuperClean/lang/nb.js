@@ -12,12 +12,12 @@
     "Cancel": "Avbryt",
     "Clean up HTML": "Vask HTML kode",
     "General tidy up and correction of some problems.": "Generell opprydding i HTML koden samt korrigering av typiske feil",
+    "OK": "OK",
     "Please select from the following cleaning options...": "Vennligst velg blandt de forskjellige mulighetene å vaske/ rydde i HTML koden",
     "Remove custom font sizes.": "Fjerne egendefinerte skriftstørrelser (font size)",
     "Remove custom text colors.": "Fjerne egendefinerte skriftfarger (font color)",
     "Remove custom typefaces (font \"styles\").": "Fjerne egendefinerte skrifttyper (font face)",
     "Remove lang attributes.": "Fjerne lang-attributter.",
-    "OK": "OK",
     "__OBSOLETE__": {
         "Clean bad HTML from Microsoft Word": "Vask HTML kode for feil og problemer etter Microsoft Word",
         "Go": "Utfør",

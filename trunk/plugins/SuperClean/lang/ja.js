@@ -20,10 +20,10 @@
     "Remove lang attributes.": "言語属性の除去。",
     "Replace directional quote marks with non-directional quote marks.": "方向つき引用符を方向なし引用符に置換。",
     "__OBSOLETE__": {
+        "CANCEL": "中止",
         "Clean bad HTML from Microsoft Word": "Microsoft Wordによる不正なHTMLの清潔化",
         "Go": "実行",
         "Tidy failed.  Check your HTML for syntax errors.": "適正化に失敗しました。HTMLの文法エラーを確認してください。",
-        "You don't have anything to tidy!": "適正化するものは何もありません!",
-        "CANCEL": "中止"
+        "You don't have anything to tidy!": "適正化するものは何もありません!"
     }
 };

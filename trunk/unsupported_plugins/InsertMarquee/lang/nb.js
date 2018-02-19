@@ -15,17 +15,16 @@
     "Direction:": "Rettning:",
     "Height:": "Høyde:",
     "Insert scrolling marquee": "Sett inn rulletekst",
+    "Left": "Venstre",
+    "Name": "Navn",
     "Name/ID:": "Navn/ID:",
+    "OK": "OK",
+    "Right": "Høyre",
     "Scroll Amount:": "Hastighet:",
     "Scroll Delay:": "Forsinkelse:",
     "Speed Control": "Egenskaper for hastigheten til rulleteksten",
     "Text:": "Tekst:",
     "Width:": "Bredde:",
-    "___ TRANSLATOR NOTE   ___": "*** INSERTMARQUEE IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***",
-    "Left": "Venstre",
-    "Name": "Navn",
-    "OK": "OK",
-    "Right": "Høyre",
     "__OBSOLETE__": {
         "Insert marquee": "Sett inn rulletekst"
     }

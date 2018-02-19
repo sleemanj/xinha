@@ -9,10 +9,10 @@
 // that you want to be editing this file directly.
 //
 {
-    "Delete": "Slett",
-    "Set Id and Name": "Sett ID og navn",
     "Cancel": "Avbryt",
+    "Delete": "Slett",
     "OK": "OK",
+    "Set Id and Name": "Sett ID og navn",
     "__OBSOLETE__": {
         "Name/Id": "Navn (ID)"
     }

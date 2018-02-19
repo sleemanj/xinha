@@ -41,8 +41,8 @@
     "Undoes your last action": "ย้อนกลับ",
     "You are in TEXT MODE.  Use the [<>] button to switch back to WYSIWYG.": "คุณอยู่ในโหมดธรรมดา กดที่ปุ่ม [<>] เพื่อสลับกลับไปยังโหมดพิมพ์งานแบบเวิร์ด",
     "__OBSOLETE__": {
+        "Cancel": "ยกเลิก",
         "Enlarge Editor": "ขยายให้เต็มจอ",
-        "OK": "ตกลง",
-        "Cancel": "ยกเลิก"
+        "OK": "ตกลง"
     }
 };

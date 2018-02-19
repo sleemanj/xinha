@@ -14,5 +14,7 @@
     "OK": "OK",
     "Preview": "Smugkig",
     "Preview the image in a new window": "Smugkig af billedet i et nyt vindue",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };

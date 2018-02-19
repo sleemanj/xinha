@@ -16,8 +16,8 @@
     "OK": "OK",
     "Preview": "Voorbeeld",
     "__OBSOLETE__": {
+        "Attention: Editing the formula in the editor is not possible, please use this dialog!": "Let op! het bewerken van de formule in de editor is niet mogelijk, gebruik dit dialoog!",
         "Based on ASCIIMathML by ": "Gebasseerd op  ASCIIMathML van ",
-        "For more information on AsciiMathML visit this page: ": "Voor meer informatie over AsciiMathML ga je naar: ",
-        "Attention: Editing the formula in the editor is not possible, please use this dialog!": "Let op! het bewerken van de formule in de editor is niet mogelijk, gebruik dit dialoog!"
+        "For more information on AsciiMathML visit this page: ": "Voor meer informatie over AsciiMathML ga je naar: "
     }
 };

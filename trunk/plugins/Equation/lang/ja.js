@@ -16,8 +16,8 @@
     "OK": "OK",
     "Preview": "表示",
     "__OBSOLETE__": {
+        "Attention: Editing the formula in the editor is not possible, please use this dialog!": "注意: エディタで数式を編集することはできません。必ず、このダイアログを使用してください",
         "Based on ASCIIMathML by ": "Based on ASCIIMathML by ",
-        "For more information on AsciiMathML visit this page: ": "AsciiMathの詳細はこのページにあります: ",
-        "Attention: Editing the formula in the editor is not possible, please use this dialog!": "注意: エディタで数式を編集することはできません。必ず、このダイアログを使用してください"
+        "For more information on AsciiMathML visit this page: ": "AsciiMathの詳細はこのページにあります: "
     }
 };

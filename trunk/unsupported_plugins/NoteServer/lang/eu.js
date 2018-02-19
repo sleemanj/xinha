@@ -14,5 +14,7 @@
     "OK": "Ados",
     "Preview": "Aurrebista",
     "Preview the image in a new window": "Aurreikusi irudia beste lehio batean",
-    "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    "__OBSOLETE__": {
+        "___ TRANSLATOR NOTE   ___": "*** NOTESERVER IS UNSUPPORTED (TRANSLATE AT YOUR DISCRETION) ***"
+    }
 };
