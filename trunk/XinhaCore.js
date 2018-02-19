@@ -8231,6 +8231,13 @@ Xinha._lc = function(string, context, replace)
       context = 'Xinha';
     }
 
+    // By default we will try and load a merged language file so that the user
+    //  is not loading quite so many javascript files just for language data
+    if ( typeof _editor_lang_merged_file == 'undefined' || _editor_lang_merged_file === true )
+    {
+      _editor_lang_merged_file = _editor_url + 'lang/merged/' + _editor_lang+'.js';
+    }
+    
     // Allow to provide an explicitly merged translation file for testing translations 
     // (and for easy using a merged translation set)    
     if ( typeof _editor_lang_merged_file == 'string' )
