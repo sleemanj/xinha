@@ -38,12 +38,14 @@ xinha_init = xinha_init ? xinha_init : function()
   [
    'CharacterMap',
    'ContextMenu',
+   'FancySelects',
    'SmartReplace',
    'Stylist',
-   'ExtendedFileManager',
    'Linker',
    'SuperClean',
-   'TableOperations'
+   'TableOperations',
+   'ListOperations',
+   'WebKitResize'
   ];
   
          // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)

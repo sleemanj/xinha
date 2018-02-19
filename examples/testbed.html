@@ -54,7 +54,7 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'CharacterMap', 'SpellChecker', 'Linker', 'ContextMenu'
+        'CharacterMap', 'ContextMenu', 'InsertAnchor', 'Linker', 'ListOperations', 'TableOperations', 'FancySelects', 'PreserveScripts', 'PreserveSelection', 'Stylist', 'SuperClean', 'WebKitResize'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -184,13 +184,13 @@
     <input type="submit" /> <input type="reset" />
 </div>
   </form>
-  <script type="text/javascript">
-    document.write(document.compatMode);
-  </script>
+
 <div>
   <a href="#" onclick="xinha_editors.myTextArea.hidePanels();">Hide</a>
   <a href="#" onclick="xinha_editors.myTextArea.showPanels();">Show</a>
 </div>
 
+  <!-- This script is used to show the rendering mode (Quirks, Standards, Almost Standards) --> 
+  <script type="text/javascript" src="render-mode-developer-help.js"></script>
 </body>
 </html>

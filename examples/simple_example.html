@@ -1,12 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Simple example of Xinha</title>
 <script type="text/javascript">
-var _editor_url  = document.location.href.replace(/examples\/simple_example\.html.*/, '')
-
-var _editor_lang = "en";
+  var _editor_url  = document.location.href.replace(/examples\/simple_example\.html.*/, '')
+  var _editor_lang = "en";
 </script>
 <!-- Load up the actual editor core -->
 <script type="text/javascript" src="../XinhaCore.js"></script>
@@ -14,12 +13,12 @@ var _editor_lang = "en";
 
 var xinha_plugins =
 [
- 'Linker'
+ 'Linker', 'ContextMenu', 'FancySelects', 'TableOperations', 'ListOperations', 'PreserveSelection', 'PreserveScripts', 'WebKitResize'
 ];
+
 var xinha_editors =
 [
-  'myTextArea',
-  'anotherOne'
+  'myTextArea'
 ];
 
 function xinha_init()
@@ -27,7 +26,7 @@ function xinha_init()
   if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
 
   var xinha_config = new Xinha.Config();
-
+  
   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 
   Xinha.startEditors(xinha_editors);
@@ -38,8 +37,9 @@ Xinha.addOnloadHandler(xinha_init);
 </head>
 
 <body>
+<div>
+<form onsubmit="alert(this.myTextArea.value); return false;" style="">
 
-<form onsubmit="alert(this.myTextArea.value); return false;">
 <textarea id="myTextArea" name="myTextArea" rows="25" cols="80">
 &lt;p&gt;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
 Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
@@ -48,7 +48,14 @@ ante elementum turpis. Aliquam nisl. Nulla posuere neque non
 tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
 parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
 Curabitur pharetra bibendum lectus.&lt;/p&gt;
+
 </textarea>
+<input type="submit" value="SUBMIT" />
 </form>
+</div>
+
+  <!-- This script is used to show the rendering mode (Quirks, Standards, Almost Standards) --> 
+  <script type="text/javascript" src="render-mode-developer-help.js"></script>
+      
 </body>
 </html>

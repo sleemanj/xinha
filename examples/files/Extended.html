@@ -101,10 +101,13 @@ function __dlg_init(bottom) {
     window.dialogArguments = opener.Dialog._arguments;
   }
   if (!document.all) {
+   if(window.sizeToContent)
+   {
     window.sizeToContent();
     window.sizeToContent();  // for reasons beyond understanding,
           // only if we call it twice we get the
           // correct size.
+    }
     window.addEventListener("unload", __dlg_onclose, true);
     window.innerWidth = body.offsetWidth + 5;
     window.innerHeight = body_height + 2;

@@ -1,7 +1,22 @@
 <?php require_once('require-password.php'); ?>
-<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?php 
+  switch(@$_REQUEST['DocType'])
+  {
+    
+    case 'quirks':
+      break;
+      
+   case 'almost':
+      echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
+      break;
+    
+    case 'standards':
+    default:
+      echo '<!DOCTYPE html>';
+      break;
+      
+  }
+?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 
@@ -27,23 +42,13 @@
     // You must set _editor_url to the URL (including trailing slash) where
     // where xinha is installed, it's highly recommended to use an absolute URL
     //  eg: _editor_url = "/path/to/xinha/";
-    // You may try a relative URL htmlif you wish]
+    // You may try a relative URL html if you wish
     //  eg: _editor_url = "../";
     // in this example we do a little regular expression to find the absolute path.
     _editor_url  = document.location.href.replace(/examples\/.*/, '')
     _editor_lang = "en";      // And the language we need to use in the editor.    
     _editor_skin = 'blue-look';
     
-    <?php 
-      if(@$_REQUEST['NoFlash'])
-      {
-        ?>__MFM_USE_FLASH__ = false;<?php
-      }
-      else
-      {
-        ?>__MFM_USE_FLASH__ = true;<?php
-      }
-    ?>
   </script>
 
   <!-- Load up the actual editor core -->
@@ -66,7 +71,7 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'MootoolsFileManager','Linker'
+        'MootoolsFileManager','Linker', 'TableOperations', 'ListOperations', 'ContextMenu', 'WebKitResize', 'FancySelects'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -95,7 +100,7 @@
        *************************************************************************/
 
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
-       xinha_config.fullPage = true;
+      // xinha_config.fullPage = true;
        with (xinha_config.MootoolsFileManager)
         { 
           <?php 
@@ -109,6 +114,7 @@
                 'images_allow_upload' => true,
                 'images_allow_delete' => true,
                 'images_allow_download' => true,
+                'images_use_hspace_vspace' => false,
                 
                 'files_dir' => getcwd() . '/images',
                 'files_url' => preg_replace('/\/examples.*/', '', $_SERVER['REQUEST_URI']) . '/examples/images',
@@ -181,62 +187,29 @@
   <p>  Click into the WYSIWYG area and then click the insert image button in the tool bar. </p>
   <p>  Highlight some text and click the insert file link button (folder with a link on it).</p>
   <p>  This demo also includes the Linker plugin (for creating normal links). </p>
-  <?php 
-    if(!isset($_REQUEST['NoFlash'])) 
-    {
-      ?>
-      <p>You are using the Flash version of MFM, <a href="mootools-file-manager.php?NoFlash=1">switch to NoFlash.</a></p>
-      <?php
-    }
-    else
-    {
-      ?>
-      <p>You are using the NoFlash version of MFM, <a href="mootools-file-manager.php">switch to Flash.</a></p>
-      <?php
-    }
-  ?>
+  
   <form action="javascript:void(0);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
      <div>
-     <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
-      &lt;html&gt;
-      &lt;head&gt;
-        &lt;title&gt;Hello&lt;/title&gt;
-        &lt;style type="text/css"&gt;
-          li { color:red; }
-        &lt;/style&gt;
-      &lt;/head&gt;
-      &lt;body&gt;&lt;span style="color:purple"&gt;
-
-      &lt;p&gt;
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-        Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
-        velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
-        ante elementum turpis.  &lt;span style="color:green"&gt;Aliquam &lt;/span&gt; nisl. Nulla posuere neque non
-        tellus. Morbi vel nibh. &lt;font face="Arial"&gt;&lt;font color="#009933"&gt;Cum  sociis natoque&lt;/font&gt;&lt;/font&gt; penatibus et magnis dis
-        parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
-        Curabitur pharetra bibendum lectus.
-      &lt;/p&gt;
-
-      &lt;ul&gt;
-        &lt;li style="color:green"&gt; Phasellus et massa sed diam viverra semper.  &lt;/li&gt;
-        &lt;li&gt; Mauris tincidunt felis in odio.              &lt;/li&gt;
-        &lt;li&gt; Nulla placerat nunc ut pede.                 &lt;/li&gt;
-        &lt;li&gt; Vivamus ultrices mi sit amet urna.           &lt;/li&gt;
-        &lt;li&gt; Quisque sed augue quis nunc laoreet volutpat.&lt;/li&gt;
-        &lt;li&gt; Nunc sit amet metus in tortor semper mattis. &lt;/li&gt;
-      &lt;/ul&gt;
-      &lt;/span&gt;&lt;/body&gt;
-      &lt;/html&gt;
-    </textarea>
-
+    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+&lt;p&gt;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
+velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
+ante elementum turpis. Aliquam nisl. Nulla posuere neque non
+tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
+parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
+Curabitur pharetra bibendum lectus.&lt;/p&gt;
+</textarea>
     <input type="submit" /> <input type="reset" />
     </div>
   </form>
 
-  <p>
-    <script type="text/javascript">
-      document.write('Browser Compatability Mode: ' + document.compatMode);
-    </script>
-  </p>
+  <ul>
+    <li><a href="<?php echo basename(__FILE__) ?>?DocType=standards">Test Standards Mode</a></li>
+    <li><a href="<?php echo basename(__FILE__) ?>?DocType=almost">Test Almost Standards Mode</a></li>
+    <li><a href="<?php echo basename(__FILE__) ?>?DocType=quirks">Test Quirks Mode</a></li>
+  </ul>
+  
+  <!-- This script is used to show the rendering mode (Quirks, Standards, Almost Standards) --> 
+  <script type="text/javascript" src="render-mode-developer-help.js"></script>
 </body>
 </html>

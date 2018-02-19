@@ -100,8 +100,8 @@
     if (window.innerHeight) sHeight = window.innerHeight;
     else if (document.body && document.body.offsetHeight) sHeight = document.body.offsetHeight;
     else return;
-    if (sHeight>270) {
-      sHeight = sHeight - 245;
+    if (sHeight>300) {
+      sHeight = sHeight - 285;
     } else {
       sHeight = 30
     }
@@ -246,7 +246,7 @@ Dialog._geckoOpenModal = function(url, action, init) {
 </head>
 
 <body>
-  <form action="ext_example-body.html" target="body" name="fsettings" id="fsettings">
+  <form action="ext_example-body.php" target="body" name="fsettings" id="fsettings">
   <h1>Xinha Example</h1>
     <fieldset>
       <legend>Settings</legend>
@@ -257,12 +257,73 @@ Dialog._geckoOpenModal = function(url, action, init) {
           Language:
           <select name="lang" id="lang">
           <option value="en">English</option>
-          <option value="de">German</option>
-          <option value="fr">French</option>
-          <option value="it">Italian</option>
-          <option value="no">Norwegian</option>
-          <option value="pl">Polish</option>
-          <option value="ja">Japanese</option>
+          <option value="en">--- By Name ---</option>
+<option value="ch">Chinese (ch)</option>
+<option value="cz">Czech</option>
+<option value="da">Danish</option>
+<option value="de">German</option>
+<option value="ee">Ewe</option>
+<option value="el">Greek</option>
+<option value="es">Spanish</option>
+<option value="eu">Basque</option>
+<option value="fa">Persian (Farsi)</option>
+<option value="fi">Finnish</option>
+<option value="fr_ca">French (Canada)</option>
+<option value="fr">French</option>
+<option value="zn_ch">Chinese (zn_ch)</option>
+<option value="he">Hebrew</option>
+<option value="hu">Hungarian</option>
+<option value="it">Italian</option>
+<option value="ja">Japanese</option>
+<option value="lt">Lithuanian</option>
+<option value="lv">Latvian</option>
+<option value="nb">Norwegian</option>
+<option value="nl">Dutch</option>
+<option value="pl">Polish</option>
+<option value="pt_br">Portuguese (Brazil)</option>
+<option value="ro">Romanian</option>
+<option value="ru">Russian</option>
+<option value="sh">Serbo-Croatian</option>
+<option value="si">Slovenian</option>
+<option value="sr">Serbian</option>
+<option value="vn">Swedish</option>
+<option value="th">Thai</option>
+<option value="tr">Turkish</option>
+<option value="vn">Vietnamese</option>
+
+          <option value="en">--- By Code ---</option>
+<option value="ch">ch</option>
+<option value="cz">cz</option>
+<option value="da">da</option>
+<option value="de">de</option>
+<option value="ee">ee</option>
+<option value="el">el</option>
+<option value="es">es</option>
+<option value="eu">eu</option>
+<option value="fa">fa</option>
+<option value="fi">fi</option>
+<option value="fr_ca">fr_ca</option>
+<option value="fr">fr</option>
+<option value="zn_ch">zn_ch</option>
+<option value="he">he</option>
+<option value="hu">hu</option>
+<option value="it">it</option>
+<option value="ja">ja</option>
+<option value="lt">lt</option>
+<option value="lv">lv</option>
+<option value="nb">nb</option>
+<option value="nl">nl</option>
+<option value="pl">pl</option>
+<option value="pt_br">pt_br</option>
+<option value="ro">ro</option>
+<option value="ru">ru</option>
+<option value="sh">sh</option>
+<option value="si">si</option>
+<option value="sr">sr</option>
+<option value="sv">sv</option>
+<option value="th">th</option>
+<option value="tr">tr</option>
+<option value="vn">vn</option>
           </select>
         </label>
         <label>
@@ -279,6 +340,24 @@ Dialog._geckoOpenModal = function(url, action, init) {
   $d->close();
 ?>
           </select>
+        </label>
+        <label>
+          Mode:
+          <select name="DocType">
+            <option value="standards">Standards</option>
+            <option value="almost">Almost Standards</option>
+            <option value="quirks">Quirks</option>
+            
+          </select>
+        </label>
+        <label>
+          Icons:
+            <select name="icons">
+              <option value="">Default/Skin</option>
+              <option value="Classic">Classic</option>
+              <option value="Crystal">Crystal</option>
+              <option value="Tango">Tango</option>
+            </select>
         </label>
         <center><input type="button" value="extended Settings" onClick="fExtended();" /></center>
 
@@ -312,8 +391,45 @@ Dialog._geckoOpenModal = function(url, action, init) {
           ante elementum turpis. Aliquam nisl. Nulla posuere neque non
           tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
           parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
-          Curabitur pharetra bibendum lectus.</p>
-
+          Curabitur pharetra bibendum lectus. </p>
+<ul>
+  <li><a href="http://test.com/john%27s">test</a></li>
+  <li><a href="/absolute/test.html">test</a></li>
+  <li><a href="/test.html">test</a></li>
+  <li><a href="test.html">test</a></li>
+  <li><a href="../test.html">test</a></li>
+  <li></li>
+  <li><a href="/absolute/test.html">test</a></li>
+  <li><a href="/absolute/./test.html">test</a></li>
+  <li><a href="/absolute/./../test.html">test</a></li>
+  <li><a href="/absolute/.///./../test.html">test</a></li>
+  <li></li>
+  <li><a href="relative/test.html">test</a></li>
+  <li><a href="relative/./test.html">test</a></li>
+  <li><a href="relative/./../test.html">test</a></li>
+  <li><a href="relative/.///./../test.html">test</a></li>
+  <li></li>
+  <li><a href="../test.html">test</a></li>
+  <li><a href=".././test.html">test</a></li>
+  <li><a href=".././../test.html">test</a></li>
+  <li><a href=".././//./../test.html">test</a></li>
+  <li></li>
+  <li><a href="./relative/test.html">test</a></li>
+  <li><a href="./relative/./test.html">test</a></li>
+  <li><a href="./relative/./../test.html">test</a></li>
+  <li><a href="./relative/.///./../test.html">test</a></li>
+  <li></li>
+  <li><a href="./relative/test.html?.///./../../../abc/def">test</a></li>
+  <li><a href="./relative/./test.html#123/45/../../..///./ddd">test</a></li>
+  <li><a href="./relative/./../test.html?.///./../../../abc/def">test</a></li>
+  <li><a href="./relative/.///./../test.html#123/45/../../..///./ddd">test</a></li>
+  <li></li>
+  <li><a href="../../../../../../../../../../.././relative/test.html?.///./../../../abc/def">test</a></li>
+  <li><a href="../../.././relative/./test.html#123/45/../../..///./ddd">test</a></li>
+  <li><a href="../../../.././relative/./../test.html?.///./../../../abc/def">test</a></li>
+  <li><a href="../../../.././relative/.///./../test.html#123/45/../../..///./ddd">test</a></li>
+  
+</ul>
           <ul>
             <li> Phasellus et massa sed diam viverra semper.  </li>
             <li> Mauris tincidunt felis in odio.              </li>
@@ -326,7 +442,7 @@ Dialog._geckoOpenModal = function(url, action, init) {
 
   </form>
   <script type="text/javascript">
-    top.frames["body"].location.href = document.location.href.replace(/ext_example-menu\.php.*/, 'ext_example-body.html')
+    top.frames["body"].location.href = document.location.href.replace(/ext_example-menu\.php.*/, 'ext_example-body.php')
     var _oldSubmitHandler = null;
     if (document.forms[0].onsubmit != null) {
       _oldSubmitHandler = document.forms[0].onsubmit;
