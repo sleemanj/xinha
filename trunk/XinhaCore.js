@@ -65,6 +65,15 @@ Xinha._resolveRelativeUrl = function( base, url )
   }
 };
 
+// Automatically determine editor_url from our script src if it is not supplied
+if ( typeof _editor_url == 'undefined' || _editor_url == null)
+{
+  // Because of the way the DOM is loaded, this is guaranteed to always pull our script tag.
+  var scripts = document.getElementsByTagName('script');
+  var this_script = scripts[scripts.length - 1];
+  _editor_url = this_script.src.split('?')[0].split('/').slice(0, -1).join('/').replace(/\x2f*$/, '/');
+}
+
 if ( typeof _editor_url == "string" )
 {
   // Leave exactly one backslash at the end of _editor_url
@@ -80,11 +89,6 @@ if ( typeof _editor_url == "string" )
       _editor_url = Xinha._resolveRelativeUrl(tmpPath.join("/"), _editor_url);
     })();
   }
-}
-else
-{
-  alert("WARNING: _editor_url is not set!  You should set this variable to the editor files path; it should preferably be an absolute path, like in '/xinha/', but it can be relative if you prefer.  Further we will try to load the editor files correctly but we'll probably fail.");
-  _editor_url = '';
 }
 
 // make sure we have a language
@@ -8773,11 +8777,13 @@ Xinha.createLoadingMessages = function(xinha_editors)
   
   for (var i=0;i<xinha_editors.length;i++)
   {
-    if (!document.getElementById(xinha_editors[i])) 
+    var e = typeof xinha_editors[i] == 'string' ? document.getElementById(xinha_editors[i]) : xinha_editors[i];
+    if (!e)
     {
       continue;
     }
-    Xinha.loadingMessages.push(Xinha.createLoadingMessage(Xinha.getElementById('textarea', xinha_editors[i])));
+    
+    Xinha.loadingMessages.push(Xinha.createLoadingMessage(e));
   }
 };
 
