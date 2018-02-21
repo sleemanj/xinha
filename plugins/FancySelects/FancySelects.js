@@ -67,16 +67,17 @@ function FancySelects(editor)
 
 FancySelects.prototype.onGenerateOnce = function()
 {
+  
+  var editor = this.editor;
+  
   // Be sure we wait until jQuery is loaded
-  if(!(jQuery && jQuery.fn && jQuery.fn.select2 && jQuery('.toolbarElement select').length))
+  if(!(jQuery && jQuery.fn && jQuery.fn.select2 && jQuery(editor._htmlArea).find('.toolbarElement select').length))
   {
     var self = this;
     window.setTimeout(function(){self.onGenerateOnce()}, 500);
     return;
   }
   
-  var editor = this.editor;
-
   function formatFontName(opt)
   {
     if(!opt.id) return opt.text;
@@ -97,7 +98,7 @@ FancySelects.prototype.onGenerateOnce = function()
    return jQuery('<font size="'+opt.id+'";" title="'+opt.text+'">'+opt.text+'</font>');
   }
   
-  jQuery('.toolbarElement select').each(function(i,e){
+  jQuery(editor._htmlArea).find('.toolbarElement select').each(function(i,e){
     var txt = e.name;
     var el  = e;
     
