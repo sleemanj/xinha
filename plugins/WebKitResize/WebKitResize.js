@@ -75,20 +75,24 @@ WebKitResize.prototype.onGenerateOnce = function()
     return;
   }
   
-  if(Xinha.is_webkit)
+  try
   {
-    jQuery(this.editor._iframe).webkitimageresize();
+    if(Xinha.is_webkit)
+    {
+      jQuery(this.editor._iframe).webkitimageresize();
+    }
+    
+    if(Xinha.is_webkit || Xinha.is_gecko && this.editor.config.WebKitResize.enableTABLEForGeckoAlso) 
+    {
+      jQuery(this.editor._iframe).webkittableresize();
+    }
+    
+    if(Xinha.is_webkit || Xinha.is_gecko && this.editor.config.WebKitResize.enableTDForGeckoAlso) 
+    {
+      jQuery(this.editor._iframe).webkittdresize();
+    }
   }
-  
-  if(Xinha.is_webkit || Xinha.is_gecko && this.editor.config.WebKitResize.enableTABLEForGeckoAlso) 
-  {
-    jQuery(this.editor._iframe).webkittableresize();
-  }
-  
-  if(Xinha.is_webkit || Xinha.is_gecko && this.editor.config.WebKitResize.enableTDForGeckoAlso) 
-  {
-    jQuery(this.editor._iframe).webkittdresize();
-  }
+  catch(e) { }
 }
 
 // When changing modes, make sure that we stop displaying the handles
