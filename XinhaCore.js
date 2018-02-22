@@ -2147,6 +2147,8 @@ Xinha.makeBtnImg = function(imgDef, doc)
   if ( Xinha.is_ie && ( ( !doc.compatMode ) || ( doc.compatMode && doc.compatMode == "BackCompat" ) ) )
   {
     i_contain = doc.createElement('span');
+    // IE10 Quirks :-/
+    i_contain.style.display = 'inline-block';
   }
   else
   {
