@@ -4290,7 +4290,7 @@ Xinha.loadScript = function(script, plugin, callback)
 
 Xinha.includeAssets = function()
 {
-  var assetLoader = { pendingAssets: [ ], loaderRunning: false, loadedAssets: [ ] };
+  var assetLoader = { pendingAssets: [ ], loaderRunning: false, loaderPaused: false, loadedAssets: [ ] };
   
   assetLoader.callbacks = [ ];
   
@@ -4324,10 +4324,24 @@ Xinha.includeAssets = function()
     
     if(this.pendingAssets.length)
     {
+      if(this.loaderPaused)
+      {
+        this.loaderRunning = false;
+        return;
+      }
       var nxt = this.pendingAssets[0];
       this.pendingAssets.splice(0,1); // Remove 1 element
       switch(nxt.type)
       {
+        case 'command/abort':
+          if((typeof nxt.condition != 'function' && nxt.condition) || (typeof nxt.condition == 'function' && nxt.condition()))
+          {
+            // Abort is in the context of the chained loader, we might have more things added
+            //  in our own list and those should continue to be executed
+            nxt.chainLoader.abort();
+          }
+          return this.loadNext();
+
         case 'text/css':
           this.loadedAssets.push(nxt);
           Xinha.loadStyle(nxt.url, nxt.plugin);
@@ -4336,12 +4350,14 @@ Xinha.includeAssets = function()
         case 'text/javascript':          
           this.loadedAssets.push(nxt);
           Xinha.loadScript(nxt.url, nxt.plugin, function() { self.loadNext(); });
+          return this;
       }
     }
     else
     {
       this.loaderRunning = false;
       this.runCallback();      
+      return this;
     }
   };
   
@@ -4433,6 +4449,51 @@ Xinha.includeAssets = function()
     if(condition) this.loadStyle(url, plugin);
     return this;
   };
+    
+  assetLoader.abortIf = function(condition)
+  {
+    // We use a dummy asset to insert, and return a chainable loader which will be started 
+    //  only if the condition is met (evaluated after previous assets have been loaded)
+    // 
+    // Note that this means you can do
+    //  
+    //  myAssetLoader.loadScript('blah.js')
+    //               .abortIf(function(){ return true ; } )
+    //               .loadStyle('blah.css');
+    //
+    //  myAssetLoader.loadScript('foo.js');
+    //  
+    // and even though the first chain was aborted after loading blah.js and blah.css 
+    //   never gets loaded, foo.js still does get loaded because it's in a different 
+    //   chain of assets.
+    //
+    // For a  practical example, see loadLibrary where jQuery is tested after it loads
+    //  and if it doesn't then the chained (assuming jQuery) scripts are not loaded.
+    //
+    var waitAsset = { type: 'command/abort', condition: condition, url: null, plugin: null, chainLoader: Xinha.includeAssets() };
+    this.pendingAssets.push( waitAsset );
+    waitAsset.chainLoader.pause();
+    return waitAsset.chainLoader;
+  };
+  
+  assetLoader.pause = function() 
+  {
+    this.loaderPaused = true;
+  };
+  
+  assetLoader.resume = function() 
+  {
+    this.loaderPaused = false;
+    if(!this.loaderRunning) this.loadNext();
+  };
+  
+  assetLoader.abort = function()
+  {
+    this.pendingAssets = [ ];
+    this.callbacks     = [ ];
+    this.loaderPaused = false;
+    return this;
+  };
   
   for(var i = 0 ; i < arguments.length; i++)
   {
@@ -4482,7 +4543,12 @@ Xinha.loadLibrary = function(libraryName, minVersion, maxVersion)
     case 'jquery':
       if(typeof jQuery == 'undefined')
       {
-        Xinha._libraryAssetLoader.loadScriptOnce('libraries/jquery-3.3.1.js');
+        // jQuery can be problematic if it (jQuery itself) fails to load
+        //  due to old browsers, so we will return a chained loader which
+        //  aborts anything chained on it if jQuery doesn't come into 
+        //  existence properly.
+        return Xinha._libraryAssetLoader.loadScriptOnce('libraries/jquery-3.3.1.js')
+                                        .abortIf(function(){ return typeof jQuery == 'undefined'; });
       }
       break;
       
