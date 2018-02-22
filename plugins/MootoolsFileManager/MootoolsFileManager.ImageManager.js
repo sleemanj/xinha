@@ -110,7 +110,11 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
     });        
   }
   
-  if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
+  // IE11 which pretends it is "gecko" is particularly finicky 
+  //  about losing selection other browsers not so much, but they
+  //   don't seem to mind saving and restoring it anyway, so we 
+  //   will do that for everybody
+  if(1||Xinha.is_ie) this.current_selection = this.editor.saveSelection();
   
   if(self.current_image)
   {      
@@ -574,7 +578,11 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
   var param = self.ImageManagerAttributes();  
   param.f_url = path;
   
-  if(Xinha.is_ie) this.editor.restoreSelection(this.current_selection);
+  // IE11 which pretends it is "gecko" is particularly finicky 
+  //  about losing selection other browsers not so much, but they
+  //   don't seem to mind saving and restoring it anyway, so we 
+  //   will do that for everybody
+  if(1||Xinha.is_ie) this.editor.restoreSelection(this.current_selection);
   var img = image;
   if (!img) {
     if (0 && Xinha.is_ie) {  // Maybe IE7 Needs this, 9 seems to be ok, I think 8 too
