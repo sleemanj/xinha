@@ -124,7 +124,11 @@ MootoolsFileManager.prototype.OpenFileManager = function(link)
       });       
     }
 
-    if(Xinha.is_ie) this.current_selection = this.editor.saveSelection();
+    // IE11 which pretends it is "gecko" is particularly finicky 
+    //  about losing selection other browsers not so much, but they
+    //   don't seem to mind saving and restoring it anyway, so we 
+    //   will do that for everybody
+    if(1||Xinha.is_ie) this.current_selection = this.editor.saveSelection();
     if(link)
     {      
         var src  = Xinha.is_ie ? link.href : link.getAttribute("href");
@@ -164,7 +168,11 @@ MootoolsFileManager.prototype.FileManagerReturn = function(path, file)
   var param = this.FileManagerAttributes();  
   param.f_href = path;
 
-  if(Xinha.is_ie) this.editor.restoreSelection(this.current_selection);  
+  // IE11 which pretends it is "gecko" is particularly finicky 
+  //  about losing selection other browsers not so much, but they
+  //   don't seem to mind saving and restoring it anyway, so we 
+  //   will do that for everybody
+  if(1||Xinha.is_ie) this.editor.restoreSelection(this.current_selection);  
   if (!a)
   {
     try 
