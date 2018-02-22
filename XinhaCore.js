@@ -561,6 +561,23 @@ Xinha.Config = function()
   */
   this.height = "auto";
 
+  /** This property allows the user to drag-resize the iframe, if 
+   * the browser supports it.  Currently Chrome and Opera seem to work
+   * ok with this, while Firefox doesn't support the CSS resize for iframe
+   * 
+   * There is a Bugzilla bug about it...
+   *    https://bugzilla.mozilla.org/show_bug.cgi?id=680823
+   * 
+   * IE, and Edge don't support the css resize property at all.
+   * 
+   *  Safari 9.1.1 acts a bit weird, unusable
+   *  Safari 11.0.3 works ok but you can only increase the size
+   * 
+   * @type Boolean
+   */
+  
+  this.resizableEditor = false;
+  
  /** Specifies whether the toolbar should be included
   *  in the size, or are extra to it.  If false then it's recommended
   *  to have the size set as explicit pixel sizes (either in Xinha.Config or on your textarea)<br />
@@ -2920,6 +2937,65 @@ Xinha.prototype.initSize = function()
   this.notifyOn('panel_change',function() { editor.sizeEditor(); });
 };
 
+/** Get the overall size of the editor, including toolbars and panels
+ *  (if they are being considered)
+ *
+ *  This is used by sizeEditor to get the size of the area excluding toolbars
+ *  when it sets the _htmlArea.size attribute first explicitly and then
+ *  adds in toolbars/panels later.
+ *
+ */
+
+Xinha.prototype.getOverallSize = function(useStylePxSize)
+{
+  // Originally when sizeEditor was adjusting for panel/toolbar
+  // size after having set _htmlArea.style.width/height it always
+  // used the offsetWidth/Height, even if it set a px width/height
+  // on the style just before.
+  //
+  // In the interests of not-fixing-whats-not-broke, we are only
+  // going to look at the style.width/height pixel size if 
+  // this is in resizing mode.  It actually works ok for 
+  // non-resizable editors too but I have not tested old ones.
+  //
+  // Note that if you use offsetWidth/Height for a resizable 
+  // editor during resize, it works OK but for some reason I don't
+  // quite understand the minimum size you can reach (in Chrome)
+  // is not as small as when you observe style.width/height
+  
+  if(typeof useStylePxSize == 'undefined')
+  {
+    useStylePxSize = this.config.resizableEditor;
+  }
+  
+  var size = { w: 0, h: 0, width: 0, height:0, offsetWidth: 0, offsetHeight: 0 };
+  
+  if(useStylePxSize && this._htmlArea.style.width.match(/px/))
+  {
+    size.w = parseInt(this._htmlArea.style.width.replace(/px/,''));
+  }
+  else
+  {
+    size.w = this._htmlArea.offsetWidth;
+  }
+  
+  if(useStylePxSize && this._htmlArea.style.height.match(/px/))
+  {
+    size.h = parseInt(this._htmlArea.style.height.replace(/px/,''));
+  }
+  else
+  {
+    size.h = this._htmlArea.offsetHeight;
+  }
+  
+  size.offsetHeight = size.h;
+  size.height       = this._htmlArea.style.height;
+  size.offsetWidth  = size.w;
+  size.width        = this._htmlArea.style.width;
+  
+  return size;
+};
+
 /**
  *  Size the editor to a specific size, or just refresh the size (when window resizes for example)
  *  @param {string} width optional width (CSS specification)
@@ -2966,13 +3042,13 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
       var rPanel = this._panels.right;
       if ( rPanel.on && rPanel.panels.length && Xinha.hasDisplayedChildren(rPanel.div) )
       {
-        this._htmlArea.style.width = (this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.right, 10)) + 'px';
+        this._htmlArea.style.width = (this.getOverallSize().offsetWidth + parseInt(this.config.panel_dimensions.right, 10)) + 'px';
       }
 
       var lPanel = this._panels.left;
       if ( lPanel.on && lPanel.panels.length && Xinha.hasDisplayedChildren(lPanel.div) )
       {
-        this._htmlArea.style.width = (this._htmlArea.offsetWidth + parseInt(this.config.panel_dimensions.left, 10)) + 'px';
+        this._htmlArea.style.width = (this.getOverallSize().offsetWidth + parseInt(this.config.panel_dimensions.left, 10)) + 'px';
       }
     }
   }
@@ -2983,7 +3059,7 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
     if ( !this._htmlArea.sizeIncludesToolbars )
     {
       // Need to add some for toolbars
-      this._htmlArea.style.height = (this._htmlArea.offsetHeight + this._toolbar.offsetHeight + this._statusBar.offsetHeight) + 'px';
+      this._htmlArea.style.height = (this.getOverallSize().offsetHeight + this._toolbar.offsetHeight + this._statusBar.offsetHeight) + 'px';
     }
 
     if ( !this._htmlArea.sizeIncludesPanels )
@@ -2992,13 +3068,13 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
       var tPanel = this._panels.top;
       if ( tPanel.on && tPanel.panels.length && Xinha.hasDisplayedChildren(tPanel.div) )
       {
-        this._htmlArea.style.height = (this._htmlArea.offsetHeight + parseInt(this.config.panel_dimensions.top, 10)) + 'px';
+        this._htmlArea.style.height = (this.getOverallSize().offsetHeight + parseInt(this.config.panel_dimensions.top, 10)) + 'px';
       }
 
       var bPanel = this._panels.bottom;
       if ( bPanel.on && bPanel.panels.length && Xinha.hasDisplayedChildren(bPanel.div) )
       {
-        this._htmlArea.style.height = (this._htmlArea.offsetHeight + parseInt(this.config.panel_dimensions.bottom, 10)) + 'px';
+        this._htmlArea.style.height = (this.getOverallSize().offsetHeight + parseInt(this.config.panel_dimensions.bottom, 10)) + 'px';
       }
     }
   }
@@ -3008,6 +3084,8 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   // now we size the INNER area and position stuff in the right places.
   width  = this._htmlArea.offsetWidth;
   height = this._htmlArea.offsetHeight;
+  
+  
 
   // Set colspan for toolbar, and statusbar, rowspan for left & right panels, and insert panels to be displayed
   // into thier rows
@@ -3819,6 +3897,24 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
           editor.sizeEditor(); 
         }
       });      
+      
+      
+      if(typeof editor.config.resizableEditor != 'undefined' && editor.config.resizableEditor)
+      {
+        editor._iframe.style.resize = 'both';
+        var lastResize    = [0,0];
+        Xinha._addEvent(editor._iframe.contentWindow, 'resize', function(){
+          if(lastResize[0] == editor._iframe.style.width && lastResize[1] == editor._iframe.style.height)
+          {
+            return;
+          }
+          
+          lastResize = [ editor._iframe.style.width, editor._iframe.style.height ];          
+          editor.sizeEditor(editor._iframe.style.width, editor._iframe.style.height, false, false);
+        });
+      }
+      
+    
       editor.removeLoadingMessage();
     }
   );
