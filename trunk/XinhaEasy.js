@@ -335,34 +335,28 @@ if(typeof Xinha == 'undefined')
 
 xinha_init = xinha_init ? xinha_init : function()
 {
-  // For lte IE7 support of selectors to choose xinha areas.  This code take from
-  //  https://github.com/inexorabletash/polyfill/blob/master/polyfill.js#L4804
-  // which is "Unlicence" licenced, which is effective Public Domain
-  //  https://github.com/inexorabletash/polyfill/blob/master/LICENSE.md
+  // IE7 support for querySelectorAll. Supports multiple / grouped selectors
+  // and the attribute selector with a "for" attribute. http://www.codecouch.com/
+  // http://www.codecouch.com/2012/05/adding-document-queryselectorall-support-to-ie-7/
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (!document.querySelectorAll) {
-    document.querySelectorAll = function(selectors) {
-      var style = document.createElement('style'), elements = [], element;
-      document.documentElement.firstChild.appendChild(style);
-      document._qsa = [];
-
-      style.styleSheet.cssText = selectors + '{x-qsa:expression(document._qsa && document._qsa.push(this))}';
-      window.scrollBy(0, 0);
-      style.parentNode.removeChild(style);
-
-      while (document._qsa.length) {
-        element = document._qsa.shift();
-        element.style.removeAttribute('x-qsa');
-        elements.push(element);
+  if (!document.querySelectorAll) 
+  {
+    (function(d, s) {
+      d=document, s=d.createStyleSheet();
+      d.querySelectorAll = function(r, c, i, j, a) {
+        a=d.all, c=[], r = r.replace(/\[for\b/gi, '[htmlFor').split(',');
+        for (i=r.length; i--;) {
+          s.addRule(r[i], 'k:v');
+          for (j=a.length; j--;) a[j].currentStyle.k && c.push(a[j]);
+          s.removeRule(0);
+        }
+        return c;
       }
-      document._qsa = null;
-      return elements;
-    };
+    })();
   }
 
-  // Document.querySelector method
-  // Needed for: IE7-
-  if (!document.querySelector) {
+  if (!document.querySelector) 
+  {
     document.querySelector = function(selectors) {
       var elements = document.querySelectorAll(selectors);
       return (elements.length) ? elements[0] : null;
@@ -389,12 +383,10 @@ xinha_init = xinha_init ? xinha_init : function()
   
   if(typeof xinha_editors == 'string')
   {
-    xinha_editors = [ xinha_editors ];
-    
     // A raw ID like we used to do
     if(document.getElementById(xinha_editors))
     {
-      xinha_editors = [ xinha_editors ];
+      xinha_editors = [ document.getElementById(xinha_editors) ];
     }
     
     // Must be a selector, this is not supported for IE7 or lower!
@@ -465,6 +457,8 @@ xinha_init = xinha_init ? xinha_init : function()
         case 'common':
         {
           Array.prototype.push.apply(xinha_plugins, [ 'CharacterMap', 'ContextMenu', 'FancySelects', 'SmartReplace', 'SuperClean', 'TableOperations', 'ListOperations', 'PreserveScripts', 'PreserveSelection', 'WebKitResize' ]);
+
+          
         } 
         break;
         
