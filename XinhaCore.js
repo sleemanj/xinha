@@ -1159,8 +1159,22 @@ Xinha.Config = function()
    */
   this.debug = false;
 
+  /** Paths to various resources loaded by Xinha during operation.
+   * 
+   * Note that the iframe_src is the document loaded in the iframe to start with
+   * due to modern security requirements, if you are using Xinha from
+   * an external server (CDN), special care needs be taken, javascript:'' 
+   * which is now the default seems to be ok, but if you have problems you could
+   * change this to an absolute path to a file on the server which has the page
+   * that is using Xinha (ie, /myserver/blank.html ), the contents should 
+   * just be a blank html page (see popups/blank.html)
+   * 
+   * @type Array
+   */
+  
   this.URIs =
   {
+   "iframe_src": 'javascript:\'\'',
    "blank": _editor_url + "popups/blank.html",
    "link":  _editor_url + "modules/CreateLink/link.html",
    "insert_image": _editor_url + "modules/InsertImage/insert_image.html",
@@ -2722,7 +2736,7 @@ Xinha.prototype.generate = function ()
 
     // create the IFRAME & add to container
   var iframe = document.createElement("iframe");
-  iframe.src = this.popupURL(editor.config.URIs.blank);
+  iframe.src = this.popupURL(editor.config.URIs.iframe_src);
   iframe.id = "XinhaIFrame_" + this._textArea.id;
   fw.ed_cell.appendChild(iframe);
   this._iframe = iframe;
@@ -2828,10 +2842,13 @@ Xinha.prototype.generate = function ()
   this.setLoadingMessage(Xinha._lc('Finishing'));
   // Add an event to initialize the iframe once loaded.
   editor._iframeLoadDone = false;
-  if (Xinha.is_opera) 
+  if (iframe.src == 'javascript:\'\'' || iframe.src == '' || Xinha.is_opera)
   {
     editor.initIframe();
   }
+  // I suspect we no longer need this and can just use editor.initIframe (certainly 
+  // iframe.src is javascritp:'' by default.  But I will leave this for posterity
+  // just in case
   else 
   {
     Xinha._addEvent(
@@ -3395,6 +3412,22 @@ Xinha.prototype.initIframe = function()
   this.disableToolbar();
   var doc = null;
   var editor = this;
+
+  // It is possible that we need to wait a bit more for the iframe
+  //  browsers vary a bit on how they treat the iframe load events
+  //  so even though we should just be able to listen to load, maybe
+  //  that doesn't work quite right, just waiting a bit if it fails
+  //  and then trying again seems like a good idea.
+  if(typeof editor._iframeWaitingRetries == 'undefined' )    
+  {
+    editor._iframeWaitingRetries = 10;
+  }
+ 
+  // For each retry we lengthen the delay, just so we don't spam the console
+  //  with messages really
+  var retryDelay = (625 / (editor._iframeWaitingRetries * editor._iframeWaitingRetries ) ) * 50;
+  editor._iframeWaitingRetries--;
+
   try
   {
     if ( editor._iframe.contentDocument )
@@ -3409,21 +3442,40 @@ Xinha.prototype.initIframe = function()
     // try later
     if ( !doc )
     {
-      if ( Xinha.is_gecko )
+      if( editor._iframeWaitingRetries > 0 )
       {
-        setTimeout(function() { editor.initIframe(); }, 50);
+        Xinha.debugMsg("Still waiting for Iframe...");
+        editor.setLoadingMessage(Xinha._lc("Waiting for Iframe to load..."));
+        setTimeout(function() { editor.initIframe(); }, retryDelay);
         return false;
       }
       else
       {
-        alert("ERROR: IFRAME can't be initialized.");
+        // Give up
+        Xinha.debugMsg("Xinha: Unable to access the Iframe document object, this may be the result of a Cross-Origin restriction, very slow network, or some other issue.", 'warn');
+        Xinha.debugMsg("You may wish to try changing xinha_config.URIs.iframe_src from "+editor.config.URIs.iframe_src+" to a url of a blank page on your server (eg '/blank.html') and see if that helps.", 'warn');
+        editor.setLoadingMessage(Xinha._lc("Error Loading Xinha.  Developers, check the Error Console for information."));
+        return false;
       }
     }
   }
   catch(ex)
   { // try later
-    setTimeout(function() { editor.initIframe(); }, 50);
-    return false;
+    if(editor._iframeWaitingRetries > 0)
+    {
+      Xinha.debugMsg("Still waiting for Iframe...");
+      editor.setLoadingMessage(Xinha._lc("Waiting for Iframe to load..."));
+      setTimeout(function() { editor.initIframe(); }, retryDelay);
+      return false;
+    }
+    else
+    {
+      Xinha.debugMsg(ex, 'warn');
+      Xinha.debugMsg("Xinha: Unable to access the Iframe document object, this may be the result of a Cross-Origin restriction, very slow network, or some other issue.", 'warn');
+      Xinha.debugMsg("You may wish to try changing xinha_config.URIs.iframe_src from "+editor.config.URIs.iframe_src+" to a url of a blank page on your server (eg '/blank.html') and see if that helps.", 'warn');
+      editor.setLoadingMessage(Xinha._lc("Error Loading Xinha.  Developers, check the Error Console for information."));
+      return false;
+    }
   }
   
   Xinha.freeLater(this, '_doc');
@@ -7489,7 +7541,7 @@ Xinha.prototype.popupURL = function(file)
     }
     url = Xinha.getPluginDir(plugin) + "/popups/" + popup;
   }
-  else if ( file.match(/^\/.*?/) || file.match(/^https?:\/\//))
+  else if ( file.match(/^\/.*?/) || file.match(/^[a-z]+?:/))
   {
     url = file;
   }
