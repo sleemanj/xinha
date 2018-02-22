@@ -4340,6 +4340,10 @@ Xinha.includeAssets = function()
             //  in our own list and those should continue to be executed
             nxt.chainLoader.abort();
           }
+          else
+          {
+            nxt.chainLoader.resume();
+          }
           return this.loadNext();
 
         case 'text/css':
