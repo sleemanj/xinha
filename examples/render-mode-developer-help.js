@@ -3,6 +3,7 @@
  */
 
 window.setTimeout(function(){
+  if(typeof document.doctype == 'undefined' || document.doctype == null) return;
   var doctypeHelp = '\
   <fieldset style="margin-top:20px;">\
     <legend style="font-weight:bold;">Browser Rendering Mode</legend>\
@@ -79,5 +80,8 @@ window.setTimeout(function(){
   document.getElementById('doctypeHelpText').innerHTML = doctypeHelp;
 }, 500);
 
-document.write('<div id="doctypeHelpText"></div>');
+// Because adding the above to the document after it's loaded will quite possibly
+// introduce a vertical scrollbar, of which Xinha won't be aware, we would have 
+// to issue a sizeEditors
+document.write('<div id="doctypeHelpText" style="height:2000px"></div>');
         
