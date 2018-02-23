@@ -527,7 +527,98 @@ Xinha.RE_email    = /^[_a-z\d\-\.]{3,}@[_a-z\d\-]{2,}(\.[_a-z\d\-]{2,})+$/i;
 */
 Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_\-]{2,}(\.[a-z0-9_\-]{2,}){2,}(:[0-9]+)?(\/\S+)*)/i;
 
+/** This object records for known plugins where they can be found
+ *  this is used by loadPlugin to avoid having to test multiple locations
+ *  when we can reasonably know where the plugin is because it is
+ *  part of the distribution.
+ * 
+ *  This becomes important because of CoRS and a problem with Amazon S3
+ *  in which it does not poroduce a necessary header to Chrome if Chrome
+ *  first requests a script as part of loading a <script> and then
+ *  "pings" with XMLHTTPRequest, depending on that bit of a race-condition
+ *  which one hits cache first things can go wonky.
+ * 
+ *  By avoiding the need to ping things in the distribution, we should
+ *  not have that problem I think.
+ */
 
+Xinha.pluginManifest = {
+  Abbreviation:         { url: _editor_url+'plugins/Abbreviation/Abbreviation.js' },
+  AboutBox:             { url: _editor_url+'modules/AboutBox/AboutBox.js' },
+  BackgroundImage:      { url: _editor_url+'unsupported_plugins/BackgroundImage/BackgroundImage.js' },
+  CharacterMap:         { url: _editor_url+'plugins/CharacterMap/CharacterMap.js' },
+  CharCounter:          { url: _editor_url+'plugins/CharCounter/CharCounter.js' },
+  ClientsideSpellcheck: { url: _editor_url+'unsupported_plugins/ClientsideSpellcheck/ClientsideSpellcheck.js' },
+  ColorPicker:          { url: _editor_url+'modules/ColorPicker/ColorPicker.js' },
+  ContextMenu:          { url: _editor_url+'plugins/ContextMenu/ContextMenu.js' },
+  CreateLink:           { url: _editor_url+'modules/CreateLink/link.js' },
+  CSSDropDowns:         { url: _editor_url+'plugins/CSSDropDowns/CSSDropDowns.js' },
+  CSSPicker:            { url: _editor_url+'plugins/CSSPicker/CSSPicker.js' },
+  DefinitionList:       { url: _editor_url+'plugins/DefinitionList/DefinitionList.js' },
+  Dialogs:              { url: _editor_url+'modules/Dialogs/dialog.js' },
+  DoubleClick:          { url: _editor_url+'unsupported_plugins/DoubleClick/DoubleClick.js' },
+  DynamicCSS:           { url: _editor_url+'plugins/DynamicCSS/DynamicCSS.js' },
+  EditTag:              { url: _editor_url+'plugins/EditTag/EditTag.js' },
+  EncodeOutput:         { url: _editor_url+'plugins/EncodeOutput/EncodeOutput.js' },
+  Equation:             { url: _editor_url+'plugins/Equation/Equation.js' },
+  ExtendedFileManager:  { url: _editor_url+'unsupported_plugins/ExtendedFileManager/ExtendedFileManager.js' },
+  FancySelects:         { url: _editor_url+'plugins/FancySelects/FancySelects.js' },
+  Filter:               { url: _editor_url+'unsupported_plugins/Filter/Filter.js' },
+  FindReplace:          { url: _editor_url+'plugins/FindReplace/FindReplace.js' },
+  FormOperations:       { url: _editor_url+'plugins/FormOperations/FormOperations.js' },
+  Forms:                { url: _editor_url+'plugins/Forms/Forms.js' },
+  FullPage:             { url: _editor_url+'plugins/FullPage/FullPage.js' },
+  FullScreen:           { url: _editor_url+'modules/FullScreen/full-screen.js' },
+  Gecko:                { url: _editor_url+'modules/Gecko/Gecko.js' },
+  GenericPlugin:        { url: _editor_url+'plugins/GenericPlugin/GenericPlugin.js' },
+  GetHtml:              { url: _editor_url+'plugins/GetHtml/GetHtml.js' },
+  HorizontalRule:       { url: _editor_url+'plugins/HorizontalRule/HorizontalRule.js' },
+  HtmlEntities:         { url: _editor_url+'plugins/HtmlEntities/HtmlEntities.js' },
+  HtmlTidy:             { url: _editor_url+'unsupported_plugins/HtmlTidy/HtmlTidy.js' },
+  ImageManager:         { url: _editor_url+'unsupported_plugins/ImageManager/ImageManager.js' },
+  InlineStyler:         { url: _editor_url+'modules/InlineStyler/InlineStyler.js' },
+  InsertAnchor:         { url: _editor_url+'plugins/InsertAnchor/InsertAnchor.js' },
+  InsertImage:          { url: _editor_url+'modules/InsertImage/insert_image.js' },
+  InsertMarquee:        { url: _editor_url+'unsupported_plugins/InsertMarquee/InsertMarquee.js' },
+  InsertNote:           { url: _editor_url+'plugins/InsertNote/InsertNote.js' },
+  InsertPagebreak:      { url: _editor_url+'plugins/InsertPagebreak/InsertPagebreak.js' },
+  InsertPicture:        { url: _editor_url+'unsupported_plugins/InsertPicture/InsertPicture.js' },
+  InsertSmiley:         { url: _editor_url+'plugins/InsertSmiley/InsertSmiley.js' },
+  InsertSnippet2:       { url: _editor_url+'plugins/InsertSnippet2/InsertSnippet2.js' },
+  InsertSnippet:        { url: _editor_url+'plugins/InsertSnippet/InsertSnippet.js' },
+  InsertTable:          { url: _editor_url+'modules/InsertTable/insert_table.js' },
+  InsertWords:          { url: _editor_url+'plugins/InsertWords/InsertWords.js' },
+  InternetExplorer:     { url: _editor_url+'modules/InternetExplorer/InternetExplorer.js' },
+  LangMarks:            { url: _editor_url+'plugins/LangMarks/LangMarks.js' },
+  Linker:               { url: _editor_url+'plugins/Linker/Linker.js' },
+  ListOperations:       { url: _editor_url+'plugins/ListOperations/ListOperations.js' },
+  ListType:             { url: _editor_url+'plugins/ListType/ListType.js' },
+  MootoolsFileManager:  { url: _editor_url+'plugins/MootoolsFileManager/MootoolsFileManager.js' },
+  NoteServer:           { url: _editor_url+'unsupported_plugins/NoteServer/NoteServer.js' },
+  Opera:                { url: _editor_url+'modules/Opera/Opera.js' },
+  PasteText:            { url: _editor_url+'plugins/PasteText/PasteText.js' },
+  PersistentStorage:    { url: _editor_url+'unsupported_plugins/PersistentStorage/PersistentStorage.js' },
+  PreserveScripts:      { url: _editor_url+'plugins/PreserveScripts/PreserveScripts.js' },
+  PreserveSelection:    { url: _editor_url+'plugins/PreserveSelection/PreserveSelection.js' },
+  PSFixed:              { url: _editor_url+'unsupported_plugins/PSFixed/PSFixed.js' },
+  PSLocal:              { url: _editor_url+'unsupported_plugins/PSLocal/PSLocal.js' },
+  PSServer:             { url: _editor_url+'unsupported_plugins/PSServer/PSServer.js' },
+  QuickTag:             { url: _editor_url+'plugins/QuickTag/QuickTag.js' },
+  SaveOnBlur:           { url: _editor_url+'plugins/SaveOnBlur/SaveOnBlur.js' },
+  SaveSubmit:           { url: _editor_url+'plugins/SaveSubmit/SaveSubmit.js' },
+  SetId:                { url: _editor_url+'plugins/SetId/SetId.js' },
+  SmartReplace:         { url: _editor_url+'plugins/SmartReplace/SmartReplace.js' },
+  SpellChecker:         { url: _editor_url+'unsupported_plugins/SpellChecker/SpellChecker.js' },
+  Stylist:              { url: _editor_url+'plugins/Stylist/Stylist.js' },
+  SuperClean:           { url: _editor_url+'plugins/SuperClean/SuperClean.js' },
+  TableOperations:      { url: _editor_url+'plugins/TableOperations/TableOperations.js' },
+  Template:             { url: _editor_url+'unsupported_plugins/Template/Template.js' },
+  UnFormat:             { url: _editor_url+'unsupported_plugins/UnFormat/UnFormat.js' },
+  UnsavedChanges:       { url: _editor_url+'plugins/UnsavedChanges/UnsavedChanges.js' },
+  WebKitResize:         { url: _editor_url+'plugins/WebKitResize/WebKitResize.js' },
+  WebKit:               { url: _editor_url+'modules/WebKit/WebKit.js' },
+  WysiwygWrap:          { url: _editor_url+'plugins/WysiwygWrap/WysiwygWrap.js' }
+};
 
 /**
  * This class creates an object that can be passed to the Xinha constructor as a parameter.
@@ -4018,6 +4109,22 @@ Xinha.getPluginDir = function(plugin, forceUnsupported)
   {
     return Xinha.externalPlugins[plugin][0];
   }
+  
+  // This is ued by multiStageLoader when it's trying to find a plugin
+  // after it's tried the normal directory, so as long as it's in the pluginManifest
+  // then this shouldn't be hit, but just incase we will respect this request
+  if (forceUnsupported)
+  {
+    return _editor_url + "unsupported_plugins/" + plugin ;
+  }
+  
+  // Just in case we fudge the pluginManifest for a given plugin
+  // pull the directory from there
+  if(typeof Xinha.pluginManifest[plugin] != 'undefined')
+  {
+    return Xinha.pluginManifest[plugin].url.replace(/\/[a-zA-Z0-9_-]+\.js$/, '');
+  }
+  
   if (forceUnsupported ||
       // If the plugin is fully loaded, it's supported status is already set.
       (Xinha.getPluginConstructor(plugin) && (typeof Xinha.getPluginConstructor(plugin).supported != 'undefined') && !Xinha.getPluginConstructor(plugin).supported))
@@ -4130,6 +4237,10 @@ Xinha.loadPlugin = function(pluginName, callback, url)
     if (Xinha.externalPlugins[pluginName])
     {
       Xinha._loadback(Xinha.externalPlugins[pluginName][0]+Xinha.externalPlugins[pluginName][1], callback, this, pluginName);
+    }
+    else if(Xinha.pluginManifest[pluginName])
+    {
+      Xinha._loadback(Xinha.pluginManifest[pluginName].url, callback, this, pluginName);
     }
     else
     {
