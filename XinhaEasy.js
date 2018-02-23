@@ -432,7 +432,36 @@ xinha_init = xinha_init ? xinha_init : function()
     xinha_plugins = [ ];
     for(var i = 0; i < load_plugins.length; i++)
     {
-      // Inc ase of [ 'Plugin1', ['Plugin1', 'Plugin3'] ]
+      // In case of { from: '/path/to/plugins', load: ['MootoolsFileManager'] }
+      if(typeof load_plugins[i] == 'object' && typeof load_plugins[i].from == 'string')
+      {
+        // Resolve the "load" into a list of plugins
+        var externs = parse_plugins(load_plugins[i].load);
+        
+        // MPush them into plugins as external plugin objects
+        for(var ii = 0; ii < externs.length; ii++)
+        {
+          // In case you want to specify a non-default plugin file naming
+          if(externs[ii].match(/\//))
+          {
+            xinha_plugins.push({ url: load_plugins[i].from + '/' + externs[ii] , plugin: externs[ii].replace(/.*\/([^.]+)\..*$/, '$1') });
+          }
+          else
+          {
+            xinha_plugins.push({ url: load_plugins[i].from + '/' + externs[ii] + '/' + externs[ii] + '.js', plugin: externs[ii]});
+          }
+        }
+        continue;
+      }
+      
+      // External plugin definition
+      if(typeof load_plugins[i] == 'object' && typeof load_plugins[i].url == 'string')
+      {
+        xinha_plugins.push(load_plugins[i]);
+        continue;
+      }
+      
+      // In case of [ 'Plugin1', ['Plugin1', 'Plugin3'] ]
       if(typeof load_plugins[i] != 'string')
       {
         Array.prototype.push.apply(load_plugins, load_plugins[i]); 
