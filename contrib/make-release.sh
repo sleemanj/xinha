@@ -75,6 +75,12 @@ rm -rf xinha-cdn/examples/files/Extended.html
 cat xinha-cdn/examples/index.html | sed -r 's/<h2>Exper/<!-- These are not applicable in a CDN environment: <h2>Exper/' | sed -r 's/(<.body>)/-->\1/' >xinha-cdn/examples/index.html.2
 mv xinha-cdn/examples/index.html.2  xinha-cdn/examples/index.html
 
+# Replace the XinhaEasy.js link to the "CDN" link 
+for file in xinha-cdn/examples/*
+do
+  replace "../XinhaEasy.js" "//s3-us-west-1.amazonaws.com/xinha/xinha-${VER}/XinhaEasy.js" -- $file
+done
+
 cat >xinha-cdn/README.TXT <<'EOF'
 Xinha CDN Local Distribution
 --------------------------------------------------------------------------------
@@ -94,9 +100,27 @@ echo "xinha-$VER" >xinha-cdn/VERSION.TXT
 zip -r    xinha-cdn.zip     xinha-cdn
 tar -cjvf xinha-cdn.tar.bz2 xinha-cdn
 
+# Update the s3 bucket
+read -p "Upload to \"s3://xinha/xinha-${VER}/\"? [yN]: "
+if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]
+then
+  cd xinha 
+  s3cmd --delete-removed sync ./ s3://xinha/xinha-${VER}/
+  cd ..
+fi
+
+read -p "Upload to \"s3://xinha/xinha-latest/\"? [yN]: "
+if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]
+then
+  cd xinha 
+  s3cmd --delete-removed sync ./ s3://xinha/xinha-latest/
+  cd ..
+fi
+
 cd xinha
 php contrib/compress_yui.php
 sleep 5
 cd ../
 zip -r    xinha-compressed-$VER.zip     xinha
 tar -cjvf xinha-compressed-$VER.tar.bz2 xinha
+
