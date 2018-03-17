@@ -34,9 +34,9 @@ cat XinhaCore.js | perl -0777  -pe 's/(.pluginManifest\s+=)\s+.+?;/\1 {\nPUT_THE
 mv XinhaCore2.js XinhaCore.js
 
 # Export
-mkdir /tmp/Xinha-$VER
-svn export $(pwd) /tmp/Xinha-$VER/xinha
-cd /tmp/Xinha-$VER/xinha
+mkdir /tmp/xinha-$VER
+svn export $(pwd) /tmp/xinha-$VER/xinha
+cd /tmp/xinha-$VER/xinha
 echo "xinha-$VER" >VERSION.TXT
 
 # Create the merged language files
@@ -54,71 +54,45 @@ cd ../
 zip -r xinha-$VER.zip        xinha
 tar -cjvf xinha-$VER.tar.bz2 xinha
 
-# Make a strippped down plugins set for the plugins which must be run locally
+# Make a stripped down plugins set for the plugins which must be run locally
 #  ie, ones that upload files or deal with the local server file system
-mkdir local_plugins
-mkdir local_plugins/contrib
-mkdir local_plugins/plugins
-cp -rp xinha/contrib/php-xinha.php         local_plugins/contrib
-cp -rp xinha/contrib/.htaccess             local_plugins/contrib
-cp -rp xinha/plugins/MootoolsFileManager   local_plugins/plugins
-cp -rp xinha/plugins/Linker                local_plugins/plugins
-cat >local_plugins/README.TXT <<'EOF'
-Xinha Local Plugins 
+mkdir xinha-cdn
+mkdir xinha-cdn/contrib
+mkdir xinha-cdn/plugins
+cp -rp xinha/contrib/php-xinha.php         xinha-cdn/contrib
+cp -rp xinha/contrib/.htaccess             xinha-cdn/contrib
+cp -rp xinha/plugins/MootoolsFileManager   xinha-cdn/plugins
+cp -rp xinha/plugins/Linker                xinha-cdn/plugins
+cp -rp xinha/examples                      xinha-cdn/examples
+
+# Some examples are not appropriate for the cdn
+rm -rf xinha-cdn/examples/Old_Newbie_Guide
+rm -rf xinha-cdn/examples/ExtendedDemo.html
+rm -rf xinha-cdn/examples/files/ext_example*php
+rm -rf xinha-cdn/examples/files/Extended.html
+
+# Comment out some examples from the index
+cat xinha-cdn/examples/index.html | sed -r 's/<h2>Exper/<!-- These are not applicable in a CDN environment: <h2>Exper/' | sed -r 's/(<.body>)/-->\1/' >xinha-cdn/examples/index.html.2
+mv xinha-cdn/examples/index.html.2  xinha-cdn/examples/index.html
+
+cat >xinha-cdn/README.TXT <<'EOF'
+Xinha CDN Local Distribution
 --------------------------------------------------------------------------------
 
 This directory contains plugins for Xinha (www.xinha.org) which must be run on
 the local web server rather than from an external server/content delivery
 network.
 
-Consult the NewbieGuide ( http://trac.xinha.org/wiki/NewbieGuide ) 
-for more complete details on Xinha configuration, however in short you can load
-Xinha using local plugins like this (assuming you upload the local_plugins
-directory to the root of your website).
+Consult the NewbieGuide ( http://trac.xinha.org/wiki/Documentation/NewbieGuide ) 
+for complete details on Xinha configuration and see the examples in the directory
+here for, err, examples.
 
-  <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-1.5-beta1/XinhaEasy.js">
-    xinha_options = {
-      xinha_plugins: [
-        'minimal', 
-        // Note that from is a URL to the plugins directory inside the
-        //  local_plugins directory, adjust for where you upload.
-        {from: '/local_plugins/plugins', load: ['MootoolsFileManager'] }]
-      ],
+Especially take note of examples/UsingPhpPlugins.php
 
-      xinha_config:            function(xinha_config) 
-      {
-        
-        // Configure the File Manager
-        with (xinha_config.MootoolsFileManager)
-        { 
-          <?php 
-            require_once($_SERVER['DOCUMENT_ROOT'].'/local_plugins/contrib/php-xinha.php');
-            xinha_pass_to_php_backend
-            (       
-              array
-              (
-                'images_dir' => $_SERVER['DOCUMENT_ROOT'] . '/images',
-                'images_url' => '/images',
-                'images_allow_upload' => true,
-                'images_allow_delete' => true,
-                'images_allow_download' => true,
-                'images_use_hspace_vspace' => false,
-                
-                'files_dir' => $_SERVER['DOCUMENT_ROOT'] . '/files',
-                'files_url' => '/files',
-                'files_allow_upload' => true,
-                'max_files_upload_size' => '4M',
-              )
-            )
-          ?>
-        }
-      }
-    }
-  </script>
 EOF
-echo "xinha-$VER" >local_plugins/VERSION.TXT
-zip -r    local_plugins.zip     local_plugins
-tar -cjvf local_plugins.tar.bz2 local_plugins
+echo "xinha-$VER" >xinha-cdn/VERSION.TXT
+zip -r    xinha-cdn.zip     xinha-cdn
+tar -cjvf xinha-cdn.tar.bz2 xinha-cdn
 
 cd xinha
 php contrib/compress_yui.php
