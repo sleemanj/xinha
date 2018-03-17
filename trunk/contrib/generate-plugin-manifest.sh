@@ -45,7 +45,7 @@ do
     fi
     
     SPACES="$(repl $(expr $NAME_LENGTH - $(echo $file | wc -c)))"
-    echo "$file:$SPACES{ url: _editor_url+'$dir/$file/$TARGET' },"    
+    echo "  $file:$SPACES{ url: _editor_url+'$dir/$file/$TARGET' },"
   done
   cd ../
 done

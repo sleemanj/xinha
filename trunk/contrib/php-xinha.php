@@ -10,6 +10,9 @@
    *  As a result, this method (in combination with the above) uses a simple file-storage
    *  mechanism to record the necessary secret data instead of the php sessions.
    *
+   *  Since this method doesn't pass much data in the url/post data, it can also be used
+   *  if you run into mod_security type restrictions.
+   *
    *  Caution, if you are load balancing, then all the servers in that cluster will need 
    *  to be able to get to the tmp_path, or you tie each user to a certain server.
    *
@@ -228,6 +231,7 @@
         
     return $maxcount ? $empty : false;
   }
+  
   /** Write the appropriate xinha_config directives to pass data to a PHP (Plugin) backend file.
    *
    *  ImageManager Example:
