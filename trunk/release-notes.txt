@@ -5,8 +5,11 @@ http://xinha.org
 
 Release History
 
-Xinha 1.5 "A Long Time Coming"
-== Bugs Fixed ==
+== Xinha 1.5 "A Long Time Coming" ==
+
+A long time passed between the release of 0.96.1 and 1.5, during this time Xinha was in daily reliable use, especially by users of Chrome and other "good" browsers, perhaps not so much IE.  In early 2018 James Sleeman (gogo) got inspired in a few weeks of free time to do some updates to bring Xinha back to up to speed with all browsers, adding new features cleaning up old bugs, and generally making Xinha ready for it's next 5 or 10 years of reliable service to come.
+
+=== Bugs Fixed ===
   * #1595 suhoshin caused issues with MootoolsFileManager
   * #1619 dTree's Node object conflicting with DOM
   * [1332] iPhone/iPad Fixes
@@ -36,7 +39,7 @@ Xinha 1.5 "A Long Time Coming"
   * [1413] Fix for the toolbar in IE10
 
   
-== New Features and Improvements ==
+=== New Features and Improvements ===
   * Add a new way of loading Xinha which is much easier, called XinhaEasy.js, this can also be used from a CDN type arrangement, even if you want to use PHP plugins (which are on your local server).  See the examples and the NewbieGuide  
   * [1332] New Plugin event onBeforeSubmitTextarea
   * #1602  Allow setting editor events after makeEditors and before startEditors
@@ -64,7 +67,7 @@ Xinha 1.5 "A Long Time Coming"
   * [1421] Reduce the "pinging" to load plugins by utilising a Plugin Manifest so Xinha knows what plugins it has in it's distribution.  This also makes using Xinha from an Amazon S3 served environment possible.
   * [1423] Improve lock-down of the contrib folder, accessing this folder from a web browser is not necessary or desirable.
   
-== New Plugins ==
+=== New Plugins ===
   * WebKitResize Provides drag-resize for images, tables and table cells in WebKit Browsers, also for tables and cells in Gecko Browsers.
   * EncodeOutput Provides ability to encode the generated HTML of Xinha in some manners before submitting it to the server, for example to avoid mod_security issues.
   * ListOperations Provides tab/shift-tab functionality when editing lists ( #1614 )
@@ -72,16 +75,49 @@ Xinha 1.5 "A Long Time Coming"
   * PreserveSelection Allows selected text in the WYSIWYG view to also be selected when you switch to textmode (#1544)
     
   
-== Deprecated Plugins ==
+=== Deprecated Plugins ===
   * [1351] Deprecate SpellChecker plugin, native browser spell checking works well enough and executing aspell on hosts never really worked that reliably.
   * [1355] Deprecate the PersistantStorage and associated plugins, these are abandoned.
   * [1366] Deprecate ExtendedFileManager and ImageManager, the MootoolsFileManager should be used instead of both.
   * #1135  Deprecate UnFormat, SuperClean now has it's features.
-  
-  
 
-Xinha 0.96
-== Bugs Fixed ==
+== Xinha 1.0 ==
+
+Xinha 1.0 ws never actually released, it was just the stable but "Unreleased Trunk" between 0.96.1 released in 2010 and 1.5 released in 2018.
+
+=== Improvements ===
+ * Update MootoolsFileManager to a new version
+ * [1313] Reduce PHP Session locking
+ * #1541 [1296] [1289] More Configurable FormatBlock options
+ * [1294] Better documentation for multistage loader
+ 
+ === Bugs Fixed ===
+ * #1581 #1524 #1577 IE Fixes (especially IE9)
+ * [1313] Fixes to InsertTable, DOMWalk, Stylist and PasteText
+ * #1298 CSS Styling gets inserted into table cell after viewing source
+ * [1301] Remoive old charactermap popup (disused)
+ * #1528 Dutch LangMarks translation fix
+ * #1534 Allow "fullscreen" as toolbar element.
+ * #1525 Extend freezescript to apply to plain script tags
+ * #1526 Hide media objects behind div-type dialogs
+ * Updates to MootoolsFileManager
+ * #1532 Fix indexOf implementation (for IE)
+ * #1553 Fix `editor._createLink` method and ability to double-click on links to edit them
+ * #1556 Fix `editor._insertTable` method
+ * #1559 DefinitionList plugin's `<dl>` button throws a JS error if the cursor context is the `<body>` element
+ * #1555 Mark DoubleClick plugin as unsupported, since its functionality is now in core (`config.dblclickList`, as of 0.96.1 release)
+ * #1561 Move DefinitionList plugin's toolbar buttons near the standard orderedlist and unorderedlist buttons
+ * #1560 If TableOperations is installed, you can now double-click on tables to edit their properties
+ * #1557 Russian translation for DefinitionList
+ * #1538 Add a configuration option for TableOperations to prevent it from trying to add a linebreak to the toolbar
+ * #1545 Fix typo in UnFormat plugin
+ * #1530 Fix a DefinitionList? syntax error and jslint warnings
+ * Improve some documentation of configuration options (#1536, #1537)
+ * #1534 Allow the use of "fullscreen" as a toolbar element, as an alternative to "popupeditor"
+
+
+== Xinha 0.96.1 ==
+=== Bugs Fixed ===
 
  * #1425 [SmartReplace][Gecko] When inserting opening quote, the space before the cursor is deleted
  * #1429 Problems with Apache and HEAD requests...
@@ -128,7 +164,7 @@ Xinha 0.96
  * #1492 Fix linker in some situations.
  * #1471, #1508, #1510 Fix IE8 problems with TableOperations and other buttons, and absolute positioned editing.
 
-== New Features ==
+=== New Features ===
 
  * r1189 added toolbar config to Newbie example
  * #1478 Add new method Xinha.extend to provide more classical object oriented subclasses within Javascript.
@@ -152,7 +188,7 @@ Xinha 0.96
  * #1502 Add new plugin MootoolsFileManager - an advanced image and file uploader/picker/inserter with multi-file-upload, progress bars, and previews.
  * #1507 Config option to show fonts in toolbar using actual fonts.
 
-== Translation ==
+=== Translation ==
 
  * #1477 Danish translation for ExtendedFileManager and SuperClean
  * r1205 Updated Danish translation.
@@ -161,8 +197,8 @@ Xinha 0.96
  * #1469 Updated danish translation.
 
 
-Xinha 0.96beta2
-Bugs Fixed
+== Xinha 0.96beta2 ==
+=== Bugs Fixed ===
  * #1376 [IE6 & IE7 Quirksmode] Dialogs are invisible
  * #1381 [IE] QuirksMode dialog background rendered in wrong position when panel is detached
  * #1383 [IE7] Secure and Nonsecure Warning
@@ -177,12 +213,12 @@ Bugs Fixed
  * #1374 [IE8] Table insert not work
  * #1379 [Firefox] no longer corrupts image data from broken images
 
-Translation
+=== Translation ===
  * [SmartReplace] Added French translation
  * #1406 [FullScreen] Added Spanish translation
 
-Xinha 0.96beta
-Bugs Fixed
+== Xinha 0.96beta ==
+=== Bugs Fixed ===
  * #314 Status bar should wrap
  * #741 ContextMenu should not overflow window boundaries
  * #961 baseHref not correctly treated when stripping
@@ -233,7 +269,7 @@ Bugs Fixed
  * #1357 safari form submit has empty form field names in POST data, causes failure with perl CGI
 
  
-Enhancements
+=== Enhancements ===
  * #1176 Completely revamped dialog system, which uses inline lightbox-style dialogs instead of separate popup windows 
  * #326 Added support for customizable icon sets
  * #1318 Added icon set from the Tango Project
@@ -247,8 +283,8 @@ Enhancements
  * #1345 Add a static function that saves the contents of all Xinhas to their respective textareas
 
 
-Xinha 0.95
-Bugs Fixed
+== Xinha 0.95 ==
+=== Bugs Fixed ===
  * fixed #1040 htmlRemoveTags doesn't work in IE 
  * fixed #645 IE Save as function only saves the original html 
  * fixed #1136 FF3 Linux select boxes in toolbar are too small 
@@ -280,7 +316,7 @@ Bugs Fixed
  * fixed #1197 [Linker] IE shows bug in line 262
  * fixed #1200 [Linker] Dialog does not show if scanned folder empty
  
-Enhancements
+=== Enhancements ===
  * #1143 add Safari support
  * #938  add Opera support
  * #1138 added API functions Xinha.getEditor(), Xinha.prototype.getPluginInstance(), Xinha.addOnloadHandler() 
@@ -305,7 +341,7 @@ Enhancements
  * #1195 Allow to specify an external url to load a plugin from
  * #1201 Add inwardHtml/outwardHtml functions to Config object
  
-I18n
+=== I18n ===
  * #1109 Spanish language extended
  * #1116 [ExtendedFileManager] added French translation
  * #853 updated Translation for farsi
@@ -314,7 +350,7 @@ I18n
  *  #1194 [ExtendedFileManager] updated French translation
 
  
-Xinha 0.94
+== Xinha 0.94 ==
  * Ticket #1093 [InsertSmiley] remove smiley gifs from trunk
  * fixed Ticket #1019 Cusor not jumping to editable part of window when clicked in IE
  * [TableOperations] Add config option to not dispaly toolbar buttons
@@ -362,7 +398,7 @@ Xinha 0.94
  * fixed Ticket #1089 [Color Picker] Localize OK Label
  * fixed Ticket #1091 [SaveSubmit] does not correctly submit value of checkboxes and radio buttons
 
-Xinha 0.93
+== Xinha 0.93 ==
  - fixed Ticket #967 Font Color Picker stops working after using one of ImageManager, ExtendedFileManager, FullPage, or HorizontalRule
  - fixed Ticket #965 When switching between Xinhas in the same page, in textmode toolbar stays disabled
  - fixwd Ticket #963 DOMwalk IE: head tag attributes without quotes and closing slash
@@ -397,7 +433,7 @@ Xinha 0.93
  - prevent an error if server is set to parse .js files as PHP
  - Ticket #127 plugin HtmlEntities: Entities.js  file corrupt
 
-Xinha 0.92beta
+== Xinha 0.92beta ==
  - fixed Ticket #831 stop empty anchors from being removed
  - Make htmlarea.js just load XinhaCore.js instead of being a copy of it.
  - fixed Ticket #445 Toggle TableBorder doesn't work if this.fullpage=true or using FullPage plugin
@@ -443,13 +479,13 @@ Xinha 0.92beta
  - fixed Ticket #603 Popop Dialog Height problems
  - fixed Ticket #955 DOMwalk getHTML outputs empty attribute with value "true" instead of attribute name and some are skipped at all
  
-Xinha 0.91beta
+== Xinha 0.91beta ==
  - changed namespace from HTMLArea to Xinha
  - the core file is now named XinhaCore.js instead of htmlarea.js,
    please change your pages accordingly (the htmlarea.js will be removed!)
  - the color picker script is now loaded on demand to reduce initial loading time
  
-Xinha 0.9beta
+== Xinha 0.9beta ==
 This equals Xinha revision 635 of Jan 11 2007
  - All JavaScript files over 2kb have been compressed using the dojo JavaScript compressor
  - All gifs have been optimized using Trout's GIF Optimizer version 2.3
