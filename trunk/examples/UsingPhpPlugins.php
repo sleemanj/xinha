@@ -30,7 +30,19 @@
       //
       // or you can do both to add extras to the set
       //   xinha_pass_to_php_backend: ['minimal', 'Linker' ]
-      xinha_plugins:  [ 'minimal', 'MootoolsFileManager', 'Linker' ],
+      xinha_plugins:  
+      [ 
+        'minimal', // Load the standard minimal set from Xinha's norma plugins
+        
+        // Since this example might be using Xinha from a CMS, we 
+        //  make sure to load our PHP plugins from our local plugins
+        //  directory on our own server, not the CMS server (which wouldn't
+        //  support PHP).
+        { 
+           from: '../plugins',      // From our local plugins directory
+           load:['MootoolsFileManager', 'Linker'] // Load these plugins
+        } 
+      ],
       
       // The default toolbar can be one of the pre-defined toolbars, 
       //   'default', 'minimal', 'minimal+fonts', 'supermini'
