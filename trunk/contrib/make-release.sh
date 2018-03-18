@@ -29,7 +29,7 @@ fi
 VER="$1"
 
 # Export
-if [ -f /tmp/xinha-$VER ]
+if [ -d /tmp/xinha-$VER ]
 then
   echo "/tmp/xinha-$VER exists, you need to delete it first."
   exit
@@ -59,7 +59,7 @@ cd ../
 
 # Create the main distribution zip and bz2
 zip -r xinha-$VER.zip        xinha
-tar -cjvf xinha-$VER.tar.bz2 xinha
+#tar -cjvf xinha-$VER.tar.bz2 xinha
 
 # Make a stripped down plugins set for the plugins which must be run locally
 #  ie, ones that upload files or deal with the local server file system
@@ -104,8 +104,8 @@ Especially take note of examples/UsingPhpPlugins.php
 
 EOF
 echo "xinha-$VER" >xinha-cdn/VERSION.TXT
-zip -r    xinha-cdn.zip     xinha-cdn
-tar -cjvf xinha-cdn.tar.bz2 xinha-cdn
+zip -r    xinha-$VER-cdn.zip     xinha-cdn
+#tar -cjvf xinha-cdn.tar.bz2 xinha-cdn
 
 # Update the s3 bucket
 read -p "Upload to \"s3://xinha/xinha-${VER}/\"? [yN]: "
@@ -128,6 +128,15 @@ cd xinha
 php contrib/compress_yui.php
 sleep 5
 cd ../
-zip -r    xinha-compressed-$VER.zip     xinha
-tar -cjvf xinha-compressed-$VER.tar.bz2 xinha
+zip -r    xinha-$VER-minified.zip     xinha
+# tar -cjvf xinha-$VER-minified.tar.bz2 xinha
 
+ls -l *.zip
+read -p "Upload zip files to to \"s3://xinha/releases/\"? [yN]: "
+if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]
+then
+  for file in *.zip
+  do
+    s3cmd --acl-public put $file s3://xinha/releases/
+  done
+fi
