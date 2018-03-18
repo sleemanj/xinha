@@ -14,7 +14,7 @@ A long time passed between the release of 0.96.1 and 1.5, during this time Xinha
   * #1619 dTree's Node object conflicting with DOM
   * [1332] iPhone/iPad Fixes
   * [1332] Stylist startup reliablility fix
-  * [1336] Fix for  aconsole warning in Chrome
+  * [1336] Fix for a console warning in Chrome
   * #1609  Rename the CSS plugin to CSSDropDowns to avoid the native CSS Object in Firefox
   * #1601  Fix status bar width
   * #1589  Fix crash in Equation plugin
@@ -25,7 +25,7 @@ A long time passed between the release of 0.96.1 and 1.5, during this time Xinha
   * #1420  Remove the Save As button, this is not relevant any more.
   * #1245  Fix percent width and height in DOMwalk
   * #1361  Increase the z-Index for the "loading" message
-  * [1360] Small fix for SmartQuotes plugin
+  * [1360] Small fix for SmartReplace plugin
   * #1279  Change ereg to preg in SuperClean tidy php 
   * [1367] Improve warnings (in the console) for deprecated plugins.
   * #1578  Fix ColorPicker scrolling and positioning
@@ -63,7 +63,7 @@ A long time passed between the release of 0.96.1 and 1.5, during this time Xinha
   * #1135  Update SuperClean to incorporate UnFormat functionality
   * [1402] Rebuild the translation system and language files entirely.  See http://trac.xinha.org/wiki/Documentation/DevelopingForXinha/Translating
   * [1403] Use merged translation files by default  
-  * [1418] Add configuration option resizableEditor whcih allows drag-resize.  Works in Chrome, not that well in the others.
+  * [1418] Add configuration option resizableEditor which allows drag-resize.  Works in Chrome, not that well in the others.
   * [1421] Reduce the "pinging" to load plugins by utilising a Plugin Manifest so Xinha knows what plugins it has in it's distribution.  This also makes using Xinha from an Amazon S3 served environment possible.
   * [1423] Improve lock-down of the contrib folder, accessing this folder from a web browser is not necessary or desirable.
   
@@ -83,7 +83,7 @@ A long time passed between the release of 0.96.1 and 1.5, during this time Xinha
 
 == Xinha 1.0 ==
 
-Xinha 1.0 ws never actually released, it was just the stable but "Unreleased Trunk" between 0.96.1 released in 2010 and 1.5 released in 2018.
+Xinha 1.0 was never actually released, it was just the stable but "Unreleased Trunk" between 0.96.1 released in 2010 and 1.5 released in 2018.
 
 === Improvements ===
  * Update MootoolsFileManager to a new version
