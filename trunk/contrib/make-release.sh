@@ -28,12 +28,19 @@ fi
 
 VER="$1"
 
+# Export
+if [ -f /tmp/xinha-$VER ]
+then
+  echo "/tmp/xinha-$VER exists, you need to delete it first."
+  exit
+fi
+
 # Update plugin Manifest
 MANIFEST="$(bash contrib/generate-plugin-manifest.sh | sort | perl -0777 -pe 's/,\s*$//s' )"
 cat XinhaCore.js | perl -0777  -pe 's/(.pluginManifest\s+=)\s+.+?;/\1 {\nPUT_THE_MANIFEST_HERE_YO\n};/is' | replace PUT_THE_MANIFEST_HERE_YO "$MANIFEST" >XinhaCore2.js
 mv XinhaCore2.js XinhaCore.js
 
-# Export
+
 mkdir /tmp/xinha-$VER
 svn export $(pwd) /tmp/xinha-$VER/xinha
 cd /tmp/xinha-$VER/xinha
@@ -105,7 +112,7 @@ read -p "Upload to \"s3://xinha/xinha-${VER}/\"? [yN]: "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]
 then
   cd xinha 
-  s3cmd --delete-removed sync ./ s3://xinha/xinha-${VER}/
+  s3cmd --delete-removed --acl-public sync ./ s3://xinha/xinha-${VER}/
   cd ..
 fi
 
@@ -113,7 +120,7 @@ read -p "Upload to \"s3://xinha/xinha-latest/\"? [yN]: "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]
 then
   cd xinha 
-  s3cmd --delete-removed sync ./ s3://xinha/xinha-latest/
+  s3cmd --delete-removed --acl-public sync ./ s3://xinha/xinha-latest/
   cd ..
 fi
 
