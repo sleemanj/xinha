@@ -828,15 +828,34 @@ Xinha.Config = function()
   this.baseHref = null;
 
   /** If true, relative URLs (../) will be made absolute. 
-   *  When the editor is in different directory depth 
-   *  as the edited page relative image sources will break the display of your images.
-   *  this fixes an issue where Mozilla converts the urls of images and links that are on the same server 
-   *  to relative ones (../) when dragging them around in the editor (Ticket #448)<br />
+   * 
+   *  When the editor is in different directory depth as the edited page relative 
+   *   image sources will break the display of your images.
+   * 
+   *  This fixes an issue where Mozilla converts the urls of images and links that 
+   *   are on the same server to relative ones (../) when dragging them around in 
+   *   the editor (Ticket #448)<br />
+   * 
+   *  Note that setting to true will not expand directly relative paths
+   *   "foo/bar.html" will not be changed.  Only parental, self-referential or 
+   *   semi-absolute paths with parental or self-referential components will be 
+   *   adjusted, some examples of paths this will affect
+   * 
+   *     "/foo/bar/../foo.html" --> /foo/foo.html
+   *     "/foo/./foo.html"      --> /foo/foo.html
+   *     "./foo.html"       --> "foo.html"
+   *     "../foo.html"      --> "/foo.html" (assuming ../ ends up at the root or lower)
+   * 
+   *  You can also set this to the string 'all' and this will include non-parental
+   *   relative urls.  I think this is probably a bad idea as it may cause broken URLS
+   *   especially when combined with stripBaseHref or if you feed in such urls in your
+   *   html.
+   * 
    *  Default: <code>true</code>
-   *  @type Boolean
+   *  @type Boolean|String
    */
   this.expandRelativeUrl = true;
-  
+    
  /**  We can strip the server part out of URL to make/leave them semi-absolute, reason for this
    *  is that the browsers will prefix  the server to any relative links to make them absolute, 
    *  which isn't what you want most the time.<br />
@@ -6843,6 +6862,11 @@ Xinha.prototype.fixRelativeLinks = function(html)
       for(var j = 0; j < all_urls.length; j++)
       {
         if(all_urls[j].match(/=["']([a-z]+:)?\/\//)) continue; // Exclude: '//...' and 'https://'
+        if(! (this.config.expandRelativeUrl == 'all'))
+        {
+          // If there is no parental or self-referential path component
+          if(all_urls[j].match(/=["'][a-z0-9_-]/i))    continue; // Exclude: 'relativedir/foo.html'
+        }
         if(
              ( !all_urls[j].match(/=["']\//)       ) // Starts with something other than a slash
           || ( all_urls[j].match(/=["']\.{1,2}\//) ) // Starts with a ./ or ../
