@@ -244,6 +244,11 @@ Xinha.prototype._fillStylist = function()
       main.appendChild(anch);
     }
   }
+
+  if(main.childNodes.length)
+  {
+    this.plugins.Stylist.instance.dialog.show();
+  }
 };
 
 
@@ -602,7 +607,7 @@ Stylist.prototype._prepareDialog = function()
   this.dialog = new Xinha.Dialog(editor, html, 'Stylist',{width:200},{modal:false,closable:false});
 	Xinha._addClass( this.dialog.rootElem, 'Stylist' );
 	this.dialog.attachToPanel('right');
-  this.dialog.show();
+  // this.dialog.show();
   
 	var dialog = this.dialog;
 	var main = this.dialog.main;
