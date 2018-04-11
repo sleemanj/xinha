@@ -47,6 +47,7 @@ cd /tmp/xinha-$VER/xinha
 echo "xinha-$VER" >VERSION.TXT
 
 # Create the merged language files
+mkdir lang/merged
 php contrib/lc_parse_strings.php
 for lang in $(find . -wholename "*/lang/*.js" | sed -r 's/.*\///' | sort | uniq | grep -v base | sed -r 's/.js//')
 do
