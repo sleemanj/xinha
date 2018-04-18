@@ -36,13 +36,15 @@ function TableOperations(editor) {
   // register the toolbar buttons provided by this plugin
 
   // Remove existing inserttable and toggleborders, we will replace it in our group
-  cfg.removeToolbarElement(' inserttable toggleborders ');
+  // cfg.removeToolbarElement(' inserttable toggleborders ');
+  // Actually, keep inserttable, we will use it to locate where to put our new block
+  cfg.removeToolbarElement(' toggleborders ');
 
   var toolbar;
   if( cfg.TableOperations.addToolbarLineBreak ) {
     toolbar = ["linebreak"];
   } else {
-    toolbar = ["inserttable"];
+    toolbar = [ ]; 
   }
 
   var bl = [ ];
@@ -143,7 +145,8 @@ function TableOperations(editor) {
   
 
   // add a new line in the toolbar
-  cfg.toolbar.push(toolbar);
+  // cfg.toolbar.push(toolbar);
+  cfg.addToolbarElement(toolbar, [ 'inserttable', 'insertimage'], 0);
   
   if ( typeof PopupWin == 'undefined' )
   {
