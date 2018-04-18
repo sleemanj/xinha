@@ -13,6 +13,7 @@
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
 .htmlarea .toolbar table { margin: 0; font-family: Tahoma, Verdana,sans-serif; font-size: 11px; }
+.htmlarea .toolbar td.toolbarElement { vertical-align:middle; }
 .htmlarea .toolbar img { border: none; vertical-align: top; }
 .htmlarea .toolbar .label { padding: 0 3px; }
 
@@ -386,7 +387,10 @@ border: 0 none transparent;
 display: none;
 }
 
+/* I believe this was used by the "PS...." plugins, but it's a bit too generic
+   and caused some conflicts, since "PS...." are deprecated, I'm just removing it.
 .hidden
 {
 display: none;
 }
+*/
