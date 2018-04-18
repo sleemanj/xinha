@@ -23,7 +23,7 @@
   padding:0px;
   -moz-border-radius:15px;
   margin:4px;
-  height:20px;
+  height:25px;
 }
 /* hack: IE6 does not know border-color: transparent;*/
 html > body .htmlarea .toolbarRow {
