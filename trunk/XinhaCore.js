@@ -1126,7 +1126,7 @@ Xinha.Config = function()
   this.toolbar =
   [
     ["popupeditor"],
-    ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
+    ["separator","formatblock","linebreak","fontname","linebreak","fontsize","separator","bold","italic","underline","strikethrough"],
     ["separator","forecolor","hilitecolor","textindicator"],
     ["separator","subscript","superscript"],
     ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
@@ -2411,7 +2411,12 @@ Xinha.prototype._createStatusBar = function()
 
   var self = this;
   this.notifyOn("before_resize", function(evt, size) {
-    self._statusBar.style.width = null;
+    // During a resize event, we need to force the status bar less wide
+    // than would be it's actual width after resizing so that it does not
+    // push-out the area wider, we must set an actual value here, neither 100% 
+    // nor null work, but at least Chrome does not actually redraw this 
+    // during the resizeso it's not really an issue to do this
+    self._statusBar.style.width = "50px";
   });
   this.notifyOn("resize", function(evt, size) {
     // HACK! IE6 doesn't update the width properly when resizing if it's 
@@ -3195,6 +3200,14 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
   width  = this._htmlArea.offsetWidth;
   height = this._htmlArea.offsetHeight;
   
+	// If instead of the above, we do the below, then the iframe can size smaller 
+  // than the area itself because the area might be pushed-out further than 
+  // any px size we set (or drag-resized) explicitly but the iframe not be so confined
+  // that said, with the standard toolbar and flow toolbars enabled (default) 
+  // the editor can size down to about 250px wide (in my test right now)
+  //
+  // width  = this.getOverallSize().offsetWidth;
+  // height = this.getOverallSize().offsetHeight;
   
 
   // Set colspan for toolbar, and statusbar, rowspan for left & right panels, and insert panels to be displayed
