@@ -16,7 +16,7 @@ function PasteText(editor) {
 		action   : function() { self.show(); }
 	});
 
-	cfg.addToolbarElement("pastetext", ["paste", "killword"], 1);
+	cfg.addToolbarElement("pastetext", ["paste", "killword", "superclean"], 1);
 }
 
 PasteText._pluginInfo = {
