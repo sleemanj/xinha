@@ -6881,7 +6881,7 @@ Xinha.prototype.fixRelativeLinks = function(html)
           if(all_urls[j].match(/=["'][a-z0-9_-]/i))    continue; // Exclude: 'relativedir/foo.html'
         }
         if(
-             ( !all_urls[j].match(/=["']\//)       ) // Starts with something other than a slash
+             ( !all_urls[j].match(/=["'][\/?#]/)   ) // Starts with something other than a slash, question or hash
           || ( all_urls[j].match(/=["']\.{1,2}\//) ) // Starts with a ./ or ../
           || ( all_urls[j].match(/\/\.{1,2}\//   ) ) // Includes a ./ or ../
           || ( all_urls[j].match(/\/{2,}/   )      ) // Includes repeated /, we will clean these up too
