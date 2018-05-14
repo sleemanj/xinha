@@ -1205,7 +1205,6 @@ var FileManager = new Class({
 		this.menu.adopt(this.downloadForm);
 
 		var tx_cfg = this.options.mkServerRequestURL(this, 'download', Object.merge({},
-						this.options.propagateData,
 						{
 							file: file.path,
 							filter: this.options.filter
@@ -1213,7 +1212,7 @@ var FileManager = new Class({
 
 		this.downloadForm.action = tx_cfg.url;
 
-		Object.each(tx_cfg.data,
+		Object.each(Object.merge({},this.options.propagateData,tx_cfg.data),
 					function(v, k)
 					{
 						this.downloadForm.adopt((new Element('input')).set({type: 'hidden', name: k, value: v}));
