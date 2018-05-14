@@ -25,7 +25,7 @@ Xinha.Config.prototype.QuickSnippet =
           'name'  : 'New Paragraph (Lorem Ipsum)',
           'parent': 'body,td,th,div',
           'html'  : '<p>Vivamus sed porta leo. Donec sed arcu ante. Morbi vel lectus sit amet ante faucibus varius. Donec sapien massa, mollis nec sem a, volutpat molestie ipsum. Sed blandit turpis sed orci gravida maximus. Donec fringilla luctus ornare. Cras vel urna vulputate, tristique nulla ac, finibus velit. Sed lobortis mollis hendrerit. Morbi vehicula blandit maximus. Curabitur turpis nunc, ornare quis risus sed, consectetur molestie quam.</p>',
-      },
+      }
     ],
   default_snippetfile: Xinha.getPluginDir('QuickSnippet')+'/snippets.js'
 };
