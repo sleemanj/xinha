@@ -89,7 +89,7 @@ function QuickSnippet(editor)
   }
   else if(editor.config.QuickSnippet.default_snippetfile)
   {
-    Xinha._getback(editor.config.QuickSnippet.snippetfile, function (t,r){
+    Xinha._getback(editor.config.QuickSnippet.default_snippetfile, function (t,r){
       self.addSnippets(JSON.parse(t));
     });
   }
