@@ -603,6 +603,7 @@ Xinha.pluginManifest = {
   PSFixed:              { url: _editor_url+'unsupported_plugins/PSFixed/PSFixed.js' },
   PSLocal:              { url: _editor_url+'unsupported_plugins/PSLocal/PSLocal.js' },
   PSServer:             { url: _editor_url+'unsupported_plugins/PSServer/PSServer.js' },
+  QuickSnippet:         { url: _editor_url+'plugins/QuickSnippet/QuickSnippet.js' },
   QuickTag:             { url: _editor_url+'plugins/QuickTag/QuickTag.js' },
   SaveOnBlur:           { url: _editor_url+'plugins/SaveOnBlur/SaveOnBlur.js' },
   SaveSubmit:           { url: _editor_url+'plugins/SaveSubmit/SaveSubmit.js' },
@@ -982,6 +983,29 @@ Xinha.Config = function()
    *  @type RegExp|null
    */
   this.htmlRemoveTags = null;
+
+ /** If the HTML fed into Xinha includes <i> tags, preserve these, otherwise convert them into <em>
+  * 
+  *  The default null will not preserve UNLESS you load the UseStrongEm plugin in which case it will, 
+  *  that means that if you use the italic button with UseStrongEm that it will insert an <em>
+  *  but you can also include <i> as is common to do with young designers who think it means "icon"
+  *  instead of "italic" :-)
+  * 
+  *  Set to true or false if you want to explicitly handle this.
+  */
+ 
+  this.preserveI     = null;
+
+ /** If the HTML fed into Xinha includes <b> tags, preserve these, otherwise convert them into <strong>
+  * 
+  *  The default null will not preserve UNLESS you load the UseStrongEm plugin in which case it will, 
+  *  that means that if you use the bold button with UseStrongEm that it will insert an <strong>
+  *  but you can also include <b>.
+  * 
+  *  Set to true or false if you want to explicitly handle this.
+  */
+ 
+  this.preserveB     = null;
 
  /** Turning this on will turn all "linebreak" and "separator" items in your toolbar into soft-breaks,
    * this means that if the items between that item and the next linebreak/separator can
@@ -5524,10 +5548,10 @@ Xinha.prototype.updateToolbar = function(noStatus)
         switch (txt)
         {
           case 'b':
-            txt = 'strong';
+            if(!this.config.preserveB) txt = 'strong';
           break;
           case 'i':
-            txt = 'em';
+            if(!this.config.preserveI) txt = 'em';
           break;
           case 'strike':
             txt = 'del';
@@ -6651,8 +6675,16 @@ Xinha.prototype.outwardHtml = function(html)
     }
   }
   
-  html = html.replace(/<(\/?)b(\s|>|\/)/ig, "<$1strong$2");
-  html = html.replace(/<(\/?)i(\s|>|\/)/ig, "<$1em$2");
+  if(!this.config.preserveB)
+  {
+    html = html.replace(/<(\/?)b(\s|>|\/)/ig, "<$1strong$2");
+  }
+  
+  if(!this.config.preserveI)
+  {
+    html = html.replace(/<(\/?)i(\s|>|\/)/ig, "<$1em$2");
+  }
+
   html = html.replace(/<(\/?)strike(\s|>|\/)/ig, "<$1del$2");
   
   // remove disabling of inline event handle inside Xinha iframe
