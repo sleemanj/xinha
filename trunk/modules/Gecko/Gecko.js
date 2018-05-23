@@ -360,8 +360,15 @@ Gecko.prototype.inwardHtml = function(html)
 {
    // Midas uses b and i internally instead of strong and em
    // Xinha will use strong and em externally (see Xinha.prototype.outwardHtml)   
-   html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
-   html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");    
+   if(!this.editor.config.preserveB)
+   {
+     html = html.replace(/<(\/?)strong(\s|>|\/)/ig, "<$1b$2");
+   }
+   
+   if(!this.editor.config.preserveI)
+   {
+     html = html.replace(/<(\/?)em(\s|>|\/)/ig, "<$1i$2");    
+   }
    
    // Both IE and Gecko use strike internally instead of del (#523)
    // Xinha will present del externally (see Xinha.prototype.outwardHtml
