@@ -119,6 +119,9 @@ QuickSnippet.prototype.doInsert = function()
   var selected = options[options.selectedIndex].value;
   if(!selected) return false;
   
+  // Save an undo point
+  this.editor._undoTakeSnapshot();
+  
   selected = this.editor.config.QuickSnippet.snippets[selected];
   
   if(selected.parent)
