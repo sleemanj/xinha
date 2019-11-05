@@ -51,6 +51,7 @@ function WebKit(editor) {
   
 WebKit.prototype.onKeyPress = function(ev)
 {
+  
   var editor = this.editor;
   var s = editor.getSelection();
   
@@ -220,11 +221,18 @@ WebKit.prototype.onKeyPress = function(ev)
     case 8: // KEY backspace
     case 46: // KEY delete
       // We handle the mozilla backspace directly??
-      if ( !ev.shiftKey && this.handleBackspace() )
+      
+      // In some situations 46 is delete, in other situations it is '.'
+      //  make sure it's not the latter :-/
+      if(editor.getKey(ev) != '.')
       {
-        Xinha._stopEvent(ev);
+        if ( !ev.shiftKey && this.handleBackspace() )
+        {
+          Xinha._stopEvent(ev);
+        }
+        break;
       }
-    break;
+      
     default:
         editor._unlinkOnUndo = false;
 
