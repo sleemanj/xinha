@@ -616,6 +616,7 @@ Xinha.pluginManifest = {
   Template:             { url: _editor_url+'unsupported_plugins/Template/Template.js' },
   UnFormat:             { url: _editor_url+'unsupported_plugins/UnFormat/UnFormat.js' },
   UnsavedChanges:       { url: _editor_url+'plugins/UnsavedChanges/UnsavedChanges.js' },
+  UseStrongEm:          { url: _editor_url+'plugins/UseStrongEm/UseStrongEm.js' },
   WebKitResize:         { url: _editor_url+'plugins/WebKitResize/WebKitResize.js' },
   WebKit:               { url: _editor_url+'modules/WebKit/WebKit.js' },
   WysiwygWrap:          { url: _editor_url+'plugins/WysiwygWrap/WysiwygWrap.js' }
