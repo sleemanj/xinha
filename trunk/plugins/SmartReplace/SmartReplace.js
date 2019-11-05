@@ -186,6 +186,7 @@ SmartReplace.prototype.smartQuotes = function(kind)
 SmartReplace.prototype.smartReplace = function(ev, lookback, re, replace, stopEvent)
 {
 	var editor = this.editor;
+  var saveSel = this.editor.saveSelection();
 	var sel = this.editor.getSelection();
 	var r = this.editor.createRange(sel);
 	
@@ -202,6 +203,10 @@ SmartReplace.prototype.smartReplace = function(ev, lookback, re, replace, stopEv
 				return false
 			}
 		}
+		else
+    {
+      editor.restoreSelection(saveSel);
+    }
 	}
 	else
 	{
@@ -217,8 +222,12 @@ SmartReplace.prototype.smartReplace = function(ev, lookback, re, replace, stopEv
 				Xinha._stopEvent(ev);
 				return false
 		  }
+		  editor.getSelection().collapseToEnd();
 		}
-		editor.getSelection().collapseToEnd();
+		else
+    {
+      editor.restoreSelection(saveSel);
+    }
 	}
 	return true;
 }
