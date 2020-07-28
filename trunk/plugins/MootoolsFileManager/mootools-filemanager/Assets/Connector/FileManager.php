@@ -5405,7 +5405,7 @@ class FileManagerUtility
 			$varlen = strlen($variable);
 			for ($i = 0; $i < $varlen; $i++)
 			{
-				$returnstring .= htmlentities($variable{$i}, ENT_QUOTES, 'UTF-8');
+				$returnstring .= htmlentities($variable[$i], ENT_QUOTES, 'UTF-8');
 			}
 			$returnstring = ($wrap_in_td ? '<span class="dump_string">' : '').nl2br($returnstring).($wrap_in_td ? '</span>' : '');
 		}
