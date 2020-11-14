@@ -1,0 +1,129 @@
+= Plugins =
+
+Plugins are optional extras (although currently distributed with Xinha anyway) which provide enhanced functions to the Xinha editor.  
+
+See the NewbieGuide for instructions on loading a plugin.
+
+If you are interested in writing a plugin, try the [wiki:Documentation/DevelopingForXinha/PluginTutorial PluginTutorial] and reading the source code of one of the simpler plugins.
+
+== The Most Common Plugins ==
+
+  [wiki:Documentation/Plugins/MootoolsFileManager MootoolsFileManager]::
+    !Insert/Upload/Delete Images and (Links To) Files (requires PHP)
+
+  [wiki:Documentation/Plugins/Linker Linker]::
+    Insert and Edit Links To Documents (requires PHP)
+
+  [wiki:Documentation/Plugins/Stylist Stylist]::
+    Select CSS classes in a context-sensitive panel.
+
+  [wiki:Documentation/Plugins/ListOperations ListOperations]::
+    Adds tab-to-indent and shift-tab-to-outdent function when editing lists.
+
+  [wiki:Documentation/Plugins/TableOperations TableOperations]::
+    Add functions for inserting and editing tables.
+
+  [wiki:Documentation/Plugins/ContextMenu ContextMenu]::
+    Add a right-click context menu which allows convenient access to other plugins (esp [wiki:Documentation/Plugins/TableOperations TableOperations] to edit tables).
+
+  [wiki:Documentation/Plugins/CharacterMap CharacterMap]::
+    Allow the user to insert special characters from a character map.
+
+  [wiki:Documentation/Plugins/SuperClean SuperClean]::
+    Provide various "html cleaning" functions.
+
+  [wiki:Documentation/Plugins/SmartReplace SmartReplace]::
+    Replace non-directional quotes ("test") with locale-sensitive directional quotes (“test”) amongst others.
+
+  [wiki:Documentation/Plugins/PreserveScripts PreserveScripts]::
+    Preserve Javascript and PHP in the editable content.
+
+  [wiki:Documentation/Plugins/PreserveSelection PreserveSelection]::
+    Preserve the selection between Source and WYSIWYG views (select text in WYSIWYG mode, switch to source, same text is selected)
+
+  [wiki:Documentation/Plugins/FancySelects FancySelects]::
+    Make the font etc. drop-downs "fancy" using jQuery.
+
+  [wiki:Documentation/Plugins/WebKitResize WebKitResize]::
+    Improve resizing of Images in !WebKit (Chrome, Safari, Edge) browsers, and Tables in !WebKit and Mozilla.
+
+  [wiki:Documentation/Plugins/QuickSnippet QuickSnippet]::
+    Easily provide context-sensitive snippets of HTML that the user can insert from a drop-down list.
+
+  [wiki:Documentation/Plugins/UseStrongEm UseStrongEm]::
+    Improves handling for the italic and bold toolbar buttons.
+
+== All Currently Supported Plugins ==
+
+ * [wiki:Documentation/Plugins/Abbreviation Abbreviation]
+ * [wiki:Documentation/Plugins/CharacterMap CharacterMap]
+ * [wiki:Documentation/Plugins/CharCounter CharCounter]
+ * [wiki:Documentation/Plugins/ContextMenu ContextMenu]
+ * [wiki:Documentation/Plugins/CSSDropDowns CSSDropDowns]
+ * [wiki:Documentation/Plugins/CSSPicker CSSPicker]
+ * [wiki:Documentation/Plugins/DefinitionList DefinitionList]
+ * [wiki:Documentation/Plugins/DynamicCSS DynamicCSS]
+ * [wiki:Documentation/Plugins/EditTag EditTag]
+ * [wiki:Documentation/Plugins/EncodeOutput EncodeOutput]
+ * [wiki:Documentation/Plugins/Equation Equation]
+ * [wiki:Documentation/Plugins/FancySelects FancySelects]
+ * [wiki:Documentation/Plugins/FindReplace FindReplace]
+ * [wiki:Documentation/Plugins/FormOperations FormOperations]
+ * [wiki:Documentation/Plugins/Forms Forms]
+ * [wiki:Documentation/Plugins/FullPage FullPage]
+ * [wiki:Documentation/Plugins/GenericPlugin GenericPlugin]
+ * [wiki:Documentation/Plugins/GetHtml GetHtml]
+ * [wiki:Documentation/Plugins/HorizontalRule HorizontalRule]
+ * [wiki:Documentation/Plugins/HtmlEntities HtmlEntities]
+ * [wiki:Documentation/Plugins/InsertAnchor InsertAnchor]
+ * [wiki:Documentation/Plugins/InsertNote InsertNote]
+ * [wiki:Documentation/Plugins/InsertPagebreak InsertPagebreak]
+ * [wiki:Documentation/Plugins/InsertSmiley InsertSmiley]
+ * [wiki:Documentation/Plugins/InsertSnippet InsertSnippet]
+ * [wiki:Documentation/Plugins/InsertSnippet2 InsertSnippet2]
+ * [wiki:Documentation/Plugins/InsertWords InsertWords]
+ * [wiki:Documentation/Plugins/LangMarks LangMarks]
+ * [wiki:Documentation/Plugins/Linker Linker]
+ * [wiki:Documentation/Plugins/ListOperations ListOperations]
+ * [wiki:Documentation/Plugins/ListType ListType]
+ * [wiki:Documentation/Plugins/MootoolsFileManager MootoolsFileManager]
+ * [wiki:Documentation/Plugins/PasteText PasteText]
+ * [wiki:Documentation/Plugins/PreserveScripts PreserveScripts]
+ * [wiki:Documentation/Plugins/PreserveSelection PreserveSelection]
+ * [wiki:Documentation/Plugins/QuickTag QuickTag]
+ * [wiki:Documentation/Plugins/QuickSnippet QuickSnippet]
+ * [wiki:Documentation/Plugins/SaveOnBlur SaveOnBlur]
+ * [wiki:Documentation/Plugins/SaveSubmit SaveSubmit]
+ * [wiki:Documentation/Plugins/SetId SetId]
+ * [wiki:Documentation/Plugins/SmartReplace SmartReplace]
+ * [wiki:Documentation/Plugins/Stylist Stylist]
+ * [wiki:Documentation/Plugins/SuperClean SuperClean]
+ * [wiki:Documentation/Plugins/TableOperations TableOperations]
+ * [wiki:Documentation/Plugins/UnsavedChanges UnsavedChanges]
+ * [wiki:Documentation/Plugins/UseStrongEm UseStrongEm]
+ * [wiki:Documentation/Plugins/WebKitResize WebKitResize]
+ * [wiki:Documentation/Plugins/WysiwygWrap WysiwygWrap]
+
+
+== Unsupported (Deprecated) Plugins ==
+
+These plugins are no longer supported officially and are regarded as deprecated, they may not work well, not work properly, have more potential for security issues, and may be superceeded by supported plugins above.  Use at your discretion, new integrations of Xinha should not use these.
+
+
+ * [wiki:Documentation/Plugins/BackgroundImage BackgroundImage]
+ * [wiki:Documentation/Plugins/ClientsideSpellcheck ClientsideSpellcheck]
+ * [wiki:Documentation/Plugins/DoubleClick DoubleClick]
+ * [wiki:Documentation/Plugins/ExtendedFileManager ExtendedFileManager]
+ * [wiki:Documentation/Plugins/Filter Filter]
+ * [wiki:Documentation/Plugins/HtmlTidy HtmlTidy]
+ * [wiki:Documentation/Plugins/ImageManager ImageManager]
+ * [wiki:Documentation/Plugins/InsertMarquee InsertMarquee]
+ * [wiki:Documentation/Plugins/InsertPicture InsertPicture]
+ * [wiki:Documentation/Plugins/NoteServer NoteServer]
+ * [wiki:Documentation/Plugins/PersistentStorage PersistentStorage]
+ * [wiki:Documentation/Plugins/PSFixed PSFixed]
+ * [wiki:Documentation/Plugins/PSLocal PSLocal]
+ * [wiki:Documentation/Plugins/PSServer PSServer]
+ * [wiki:Documentation/Plugins/SpellChecker SpellChecker]
+ * [wiki:Documentation/Plugins/Template Template]
+ * [wiki:Documentation/Plugins/UnFormat UnFormat]

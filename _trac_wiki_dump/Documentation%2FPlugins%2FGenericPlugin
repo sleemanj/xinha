@@ -1,0 +1,11 @@
+= Plugin:  GenericPlugin =
+
+This plugin is just a boiler-plate for you to copy and make your own new plugin.
+
+[wiki:Plugins Back to Plugins]
+
+== Configuration ==
+
+**See the [wiki:NewbieGuide#ProvideSomeConfiguration NewbieGuide] for how to set configuration values in general, the below configuration options are available for this plugin.**
+
+There is no configuration required for this plugin at present.
