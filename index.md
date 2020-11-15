@@ -17,6 +17,11 @@ We can do better than a one line explanation though, because you can **add Xinha
 
 That single line make all the `<texarea>` on that page into Xinha areas.  Of course that's just the beginning of the story, there are lots of [configuration options available]({{ site.baseurl }}/Documentation/NewbieGuide.html) if you want to use them.
 
+---
+
+* TOC
+{:toc}
+
 ## News
 
 ### November 2020 
