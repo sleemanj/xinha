@@ -8,11 +8,17 @@ To use these is quite simple, instead of supplying an image filename for the but
 
 For example, what used to be (in the tool bar)
 
-{{{ bold:          [ "Bold", "ed_format_bold.gif", false, function(e) {e.execCommand("bold");} ]}}}
+
+```
+bold:          [ "Bold", "ed_format_bold.gif", false, function(e) {e.execCommand("bold");} ]
+```
 
 is now written
 
-{{{bold:          [ "Bold",   ["ed_buttons_main.gif",3,2], false, function(e) {e.execCommand("bold");} ]}}}
+
+```
+bold:          [ "Bold",   ["ed_buttons_main.gif",3,2], false, function(e) {e.execCommand("bold");} ]
+```
 
 indicating that the button at row 2, column 3 in ed_buttons_main.gif "Bold".
 

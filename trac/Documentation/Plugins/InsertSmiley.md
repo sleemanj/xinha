@@ -14,7 +14,10 @@ It is easy to add more smileys, in the `plugins/InsertSmiley/smileys/` folder yo
 
 If your server supports PHP, you don't even need to edit the file, just make this Xinha configuration
 
-{{{ xinha_config.InsertSmiley.smileys = _editor_url + '/plugins/InsertSmiley/smileys/smileys.php'; }}}
+
+```
+xinha_config.InsertSmiley.smileys = _editor_url + '/plugins/InsertSmiley/smileys/smileys.php'; 
+```
 
 and it will automatically detect the new smileys.
 

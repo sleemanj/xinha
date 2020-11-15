@@ -33,4 +33,4 @@ var foo = function()
 };
 ```
 
-4. Always use {{{var}}} when declaring variables, unless you ''really'' do mean to create a global variable.
+4. Always use `var` when declaring variables, unless you ''really'' do mean to create a global variable.

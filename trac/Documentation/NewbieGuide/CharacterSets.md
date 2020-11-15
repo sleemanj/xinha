@@ -60,7 +60,10 @@ The way you do this is for your webserver (or application language such as PHP) 
 
 All the javascript files (that form Xinha) must be loaded as UTF-8, for example
 
-{{{ <script language="Javascript" src="htmlarea.js" charset="utf-8"></script> }}}
+
+```
+<script language="Javascript" src="htmlarea.js" charset="utf-8"></script> 
+```
 
 Further to that, UTF-8 encoding across the board with your files, with your edited content, with EVERYTHING, is HIGHLY encouraged, avoid using older encodings and character sets, UTF-8 encoded UNICODE isn't the way of the future, it's the way of the present - you will have a much more reliable time if you forget about the character sets of old and use UNICODE.
 

@@ -6,7 +6,10 @@ The Xinha Stylist plugin provides a "Panel" containing various developer supplie
 
 The plugin is "smart", that is, it will understand classes that are only valid within context.  For example if you supplied the plugin the following style
 
-{{{ li.important { color:red } }}}
+
+```
+li.important { color:red } 
+```
 
 it would only be avaliable in the stylist when the cursor is in an <li> element.
 
