@@ -21,10 +21,10 @@ Here are the main talking points, but of course there's a lot more besides this,
 
   * Lots of bugs fixed
   * Lots of improvements made
-  * Some new plugins added [wiki:Documentation/Plugins/WebKitResize WebKitResize], [wiki:Documentation/Plugins/EncodeOutput EncodeOutput], [wiki:Documentation/Plugins/ListOperations ListOperations], [wiki:Documentation/Plugins/FancySelects FancySelects], [wiki:Documentation/Plugins/PreserveSelection PreserveSelection]
+  * Some new plugins added [Documentation/Plugins/WebKitResize.html](WebKitResize), [wiki:Documentation/Plugins/EncodeOutput EncodeOutput], [wiki:Documentation/Plugins/ListOperations ListOperations], [wiki:Documentation/Plugins/FancySelects FancySelects], [wiki:Documentation/Plugins/PreserveSelection PreserveSelection]
   * Some old plugins deprecated (!SpellChecker (browsers these days do spellchecking themselves), !ExtendedFileManager (recommend to use !MootoolsFileManager instead), !ImageManager (recommend to use !MootoolsFileManager instead), !UnFormat (use !SuperClean), !PersistentStorage (abandonded)) 
-  * [wiki:Documentation/Plugins/MootoolsFileManager MootoolsFileManager] plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
-  * [wiki:Documentation/NewbieGuide A much easier way for integrating Xinha]
+  * [Documentation/Plugins/MootoolsFileManager.html](MootoolsFileManager) plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
+  * [Documentation/NewbieGuide.html](A much easier way for integrating Xinha)
   * [wiki:Documentation/NewbieGuide/InstallingXinha Ability to use Xinha from external servers (CDN)] and still maintaining the ability to run special local plugins (eg your own plugins locally and everything else external, or everything locally, or everything externally...
   * Rewritten translations system reducing page loads and making the job easier for translators
   * Reduction in network activity for plugin loading
@@ -32,9 +32,9 @@ Here are the main talking points, but of course there's a lot more besides this,
   * Improved security
   * Rewritten keyboard handling and new events exposed for plugin authors
 
-You can [wiki:DownloadXinha Download Xinha Here] and it is recommended to read through the New [wiki:Documentation/NewbieGuide Newbie Guide] here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
+You can [DownloadXinha.html](Download Xinha Here) and it is recommended to read through the New [wiki:Documentation/NewbieGuide Newbie Guide] here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
 
-=## Compatability =
+## Compatability 
 
 As always, backwards compatibility is important, and breaking changes have been kept to a minimum.  
 
@@ -58,7 +58,7 @@ The short version is, that development happens when a developer has an itch they
 
 There is no set schedule, and development of Xinha simply for the sake of developing Xinha doesn't happen much (we have bills to pay, if we don't have a direct need for something in one of our projects, it's not getting written).
 
-Xinha is open source, and we mean it, if you want to progress the development of Xinha in some way, please contact James Sleeman ( See [wiki:Developers Xinha Developers] ) and he will arrange for SVN commit and Trac management access.
+Xinha is open source, and we mean it, if you want to progress the development of Xinha in some way, please contact James Sleeman ( See [Developers.html](Xinha Developers) ) and he will arrange for SVN commit and Trac management access.
 
 
 ## How can I get Xinha? 
@@ -78,10 +78,7 @@ This is one of the main reasons Xinha split from htmlArea, the htmlArea developm
 There ~~is~~ once was a mailing list available at [http://www.openplans.org/projects/xinha/lists/xinha-discussion], it's gone now.
 
 ## I don't know Javascript! 
-That's ok, we do.  Some other ways you might contribute are to sponsor development of Xinha plugins, or donate some cash to one of the [wiki:Developers Xinha developers].
+That's ok, we do.  Some other ways you might contribute are to sponsor development of Xinha plugins, or donate some cash to one of the [Developers.html](Xinha developers).
 
 ## What else is here? 
 For a complete list of local wiki pages, see TitleIndex.
-
-
-
