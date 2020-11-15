@@ -82,13 +82,13 @@ We can easily set the language and skin to your desire with some more options
 ```
 
 
-The options for [[/browser/trunk/lang|Languages are those provided by the lang files here]] - for example for French use 'fr' - note that Languages other than English ('en', the default) may be in various states of completeness, untranslated things will revert to English, if you would like to help with translating DownloadXinha and see the READEME_TRANSLATORS.TXT file.
+The options for [Languages are those provided by the lang files here]({{ site.github.repository_url }}/tree/master/lang) - for example for French use 'fr' - note that Languages other than English ('en', the default) may be in various states of completeness, untranslated things will revert to English, if you would like to help with translating DownloadXinha and see the READEME_TRANSLATORS.TXT file.
 
-The options for [[/browser/trunk/skins|Skins are those here]], use the folder name as the skin name.
+The options for [Skins are those here]({{ site.github.repository_url }}/tree/master/skins), use the folder name as the skin name.
 
 ### Specify Some Plugins
 
-Xinha uses a system of [wiki:Documentation/Plugins] to provide extra functionality.  The default is to use a set of those plugins which are most commonly useful, but you can also specify a list of plugins, or the set names 'minimal', 'common', and 'loaded' (which means use a whole bunch more plugins that might be less useful commonly) or a combination there-of with a simple option...
+Xinha uses a system of [Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html) to provide extra functionality.  The default is to use a set of those plugins which are most commonly useful, but you can also specify a list of plugins, or the set names 'minimal', 'common', and 'loaded' (which means use a whole bunch more plugins that might be less useful commonly) or a combination there-of with a simple option...
 
 
 

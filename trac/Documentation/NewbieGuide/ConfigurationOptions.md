@@ -2,7 +2,7 @@
 
 The following options can be specified to control the core features of Xinha.
 
-** See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general. **
+** See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general. **
 
 
   width::

@@ -28,9 +28,9 @@
 
 ## コンフィギュレーション
 
- * Q: 私のニーズにフィットするエディタを作るためには、どんなオプションがありますか？ [wiki:Documentation/ConfigVariablesList Wiki: List of available options]
- * Q: どうやってツールバーをカスタマイズすればいいですか？[wiki:Documentation/ConfigVariablesList#xinha_configtoolbar Wiki: xinha_config.toolbar]
- * Q: どうすれば、h1タグやその他のタグを私のサイトで表示されるのと同じスタイルにすることができますか？[wiki:Documentation/ConfigVariablesList#xinha_configpageStyleSheets Wiki: xinha_config.pageStyleSheets/xinha_config.pageStyles]
+ * Q: 私のニーズにフィットするエディタを作るためには、どんなオプションがありますか？ [Wiki: List of available options]({{ site.baseurl }}/trac/Documentation/ConfigVariablesList.html)
+ * Q: どうやってツールバーをカスタマイズすればいいですか？[Wiki: xinha_config.toolbar]({{ site.baseurl }}/trac/Documentation/ConfigVariablesList.html#xinha_configtoolbar)
+ * Q: どうすれば、h1タグやその他のタグを私のサイトで表示されるのと同じスタイルにすることができますか？[Wiki: xinha_config.pageStyleSheets/xinha_config.pageStyles]({{ site.baseurl }}/trac/Documentation/ConfigVariablesList.html#xinha_configpageStyleSheets)
  * Q: どうすればデフォルトの表示フォントを変更できますか？[http://xinha.gogo.co.nz/punbb/viewtopic.php?id=116 Font]
  * Q: Xinhaをフルスクリーンモードで起動することはできますか？[http://xinha.gogo.co.nz/punbb/viewtopic.php?id=102 Full screen]
  * Q: どうすればパスバーを隠せますか？ [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=3 Path bar]

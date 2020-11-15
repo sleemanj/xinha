@@ -8,7 +8,7 @@ MootoolsFileManager (MFM) is a complex plugin and requires your server uses PHP,
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 MFM requires the use of PHP in your configuration to securely pass configuration details to the plugin, for obvious reasons we can't allow people to specifiy what they want to do with files on your server just with some Javascript!
 

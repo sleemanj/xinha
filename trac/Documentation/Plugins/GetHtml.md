@@ -17,8 +17,8 @@ It is based on the XML_Utility functions submitted in Ticket #253 by troels_kn, 
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
-You can enable this by setting [wiki:Documentation/ConfigVariablesList#xinha_configgetHtmlMethod xinha_config.getHtmlMethod] to "TransformInnerHTML"
+You can enable this by setting [xinha_config.getHtmlMethod]({{ site.baseurl }}/trac/Documentation/ConfigVariablesList.html#xinha_configgetHtmlMethod) to "TransformInnerHTML"
 

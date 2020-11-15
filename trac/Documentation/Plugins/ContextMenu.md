@@ -6,7 +6,7 @@ The ContextMenu plugin, developed by [http://dynarch.com/ Mihai Bazon] with spon
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 No configuration is necessary for general purposes.  For advanced users there are a couple of options.
 

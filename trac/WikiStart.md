@@ -34,18 +34,18 @@
 
 
 
-**6th November 2019**\\[wiki:ReleaseNotes Release 1.5.4]
+**6th November 2019**\\[Release 1.5.4]({{ site.baseurl }}/trac/ReleaseNotes.html)
 
-**24th May 2018**\\[wiki:ReleaseNotes Release 1.5.3]
+**24th May 2018**\\[Release 1.5.3]({{ site.baseurl }}/trac/ReleaseNotes.html)
 
-**15th May 2018**\\[wiki:ReleaseNotes Release 1.5.2]
+**15th May 2018**\\[Release 1.5.2]({{ site.baseurl }}/trac/ReleaseNotes.html)
 
-**12th April 2018**\\[wiki:ReleaseNotes Release 1.5.1]
+**12th April 2018**\\[Release 1.5.1]({{ site.baseurl }}/trac/ReleaseNotes.html)
 
 **18th March 2018**\\[wiki:ReleaseNotes Release 1.5 "A Long Time Coming"]
 
 \\
-[wiki:NewsArchive see older news...]
+[see older news...]({{ site.baseurl }}/trac/NewsArchive.html)
 ```
 
 

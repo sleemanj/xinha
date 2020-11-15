@@ -7,6 +7,6 @@ Replace standard single and double quotes with directional ones automatically.  
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 There is no configuration required for this plugin at present.

@@ -8,7 +8,7 @@ The plugin was developed by [http://dynarch.com Mihai Bazon], sponsored by the A
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 Configuration of this plugin is not normally required, however there exist some options if you wish to customise it's function...
 

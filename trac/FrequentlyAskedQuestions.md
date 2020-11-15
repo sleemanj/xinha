@@ -40,9 +40,9 @@ Firstly, this page is always being improved, so if you don't understand somethin
 
 ## Configuration
 
- * Q: What options are there to make the editor fit my needs? See the [wiki:Documentation/NewbieGuide/ConfigurationOptions Wiki: list of available options]
- * Q: How can I customize the toolbar? [wiki:Documentation/NewbieGuide/ConfigurationOptions#xinha_configtoolbar Wiki: xinha_config.toolbar]
- * Q: How can I make the h1 tag and other tags to be styled the way they will show on my website ? [wiki:Documentation/NewbieGuide/ConfigurationOptions#xinha_configpageStyleSheets Wiki: xinha_config.pageStyleSheets/xinha_config.pageStyles]
+ * Q: What options are there to make the editor fit my needs? See the [Wiki: list of available options]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html)
+ * Q: How can I customize the toolbar? [Wiki: xinha_config.toolbar]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html#xinha_configtoolbar)
+ * Q: How can I make the h1 tag and other tags to be styled the way they will show on my website ? [Wiki: xinha_config.pageStyleSheets/xinha_config.pageStyles]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html#xinha_configpageStyleSheets)
  * Q: How can I change the default display font ? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=116 Font]
  * Q: Is it possible to start Xinha in fullscreen mode? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=102 Full screen]
  * Q: How can I hide the path bar ? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=3 Path bar]

@@ -18,6 +18,6 @@ In Xinha you may find the [Stylist Plugin]({{ site.baseurl }}/trac/Stylist.html)
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 There is presently no configuration required for this plugin other than to set one or more stylesheets as illustrated in the NewbieGuide.

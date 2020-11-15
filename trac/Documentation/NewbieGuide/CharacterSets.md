@@ -3,7 +3,7 @@
 The use of Xinha with non-english languages, or special characters (such as the Euro symbol) means that you will very likely encounter character set problems, especially if you don't know jack about character sets.  This document first attempts to explain Character Sets and Encodings, then will give you some advice about the use of character sets with HTML, Javascript and in particular Xinha.
 
 
-[wiki:CharacterSets#stopwaffle Skip to the advice.]
+[Skip to the advice.]({{ site.baseurl }}/trac/CharacterSets.html#stopwaffle)
 
 
 ## What is a Character Set?

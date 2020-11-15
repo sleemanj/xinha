@@ -7,7 +7,7 @@ Inserts one or more drop down menus into the Xinha toolbar allowing to select CS
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 You can use this plugin without configuration and two default drop downs will be shown as an example, however more usefully you can specify a configuration such as....
 

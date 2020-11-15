@@ -6,7 +6,7 @@ This plugin makes the drop-downs (font, size etc) "Fancy" by using the "select2"
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 Generally no configuration is necessary, however you may wish to set widths explicitly, the following are the defaults...
 

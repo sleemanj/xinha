@@ -12,4 +12,4 @@
 
 The end.
 
-Ok there's a lot more you CAN do if you want, read the [wiki:Documentation/NewbieGuide] if you want to learn how.
+Ok there's a lot more you CAN do if you want, read the [NewbieGuide]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html) if you want to learn how.
