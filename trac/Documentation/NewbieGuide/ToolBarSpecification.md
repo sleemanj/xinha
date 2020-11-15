@@ -22,15 +22,18 @@ When using `XinhaEasy.js` there are a few simple pre-defined toolbars you can us
 
 If you want one of the above (or default) toolbars, but want to hide some button(s) in it, you can do this in the config...
 
+
 ```
   xinha_config.hideSomeButtons(" fontname fontsize textindicator ");
 ```
+
 
 which would remove the font name and size drop downs, and the text indicator item (shows fore/background colour).
 
 ## Full Configuration
 
 If you wish you can specify the toolbar in full, here is the default...
+
 
 ```
 
@@ -49,6 +52,7 @@ If you wish you can specify the toolbar in full, here is the default...
   ];
 
 ```
+
 
 as you can see it is made up of a 2 dimensional array.  Each subarray can be regarded as a logical "grouping" of "things".  
 
@@ -72,6 +76,7 @@ Note that plugins may also insert themselves into toolbars after you have config
 
 To add a custom button to the toolbar, first you must register the button, then you can add it to your toolbar somewhere.  This can be done in the xinha_config section of loading Xinha (see NewbieGuide).
 
+
 ```
 
  xinha_config.registerButton({
@@ -88,6 +93,7 @@ To add a custom button to the toolbar, first you must register the button, then 
   xinha_config.toolbar.push(['my-hilite']);
 
 ```
+
 
 
 

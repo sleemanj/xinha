@@ -11,6 +11,7 @@ Inserts one or more drop down menus into the Xinha toolbar allowing to select CS
 
 You can use this plugin without configuration and two default drop downs will be shown as an example, however more usefully you can specify a configuration such as....
 
+
 ```
 xinha_config.cssPluginConfig =
   {
@@ -28,3 +29,4 @@ xinha_config.cssPluginConfig =
     ]
   };
 ```
+

@@ -10,6 +10,7 @@
 **See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
+
 ```
 
   xinha_config.UseStrongEm = 
@@ -20,6 +21,7 @@
   }
 
 ```
+
 
   useEm:: 
     When you hit italic button, insert an <em> tag.  Hitting italic on an already italic text should unitalic.

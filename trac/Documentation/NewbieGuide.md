@@ -15,9 +15,11 @@ Including one or more Xinha areas on your page has been made very easy, in fact 
 
 Assuming that your page contains one or more `<textarea>` that you wish to turn into Xinha areas, and you just want default options, then this is all you need.
 
+
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js"></script>
 ```
+
 
 ### Remember to Entize
 
@@ -50,6 +52,7 @@ See [Caching Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/Caching.ht
 
 You muight want to be a bit more picky about which textareas get converted, some simple configuration will see to it,
 
+
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js">
     xinha_options =
@@ -59,11 +62,13 @@ You muight want to be a bit more picky about which textareas get converted, some
   </script>
 ```
 
+
 now only `<textarea class="some-css-class"></textarea>` will be converted.  You can use multiple and full CSS selectors as you desire, just like you would for writing CSS rulesets.
 
 ### Set the Language and Skin
 
 We can easily set the language and skin to your desire with some more options
+
 
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js">
@@ -76,6 +81,7 @@ We can easily set the language and skin to your desire with some more options
   </script>
 ```
 
+
 The options for [[/browser/trunk/lang|Languages are those provided by the lang files here]] - for example for French use 'fr' - note that Languages other than English ('en', the default) may be in various states of completeness, untranslated things will revert to English, if you would like to help with translating DownloadXinha and see the READEME_TRANSLATORS.TXT file.
 
 The options for [[/browser/trunk/skins|Skins are those here]], use the folder name as the skin name.
@@ -83,6 +89,7 @@ The options for [[/browser/trunk/skins|Skins are those here]], use the folder na
 ### Specify Some Plugins
 
 Xinha uses a system of [wiki:Documentation/Plugins] to provide extra functionality.  The default is to use a set of those plugins which are most commonly useful, but you can also specify a list of plugins, or the set names 'minimal', 'common', and 'loaded' (which means use a whole bunch more plugins that might be less useful commonly) or a combination there-of with a simple option...
+
 
 
 ```
@@ -97,11 +104,13 @@ Xinha uses a system of [wiki:Documentation/Plugins] to provide extra functionali
   </script>
 ```
 
+
 here we have specified that in addition to the 'minimal' set of plugins, we also want `TableOperations` which provides more complete table editing functions.
 
 ### Specify A Stylesheet
 
 To make Xinha a real WYSIWYG editor you should also load a stylesheet into it that will give your users the "look" of what they are typing as it would appear on the website, again it's just an option away...
+
 
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js">
@@ -117,9 +126,11 @@ To make Xinha a real WYSIWYG editor you should also load a stylesheet into it th
   </script>
 ```
 
+
 ### Specify A Toolbar
 
 The toolbar (buttons and drop-down selectors) can be customised easily using the `xinha_toolbar` option, it accepts either one of the keywords `default`, `minimal`, `minimal+fonts`, `supermini` (it can also accept a toolbar structure but we will leave that for another time).
+
 
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js">
@@ -134,12 +145,14 @@ The toolbar (buttons and drop-down selectors) can be customised easily using the
   </script>
 ```
 
+
 Here we have specified this is going to be an extremely minimal editor indeed!
 
 
 ### Provide Some Configuration
 
 [Xinha Core]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html) and it's [Plugins]({{ site.baseurl }}/trac/Plugins.html) have lots of scope to configure them as you require, this is how you can set configuration settings in general.
+
 
 
 ```
@@ -161,6 +174,7 @@ Here we have specified this is going to be an extremely minimal editor indeed!
   </script>
 ```
 
+
 here we have turned on the ability for the user to click-drag resize the editor (note that this only works well in Chrome and Safari).
 
 ## Editor-Specific Options
@@ -170,6 +184,7 @@ If you have more than one editor on a page, or you are using the same "include" 
 ### Provide Different Configuration For A Specific Editor
 
 There might be times when you want to give a different configuration to certain editors than to certain others, we can do that no problem...
+
 
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js">
@@ -198,11 +213,13 @@ There might be times when you want to give a different configuration to certain 
   </script>
 ```
 
+
 here we have decided that any textarera with class "for-email" (which also has "some-css-class" in the first place causing it to be selected for conversion) should be configured as "sevenBitClean" (which means that only 7 bit characters are used in the output).
 
 ### Disable Some Plugins For A Specific Editor
 
 It might be the case that you want certain editors not to have some plugins, we can sort that out...
+
 
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js">
@@ -239,11 +256,13 @@ It might be the case that you want certain editors not to have some plugins, we 
   </script>
 ```
 
+
 here we have removed `TableOperations` from the for-email editor.
 
 ### Set The Toolbar For A Specific Editor
 
 It might be the case that you want some editor to have a differnet toolbar than others, we can do this by adjusting that editor's configuration...
+
 
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js">
@@ -285,6 +304,7 @@ It might be the case that you want some editor to have a differnet toolbar than 
   </script>
 ```
 
+
 here we have decided that the texarea with 'full-tools' class name should get the default toolbar.
 
 ## Load External (Local) Plugins
@@ -292,6 +312,7 @@ here we have decided that the texarea with 'full-tools' class name should get th
 it may be that you wish to develop your own Xinha plugins and keep them separate to Xinha (or you use Xinha from a CDN), or you wish to use plugins such as [Linker]({{ site.baseurl }}/trac/Documentation/Plugins/Linker.html) and [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) which must be run on your own webserver because they allow browsing or uploading files on your webserver.  
 
 You can use these even if you are pulling Xinha from a CDN simply by specifying them as external plugins.   See the "Custom Plugins Example"
+
 
 ```
   <script src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js" type="text/javascript">
@@ -316,5 +337,6 @@ You can use these even if you are pulling Xinha from a CDN simply by specifying 
 
   </script>
 ```
+
 
 This code shows loading plugins from 3 locations, first the standard 'minimal' plugins are loaded from Xinha, then the `MootoolsFileManager` and `Linker` plugins are loaded from your local server's `xinha-cdn` folder (eg, `/url/path/to/xinha-cdn/MootoolsFileManager/MootoolsFileManager.js`) and finally your own `CustomPlugin` is loaded from your local server's `my_custom_plugins` (ie, `/url/path/to/my_custom_plugins/CustomPlugin/CustomPlugin.js`)

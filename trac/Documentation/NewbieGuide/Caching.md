@@ -4,6 +4,7 @@ Xinha use involves the browser loading a fairly large number of files from the w
 
 If you are running Xinha from your own server (rather than an external server, CDN etc) then you may need to tell your server to tell the browser not to check the files for changes so often.  For Apache users, a set of caching directives like this in a `.htaccess` file (eg `/path/to/xinha/.htaccess`) is a good idea...
 
+
 ```
 <IfModule mod_expires.c>
   ExpiresActive On
@@ -16,6 +17,7 @@ If you are running Xinha from your own server (rather than an external server, C
   ExpiresByType application/xml  "access plus 24 hour"
 </IfModule>
 ```
+
 
 If course you can make the time longer, or shorter, the point is your Xinha files are unlikely to change any time soon so you might as well make it cache for a long time.
 

@@ -8,6 +8,7 @@ This page is meant to provide some basic coding practices and style guidelines f
 2. '''Don't use tabs.''' Instead, indent code blocks with '''two spaces'''.
 
 3. Always use semicolons after single lines, function definition and object literals, but not after loops and if-blocks. E.g., 
+
 ```
 var foo = function() 
 {
@@ -32,5 +33,6 @@ var foo = function()
   }
 };
 ```
+
 
 4. Always use `var` when declaring variables, unless you ''really'' do mean to create a global variable.

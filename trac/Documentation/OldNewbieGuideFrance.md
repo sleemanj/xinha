@@ -20,6 +20,7 @@ Maintenant vous avez besoin du code suivant sur votre page, pour transformer un 
 
 En tout premier lieu, ajouter ce code quelquepart dans votre page (si possible dans la section <head></head> de votre document HTML) :
 
+
 ```
   <script type="text/javascript">
     _editor_url  = "/xinha/"  // (de préférence absolue) URL (incluant le slash de fin) où Xinha est installé
@@ -28,18 +29,22 @@ En tout premier lieu, ajouter ce code quelquepart dans votre page (si possible d
   <script type="text/javascript" src="/xinha/XinhaCore.js"></script>
 ```
 
+
 Si vous utilisez un répertoire différent, assurez-vous de d'accorder l'url de XinhaCore.js avec ce répertoire d'installation.
 
 Vous aurez également besoin d'un peu de code de configuration inclus également sur la page - il y a deux manière de le faire :
 
 
 '''1)''' copier le code de configuration ans un fichier appelé "my_config.js" puis inclure ce fichier en utilisant
+
 ```
 <script type="text/javascript" src="/xinha/my_config.js"></script>
 ```
+
  Cela vous permettra d'utiliser plusieurs X-Areas sur différentes pages en leur faisant tous partager la même configuration.
 
 '''2)''' copier le code suivant dans votre page - cela est nécessaire sur chaque page où vous désirez avec un éditeur, et vous permettra de les configurer individuellement. Vous aurez besoin d'encadrer le code suivant par les tags <script type="text/javascript"> </script> si vous utilisez cette deuxième option.
+
 
 ```
     xinha_editors = null;
@@ -145,19 +150,23 @@ Vous aurez également besoin d'un peu de code de configuration inclus également
 ```
 
 
+
 ## Plus de code
 
 Vous devez vous assurer que le tag du textarea a transformer possède un bien un paramètre "id"
 
+
 ```
 <textarea id="newbiearea1" name="newbiearea1" rows="10" cols="50" style="width: 100%"></textarea>
 ```
+
 
 il peut être le même que le "name" - assurez-vous juste que cet identifiant est unique sur la page !
 
 Maintenant, dans le code copié dans le fichier "my_config.js" (ou dans le <head></head> si vous avez utilisé cette méthode), vous devez éditer l'étape 2 qui liste les éditeurs à transformer.
 
 Dans cet example, deux textareas sont listés : 'myTextArea' et 'anotherOne' - vous devez changer 'myTextArea' en l'ID défini pour votre textarea - dans ce nouvel exemple, nous l'avons appelé 'newbiearea1'. Vous devez également supprimer la référence à 'anotherOne' puisque nous ne transformons que un seul textarea ici ! ('''attention, ici les valeurs sont séparées par des virgules MAIS il n'y a pas de virgule après la dernière valeur'''), votre nouveau code devrait ressembler à ceci :
+
 
 ```
       /** ETAPE 2 ***************************************************************
@@ -170,6 +179,7 @@ Dans cet example, deux textareas sont listés : 'myTextArea' et 'anotherOne' - v
         'newbiearea1'
       ];
 ```
+
 
 ## Et voilà !
 

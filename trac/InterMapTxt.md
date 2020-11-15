@@ -11,9 +11,11 @@ This page is interpreted in a special way by Trac, in order to support
 
 The code block after the first line separator in this page
 will be interpreted as a list of `InterWiki` specifications:
+
 ```
 prefix <space> URL [<space> # comment]
 ```
+
 
 By using `$1`, `$2`, etc. within the URL, it is possible to create 
 InterWiki links which support multiple arguments, e.g. Trac:ticket:40.
@@ -36,6 +38,7 @@ Also note that `InterWiki` prefixes are case insensitive.
 ----
 
 ## Prefix Definitions
+
 
 ```
 PEP     http://www.python.org/peps/pep-$1.html                                       # Python Enhancement Proposal 
@@ -75,3 +78,4 @@ Why              http://clublet.com/c/c/why?
 c2Wiki             http://c2.com/cgi/wiki?
 WikiPedia        http://en.wikipedia.org/wiki/
 ```
+

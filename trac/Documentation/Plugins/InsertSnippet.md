@@ -17,6 +17,7 @@ The snippets file, which is not "JSON" but an eval'd javascript script, must def
 
 ### Example snippets.js file
 
+
 ```
 
   var snippets = [
@@ -25,5 +26,6 @@ The snippets file, which is not "JSON" but an eval'd javascript script, must def
   ];
 
 ```
+
 
 Obviously you can generate this file manually, or dynamically by whatever processes you desire, just specify the path to it in the configuration.

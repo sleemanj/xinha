@@ -22,6 +22,7 @@ The following options can be specified to control the core features of Xinha.
 
   panelDimensions::
     Object.  Specify the panel dimensions for left/right/top/bottom, pixel widths only.
+
 ```
   xinha_config.panel_dimensions =
   {
@@ -31,6 +32,7 @@ The following options can be specified to control the core features of Xinha.
     bottom: '100px'
   };
 ```
+
 
   iframeWidth::
      Integer.  If you want the iframe to be narrower than toolbar, set this to a number of pixels.  Eg if you are editing a very narrow column of text and want to maintain that narrowness in the editor.
@@ -61,16 +63,20 @@ The following options can be specified to control the core features of Xinha.
 
   pageStyle::
     String. CSS definitions to apply to the edited document.  See also pageStyleSheets below, and [Stylist]({{ site.baseurl }}/trac/Stylist.html) plugin.
+
 ```
      xinha_config.pageStyle = '  p { color:red;  }  \n' 
                             + ' li { color:blue; }';
 ```
+
     
   pageStyleSheets::
     Array of string.  An array of external stylesheets to apply to the edited document. 
+
 ```
      xinha_config.pageStyleSheets = [ "/css/myPagesStyleSheet.css","/css/anotherOne.css" ];
 ```
+
 
   baseHref::
     String.  Base href to apply to relative links.  ** This is probably buggy.  You shouldn't need to use it. **
@@ -93,6 +99,7 @@ The following options can be specified to control the core features of Xinha.
   
   specialReplacements::
     Object.  Display one thing in the WYSIWYG view and translate it to a different thing in the HTML view.  Potential use as showing some example text in the WYSIWYG view but using a "replacement code" in the HTML generated.  Default empty.
+
 ```
      xinha_config.specialReplacements = 
      { 
@@ -100,6 +107,7 @@ The following options can be specified to control the core features of Xinha.
        '{$Name}' : 'John Smith',
      };
 ```
+
 
   tabSpanClass::
     String.  When the user presses the tab key in the editor, Xinha will insert a span with this class and the below contents.  Default 'xinha-tab'
@@ -110,18 +118,22 @@ The following options can be specified to control the core features of Xinha.
   inwardHtml::
     Function accepting parameter `html` and returning html to use in the editor.  This is called with the contents of the textarea and the result is what is inserted into the Xinha editor for editing.  Default, null function.
 
+
 ```
       xinha_config.inwardHtml = function(html) { return html.replace(/how now brown cow/, 'how now yellow camel'); }
 ```
+
 
     Makes <textarea>how now brown cow</textarea> edit a Xinha document with the text "how now yellow camel" instead.
 
   outwardHtml::
     Function accepting parameter `html` and returning html to return to the textarea.  This is called before putting the edited html back into the textarea.
 
+
 ```
       xinha_config.inwardHtml = function(html) { return html.replace(/how now yellow camel/, 'how now brown cow'); }
 ```
+
 
     Makes the Xinha edited content "how now yellow camel" be written into the textarea as "how now brown cow".
 
@@ -142,9 +154,11 @@ The following options can be specified to control the core features of Xinha.
 
   htmlRemoveTags::
     RegExp|null.  Set to a regular expression matching tags to remove these entirely from the edited content.   Default null.
+
 ```
       xinha_config.htmlRemoveTags = /span|font/;
 ```
+
     Removes all span and font tags.
 
   preserveI::
@@ -204,6 +218,7 @@ The following options can be specified to control the core features of Xinha.
 
   fontname::
     Object.  The font families to provide in the drop-down select.
+
 ```
 xinha_config.fontname = 
   {
@@ -219,8 +234,10 @@ xinha_config.fontname =
   }
 ```
 
+
   fontsize::
     Object.  The font sizes to provide in the drop down select.
+
 ```
 xinha_config.fontsize =
   {
@@ -235,8 +252,10 @@ xinha_config.fontsize =
   };
 ```
 
+
   formatblock::
     Object.  The different block format types to provide in the drop down select.
+
 ```
 xinha_config.formatblock = {
     "&#8212; format &#8212;": "", // &#8212; is mdash
@@ -253,11 +272,13 @@ xinha_config.formatblock = {
 ```
 
 
+
   formatblockDetector::
     Object.  See https://www.coactivate.org/projects/xinha/custom-formatblock-options
 
   dialogOptions::
     Object.  Controls some options for dialogs.
+
 ```
   xinha_config.dialogOptions =
   {
@@ -267,8 +288,10 @@ xinha_config.formatblock = {
   };
 ```
 
+
   Events::
     Object.  Hook into some events, for example...
+
 ```
     xinha_config.Events.onKeyPress = function (event) 
     {
@@ -276,6 +299,7 @@ xinha_config.formatblock = {
        return false;
     }
 ```
+
     See EventHooks for discussion about available hooks.
 
   debug::

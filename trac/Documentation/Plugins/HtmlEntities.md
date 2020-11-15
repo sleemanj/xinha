@@ -9,15 +9,19 @@ Maybe these characters are rendered correctly in the browser, but they produce a
 If you use the ISO-8859-1 charset, just load the plugin and all characters that are not contained therein are converted.
 
 If you want all non ASCII characters converted to named entites, set 
+
 ```
  xinha_config.HtmlEntities.Encoding= null; 
 ```
 
+
 If you want to exclude characters that are available in the used charset other than ISO-8859-1, you can edit the file Entities in the plugin folder by deleting or commenting out the respective lines. Then you save the file under a different name and reference it like this
+
 ```
  xinha_config.HtmlEntities.Encoding= null; 
  xinha_config.HtmlEntities.EntitiesFile = "/url/to/your/file.js"; 
 ```
+
 This way you will have no needless entities. If you have done this for any charset, please consider sending it along, so that we can include it as a preset.
 
 The conversion map provided by mharrisonline in ticket #127\\

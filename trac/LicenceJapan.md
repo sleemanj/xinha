@@ -5,6 +5,7 @@ Xinhaはhtmlareaオリジナルライセンスの下で公開されています�
 
 TODO: 我々はこのライセンスに著作権表記を追加する必要はあるだろうか？必要とすべきなのか？必要性を持つことができるのか？
 
+
 ```
 htmlArea License (based on BSD license)
 Copyright (c) 2002-2004, interactivetools.com, inc.
@@ -37,3 +38,4 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 ```
+

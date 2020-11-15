@@ -18,6 +18,7 @@ it would only be avaliable in the stylist when the cursor is in an <li> element.
 **See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
+
 ```
 
   // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
@@ -33,5 +34,6 @@ it would only be avaliable in the stylist when the cursor is in an <li> element.
   // or like this
   xinha_config.stylistLoadStylesheet('/mystyles.css', {'p.pink_text' : 'Pretty Pink'});
 ```
+
 
 The plugin was developed by [http://code.gogo.co.nz/ James Sleeman].

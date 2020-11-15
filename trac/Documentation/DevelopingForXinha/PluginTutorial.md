@@ -10,6 +10,7 @@ Beginning an update of this tutorial.  We're going to talk about coding style (I
 3. Add an entry to xinha_plugins section of myconfig.js to point to your directory that you have created.
 
 4. In the my-test.js file, the absolute min you require just to get a button on the toolbar (that doesn't error when clicked) is...
+
 ```
 function MyTest(editor)
 {
@@ -50,6 +51,7 @@ function MyTest(editor)
 
 }
 ```
+
 Note where `MyTest` and my-test and My Test are placed. These will need to be made relevant to your situation.
 
 
@@ -70,6 +72,7 @@ ii. You can change the alert(value) to do whatever you want to the parent Xinha 
 		iii. If you want to pass a value INTO your pop-up window, you use the third parameter of the _popupDialog. editor._popupDialog(_editor_url + "plugins/MyTest/MyTestForm.aspx", function(value){editor.insertHTML(value);}, {FirstArg:'Text to pass into my pop-up',SecondArg:'More text'});
 		iv. The pop-up (`MyTest`Form.aspx) will require an Init function. The function will be called from the body onload. <body onload="Init()">
 		v. The Init() will contain a method to get the value out.
+
 ```
 	function Init()
 	{
@@ -79,6 +82,7 @@ ii. You can change the alert(value) to do whatever you want to the parent Xinha 
 		alert(Incoming["SecArg"]);
 	}
 ```
+
 
 
 

@@ -1,6 +1,7 @@
 # Download Xinha
 
 ## Available Packages
+
 ```
 #!html
 <table border="0" cellspacing="0" cellpadding="5" style="border:solid 1px #ccc" summary="File listings for the Xinha project">
@@ -420,17 +421,22 @@
 </table>
 ```
 
+
 ## SVN Checkout
 
 The SVN repository is open for public read.  Simply point your preferred SVN client to
+
 
 ```
 http://svn.xinha.org/trunk/
 ```
 
+
 for example, using the command line SVN client
+
 
 ```
 ~$ svn co http://svn.xinha.org/trunk/ xinha
 ```
+
 

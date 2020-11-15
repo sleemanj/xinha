@@ -14,6 +14,7 @@ MFM requires the use of PHP in your configuration to securely pass configuration
 
 Here is an example Xinha configuration to present both an insert image and a file link button.
 
+
 ```
       xinha_config:            function(xinha_config) 
       {   
@@ -49,6 +50,7 @@ Here is an example Xinha configuration to present both an insert image and a fil
 
       }
 ```
+
 
 Notice how there is `<?php` used here, this means of course that you need to have your Xinha configuration defined in a file which is processed by PHP, the implementation of that is left to you if you are using .html files or template frameworks.
 

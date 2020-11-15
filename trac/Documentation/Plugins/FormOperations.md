@@ -9,6 +9,7 @@ The Form Operations plugin provides a set of buttons in the toolbar and an as-re
 ## Usage:
 See the README file, the contents of which are pasted here...
 
+
 ```
   1. Follow the standard procedure for loading a plugin.
   2. You optionally may configure the plugin by setting the following configuration variables, or leave them as the defaults.
@@ -36,6 +37,7 @@ See the README file, the contents of which are pasted here...
               = HTMLArea._geturlcontent('http://absolute/url/to/file.html')
               see default_form.html for a suitable example, pay attention to the form tag.
 ```
+
 
 ## Known Issues
 

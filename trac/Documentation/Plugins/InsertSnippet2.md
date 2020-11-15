@@ -16,6 +16,7 @@ Provide functionality to insert snippets of HTML (or any other text, such as var
 
 ### Example snippets.xml file
 
+
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE snXML PUBLIC "Xinha InsertSnippet Data File" "http://x-webservice.net/res/snXML.dtd">
@@ -48,6 +49,7 @@ Provide functionality to insert snippets of HTML (or any other text, such as var
     </snippets>
 </snXML>
 ```
+
 
 Obviously you can generate this file manually, or dynamically by whatever processes you desire, just specify the path to it in the configuration.
 

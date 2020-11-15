@@ -1,5 +1,7 @@
+
 ```
 #!div style="float:right;width:430px;padding:0;margin-right:20px"
+
 ```
 #!html
 <div style="text-align:center;border:1px solid #CCC; width:100%;margin-right:20px; background-color:#EEEEEE;">
@@ -20,12 +22,16 @@
 </table>
 </div>
 ```
+
+
 ```
 #!div style="float:right;margin:10px 0 0 10px;border:1px solid #CCC; width:200px; background-color:#EEEEEE;"
+
 ```
 #!html
 <h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">News</h2>
 ```
+
 
 
 **6th November 2019**\\[wiki:ReleaseNotes Release 1.5.4]
@@ -42,8 +48,11 @@
 [wiki:NewsArchive see older news...]
 ```
 
+
+
 ```
 #!div style="float:right;border:2px solid red; margin:10px 0 0 0; padding:5px; background-color:#fffbd9; width: 200px"
+
 ```
 #!html
 <h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">Security Patch</h2>
@@ -63,18 +72,23 @@ If you are new to Xinha, view the <a href="/wiki/Documentation/NewbieGuide">Xinh
 <h2 style="margin:0px;margin-top:10px;padding:3px; border-bottom:1px outset #CCC; ">Bug Reports/Feature Requests</h2>
 If you have found a bug in Xinha or have a great idea how we can make it even better, please create a <a href="/wiki/Tickets">ticket</a>.<br />
 ```
+
 Due to the large amount of ticket spam the ticket system requires that you login prior to 
 being able to create or comment on tickets, guests can login with [guest login details]({{ site.baseurl }}/trac/Tickets.html).  
 Please read the [Tickets]({{ site.baseurl }}/trac/Tickets.html) page for more information on creating bug reports and feature requests.
 ```
 
 
+
 ```
+
+
 
 ```
 #!html
 <h1><span style="font-size:26px">Xinha</span><br />The Community-built Open Source Online HTML Editor</h1>
 ```
+
 Xinha (pronounced like [http://images.google.co.nz/images?q=xena&hl=en&btnG=Google+Search Xena, the Warrior Princess]) 
 is a powerful WYSIWYG HTML editor component that works in all current browsers. Its 
 configurabilty and extensibility make it easy to build just the right editor for multiple purposes, from a restricted mini-editor
@@ -84,10 +98,12 @@ for integration into any kind of project.
 '''Xinha is Open Source,''' and we take this seriously. There is no company that owns the source but a community of professionals 
 who just want Xinha to be the best tool for their work.
 
+
 ```
 #!html
 <img src="//s3-us-west-1.amazonaws.com/xinha/screenshots/xinha-1.jpg" />
 ```
+
 
 ## November 2019 - Version 1.5.4 Release
 

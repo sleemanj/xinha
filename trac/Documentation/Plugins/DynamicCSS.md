@@ -4,9 +4,11 @@
 
 The DynamicCSS plugin is used to place a drop-down in the toolbar to allow applying CSS classes to the selection.  The drop-down gives access to CSS styles that Xinha has access to.  So, for example, if you use the code below, 
 
+
 ```
 config.pageStyle = "@import url(style.css)"
 ```
+
 
 then whatever styles set in "style.css" will be available in the drop-down (hence the "dynamic" part).  Note that a full URL is required for import url.
 

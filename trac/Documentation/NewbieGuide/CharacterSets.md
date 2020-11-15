@@ -46,10 +46,12 @@ Slowly but surely the world is progessing to ONE character set (UNICODE) and ONE
 
 '''The important thing is''' - UTF-8, and any other character encoding, is ONLY used to get characters IN TO Javascript, once it's there, that's it, it's just a list of numbers which are indexes into the big UNICODE character tables, nothing more, nothing less.  Not BIG-5, not ASCII, not even UTF-8 anymore, it's just UNICODE index numbers.
 
+
 ```
 #!html
 <a name="stopwaffle"></a>
 ```
+
 ## Stop waffling, cut to the chase!
 
 '''Encoding and character sets are only used to get data IN TO and OUT OF the web browser.  Inside the browser, inside Xinha, the data is ALWAYS represented by a list of numbers representing characters in UNICODE.'''  

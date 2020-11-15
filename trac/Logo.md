@@ -10,6 +10,7 @@ http://www.easycms.no/xinha/logo-vote/logo/riftdesign02.jpg
 
 ## Dowload the new Xinha logo for your own applications
 
+
 ```
 #!html
 <table border="0" cellpadding="2" cellspacing="2" width="" summary="" class="xinha-logo">
@@ -54,6 +55,7 @@ http://www.easycms.no/xinha/logo-vote/logo/riftdesign02.jpg
   </tr>
 </table>
 ```
+
 ## The runner ups
 There was alot of more users with great ideas for a logo which didn't make it to the top. Enter the [the runners-ups page]({{ site.baseurl }}/trac/Logo-runners-ups.html).
 

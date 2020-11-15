@@ -7,6 +7,7 @@ There are a bunch of event hooks that can be used from within plugins or the con
 
 If you return true from your function, no further event listeners are executed.
 ## Adding a an event listener to a plugin
+
 ```
 myPlugin.prototype.onKeyPress = function ( event )
 {
@@ -14,7 +15,9 @@ myPlugin.prototype.onKeyPress = function ( event )
   return false;
 }
 ```
+
 ## Adding an event listener to a the config object
+
 ```
 xinha_config.Events.onKeyPress = function ( event )
 {
@@ -22,11 +25,13 @@ xinha_config.Events.onKeyPress = function ( event )
   return false;
 }
 ```
+
 ## The Meaning of "this"
 In a plugin, ''this'' refers to the plugin instance; in the config object ''this'' refers to the respective Xinha instance
 
 ## Available hooks
 TODO: make this into a real wiki page
+
 ```
 
 GenericPlugin.prototype.onGenerate = function ()
@@ -109,3 +114,4 @@ GenericPlugin.prototype.onBeforeMode = function (mode)
 	return false;
 }
 ```
+

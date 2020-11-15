@@ -17,6 +17,7 @@
 
 Snippets can be provided in three ways, firstly directly in the configuration
 
+
 ```
 
   xinha_config.QuickSnippet.snippets    = [
@@ -43,9 +44,11 @@ Snippets can be provided in three ways, firstly directly in the configuration
 
 ```
 
+
 You can see that this is an array of objects each object representing a snippet.  Each snippet has a name, an optional parent an the html associated.  The parent of a snippet is a jQuery compatible CSS selector (or selectors comma separated as usual), the snippet can only be inserted into something that matches this selector(s), if the insertion point (caret, cursor) is not in one of these (or child of) then the snippet is not available.
 
 The second way is to provide the URL to a snippet file...
+
 
 ```
 
@@ -53,7 +56,9 @@ The second way is to provide the URL to a snippet file...
 
 ```
 
+
 the file contents is in just the same format...
+
 
 ```
     [
@@ -79,13 +84,16 @@ the file contents is in just the same format...
     ]
 ```
 
+
 The third way is to use InsertSnippet2 compatible files, in which case provide the configuration thusly...
+
 
 ```
 
     xinha_config.InsertSnippet2.snippets = '/path/to/snippets.xml';
 
 ```
+
 
 consult [InsertSnippet2]({{ site.baseurl }}/trac/Documentation/Plugins/InsertSnippet2.html) for details on that XML format.
 

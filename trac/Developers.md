@@ -5,6 +5,7 @@ Xinha is based on the work of [http://dynarch.com/ Mihai (mishoo) Bazon], who pr
 Currently leading the Xinha project is [http://code.gogo.co.nz/ James Sleeman].
 ----
 [http://xinha.raimundmeyer.de Raimund Meyer] (ray) has contributed somewhat to the advancement of Xinha recently. He is always pleased to help you in the forum.
+
 ```
 #!html
 
@@ -16,5 +17,6 @@ Donate to ray<input type="image" src="https://www.paypal.com/de_DE/i/btn/x-click
 ">
 </form>
 ```
+
 ----
 TODO: Add plugin authors, patch authors, and donate buttons through Pay Pal.  Developers - feel free to add your names and how to contact you here!

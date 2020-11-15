@@ -10,6 +10,7 @@ This plugin makes the drop-downs (font, size etc) "Fancy" by using the "select2"
 
 Generally no configuration is necessary, however you may wish to set widths explicitly, the following are the defaults...
 
+
 ```
 xinha_config.FancySelects = {
   widths: {
@@ -21,3 +22,4 @@ xinha_config.FancySelects = {
   }
 };
 ```
+

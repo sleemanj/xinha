@@ -29,11 +29,13 @@ Read [here]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager.html) how to use
  NOTE: This directory requires write access by PHP. That is,
 	   PHP must be able to create files in this directory.
 	   Able to create directories is nice, but not necessary.
+
 ```
 $IMConfig['images_dir'] = $_SERVER['DOCUMENT_ROOT'].'/images';
 //You may set a different directory for the link mode; if you don't, the above setting will be used for both modes
 //$IMConfig['files_dir'] = $_SERVER['DOCUMENT_ROOT'].'/files_dir';
 ```
+
 
 ### images_url/files_url
  The URL to the above path, the web browser needs to be able to see it. It is 
@@ -42,18 +44,22 @@ $IMConfig['images_dir'] = $_SERVER['DOCUMENT_ROOT'].'/images';
  check you web server documentation for futher information on directory protection
  If this directory needs to be publicly accessiable, remove scripting capabilities
  for this directory (i.e. disable PHP, Perl, CGI).
+
 ```
 $IMConfig['images_url'] = '/images/';
 //You may set a different directory for the link mode; if you don't, the above setting will be used for both modes
 //$IMConfig['files_url'] = 'url/to/files_dir';
 ```
+
 ### view_type
 Possible values: "thumbview","listview"\\
 Default is thumbview in image mode and listview in file mode
 
+
 ```
 $IMConfig['view_type'] = "listview";
 ```
+
 
 
 ### allow_new_dir
@@ -68,9 +74,11 @@ Possible values: true, false
  NOTE: If PHP is running in Safe Mode this parameter
        is ignored, you can not create directories
        
+
 ```
 $IMConfig['allow_new_dir'] = false;
 ```
+
 
 ### allow_edit_image
 
@@ -82,9 +90,11 @@ Possible values: true, false
 
  NOTE: If $IMConfig['img_library'] = false, this parameter
        is ignored, you can not edit images.
+
 ```
 $IMConfig['allow_edit_image'] = false;
 ```
+
 
 ### allow_rename
 
@@ -93,9 +103,11 @@ Possible values: true, false
  TRUE (default)-  Allow the user to rename files and folders.
 
  FALSE - No rename icon will be displayed.
+
 ```
 $IMConfig['allow_rename'] = false;
 ```
+
 
 ### allow_cut_copy_paste
 
@@ -105,9 +117,11 @@ Possible values: true, false
 
  FALSE - No cut/copy/paste icons will be displayed.
 
+
 ```
 $IMConfig['allow_cut_copy_paste'] = false;
 ```
+
 
 ### use_color_pickers
 
@@ -116,9 +130,11 @@ Possible values: true, false
   TRUE (default) - Display color pickers for image background / border colors
 
   FALSE - Don't display color pickers
+
 ```
 $IMConfig['use_color_pickers'] = false;
 ```
+
 
 ### images_enable_alt
 
@@ -130,9 +146,11 @@ Possible values: true, false
 
  NOTE: The alt attribute is ''obligatory'' for images, so <img alt="" /> will be inserted
       if 'images_enable_alt' is set to false
+
 ```
 $IMConfig['images_enable_alt'] = false;
 ```
+
 
 
 ### images_enable_title
@@ -143,9 +161,11 @@ Possible values: true, false
 
  FALSE - No input field for title attribute will be displayed.
 
+
 ```
 $IMConfig['images_enable_title'] = false;
 ```
+
 
 ### images_enable_align
 
@@ -155,9 +175,11 @@ Possible values: true, false
 
  FALSE - No selection box for align attribute will be displayed.
 
+
 ```
 $IMConfig['images_enable_align'] = false;
 ```
+
 
 ### images_enable_styling
 
@@ -167,9 +189,11 @@ Possible values: true, false
 
  FALSE - No styling input fields will be displayed.
 
+
 ```
 $IMConfig['images_enable_styling'] = false;
 ```
+
 
 ### link_enable_target
 
@@ -179,9 +203,11 @@ Possible values: true, false
  
  FALSE - No selection box for target attribute will be displayed.
 
+
 ```
 $IMConfig['link_enable_target'] = false;
 ```
+
 
 ### allow_upload
 
@@ -191,9 +217,11 @@ Possible values: true, false
  
  FALSE - No uploading allowed.
 
+
 ```
 $IMConfig['allow_upload'] = false;
 ```
+
 
 ### max_filesize_kb_image/max_filesize_kb_link
 Maximum upload file size
@@ -204,23 +232,29 @@ Maximum upload file size
 
   "max"  - the maximum allowed by the server (the value is retrieved from the server configuration).
 
+
 ```
 $IMConfig['max_filesize_kb_image'] = 2000000;
 
 $IMConfig['max_filesize_kb_link'] = 5000;
 ```
 
+
 ### max_foldersize_mb
 Maximum upload folder size in Megabytes. Use 0 to disable limit
+
 ```
 $IMConfig['max_foldersize_mb'] = 0;
 ```
+
 
 ### allowed_image_extensions/allowed_link_extensions
 Allowed extensions that can be shown and allowed to upload.
 Available icons are for "doc,fla,gif,gz,html,jpg,js,mov,pdf,php,png,ppt,rar,txt,xls,zip"
 Below is the default configuration
+
 ```
 $IMConfig['allowed_image_extensions'] = array("jpg","gif","png","bmp");
 $IMConfig['allowed_link_extensions'] = array("jpg","gif","js","php","pdf","zip","txt","psd","png","html","swf","xml","xls","doc");
 ```
+

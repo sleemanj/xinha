@@ -9,6 +9,7 @@ Currently there are three methods for filling this tree:
 
 ### 1. using the provided backend scanner
 By default Linker provides a tree listing files under the xinha directory itself, not that useful generally so if you wish to control scan.php it can be configured similarly to ImageManager ...
+
 ```
   with(xinha_config.Linker)
   {
@@ -28,14 +29,18 @@ By default Linker provides a tree listing files under the xinha directory itself
   }
 ```
 
+
 ### 2. Write your own scan.php
+
 
 ```
 xinha_config.Linker.backend = '/url/to/your/scan.php';
 ```
 
 
+
 scan.php should return code like this one:
+
 ```
 // <<node-list>> = [ <<node>, <<node>>, ...]  
 // <<node>> = one of the following four types
@@ -51,9 +56,11 @@ scan.php should return code like this one:
 ]
 ```
 
+
 Type 3 and 4 nodes would be the preference, I'd go so far as to deprecate type 1 and 2.
 
 ### 3. using configuration-variables
+
 ```
 xinha_config.Linker.backend = null;
 xinha_config.Linker.files = [
@@ -63,6 +70,7 @@ xinha_config.Linker.files = [
                                {url:'j.html',title:'J Html', children:[{url:'k.html',name:"K Html"},'l.html',['m.html',['n.html']]]} 
                              ];
 ```
+
 
 This plugin incorporates the dTree javascript tree widget by [http://www.destroydrop.com/javascript/tree/ Geir Landr].  dTree has been slightly modified to improve performance.
 

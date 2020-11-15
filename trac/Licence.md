@@ -4,6 +4,7 @@ Xinha is released under the original htmlarea licence, essentially this is a BSD
 
 TODO: Do we need to add Copyright notices to the Licence? Should we? Can we?
 
+
 ```
 htmlArea License (based on BSD license)
 Copyright (c) 2002-2004, interactivetools.com, inc.
@@ -36,3 +37,4 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 ```
+

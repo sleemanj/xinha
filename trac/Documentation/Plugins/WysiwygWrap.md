@@ -9,6 +9,7 @@ The purpose of this plugin is to wrap the content being edited in Xinha with cer
 **See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
+
 ```
 xinha_config.WysiwygWrap =
 {
@@ -16,7 +17,9 @@ xinha_config.WysiwygWrap =
 };
 ```
 
+
 will cause the xinha content to be wrapped with 
+
 ```
   <div id="fooid" class="className">
    <ul>
@@ -26,5 +29,6 @@ will cause the xinha content to be wrapped with
    </ul>
   </div>
 ```
+
 
 this wrapping will NOT be passed back to your server, you will only get the editable content itself, and you should not pass the wrapping into Xinha either, Xinha adds it and removes it as you go into and out of it.

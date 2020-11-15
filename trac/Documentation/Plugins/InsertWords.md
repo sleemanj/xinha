@@ -12,6 +12,7 @@ To insert a word set the cursor where you want to enter the word and select the 
 
 
 Usage:
+
 ```
 // Register the keyword/replacement list
 var keywrds1 = new Object();
@@ -33,6 +34,7 @@ xinha_config.InsertWords = {
 
 
 ```
+
 
 
 This plugin was developed by Adam Wright and is under htmlArea license.

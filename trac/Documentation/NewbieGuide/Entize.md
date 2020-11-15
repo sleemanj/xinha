@@ -8,6 +8,7 @@ The TEXTAREA tag accepts #PCDATA, that means its plain character data which can 
 
 This is the wrong way, you will see that the HTML to be edited has been put into the textarea without any entitization, i.e the raw html has been inserted.
 
+
 ```
   <textarea name="MyXinha">
     <h1>G'Day &amp; Welcome</h1>
@@ -15,9 +16,11 @@ This is the wrong way, you will see that the HTML to be edited has been put into
   </textarea>
 ```
 
+
 ## The Right Way
 
 This is the right way, the HTML to be edited has been entized before it was put into the textarea, < is now &lt; > is &gt; and " is &quot; and & is &amp;
+
 
 ```
   <textarea name="MyXinha">
@@ -26,16 +29,21 @@ This is the right way, the HTML to be edited has been entized before it was put 
   </textarea>
 ```
 
+
 ## Language Specific Methods
 
 ### PHP
 Use the PHP function htmlspecialchars(), eg 
+
 ```
   <textarea><?php echo htmlspecialchars($HtmlToEdit) ?></textarea>
 ```
 
+
 ### Coldfusion
 Use the function HTMLEditFormat(), eg
+
 ```
   <textarea><CFOUTPUT>#HTMLEditFormat(HtmlToEdit)#</CFOUTPUT></textarea>
 ```
+

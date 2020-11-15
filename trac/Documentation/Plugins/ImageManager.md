@@ -11,6 +11,7 @@ ImageManager presently requires PHP.
 (first see the NewbieGuide)
 
 Insert the ImageManager into xinha_plugins just like normal
+
 ```
 
   xinha_plugins = xinha_plugins ? xinha_plugins :
@@ -20,7 +21,9 @@ Insert the ImageManager into xinha_plugins just like normal
 
 ```
 
+
 Now we configure the PHP, (for a full list of options you can use here, see source:trunk/plugins/ImageManager/config.inc.php#latest , any you don't provide here will revert to the defaults shown in that file)...
+
 
 ```
  with(xinha_config.ImageManager)
@@ -38,10 +41,12 @@ Now we configure the PHP, (for a full list of options you can use here, see sour
  }
 ```
 
+
 Fairly obviously, you need to change the paths above to suit your installation.  Note that by default allow_upload is false (in current SVN version), you MUST set it true manually as above if you wish to allow uploading.
 
 ## Complete Example
 Here is a complete example of the xinha_init (see the NewbieGuide if you don't know what this is!).
+
 ```
     xinha_init = xinha_init ? xinha_init : function()
     {
@@ -136,3 +141,4 @@ Here is a complete example of the xinha_init (see the NewbieGuide if you don't k
     }
 
 ```
+

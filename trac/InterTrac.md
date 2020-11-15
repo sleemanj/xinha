@@ -18,9 +18,11 @@ Trac environment.
 Simply use the name of the other Trac environment as a prefix, 
 followed by a colon, ending with the resource located in the other environment.
 
+
 ```
 <target_environment>:<TracLinks>
 ```
+
 
 The other resource is specified using a regular TracLinks, of any flavor.
 
@@ -42,6 +44,7 @@ It is necessary to setup a configuration for the InterTrac facility.
 This configuration has to be done in the TracIni file, `[intertrac]` section.
 
 Example configuration:
+
 ```
 ...
 [intertrac]
@@ -52,6 +55,7 @@ t = trac
 trac.title = Edgewall's Trac for Trac
 trac.url = http://trac.edgewall.org
 ```
+
 
 The `.url` is mandatory and is used for locating the other Trac.
 This can be a relative URL in case that Trac environment is located 

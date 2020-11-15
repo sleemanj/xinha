@@ -8,12 +8,16 @@ The plugin was developed by [http://dynarch.com/ Mihai Bazon] with sponsorship b
 
 There is now two representation available. Panel or Toolbar, toolbar version is the default settings. To use the panel, it is needed to update the configuration
 
+
 ```
 xinha_config.ListType.mode = 'panel';
 ```
+
 Setting the configuration to 'panel' will ask the plugin to use the panel instead of the selectbox in toolbar.
 
 The default setting is set to toolbar :
+
 ```
 xinha_config.ListType.mode = 'toolbar';
 ```
+

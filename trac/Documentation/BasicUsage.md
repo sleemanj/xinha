@@ -1,4 +1,5 @@
 # Basic Usage
+
 ```
   <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-1.5-beta1/XinhaEasy.js">
     xinha_options =
@@ -7,6 +8,7 @@
     }
   </script>
 ```
+
 
 The end.
 

@@ -12,14 +12,17 @@ Provides some additional features for working with lists in Xinha.
  
  At present the only feature is
  
+
 ```
    xinha_config.ListOperations.tabToIndent = [true | 'atstart' | false];
 ```
+
  
  which causes pressig tab ina list to indent (or shift-tab to detent) to 
  a new list level
  
  Note that the HTML structure of this list may be, for example
+
 ```
    <ul>
      <li>Item 1</li>
@@ -29,3 +32,4 @@ Provides some additional features for working with lists in Xinha.
      <li>Item 2</li>
    </ul>
 ```
+

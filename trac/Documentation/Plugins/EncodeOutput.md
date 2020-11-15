@@ -10,6 +10,7 @@ Responsibility for checking that prefix, removing it and **decoding** the encode
 
 A typical decoding would look like this in PHP
 
+
 ```
     /** mod_security can be a pain, so sometimes we submit form fields as 
      *  an encoded form, typically rot13.  To identify this we use the 
@@ -100,9 +101,11 @@ A typical decoding would look like this in PHP
     }
 ```
 
+
 ## Configuration
 
 **See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+
 
 ```
 xinha_config.EncodeOutput = 
@@ -120,3 +123,4 @@ xinha_config.EncodeOutput =
   
 };
 ```
+

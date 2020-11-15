@@ -18,11 +18,13 @@
 
 Configuration for this plugin is not normally required, however there are a couple of options if you wish to customise it.  
 
+
 ```
   xinha_config.WebKitResize.enableTDForGeckoAlso = false;
 
   xinha_config.WebKitResize.enableTABLEForGeckoAlso = false;
 ```
+
 
   ## Caution
   This only works acceptably in either:

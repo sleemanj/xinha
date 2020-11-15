@@ -21,6 +21,7 @@ Now you need the following code on your page, to turn an existing <textarea> int
 
 From the top down, put this code on your pages somewhere (if possible in your <head></head> section):
 
+
 ```
 #!text/html
   <script type="text/javascript">
@@ -32,14 +33,18 @@ From the top down, put this code on your pages somewhere (if possible in your <h
   <script type="text/javascript" src="/xinha/XinhaCore.js"></script>
 ```
 
+
 If you are using a different directory, make sure you change both _editor_url and the location of `XinhaCore`.js in the above code accordingly.
 
 You will also need some config code included in the page too. Either put the code below into a new file called "my_config.js" and including this file using
+
 ```
 #!text/html
 <script type="text/javascript" src="/xinha/my_config.js"></script>
 ```
+
 or just copy it into your page and wrap it in <script type="text/javascript"> </script> tags - this will need to be done on every page you want an editor on, and will allow you to customise each one as you want. 
+
 
 ```
 xinha_editors = null;
@@ -173,20 +178,24 @@ Xinha._addEvent(window,'load', xinha_init); // this executes the xinha_init func
 ```
 
 
+
 ## More Page Code
 
 You need to make sure the textarea you want to convert has the "id" set, such as
+
 
 ```
 #!text/html
 <textarea id="newbiearea1" name="newbiearea1" rows="10" cols="50" style="width: 100%"></textarea>
 ```
 
+
 it can be the same as the name - just make sure there is only one thing on the page with that ID though!
 
 Now in the code you pasted into your "my_config.js" file (or in the <head></head> if you did it that way) you need to edit the bit labelled "Step 1" which lists what editors need to be converted.
 
 In the example it lists two: 'myTextArea' and 'anotherOne' - you will need to change 'myTextArea' to whatever you set the ID of your textarea to - in this example we set it to 'newbiearea1'('''remember here that these values are comma seperated BUT there is no comma after the last value'''), so your code should look like this:
+
 
 ```
 
@@ -195,6 +204,7 @@ In the example it lists two: 'myTextArea' and 'anotherOne' - you will need to ch
         'newbiearea1'
       ];
 ```
+
 
 ## Thats It!
 

@@ -14,9 +14,11 @@ links to new protocols, such as `tsvn:` used by [trac:TortoiseSvn TortoiseSvn].
 
 ## Link Syntax
 
+
 ```
 <target_wiki>(:<identifier>)+
 ```
+
 
 The link is composed by the targeted Wiki (or system) name,
 followed by a colon (e.g. `MeatBall:`),
@@ -37,6 +39,7 @@ using the ":" separator.
 Every option in the `[interwiki]` section in TracIni defines one InterWiki prefix. The option name defines the prefix. The option value defines the URL, optionally followed by a description separated from the URL by whitespace. Parametric URLs are supported as well.
 
 '''Example:'''
+
 ```
 [interwiki]
 MeatBall = http://www.usemod.com/cgi-bin/mb.pl?
@@ -44,9 +47,11 @@ PEP = http://www.python.org/peps/pep-$1.html Python Enhancement Proposal $1
 tsvn = tsvn: Interact with TortoiseSvn
 ```
 
+
 ## Examples
 
 If the following is an excerpt of the InterMapTxt page:
+
 
 ```
 # InterMapTxt
@@ -57,6 +62,7 @@ Currently active prefixes: [[InterWiki]]
 This page is modelled after the MeatBall:InterMapTxt page.
 In addition, an optional comment is allowed after the mapping.
 ----
+
 ```
 PEP      http://www.python.org/peps/pep-$1.html           # Python Enhancement Proposal $1 
 Trac-ML  http://thread.gmane.org/gmane.comp.version-control.subversion.trac.general/$1  # Message $1 in Trac Mailing List
@@ -69,7 +75,9 @@ MetaWikiPedia http://meta.wikipedia.org/wiki/
 MoinMoin http://moinmoin.wikiwikiweb.de/
 ...
 ```
+
 ```
+
 
 Then, 
  * `MoinMoin:InterWikiMap` should be rendered as MoinMoin:InterWikiMap

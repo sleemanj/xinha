@@ -12,9 +12,11 @@ The choice is yours.
 
 If you do not need the PHP backend requiring plugins (primarily, [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) and [Linker]({{ site.baseurl }}/trac/Documentation/Plugins/Linker.html) plugins) then you can run Xinha from an external server (or content delivery network), such as Xinha's s3 bucket.  This is as shown in the NewbieGuide.  No installation is necessary.
 
+
 ```
  <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js"></script>
 ```
+
 
 ## Run from the Local Server (Full Local Install)
 
@@ -22,9 +24,11 @@ If you do not need the PHP backend requiring plugins (primarily, [MootoolsFileMa
 
 Now instead of pointing to the S3 url as the Newbie Guide shows, point at your "local" one...
 
+
 ```
  <script type="text/javascript" src="/path/to/Xinha/XinhaEasy.js"></script>
 ```
+
 
 everything else is the same, you just change that one src="" path and you are done.
 
@@ -38,6 +42,7 @@ Remember to check permissions and so forth, open your browser's console and look
 The CDN distribution just contains examples, some "contrib" php and plugins which must be run locally on your own server.
 
 Load Xinha as you would for the CDN but when it comes to loading those special plugins, tell Xinha where they are.
+
 
 ```
    <script src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js" type="text/javascript">
@@ -60,6 +65,7 @@ Load Xinha as you would for the CDN but when it comes to loading those special p
 
   </script>
 ```
+
 
 
 

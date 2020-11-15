@@ -44,6 +44,7 @@ and selecting the plugin in appropriate xinha_plugins list.
 
 Plugin may be configured via xinha_config.`ExtendedFile`Manager object.
 You can find the [available options here]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html).
+
 ```
 #!text/x-javascript
 // only snippets of code from initializing file shown below
@@ -107,6 +108,7 @@ if (xinha_config.ExtendedFileManager) {
         }
 }
 ```
+
 
 Please note that by default allow_upload is false and uploading is not permitted, you MUST set it true in the config as is indicated above in order to allow uploading.
 

@@ -15,6 +15,8 @@ No configuration is necessary for general purposes.  For advanced users there ar
 
   `xinha_config.ContextMenu.customHooks = { }`::
      This option allows you to, for specific tag names, set custom functions to insert into the context menu.  For example
+
 ```
        xinha_config.ContextMenu.customHooks = { 'a': [ ['Label', function() { alert('Action'); }, 'Tooltip', '/icon.jpg' ] ] }
 ```
+
