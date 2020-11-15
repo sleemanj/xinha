@@ -1,7 +1,6 @@
-{{{
-#!div style="float:right;width:430px;padding:0;margin-right:20px"
-{{{
-#!html
+
+<![CDATA[
+<div div style="float:right;width:430px;padding:0;margin-right:20px">
 <div style="text-align:center;border:1px solid #CCC; width:100%;margin-right:20px; background-color:#EEEEEE;">
 <table style="width:430px"><tr>
   <td>
@@ -19,33 +18,22 @@
 </tr>
 </table>
 </div>
-}}}
-{{{
-#!div style="float:right;margin:10px 0 0 10px;border:1px solid #CCC; width:200px; background-color:#EEEEEE;"
-{{{
-#!html
+</div>
+
+<div style="float:right;margin:10px 0 0 10px;border:1px solid #CCC; width:200px; background-color:#EEEEEE;">
 <h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">News</h2>
-}}}
+<ul>
+<li>**6th November 2019**<br/>[wiki:ReleaseNotes Release 1.5.4]</li>
+<li>**24th May 2018**<br/>[wiki:ReleaseNotes Release 1.5.3]</li>
+<li>**15th May 2018**<br/>[wiki:ReleaseNotes Release 1.5.2]</li>
+<li>**12th April 2018**<br/>[wiki:ReleaseNotes Release 1.5.1]</li>
+<li>**18th March 2018**<br/>[wiki:ReleaseNotes Release 1.5 "A Long Time Coming"]</li>
+</ul>
 
+<p>[wiki:NewsArchive see older news...]</p>
+</div>
 
-**6th November 2019**[[BR]][wiki:ReleaseNotes Release 1.5.4]
-
-**24th May 2018**[[BR]][wiki:ReleaseNotes Release 1.5.3]
-
-**15th May 2018**[[BR]][wiki:ReleaseNotes Release 1.5.2]
-
-**12th April 2018**[[BR]][wiki:ReleaseNotes Release 1.5.1]
-
-**18th March 2018**[[BR]][wiki:ReleaseNotes Release 1.5 "A Long Time Coming"]
-
-[[BR]]
-[wiki:NewsArchive see older news...]
-}}}
-
-{{{
-#!div style="float:right;border:2px solid red; margin:10px 0 0 0; padding:5px; background-color:#fffbd9; width: 200px"
-{{{
-#!html
+<div style="float:right;border:2px solid red; margin:10px 0 0 0; padding:5px; background-color:#fffbd9; width: 200px"
 <h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">Security Patch</h2>
 <p>Developers are urged to update to Xinha 1.5, there are no security advisories for 1.5 at this time.</p>
 <!--
@@ -62,32 +50,21 @@ If you are new to Xinha, view the <a href="/wiki/Documentation/NewbieGuide">Xinh
 </p>
 <h2 style="margin:0px;margin-top:10px;padding:3px; border-bottom:1px outset #CCC; ">Bug Reports/Feature Requests</h2>
 If you have found a bug in Xinha or have a great idea how we can make it even better, please create a <a href="/wiki/Tickets">ticket</a>.<br />
-}}}
+<p>
 Due to the large amount of ticket spam the ticket system requires that you login prior to 
 being able to create or comment on tickets, guests can login with [wiki:Tickets guest login details].  
 Please read the [wiki:Tickets Tickets] page for more information on creating bug reports and feature requests.
-}}}
+</p>
+</div>
+]]>
 
-
-}}}
-
-{{{
-#!html
-<h1><span style="font-size:26px">Xinha</span><br />The Community-built Open Source Online HTML Editor</h1>
-}}}
-Xinha (pronounced like [http://images.google.co.nz/images?q=xena&hl=en&btnG=Google+Search Xena, the Warrior Princess]) 
-is a powerful WYSIWYG HTML editor component that works in all current browsers. Its 
-configurabilty and extensibility make it easy to build just the right editor for multiple purposes, from a restricted mini-editor
-for one database field to a full-fledged website editor. Its liberal, [wiki:Licence BSD licence] makes it an ideal candidate
-for integration into any kind of project.
-
-'''Xinha is Open Source,''' and we take this seriously. There is no company that owns the source but a community of professionals 
-who just want Xinha to be the best tool for their work.
-
-{{{
-#!html
+<![CDATA[
 <img src="//s3-us-west-1.amazonaws.com/xinha/screenshots/xinha-1.jpg" />
-}}}
+]]>
+
+== November 2020 ==
+
+Due to Webfaction (nee Python-Hosting) changes we can no longer host with them since they no longer to Trac and Subversion.  So, Github here we come.
 
 == November 2019 - Version 1.5.4 Release ==
 
