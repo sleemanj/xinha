@@ -4,16 +4,16 @@
 <div style="text-align:center;border:1px solid #CCC; width:100%;margin-right:20px; background-color:#EEEEEE;">
 <table style="width:430px"><tr>
   <td>
-    <a href="/wiki/Examples">Demo</a>&nbsp;&nbsp;
-    <a href="/wiki/DownloadXinha">Downloads</a>&nbsp;&nbsp;
-    <a href="/wiki/ReleaseNotes">Release Notes</a>&nbsp;&nbsp;
-    <a href="/wiki/Documentation">Documentation</a>
+    <a href="/Examples.html">Demo</a>&nbsp;&nbsp;
+    <a href="/DownloadXinha.html">Downloads</a>&nbsp;&nbsp;
+    <a href="/ReleaseNotes.html">Release Notes</a>&nbsp;&nbsp;
+    <a href="/Documentation.html">Documentation</a>
 <br/>
-    <a href="/wiki/Tickets">Report Bug</a>&nbsp;&nbsp;
-    <a href="/wiki/FrequentlyAskedQuestions">FAQ</a>&nbsp;&nbsp;
-    <a href="/wiki/Screenshots">Screenshots</a>&nbsp;&nbsp;
+    <a href="/Tickets.html">Report Bug</a>&nbsp;&nbsp;
+    <a href="/FrequentlyAskedQuestions.html">FAQ</a>&nbsp;&nbsp;
+    <a href="/Screenshots.html">Screenshots</a>&nbsp;&nbsp;
     <a href="http://www.xinha.org/punbb/index.php">Forum Archive</a>&nbsp;&nbsp;
-    <a href="/wiki/Developers">Developers</a>&nbsp;&nbsp;
+    <a href="/Developers.html">Developers</a>&nbsp;&nbsp;
   </td>
 </tr>
 </table>
@@ -23,38 +23,14 @@
 <div style="float:right;margin:10px 0 0 10px;border:1px solid #CCC; width:200px; background-color:#EEEEEE;">
 <h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">News</h2>
 <ul>
-<li>**6th November 2019**<br/>[wiki:ReleaseNotes Release 1.5.4]</li>
-<li>**24th May 2018**<br/>[wiki:ReleaseNotes Release 1.5.3]</li>
-<li>**15th May 2018**<br/>[wiki:ReleaseNotes Release 1.5.2]</li>
-<li>**12th April 2018**<br/>[wiki:ReleaseNotes Release 1.5.1]</li>
-<li>**18th March 2018**<br/>[wiki:ReleaseNotes Release 1.5 "A Long Time Coming"]</li>
+<li>**6th November 2019**<br/><a href="ReleaseNotes.html"> Release 1.5.4</a></li>
+<li>**24th May 2018**<br/><a href="ReleaseNotes.html"> Release 1.5.3</a></li>
+<li>**15th May 2018**<br/><a href="ReleaseNotes.html"> Release 1.5.2</a></li>
+<li>**12th April 2018**<br/><a href="ReleaseNotes.html">ReleaseNotes Release 1.5.1</a></li>
+<li>**18th March 2018**<br/><a href="ReleaseNotes.html">Release 1.5 "A Long Time Coming"</a></li>
 </ul>
 
-<p>[wiki:NewsArchive see older news...]</p>
-</div>
-
-<div style="float:right;border:2px solid red; margin:10px 0 0 0; padding:5px; background-color:#fffbd9; width: 200px"
-<h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">Security Patch</h2>
-<p>Developers are urged to update to Xinha 1.5, there are no security advisories for 1.5 at this time.</p>
-<!--
-<p>10th May 2010 - New Security Advisory, see <a href="/ticket/1518">Ticket #1518</a>.</p>
-<p>4th May 2010 - New Security Advisory, see <a href="/ticket/1515">Ticket #1515</a>.</p>
-<p>All developers are urgently instructed to see <a href="/ticket/1363">Ticket #1363</a>.</p>
-
-<h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">Help</h2>
-<p>If you need help installing the editor or have questions, ask them in the
-<a href="http://www.xinha.org/punbb/index.php">Forum</a></p>
--->
-<p>
-If you are new to Xinha, view the <a href="/wiki/Documentation/NewbieGuide">Xinha Newbie Guide</a>
-</p>
-<h2 style="margin:0px;margin-top:10px;padding:3px; border-bottom:1px outset #CCC; ">Bug Reports/Feature Requests</h2>
-If you have found a bug in Xinha or have a great idea how we can make it even better, please create a <a href="/wiki/Tickets">ticket</a>.<br />
-<p>
-Due to the large amount of ticket spam the ticket system requires that you login prior to 
-being able to create or comment on tickets, guests can login with [wiki:Tickets guest login details].  
-Please read the [wiki:Tickets Tickets] page for more information on creating bug reports and feature requests.
-</p>
+<p><a hre="NewsArchive.html">see older news...</a></p>
 </div>
 ]]>
 
