@@ -2,8 +2,6 @@
 
 ## Available Packages
 
-```
-#!html
 <table border="0" cellspacing="0" cellpadding="5" style="border:solid 1px #ccc" summary="File listings for the Xinha project">
   <thead style="background-color:#ccc;text-align:left">
     <tr> 
@@ -419,8 +417,6 @@
 
   </tbody>
 </table>
-```
-
 
 ## SVN Checkout
 
