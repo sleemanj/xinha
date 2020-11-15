@@ -23,5 +23,5 @@ and it will automatically detect the new smileys.
 
 
 ## Authors
-This plugin was developed by [http://kimastergeorge.i4host.com/ Ki Master George] and is under htmlArea license.
-The plugin was rewritten by [http://www.gogo.co.nz/ James Sleeman]
+This plugin was developed by [Ki Master George](http://kimastergeorge.i4host.com/) and is under htmlArea license.
+The plugin was rewritten by [James Sleeman](http://www.gogo.co.nz/)

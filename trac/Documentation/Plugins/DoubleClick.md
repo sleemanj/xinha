@@ -7,4 +7,4 @@
 The DoubleClick plugin calls functions by doubleclick on tag (u, strike, sub, sup, a, img, td),
 to be continued!
 
-The plugin was developed by [http://www.marijn.org Marijn Kampf], sponsored by [http://www.smiling-faces.com smiling-faces.com].
+The plugin was developed by [Marijn Kampf](http://www.marijn.org), sponsored by [smiling-faces.com](http://www.smiling-faces.com).

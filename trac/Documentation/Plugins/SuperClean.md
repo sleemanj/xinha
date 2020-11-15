@@ -2,7 +2,7 @@
 
 [Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
-The SuperClean plugin, developed by [http://code.gogo.co.nz/ James Sleeman] and improved by Niko Sams based on code by Udo Schmal provides a combined interface for HTMLTidy, Word cleaning, stripping out font typefaces, colours and sizes, and calling custom filter-functions.
+The SuperClean plugin, developed by [James Sleeman](http://code.gogo.co.nz/) and improved by Niko Sams based on code by Udo Schmal provides a combined interface for HTMLTidy, Word cleaning, stripping out font typefaces, colours and sizes, and calling custom filter-functions.
 
 ## Configuration
 

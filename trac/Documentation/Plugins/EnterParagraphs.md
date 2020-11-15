@@ -4,7 +4,7 @@
 
 The EnterParagraphs plugin is used to make Gecko based web browsers (Mozilla (Firefox), Epihpany etc) work a bit more like Internet Explorer in terms of the behaviour when you press Enter.  Essentially, when you press enter in IE it starts a new paragraph, while in Mozilla it inserts a <br /> (break) tag.  The Internet Explorer behaviour is the technically correct behaviour.
 
-The plugin was developed by [http://blog.hipikat.org/ Adam Wright].
+The plugin was developed by [Adam Wright](http://blog.hipikat.org/).
 
 ## Special Case
 

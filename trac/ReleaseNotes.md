@@ -7,7 +7,7 @@ Installation: see Documentation/NewbieGuide/InstallingXinha
 
 
 ## Unreleased Trunk 
-See [http://trac.xinha.org/log/?action=stop_on_copy&mode=stop_on_copy&stop_rev=1453&limit=200 Commits] since r1453 (the 1.5.4 tag)
+See [Commits](http://trac.xinha.org/log/?action=stop_on_copy&mode=stop_on_copy&stop_rev=1453&limit=200) since r1453 (the 1.5.4 tag)
 
 
 ----

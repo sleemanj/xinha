@@ -72,6 +72,6 @@ xinha_config.Linker.files = [
 ```
 
 
-This plugin incorporates the dTree javascript tree widget by [http://www.destroydrop.com/javascript/tree/ Geir Landr].  dTree has been slightly modified to improve performance.
+This plugin incorporates the dTree javascript tree widget by [Geir Landr](http://www.destroydrop.com/javascript/tree/).  dTree has been slightly modified to improve performance.
 
-The Linker plugin was developed by [http://code.gogo.co.nz/ James Sleeman].
+The Linker plugin was developed by [James Sleeman](http://code.gogo.co.nz/).

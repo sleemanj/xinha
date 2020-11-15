@@ -1,10 +1,10 @@
 # Xinha Developers
 
-Xinha is based on the work of [http://dynarch.com/ Mihai (mishoo) Bazon], who produced htmlArea for [http://www.interactivetools.com/ Interactive Tools].
+Xinha is based on the work of [Mihai (mishoo) Bazon](http://dynarch.com/), who produced htmlArea for [Interactive Tools](http://www.interactivetools.com/).
 ----
-Currently leading the Xinha project is [http://code.gogo.co.nz/ James Sleeman].
+Currently leading the Xinha project is [James Sleeman](http://code.gogo.co.nz/).
 ----
-[http://xinha.raimundmeyer.de Raimund Meyer] (ray) has contributed somewhat to the advancement of Xinha recently. He is always pleased to help you in the forum.
+[Raimund Meyer](http://xinha.raimundmeyer.de) (ray) has contributed somewhat to the advancement of Xinha recently. He is always pleased to help you in the forum.
 
 ```
 #!html

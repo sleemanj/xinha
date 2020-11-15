@@ -4,7 +4,7 @@
 
 The TableOperations plugin inserts context-sensitive buttons into the toolbar to enable working with tables, for example inserting rows, columns, merging, splitting etc.
 
-The plugin was developed by [http://dynarch.com Mihai Bazon], sponsored by the American Bible Society.
+The plugin was developed by [Mihai Bazon](http://dynarch.com), sponsored by the American Bible Society.
 
 ## Configuration
 

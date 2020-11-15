@@ -4,8 +4,8 @@
 
 ## AsciiMathML Formula Editor for Xinha
 
-Based on AsciiMathML by [http://www.chapman.edu/~jipsen Peter Jipsen]. \\
-Plugin by [http://xinha.raimundmeyer.de Raimund Meyer]
+Based on AsciiMathML by [Peter Jipsen](http://www.chapman.edu/~jipsen). \\
+Plugin by [Raimund Meyer](http://xinha.raimundmeyer.de)
 
 AsciiMathML is a `JavaScript` library for translating ASCII math notation to Presentation MathML.
 

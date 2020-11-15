@@ -71,13 +71,13 @@ Further to that, UTF-8 encoding across the board with your files, with your edit
 
 ## Tools
 
-A very handy tool for the Linux users amongst us is [http://gucharmap.sourceforge.net/ gucharmap] this program allows you to easily browse (and search) the entire UNICODE character set.
+A very handy tool for the Linux users amongst us is [gucharmap](http://gucharmap.sourceforge.net/) this program allows you to easily browse (and search) the entire UNICODE character set.
 
 ## Fonts
 
 UNICODE is nothing if you don't have a font with the characters.  To my knowledge the most complete UNICODE font is currently Arial Unicode MS which has representations of a very large proportion of the UNICODE standard.
 
-This font used to be downloadable from Microsoft for free but is now included only with MS Office.  Emphasis to be placed on ''from microsoft'' [http://www.google.co.nz/search?hl=en&safe=off&c2coff=1&client=firefox-a&rls=org.mozilla%3Aen-US%3Aofficial&q=download+unicode+fonts&btnG=Search&meta= if you know what I mean].
+This font used to be downloadable from Microsoft for free but is now included only with MS Office.  Emphasis to be placed on ''from microsoft'' [if you know what I mean](http://www.google.co.nz/search?hl=en&safe=off&c2coff=1&client=firefox-a&rls=org.mozilla%3Aen-US%3Aofficial&q=download+unicode+fonts&btnG=Search&meta=).
 
 
 

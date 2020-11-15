@@ -36,4 +36,4 @@ it would only be avaliable in the stylist when the cursor is in an <li> element.
 ```
 
 
-The plugin was developed by [http://code.gogo.co.nz/ James Sleeman].
+The plugin was developed by [James Sleeman](http://code.gogo.co.nz/).

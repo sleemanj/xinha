@@ -3,7 +3,7 @@
 [Version English]({{ site.baseurl }}/trac/NewbieGuide.html).
 [Version française]({{ site.baseurl }}/trac/NewbieGuideFrance.html).
 
-まずはじめに、このページは常に成長しているので、ここでわからないことがあったり、Xinhaでもっと多くのことがしたい場合、フォーラム内の[http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255 Newbie Guide スレッド]にメッセージを投函してください。
+まずはじめに、このページは常に成長しているので、ここでわからないことがあったり、Xinhaでもっと多くのことがしたい場合、フォーラム内の[Newbie Guide スレッド](http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255)にメッセージを投函してください。
 
 ## Getting Started
 
@@ -190,5 +190,5 @@ idはnameと同じでかまいませんが、ページ全体を通じて、そ�
 
 あなたは（望むならすぐにでも）、エディタをコンフィグしにかかることができます。[wiki:Documentation/ConfigVariablesList 設定可能オプション一覧]で、オプション設定を見つけることができます。
 
-もし何か問題に遭遇した場合は、フォーラムの[http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255 Newbie Guide スレッド]の続きに投函することを覚えておいてください。私たちはそれを解決し、誰一人として同じことに没入させまいと約束するため、我々のベストを尽くします！
+もし何か問題に遭遇した場合は、フォーラムの[Newbie Guide スレッド](http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255)の続きに投函することを覚えておいてください。私たちはそれを解決し、誰一人として同じことに没入させまいと約束するため、我々のベストを尽くします！
 

@@ -2,7 +2,7 @@
 
 [English version]({{ site.baseurl }}/trac/NewbieGuide.html).
 
-Tout d'abord, cette page est régulièrement mise à jour, donc si vous ne comprenez pas, ou si vous voulez faire quelque chose de plus avec Xinha, veuillez alors poster une réponse dans le [http://xinha.gogo.co.nz/punbb/viewforum.php?id=1 forum].
+Tout d'abord, cette page est régulièrement mise à jour, donc si vous ne comprenez pas, ou si vous voulez faire quelque chose de plus avec Xinha, veuillez alors poster une réponse dans le [forum](http://xinha.gogo.co.nz/punbb/viewforum.php?id=1).
 
 ## Commencer
 
@@ -185,5 +185,5 @@ Dans cet example, deux textareas sont listés : 'myTextArea' et 'anotherOne' - v
 
 Votre X-Area apparait maintenant sur la page quand celle-ci a fini de se charger (pas besoin de toucher à la propriété onload du tag <body> puisque window.onload = xinha_init; en prend soin)
 
-Rappelez-vous, si vous avez un quelconque problème, postez une réponse dans le [http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255 Newbie Guide thread] du forum et nous nous efforçons de trouver une solution et que personne d'autre ne recontre encore cette même difficulté !
+Rappelez-vous, si vous avez un quelconque problème, postez une réponse dans le [Newbie Guide thread](http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255) du forum et nous nous efforçons de trouver une solution et que personne d'autre ne recontre encore cette même difficulté !
 

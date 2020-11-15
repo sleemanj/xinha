@@ -2,10 +2,10 @@
 
 [Version française]({{ site.baseurl }}/trac/FrequentlyAskedQuestionsFrance.html).
 
-Firstly, this page is always being improved, so if you don't understand something, or you think something is missing, then please post a message in the forum in the [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=138 Discussion Forum].
+Firstly, this page is always being improved, so if you don't understand something, or you think something is missing, then please post a message in the forum in the [Discussion Forum](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=138).
 
 ## Basic
-[http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=5355 Can I load/edit/save online documents with Xinha?]
+[Can I load/edit/save online documents with Xinha?](http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=5355)
 
  * Q: How do I set the content of the editor?
    * A: To set the initial editor content, simply put the [entized]({{ site.baseurl }}/trac/Documentation/NewbieGuide/Entize.html) HTML into the initial textarea
@@ -30,7 +30,7 @@ Firstly, this page is always being improved, so if you don't understand somethin
  * A: You can use it from a CDN if you want, see the [Newbie Guide]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html), but ultimately you're going to need a server to actually do something with your HTML, right.
 
  * Q: How can I change the default editor CSS? 
- * A: See ([http://xinha.gogo.co.nz/punbb/viewtopic.php?id=455 default CSS])
+ * A: See ([default CSS](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=455))
 
 ## Editor usage
 
@@ -43,10 +43,10 @@ Firstly, this page is always being improved, so if you don't understand somethin
  * Q: What options are there to make the editor fit my needs? See the [Wiki: list of available options]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html)
  * Q: How can I customize the toolbar? [Wiki: xinha_config.toolbar]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html#xinha_configtoolbar)
  * Q: How can I make the h1 tag and other tags to be styled the way they will show on my website ? [Wiki: xinha_config.pageStyleSheets/xinha_config.pageStyles]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html#xinha_configpageStyleSheets)
- * Q: How can I change the default display font ? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=116 Font]
- * Q: Is it possible to start Xinha in fullscreen mode? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=102 Full screen]
- * Q: How can I hide the path bar ? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=3 Path bar]
- * Q: How can I resize the editor ? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=244 Resize]
+ * Q: How can I change the default display font ? [Font](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=116)
+ * Q: Is it possible to start Xinha in fullscreen mode? [Full screen](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=102)
+ * Q: How can I hide the path bar ? [Path bar](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=3)
+ * Q: How can I resize the editor ? [Resize](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=244)
 
  
 ## Troubles
@@ -66,8 +66,8 @@ Firstly, this page is always being improved, so if you don't understand somethin
 
 ## Developers
 
- * Q: Is there a list of all the functions Xinha uses? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=137 Xinha functions] (probably out-dated)
- * Q: How do I update the data in the editor? [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=224 setEditorContent(), getEditorContent()...]
+ * Q: Is there a list of all the functions Xinha uses? [Xinha functions](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=137) (probably out-dated)
+ * Q: How do I update the data in the editor? [setEditorContent(), getEditorContent()...](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=224)
 
 ## Internationalization
 

@@ -1,6 +1,6 @@
 # SaveSubmit for Xinha
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html) \\
-developed by [http://xinha.raimundmeyer.de Raimund Meyer]
+developed by [Raimund Meyer](http://xinha.raimundmeyer.de)
 
 Registers a button for submitting the Xinha form using asynchronous postback for sending the data to the server. This has the advantage of creating a much smother user experience, because the page isn't reloaded as would be with normal HTML submit.
 

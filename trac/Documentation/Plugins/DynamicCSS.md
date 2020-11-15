@@ -12,7 +12,7 @@ config.pageStyle = "@import url(style.css)"
 
 then whatever styles set in "style.css" will be available in the drop-down (hence the "dynamic" part).  Note that a full URL is required for import url.
 
-It was originally developed by [http://systemconcept.de/ Holger Hees].
+It was originally developed by [Holger Hees](http://systemconcept.de/).
 
 In Xinha you may find the [Stylist Plugin]({{ site.baseurl }}/trac/Stylist.html) offers better functionality, at the price of a little more screen realestate.
 

@@ -4,7 +4,7 @@
 
 The LangMarks plugin inserts a select into the toolbar to enable working with the lang attribute.
 
-The plugin was developed by [http://www.schaffrath-neuemedien.de Udo Schmal], sponsored by [http://www.schaffrath-neuemedien.de L.N.Schaffrath NeueMedien].
+The plugin was developed by [Udo Schmal](http://www.schaffrath-neuemedien.de), sponsored by [L.N.Schaffrath NeueMedien](http://www.schaffrath-neuemedien.de).
 
 ## Configuration
 

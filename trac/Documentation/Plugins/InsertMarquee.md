@@ -4,5 +4,5 @@
 
 The InsertMarquee plugin allows the user to add and edit the marquee tags.
 
-InsertMarquee was developed by [http://www.schaffrath-neuemedien.de Udo Schmal], sponsored by [http://www.schaffrath-neuemedien.de L.N.Schaffrath NeueMedien].
+InsertMarquee was developed by [Udo Schmal](http://www.schaffrath-neuemedien.de), sponsored by [L.N.Schaffrath NeueMedien](http://www.schaffrath-neuemedien.de).
 

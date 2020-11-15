@@ -25,4 +25,4 @@ If you want to exclude characters that are available in the used charset other t
 This way you will have no needless entities. If you have done this for any charset, please consider sending it along, so that we can include it as a preset.
 
 The conversion map provided by mharrisonline in ticket #127\\
-The plugin is by [http://xinha.raimundmeyer.de Raimund Meyer]
+The plugin is by [Raimund Meyer](http://xinha.raimundmeyer.de)

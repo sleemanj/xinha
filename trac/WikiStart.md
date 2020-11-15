@@ -89,7 +89,7 @@ Please read the [Tickets]({{ site.baseurl }}/trac/Tickets.html) page for more in
 <h1><span style="font-size:26px">Xinha</span><br />The Community-built Open Source Online HTML Editor</h1>
 ```
 
-Xinha (pronounced like [http://images.google.co.nz/images?q=xena&hl=en&btnG=Google+Search Xena, the Warrior Princess]) 
+Xinha (pronounced like [Xena, the Warrior Princess](http://images.google.co.nz/images?q=xena&hl=en&btnG=Google+Search)) 
 is a powerful WYSIWYG HTML editor component that works in all current browsers. Its 
 configurabilty and extensibility make it easy to build just the right editor for multiple purposes, from a restricted mini-editor
 for one database field to a full-fledged website editor. Its liberal, [BSD licence]({{ site.baseurl }}/trac/Licence.html) makes it an ideal candidate
@@ -166,14 +166,14 @@ See the DownloadsPage.
 
 The forum was made read-only some years ago due to being too difficult to maintain, monitor and keep on top of the spammers.
 
-You can read and search it here: [http://www.xinha.org/punbb/index.php]
+You can read and search it here: [](http://www.xinha.org/punbb/index.php)
 
 ## How can I contribute to Xinha?
 
 Do you know Javascript, are you willing to learn?  Then checkout a working copy and get hacking that code!  Check the tickets for feature requests that you could implement, reported bugs that you could fix.  When you've got something worth contributing back to Xinha, just send it on along.  Regular and proven contributors will get SVN commit access!
 This is one of the main reasons Xinha split from htmlArea, the htmlArea development was not open to fair and equal participation by all developers.  Xinha is different, we are a group of developers trying to produce the best WYSIWYG HTML Editor available.  
 
-There ~~is~~ once was a mailing list available at [http://www.openplans.org/projects/xinha/lists/xinha-discussion], it's gone now.
+There ~~is~~ once was a mailing list available at [](http://www.openplans.org/projects/xinha/lists/xinha-discussion), it's gone now.
 
 ## I don't know Javascript!
 That's ok, we do.  Some other ways you might contribute are to sponsor development of Xinha plugins, or donate some cash to one of the [Xinha developers]({{ site.baseurl }}/trac/Developers.html).
