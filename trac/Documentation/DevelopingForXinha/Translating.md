@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Translating Xinha
 
 * TOC

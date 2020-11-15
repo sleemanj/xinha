@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 There are a number of plugins in Xinha that are very old. Some are no longer used, some are deprecated, and some are even broken. 
 
 As of Xinha 0.96, we have moved these to an "unsupported_plugins".  Plugins are still found and loaded from that directory.

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: DynamicCSS
 
 [Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)

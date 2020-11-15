@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: ImageManager
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
 

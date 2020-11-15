@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Installing Xinha
 
 * TOC

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: InsertSnippet2 
 
 Provide functionality to insert snippets of HTML (or any other text, such as variable substitutions), with XML structure defining snippets.

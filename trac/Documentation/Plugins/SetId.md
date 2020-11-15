@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: SetId
 
 Provides a button to allow setting the ID and/or name attribute of the selected/focussed element.

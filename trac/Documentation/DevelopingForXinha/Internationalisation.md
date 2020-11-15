@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Internationalisation (i18n)
 
 If you look for information on localisation (l10n, how you translate Xinha) take a look at wiki:Translating.

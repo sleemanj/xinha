@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: MootoolsFileManager
 
 This plugin allows the ability to upload, rename, delete and insert into your document Images and (links to) Files.

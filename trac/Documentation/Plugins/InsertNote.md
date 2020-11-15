@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: InsertNote 
 
 Allows for the insertion of footnotes/endnotes. Supports:

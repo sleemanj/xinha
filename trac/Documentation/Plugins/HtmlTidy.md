@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: HtmlTidy
 
 '''In Xinha this plugin is superceeded by SuperClean and is now deprecated.'''

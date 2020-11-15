@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Caching Xinha
 
 Xinha use involves the browser loading a fairly large number of files from the web server, it is in your interest to assist the browser in not requesting these seldom changed files.

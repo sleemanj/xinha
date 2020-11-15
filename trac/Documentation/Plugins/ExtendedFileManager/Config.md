@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # ExtendedFileManager Configuration
 These are the most important config variables for the `ExtendedFileManager`.\\
 For a complete overview look into the config.inc.php in the plugin directory.\\

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: FullPage 
 
 ** This plugin is not well tested in current versions of Xinha **

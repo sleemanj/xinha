@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Extended File Manager EFM
 
 Version 1.1 created from 1.0 beta by Krzysztof Kotowicz <koto@webworkers.pl>

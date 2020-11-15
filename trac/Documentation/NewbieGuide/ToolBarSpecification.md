@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Specifying The Toolbar
 
 Xinha's toolbar, the buttons and drop-downs, can be configured.

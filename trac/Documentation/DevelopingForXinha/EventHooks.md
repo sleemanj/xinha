@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Event Hooks
 * TOC
 {:toc}

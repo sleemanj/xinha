@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # HtmlEntities for Xinha
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)\\
 

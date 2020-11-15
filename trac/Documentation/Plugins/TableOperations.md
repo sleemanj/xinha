@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: TableOperations
 
 [Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)

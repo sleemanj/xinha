@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 ## 入門ガイド
 
 [Version English]({{ site.baseurl }}/trac/NewbieGuide.html).

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: SmartReplace
 
 Replace standard single and double quotes with directional ones automatically.  Also replace hyphens with mdashes.

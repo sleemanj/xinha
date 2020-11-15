@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Notes about Large Image
 
 Xinha has an enhanced toolbar image system which allows for combining all the images into one large image.  This makes the initial download much quicker, particularly in Firefox (IE is quicker too, but not so much, at least in my opinion).

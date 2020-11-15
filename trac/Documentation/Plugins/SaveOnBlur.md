@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: SaveOnBlur 
 
 Put the content of Xinha into the textarea when blurring (losing focus).

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # SaveSubmit for Xinha
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html) \\
 developed by [Raimund Meyer](http://xinha.raimundmeyer.de)

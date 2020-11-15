@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Entize Your Data
 
 When you put HTML into a textarea to be turned into a Xinha editor, many people forget that raw HTML in a textarea is not valid, this leads to all sorts of unusual symptoms.

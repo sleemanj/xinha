@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: InsertPagebreak
 
 ** This plugin is not well tested. **

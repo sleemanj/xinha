@@ -4,5 +4,8 @@ for file in *%2F*
 do
   newfile=$(echo "$file" | sed -r 's/%2F/\//g')
   mkdir -p $(dirname "$newfile")
-  mv $file $newfile 
+  echo "{% include nav.html %}" >$newfile
+  echo                         >>$newfile
+  cat $file                    >>$newfile 
+  rm  $file
 done

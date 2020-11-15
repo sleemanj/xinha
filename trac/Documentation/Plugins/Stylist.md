@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Stylist
 
 [Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)

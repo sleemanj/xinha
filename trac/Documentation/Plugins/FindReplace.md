@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: FindReplace
 
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)

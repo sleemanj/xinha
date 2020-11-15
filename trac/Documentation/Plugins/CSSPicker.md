@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: CSS Picker Plugin
 
 [Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Form Operations
 
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)

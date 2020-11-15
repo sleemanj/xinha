@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 \\
 # Creating a XINHA plugin.
 

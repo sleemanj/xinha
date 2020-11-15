@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: HorizontalRule
 
 This plugin allows inserting and editing horizontal rules with various options (colour, width etc...)

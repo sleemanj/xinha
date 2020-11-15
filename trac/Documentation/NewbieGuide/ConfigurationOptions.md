@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Core Configuration Options
 
 The following options can be specified to control the core features of Xinha.

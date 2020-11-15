@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: PasteText
 
 Adds a button to the toolbar to allow paste-as-text.

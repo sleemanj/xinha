@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: WebKitResize 
 
 [Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)

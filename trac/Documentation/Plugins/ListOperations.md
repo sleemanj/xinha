@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: ListOperations 
 
 Provides some additional features for working with lists in Xinha.

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: UnsavedChanges 
 
 Provide a warning when navigating away from a Xinha which has "unsaved changes".

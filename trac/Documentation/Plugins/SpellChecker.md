@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: SpellChecker
 
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)

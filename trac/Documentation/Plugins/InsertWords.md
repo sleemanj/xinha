@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: InsertWords
 
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)

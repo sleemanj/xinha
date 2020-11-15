@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Character Sets in Xinha
 
 The use of Xinha with non-english languages, or special characters (such as the Euro symbol) means that you will very likely encounter character set problems, especially if you don't know jack about character sets.  This document first attempts to explain Character Sets and Encodings, then will give you some advice about the use of character sets with HTML, Javascript and in particular Xinha.

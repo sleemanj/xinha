@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugins
 
 Plugins are optional extras (although currently distributed with Xinha anyway) which provide enhanced functions to the Xinha editor.  

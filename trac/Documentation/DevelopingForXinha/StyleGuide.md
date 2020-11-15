@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 
 ## Code Style Guide
 

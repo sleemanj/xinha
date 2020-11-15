@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin:  GenericPlugin
 
 This plugin is just a boiler-plate for you to copy and make your own new plugin.

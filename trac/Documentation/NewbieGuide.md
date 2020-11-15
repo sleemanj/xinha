@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 This is the New Newbie Guide, for versions of Xinha prior 1.5, please see the [Old Newbie Guide]({{ site.baseurl }}/trac/OldNewbieGuide.html)
 
 

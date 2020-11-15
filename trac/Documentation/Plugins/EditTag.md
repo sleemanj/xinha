@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: EditTag
 
 [Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)

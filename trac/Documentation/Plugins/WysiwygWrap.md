@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Plugin: WysiwygWrap 
 
 The purpose of this plugin is to wrap the content being edited in Xinha with certain elements of given ID and/or class when in the WYSIWYG view.
