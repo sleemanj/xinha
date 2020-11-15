@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Release History
 
 Installation: see Documentation/NewbieGuide/InstallingXinha

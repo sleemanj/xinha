@@ -1,14 +1,17 @@
+{% include nav.html %}
+
 # Xinha Screenshots
 
 ## A typical Xinha
 ![xinha.s3.amazonaws.com/screenshots/xinha-1.jpg](https://xinha.s3.amazonaws.com/screenshots/xinha-1.jpg)
 
-## `FancySelects` Plugin
+## FancySelects Plugin
 ![xinha.s3.amazonaws.com/screenshots/xinha-2.jpg](https://xinha.s3.amazonaws.com/screenshots/xinha-2.jpg)
 
-## `WebKitResize` Plugin In Action
+## WebKitResize Plugin In Action
 ![xinha.s3.amazonaws.com/screenshots/xinha-3.jpg](https://xinha.s3.amazonaws.com/screenshots/xinha-3.jpg)
-![xinha.s3.amazonaws.com/screenshots/xinha-4.jpg](https://xinha.s3.amazonaws.com/screenshots/xinha-4.jpg) \\
+
+![xinha.s3.amazonaws.com/screenshots/xinha-4.jpg](https://xinha.s3.amazonaws.com/screenshots/xinha-4.jpg)
 
 ## Linker Plugin Dialog
 ![xinha.s3.amazonaws.com/screenshots/xinha-5.jpg](https://xinha.s3.amazonaws.com/screenshots/xinha-5.jpg)

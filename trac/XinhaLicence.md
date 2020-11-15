@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Licence
 
 Xinha is released under the original htmlarea licence, essentially this is a BSD style licence which means, it's yours go do with it what you please, but don't come crying if it eats your grandmother or performs some other equally terrible action.

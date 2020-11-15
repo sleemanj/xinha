@@ -1,22 +1,11 @@
+{% include nav.html %}
+
 # Xinha Developers
 
-Xinha is based on the work of [Mihai (mishoo) Bazon](http://dynarch.com/), who produced htmlArea for [Interactive Tools](http://www.interactivetools.com/).
-----
-Currently leading the Xinha project is [James Sleeman](http://code.gogo.co.nz/).
-----
-[Raimund Meyer](http://xinha.raimundmeyer.de) (ray) has contributed somewhat to the advancement of Xinha recently. He is always pleased to help you in the forum.
+Xinha was originally based on the work of [Mihai (mishoo) Bazon](http://dynarch.com/), who produced htmlArea for [Interactive Tools](http://www.interactivetools.com/), it was forked from that project in the 00's sometime.
 
-```
-#!html
+Currently leading the Xinha project is [James Sleeman](https://code.gogo.co.nz/).
 
-   <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-Donate to ray<input type="image" src="https://www.paypal.com/de_DE/i/btn/x-click-but04.gif" border="0" name="submit" alt="Donate with PayPal">
-<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-">
-</form>
-```
+Many others have contributed to Xinha over the years, unfortunately no list exists.  Past developers who have contributed to Xinha, please contact James above to get your name added to this list (or submit a pull request).
 
-----
-TODO: Add plugin authors, patch authors, and donate buttons through Pay Pal.  Developers - feel free to add your names and how to contact you here!
+  * [Raimund Meyer](http://xinha.raimundmeyer.de) (ray)

@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # Download Xinha
 
 ## Available Packages
@@ -418,21 +420,10 @@
   </tbody>
 </table>
 
-## SVN Checkout
+## Git Checkout
 
-The SVN repository is open for public read.  Simply point your preferred SVN client to
-
-
-```
-http://svn.xinha.org/trunk/
-```
+Of course you can checkout the [master Xinha branch at Github]({{ site.github.repository_url }})
 
 
-for example, using the command line SVN client
-
-
-```
-~$ svn co http://svn.xinha.org/trunk/ xinha
-```
 
 

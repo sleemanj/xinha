@@ -1,8 +1,6 @@
+{% include nav.html %}
+
 # Frequently Asked Questions
-
-[Version française]({{ site.baseurl }}/trac/FrequentlyAskedQuestionsFrance.html).
-
-Firstly, this page is always being improved, so if you don't understand something, or you think something is missing, then please post a message in the forum in the [Discussion Forum](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=138).
 
 ## Basic
 [Can I load/edit/save online documents with Xinha?](http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=5355)
@@ -16,11 +14,8 @@ Firstly, this page is always being improved, so if you don't understand somethin
 ## On the project
 
  * Q: How can I help the project?
-   * A: Use the editor with eyes open and tell us how to improve it. Feature requests and bug reports should be submitted as [tickets]({{ site.baseurl }}/trac/Tickets.html).
-   * A: Check the timeline and participate in ticket discussions. To see the most recent comments posted to all tickets, [report:9 click here].
+   * A: Use the editor with eyes open and tell us how to improve it at [Github]({{ site.github.repository_url }})
    * A: Localize Xinha to your language ([Translating Xinha]({{ site.baseurl }}/trac/Documentation/DevelopingForXinha/Translating.html))
- * Q: Have you had a chance to put up a donation page?
-   * A: Currently only one developer showed no scruples and has put up a personal `PayPal` button [Developers]({{ site.baseurl }}/trac/Developers.html)
 
 ## Installation
  
@@ -30,13 +25,13 @@ Firstly, this page is always being improved, so if you don't understand somethin
  * A: You can use it from a CDN if you want, see the [Newbie Guide]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html), but ultimately you're going to need a server to actually do something with your HTML, right.
 
  * Q: How can I change the default editor CSS? 
- * A: See ([default CSS](http://xinha.gogo.co.nz/punbb/viewtopic.php?id=455))
+ * A: See ([default CSS](http://www.xinha.org/punbb/viewtopic.php?id=455))
 
 ## Editor usage
 
  * Q: How to insert a <br> tag ?
-   * Use Shift+Enter
-   * To change the behaviour of unshifted enter, in Mozilla set `xinha_config.mozParaHandler = "built-in"`. In IE there is now way to change this.
+   * Use Shift+Enter (this is the same as you would do in most word processors by the way)
+   * To change the behaviour of unshifted enter, in Mozilla set `xinha_config.mozParaHandler = "built-in"`. In IE there is no way to change this.
 
 ## Configuration
 

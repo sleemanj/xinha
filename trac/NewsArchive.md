@@ -1,3 +1,5 @@
+{% include nav.html %}
+
 # News Archive
 
 '''12-May-08'''\\
