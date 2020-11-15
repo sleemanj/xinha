@@ -1,21 +1,101 @@
-{% include nav.html %}
-{% include sidebar-news.html %}
+```
+#!div style="float:right;width:430px;padding:0;margin-right:20px"
+```
+#!html
+<div style="text-align:center;border:1px solid #CCC; width:100%;margin-right:20px; background-color:#EEEEEE;">
+<table style="width:430px"><tr>
+  <td>
+    <a href="/wiki/Examples">Demo</a>&nbsp;&nbsp;
+    <a href="/wiki/DownloadXinha">Downloads</a>&nbsp;&nbsp;
+    <a href="/wiki/ReleaseNotes">Release Notes</a>&nbsp;&nbsp;
+    <a href="/wiki/Documentation">Documentation</a>
+<br/>
+    <a href="/wiki/Tickets">Report Bug</a>&nbsp;&nbsp;
+    <a href="/wiki/FrequentlyAskedQuestions">FAQ</a>&nbsp;&nbsp;
+    <a href="/wiki/Screenshots">Screenshots</a>&nbsp;&nbsp;
+    <a href="http://www.xinha.org/punbb/index.php">Forum Archive</a>&nbsp;&nbsp;
+    <a href="/wiki/Developers">Developers</a>&nbsp;&nbsp;
+  </td>
+</tr>
+</table>
+</div>
+```
+```
+#!div style="float:right;margin:10px 0 0 10px;border:1px solid #CCC; width:200px; background-color:#EEEEEE;"
+```
+#!html
+<h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">News</h2>
+```
 
+
+**6th November 2019**\\[wiki:ReleaseNotes Release 1.5.4]
+
+**24th May 2018**\\[wiki:ReleaseNotes Release 1.5.3]
+
+**15th May 2018**\\[wiki:ReleaseNotes Release 1.5.2]
+
+**12th April 2018**\\[wiki:ReleaseNotes Release 1.5.1]
+
+**18th March 2018**\\[wiki:ReleaseNotes Release 1.5 "A Long Time Coming"]
+
+\\
+[wiki:NewsArchive see older news...]
+```
+
+```
+#!div style="float:right;border:2px solid red; margin:10px 0 0 0; padding:5px; background-color:#fffbd9; width: 200px"
+```
+#!html
+<h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">Security Patch</h2>
+<p>Developers are urged to update to Xinha 1.5, there are no security advisories for 1.5 at this time.</p>
+<!--
+<p>10th May 2010 - New Security Advisory, see <a href="/ticket/1518">Ticket #1518</a>.</p>
+<p>4th May 2010 - New Security Advisory, see <a href="/ticket/1515">Ticket #1515</a>.</p>
+<p>All developers are urgently instructed to see <a href="/ticket/1363">Ticket #1363</a>.</p>
+
+<h2 style="margin:0px;padding:3px; border-bottom:1px outset #CCC; ">Help</h2>
+<p>If you need help installing the editor or have questions, ask them in the
+<a href="http://www.xinha.org/punbb/index.php">Forum</a></p>
+-->
+<p>
+If you are new to Xinha, view the <a href="/wiki/Documentation/NewbieGuide">Xinha Newbie Guide</a>
+</p>
+<h2 style="margin:0px;margin-top:10px;padding:3px; border-bottom:1px outset #CCC; ">Bug Reports/Feature Requests</h2>
+If you have found a bug in Xinha or have a great idea how we can make it even better, please create a <a href="/wiki/Tickets">ticket</a>.<br />
+```
+Due to the large amount of ticket spam the ticket system requires that you login prior to 
+being able to create or comment on tickets, guests can login with [guest login details](Tickets.html).  
+Please read the [Tickets](Tickets.html) page for more information on creating bug reports and feature requests.
+```
+
+
+```
+
+```
+#!html
+<h1><span style="font-size:26px">Xinha</span><br />The Community-built Open Source Online HTML Editor</h1>
+```
+Xinha (pronounced like [http://images.google.co.nz/images?q=xena&hl=en&btnG=Google+Search Xena, the Warrior Princess]) 
+is a powerful WYSIWYG HTML editor component that works in all current browsers. Its 
+configurabilty and extensibility make it easy to build just the right editor for multiple purposes, from a restricted mini-editor
+for one database field to a full-fledged website editor. Its liberal, [BSD licence](Licence.html) makes it an ideal candidate
+for integration into any kind of project.
+
+'''Xinha is Open Source,''' and we take this seriously. There is no company that owns the source but a community of professionals 
+who just want Xinha to be the best tool for their work.
+
+```
+#!html
 <img src="//s3-us-west-1.amazonaws.com/xinha/screenshots/xinha-1.jpg" />
+```
 
-## November 2020 
-
-Due to Webfaction (nee Python-Hosting) changes we can no longer host with them since they no longer to Trac and Subversion.  So, Github here we come.  This Github Pages site is a work-in-progress recreation of the Trac wiki pages.
-
-The [raw wiki pages as exported from Trac](trac/index.html) can be viewed here for reference until things are in better shape here.  Unfortuantely time is a bit short right now -- James.
-
-## November 2019 - Version 1.5.4 Release 
+## November 2019 - Version 1.5.4 Release
 
 A quiet year on Xinha with it just ticking along as usual.  A few small updates were made since the big 1.5 Release in 2018 and upgrading to 1.5.4 is encouraged.
 
 1.5.4 fixes a small issue with highlighting some text and hitting the period key (.) with the `SmartReplace` plugin loaded, while it didn't break anything the UX wasn't quite right, now it's better.
 
-## March 2018 - Version 1.5 Release 
+## March 2018 - Version 1.5 Release
 
 March 2018 sees a large update to Xinha released after years of faithful service.
 
@@ -36,7 +116,7 @@ Here are the main talking points, but of course there's a lot more besides this,
 
 You can [Download Xinha Here](DownloadXinha.html) and it is recommended to read through the New [Newbie Guide](Documentation/NewbieGuide.html) here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
 
-## Compatability 
+### Compatability
 
 As always, backwards compatibility is important, and breaking changes have been kept to a minimum.  
 
@@ -48,7 +128,7 @@ That should be about it.
 
 
 
-## Is Xinha under active development?  No updates for years and then a big one?  What's going on? 
+## Is Xinha under active development?  No updates for years and then a big one?  What's going on?
 
 Xinha is a tool made by the developers for their own use.  
 
@@ -63,24 +143,27 @@ There is no set schedule, and development of Xinha simply for the sake of develo
 Xinha is open source, and we mean it, if you want to progress the development of Xinha in some way, please contact James Sleeman ( See [Xinha Developers](Developers.html) ) and he will arrange for SVN commit and Trac management access.
 
 
-## How can I get Xinha? 
+## How can I get Xinha?
 See the DownloadsPage.
 
-## Have you got a forum? 
+## Have you got a forum?
 
 The forum was made read-only some years ago due to being too difficult to maintain, monitor and keep on top of the spammers.
 
 You can read and search it here: [http://www.xinha.org/punbb/index.php]
 
-## How can I contribute to Xinha? 
+## How can I contribute to Xinha?
 
 Do you know Javascript, are you willing to learn?  Then checkout a working copy and get hacking that code!  Check the tickets for feature requests that you could implement, reported bugs that you could fix.  When you've got something worth contributing back to Xinha, just send it on along.  Regular and proven contributors will get SVN commit access!
 This is one of the main reasons Xinha split from htmlArea, the htmlArea development was not open to fair and equal participation by all developers.  Xinha is different, we are a group of developers trying to produce the best WYSIWYG HTML Editor available.  
 
 There ~~is~~ once was a mailing list available at [http://www.openplans.org/projects/xinha/lists/xinha-discussion], it's gone now.
 
-## I don't know Javascript! 
+## I don't know Javascript!
 That's ok, we do.  Some other ways you might contribute are to sponsor development of Xinha plugins, or donate some cash to one of the [Xinha developers](Developers.html).
 
-## What else is here? 
+## What else is here?
 For a complete list of local wiki pages, see TitleIndex.
+
+
+
