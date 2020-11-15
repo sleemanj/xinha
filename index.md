@@ -6,13 +6,14 @@
 
 
 ## What's Xinha?
+{: .no_toc}
 
 The one line explanation is that Xinha turns `<textarea>` form fields into HTML editors.
 
 We can do better than a one line explanation though, because you can **add Xinha to your site with one line**!
 
 ```
-  <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js"></script>
+  <script src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js"></script>
 ```
 
 That single line make all the `<texarea>` on that page into Xinha areas.  Of course that's just the beginning of the story, there are lots of [configuration options available]({{ site.baseurl }}/Documentation/NewbieGuide.html) if you want to use them.
@@ -30,16 +31,19 @@ Due to Webfaction (nee Python-Hosting) changes we can no longer host with them s
 
 The [raw wiki pages as exported from Trac](trac/index.html) can be viewed here for reference until things are in better shape here.  Unfortuantely time is a bit short right now -- James.
 
-### November 2019 - Version 1.5.4 Release 
+### November 2019
 
 A quiet year on Xinha with it just ticking along as usual.  A few small updates were made since the big 1.5 Release in 2018 and upgrading to 1.5.4 is encouraged.
 
+####  Version 1.5.4 Release 
+
 1.5.4 fixes a small issue with highlighting some text and hitting the period key (.) with the `SmartReplace` plugin loaded, while it didn't break anything the UX wasn't quite right, now it's better.
 
-### March 2018 - Version 1.5 Release 
+### March 2018
 
 March 2018 sees a large update to Xinha released after years of faithful service.
 
+####  Version 1.5 Release 
 Here are the main talking points, but of course there's a lot more besides this, see the ReleaseNotes.
 
   * Lots of bugs fixed
@@ -57,7 +61,7 @@ Here are the main talking points, but of course there's a lot more besides this,
 
 You can [Download Xinha Here](DownloadXinha.html) and it is recommended to read through the New [Newbie Guide](Documentation/NewbieGuide.html) here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
 
-#### Compatability 
+#### Version 1.5.x Compatability 
 
 As always, backwards compatibility is important, and breaking changes have been kept to a minimum.  
 
