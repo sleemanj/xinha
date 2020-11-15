@@ -2,7 +2,7 @@
 
 The following options can be specified to control the core features of Xinha.
 
-** See the [wiki:NewbieGuide#ProvideSomeConfiguration NewbieGuide] for how to set configuration values in general. **
+** See the [wiki:Documentation/NewbieGuide#ProvideSomeConfiguration NewbieGuide] for how to set configuration values in general. **
 
 
   width::

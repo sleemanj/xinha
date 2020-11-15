@@ -1,5 +1,19 @@
 = Entize Your Data =
 
+It's simple, just be sure you put HTML into your textarea like this...
+
+{{{
+<textarea><?php echo htmlspecialchars($HtmlToEdit) ?></textarea>
+}}}
+
+and not like this...
+
+{{{
+<textarea><?php echo $HtmlToEdit ?></textarea>
+}}}
+
+== Read on if you need more information... ==
+
 When you put HTML into a textarea to be turned into a Xinha editor, many people forget that raw HTML in a textarea is not valid, this leads to all sorts of unusual symptoms.
 
 The TEXTAREA tag accepts #PCDATA, that means its plain character data which can include entities for the special characters, you should not put raw HTML into the textarea, while some browsers will allow you to get away with most raw HTML, it will break at some point.
@@ -17,7 +31,7 @@ This is the wrong way, you will see that the HTML to be edited has been put into
 
 == The Right Way ==
 
-This is the right way, the HTML to be edited has been entized before it was put into the textarea, < is now &lt; > is &gt; and " is &quot; and & is &amp;
+This is the right way, the HTML to be edited has been entized before it was put into the textarea, < is now `&lt;` > is `&gt;` and " is `&quot;` and & is `&amp;`
 
 {{{
   <textarea name="MyXinha">
