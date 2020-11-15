@@ -1,6 +1,6 @@
 # Plugin: InsertWords
 
-[Back To Plugins]({{ site.baseurl }}/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
 The Insert Words plugin allows the user to insert defined words in the page. This can be very useful vor some kind on predefined variables like '%user%' that will be replaced in the frontend.
 
@@ -8,7 +8,7 @@ To insert a word set the cursor where you want to enter the word and select the 
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
 Usage:

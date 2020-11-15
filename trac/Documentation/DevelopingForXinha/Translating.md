@@ -11,7 +11,7 @@ It's really easy!
 
 ## First, Download Xinha
 
-In the full Xinha distribution ([Download Xinha Here]({{ site.baseurl }}/DownloadXinha.html)) you 
+In the full Xinha distribution ([Download Xinha Here]({{ site.baseurl }}/trac/DownloadXinha.html)) you 
 will find some files under the following directory
 
    /lang/merged/*.js

@@ -2,7 +2,7 @@
 
 The following options can be specified to control the core features of Xinha.
 
-** See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general. **
+** See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general. **
 
 
   width::
@@ -60,7 +60,7 @@ The following options can be specified to control the core features of Xinha.
     Boolean. If true then Xinha will retrieve the full HTML, starting with the `<HTML>` tag.  **Not well tested, see also FullPage plugin**.
 
   pageStyle::
-    String. CSS definitions to apply to the edited document.  See also pageStyleSheets below, and [Stylist]({{ site.baseurl }}/Stylist.html) plugin.
+    String. CSS definitions to apply to the edited document.  See also pageStyleSheets below, and [Stylist]({{ site.baseurl }}/trac/Stylist.html) plugin.
 ```
      xinha_config.pageStyle = '  p { color:red;  }  \n' 
                             + ' li { color:blue; }';

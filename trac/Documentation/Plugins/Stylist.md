@@ -1,6 +1,6 @@
 # Stylist
 
-[Back to Plugins]({{ site.baseurl }}/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
 The Xinha Stylist plugin provides a "Panel" containing various developer supplied context sensitive CSS styles.  Using this plugin the user is able to apply (and remove) one or more CSS classes to the (possibly implicit) selection.
 
@@ -15,7 +15,7 @@ it would only be avaliable in the stylist when the cursor is in an <li> element.
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
 ```

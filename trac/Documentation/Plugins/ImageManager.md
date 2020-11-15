@@ -1,7 +1,7 @@
 # Plugin: ImageManager
-[Back To Plugins]({{ site.baseurl }}/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
-'''Note: The [ExtendedFileManager]({{ site.baseurl }}/Plugins/ExtendedFileManager.html) plugin is a generally advanced version of `ImageManager` and is recommended instead'''
+'''Note: The [ExtendedFileManager]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager.html) plugin is a generally advanced version of `ImageManager` and is recommended instead'''
 
 The ImageManager plugin provides a means for users to upload, manipulate (resize, rotate, crop etc), delete and organise (into directories) images, and then insert them into the HTML being edited.
 

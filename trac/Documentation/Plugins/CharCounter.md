@@ -1,6 +1,6 @@
 # Plugin: CharCounter
 
-[Back to Plugins]({{ site.baseurl }}/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
 The CharCounter plugin inserts a second line into the statusbar to show the number of characters in the editor.
 

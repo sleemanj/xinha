@@ -58,7 +58,7 @@ Each "thing" is either:
     A separator colon or other type of indication will be inserted in the toolbar.
 
   'linebreak'::
-    This is where a linebreak may occur (also see flowToolbars [Config Option]({{ site.baseurl }}/ConfigurationOptions.html)).
+    This is where a linebreak may occur (also see flowToolbars [Config Option]({{ site.baseurl }}/trac/ConfigurationOptions.html)).
 
   'buttonname'::
     The name of a button to display in this location.

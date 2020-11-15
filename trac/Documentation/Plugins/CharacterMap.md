@@ -1,12 +1,12 @@
 # Plugin: CharacterMap
 
-[Back to Plugins]({{ site.baseurl }}/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
 The CharacterMap plugin, developed by [http://www.systemconcept.de/ Holger Hees & Bernhard Pfeifer] implants a button onto the toolbar which will open a popup window allowing the insertion of various special characters.
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 There is now two representation available. Panel or Popup, popup version is the default settings. To use the panel, it is needed to update the configuration
 

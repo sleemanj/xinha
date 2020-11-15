@@ -23,25 +23,25 @@ Assuming that your page contains one or more `<textarea>` that you wish to turn 
 
 A very common mistake people make is to put raw HTML into a textarea without encoding it.
 
-Please read [Entize Your Data]({{ site.baseurl }}/Documentation/NewbieGuide/Entize.html) for more information.
+Please read [Entize Your Data]({{ site.baseurl }}/trac/Documentation/NewbieGuide/Entize.html) for more information.
 
 ### Careful With Character Sets
 
 In the modern world you should be using UTF-8 for everything.  But, maybe you are not.  Maybe you don't know what this means.
 
-Please read [Character Sets in Xinha]({{ site.baseurl }}/Documentation/NewbieGuide/CharacterSets.html) for more information.
+Please read [Character Sets in Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/CharacterSets.html) for more information.
 
 ### Install Xinha Locally (or Half-and-Half)
 
 This NewbieGuide shows using Xinha from an Amazon S3 Bucket URL, but you can install Xinha locally and this is recommended for your own stability.
 
-Please read [Installing Xinha]({{ site.baseurl }}/Documentation/NewbieGuide/InstallingXinha.html) for more information.
+Please read [Installing Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/InstallingXinha.html) for more information.
 
 #### Cache All The Things
 
 Xinha's files are not going to change often, so you should ensure your server tells your browser to cache things if you are running Xinha locally in full or part.
 
-See [Caching Xinha]({{ site.baseurl }}/Documentation/NewbieGuide/Caching.html) for an example.
+See [Caching Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/Caching.html) for an example.
 
 
 
@@ -139,7 +139,7 @@ Here we have specified this is going to be an extremely minimal editor indeed!
 
 ### Provide Some Configuration
 
-[Xinha Core]({{ site.baseurl }}/Documentation/NewbieGuide/ConfigurationOptions.html) and it's [Plugins]({{ site.baseurl }}/Plugins.html) have lots of scope to configure them as you require, this is how you can set configuration settings in general.
+[Xinha Core]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html) and it's [Plugins]({{ site.baseurl }}/trac/Plugins.html) have lots of scope to configure them as you require, this is how you can set configuration settings in general.
 
 
 ```
@@ -289,7 +289,7 @@ here we have decided that the texarea with 'full-tools' class name should get th
 
 ## Load External (Local) Plugins
 
-it may be that you wish to develop your own Xinha plugins and keep them separate to Xinha (or you use Xinha from a CDN), or you wish to use plugins such as [Linker]({{ site.baseurl }}/Documentation/Plugins/Linker.html) and [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html) which must be run on your own webserver because they allow browsing or uploading files on your webserver.  
+it may be that you wish to develop your own Xinha plugins and keep them separate to Xinha (or you use Xinha from a CDN), or you wish to use plugins such as [Linker]({{ site.baseurl }}/trac/Documentation/Plugins/Linker.html) and [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) which must be run on your own webserver because they allow browsing or uploading files on your webserver.  
 
 You can use these even if you are pulling Xinha from a CDN simply by specifying them as external plugins.   See the "Custom Plugins Example"
 

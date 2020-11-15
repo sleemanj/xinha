@@ -55,5 +55,5 @@ http://www.easycms.no/xinha/logo-vote/logo/riftdesign02.jpg
 </table>
 ```
 ## The runner ups
-There was alot of more users with great ideas for a logo which didn't make it to the top. Enter the [the runners-ups page]({{ site.baseurl }}/Logo-runners-ups.html).
+There was alot of more users with great ideas for a logo which didn't make it to the top. Enter the [the runners-ups page]({{ site.baseurl }}/trac/Logo-runners-ups.html).
 

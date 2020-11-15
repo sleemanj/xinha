@@ -6,7 +6,7 @@ Happy to finally announce the new stable release! \\
 This release features compatibility fixes for the new Firefox 3, plus support for Safari 3 and Opera 9, as well as loads of other fixes and enhancements.\\
 
 Everyone is strongly advised to update their installations of older Xinhas and HTMLArea 3's, to avoid severe problems with FF3 
- [Download]({{ site.baseurl }}/DownloadsPage.html)
+ [Download]({{ site.baseurl }}/trac/DownloadsPage.html)
 
 
 '''04-Feb-08'''\\
@@ -14,23 +14,23 @@ Hot off the SVN: Finally added support for '''Safari 3'''. Check out [wiki:Downl
 
 '''02-Feb-08'''\\
 The next version provides a '''compatibility update for Firefox 3''' and is scheduled for the beginning of march. Until then there is 
-a Release Candidate version to be downloaded on the [downloads page]({{ site.baseurl }}/DownloadsPage.html). Everyone who can spare the time, 
+a Release Candidate version to be downloaded on the [downloads page]({{ site.baseurl }}/trac/DownloadsPage.html). Everyone who can spare the time, 
 please update your installations and give us some feedback.\\
 Thanks!
 
 '''18-Oct-07'''[[br]]New release to be downloaded here:
-\\[Xinha Download]({{ site.baseurl }}/DownloadsPage.html)
+\\[Xinha Download]({{ site.baseurl }}/trac/DownloadsPage.html)
 
 '''03-May-07'''[[br]]New release to be downloaded here:
-\\[Xinha Download]({{ site.baseurl }}/DownloadsPage.html)
+\\[Xinha Download]({{ site.baseurl }}/trac/DownloadsPage.html)
 
 '''16-Feb-07'''[[br]]We're pleased to announce that the loads of bugfixes, updates, and improvements
 accumulated during the last month now found their way into a '''new beta-release''' of Xinha!
-\\[Download it here]({{ site.baseurl }}/DownloadsPage.html)
+\\[Download it here]({{ site.baseurl }}/trac/DownloadsPage.html)
 
-'''12-Jan-07'''[[br]]New release with an incisive change \\[Download it here]({{ site.baseurl }}/DownloadsPage.html)
+'''12-Jan-07'''[[br]]New release with an incisive change \\[Download it here]({{ site.baseurl }}/trac/DownloadsPage.html)
 
-'''11-Jan-07'''[[br]]Xinha has now a first release! \\[Download it here]({{ site.baseurl }}/DownloadsPage.html)
+'''11-Jan-07'''[[br]]Xinha has now a first release! \\[Download it here]({{ site.baseurl }}/trac/DownloadsPage.html)
 
 '''1-May-06'''[[br]]Xinha now has a logo, go ahead and grab it.[[br]][wiki:Logo Read more...].
 

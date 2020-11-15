@@ -1,7 +1,7 @@
 # よくある質問
 
-[Version English]({{ site.baseurl }}/FrequentlyAskedQuestions.html).
-[Version française]({{ site.baseurl }}/FrequentlyAskedQuestionsFrance.html).
+[Version English]({{ site.baseurl }}/trac/FrequentlyAskedQuestions.html).
+[Version française]({{ site.baseurl }}/trac/FrequentlyAskedQuestionsFrance.html).
 
 まずはじめに、このページは常に成長しているので、ここでわからないことがあったり、ここにない事を考えていたりする場合、フォーラムの[http://xinha.gogo.co.nz/punbb/viewtopic.php?id=138 ディスカッションフォーラム]にメッセージを投函してください。
 
@@ -43,7 +43,7 @@
    * A1: あなたの言語ファイルが最新か確認してください。
    * A2: 翻訳システム(i18n)はWebサーバでのみ機能します。
  * Q: テキストエリアに打ち込んだ自分の文字がおかしな表示になる。
-   * A: そんな場合は、テキストエリアにエンティティ化データを打ち込むべきでしょう。 [Entitize data]({{ site.baseurl }}/Entize.html)
+   * A: そんな場合は、テキストエリアにエンティティ化データを打ち込むべきでしょう。 [Entitize data]({{ site.baseurl }}/trac/Entize.html)
 
 ## 開発者
 

@@ -1,6 +1,6 @@
 # Plugin: DoubleClick
 
-[Back to Plugins]({{ site.baseurl }}/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
 '''This plugin is deprecated, and its functionality has moved to Xinha core.  See wiki:Documentation/UnsupportedPlugins'''
 

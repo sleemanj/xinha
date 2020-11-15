@@ -1,6 +1,6 @@
 # Plugin: `QuickSnippet` 
 
-[Back to Plugins]({{ site.baseurl }}/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
  
   Provides a drop-down menu which you can populate with snippets that the user can select from to insert into the document.
@@ -9,11 +9,11 @@
 
   Snippets can be provided by an external file, or directly in the configuration.
 
-  [InsertSnippet2]({{ site.baseurl }}/Documentation/Plugins/InsertSnippet2.html) xml files are compatible, if you already use `InsertSnippet2` just remove that from your plugins list and load `QuickSnippet` instead and it will use the `InsertSnippet2` configuration.
+  [InsertSnippet2]({{ site.baseurl }}/trac/Documentation/Plugins/InsertSnippet2.html) xml files are compatible, if you already use `InsertSnippet2` just remove that from your plugins list and load `QuickSnippet` instead and it will use the `InsertSnippet2` configuration.
 
   ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 Snippets can be provided in three ways, firstly directly in the configuration
 
@@ -87,5 +87,5 @@ The third way is to use InsertSnippet2 compatible files, in which case provide t
 
 ```
 
-consult [InsertSnippet2]({{ site.baseurl }}/Documentation/Plugins/InsertSnippet2.html) for details on that XML format.
+consult [InsertSnippet2]({{ site.baseurl }}/trac/Documentation/Plugins/InsertSnippet2.html) for details on that XML format.
 

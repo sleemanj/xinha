@@ -1,5 +1,5 @@
 # HtmlEntities for Xinha
-[Back To Plugins]({{ site.baseurl }}/Plugins.html)\\
+[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)\\
 
 Internally, the editor (actually `JavaScript`) treats strings as Unicode, disregarding of the charset you are using in your page. As a result all named entities are decoded when editing, thereby possibly breaking the encoding of characters that are not available in the actual codepage, e.g. the € in ISO-8859-1, or “quotation marks”. 
 Maybe these characters are rendered correctly in the browser, but they produce a "non SGML character number ..." error in HTML validation.

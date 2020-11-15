@@ -10,7 +10,7 @@ The choice is yours.
 
 ## Run from External Server (CDN) without needing the PHP plugins
 
-If you do not need the PHP backend requiring plugins (primarily, [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html) and [Linker]({{ site.baseurl }}/Documentation/Plugins/Linker.html) plugins) then you can run Xinha from an external server (or content delivery network), such as Xinha's s3 bucket.  This is as shown in the NewbieGuide.  No installation is necessary.
+If you do not need the PHP backend requiring plugins (primarily, [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) and [Linker]({{ site.baseurl }}/trac/Documentation/Plugins/Linker.html) plugins) then you can run Xinha from an external server (or content delivery network), such as Xinha's s3 bucket.  This is as shown in the NewbieGuide.  No installation is necessary.
 
 ```
  <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js"></script>
@@ -18,7 +18,7 @@ If you do not need the PHP backend requiring plugins (primarily, [MootoolsFileMa
 
 ## Run from the Local Server (Full Local Install)
 
-[Download the Full Distribution]({{ site.baseurl }}/DownloadXinha.html) and unzip it, place it somewhere on your server.
+[Download the Full Distribution]({{ site.baseurl }}/trac/DownloadXinha.html) and unzip it, place it somewhere on your server.
 
 Now instead of pointing to the S3 url as the Newbie Guide shows, point at your "local" one...
 
@@ -33,7 +33,7 @@ Remember to check permissions and so forth, open your browser's console and look
 
 ## Run from External Server (CDN) but also use some local PHP plugins (Partial Local Install)
 
-[Download the CDN Distribution]({{ site.baseurl }}/DownloadXinha.html) and unzip it, place it somewhere on your server.
+[Download the CDN Distribution]({{ site.baseurl }}/trac/DownloadXinha.html) and unzip it, place it somewhere on your server.
 
 The CDN distribution just contains examples, some "contrib" php and plugins which must be run locally on your own server.
 

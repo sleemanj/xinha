@@ -1,6 +1,6 @@
 # Plugin: ListType
 
-[Back to Plugins]({{ site.baseurl }}/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
 The ListType plugin allows for the creation of different types of lists, namely decimal, lower-roman, upper-roman, lower-alpha and upper-alpha.  Additionally in Gecko browsers it supports a "lower-greek" list style.
 

@@ -1,6 +1,6 @@
 # Plugin: EncodeOutput 
 
-[Back to Plugins]({{ site.baseurl }}/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
 This plugin makes Xinha encode the edited HTML in one of several ways immediately prior to submitting it back to your server.  This is useful for avoiding "mod_security" issues where "mod_security" may detect HTML being submitted to your server and cancel the submission (typically with a 403 error).
 
@@ -102,7 +102,7 @@ A typical decoding would look like this in PHP
 
 ## Configuration
 
-**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 ```
 xinha_config.EncodeOutput = 

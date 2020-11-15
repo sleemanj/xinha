@@ -38,11 +38,11 @@ See [http://trac.xinha.org/log/?action=stop_on_copy&mode=stop_on_copy&stop_rev=1
 
 ### New Plugins
 
-  * [UseStrongEm]({{ site.baseurl }}/Documentation/Plugins/UseStrongEm.html) Plugin
+  * [UseStrongEm]({{ site.baseurl }}/trac/Documentation/Plugins/UseStrongEm.html) Plugin
 
 ### New Features
 
-  * Added `preserveI` and `preserveB` [configuration options]({{ site.baseurl }}/Documentation/NewbieGuide/ConfigurationOptions.html)
+  * Added `preserveI` and `preserveB` [configuration options]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html)
   
 
 ----
@@ -57,7 +57,7 @@ See [http://trac.xinha.org/log/?action=stop_on_copy&mode=stop_on_copy&stop_rev=1
   
 ### New Plugins
 
-  * [1444] Add new [QuickSnippet]({{ site.baseurl }}/Documentation/Plugins/QuickSnippet.html) Plugin
+  * [1444] Add new [QuickSnippet]({{ site.baseurl }}/trac/Documentation/Plugins/QuickSnippet.html) Plugin
 
 ### Improvements
  
@@ -86,27 +86,27 @@ A very small release to address a bug in relative URL handling introduced in 1.5
 A long time passed between the release of 0.96.1 and 1.5, during this time Xinha was in daily reliable use, especially by users of Chrome and other "good" browsers, perhaps not so much IE.  In early 2018 James Sleeman (gogo) got inspired in a few weeks of free time to do some updates to bring Xinha back to up to speed with all browsers, adding new features cleaning up old bugs, and generally making Xinha ready for it's next 5 or 10 years of reliable service to come.
 
 ### Bugs Fixed
-  * #1595 suhoshin caused issues with [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html)
+  * #1595 suhoshin caused issues with [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html)
   * #1619 dTree's Node object conflicting with DOM
   * [1332] iPhone/iPad Fixes
-  * [1332] [Stylist]({{ site.baseurl }}/Documentation/Plugins/Stylist.html) startup reliablility fix
+  * [1332] [Stylist]({{ site.baseurl }}/trac/Documentation/Plugins/Stylist.html) startup reliablility fix
   * [1336] Fix for a console warning in Chrome
-  * #1609  Rename the CSS plugin to [CSSDropDowns]({{ site.baseurl }}/Documentation/Plugins/CSSDropDowns.html) to avoid the native CSS Object in Firefox
+  * #1609  Rename the CSS plugin to [CSSDropDowns]({{ site.baseurl }}/trac/Documentation/Plugins/CSSDropDowns.html) to avoid the native CSS Object in Firefox
   * #1601  Fix status bar width
-  * #1589  Fix crash in [Equation]({{ site.baseurl }}/Documentation/Plugins/Equation.html) plugin
+  * #1589  Fix crash in [Equation]({{ site.baseurl }}/trac/Documentation/Plugins/Equation.html) plugin
   * #1568  Fix some 7 bit clean URLs with `TransformInner`HTML
   * #1520  Remove class attributes correctly when cleaning word
   * #1487  Prevent "Disco Fever" with multiple editors due to a race condition in some circumstances
-  * #1480  Fix some oddities with [InsertAnchor]({{ site.baseurl }}/Documentation/Plugins/InsertAnchor.html) plugin
+  * #1480  Fix some oddities with [InsertAnchor]({{ site.baseurl }}/trac/Documentation/Plugins/InsertAnchor.html) plugin
   * #1420  Remove the Save As button, this is not relevant any more.
   * #1245  Fix percent width and height in DOMwalk
   * #1361  Increase the z-Index for the "loading" message
-  * [1360] Small fix for [SmartReplace]({{ site.baseurl }}/Documentation/Plugins/SmartReplace.html) plugin
-  * #1279  Change ereg to preg in [SuperClean]({{ site.baseurl }}/Documentation/Plugins/SuperClean.html) tidy php 
+  * [1360] Small fix for [SmartReplace]({{ site.baseurl }}/trac/Documentation/Plugins/SmartReplace.html) plugin
+  * #1279  Change ereg to preg in [SuperClean]({{ site.baseurl }}/trac/Documentation/Plugins/SuperClean.html) tidy php 
   * [1367] Improve warnings (in the console) for deprecated plugins.
   * #1578  Fix `ColorPicker` scrolling and positioning
   * [1373] Fix padding of skin-less buttons in the toolbar.
-  * #1358  Hide [SmartReplace]({{ site.baseurl }}/Documentation/Plugins/SmartReplace.html) when in textmode
+  * #1358  Hide [SmartReplace]({{ site.baseurl }}/trac/Documentation/Plugins/SmartReplace.html) when in textmode
   * #1612  Fix list element creation in some circumstances in Gecko
   * #1422  Fix algorithm for determining selected font styles (implementational difference only)
   * #1484  Rewrite expandRelativeUrl to work properly
@@ -116,27 +116,27 @@ A long time passed between the release of 0.96.1 and 1.5, during this time Xinha
 
   
 ### New Features and Improvements
-  * Add a new way of loading Xinha which is much easier, called `XinhaEasy.js`, this can also be used from a CDN type arrangement, even if you want to use PHP plugins (which are on your local server).  See the examples and the [NewbieGuide]({{ site.baseurl }}/Documentation/NewbieGuide.html)
+  * Add a new way of loading Xinha which is much easier, called `XinhaEasy.js`, this can also be used from a CDN type arrangement, even if you want to use PHP plugins (which are on your local server).  See the examples and the [NewbieGuide]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html)
   * [1332] New Plugin event `onBeforeSubmitTextarea`
   * #1602  Allow setting editor events after `makeEditors` and before `startEditors`
   * #1600  Improve scrolling when a new paragraph is entered
   * #1546  Add an `onMouseUp` event
-  * #1391  Improve [PreserveScripts]({{ site.baseurl }}/Documentation/Plugins/PreserveScripts.html) plugin.
-  * #1511  Improve [SuperClean]({{ site.baseurl }}/Documentation/Plugins/SuperClean.html) plugin
-  * #1476  Improve [ContextMenu]({{ site.baseurl }}/Documentation/Plugins/ContextMenu.html) when using native browser spell checking
-  * #1432  Support title attribute in the [Linker]({{ site.baseurl }}/Documentation/Plugins/Linker.html) plugin
+  * #1391  Improve [PreserveScripts]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveScripts.html) plugin.
+  * #1511  Improve [SuperClean]({{ site.baseurl }}/trac/Documentation/Plugins/SuperClean.html) plugin
+  * #1476  Improve [ContextMenu]({{ site.baseurl }}/trac/Documentation/Plugins/ContextMenu.html) when using native browser spell checking
+  * #1432  Support title attribute in the [Linker]({{ site.baseurl }}/trac/Documentation/Plugins/Linker.html) plugin
   * #1343  Add some Turkish translations
   * #1489  Add some Portuguese Brazilian translations
-  * #1163  Add editing support for th in [TableOperations]({{ site.baseurl }}/Documentation/Plugins/TableOperations.html)
+  * #1163  Add editing support for th in [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html)
   * [1366] Add a .htaccess to unsupported_plugins to restrict access to possible security threatening plugins to approved IP addresses.
-  * [1371] Update [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html) to no longer require Flash (uses HTML5 uploading) amongst some other small improvements.
+  * [1371] Update [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) to no longer require Flash (uses HTML5 uploading) amongst some other small improvements.
   * [1378] Improve handling of tab key, add configuration `tabSpanClass` and `tabSpanContents`
-  * #1617  Implement tab/shift-tab for [TableOperations]({{ site.baseurl }}/Documentation/Plugins/TableOperations.html)
-  * #1163  Allow changing table cells between td/th in [TableOperations]({{ site.baseurl }}/Documentation/Plugins/TableOperations.html)
-  * #1550  Make some features of [TableOperations]({{ site.baseurl }}/Documentation/Plugins/TableOperations.html) less confusing and improve border styling.
+  * #1617  Implement tab/shift-tab for [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html)
+  * #1163  Allow changing table cells between td/th in [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html)
+  * #1550  Make some features of [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html) less confusing and improve border styling.
   * [1394] Rewrite key event handling to make key events more standardised (#1393) 
   * [1397] Improve the undo/redo by also remembering the caret position and restoring that on undo/redo (#360)
-  * #1135  Update [SuperClean]({{ site.baseurl }}/Documentation/Plugins/SuperClean.html) to incorporate `UnFormat` functionality
+  * #1135  Update [SuperClean]({{ site.baseurl }}/trac/Documentation/Plugins/SuperClean.html) to incorporate `UnFormat` functionality
   * [1402] Rebuild the translation system and language files entirely.  See http://trac.xinha.org/wiki/Documentation/DevelopingForXinha/Translating
   * [1403] Use merged translation files by default  
   * [1418] Add configuration option `resizableEditor` which allows drag-resize.  Works in Chrome, not that well in the others.
@@ -144,18 +144,18 @@ A long time passed between the release of 0.96.1 and 1.5, during this time Xinha
   * [1423] Improve lock-down of the contrib folder, accessing this folder from a web browser is not necessary or desirable.
   
 ### New Plugins
-  * [WebKitResize]({{ site.baseurl }}/Documentation/Plugins/WebKitResize.html) Provides drag-resize for images, tables and table cells in `WebKit` Browsers, also for tables and cells in Gecko Browsers.
-  * [EncodeOutput]({{ site.baseurl }}/Documentation/Plugins/EncodeOutput.html) Provides ability to encode the generated HTML of Xinha in some manners before submitting it to the server, for example to avoid mod_security issues.
-  * [ListOperations]({{ site.baseurl }}/Documentation/Plugins/ListOperations.html) Provides tab/shift-tab functionality when editing lists ( #1614 )
-  * [FancySelects]({{ site.baseurl }}/Documentation/Plugins/FancySelects.html) Provides "fancy" selects for the font style etc which show the font in use.  Uses the select2 jQuery component behind the scenes (jQuery is loaded automatically if necessary).
-  * [PreserveSelection]({{ site.baseurl }}/Documentation/Plugins/PreserveSelection.html) Allows selected text in the WYSIWYG view to also be selected when you switch to textmode (#1544)
+  * [WebKitResize]({{ site.baseurl }}/trac/Documentation/Plugins/WebKitResize.html) Provides drag-resize for images, tables and table cells in `WebKit` Browsers, also for tables and cells in Gecko Browsers.
+  * [EncodeOutput]({{ site.baseurl }}/trac/Documentation/Plugins/EncodeOutput.html) Provides ability to encode the generated HTML of Xinha in some manners before submitting it to the server, for example to avoid mod_security issues.
+  * [ListOperations]({{ site.baseurl }}/trac/Documentation/Plugins/ListOperations.html) Provides tab/shift-tab functionality when editing lists ( #1614 )
+  * [FancySelects]({{ site.baseurl }}/trac/Documentation/Plugins/FancySelects.html) Provides "fancy" selects for the font style etc which show the font in use.  Uses the select2 jQuery component behind the scenes (jQuery is loaded automatically if necessary).
+  * [PreserveSelection]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveSelection.html) Allows selected text in the WYSIWYG view to also be selected when you switch to textmode (#1544)
     
   
 ### Deprecated Plugins
-  * [1351] Deprecate [SpellChecker]({{ site.baseurl }}/Documentation/Plugins/SpellChecker.html) plugin, native browser spell checking works well enough and executing aspell on hosts never really worked that reliably.
+  * [1351] Deprecate [SpellChecker]({{ site.baseurl }}/trac/Documentation/Plugins/SpellChecker.html) plugin, native browser spell checking works well enough and executing aspell on hosts never really worked that reliably.
   * [1355] Deprecate the `PersistentStorage` and associated plugins, these are abandoned.
-  * [1366] Deprecate [ExtendedFileManager]({{ site.baseurl }}/Documentation/Plugins/ExtendedFileManager.html) and [ImageManager]({{ site.baseurl }}/Documentation/Plugins/ImageManager.html), the [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html) should be used instead of both.
-  * #1135  Deprecate `UnFormat`, [SuperClean]({{ site.baseurl }}/Documentation/Plugins/SuperClean.html) now has it's features.
+  * [1366] Deprecate [ExtendedFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager.html) and [ImageManager]({{ site.baseurl }}/trac/Documentation/Plugins/ImageManager.html), the [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) should be used instead of both.
+  * #1135  Deprecate `UnFormat`, [SuperClean]({{ site.baseurl }}/trac/Documentation/Plugins/SuperClean.html) now has it's features.
 
 ----
 

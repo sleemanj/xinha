@@ -108,7 +108,7 @@
       <td colspan="5">	
        
         <p>
-	Add a new plugin [UseStrongEm]({{ site.baseurl }}/Documentation/Plugins/UseStrongEm.html)
+	Add a new plugin [UseStrongEm]({{ site.baseurl }}/trac/Documentation/Plugins/UseStrongEm.html)
         </p>
 
         <p> This release supports minimally versions of maintained WebKit and Gecko based browsers current as of early 2018, including Chrome, Safari, Firefox, Microsoft IE, Microsoft Edge and Opera.  Older browsers are still likely to function just fine and testing is done in old versions of Firefox and IE to at least see that they "work".  </p>
@@ -161,7 +161,7 @@
       <td colspan="5">	
        
         <p>
-	Some tweaks and tidyups to the toolbars and icons, improved drag-resizing of the editor, further fixes to URL expanding, and add a new plugin [QuickSnippet]({{ site.baseurl }}/Documentation/Plugins/QuickSnippet.html)
+	Some tweaks and tidyups to the toolbars and icons, improved drag-resizing of the editor, further fixes to URL expanding, and add a new plugin [QuickSnippet]({{ site.baseurl }}/trac/Documentation/Plugins/QuickSnippet.html)
         </p>
 
         <p> This release supports minimally versions of maintained WebKit and Gecko based browsers current as of early 2018, including Chrome, Safari, Firefox, Microsoft IE, Microsoft Edge and Opera.  Older browsers are still likely to function just fine and testing is done in old versions of Firefox and IE to at least see that they "work".  </p>
