@@ -34,7 +34,7 @@ From the top down, put this code on your pages somewhere (if possible in your <h
 ```
 
 
-If you are using a different directory, make sure you change both _editor_url and the location of `XinhaCore`.js in the above code accordingly.
+If you are using a different directory, make sure you change both _editor_url and the location of `XinhaCore.js` in the above code accordingly.
 
 You will also need some config code included in the page too. Either put the code below into a new file called "my_config.js" and including this file using
 

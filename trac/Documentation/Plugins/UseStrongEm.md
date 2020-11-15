@@ -1,4 +1,4 @@
-# Plugin: `UseStrong`Em 
+# Plugin: `UseStrongEm` 
 
 [Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
 
@@ -28,6 +28,6 @@
   useStrong:: 
     When you hit the bold button, insert a <strong> tag.  
   twoStageStrong:: 
-    Hit bold on non-bold text should bold (<strong).  Hitting bold on an already bold text should double-bold (<strong><strong>...).  Hitting bold on a double bold text should unbold.  This is how Firefox generally works without `UseStrong`Em plugin, and generally works quite well with modern website designs.
+    Hit bold on non-bold text should bold (<strong).  Hitting bold on an already bold text should double-bold (<strong><strong>...).  Hitting bold on a double bold text should unbold.  This is how Firefox generally works without `UseStrongEm` plugin, and generally works quite well with modern website designs.
 
 

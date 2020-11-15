@@ -1,5 +1,5 @@
 # ExtendedFileManager Configuration
-These are the most important config variables for the `ExtendedFile`Manager.\\
+These are the most important config variables for the `ExtendedFileManager`.\\
 For a complete overview look into the config.inc.php in the plugin directory.\\
 Read [here]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager.html) how to use these values in your Xinha configuration.
 

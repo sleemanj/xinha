@@ -53,7 +53,7 @@ See [Commits](http://trac.xinha.org/log/?action=stop_on_copy&mode=stop_on_copy&s
   
   * [1437] Some skins had slightly incorrect toolbar row heights.
   * [1440] Ensure toolbar buttons are middle aligned
-  * [1443] The download file link in the `MootoolsFile`Manager may not have worked
+  * [1443] The download file link in the `MootoolsFileManager` may not have worked
   
 ### New Plugins
 
@@ -504,9 +504,9 @@ Xinha 1.0 was never actually released, it was just the stable but "Unreleased Tr
  - fixed Ticket #981 No doctype in iframe content document/ editor always in quirks mode
  - fixed Ticket #543 Stylist Panel overflow broken
  - Ticket #983 added id for iframe
- - fixed Ticket #984 `ExtendedFile`Manager produces php warning
+ - fixed Ticket #984 `ExtendedFileManager` produces php warning
  - optimized icon file size
- - fixed `JavaScript` error in `ImageManager`/`ExtendedFile`Manager image editor
+ - fixed `JavaScript` error in `ImageManager`/`ExtendedFileManager` image editor
  - Ticket #908* Prompts broken in IE7: fixed for EFM, `ImageManager` & `TableOperations`
  - Fixes for TableOperations, tickets #82, #908*, #912 and #947
  - fixed Ticket #998* whitespace added before and/or after content (in non-fullpage mode)

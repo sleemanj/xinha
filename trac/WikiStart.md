@@ -120,7 +120,7 @@ Here are the main talking points, but of course there's a lot more besides this,
   * Lots of bugs fixed
   * Lots of improvements made
   * Some new plugins added [WebKitResize]({{ site.baseurl }}/trac/Documentation/Plugins/WebKitResize.html), [EncodeOutput]({{ site.baseurl }}/trac/Documentation/Plugins/EncodeOutput.html), [ListOperations]({{ site.baseurl }}/trac/Documentation/Plugins/ListOperations.html), [FancySelects]({{ site.baseurl }}/trac/Documentation/Plugins/FancySelects.html), [PreserveSelection]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveSelection.html)
-  * Some old plugins deprecated (`SpellChecker` (browsers these days do spellchecking themselves), `ExtendedFile`Manager (recommend to use `MootoolsFile`Manager instead), `ImageManager` (recommend to use `MootoolsFile`Manager instead), `UnFormat` (use `SuperClean`), `PersistentStorage` (abandonded)) 
+  * Some old plugins deprecated (`SpellChecker` (browsers these days do spellchecking themselves), `ExtendedFileManager` (recommend to use `MootoolsFileManager` instead), `ImageManager` (recommend to use `MootoolsFileManager` instead), `UnFormat` (use `SuperClean`), `PersistentStorage` (abandonded)) 
   * [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
   * [A much easier way for integrating Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html)
   * [wiki:Documentation/NewbieGuide/InstallingXinha Ability to use Xinha from external servers (CDN)] and still maintaining the ability to run special local plugins (eg your own plugins locally and everything else external, or everything locally, or everything externally...
@@ -136,7 +136,7 @@ You can [Download Xinha Here]({{ site.baseurl }}/trac/DownloadXinha.html) and it
 
 As always, backwards compatibility is important, and breaking changes have been kept to a minimum.  
 
-For users still using the `ImageManager` and `ExtendedFile`Manager plugins you will need to enable these specifically, they can also only be used with a full distribution.  These plugins have been moved to unsupported_plugins and to reduce the exposure for potential vulnerabilities in these very old plugins a .htaccess file has been added to unsupported_plugins to restrict them to certain IP addresses, you will need to edit `unsupported_plugins/.htaccess` to enable your IP (or open-access).
+For users still using the `ImageManager` and `ExtendedFileManager` plugins you will need to enable these specifically, they can also only be used with a full distribution.  These plugins have been moved to unsupported_plugins and to reduce the exposure for potential vulnerabilities in these very old plugins a .htaccess file has been added to unsupported_plugins to restrict them to certain IP addresses, you will need to edit `unsupported_plugins/.htaccess` to enable your IP (or open-access).
 
 For users using the `CSS` plugin, this has been renamed to `CSSDropDowns` due to conflicts with native `CSS` objects.
 

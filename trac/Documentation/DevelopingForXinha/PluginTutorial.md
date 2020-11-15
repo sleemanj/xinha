@@ -63,14 +63,14 @@ Note where `MyTest` and my-test and My Test are placed. These will need to be ma
 	More specifically, the Xinha and Xinha.Config links on the left will give you most of the information you require.
 
 7. To get your button press to pop-up a window...
-	a. Add a new page to the working folder, in this case `MyTest`. Call your page whatever you like. In my case, I have called it `MyTest`Form.aspx (as I am running .NET)
+	a. Add a new page to the working folder, in this case `MyTest`. Call your page whatever you like. In my case, I have called it `MyTestForm.aspx` (as I am running .NET)
 	b. In the buttonpress, type... editor._popupDialog(_editor_url + "plugins/MyTest/MyTestForm.aspx"); (changing the URL to what you need).\\This will give you a pop-up on the button press, however, it will be small. You will need to handle the sizing.
 	c. The _popUpDialog function can take two further parameters. the first is what you want to happen when the pop-up window is closed, the second is what you want to pass to the dialog when you first open it.
-		i. Change the buttonPress to... editor._popupDialog(_editor_url + "plugins/MyTest/MyTestForm.aspx", function(value){alert(value);}); and in your popped-up page, you need to ensure your return button has an onclick event. You can put any event name in the onclick, but ensure you have the event. For simple return just make the button onclick to onclick="!__dlg_close('some value');"\\[[BR]]You will also require <script src="../../popups/popup.js" type=text/javascript></script> somewhere in the HTML of the pop-up page (in my case, `MyTest`Form.aspx) prior to the call to !__dlg_close().[[BR]][[BR]]
+		i. Change the buttonPress to... editor._popupDialog(_editor_url + "plugins/MyTest/MyTestForm.aspx", function(value){alert(value);}); and in your popped-up page, you need to ensure your return button has an onclick event. You can put any event name in the onclick, but ensure you have the event. For simple return just make the button onclick to onclick="!__dlg_close('some value');"\\[[BR]]You will also require <script src="../../popups/popup.js" type=text/javascript></script> somewhere in the HTML of the pop-up page (in my case, `MyTestForm.aspx`) prior to the call to !__dlg_close().[[BR]][[BR]]
 
 ii. You can change the alert(value) to do whatever you want to the parent Xinha element, such as...  editor.insertHTML(value); This will put the 'some value' from my example into your editor.
 		iii. If you want to pass a value INTO your pop-up window, you use the third parameter of the _popupDialog. editor._popupDialog(_editor_url + "plugins/MyTest/MyTestForm.aspx", function(value){editor.insertHTML(value);}, {FirstArg:'Text to pass into my pop-up',SecondArg:'More text'});
-		iv. The pop-up (`MyTest`Form.aspx) will require an Init function. The function will be called from the body onload. <body onload="Init()">
+		iv. The pop-up (`MyTestForm.aspx`) will require an Init function. The function will be called from the body onload. <body onload="Init()">
 		v. The Init() will contain a method to get the value out.
 
 ```
@@ -90,7 +90,7 @@ If you want your plugin to override another plugin, for example, you may have de
 
 1. Remove all code from this.editor down to cfg.addToolbarElement. (lines 3 to 17 in my example)
 
-2. Change `MyTest`.prototype.buttonPress # function(editor) to Xinha.prototype._insertImage function(image).
+2. Change `MyTest.prototype`.buttonPress # function(editor) to Xinha.prototype._insertImage function(image).
      The _insertImage and function(image) will change depending on what control you will be overriding. You will be responsible for finding this information.
 3. You still require the entry in xinha_plugins section of myconfig.js to point to your directory that you have created.
 
