@@ -1,7 +1,8 @@
 {% include nav.html %}
-{% include sidebar-news.html %}
 
-<img src="//s3-us-west-1.amazonaws.com/xinha/screenshots/xinha-1.jpg" />
+![Screenshot of a typical Xinha v1.5.x](https://s3-us-west-1.amazonaws.com/xinha/screenshots/xinha-1.jpg)
+
+{% include sidebar-news.html %}
 
 ## November 2020 
 
