@@ -1,6 +1,6 @@
 # Plugin: Abbreviation
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 The Abbreviation plugin inserts a button into the toolbar to enable working with the <abbr> tag.
 

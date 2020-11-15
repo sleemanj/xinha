@@ -1,13 +1,13 @@
 # Plugin: `UseStrong`Em 
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
  Improves handling of the bold and italic buttons to insert more consistently <strong> and <em> tags, while also preserving existing <i> and <b>.
 
 
   ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
 ```

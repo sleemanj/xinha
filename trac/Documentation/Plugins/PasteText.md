@@ -2,13 +2,13 @@
 
 Adds a button to the toolbar to allow paste-as-text.
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 
 
 ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 Configuration is not typically required for this plugin.
 

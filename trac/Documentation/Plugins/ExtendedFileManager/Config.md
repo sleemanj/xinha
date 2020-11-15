@@ -1,24 +1,24 @@
 # ExtendedFileManager Configuration
 These are the most important config variables for the `ExtendedFile`Manager.\\
 For a complete overview look into the config.inc.php in the plugin directory.\\
-Read [here](Plugins/ExtendedFileManager.html) how to use these values in your Xinha configuration.
+Read [here]({{ site.baseurl }}/Plugins/ExtendedFileManager.html) how to use these values in your Xinha configuration.
 
  * [wiki:Plugins/ExtendedFileManager/Config#images_dirfiles_dir images_dir/files_dir]
  * [wiki:Plugins/ExtendedFileManager/Config#images_urlfiles_url images_url/files_url]
- * [view_type](Plugins/ExtendedFileManager/Config#images_dirfiles_dir.html)
- * [allow_new_dir](Plugins/ExtendedFileManager/Config#allow_new_dir.html)
- * [allow_edit_image](Plugins/ExtendedFileManager/Config#allow_edit_image.html)
- * [allow_rename](Plugins/ExtendedFileManager/Config#allow_rename.html)
- * [allow_cut_copy_paste](Plugins/ExtendedFileManager/Config#allow_cut_copy_paste.html)
- * [use_color_pickers](Plugins/ExtendedFileManager/Config#use_color_pickers.html)
- * [images_enable_alt](Plugins/ExtendedFileManager/Config#images_enable_alt.html)
- * [images_enable_title](Plugins/ExtendedFileManager/Config#images_enable_title.html)
- * [images_enable_align](Plugins/ExtendedFileManager/Config#images_enable_align.html)
- * [images_enable_styling](Plugins/ExtendedFileManager/Config#images_enable_styling.html)
- * [link_enable_target](Plugins/ExtendedFileManager/Config#link_enable_target.html)
- * [allow_upload](Plugins/ExtendedFileManager/Config#allow_upload.html)
+ * [view_type]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#images_dirfiles_dir.html)
+ * [allow_new_dir]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#allow_new_dir.html)
+ * [allow_edit_image]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#allow_edit_image.html)
+ * [allow_rename]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#allow_rename.html)
+ * [allow_cut_copy_paste]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#allow_cut_copy_paste.html)
+ * [use_color_pickers]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#use_color_pickers.html)
+ * [images_enable_alt]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#images_enable_alt.html)
+ * [images_enable_title]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#images_enable_title.html)
+ * [images_enable_align]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#images_enable_align.html)
+ * [images_enable_styling]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#images_enable_styling.html)
+ * [link_enable_target]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#link_enable_target.html)
+ * [allow_upload]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#allow_upload.html)
  * [wiki:Plugins/ExtendedFileManager/Config#max_filesize_kb_imagemax_filesize_kb_link max_filesize_kb_image/max_filesize_kb_link]
- * [max_foldersize_mb](Plugins/ExtendedFileManager/Config#max_foldersize_mb.html)
+ * [max_foldersize_mb]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config#max_foldersize_mb.html)
  * [wiki:Plugins/ExtendedFileManager/Config#allowed_image_extensionsallowed_link_extensions allowed_image_extensions/allowed_link_extensions]
 
 ### images_dir/files_dir

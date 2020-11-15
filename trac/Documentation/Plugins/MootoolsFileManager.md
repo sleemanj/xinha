@@ -4,11 +4,11 @@ This plugin allows the ability to upload, rename, delete and insert into your do
 
 MootoolsFileManager (MFM) is a complex plugin and requires your server uses PHP, it also must be run on your server rather than a CDN (but you can use Xinha from a CDN and point it to MFM on your local server as an external plugin).
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 MFM requires the use of PHP in your configuration to securely pass configuration details to the plugin, for obvious reasons we can't allow people to specifiy what they want to do with files on your server just with some Javascript!
 

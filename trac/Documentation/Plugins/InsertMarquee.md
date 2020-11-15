@@ -1,6 +1,6 @@
 # Plugin: InsertMarquee
 
-[Back To Plugins](Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/Plugins.html)
 
 The InsertMarquee plugin allows the user to add and edit the marquee tags.
 

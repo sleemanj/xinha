@@ -1,6 +1,6 @@
 # Plugin: TableOperations
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 The TableOperations plugin inserts context-sensitive buttons into the toolbar to enable working with tables, for example inserting rows, columns, merging, splitting etc.
 
@@ -8,7 +8,7 @@ The plugin was developed by [http://dynarch.com Mihai Bazon], sponsored by the A
 
 ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 Configuration of this plugin is not normally required, however there exist some options if you wish to customise it's function...
 

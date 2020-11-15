@@ -1,6 +1,6 @@
 # Plugin: GetHtml 
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 `GetHtml` is a replacement for the getHTML() function in htmlarea.js. It offers several improvements over the original, including:
 
@@ -17,7 +17,7 @@ It is based on the XML_Utility functions submitted in Ticket #253 by troels_kn, 
 
 ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
 You can enable this by setting [wiki:Documentation/ConfigVariablesList#xinha_configgetHtmlMethod xinha_config.getHtmlMethod] to "TransformInnerHTML"

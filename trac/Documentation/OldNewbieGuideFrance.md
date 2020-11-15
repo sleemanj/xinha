@@ -1,12 +1,12 @@
 ## Guide du débutant
 
-[English version](NewbieGuide.html).
+[English version]({{ site.baseurl }}/NewbieGuide.html).
 
 Tout d'abord, cette page est régulièrement mise à jour, donc si vous ne comprenez pas, ou si vous voulez faire quelque chose de plus avec Xinha, veuillez alors poster une réponse dans le [http://xinha.gogo.co.nz/punbb/viewforum.php?id=1 forum].
 
 ## Commencer
 
-Vous devez [télécharger](DownloadsPage.html) les fichiers de Xinha. La dernière release stable est recommandée, car bien que la version nightly contient certainement des améliorations, elle peut tout aussi bien être temporairement cassée. Ce qui rendrait l'initiation bien plus difficile ! '''***'''
+Vous devez [télécharger]({{ site.baseurl }}/DownloadsPage.html) les fichiers de Xinha. La dernière release stable est recommandée, car bien que la version nightly contient certainement des améliorations, elle peut tout aussi bien être temporairement cassée. Ce qui rendrait l'initiation bien plus difficile ! '''***'''
 
 '''*** Normallement vous devriez utiliser la dernière release stable, mais au moment de l'écriture de ce document, vous devez utiliser la version "nightly" pour pouvoir faire fonctionner Xinha'''
 

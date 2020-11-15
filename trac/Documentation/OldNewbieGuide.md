@@ -1,6 +1,6 @@
 ## Newbie Guide
 
-[Version française](NewbieGuideFrance.html).
+[Version française]({{ site.baseurl }}/NewbieGuideFrance.html).
 
 Firstly, this page is always being improved, so if you don't understand something, or you want to do something more with Xinha, then please post a message in the [http://xinha.gogo.co.nz/punbb/viewforum.php?id=1 forum].
 
@@ -200,7 +200,7 @@ In the example it lists two: 'myTextArea' and 'anotherOne' - you will need to ch
 
 Your X-Area will now appear when the page has finished loading.
 
-You can now, if you want to, go on with configuring the editor. You can find a [list of available options](Documentation/ConfigVariablesList.html) here.
+You can now, if you want to, go on with configuring the editor. You can find a [list of available options]({{ site.baseurl }}/Documentation/ConfigVariablesList.html) here.
 
 Remember if you encounter any problems, don't hesitate to ask  [http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255 on the forum] and we will clear it up and  do our best to make sure no-one else runs into the same thing!
 

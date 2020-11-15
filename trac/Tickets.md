@@ -1,4 +1,4 @@
-[Version française](TicketsFrance.html).
+[Version française]({{ site.baseurl }}/TicketsFrance.html).
 
 # Reporting Bugs and Feature Requests
 

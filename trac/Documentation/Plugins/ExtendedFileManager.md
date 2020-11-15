@@ -43,7 +43,7 @@ Installing involves extracting the archive to 'plugins' subdirectory of Xinha
 and selecting the plugin in appropriate xinha_plugins list.
 
 Plugin may be configured via xinha_config.`ExtendedFile`Manager object.
-You can find the [available options here](Plugins/ExtendedFileManager/Config.html).
+You can find the [available options here]({{ site.baseurl }}/Plugins/ExtendedFileManager/Config.html).
 ```
 #!text/x-javascript
 // only snippets of code from initializing file shown below

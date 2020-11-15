@@ -4,105 +4,105 @@ Plugins are optional extras (although currently distributed with Xinha anyway) w
 
 See the NewbieGuide for instructions on loading a plugin.
 
-If you are interested in writing a plugin, try the [PluginTutorial](Documentation/DevelopingForXinha/PluginTutorial.html) and reading the source code of one of the simpler plugins.
+If you are interested in writing a plugin, try the [PluginTutorial]({{ site.baseurl }}/Documentation/DevelopingForXinha/PluginTutorial.html) and reading the source code of one of the simpler plugins.
 
 ## The Most Common Plugins
 
-  [MootoolsFileManager](Documentation/Plugins/MootoolsFileManager.html)::
+  [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html)::
     !Insert/Upload/Delete Images and (Links To) Files (requires PHP)
 
-  [Linker](Documentation/Plugins/Linker.html)::
+  [Linker]({{ site.baseurl }}/Documentation/Plugins/Linker.html)::
     Insert and Edit Links To Documents (requires PHP)
 
-  [Stylist](Documentation/Plugins/Stylist.html)::
+  [Stylist]({{ site.baseurl }}/Documentation/Plugins/Stylist.html)::
     Select CSS classes in a context-sensitive panel.
 
-  [ListOperations](Documentation/Plugins/ListOperations.html)::
+  [ListOperations]({{ site.baseurl }}/Documentation/Plugins/ListOperations.html)::
     Adds tab-to-indent and shift-tab-to-outdent function when editing lists.
 
-  [TableOperations](Documentation/Plugins/TableOperations.html)::
+  [TableOperations]({{ site.baseurl }}/Documentation/Plugins/TableOperations.html)::
     Add functions for inserting and editing tables.
 
-  [ContextMenu](Documentation/Plugins/ContextMenu.html)::
-    Add a right-click context menu which allows convenient access to other plugins (esp [TableOperations](Documentation/Plugins/TableOperations.html) to edit tables).
+  [ContextMenu]({{ site.baseurl }}/Documentation/Plugins/ContextMenu.html)::
+    Add a right-click context menu which allows convenient access to other plugins (esp [TableOperations]({{ site.baseurl }}/Documentation/Plugins/TableOperations.html) to edit tables).
 
-  [CharacterMap](Documentation/Plugins/CharacterMap.html)::
+  [CharacterMap]({{ site.baseurl }}/Documentation/Plugins/CharacterMap.html)::
     Allow the user to insert special characters from a character map.
 
-  [SuperClean](Documentation/Plugins/SuperClean.html)::
+  [SuperClean]({{ site.baseurl }}/Documentation/Plugins/SuperClean.html)::
     Provide various "html cleaning" functions.
 
-  [SmartReplace](Documentation/Plugins/SmartReplace.html)::
+  [SmartReplace]({{ site.baseurl }}/Documentation/Plugins/SmartReplace.html)::
     Replace non-directional quotes ("test") with locale-sensitive directional quotes (“test”) amongst others.
 
-  [PreserveScripts](Documentation/Plugins/PreserveScripts.html)::
+  [PreserveScripts]({{ site.baseurl }}/Documentation/Plugins/PreserveScripts.html)::
     Preserve Javascript and PHP in the editable content.
 
-  [PreserveSelection](Documentation/Plugins/PreserveSelection.html)::
+  [PreserveSelection]({{ site.baseurl }}/Documentation/Plugins/PreserveSelection.html)::
     Preserve the selection between Source and WYSIWYG views (select text in WYSIWYG mode, switch to source, same text is selected)
 
-  [FancySelects](Documentation/Plugins/FancySelects.html)::
+  [FancySelects]({{ site.baseurl }}/Documentation/Plugins/FancySelects.html)::
     Make the font etc. drop-downs "fancy" using jQuery.
 
-  [WebKitResize](Documentation/Plugins/WebKitResize.html)::
+  [WebKitResize]({{ site.baseurl }}/Documentation/Plugins/WebKitResize.html)::
     Improve resizing of Images in `WebKit` (Chrome, Safari, Edge) browsers, and Tables in `WebKit` and Mozilla.
 
-  [QuickSnippet](Documentation/Plugins/QuickSnippet.html)::
+  [QuickSnippet]({{ site.baseurl }}/Documentation/Plugins/QuickSnippet.html)::
     Easily provide context-sensitive snippets of HTML that the user can insert from a drop-down list.
 
-  [UseStrongEm](Documentation/Plugins/UseStrongEm.html)::
+  [UseStrongEm]({{ site.baseurl }}/Documentation/Plugins/UseStrongEm.html)::
     Improves handling for the italic and bold toolbar buttons.
 
 ## All Currently Supported Plugins
 
- * [Abbreviation](Documentation/Plugins/Abbreviation.html)
- * [CharacterMap](Documentation/Plugins/CharacterMap.html)
- * [CharCounter](Documentation/Plugins/CharCounter.html)
- * [ContextMenu](Documentation/Plugins/ContextMenu.html)
- * [CSSDropDowns](Documentation/Plugins/CSSDropDowns.html)
- * [CSSPicker](Documentation/Plugins/CSSPicker.html)
- * [DefinitionList](Documentation/Plugins/DefinitionList.html)
- * [DynamicCSS](Documentation/Plugins/DynamicCSS.html)
- * [EditTag](Documentation/Plugins/EditTag.html)
- * [EncodeOutput](Documentation/Plugins/EncodeOutput.html)
- * [Equation](Documentation/Plugins/Equation.html)
- * [FancySelects](Documentation/Plugins/FancySelects.html)
- * [FindReplace](Documentation/Plugins/FindReplace.html)
- * [FormOperations](Documentation/Plugins/FormOperations.html)
- * [Forms](Documentation/Plugins/Forms.html)
- * [FullPage](Documentation/Plugins/FullPage.html)
- * [GenericPlugin](Documentation/Plugins/GenericPlugin.html)
- * [GetHtml](Documentation/Plugins/GetHtml.html)
- * [HorizontalRule](Documentation/Plugins/HorizontalRule.html)
- * [HtmlEntities](Documentation/Plugins/HtmlEntities.html)
- * [InsertAnchor](Documentation/Plugins/InsertAnchor.html)
- * [InsertNote](Documentation/Plugins/InsertNote.html)
- * [InsertPagebreak](Documentation/Plugins/InsertPagebreak.html)
- * [InsertSmiley](Documentation/Plugins/InsertSmiley.html)
- * [InsertSnippet](Documentation/Plugins/InsertSnippet.html)
- * [InsertSnippet2](Documentation/Plugins/InsertSnippet2.html)
- * [InsertWords](Documentation/Plugins/InsertWords.html)
- * [LangMarks](Documentation/Plugins/LangMarks.html)
- * [Linker](Documentation/Plugins/Linker.html)
- * [ListOperations](Documentation/Plugins/ListOperations.html)
- * [ListType](Documentation/Plugins/ListType.html)
- * [MootoolsFileManager](Documentation/Plugins/MootoolsFileManager.html)
- * [PasteText](Documentation/Plugins/PasteText.html)
- * [PreserveScripts](Documentation/Plugins/PreserveScripts.html)
- * [PreserveSelection](Documentation/Plugins/PreserveSelection.html)
- * [QuickTag](Documentation/Plugins/QuickTag.html)
- * [QuickSnippet](Documentation/Plugins/QuickSnippet.html)
- * [SaveOnBlur](Documentation/Plugins/SaveOnBlur.html)
- * [SaveSubmit](Documentation/Plugins/SaveSubmit.html)
- * [SetId](Documentation/Plugins/SetId.html)
- * [SmartReplace](Documentation/Plugins/SmartReplace.html)
- * [Stylist](Documentation/Plugins/Stylist.html)
- * [SuperClean](Documentation/Plugins/SuperClean.html)
- * [TableOperations](Documentation/Plugins/TableOperations.html)
- * [UnsavedChanges](Documentation/Plugins/UnsavedChanges.html)
- * [UseStrongEm](Documentation/Plugins/UseStrongEm.html)
- * [WebKitResize](Documentation/Plugins/WebKitResize.html)
- * [WysiwygWrap](Documentation/Plugins/WysiwygWrap.html)
+ * [Abbreviation]({{ site.baseurl }}/Documentation/Plugins/Abbreviation.html)
+ * [CharacterMap]({{ site.baseurl }}/Documentation/Plugins/CharacterMap.html)
+ * [CharCounter]({{ site.baseurl }}/Documentation/Plugins/CharCounter.html)
+ * [ContextMenu]({{ site.baseurl }}/Documentation/Plugins/ContextMenu.html)
+ * [CSSDropDowns]({{ site.baseurl }}/Documentation/Plugins/CSSDropDowns.html)
+ * [CSSPicker]({{ site.baseurl }}/Documentation/Plugins/CSSPicker.html)
+ * [DefinitionList]({{ site.baseurl }}/Documentation/Plugins/DefinitionList.html)
+ * [DynamicCSS]({{ site.baseurl }}/Documentation/Plugins/DynamicCSS.html)
+ * [EditTag]({{ site.baseurl }}/Documentation/Plugins/EditTag.html)
+ * [EncodeOutput]({{ site.baseurl }}/Documentation/Plugins/EncodeOutput.html)
+ * [Equation]({{ site.baseurl }}/Documentation/Plugins/Equation.html)
+ * [FancySelects]({{ site.baseurl }}/Documentation/Plugins/FancySelects.html)
+ * [FindReplace]({{ site.baseurl }}/Documentation/Plugins/FindReplace.html)
+ * [FormOperations]({{ site.baseurl }}/Documentation/Plugins/FormOperations.html)
+ * [Forms]({{ site.baseurl }}/Documentation/Plugins/Forms.html)
+ * [FullPage]({{ site.baseurl }}/Documentation/Plugins/FullPage.html)
+ * [GenericPlugin]({{ site.baseurl }}/Documentation/Plugins/GenericPlugin.html)
+ * [GetHtml]({{ site.baseurl }}/Documentation/Plugins/GetHtml.html)
+ * [HorizontalRule]({{ site.baseurl }}/Documentation/Plugins/HorizontalRule.html)
+ * [HtmlEntities]({{ site.baseurl }}/Documentation/Plugins/HtmlEntities.html)
+ * [InsertAnchor]({{ site.baseurl }}/Documentation/Plugins/InsertAnchor.html)
+ * [InsertNote]({{ site.baseurl }}/Documentation/Plugins/InsertNote.html)
+ * [InsertPagebreak]({{ site.baseurl }}/Documentation/Plugins/InsertPagebreak.html)
+ * [InsertSmiley]({{ site.baseurl }}/Documentation/Plugins/InsertSmiley.html)
+ * [InsertSnippet]({{ site.baseurl }}/Documentation/Plugins/InsertSnippet.html)
+ * [InsertSnippet2]({{ site.baseurl }}/Documentation/Plugins/InsertSnippet2.html)
+ * [InsertWords]({{ site.baseurl }}/Documentation/Plugins/InsertWords.html)
+ * [LangMarks]({{ site.baseurl }}/Documentation/Plugins/LangMarks.html)
+ * [Linker]({{ site.baseurl }}/Documentation/Plugins/Linker.html)
+ * [ListOperations]({{ site.baseurl }}/Documentation/Plugins/ListOperations.html)
+ * [ListType]({{ site.baseurl }}/Documentation/Plugins/ListType.html)
+ * [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html)
+ * [PasteText]({{ site.baseurl }}/Documentation/Plugins/PasteText.html)
+ * [PreserveScripts]({{ site.baseurl }}/Documentation/Plugins/PreserveScripts.html)
+ * [PreserveSelection]({{ site.baseurl }}/Documentation/Plugins/PreserveSelection.html)
+ * [QuickTag]({{ site.baseurl }}/Documentation/Plugins/QuickTag.html)
+ * [QuickSnippet]({{ site.baseurl }}/Documentation/Plugins/QuickSnippet.html)
+ * [SaveOnBlur]({{ site.baseurl }}/Documentation/Plugins/SaveOnBlur.html)
+ * [SaveSubmit]({{ site.baseurl }}/Documentation/Plugins/SaveSubmit.html)
+ * [SetId]({{ site.baseurl }}/Documentation/Plugins/SetId.html)
+ * [SmartReplace]({{ site.baseurl }}/Documentation/Plugins/SmartReplace.html)
+ * [Stylist]({{ site.baseurl }}/Documentation/Plugins/Stylist.html)
+ * [SuperClean]({{ site.baseurl }}/Documentation/Plugins/SuperClean.html)
+ * [TableOperations]({{ site.baseurl }}/Documentation/Plugins/TableOperations.html)
+ * [UnsavedChanges]({{ site.baseurl }}/Documentation/Plugins/UnsavedChanges.html)
+ * [UseStrongEm]({{ site.baseurl }}/Documentation/Plugins/UseStrongEm.html)
+ * [WebKitResize]({{ site.baseurl }}/Documentation/Plugins/WebKitResize.html)
+ * [WysiwygWrap]({{ site.baseurl }}/Documentation/Plugins/WysiwygWrap.html)
 
 
 ## Unsupported (Deprecated) Plugins
@@ -110,20 +110,20 @@ If you are interested in writing a plugin, try the [PluginTutorial](Documentatio
 These plugins are no longer supported officially and are regarded as deprecated, they may not work well, not work properly, have more potential for security issues, and may be superceeded by supported plugins above.  Use at your discretion, new integrations of Xinha should not use these.
 
 
- * [BackgroundImage](Documentation/Plugins/BackgroundImage.html)
- * [ClientsideSpellcheck](Documentation/Plugins/ClientsideSpellcheck.html)
- * [DoubleClick](Documentation/Plugins/DoubleClick.html)
- * [ExtendedFileManager](Documentation/Plugins/ExtendedFileManager.html)
- * [Filter](Documentation/Plugins/Filter.html)
- * [HtmlTidy](Documentation/Plugins/HtmlTidy.html)
- * [ImageManager](Documentation/Plugins/ImageManager.html)
- * [InsertMarquee](Documentation/Plugins/InsertMarquee.html)
- * [InsertPicture](Documentation/Plugins/InsertPicture.html)
- * [NoteServer](Documentation/Plugins/NoteServer.html)
- * [PersistentStorage](Documentation/Plugins/PersistentStorage.html)
- * [PSFixed](Documentation/Plugins/PSFixed.html)
- * [PSLocal](Documentation/Plugins/PSLocal.html)
- * [PSServer](Documentation/Plugins/PSServer.html)
- * [SpellChecker](Documentation/Plugins/SpellChecker.html)
- * [Template](Documentation/Plugins/Template.html)
- * [UnFormat](Documentation/Plugins/UnFormat.html)
+ * [BackgroundImage]({{ site.baseurl }}/Documentation/Plugins/BackgroundImage.html)
+ * [ClientsideSpellcheck]({{ site.baseurl }}/Documentation/Plugins/ClientsideSpellcheck.html)
+ * [DoubleClick]({{ site.baseurl }}/Documentation/Plugins/DoubleClick.html)
+ * [ExtendedFileManager]({{ site.baseurl }}/Documentation/Plugins/ExtendedFileManager.html)
+ * [Filter]({{ site.baseurl }}/Documentation/Plugins/Filter.html)
+ * [HtmlTidy]({{ site.baseurl }}/Documentation/Plugins/HtmlTidy.html)
+ * [ImageManager]({{ site.baseurl }}/Documentation/Plugins/ImageManager.html)
+ * [InsertMarquee]({{ site.baseurl }}/Documentation/Plugins/InsertMarquee.html)
+ * [InsertPicture]({{ site.baseurl }}/Documentation/Plugins/InsertPicture.html)
+ * [NoteServer]({{ site.baseurl }}/Documentation/Plugins/NoteServer.html)
+ * [PersistentStorage]({{ site.baseurl }}/Documentation/Plugins/PersistentStorage.html)
+ * [PSFixed]({{ site.baseurl }}/Documentation/Plugins/PSFixed.html)
+ * [PSLocal]({{ site.baseurl }}/Documentation/Plugins/PSLocal.html)
+ * [PSServer]({{ site.baseurl }}/Documentation/Plugins/PSServer.html)
+ * [SpellChecker]({{ site.baseurl }}/Documentation/Plugins/SpellChecker.html)
+ * [Template]({{ site.baseurl }}/Documentation/Plugins/Template.html)
+ * [UnFormat]({{ site.baseurl }}/Documentation/Plugins/UnFormat.html)

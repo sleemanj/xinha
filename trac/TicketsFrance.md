@@ -1,4 +1,4 @@
-[English version](Tickets.html).
+[English version]({{ site.baseurl }}/Tickets.html).
 
 # Rapporter des bugs et faire des demandes d'amélioration grâce aux Tickets
 

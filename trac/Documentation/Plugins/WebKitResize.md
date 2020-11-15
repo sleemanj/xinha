@@ -1,6 +1,6 @@
 # Plugin: WebKitResize 
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
  
   The `WebKit` based (or similar) browsers, including Chrome (and Edge)
@@ -14,7 +14,7 @@
   
     ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 Configuration for this plugin is not normally required, however there are a couple of options if you wish to customise it.  
 

@@ -64,8 +64,8 @@ If you are new to Xinha, view the <a href="/wiki/Documentation/NewbieGuide">Xinh
 If you have found a bug in Xinha or have a great idea how we can make it even better, please create a <a href="/wiki/Tickets">ticket</a>.<br />
 ```
 Due to the large amount of ticket spam the ticket system requires that you login prior to 
-being able to create or comment on tickets, guests can login with [guest login details](Tickets.html).  
-Please read the [Tickets](Tickets.html) page for more information on creating bug reports and feature requests.
+being able to create or comment on tickets, guests can login with [guest login details]({{ site.baseurl }}/Tickets.html).  
+Please read the [Tickets]({{ site.baseurl }}/Tickets.html) page for more information on creating bug reports and feature requests.
 ```
 
 
@@ -78,7 +78,7 @@ Please read the [Tickets](Tickets.html) page for more information on creating bu
 Xinha (pronounced like [http://images.google.co.nz/images?q=xena&hl=en&btnG=Google+Search Xena, the Warrior Princess]) 
 is a powerful WYSIWYG HTML editor component that works in all current browsers. Its 
 configurabilty and extensibility make it easy to build just the right editor for multiple purposes, from a restricted mini-editor
-for one database field to a full-fledged website editor. Its liberal, [BSD licence](Licence.html) makes it an ideal candidate
+for one database field to a full-fledged website editor. Its liberal, [BSD licence]({{ site.baseurl }}/Licence.html) makes it an ideal candidate
 for integration into any kind of project.
 
 '''Xinha is Open Source,''' and we take this seriously. There is no company that owns the source but a community of professionals 
@@ -103,10 +103,10 @@ Here are the main talking points, but of course there's a lot more besides this,
 
   * Lots of bugs fixed
   * Lots of improvements made
-  * Some new plugins added [WebKitResize](Documentation/Plugins/WebKitResize.html), [EncodeOutput](Documentation/Plugins/EncodeOutput.html), [ListOperations](Documentation/Plugins/ListOperations.html), [FancySelects](Documentation/Plugins/FancySelects.html), [PreserveSelection](Documentation/Plugins/PreserveSelection.html)
+  * Some new plugins added [WebKitResize]({{ site.baseurl }}/Documentation/Plugins/WebKitResize.html), [EncodeOutput]({{ site.baseurl }}/Documentation/Plugins/EncodeOutput.html), [ListOperations]({{ site.baseurl }}/Documentation/Plugins/ListOperations.html), [FancySelects]({{ site.baseurl }}/Documentation/Plugins/FancySelects.html), [PreserveSelection]({{ site.baseurl }}/Documentation/Plugins/PreserveSelection.html)
   * Some old plugins deprecated (`SpellChecker` (browsers these days do spellchecking themselves), `ExtendedFile`Manager (recommend to use `MootoolsFile`Manager instead), `ImageManager` (recommend to use `MootoolsFile`Manager instead), `UnFormat` (use `SuperClean`), `PersistentStorage` (abandonded)) 
-  * [MootoolsFileManager](Documentation/Plugins/MootoolsFileManager.html) plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
-  * [A much easier way for integrating Xinha](Documentation/NewbieGuide.html)
+  * [MootoolsFileManager]({{ site.baseurl }}/Documentation/Plugins/MootoolsFileManager.html) plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
+  * [A much easier way for integrating Xinha]({{ site.baseurl }}/Documentation/NewbieGuide.html)
   * [wiki:Documentation/NewbieGuide/InstallingXinha Ability to use Xinha from external servers (CDN)] and still maintaining the ability to run special local plugins (eg your own plugins locally and everything else external, or everything locally, or everything externally...
   * Rewritten translations system reducing page loads and making the job easier for translators
   * Reduction in network activity for plugin loading
@@ -114,7 +114,7 @@ Here are the main talking points, but of course there's a lot more besides this,
   * Improved security
   * Rewritten keyboard handling and new events exposed for plugin authors
 
-You can [Download Xinha Here](DownloadXinha.html) and it is recommended to read through the New [Newbie Guide](Documentation/NewbieGuide.html) here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
+You can [Download Xinha Here]({{ site.baseurl }}/DownloadXinha.html) and it is recommended to read through the New [Newbie Guide]({{ site.baseurl }}/Documentation/NewbieGuide.html) here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
 
 ### Compatability
 
@@ -140,7 +140,7 @@ The short version is, that development happens when a developer has an itch they
 
 There is no set schedule, and development of Xinha simply for the sake of developing Xinha doesn't happen much (we have bills to pay, if we don't have a direct need for something in one of our projects, it's not getting written).
 
-Xinha is open source, and we mean it, if you want to progress the development of Xinha in some way, please contact James Sleeman ( See [Xinha Developers](Developers.html) ) and he will arrange for SVN commit and Trac management access.
+Xinha is open source, and we mean it, if you want to progress the development of Xinha in some way, please contact James Sleeman ( See [Xinha Developers]({{ site.baseurl }}/Developers.html) ) and he will arrange for SVN commit and Trac management access.
 
 
 ## How can I get Xinha?
@@ -160,7 +160,7 @@ This is one of the main reasons Xinha split from htmlArea, the htmlArea developm
 There ~~is~~ once was a mailing list available at [http://www.openplans.org/projects/xinha/lists/xinha-discussion], it's gone now.
 
 ## I don't know Javascript!
-That's ok, we do.  Some other ways you might contribute are to sponsor development of Xinha plugins, or donate some cash to one of the [Xinha developers](Developers.html).
+That's ok, we do.  Some other ways you might contribute are to sponsor development of Xinha plugins, or donate some cash to one of the [Xinha developers]({{ site.baseurl }}/Developers.html).
 
 ## What else is here?
 For a complete list of local wiki pages, see TitleIndex.

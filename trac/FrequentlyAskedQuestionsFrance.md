@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-[english version](FrequentlyAskedQuestions.html).
+[english version]({{ site.baseurl }}/FrequentlyAskedQuestions.html).
 
 Tout d'abord, cette page est régulièrement mise à jour. Donc si quelque chose reste incompréhensible ou si vous pensez qu'une question manque, veuillez poster un message dans le [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=138 Forum de Discussion].
 
@@ -36,7 +36,7 @@ Tout d'abord, cette page est régulièrement mise à jour. Donc si quelque chose
    * R1: Assurez-vous d'avoir un fichier de traduction à jour.
    * R2: Le système de traduction (i18n) fonctionnera uniquement si vous avez un serveur web.
  * Q: Mes données apparaissent bizarrement dans la zone de texte ? 
-   * R: Vous devez transformer en entités les données transmises dans le textarea [Entitize data](Entize.html) 
+   * R: Vous devez transformer en entités les données transmises dans le textarea [Entitize data]({{ site.baseurl }}/Entize.html) 
 
 ## Développeurs
 

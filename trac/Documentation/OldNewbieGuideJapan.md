@@ -1,7 +1,7 @@
 ## 入門ガイド
 
-[Version English](NewbieGuide.html).
-[Version française](NewbieGuideFrance.html).
+[Version English]({{ site.baseurl }}/NewbieGuide.html).
+[Version française]({{ site.baseurl }}/NewbieGuideFrance.html).
 
 まずはじめに、このページは常に成長しているので、ここでわからないことがあったり、Xinhaでもっと多くのことがしたい場合、フォーラム内の[http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=255#p255 Newbie Guide スレッド]にメッセージを投函してください。
 

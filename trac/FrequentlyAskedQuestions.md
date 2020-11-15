@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-[Version française](FrequentlyAskedQuestionsFrance.html).
+[Version française]({{ site.baseurl }}/FrequentlyAskedQuestionsFrance.html).
 
 Firstly, this page is always being improved, so if you don't understand something, or you think something is missing, then please post a message in the forum in the [http://xinha.gogo.co.nz/punbb/viewtopic.php?id=138 Discussion Forum].
 
@@ -8,7 +8,7 @@ Firstly, this page is always being improved, so if you don't understand somethin
 [http://xinha.gogo.co.nz/punbb/viewtopic.php?pid=5355 Can I load/edit/save online documents with Xinha?]
 
  * Q: How do I set the content of the editor?
-   * A: To set the initial editor content, simply put the [entized](Documentation/NewbieGuide/Entize.html) HTML into the initial textarea
+   * A: To set the initial editor content, simply put the [entized]({{ site.baseurl }}/Documentation/NewbieGuide/Entize.html) HTML into the initial textarea
    * A: To set the content dynamically by Javascript, use the editor.setEditorContent(html) method
  * Q: How do I get the edited HTML with?
    * A: Use the editor.getEditorContent() method
@@ -16,18 +16,18 @@ Firstly, this page is always being improved, so if you don't understand somethin
 ## On the project
 
  * Q: How can I help the project?
-   * A: Use the editor with eyes open and tell us how to improve it. Feature requests and bug reports should be submitted as [tickets](Tickets.html).
+   * A: Use the editor with eyes open and tell us how to improve it. Feature requests and bug reports should be submitted as [tickets]({{ site.baseurl }}/Tickets.html).
    * A: Check the timeline and participate in ticket discussions. To see the most recent comments posted to all tickets, [report:9 click here].
-   * A: Localize Xinha to your language ([Translating Xinha](Documentation/DevelopingForXinha/Translating.html))
+   * A: Localize Xinha to your language ([Translating Xinha]({{ site.baseurl }}/Documentation/DevelopingForXinha/Translating.html))
  * Q: Have you had a chance to put up a donation page?
-   * A: Currently only one developer showed no scruples and has put up a personal `PayPal` button [Developers](Developers.html)
+   * A: Currently only one developer showed no scruples and has put up a personal `PayPal` button [Developers]({{ site.baseurl }}/Developers.html)
 
 ## Installation
  
- * Q: How do I get started? See [Newbie Guide](Documentation/NewbieGuide.html)
+ * Q: How do I get started? See [Newbie Guide]({{ site.baseurl }}/Documentation/NewbieGuide.html)
 
  * Q: Do I need a webserver or can I use the script through file:// ?
- * A: You can use it from a CDN if you want, see the [Newbie Guide](Documentation/NewbieGuide.html), but ultimately you're going to need a server to actually do something with your HTML, right.
+ * A: You can use it from a CDN if you want, see the [Newbie Guide]({{ site.baseurl }}/Documentation/NewbieGuide.html), but ultimately you're going to need a server to actually do something with your HTML, right.
 
  * Q: How can I change the default editor CSS? 
  * A: See ([http://xinha.gogo.co.nz/punbb/viewtopic.php?id=455 default CSS])
@@ -58,11 +58,11 @@ Firstly, this page is always being improved, so if you don't understand somethin
    * A: Make sure your language file is up to date.
    * A: The translation system (i18n) will only work if you have a webserver or run Xinha from CDN.
  * Q: My text appears strangely in my textarea ?
-   * A: You should entitize data put into textareas [Entitize data](Documentation/NewbieGuide/Entize.html)
+   * A: You should entitize data put into textareas [Entitize data]({{ site.baseurl }}/Documentation/NewbieGuide/Entize.html)
  * Q: Why get the changes only submitted when switching into HTML mode?
    * A: If you submit the form using `JavaScript` (form.submit())you must not have a button with id="submit" in the same form
  * Q: When i'm using the html code mode, all accented or umlaut characters are converted to normal.
-   * A: Use the [HtmlEntities plugin](Documentation/Plugins/HtmlEntities.html) 
+   * A: Use the [HtmlEntities plugin]({{ site.baseurl }}/Documentation/Plugins/HtmlEntities.html) 
 
 ## Developers
 
@@ -72,7 +72,7 @@ Firstly, this page is always being improved, so if you don't understand somethin
 ## Internationalization
 
  * Q: How can I add my language to the Xinha translations?
- * A: [Translating Xinha](Documentation/DevelopingForXinha/Translating.html)
+ * A: [Translating Xinha]({{ site.baseurl }}/Documentation/DevelopingForXinha/Translating.html)
 
 ## About the plugins
 

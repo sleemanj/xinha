@@ -1,6 +1,6 @@
 # Plugin: Equation
 
-[Back To Plugins](Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/Plugins.html)
 
 ## AsciiMathML Formula Editor for Xinha
 

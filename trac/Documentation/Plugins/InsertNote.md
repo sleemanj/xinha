@@ -8,10 +8,10 @@ Allows for the insertion of footnotes/endnotes. Supports:
   * Saves previously referenced notes for easy reuse
   * Cleanup of unreferenced notes (or references to non-existent notes)
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 There is no configuration required for this plugin at present.

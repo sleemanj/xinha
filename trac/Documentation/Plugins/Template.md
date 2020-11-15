@@ -1,6 +1,6 @@
 # Plugin: Template
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 The Template plugin inserts a set of div's into the editor with position and other style informations, you can change the template in a dialog but your text remains exists.
 

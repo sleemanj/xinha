@@ -1,12 +1,12 @@
 # Plugin: SuperClean
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 The SuperClean plugin, developed by [http://code.gogo.co.nz/ James Sleeman] and improved by Niko Sams based on code by Udo Schmal provides a combined interface for HTMLTidy, Word cleaning, stripping out font typefaces, colours and sizes, and calling custom filter-functions.
 
 ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 Configuration of this plugin is not normally required, however there are some options to customise it if necessary.
 

@@ -1,6 +1,6 @@
 # Plugin: NoteServer
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 The NoteServer plugin is a collection of JavaScript routines that facilitate accessing the GUIDO NoteServer.
 

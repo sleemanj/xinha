@@ -1,12 +1,12 @@
 # Plugin: ContextMenu
 
-[Back to Plugins](Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/Plugins.html)
 
 The ContextMenu plugin, developed by [http://dynarch.com/ Mihai Bazon] with sponsorshop by the American Bible Society, provides a right-click context menu for the editor.
 
 ## Configuration
 
-**See the [NewbieGuide](NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
+**See the [NewbieGuide]({{ site.baseurl }}/NewbieGuide#ProvideSomeConfiguration.html) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 No configuration is necessary for general purposes.  For advanced users there are a couple of options.
 
