@@ -6,6 +6,11 @@ description: >- # this means to ignore newlines until "baseurl:"
   Xinha (pronounced like ​Xena, the Warrior Princess) is a powerful WYSIWYG HTML editor component that works in all current browsers. Its configurabilty and extensibility make it easy to build just the right editor for multiple purposes, from a restricted mini-editor for one database field to a full-fledged website editor. Its liberal, BSD licence makes it an ideal candidate for integration into any kind of project.
 
 markdown: kramdown
+kramdown:
+  input: GFM
+  
+# For github metadata which can be used , such as {{ site.github.repository_url }} see...
+# https://jekyll.github.io/github-metadata/site.github/
   
 #baseurl: "/xinha" # the subpath of your site, e.g. /blog
 #url: "/" # the base hostname & protocol for your site, e.g. http://example.com

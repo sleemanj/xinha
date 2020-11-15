@@ -4,19 +4,34 @@
 
 {% include sidebar-news.html %}
 
-## November 2020 
+
+## What's Xinha?
+
+The one line explanation is that Xinha turns `<textarea>` form fields into HTML editors.
+
+We can do better than a one line explanation though, because you can **add Xinha to your site with one line**!
+
+```
+  <script type="text/javascript" src="//s3-us-west-1.amazonaws.com/xinha/xinha-latest/XinhaEasy.js"></script>
+```
+
+That single line make all the `<texarea>` on that page into Xinha areas.  Of course that's just the beginning of the story, there are lots of [configuration options available]({{ site.baseurl }}/Documentation/NewbieGuide.html) if you want to use them.
+
+## News
+
+### November 2020 
 
 Due to Webfaction (nee Python-Hosting) changes we can no longer host with them since they no longer to Trac and Subversion.  So, Github here we come.  This Github Pages site is a work-in-progress recreation of the Trac wiki pages.
 
 The [raw wiki pages as exported from Trac](trac/index.html) can be viewed here for reference until things are in better shape here.  Unfortuantely time is a bit short right now -- James.
 
-## November 2019 - Version 1.5.4 Release 
+### November 2019 - Version 1.5.4 Release 
 
 A quiet year on Xinha with it just ticking along as usual.  A few small updates were made since the big 1.5 Release in 2018 and upgrading to 1.5.4 is encouraged.
 
 1.5.4 fixes a small issue with highlighting some text and hitting the period key (.) with the `SmartReplace` plugin loaded, while it didn't break anything the UX wasn't quite right, now it's better.
 
-## March 2018 - Version 1.5 Release 
+### March 2018 - Version 1.5 Release 
 
 March 2018 sees a large update to Xinha released after years of faithful service.
 
@@ -28,16 +43,16 @@ Here are the main talking points, but of course there's a lot more besides this,
   * Some old plugins deprecated (`SpellChecker` (browsers these days do spellchecking themselves), `ExtendedFile`Manager (recommend to use `MootoolsFile`Manager instead), `ImageManager` (recommend to use `MootoolsFile`Manager instead), `UnFormat` (use `SuperClean`), `PersistentStorage` (abandonded)) 
   * [MootoolsFileManager](Documentation/Plugins/MootoolsFileManager.html) plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
   * [A much easier way for integrating Xinha](Documentation/NewbieGuide.html)
-  * [wiki:Documentation/NewbieGuide/InstallingXinha Ability to use Xinha from external servers (CDN)] and still maintaining the ability to run special local plugins (eg your own plugins locally and everything else external, or everything locally, or everything externally...
-  * Rewritten translations system reducing page loads and making the job easier for translators
-  * Reduction in network activity for plugin loading
+  * [Ability to use Xinha from external servers (CDN)](Documentation/NewbieGuide/InstallingXinha.html) and still maintaining the ability to run special local plugins (eg your own plugins locally and everything else external, or everything locally, or everything externally...
+  * Rewritten translations system reducing page loads and making the job easier for translators.
+  * Reduction in network activity for plugin loading.
   * Updates to ensure continued good support in all modern browsers including Firefox, Chrome, Safari, IE and Edge, and retaining functionality in older versions of browsers where possible.
   * Improved security
   * Rewritten keyboard handling and new events exposed for plugin authors
 
 You can [Download Xinha Here](DownloadXinha.html) and it is recommended to read through the New [Newbie Guide](Documentation/NewbieGuide.html) here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
 
-## Compatability 
+#### Compatability 
 
 As always, backwards compatibility is important, and breaking changes have been kept to a minimum.  
 
@@ -47,41 +62,26 @@ For users using the `CSS` plugin, this has been renamed to `CSSDropDowns` due to
 
 That should be about it.
 
-
-
-## Is Xinha under active development?  No updates for years and then a big one?  What's going on? 
+## Is Xinha under active development?
 
 Xinha is a tool made by the developers for their own use.  
 
 It is used by thousands of websites in production systems all over the world and has been for many many years.
 
-Mostly the current trunk ( checkout with "svn co http://svn.xinha.org/trunk/ trunk" ) is what is used in even production systems.
+Mostly the current [master branch]({{ site.github.repository_url }})  is what is used in even production systems.
 
 The short version is, that development happens when a developer has an itch they need to scratch, we don't "fix-what's-not-broke".
 
 There is no set schedule, and development of Xinha simply for the sake of developing Xinha doesn't happen much (we have bills to pay, if we don't have a direct need for something in one of our projects, it's not getting written).
 
-Xinha is open source, and we mean it, if you want to progress the development of Xinha in some way, please contact James Sleeman ( See [Xinha Developers](Developers.html) ) and he will arrange for SVN commit and Trac management access.
-
+Xinha is open source, and we mean it, if you want to progress the development of Xinha in some way, submit a pull request!
 
 ## How can I get Xinha? 
-See the DownloadsPage.
+
+See the [Downloads Page](DownloadsPage.html) or checout the [master branch]({{ site.github.repository_url }}), or even simply use it [directly from Amazon S3](Documentation/NewbieGuide.html) without needing to download diddly squat.
 
 ## Have you got a forum? 
 
 The forum was made read-only some years ago due to being too difficult to maintain, monitor and keep on top of the spammers.
 
-You can read and search it here: [http://www.xinha.org/punbb/index.php]
-
-## How can I contribute to Xinha? 
-
-Do you know Javascript, are you willing to learn?  Then checkout a working copy and get hacking that code!  Check the tickets for feature requests that you could implement, reported bugs that you could fix.  When you've got something worth contributing back to Xinha, just send it on along.  Regular and proven contributors will get SVN commit access!
-This is one of the main reasons Xinha split from htmlArea, the htmlArea development was not open to fair and equal participation by all developers.  Xinha is different, we are a group of developers trying to produce the best WYSIWYG HTML Editor available.  
-
-There ~~is~~ once was a mailing list available at [http://www.openplans.org/projects/xinha/lists/xinha-discussion], it's gone now.
-
-## I don't know Javascript! 
-That's ok, we do.  Some other ways you might contribute are to sponsor development of Xinha plugins, or donate some cash to one of the [Xinha developers](Developers.html).
-
-## What else is here? 
-For a complete list of local wiki pages, see TitleIndex.
+[You can read and search it here](http://www.xinha.org/punbb/index.php)
