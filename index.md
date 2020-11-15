@@ -46,18 +46,18 @@ Here are the main talking points, but of course there's a lot more besides this,
 
   * Lots of bugs fixed
   * Lots of improvements made
-  * Some new plugins added [WebKitResize](Documentation/Plugins/WebKitResize.html), [EncodeOutput](Documentation/Plugins/EncodeOutput.html), [ListOperations](Documentation/Plugins/ListOperations.html), [FancySelects](Documentation/Plugins/FancySelects.html), [PreserveSelection](Documentation/Plugins/PreserveSelection.html)
+  * Some new plugins added [WebKitResize]({{ site.baseurl }}/trac/Documentation/Plugins/WebKitResize.html), [EncodeOutput]({{ site.baseurl }}/trac/Documentation/Plugins/EncodeOutput.html), [ListOperations]({{ site.baseurl }}/trac/Documentation/Plugins/ListOperations.html), [FancySelects]({{ site.baseurl }}/trac/Documentation/Plugins/FancySelects.html), [PreserveSelection]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveSelection.html)
   * Some old plugins deprecated (`SpellChecker` (browsers these days do spellchecking themselves), `ExtendedFile`Manager (recommend to use `MootoolsFile`Manager instead), `ImageManager` (recommend to use `MootoolsFile`Manager instead), `UnFormat` (use `SuperClean`), `PersistentStorage` (abandonded)) 
-  * [MootoolsFileManager](Documentation/Plugins/MootoolsFileManager.html) plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
-  * [A much easier way for integrating Xinha](Documentation/NewbieGuide.html)
-  * [Ability to use Xinha from external servers (CDN)](Documentation/NewbieGuide/InstallingXinha.html) and still maintaining the ability to run special local plugins (eg your own plugins locally and everything else external, or everything locally, or everything externally...
+  * [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html) plugin updated to no longer require Flash, this plugin now uses HTML5 file uploads to do multiple file uploads with progress bars.
+  * [A much easier way for integrating Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html)
+  * [Ability to use Xinha from external servers (CDN)]({{ site.baseurl }}/trac/Documentation/NewbieGuide/InstallingXinha.html) and still maintaining the ability to run special local plugins (eg your own plugins locally and everything else external, or everything locally, or everything externally...
   * Rewritten translations system reducing page loads and making the job easier for translators.
   * Reduction in network activity for plugin loading.
   * Updates to ensure continued good support in all modern browsers including Firefox, Chrome, Safari, IE and Edge, and retaining functionality in older versions of browsers where possible.
   * Improved security
   * Rewritten keyboard handling and new events exposed for plugin authors
 
-You can [Download Xinha Here](DownloadXinha.html) and it is recommended to read through the New [Newbie Guide](Documentation/NewbieGuide.html) here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
+You can [Download Xinha Here]({{ site.baseurl }}/trac/DownloadXinha.html) and it is recommended to read through the New [Newbie Guide]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html) here as, while the old way will still work, the new way of loading Xinha offers you a lot more convenience!
 
 #### Version 1.5.x Compatability 
 
@@ -85,7 +85,7 @@ Xinha is open source, and we mean it, if you want to progress the development of
 
 ## How can I get Xinha? 
 
-See the [Downloads Page](DownloadsPage.html) or checout the [master branch]({{ site.github.repository_url }}), or even simply use it [directly from Amazon S3](Documentation/NewbieGuide.html) without needing to download diddly squat.
+See the [Downloads Page]({{ site.baseurl }}/trac/DownloadsPage.html) or checout the [master branch]({{ site.github.repository_url }}), or even simply use it [directly from Amazon S3]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html) without needing to download diddly squat.
 
 ## Have you got a forum? 
 

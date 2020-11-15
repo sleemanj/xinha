@@ -2,15 +2,13 @@
 
 # Release History
 
-Installation: see Documentation/NewbieGuide/InstallingXinha
-
 * TOC
 {:toc}
 
+Note that below the numbers in square brackets represent Subversion commit numbers, since we no longer use Subversion, these are no longer relevant.
 
 ## Unreleased Trunk 
-See [Commits](http://trac.xinha.org/log/?action=stop_on_copy&mode=stop_on_copy&stop_rev=1453&limit=200) since r1453 (the 1.5.4 tag)
-
+See [Commits]({{ site.github.repository_url }}/compare/1.5.4...master) since 1.5.4
 
 ----
 
