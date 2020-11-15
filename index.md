@@ -27,9 +27,7 @@ That single line make all the `<texarea>` on that page into Xinha areas.  Of cou
 
 ### November 2020 
 
-Due to Webfaction (nee Python-Hosting) changes we can no longer host with them since they no longer to Trac and Subversion.  So, Github here we come.  This Github Pages site is a work-in-progress recreation of the Trac wiki pages.
-
-The [raw wiki pages as exported from Trac](trac/index.html) can be viewed here for reference until things are in better shape here.  Unfortuantely time is a bit short right now -- James.
+Xinha has joined the cool modern hip kids over at Github, and the previous Trac wiki has been migrated (a little roughly, work in progress) to this Github Pages site.
 
 ### November 2019
 
