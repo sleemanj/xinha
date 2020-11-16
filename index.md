@@ -2,8 +2,7 @@
 
 ![Screenshot of a typical Xinha v1.5.x](https://s3-us-west-1.amazonaws.com/xinha/screenshots/xinha-1.jpg)
 
-{% include sidebar-news.html %}
-
+<img src="{{ site.baseurl }}/images/xinha-red-95.png" alt="Xinha Logo" style="float:right;margin:20px;"/>
 
 ## What's Xinha?
 {: .no_toc}
@@ -19,6 +18,8 @@ We can do better than a one line explanation though, because you can **add Xinha
 That single line make all the `<texarea>` on that page into Xinha areas.  Of course that's just the beginning of the story, there are lots of [configuration options available]({{ site.baseurl }}/trac/Documentation/NewbieGuide.html) if you want to use them.
 
 ---
+
+{% include sidebar-news.html %}
 
 * TOC
 {:toc}
