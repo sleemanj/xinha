@@ -2,10 +2,13 @@
 
 # Character Sets in Xinha
 
+If you use UTF-8 encoding across the board then you should not have problems.  Almost everybody uses UTF-8 these days, and as long as you do everywhere, you should be fine.
+
+## I want to learn more anyway...
+
 The use of Xinha with non-english languages, or special characters (such as the Euro symbol) means that you will very likely encounter character set problems, especially if you don't know jack about character sets.  This document first attempts to explain Character Sets and Encodings, then will give you some advice about the use of character sets with HTML, Javascript and in particular Xinha.
 
-
-[Skip to the advice.]({{ site.baseurl }}/trac/CharacterSets.html#stopwaffle)
+[Skip to the advice.]({{ site.baseurl }}/trac/Documentation/NewbieGuide/CharacterSets.html#stopwaffle)
 
 
 ## What is a Character Set?

@@ -23,31 +23,22 @@ Assuming that your page contains one or more `<textarea>` that you wish to turn 
 ```
 
 
-### Remember to Entize
+## Common Traps For Young Players
 
-A very common mistake people make is to put raw HTML into a textarea without encoding it.
+  1. Make sure you [Entize Your Html]({{ site.baseurl }}/trac/Documentation/NewbieGuide/Entize.html) in the textarea, eg in PHP `<textarea><?php htmlspecialchars($Html); ?></textarea>`
+  2. If you are not using UTF-8 everywhere, you probably should be, or you will want to read more about  [Character Sets in Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/CharacterSets.html)
 
-Please read [Entize Your Data]({{ site.baseurl }}/trac/Documentation/NewbieGuide/Entize.html) for more information.
+## Serve Xinha From Your Server If You Wish (or Half-and-Half)
 
-### Careful With Character Sets
-
-In the modern world you should be using UTF-8 for everything.  But, maybe you are not.  Maybe you don't know what this means.
-
-Please read [Character Sets in Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/CharacterSets.html) for more information.
-
-### Install Xinha Locally (or Half-and-Half)
-
-This NewbieGuide shows using Xinha from an Amazon S3 Bucket URL, but you can install Xinha locally and this is recommended for your own stability.
+This NewbieGuide shows using Xinha from an Amazon S3 Bucket URL, but you can install Xinha from your own server and this is recommended for your own stability.
 
 Please read [Installing Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/InstallingXinha.html) for more information.
 
-#### Cache All The Things
+### Cache All The Things
 
-Xinha's files are not going to change often, so you should ensure your server tells your browser to cache things if you are running Xinha locally in full or part.
+When you serve Xinha from your own server you should think about caching.  Xinha's files are not going to change often, so you should ensure your server tells your browser to cache things if you are running Xinha locally in full or part.
 
 See [Caching Xinha]({{ site.baseurl }}/trac/Documentation/NewbieGuide/Caching.html) for an example.
-
-
 
 ## Basic Options
 ### Convert Only Certain `<textarea>`
