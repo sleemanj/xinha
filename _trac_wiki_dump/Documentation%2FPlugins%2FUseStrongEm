@@ -2,10 +2,10 @@
 
 [wiki:Plugins Back to Plugins]
 
- Improves handling of the bold and italic buttons to insert more consistently <strong> and <em> tags, while also preserving existing <i> and <b>.
+ Improves handling of the bold and italic buttons to insert more consistently `<strong>` and `<em>` tags, while also preserving existing `<i>` and `<b>`.
 
 
-  == Configuration ==
+== Configuration ==
 
 **See the [wiki:NewbieGuide#ProvideSomeConfiguration NewbieGuide] for how to set configuration values in general, the below configuration options are available for this plugin.**
 

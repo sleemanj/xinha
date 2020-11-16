@@ -8,17 +8,17 @@ Xinha's toolbar, the buttons and drop-downs, can be configured.
 
 When using `XinhaEasy.js` there are a few simple pre-defined toolbars you can use.
 
-  xinha_toolbar: 'minimal'::
-    Just the most common options, without font selections.
+  xinha_toolbar: 'minimal'
+  :    Just the most common options, without font selections.
 
-  xinha_toolbar: 'minimal+fonts'::
-    Minimal options, plus font selections.
+  xinha_toolbar: 'minimal+fonts'
+  :    Minimal options, plus font selections.
 
-  xinha_toolbar: 'supermini'::
-    A really minimal toolbar, only bold, italic, underline, strikethrough and superscript.  Suitable for really basic comment editing.
+  xinha_toolbar: 'supermini'
+  :    A really minimal toolbar, only bold, italic, underline, strikethrough and superscript.  Suitable for really basic comment editing.
 
-  xinha_toolbar: 'default'::
-    The default toolbar.
+  xinha_toolbar: 'default'
+  :    The default toolbar.
 
 ## Just Hide Some !Buttons/Drop Downs
 
@@ -60,17 +60,17 @@ as you can see it is made up of a 2 dimensional array.  Each subarray can be reg
 
 Each "thing" is either:
 
-  'separator'::
-    A separator colon or other type of indication will be inserted in the toolbar.
+  'separator'
+  :    A separator colon or other type of indication will be inserted in the toolbar.
 
-  'linebreak'::
-    This is where a linebreak may occur (also see flowToolbars [Config Option]({{ site.baseurl }}/trac/ConfigurationOptions.html)).
+  'linebreak'
+  :    This is where a linebreak may occur (also see flowToolbars [Config Option]({{ site.baseurl }}/trac/ConfigurationOptions.html)).
 
-  'buttonname'::
-    The name of a button to display in this location.
+  'buttonname'
+  :    The name of a button to display in this location.
 
-  'dropdownname'::
-    The name of a drop down menu to display in this location.
+  'dropdownname'
+  :    The name of a drop down menu to display in this location.
 
 Note that plugins may also insert themselves into toolbars after you have configured them, presently you should consult the source code of the plugin to determine this (or just try it).
 

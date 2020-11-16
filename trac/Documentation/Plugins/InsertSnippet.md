@@ -12,8 +12,8 @@ Provide functionality to insert snippets of HTML (or any other text, such as var
 **See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
-  xinha_config.InsertSnippet.snippets = '/url/path/to/snippets.js';::
-    The URL path to a javascript file which defines a "snippets" array.
+  xinha_config.InsertSnippet.snippets = '/url/path/to/snippets.js';
+  :    The URL path to a javascript file which defines a "snippets" array.
 
 The snippets file, which is not "JSON" but an eval'd javascript script, must define the array "`snippets`" in which each element is an object with the properties 'id' and 'HTML'.
 

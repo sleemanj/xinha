@@ -19,4 +19,5 @@ echo "$INPUT" | sed -r 's/====\s+([^=]+)\s+====/#### \1/' | # H4
 						    sed -r 's/\[\[BR\]\]/\\\\/'                                   |  # Linebreak
 						    sed -r 's/\[\[\/browser\/trunk\/([^|]+)\|([a-zA-Z0-9_ -]+)\]\]/[\2]({{ site.github.repository_url }}\/tree\/master\/\1)/g'                                         | # Links to repository
 						    sed -r 's/\[(https?:\/\/[^ ]+)(\s+([^]]+))?\]/[\3](\1)/g'     |  # [http links
-						    sed -r 's/\[\[Image\(https?:\/\/([^)]+)\)\]\]/![\1](https:\/\/\1)/g'                      # Images
+						    sed -r 's/\[\[Image\(https?:\/\/([^)]+)\)\]\]/![\1](https:\/\/\1)/g' |                     # Images
+						    sed -rz 's/(^|\n)([^\n]+)::\s*(\n|$)/\1\2\n  :/g' # Definition Lists

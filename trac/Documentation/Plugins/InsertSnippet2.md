@@ -12,8 +12,8 @@ Provide functionality to insert snippets of HTML (or any other text, such as var
 **See the [NewbieGuide]({{ site.baseurl }}/trac/NewbieGuide.html#ProvideSomeConfiguration) for how to set configuration values in general, the below configuration options are available for this plugin.**
 
 
-  xinha_config.InsertSnippet2.snippets = '/url/path/to/snippets.xml';::
-    The URL path to an XML file which defines snippets.
+  xinha_config.InsertSnippet2.snippets = '/url/path/to/snippets.xml';
+  :    The URL path to an XML file which defines snippets.
 
 
 ### Example snippets.xml file
@@ -55,22 +55,22 @@ Provide functionality to insert snippets of HTML (or any other text, such as var
 
 Obviously you can generate this file manually, or dynamically by whatever processes you desire, just specify the path to it in the configuration.
 
-  categories::
-    An optional list of the categories to organise the snippets.
+  categories
+  :    An optional list of the categories to organise the snippets.
 
-  <c n="...">::
-    The name of the category.
+  <c n="...">
+  :    The name of the category.
 
-  snippets::
-    A list of each snippet (`<s>...</s>`), note that the contents of the snippet is not XML so we use CDATA or entisation to insert into the XML.
+  snippets
+  :    A list of each snippet (`<s>...</s>`), note that the contents of the snippet is not XML so we use CDATA or entisation to insert into the XML.
     
-  <s n="...">::
-      The name of the snippet to display in the dialog.
+  <s n="...">
+  :      The name of the snippet to display in the dialog.
 
-  <s c="...">::
-      The category to place this snippet into.
+  <s c="...">
+  :      The category to place this snippet into.
 
-  <s v="...">::
-      If supplied, this will be inserted instead of the snippet itself.  In other words the snippet becomes an "example of what this variable might look like" for the user, but the variable reference itself (v) is inserted.
+  <s v="...">
+  :      If supplied, this will be inserted instead of the snippet itself.  In other words the snippet becomes an "example of what this variable might look like" for the user, but the variable reference itself (v) is inserted.
 
 Don't ask me why the XML has one letter element and attribute names, historical? -- gogo

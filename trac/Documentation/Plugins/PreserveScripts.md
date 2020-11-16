@@ -12,9 +12,9 @@ Replace blocks of of PHP or JavaScript with icons in the editor, this way making
 
 Configuration is not typically required, however the following options exist if you wish...
 
-  `xinha_config.PreserveScripts.preservePHP = (bool);`::
-    Default true
+  `xinha_config.PreserveScripts.preservePHP = (bool);`
+  :    Default true
 
-  `xinha_config.PreserveScripts.preserveJS = (bool);`::
-    Default true
+  `xinha_config.PreserveScripts.preserveJS = (bool);`
+  :    Default true
 

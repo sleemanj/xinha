@@ -16,8 +16,8 @@ Configuration is not typically required for this plugin.
 
 However a couple of options do exist if you wish...
 
-  `xinha_config.PasteText.showParagraphOption = (boolean);`::
-    Give the ability to paste text as a new paragraph, default true.
+  `xinha_config.PasteText.showParagraphOption = (boolean);`
+  :    Give the ability to paste text as a new paragraph, default true.
 
-  `xinha_config.PasteText.newParagraphDefault = (boolean);`::
-    Select the "as new paragraph" option by default, default true.
+  `xinha_config.PasteText.newParagraphDefault = (boolean);`
+  :    Select the "as new paragraph" option by default, default true.

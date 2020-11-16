@@ -10,50 +10,50 @@ If you are interested in writing a plugin, try the [PluginTutorial]({{ site.base
 
 ## The Most Common Plugins
 
-  [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html)::
-    !Insert/Upload/Delete Images and (Links To) Files (requires PHP)
+  [MootoolsFileManager]({{ site.baseurl }}/trac/Documentation/Plugins/MootoolsFileManager.html)
+  :    !Insert/Upload/Delete Images and (Links To) Files (requires PHP)
 
-  [Linker]({{ site.baseurl }}/trac/Documentation/Plugins/Linker.html)::
-    Insert and Edit Links To Documents (requires PHP)
+  [Linker]({{ site.baseurl }}/trac/Documentation/Plugins/Linker.html)
+  :    Insert and Edit Links To Documents (requires PHP)
 
-  [Stylist]({{ site.baseurl }}/trac/Documentation/Plugins/Stylist.html)::
-    Select CSS classes in a context-sensitive panel.
+  [Stylist]({{ site.baseurl }}/trac/Documentation/Plugins/Stylist.html)
+  :    Select CSS classes in a context-sensitive panel.
 
-  [ListOperations]({{ site.baseurl }}/trac/Documentation/Plugins/ListOperations.html)::
-    Adds tab-to-indent and shift-tab-to-outdent function when editing lists.
+  [ListOperations]({{ site.baseurl }}/trac/Documentation/Plugins/ListOperations.html)
+  :    Adds tab-to-indent and shift-tab-to-outdent function when editing lists.
 
-  [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html)::
-    Add functions for inserting and editing tables.
+  [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html)
+  :    Add functions for inserting and editing tables.
 
-  [ContextMenu]({{ site.baseurl }}/trac/Documentation/Plugins/ContextMenu.html)::
-    Add a right-click context menu which allows convenient access to other plugins (esp [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html) to edit tables).
+  [ContextMenu]({{ site.baseurl }}/trac/Documentation/Plugins/ContextMenu.html)
+  :    Add a right-click context menu which allows convenient access to other plugins (esp [TableOperations]({{ site.baseurl }}/trac/Documentation/Plugins/TableOperations.html) to edit tables).
 
-  [CharacterMap]({{ site.baseurl }}/trac/Documentation/Plugins/CharacterMap.html)::
-    Allow the user to insert special characters from a character map.
+  [CharacterMap]({{ site.baseurl }}/trac/Documentation/Plugins/CharacterMap.html)
+  :    Allow the user to insert special characters from a character map.
 
-  [SuperClean]({{ site.baseurl }}/trac/Documentation/Plugins/SuperClean.html)::
-    Provide various "html cleaning" functions.
+  [SuperClean]({{ site.baseurl }}/trac/Documentation/Plugins/SuperClean.html)
+  :    Provide various "html cleaning" functions.
 
-  [SmartReplace]({{ site.baseurl }}/trac/Documentation/Plugins/SmartReplace.html)::
-    Replace non-directional quotes ("test") with locale-sensitive directional quotes (“test”) amongst others.
+  [SmartReplace]({{ site.baseurl }}/trac/Documentation/Plugins/SmartReplace.html)
+  :    Replace non-directional quotes ("test") with locale-sensitive directional quotes (“test”) amongst others.
 
-  [PreserveScripts]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveScripts.html)::
-    Preserve Javascript and PHP in the editable content.
+  [PreserveScripts]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveScripts.html)
+  :    Preserve Javascript and PHP in the editable content.
 
-  [PreserveSelection]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveSelection.html)::
-    Preserve the selection between Source and WYSIWYG views (select text in WYSIWYG mode, switch to source, same text is selected)
+  [PreserveSelection]({{ site.baseurl }}/trac/Documentation/Plugins/PreserveSelection.html)
+  :    Preserve the selection between Source and WYSIWYG views (select text in WYSIWYG mode, switch to source, same text is selected)
 
-  [FancySelects]({{ site.baseurl }}/trac/Documentation/Plugins/FancySelects.html)::
-    Make the font etc. drop-downs "fancy" using jQuery.
+  [FancySelects]({{ site.baseurl }}/trac/Documentation/Plugins/FancySelects.html)
+  :    Make the font etc. drop-downs "fancy" using jQuery.
 
-  [WebKitResize]({{ site.baseurl }}/trac/Documentation/Plugins/WebKitResize.html)::
-    Improve resizing of Images in `WebKit` (Chrome, Safari, Edge) browsers, and Tables in `WebKit` and Mozilla.
+  [WebKitResize]({{ site.baseurl }}/trac/Documentation/Plugins/WebKitResize.html)
+  :    Improve resizing of Images in `WebKit` (Chrome, Safari, Edge) browsers, and Tables in `WebKit` and Mozilla.
 
-  [QuickSnippet]({{ site.baseurl }}/trac/Documentation/Plugins/QuickSnippet.html)::
-    Easily provide context-sensitive snippets of HTML that the user can insert from a drop-down list.
+  [QuickSnippet]({{ site.baseurl }}/trac/Documentation/Plugins/QuickSnippet.html)
+  :    Easily provide context-sensitive snippets of HTML that the user can insert from a drop-down list.
 
-  [UseStrongEm]({{ site.baseurl }}/trac/Documentation/Plugins/UseStrongEm.html)::
-    Improves handling for the italic and bold toolbar buttons.
+  [UseStrongEm]({{ site.baseurl }}/trac/Documentation/Plugins/UseStrongEm.html)
+  :    Improves handling for the italic and bold toolbar buttons.
 
 ## All Currently Supported Plugins
 
