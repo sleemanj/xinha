@@ -4,7 +4,7 @@
 
 Provides a button to allow setting the ID and/or name attribute of the selected/focussed element.
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

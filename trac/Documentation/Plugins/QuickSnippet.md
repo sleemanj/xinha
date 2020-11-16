@@ -2,7 +2,7 @@
 
 # Plugin: `QuickSnippet` 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
  
   Provides a drop-down menu which you can populate with snippets that the user can select from to insert into the document.

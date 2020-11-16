@@ -2,7 +2,7 @@
 
 # Form Operations
 
-[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ** This plugin, while not deprecated, is not especially functional due to browser selection issues (problems when trying to select form fields in the browser).  Try it, but don't rely on it. **
 

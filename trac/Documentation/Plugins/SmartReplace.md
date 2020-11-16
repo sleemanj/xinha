@@ -5,7 +5,7 @@
 Replace standard single and double quotes with directional ones automatically.  Also replace hyphens with mdashes.
 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

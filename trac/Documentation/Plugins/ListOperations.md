@@ -4,7 +4,7 @@
 
 Provides some additional features for working with lists in Xinha.
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

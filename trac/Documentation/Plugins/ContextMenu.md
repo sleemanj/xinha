@@ -2,7 +2,7 @@
 
 # Plugin: ContextMenu
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The ContextMenu plugin, developed by [Mihai Bazon](http://dynarch.com/) with sponsorshop by the American Bible Society, provides a right-click context menu for the editor.
 

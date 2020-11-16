@@ -45,7 +45,7 @@ Installing involves extracting the archive to 'plugins' subdirectory of Xinha
 and selecting the plugin in appropriate xinha_plugins list.
 
 Plugin may be configured via `xinha_config.ExtendedFileManager` object.
-You can find the [available options here]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html).
+You can find the [available options here]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html).
 
 ```
 #!text/x-javascript

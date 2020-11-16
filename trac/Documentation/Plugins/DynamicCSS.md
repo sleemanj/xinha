@@ -2,7 +2,7 @@
 
 # Plugin: DynamicCSS
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The DynamicCSS plugin is used to place a drop-down in the toolbar to allow applying CSS classes to the selection.  The drop-down gives access to CSS styles that Xinha has access to.  So, for example, if you use the code below, 
 

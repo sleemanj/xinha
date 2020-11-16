@@ -2,7 +2,7 @@
 
 # Plugin: WebKitResize 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
  
   The `WebKit` based (or similar) browsers, including Chrome (and Edge)

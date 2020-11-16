@@ -2,7 +2,7 @@
 
 # Plugin: DefinitionList 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 Provides support for inserting and editing Definition Lists.
 

@@ -2,7 +2,7 @@
 
 # Plugin: FindReplace
 
-[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The Find & Replace plugin allows the user to use find and replace-functions in the WYSIWYG-view.
 

@@ -4,7 +4,7 @@
 
 Replace blocks of of PHP or JavaScript with icons in the editor, this way making it possible to edit sourcecode containing PHP, and preventing Javascript from being accidentally deleted because it's normally invisible
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

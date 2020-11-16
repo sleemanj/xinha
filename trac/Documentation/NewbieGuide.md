@@ -144,7 +144,7 @@ Here we have specified this is going to be an extremely minimal editor indeed!
 
 ### Provide Some Configuration
 
-[Xinha Core]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html) and it's [Plugins]({{ site.baseurl }}/trac/Plugins.html) have lots of scope to configure them as you require, this is how you can set configuration settings in general.
+[Xinha Core]({{ site.baseurl }}/trac/Documentation/NewbieGuide/ConfigurationOptions.html) and it's [Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html) have lots of scope to configure them as you require, this is how you can set configuration settings in general.
 
 
 

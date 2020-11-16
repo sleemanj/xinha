@@ -2,7 +2,7 @@
 
 # Plugin: GetHtml 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 `GetHtml` is a replacement for the getHTML() function in htmlarea.js. It offers several improvements over the original, including:
 

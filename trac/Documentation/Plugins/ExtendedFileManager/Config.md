@@ -3,25 +3,25 @@
 # ExtendedFileManager Configuration
 These are the most important config variables for the `ExtendedFileManager`.\\
 For a complete overview look into the config.inc.php in the plugin directory.\\
-Read [here]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager.html) how to use these values in your Xinha configuration.
+Read [here]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager.html) how to use these values in your Xinha configuration.
 
- * [images_dir/files_dir]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#images_dirfiles_dir)
- * [images_url/files_url]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#images_urlfiles_url)
- * [view_type]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#images_dirfiles_dir)
- * [allow_new_dir]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#allow_new_dir)
- * [allow_edit_image]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#allow_edit_image)
- * [allow_rename]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#allow_rename)
- * [allow_cut_copy_paste]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#allow_cut_copy_paste)
- * [use_color_pickers]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#use_color_pickers)
- * [images_enable_alt]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#images_enable_alt)
- * [images_enable_title]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#images_enable_title)
- * [images_enable_align]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#images_enable_align)
- * [images_enable_styling]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#images_enable_styling)
- * [link_enable_target]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#link_enable_target)
- * [allow_upload]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#allow_upload)
- * [max_filesize_kb_image/max_filesize_kb_link]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#max_filesize_kb_imagemax_filesize_kb_link)
- * [max_foldersize_mb]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#max_foldersize_mb)
- * [allowed_image_extensions/allowed_link_extensions]({{ site.baseurl }}/trac/Plugins/ExtendedFileManager/Config.html#allowed_image_extensionsallowed_link_extensions)
+ * [images_dir/files_dir]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#images_dirfiles_dir)
+ * [images_url/files_url]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#images_urlfiles_url)
+ * [view_type]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#images_dirfiles_dir)
+ * [allow_new_dir]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#allow_new_dir)
+ * [allow_edit_image]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#allow_edit_image)
+ * [allow_rename]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#allow_rename)
+ * [allow_cut_copy_paste]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#allow_cut_copy_paste)
+ * [use_color_pickers]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#use_color_pickers)
+ * [images_enable_alt]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#images_enable_alt)
+ * [images_enable_title]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#images_enable_title)
+ * [images_enable_align]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#images_enable_align)
+ * [images_enable_styling]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#images_enable_styling)
+ * [link_enable_target]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#link_enable_target)
+ * [allow_upload]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#allow_upload)
+ * [max_filesize_kb_image/max_filesize_kb_link]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#max_filesize_kb_imagemax_filesize_kb_link)
+ * [max_foldersize_mb]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#max_foldersize_mb)
+ * [allowed_image_extensions/allowed_link_extensions]({{ site.baseurl }}/trac/Documentation/Plugins/ExtendedFileManager/Config.html#allowed_image_extensionsallowed_link_extensions)
 
 ### images_dir/files_dir
 

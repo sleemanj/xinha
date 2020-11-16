@@ -7,6 +7,7 @@ echo "$INPUT" | sed -r 's/====\s+([^=]+)\s+====/#### \1/' | # H4
 						    sed -r 's/===\s+([^=]+)\s+===/### \1/'    |
 						    sed -r 's/==\s+([^=]+)\s+==/## \1/'       | 
 						    sed -r 's/=\s+([^=]+)\s+=/# \1/'          | # H1
+						    sed -r 's/\[wiki:Plugins/[wiki:Documentation\/Plugins/g' | # Incorrect wiki link
 						    sed -r 's/\[wiki:([^ #]+)(#[-.A-Za-z0-9_]+)? ([-\/.A-Za-z0-9_ :]+)\]/[\3]({{ site.baseurl }}\/trac\/\1.html\2)/g' |  # Wiki links
 						    sed -r 's/\[wiki:([^ #]+)\/([-.A-Za-z0-9_:]+)(#[-.A-Za-z0-9_]+)?\]/[\2]({{ site.baseurl }}\/trac\/\1\/\2.html\3)/g' |  # Wiki links without text
 						    sed -r 's/([a-zA-Z0-9._-]+\.)?!([A-Z][a-z0-9]+([A-Z][a-z0-9]+)+(\.[a-z]+)?)/`\1\2`/g'             |  # !CamelCase

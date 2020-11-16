@@ -2,7 +2,7 @@
 
 # Plugin: TableOperations
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The TableOperations plugin inserts context-sensitive buttons into the toolbar to enable working with tables, for example inserting rows, columns, merging, splitting etc.
 

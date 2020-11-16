@@ -2,7 +2,7 @@
 
 # Plugin: EditTag
 
-[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The EditTag plugin launches a popup that allows the user to edit the HTML for just their selected editor content.
 

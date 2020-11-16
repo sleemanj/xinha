@@ -2,7 +2,7 @@
 
 # Plugin: CSSDropDowns
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 Inserts one or more drop down menus into the Xinha toolbar allowing to select CSS classes which will be applied to selected text wrapped in a span.
 

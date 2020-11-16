@@ -4,7 +4,7 @@
 
 The purpose of this plugin is to wrap the content being edited in Xinha with certain elements of given ID and/or class when in the WYSIWYG view.
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

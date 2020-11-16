@@ -2,7 +2,7 @@
 
 # Plugin: InsertMarquee
 
-[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The InsertMarquee plugin allows the user to add and edit the marquee tags.
 

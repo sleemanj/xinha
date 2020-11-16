@@ -2,7 +2,7 @@
 
 # Plugin: InsertSmiley
 
-[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The InsertSmiley plugin allows the user to add Smileys by dialog.
 

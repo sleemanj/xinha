@@ -2,7 +2,7 @@
 
 # Plugin: SpellChecker
 
-[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The SpellChecker plugin included with Xinha was originally developed for htmlArea by Mihai Bazon with sponsorship by the [American Bible Society](http://www.americanbible.org/) and released under the [htmlArea Licence]({{ site.baseurl }}/trac/XinhaLicence.html).
 

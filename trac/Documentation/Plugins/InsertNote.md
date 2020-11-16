@@ -10,7 +10,7 @@ Allows for the insertion of footnotes/endnotes. Supports:
   * Saves previously referenced notes for easy reuse
   * Cleanup of unreferenced notes (or references to non-existent notes)
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

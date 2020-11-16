@@ -4,7 +4,7 @@
 
 Provide a warning when navigating away from a Xinha which has "unsaved changes".
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

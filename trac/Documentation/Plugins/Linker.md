@@ -2,7 +2,7 @@
 
 # Plugin: Linker
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The Linker plugin provides an enhanced link dialog for inserting/modifing links to files, mailto: links to email addresses, or links to anchors in the current page. The plugin when registered with an editor replaces the editors default createlink button.
 

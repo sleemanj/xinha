@@ -4,7 +4,7 @@
 
 Adds a button to the toolbar to allow paste-as-text.
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 
 

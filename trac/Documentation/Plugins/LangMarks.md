@@ -2,7 +2,7 @@
 
 # Plugin: LangMarks
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The LangMarks plugin inserts a select into the toolbar to enable working with the lang attribute.
 

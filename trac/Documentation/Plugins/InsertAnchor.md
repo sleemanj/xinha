@@ -2,7 +2,7 @@
 
 # Plugin: InsertAnchor
 
-[Back To Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back To Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The Insert Anchor plugin version "2.0" allows the user to add and edit Anchors.
 

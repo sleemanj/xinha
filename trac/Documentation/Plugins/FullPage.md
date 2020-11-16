@@ -6,7 +6,7 @@
 
 This plugin allows editing an entire HTML page, that is the content in your textarea for editing is the **entire** well-formed html page ( `<html><head>...</head><body>...</body></html>` ).
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

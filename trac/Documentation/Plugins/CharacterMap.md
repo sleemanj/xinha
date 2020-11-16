@@ -2,7 +2,7 @@
 
 # Plugin: CharacterMap
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The CharacterMap plugin, developed by [Holger Hees & Bernhard Pfeifer](http://www.systemconcept.de/) implants a button onto the toolbar which will open a popup window allowing the insertion of various special characters.
 

@@ -2,7 +2,7 @@
 
 # Plugin: FancySelects 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 This plugin makes the drop-downs (font, size etc) "Fancy" by using the "select2" jQuery script (jQuery will be loaded automatically when using this plugin).
 

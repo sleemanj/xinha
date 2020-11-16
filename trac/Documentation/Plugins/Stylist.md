@@ -2,7 +2,7 @@
 
 # Stylist
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The Xinha Stylist plugin provides a "Panel" containing various developer supplied context sensitive CSS styles.  Using this plugin the user is able to apply (and remove) one or more CSS classes to the (possibly implicit) selection.
 

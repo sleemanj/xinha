@@ -4,7 +4,7 @@
 
 This plugin allows inserting and editing horizontal rules with various options (colour, width etc...)
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

@@ -6,7 +6,7 @@ Put the content of Xinha into the textarea when blurring (losing focus).
 
 ** NOTE: This does not mean the contents are "saved" to the server, just put into the textarea, what you do with the textarea is your business! **
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

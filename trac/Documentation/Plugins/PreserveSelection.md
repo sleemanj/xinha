@@ -4,7 +4,7 @@
 
 This plugin preserves the selected text when switching between wysiwyg and source modes, eg, select hello world in the wysiwyg mode, and switch to source mode and hello world will be selected there also.
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

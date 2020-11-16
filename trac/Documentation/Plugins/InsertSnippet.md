@@ -5,7 +5,7 @@
 Provide functionality to insert snippets of HTML (or any other text, such as variable substitutions).
 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

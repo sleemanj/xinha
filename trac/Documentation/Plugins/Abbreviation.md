@@ -2,7 +2,7 @@
 
 # Plugin: Abbreviation
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The Abbreviation plugin inserts a button into the toolbar to enable working with the <abbr> tag.
 

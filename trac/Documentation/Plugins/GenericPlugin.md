@@ -4,7 +4,7 @@
 
 This plugin is just a boiler-plate for you to copy and make your own new plugin.
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

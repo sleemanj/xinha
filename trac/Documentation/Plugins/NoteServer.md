@@ -2,7 +2,7 @@
 
 # Plugin: NoteServer
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 The NoteServer plugin is a collection of JavaScript routines that facilitate accessing the GUIDO NoteServer.
 

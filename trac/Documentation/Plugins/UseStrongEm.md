@@ -2,7 +2,7 @@
 
 # Plugin: `UseStrongEm` 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
  Improves handling of the bold and italic buttons to insert more consistently `<strong>` and `<em>` tags, while also preserving existing `<i>` and `<b>`.
 

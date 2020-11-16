@@ -15,7 +15,7 @@ The code inserted when using the button provided is the following snippet...
 
 
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 ## Configuration
 

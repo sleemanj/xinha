@@ -2,7 +2,7 @@
 
 # Plugin: QuickTag
 
-[Back to Plugins]({{ site.baseurl }}/trac/Plugins.html)
+[Back to Plugins]({{ site.baseurl }}/trac/Documentation/Plugins.html)
 
 Highlight text you want to put a tag around, and a dropdown appears with tags, when you choose a tag, nearly every possible attribute for that tag appears as an additional option, just like in a typical IDE.
 
