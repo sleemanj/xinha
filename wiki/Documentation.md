@@ -1,1 +1,1 @@
-<meta http-equiv="refresh" content="0; url=../trac/Documentation.html" />
+<meta http-equiv="refresh" content="0; url={{ site.baseurl }}/trac/Documentation.html" />

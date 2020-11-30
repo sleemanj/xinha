@@ -1,1 +1,1 @@
-<meta http-equiv="refresh" content="0; url=../trac/Documentation/Plugins/CSSPicker.html" />
+<meta http-equiv="refresh" content="0; url={{ site.baseurl }}/trac/Documentation/Plugins/CSSPicker.html" />

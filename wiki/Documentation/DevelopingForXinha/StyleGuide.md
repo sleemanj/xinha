@@ -1,1 +1,1 @@
-<meta http-equiv="refresh" content="0; url=../trac/Documentation/DevelopingForXinha/StyleGuide.html" />
+<meta http-equiv="refresh" content="0; url={{ site.baseurl }}/trac/Documentation/DevelopingForXinha/StyleGuide.html" />
