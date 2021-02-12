@@ -3356,7 +3356,7 @@ Xinha.prototype.sizeEditor = function(width, height, includingBars, includingPan
      
   this.notifyOf('resize', {width:this._htmlArea.offsetWidth, height:this._htmlArea.offsetHeight});
   this.firePluginEvent('onResize',this._htmlArea.offsetWidth, this._htmlArea.offsetWidth);
-  this._risizing = false;
+  var self = this; window.setTimeout(function(){self._risizing = false;},25);
 };
 /** FIXME: Never used, what is this for? 
 * @param {string} side 
