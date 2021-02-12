@@ -59,6 +59,17 @@ ContextMenu.prototype.getContextMenu = function(target) {
 			menu.push([ Xinha._lc("Paste", "ContextMenu"), function() { editor.execCommand("paste"); }, null, config.btnList["paste"][1] ]);
 		}
 	}
+	
+	if(!menu.length)
+  {
+    if(selection)
+    {
+      menu.push([ Xinha._lc("Cut", "ContextMenu"), function() { alert(Xinha._lc("Please press CTRL-X (Command-X Mac) to cut")); }, null,  config.btnList["paste"][1] ]);
+      menu.push([ Xinha._lc("Copy", "ContextMenu"), function() { alert(Xinha._lc("Please press CTRL-C (Command-C Mac) to copy")); }, null,  config.btnList["paste"][1] ]);
+    }
+    menu.push([ Xinha._lc("Paste", "ContextMenu"), function() { alert(Xinha._lc("Please press CTRL-V (Command-V Mac) to paste")); }, null,  config.btnList["paste"][1] ]);
+  }
+  
 	var currentTarget = target;
 	var elmenus = [];
 
