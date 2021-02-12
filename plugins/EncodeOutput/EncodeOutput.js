@@ -99,7 +99,9 @@ function EncodeOutput(editor)
 
 EncodeOutput.prototype.rot13 = function (s)
 {
-  return (s ? s : this).split('').map(function(_)
+  if(typeof s === 'undefined' || s === null) return '';
+  
+  return s.toString().split('').map(function(_)
   {
       if (!_.match(/[A-Za-z]/)) return _;
       c = Math.floor(_.charCodeAt(0) / 97);
