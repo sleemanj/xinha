@@ -26,7 +26,11 @@ That single line make all the `<texarea>` on that page into Xinha areas.  Of cou
 
 ## News
 
-### Version 1.5.5 Release, February 2021
+### February 2021
+
+A few updates brought in from the last year or so of in the field usage.
+
+#### Version 1.5.5 Release
 
 Just a small release which fixes a handful of issues.  No new features.  No security issues.
 
