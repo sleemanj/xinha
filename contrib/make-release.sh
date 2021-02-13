@@ -8,9 +8,9 @@ then
 fi
 
 
-if ! [ -d .svn ]
+if ! [ -d .git ]
 then 
-  echo "This script must be run inside a subversion working copy." >&2
+  echo "This script must be run inside a git working copy." >&2
   echo                                                             >&2
   exit 1
 fi
@@ -22,8 +22,8 @@ then
   exit 1
 fi
 
-# Run this with bash from the root of your SVN working copy checkout of the trunk
-# it will dump int /tmp the archived release files
+# Run this with bash from the root of your git working copy checkout of the trunk
+# it will dump in /tmp the archived release files
 # eg bash contrib/make-release.sh
 
 VER="$1"
@@ -42,8 +42,9 @@ mv XinhaCore2.js XinhaCore.js
 
 
 mkdir /tmp/xinha-$VER
-svn export $(pwd) /tmp/xinha-$VER/xinha
+cp -rp $(pwd) /tmp/xinha-$VER/xinha
 cd /tmp/xinha-$VER/xinha
+rm -rf .git*
 echo "xinha-$VER" >VERSION.TXT
 
 # Create the merged language files
@@ -97,9 +98,10 @@ This directory contains plugins for Xinha (www.xinha.org) which must be run on
 the local web server rather than from an external server/content delivery
 network.
 
-Consult the NewbieGuide ( http://trac.xinha.org/wiki/Documentation/NewbieGuide ) 
-for complete details on Xinha configuration and see the examples in the directory
-here for, err, examples.
+Consult the NewbieGuide 
+  https://trac.xinha.org/trac/Documentation/NewbieGuide.html
+for complete details on Xinha configuration and see the examples in the 
+directory here for, err, examples.
 
 Especially take note of examples/UsingPhpPlugins.php
 
