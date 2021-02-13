@@ -26,6 +26,10 @@ That single line make all the `<texarea>` on that page into Xinha areas.  Of cou
 
 ## News
 
+### Version 1.5.5 Release, February 2021
+
+Just a small release which fixes a handful of issues.  No new features.  No security issues.
+
 ### November 2020 
 
 Xinha has joined the cool modern hip kids over at Github, and the previous Trac wiki has been migrated (a little roughly, work in progress) to this Github Pages site.

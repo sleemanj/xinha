@@ -8,9 +8,26 @@
 Note that below the numbers in square brackets represent Subversion commit numbers, since we no longer use Subversion, these are no longer relevant.
 
 ## Unreleased Trunk 
-See [Commits]({{ site.github.repository_url }}/compare/1.5.4...master) since 1.5.4
+See [Commits]({{ site.github.repository_url }}/compare/1.5.5...master) since 1.5.5
 
 ----
+
+## Xinha 1.5.5
+
+### Bugs Fixed
+
+  * #1733 Fix a couple of PHP 7.4 compatability issues.
+  * `EncodeOutput` plugin did not correctly handle falsey values (0, empty string etc)
+  * Fix a couple of resizing issue I have encountered in recent Chrome beta builds
+  * Add cut/copy/paste to the Context Menu when a selection is present even if they can't be used (because of security), instead they will display an alert to tell the user how to use CTRL-C etc instead.
+
+### New Plugins
+
+  * None, have not come across anything it needs!
+
+### New Features
+
+  * None, have not come across anything it needs!
 
 ## Xinha 1.5.4
 
