@@ -123,6 +123,15 @@
 
   </script>
   
+  <style type="text/css">
+    /*
+       A recent Chrome Beta build has some sort of issue with auto scrollbar
+         either lock it to scroll or hidden to avoid an annoying "jerk"
+         in MootoolsFileManager (the image picker).  I'm setting it to scroll
+         in this example.
+    */
+    body { overflow-y:scroll; }
+  </style>
 </head>
 
 <body>
