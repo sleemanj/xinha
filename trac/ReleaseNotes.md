@@ -8,9 +8,23 @@
 Note that below the numbers in square brackets represent Subversion commit numbers, since we no longer use Subversion, these are no longer relevant.
 
 ## Unreleased Trunk 
-See [Commits]({{ site.github.repository_url }}/compare/1.5.5...master) since 1.5.5
+See [Commits]({{ site.github.repository_url }}/compare/1.5.6...master) since 1.5.6
 
 ----
+
+## Xinha 1.5.6
+
+### Bugs Fixed
+
+  * Replace implementation of `Xinha.base64_encode` and `Xinha.base64_decode` which are used by EncodeOutput so that multi-byte characters are correctly preserved.
+
+### New Plugins
+
+  * None, have not come across anything it needs!
+
+### New Features
+
+  * None, have not come across anything it needs!
 
 ## Xinha 1.5.5
 

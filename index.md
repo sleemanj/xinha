@@ -26,6 +26,12 @@ That single line make all the `<texarea>` on that page into Xinha areas.  Of cou
 
 ## News
 
+### May 2021
+
+#### Version 1.5.6 Release
+
+Minor release to address base64 encoding issue with EncodeOutput plugin.
+
 ### February 2021
 
 A few updates brought in from the last year or so of in the field usage.
