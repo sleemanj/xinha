@@ -149,7 +149,7 @@ EncodeOutput.prototype.inwardHtml = function(html)
     // while in text mode, and it's submitted to a new window/tab
     html = this.unrot13(html.substring(7));
   }    
-  else if(html.match(/^:!b64:!/))
+  else if(html.match(/^:!b64!:/))
   {
     html = this.unb64(html.substring(7));
   }
