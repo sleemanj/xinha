@@ -25,6 +25,58 @@
 
 
 
+
+
+    
+    
+    
+
+<tr style="background-color:#dbdbdb"> 
+      <td><small>stable</small></td>
+      <td colspan="4">Xinha 1.5.6 <small>(2021-05-25)</small></td>
+    </tr>
+
+    <tr> 
+      <td colspan="2" >&nbsp;</td>
+      <td ><a href="//s3-us-west-1.amazonaws.com/xinha/releases/xinha-1.5.6.zip">xinha-1.5.6.zip</a> 
+      </td>
+      <td >5.5 MB</td>
+      <td >Full Distribution</td>
+    </tr>
+
+    <tr class="show"> 
+      <td colspan="2">&nbsp;</td>
+      <td><a href="//s3-us-west-1.amazonaws.com/xinha/releases/xinha-1.5.6-minified.zip">xinha-1.5.6-minified.zip</a></td>
+      <td>5.1 MB</td>
+      <td>YUI Compressed (Minified) Distribution</td>
+    </tr>
+
+    <tr class="show"> 
+      <td colspan="2">&nbsp;</td>
+      <td><a href="//s3-us-west-1.amazonaws.com/xinha/releases/xinha-1.5.6-cdn.zip">xinha-1.5.6-cdn.zip</a></td>
+      <td>0.6 MB</td>
+      <td>Local plugins for use with Xinha on a CDN, zip</td>
+    </tr>
+
+    <tr>  
+      <td colspan="5">  
+       
+        <p>
+          Minor fix to the EncodeOutput plugin and base64 encoding/decoding.  See <a href="/wiki/ReleaseNotes.html">Release Notes</a>
+        </p>
+
+        <p> This release supports minimally versions of maintained WebKit and Gecko based browsers current as of early 2021, including Chrome, Safari, Firefox, Microsoft IE, Microsoft Edge and Opera.  Older browsers are still likely to function just fine and testing is done in old versions of Firefox and IE to at least see that they "work".  </p>
+       <p>
+        <strong>Updating</strong><br /> Just put the new files in the location of the old ones.
+       </p>
+       <p>
+        Starting with version 1.5 Xinha can be run from external servers to the page which is including Xinha, for example a CDN (if you have one) or Amazon S3.  See the <a href="/wiki/Documentation/NewbieGuide">Newbie Guide</a>
+       </p>
+      </td>
+    </tr>
+
+
+    
     
     
     
