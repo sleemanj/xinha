@@ -146,7 +146,7 @@ function TableOperations(editor) {
 
   // add a new line in the toolbar
   // cfg.toolbar.push(toolbar);
-  cfg.addToolbarElement(toolbar, [ 'inserttable', 'insertimage'], 0);
+  cfg.addToolbarElement(toolbar, [ 'inserttable', 'insertimage'], 1);
   
   if ( typeof PopupWin == 'undefined' )
   {
