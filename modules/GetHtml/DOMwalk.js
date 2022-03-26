@@ -336,7 +336,16 @@ Xinha.getHTMLWrapper = function(root, outputRoot, editor, indent)
       {
         if(root.data)
         {
-          html = ' ';
+	  // [DC] Fix to replace 0xA0 and still trim whitespace only text. 
+	  // This fixes dropped &nbsp; chars used without other text.
+          if(root.data.replace(/\u00a0/g,'&nbsp;').includes('&nbsp;')) 
+	  { 
+            html = root.data.replace(/\u00a0/g,'&nbsp;').trim(); 
+          } 
+          else 
+          { 
+            html = ' '; 
+          }
         }
         else
         {
