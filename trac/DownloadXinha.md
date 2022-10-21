@@ -500,27 +500,6 @@
       </td>
     </tr>
 
-<tr style="background-color:#dbdbdb"> 
-      <td><small>Nightly</small></td>
-      <td colspan="4">Xinha-nightly</td>
-    </tr>
-    <tr> 
-      <td colspan="2" >&nbsp;</td>
-      <td ><a href="http://releases.xinha.gogo.co.nz/xinha-nightly.tar.bz2">xinha-nightly.tar.bz2</a> 
-      </td>
-      <td >&nbsp;</td>
-      <td >bzip2-ed tar</td>
-    </tr>
-   
-    <tr>  
-      <td colspan="5">
-	  The bleeding edge of Xinha is available as a nightly zip file.  It might have new features, it might also be broken.<br />
-       You are nevertheless encouraged to download and test it and help us by finding bugs and creating <a href="http://xinha.webfactional.com/wiki/Tickets">tickets</a>!
-
-       For production use there is a compression script contained to optimize loading time (see compression_readme.txt in the archive)
-      </td>
-    </tr>
-
   </tbody>
 </table>
 
