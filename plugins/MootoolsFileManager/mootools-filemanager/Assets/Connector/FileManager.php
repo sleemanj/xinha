@@ -610,7 +610,7 @@ class MTFMCacheItem
 		$this->init($fm_obj, $legal_url, $prefetch, $persistent_edits);
 	}
 
-	public function init($fm_obj, $legal_url, $prefetch = false, $persistent_edits)
+	public function init($fm_obj, $legal_url, $prefetch = false, $persistent_edits = false)
 	{
 		$this->dirty = false;
 		$this->persistent_edits = $persistent_edits;
@@ -1001,6 +1001,8 @@ class FileManager
 	protected $thumbnailCacheParentDir;  // assistant precalculated value for scandir/view
 	protected $managedBaseDir;           // precalculated filesystem path eqv. of options['directory']
 
+	protected $_finfo;
+	
 	public function __construct($options)
 	{
 		$this->options = array_merge(array(
@@ -4519,7 +4521,7 @@ class FileManager
 	public function mkSafeUTF8($str)
 	{
 		// kill NUL bytes: they don't belong in here!
-		$str = strtr($str, "\x00", ' ');
+		$str = strtr((string)$str, "\x00", ' ');
 
 		if (!mb_check_encoding($str, 'UTF-8') || $str !== mb_convert_encoding(mb_convert_encoding($str, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32'))
 		{
